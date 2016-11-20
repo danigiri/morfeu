@@ -14,21 +14,33 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.partikle.model.di;
 
 import java.net.URI;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+
+import cat.calidos.partikle.model.Catalogue;
+
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Partikle extends Composite implements Validable, Locatable {
+*///////////////////////////////////////////////////////////////////////////////////////////////////
+@Module
+public class CatalogueModule {
 
-	private URI uri;
-	private String name;
-	
-	
-	public URI getUri() {
-		return uri;
-	}
+private String baseUri;
+
+public CatalogueModule(String baseUri) {
+	this.baseUri = baseUri;
+}
+
+@Provides 
+Catalogue provideCatalogue(String uri) {
+	URI catalogueUri = URI.create(baseUri+uri);
+	return null;
+}
 
 }

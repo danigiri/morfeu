@@ -16,14 +16,25 @@
 
 package cat.calidos.partikle.model;
 
+import java.net.URI;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////
-public class Catalogue {
+public class Catalogue implements Locatable {
 
+	protected URI uri;
 	protected List<Document> documents;
 	protected List<Partikle> templatePartikles;
+	
+	@Inject public Catalogue(String catalogueJson) {
+	}
+	
+	public URI getUri() {
+		return uri;
+	}
 
 }

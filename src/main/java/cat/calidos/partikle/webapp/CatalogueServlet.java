@@ -14,21 +14,14 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.partikle.webapp;
 
-import java.net.URI;
+import javax.servlet.http.HttpServlet;
+
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Partikle extends Composite implements Validable, Locatable {
-
-	private URI uri;
-	private String name;
-	
-	
-	public URI getUri() {
-		return uri;
-	}
+*//////////////////////////////////////////////////////////////////////////////
+public class CatalogueServlet extends HttpServlet {
 
 }

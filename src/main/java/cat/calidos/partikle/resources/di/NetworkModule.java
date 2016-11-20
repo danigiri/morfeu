@@ -14,21 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.partikle.resources.di;
 
-import java.net.URI;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+import dagger.Module;
+import dagger.Provides;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Partikle extends Composite implements Validable, Locatable {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Module
+public class NetworkModule {
 
-	private URI uri;
-	private String name;
-	
-	
-	public URI getUri() {
-		return uri;
+	private String baseURI;
+
+	public NetworkModule(String baseURI) {
+		this.baseURI = baseURI;
 	}
 
+	@Provides
+	CloseableHttpClient provideHttpClient() {
+		return HttpClients.createDefault();
+		
+	}
+	
 }

@@ -14,21 +14,18 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.partikle.config.di;
 
-import java.net.URI;
+import java.util.Properties;
+
+import dagger.Component;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Partikle extends Composite implements Validable, Locatable {
+*//////////////////////////////////////////////////////////////////////////////
+@Component(modules = ConfigModule.class)
+public interface ConfigComponent {
 
-	private URI uri;
-	private String name;
-	
-	
-	public URI getUri() {
-		return uri;
-	}
+	void inject(Properties p);
 
 }

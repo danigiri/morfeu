@@ -14,21 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.partikle.config.di;
 
-import java.net.URI;
+import java.util.Collections;
+import java.util.Properties;
+
+import javax.annotation.Nonnull;
+import javax.servlet.ServletConfig;
+
+import dagger.Module;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Partikle extends Composite implements Validable, Locatable {
+*//////////////////////////////////////////////////////////////////////////////
+@Module
+public class ConfigModule {
 
-	private URI uri;
-	private String name;
+public Properties provideConfigWithServletConfig(@Nonnull ServletConfig c) {
 	
-	
-	public URI getUri() {
-		return uri;
-	}
+	Properties config = new Properties();
+	Collections.list(c.getInitParameterNames())
+		.forEach(name -> config.setProperty(name, c.getInitParameter(name)));
+
+	return config;
+
+}
 
 }
