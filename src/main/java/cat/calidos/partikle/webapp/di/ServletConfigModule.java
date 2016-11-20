@@ -14,14 +14,38 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.webapp;
+package cat.calidos.partikle.webapp.di;
 
-import javax.servlet.http.HttpServlet;
+import java.util.Collections;
+import java.util.Properties;
 
+import javax.annotation.Nonnull;
+import javax.servlet.ServletConfig;
+
+import dagger.Module;
+import dagger.Provides;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-public class CatalogueServlet extends HttpServlet {
+@Module
+public class ServletConfigModule {
+
+private ServletConfig servletConfig;
+
+public ServletConfigModule(ServletConfig c) {
+	this.servletConfig = c;
+}
+
+@Provides
+public Properties provideConfigurationFromServlet() {
+	
+	Properties p = new Properties();
+	Collections.list(servletConfig.getInitParameterNames())
+		.forEach(name -> p.setProperty(name, servletConfig.getInitParameter(name)));
+
+	return p;
+
+}
 
 }

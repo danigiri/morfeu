@@ -14,30 +14,17 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.resources.di;
+package cat.calidos.partikle.webapp.di;
 
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-
-import dagger.Module;
-import dagger.Provides;
+import java.util.Properties;
+import dagger.Component;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class NetworkModule {
+*//////////////////////////////////////////////////////////////////////////////
+@Component(modules = ServletConfigModule.class)
+public interface ServletConfigComponent {
 
-	private String baseURI;
+	Properties getProperties();
 
-	public NetworkModule(String baseURI) {
-		this.baseURI = baseURI;
-	}
-
-	@Provides
-	CloseableHttpClient provideHttpClient() {
-		return HttpClients.createDefault();
-		
-	}
-	
 }

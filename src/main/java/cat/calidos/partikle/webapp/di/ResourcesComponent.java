@@ -14,18 +14,18 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.config.di;
+package cat.calidos.partikle.webapp.di;
 
-import java.util.Properties;
+import org.apache.http.client.HttpClient;
 
 import dagger.Component;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@Component(modules = ConfigModule.class)
-public interface ConfigComponent {
+@Component(modules = ResourcesModule.class)
+public interface ResourcesComponent {
 
-	void inject(Properties p);
+	HttpClient getHttpClient();
 
 }

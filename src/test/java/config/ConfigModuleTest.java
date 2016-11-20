@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import cat.calidos.partikle.config.di.ConfigModule;
+import cat.calidos.partikle.webapp.di.ServletConfigModule;
 
 
 public class ConfigModuleTest {
@@ -35,7 +35,7 @@ public void testProvideConfigWithServletConfig() {
 		when(servletConfig.getInitParameter("b")).thenReturn("B");
 		when(servletConfig.getInitParameter("c")).thenReturn("C");
 		
-		Properties p = (new ConfigModule().provideConfigWithServletConfig(servletConfig));
+		Properties p = (new ServletConfigModule().provideConfigWithServletConfig(servletConfig));
 		
 		assertEquals("A", p.getProperty("a"));
 		assertEquals("B", p.getProperty("b"));

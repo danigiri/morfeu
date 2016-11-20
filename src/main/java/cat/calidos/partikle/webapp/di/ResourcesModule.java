@@ -14,30 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.config.di;
+package cat.calidos.partikle.webapp.di;
 
-import java.util.Collections;
-import java.util.Properties;
-
-import javax.annotation.Nonnull;
-import javax.servlet.ServletConfig;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import dagger.Module;
+import dagger.Provides;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class ConfigModule {
+public class ResourcesModule {
 
-public Properties provideConfigWithServletConfig(@Nonnull ServletConfig c) {
+	private String baseURI;
+
+	public ResourcesModule(String baseURI) {
+		this.baseURI = baseURI;
+	}
+
+	@Provides
+	HttpClient provideHttpClient() {
+		return HttpClients.createDefault();
+		
+	}
 	
-	Properties config = new Properties();
-	Collections.list(c.getInitParameterNames())
-		.forEach(name -> config.setProperty(name, c.getInitParameter(name)));
-
-	return config;
-
-}
-
 }
