@@ -1,4 +1,5 @@
 # java stuff
+.factorypath
 /target/
 /.settings/
 .classpath
@@ -6,3 +7,5 @@
 # angular 2 stuff
 node_modules
 /.apt_generated/
+app/**/*.js
+app/**/*.map
