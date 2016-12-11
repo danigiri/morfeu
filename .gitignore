@@ -3,6 +3,7 @@
 /target/
 /.settings/
 .classpath
+/build/
 
 # angular 2 stuff
 node_modules

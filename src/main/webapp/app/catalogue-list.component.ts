@@ -24,11 +24,23 @@ import { CatalogueService } from './catalogue.service';
     moduleId: module.id,
     selector: 'catalogue-list',
     template: `
-    [catalogue-list]
-        <li *ngFor="let catalogue of catalogues">
-           [catalogue] <span class="badge">{{catalogue.name}}</span>
-        </li>
+    <h2>catalogue-list</h2>
+        <div id="catalogue-list">
+            <li *ngFor="let catalogue of catalogues">
+               <span class="catalogue-entry">{{catalogue.name}}</span>
+            </li>
+        </div>
     `,
+    styles:[`
+    #catalogue-list {
+            border: 1px solid #000000;
+            border-radius: 4px;
+            padding: 10px;
+    }
+    .catalogue-entry {
+        
+    }
+    `],
     providers: [CatalogueService]
     })
     

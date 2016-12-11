@@ -1,4 +1,4 @@
-package config;
+package cat.calidos.partikle.config;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -9,7 +9,6 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,7 +39,7 @@ public void testProvideConfigWithServletConfig() {
 		assertEquals("A", p.getProperty("a"));
 		assertEquals("B", p.getProperty("b"));
 		assertEquals("C", p.getProperty("c"));
-		
+	
 }
 
 }
