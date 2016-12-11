@@ -24,22 +24,27 @@ import { CatalogueService } from './catalogue.service';
     moduleId: module.id,
     selector: 'catalogue-list',
     template: `
-    <h2>catalogue-list</h2>
-        <div id="catalogue-list">
-            <li *ngFor="let catalogue of catalogues">
-               <span class="catalogue-entry">{{catalogue.name}}</span>
+     <div id="catalogue-list" class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Catalogues</h4>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group" *ngFor="let catalogue of catalogues">
+            <li class="catalogue-entry list-group-item">
+              <button type="button" class="btn btn-secondary">{{catalogue.name}}</button>
             </li>
-        </div>
+        </ul>
+      </div>
+    </div>
     `,
     styles:[`
     #catalogue-list {
-            border: 1px solid #000000;
-            border-radius: 4px;
-            padding: 10px;
+        width: auto;
+    height: auto;
+    margin-left: 10px;
+    margin-top: 3px;
     }
-    .catalogue-entry {
-        
-    }
+    .catalogue-entry {}
     `],
     providers: [CatalogueService]
     })

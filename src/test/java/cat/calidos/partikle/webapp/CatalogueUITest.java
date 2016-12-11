@@ -32,7 +32,7 @@ import static com.codeborne.selenide.Condition.*;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CatalogueITest {
+public class CatalogueUITest {
 
 private static final String URL_PROPERTY = "app-url";
 private static final String DEFAULT_URL = "http://localhost:3000";
@@ -56,6 +56,7 @@ public void setUp() throws Exception {
 	driver = new ChromeDriver();
 }
 
+
 @Test
 public void catalogueListTest() throws Exception {
 
@@ -68,6 +69,7 @@ public void catalogueListTest() throws Exception {
 
 }
 
+
 @After
 public void tearDown() {
 	
@@ -77,6 +79,7 @@ public void tearDown() {
 	}
 	
 }
+
 
 private String defineSystemVariable(String systemProperty, String defaultValue) {
 
