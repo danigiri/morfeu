@@ -31,7 +31,7 @@ import dagger.Provides;
 @Module
 public class ServletConfigModule {
 
-private ServletConfig servletConfig;
+protected ServletConfig servletConfig;
 
 public ServletConfigModule(ServletConfig c) {
 	this.servletConfig = c;

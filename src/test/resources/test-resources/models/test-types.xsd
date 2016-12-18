@@ -48,9 +48,4 @@
 		<xs:restriction base="xs:string" />
 	</xs:simpleType>
 	
-<<<<<<< HEAD
 </xs:schema>
-
-=======
-</xs:schema>
->>>>>>> xsd
