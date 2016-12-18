@@ -14,26 +14,17 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.morfeu.model;
 
-import java.util.List;
+import java.net.URI;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
-public class Composite {
+*///////////////////////////////////////////////////////////////////////////////////////////////////
+public interface Locatable {
 
-	protected List<Partikle> children;
+	/** @return the location of this document or partikle
+	*///////////////////////////////////////////////////////////////////////////////////////////////
+	URI getUri();
 
-	
-	public List<Partikle> children() {
-		return children;
-	}
-	
-	public Partikle childAt(int i) {
-		if (children==null) {
-			throw new NullPointerException("Attempt to get particle on null list position "+i);
-		}
-		return children.get(i);
-	}
 }

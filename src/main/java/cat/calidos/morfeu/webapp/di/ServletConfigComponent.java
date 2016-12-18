@@ -14,33 +14,17 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model.di;
+package cat.calidos.morfeu.webapp.di;
 
-import java.net.URI;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-
-import cat.calidos.partikle.model.Catalogue;
+import java.util.Properties;
+import dagger.Component;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class CatalogueModule {
+*//////////////////////////////////////////////////////////////////////////////
+@Component(modules = ServletConfigModule.class)
+public interface ServletConfigComponent {
 
-private String baseUri;
-
-public CatalogueModule(String baseUri) {
-	this.baseUri = baseUri;
-}
-
-@Provides 
-Catalogue provideCatalogue(String uri) {
-	URI catalogueUri = URI.create(baseUri+uri);
-	return null;
-}
+	Properties getProperties();
 
 }

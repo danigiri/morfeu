@@ -13,7 +13,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 	<servlet>
     	<display-name>catalogue-servlet</display-name>
     	<servlet-name>CatalogueServlet</servlet-name>
-   		<servlet-class>cat.calidos.partikle.webapp.ResourcesServlet</servlet-class>
+   		<servlet-class>cat.calidos.morfeu.webapp.ResourcesServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:pk="http://dani.calidos.com/morfeu/model">
+
+	<xs:annotation>
+		<xs:documentation>
+		</xs:documentation>
+	</xs:annotation>
+
+	 <xs:include schemaLocation="test-types.xsd" />
+	 <xs:include schemaLocation="test-cells.xsd" />
+	
+	<xs:element name="test">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
+

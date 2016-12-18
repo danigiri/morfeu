@@ -14,30 +14,33 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.webapp.di;
+package cat.calidos.morfeu.model.di;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClients;
+import java.net.URI;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+
+import cat.calidos.morfeu.model.Catalogue;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class RemoteResourcesModule {
+public class CatalogueModule {
 
-	private String baseURI;
+private String baseUri;
 
-	public RemoteResourcesModule(String baseURI) {
-		this.baseURI = baseURI;
-	}
+public CatalogueModule(String baseUri) {
+	this.baseUri = baseUri;
+}
 
-	@Provides
-	HttpClient provideHttpClient() {
-		return HttpClients.createDefault();
-		
-	}
-	
+@Provides 
+Catalogue provideCatalogue(String uri) {
+	URI catalogueUri = URI.create(baseUri+uri);
+	return null;
+}
+
 }

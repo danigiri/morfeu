@@ -14,18 +14,26 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.webapp.di;
+package cat.calidos.morfeu.model;
 
-import org.apache.http.client.HttpClient;
-
-import dagger.Component;
+import java.util.List;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@Component(modules = RemoteResourcesModule.class)
-public interface RemoteResourcesComponent {
+public class Composite {
 
-	HttpClient getHttpClient();
+	protected List<Cell> children;
 
+	
+	public List<Cell> children() {
+		return children;
+	}
+	
+	public Cell childAt(int i) {
+		if (children==null) {
+			throw new NullPointerException("Attempt to get particle on null list position "+i);
+		}
+		return children.get(i);
+	}
 }

@@ -14,38 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.webapp.di;
+package cat.calidos.morfeu.webapp.di;
 
-import java.util.Collections;
-import java.util.Properties;
-
-import javax.annotation.Nonnull;
-import javax.servlet.ServletConfig;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import dagger.Module;
 import dagger.Provides;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class ServletConfigModule {
+public class RemoteResourcesModule {
 
-private ServletConfig servletConfig;
+	private String baseURI;
 
-public ServletConfigModule(ServletConfig c) {
-	this.servletConfig = c;
-}
+	public RemoteResourcesModule(String baseURI) {
+		this.baseURI = baseURI;
+	}
 
-@Provides
-public Properties provideConfig() {
+	@Provides
+	HttpClient provideHttpClient() {
+		return HttpClients.createDefault();
+		
+	}
 	
-	Properties p = new Properties();
-	Collections.list(servletConfig.getInitParameterNames())
-		.forEach(name -> p.setProperty(name, servletConfig.getInitParameter(name)));
-
-	return p;
-
-}
-
 }

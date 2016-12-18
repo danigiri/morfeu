@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.webapp;
+package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -28,12 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.client.HttpClient;
 
-import cat.calidos.partikle.webapp.di.DaggerRemoteResourcesComponent;
-import cat.calidos.partikle.webapp.di.DaggerServletConfigComponent;
-import cat.calidos.partikle.webapp.di.RemoteResourcesComponent;
-import cat.calidos.partikle.webapp.di.RemoteResourcesModule;
-import cat.calidos.partikle.webapp.di.ServletConfigComponent;
-import cat.calidos.partikle.webapp.di.ServletConfigModule;
+import cat.calidos.morfeu.webapp.di.DaggerRemoteResourcesComponent;
+import cat.calidos.morfeu.webapp.di.DaggerServletConfigComponent;
+import cat.calidos.morfeu.webapp.di.RemoteResourcesComponent;
+import cat.calidos.morfeu.webapp.di.RemoteResourcesModule;
+import cat.calidos.morfeu.webapp.di.ServletConfigComponent;
+import cat.calidos.morfeu.webapp.di.ServletConfigModule;
 
 
 /**

@@ -1,4 +1,4 @@
-package cat.calidos.partikle.config;
+package cat.calidos.morfeu.config;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import cat.calidos.partikle.webapp.di.ServletConfigModule;
+import cat.calidos.morfeu.webapp.di.ServletConfigModule;
 
 
 public class ConfigModuleTest {

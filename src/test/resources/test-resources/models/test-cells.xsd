@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:pk="http://dani.calidos.com/morfeu/model">
+
+	 <xs:include schemaLocation="test-types.xsd" />
+	
+	<xs:annotation>
+		<xs:documentation>
+		XML Schema types used to test the system
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:complexType name="testCell">
+		<xs:annotation>
+			<xs:documentation>
+			</xs:documentation>
+            <xs:appinfo>
+                <pk:input>col-cell</pk:input>
+            </xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="text" type="textField" />
+		<xs:attribute name="number" type="numberField" />
+	</xs:complexType>
+		
+	
+	<xs:complexType name="colCell">
+		<xs:annotation>
+			<xs:documentation>
+			</xs:documentation>
+            <xs:appinfo>
+                <pk:input>col-cell</pk:input>
+            </xs:appinfo>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="test" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+		   
+		   
+	<xs:complexType name="rowCell">
+		<xs:annotation>
+			<xs:documentation>
+			</xs:documentation>
+            <xs:appinfo>
+                <pk:input>row-cell</pk:input>
+            </xs:appinfo>
+		</xs:annotation>
+		<xs:sequence>
+				<xs:element name="col" type="colCell" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="number" type="numberField" />
+	</xs:complexType>
+	
+	
+</xs:schema>

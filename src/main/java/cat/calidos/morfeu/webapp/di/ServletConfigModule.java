@@ -14,17 +14,38 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.webapp.di;
+package cat.calidos.morfeu.webapp.di;
 
+import java.util.Collections;
 import java.util.Properties;
-import dagger.Component;
+
+import javax.annotation.Nonnull;
+import javax.servlet.ServletConfig;
+
+import dagger.Module;
+import dagger.Provides;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@Component(modules = ServletConfigModule.class)
-public interface ServletConfigComponent {
+@Module
+public class ServletConfigModule {
 
-	Properties getProperties();
+private ServletConfig servletConfig;
+
+public ServletConfigModule(ServletConfig c) {
+	this.servletConfig = c;
+}
+
+@Provides
+public Properties provideConfig() {
+	
+	Properties p = new Properties();
+	Collections.list(servletConfig.getInitParameterNames())
+		.forEach(name -> p.setProperty(name, servletConfig.getInitParameter(name)));
+
+	return p;
+
+}
 
 }

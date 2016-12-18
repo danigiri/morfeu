@@ -14,18 +14,24 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Partikle extends Composite implements Validable, Locatable {
+*///////////////////////////////////////////////////////////////////////////////////////////////////
+public class Catalogue implements Locatable {
 
-	private URI uri;
-	private String name;
+	protected URI uri;
+	protected List<Document> documents;
+	protected List<Cell> templatePartikles;
 	
+	@Inject public Catalogue(String catalogueJson) {
+	}
 	
 	public URI getUri() {
 		return uri;

@@ -14,14 +14,21 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.morfeu.model;
 
-import java.util.List;
+import java.net.URI;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Validable {
+public class Cell extends Composite implements Validable, Locatable {
 
+	private URI uri;
+	private String name;
+	
+	
+	public URI getUri() {
+		return uri;
+	}
 
 }

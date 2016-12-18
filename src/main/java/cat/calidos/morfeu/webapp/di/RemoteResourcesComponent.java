@@ -14,13 +14,18 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.model;
+package cat.calidos.morfeu.webapp.di;
 
+import org.apache.http.client.HttpClient;
+
+import dagger.Component;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////
-public class Document extends Partikle {
+*//////////////////////////////////////////////////////////////////////////////
+@Component(modules = RemoteResourcesModule.class)
+public interface RemoteResourcesComponent {
 
+	HttpClient getHttpClient();
 
 }

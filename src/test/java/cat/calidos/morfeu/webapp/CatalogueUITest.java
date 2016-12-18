@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.partikle.webapp;
+package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
 
