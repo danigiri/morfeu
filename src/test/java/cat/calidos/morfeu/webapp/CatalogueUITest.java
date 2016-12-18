@@ -18,8 +18,8 @@ package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -41,11 +41,11 @@ private static final String DEFAULT_BROWSER = "chrome";
 private static final String DRIVER_LOCATION_PROPERTY = "webdriver.chrome.driver";
 private static final String DEFAULT_DRIVER_LOCATION = "/Applications/chromedriver";
 
-private String appBaseURL;
-private WebDriver driver;
+private static String appBaseURL;
+private static WebDriver driver;
 
-@Before
-public void setUp() throws Exception {
+@BeforeClass
+public static void setUpClass() throws Exception {
 	
 
 	defineSystemVariable(BROWSER_PROPERTY, DEFAULT_BROWSER);
@@ -60,18 +60,44 @@ public void setUp() throws Exception {
 @Test
 public void catalogueListTest() throws Exception {
 
+	// catalogue list appears and has two entries
 	open(appBaseURL);
 	$("#catalogue-list").should(appear);
-	ElementsCollection catalogueEntries = $$(".catalogue-entry");
+	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
 	catalogueEntries.shouldHaveSize(2);
 	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).getText());
-
+	
 }
 
 
-@After
-public void tearDown() {
+@Test
+public void catalogueDetailTest() throws Exception {
+
+	// click on catalogue list entry and it appears
+	open(appBaseURL);
+	$("#catalogue-list").should(appear);
+	$("#catalogue").shouldNotBe(visible);
+	$("#document-list").shouldNotBe(visible);
+	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
+	catalogueEntries.get(0).click();
+	$("#catalogue").should(appear);
+	$("#document-list").should(appear);
+
+	assertEquals("Wrong catalogue selected", "Catalogue 1", $("#catalogue-name").getText());
+	assertEquals("Wrong catalogue selected", "First Catalogue", $("#catalogue-desc").getText());
+	
+	// test listing of documents
+	ElementsCollection documentEntries = $$(".document-list-entry");
+	documentEntries.shouldHaveSize(3);
+	assertEquals("Wrong catalogue content", "empty\nxml", documentEntries.get(0).getText());
+	assertEquals("Wrong catalogue content", "table\nxml", documentEntries.get(1).getText());
+	assertEquals("Wrong catalogue content", "other\nyaml", documentEntries.get(2).getText());
+	
+}
+
+@AfterClass
+public static void tearDownClass() {
 	
 	//Close the browser
 	if (driver!=null) {
@@ -81,7 +107,7 @@ public void tearDown() {
 }
 
 
-private String defineSystemVariable(String systemProperty, String defaultValue) {
+private static String defineSystemVariable(String systemProperty, String defaultValue) {
 
 	String value = System.getProperty(systemProperty);
 	if (value==null) {

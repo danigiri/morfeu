@@ -17,6 +17,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
+import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
 
@@ -24,40 +25,44 @@ import { CatalogueService } from './catalogue.service';
     moduleId: module.id,
     selector: 'catalogue-list',
     template: `
-     <div id="catalogue-list" class="panel panel-default">
+     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">Catalogues</h4>
       </div>
       <div class="panel-body">
-        <ul class="list-group" *ngFor="let catalogue of catalogues">
-            <li class="catalogue-entry list-group-item">
-              <button type="button" class="btn btn-secondary">{{catalogue.name}}</button>
-            </li>
-        </ul>
+        <div id="catalogue-list" class="list-group">
+            <a *ngFor="let c of catalogues"
+                 href="#" 
+                class="catalogue-list-entry list-group-item" [class.active]="c === currentCatalogue"
+                (click)="selectCatalogue(c)">
+            {{c.name}}</a>
+        </div>
       </div>
     </div>
+    <catalogue [selectedCatalogueUri]="currentCatalogue.uri" *ngIf="currentCatalogue"></catalogue>
     `,
     styles:[`
-    #catalogue-list {
-        width: auto;
-    height: auto;
-    margin-left: 10px;
-    margin-top: 3px;
-    }
-    .catalogue-entry {}
+    #catalogue-list {}
+    .catalogue-list-entry {}
     `],
     providers: [CatalogueService]
     })
     
 export class CatalogueListComponent {
     
-    catalogues: Catalogue[];
+catalogues: Catalogue[];
+currentCatalogue: Catalogue;
     
-constructor(private catalogueService : CatalogueService){}
+constructor(private catalogueService : CatalogueService) {}
 
 ngOnInit() {
     this.catalogueService.getAll()
     .subscribe(c => this.catalogues = c);
+}
+
+selectCatalogue(c:Catalogue) {
+    console.log("Selected catalogue="+c.uri);
+    this.currentCatalogue = c;
 }
 
 }

@@ -16,7 +16,10 @@
 
 export class Catalogue {
     
-    name: String;
-    uri: String;
-    
+    name: string;
+    uri: string;
+    desc: string;
+
+    documents: Document[];
+
 }

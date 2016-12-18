@@ -17,7 +17,6 @@
 import { Component } from '@angular/core';
 
 import { CatalogueListComponent } from './catalogue-list.component';
-import { CatalogueComponent } from './catalogue.component';
 
 @Component({
   selector: 'my-app',
@@ -26,23 +25,13 @@ import { CatalogueComponent } from './catalogue.component';
           <h1>Partikle application</h1>
       </div>
       
-      <div class="container">
+      <div class="container-fluid">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-md-4">
               <catalogue-list></catalogue-list>
-              <catalogue></catalogue>
               </div>
-            <div class="col-sm-8">
-            <div class="navbar">
-  <div class="navbar-inner">
-    <a class="brand" href="#">Title</a>
-    <ul class="nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Link</a></li>
-      <li><a href="#">Link</a></li>
-    </ul>
-  </div>
-</div>
+            <div class="col-md-8">
+
             </div>
           </div>
       </div>

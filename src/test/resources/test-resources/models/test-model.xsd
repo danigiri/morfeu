@@ -20,5 +20,12 @@
 		</xs:complexType>
 	</xs:element>
 
+<<<<<<< HEAD
 </xs:schema>
 
+=======
+		   
+</xs:schema>
+
+
+>>>>>>> xsd

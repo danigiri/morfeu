@@ -1,4 +1,4 @@
 [
-	{ "name":"Catalogue 1", "uri":"catalogue1.json" }
-	,{ "name":"Catalogue 2", "uri":"catalogue2.json" }
+	{ "name":"Catalogue 1", "uri":"/test-resources/catalogues/catalogue1.json" }
+	,{ "name":"Catalogue 2", "uri":"/test-resources/catalogues/catalogue2.json"  }
 ]	
