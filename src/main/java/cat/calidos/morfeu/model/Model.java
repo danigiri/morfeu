@@ -14,18 +14,27 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp.di;
+package cat.calidos.morfeu.model;
 
-import org.apache.http.client.HttpClient;
+import java.net.URI;
 
-import dagger.Component;
+import com.sun.xml.xsom.XSSchemaSet;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
-@Component(modules = RemoteResourcesModule.class)
-public interface RemoteResourcesComponent {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class Model implements Validable, Locatable {
 
-	HttpClient getHttpClient();
+protected URI uri;
+protected XSSchemaSet schema;
+
+
+@Override
+public URI getUri() {
+
+	// TODO Auto-generated method stub
+	return uri;
+}
+
 
 }

@@ -23,12 +23,12 @@ import java.net.URI;
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class Cell extends Composite implements Validable, Locatable {
 
-	private URI uri;
-	private String name;
-	
-	
-	public URI getUri() {
-		return uri;
-	}
+protected URI uri;
+protected String name;
+
+
+public URI getUri() {
+	return uri;
+}
 
 }

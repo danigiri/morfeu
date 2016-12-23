@@ -19,7 +19,6 @@ package cat.calidos.morfeu.webapp.di;
 import java.util.Collections;
 import java.util.Properties;
 
-import javax.annotation.Nonnull;
 import javax.servlet.ServletConfig;
 
 import dagger.Module;
@@ -31,19 +30,12 @@ import dagger.Provides;
 @Module
 public class ServletConfigModule {
 
-protected ServletConfig servletConfig;
-
-public ServletConfigModule(ServletConfig c) {
-	this.servletConfig = c;
-}
-
 @Provides
-public Properties provideConfig() {
+public static Properties provideConfig(ServletConfig c) {
 	
 	Properties p = new Properties();
-	Collections.list(servletConfig.getInitParameterNames())
-		.forEach(name -> p.setProperty(name, servletConfig.getInitParameter(name)));
-
+	Collections.list(c.getInitParameterNames())
+		.forEach(name -> p.setProperty(name, c.getInitParameter(name)));
 	return p;
 
 }

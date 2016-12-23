@@ -26,14 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.client.HttpClient;
-
-import cat.calidos.morfeu.webapp.di.DaggerRemoteResourcesComponent;
 import cat.calidos.morfeu.webapp.di.DaggerServletConfigComponent;
-import cat.calidos.morfeu.webapp.di.RemoteResourcesComponent;
-import cat.calidos.morfeu.webapp.di.RemoteResourcesModule;
-import cat.calidos.morfeu.webapp.di.ServletConfigComponent;
-import cat.calidos.morfeu.webapp.di.ServletConfigModule;
 
 
 /**
@@ -41,9 +34,9 @@ import cat.calidos.morfeu.webapp.di.ServletConfigModule;
 *//////////////////////////////////////////////////////////////////////////////
 public class ResourcesServlet extends HttpServlet {
 
-
+	// TODO: doublecheck visibility is needed (it probably is)
 	@Inject
-	Properties configuration;
+	public Properties configuration;
 
 	/* (non-Javadoc)
 	* @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
@@ -52,16 +45,17 @@ public class ResourcesServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 
-		// TODO: refactor with a more Dagger2 friendly and less boilerplate
-		ServletConfigComponent servletComponent = DaggerServletConfigComponent.builder()
-			.servletConfigModule(new ServletConfigModule(config))
-			.build();
-		Properties p = servletComponent.getProperties();
+		//TODO: think of refactoring to a servlet module?
+		Properties p = DaggerServletConfigComponent.builder()
+			.servletConfig(this.getServletConfig())
+			.build()
+			.getProperties();
 
-		RemoteResourcesComponent resourcesComponent = DaggerRemoteResourcesComponent.builder()
-		.remoteResourcesModule(new RemoteResourcesModule(p.getProperty("")))
-		.build();
-		HttpClient httpClient = resourcesComponent.getHttpClient();
+		//TODO: refactor into more dagger2 friendliness
+//		RemoteResourcesComponent resourcesComponent = DaggerRemoteResourcesComponent.builder()
+//		.remoteResourcesModule(new RemoteResourcesModule(p.getProperty("")))
+//		.build();
+//		HttpClient httpClient = resourcesComponent.getHttpClient();
 		
 	}
 

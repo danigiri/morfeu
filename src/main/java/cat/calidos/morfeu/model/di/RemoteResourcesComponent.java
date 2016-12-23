@@ -14,20 +14,18 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp.di;
+package cat.calidos.morfeu.model.di;
 
-import java.util.Properties;
-
-import javax.servlet.ServletConfig;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import dagger.Component;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@Component(modules = ServletConfigModule.class, dependencies = ServletConfig.class)
-public interface ServletConfigComponent {
+@Component(modules = RemoteResourcesModule.class)
+public interface RemoteResourcesComponent {
 
-Properties getProperties();
+CloseableHttpClient getHttpClient();
 
 }

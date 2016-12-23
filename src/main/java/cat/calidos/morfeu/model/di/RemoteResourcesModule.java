@@ -14,10 +14,17 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp.di;
+package cat.calidos.morfeu.model.di;
 
-import org.apache.http.client.HttpClient;
+import java.net.URI;
+
+import javax.inject.Singleton;
+
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 
 import dagger.Module;
 import dagger.Provides;
@@ -28,16 +35,10 @@ import dagger.Provides;
 @Module
 public class RemoteResourcesModule {
 
-	private String baseURI;
+//TODO: this is stateful and non-reentrant
+@Provides
+CloseableHttpClient getAsyncHttpClient() {
+	return HttpClients.createDefault();	
+}
 
-	public RemoteResourcesModule(String baseURI) {
-		this.baseURI = baseURI;
-	}
-
-	@Provides
-	HttpClient provideHttpClient() {
-		return HttpClients.createDefault();
-		
-	}
-	
 }

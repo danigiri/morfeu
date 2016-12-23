@@ -16,44 +16,97 @@
 
 package cat.calidos.morfeu.model.di;
 
+import cat.calidos.morfeu.model.Document;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.xerces.jaxp.SAXParserFactoryImpl;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.sun.xml.xsom.parser.XSOMParser;
 
-import cat.calidos.morfeu.model.Document;
 import dagger.Module;
 import dagger.Provides;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
+import dagger.producers.Production;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
+@ProducerModule
 public class DocumentModule {
 
 protected XSOMParser parser;
 
-public DocumentModule() {
-	SAXParserFactory spf = SAXParserFactory.newInstance();
-    spf.setNamespaceAware(true);
+@Provides
+public SAXParserFactory provideSAXParserFactory() {
+	//TODO: double-check which parser to use that implements security like we want
+	return new SAXParserFactoryImpl();
+}
+
+@Provides
+public XSOMParser provideSchemaParser(SAXParserFactory factory) {
+	
+	factory.setNamespaceAware(true);
     try {
     	// TODO: checkout how to ensure we can load includes but only from the same origin and stuff
-		spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    	factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 	} catch (SAXNotRecognizedException | SAXNotSupportedException | ParserConfigurationException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+   return new XSOMParser(factory);
     
 }
 
-@Provides
-public Document provideDocumentFromURL(String url) {
-	return null;
+
+@Produces
+public ListenableFuture<Document> produceDocumentFromURL(URI uri, ListeningExecutorService s, CloseableHttpAsyncClient client) {
+
+	return s.submit(new Callable<Document>() {
+
+			@Override
+			public Document call() throws Exception {
+
+				try {
+					client.start();
+					HttpGet get = new HttpGet(uri);
+				} finally {
+					if (client!=null) {
+							client.close();
+					}
+				}
+				return null;
+	}});
 	
 }
 
+}
+
+@Module
+final class ListeningExecutorServiceModule {
+  @Provides
+  @Production
+  static ListeningExecutorService executor() {
+	  return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+    //return Executors.newCachedThreadPool();
+  }
 }
