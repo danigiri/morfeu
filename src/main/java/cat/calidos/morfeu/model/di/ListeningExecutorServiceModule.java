@@ -16,22 +16,24 @@
 
 package cat.calidos.morfeu.model.di;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.impl.client.CloseableHttpClient;
+import java.util.concurrent.Executors;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 
-import dagger.producers.ProductionComponent;
-
+import dagger.Module;
+import dagger.Provides;
+import dagger.producers.Production;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules = {RemoteResourcesModule.class, ListeningExecutorServiceModule.class})
-public interface RemoteResourcesComponent {
-
-CloseableHttpClient getHttpClient();
-
-ListenableFuture<HttpResponse> fetchHttpData();
-
+@Module
+public final class ListeningExecutorServiceModule {
+  @Provides
+  @Production
+  public static ListeningExecutorService executor() {
+	  return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+    //return Executors.newCachedThreadPool();
+  }
 }

@@ -16,19 +16,11 @@
 
 package cat.calidos.morfeu.model;
 
-import java.net.URI;
-
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Cell extends Composite implements Validable, Locatable {
+public class Cell extends RemoteResource implements Validable {
 
-protected URI uri;
 protected String name;
-
-
-public URI getUri() {
-	return uri;
-}
 
 }

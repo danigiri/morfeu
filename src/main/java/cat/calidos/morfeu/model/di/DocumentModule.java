@@ -24,13 +24,16 @@ import java.net.URL;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.xerces.jaxp.SAXParserFactoryImpl;
 import org.xml.sax.SAXException;
@@ -51,7 +54,7 @@ import dagger.producers.Production;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule
+@Module
 public class DocumentModule {
 
 protected XSOMParser parser;
@@ -78,35 +81,14 @@ public XSOMParser provideSchemaParser(SAXParserFactory factory) {
 }
 
 
-@Produces
-public ListenableFuture<Document> produceDocumentFromURL(URI uri, ListeningExecutorService s, CloseableHttpAsyncClient client) {
+@Provides
+public Document produceDocumentFromURL() {
 
-	return s.submit(new Callable<Document>() {
-
-			@Override
-			public Document call() throws Exception {
-
-				try {
-					client.start();
-					HttpGet get = new HttpGet(uri);
-				} finally {
-					if (client!=null) {
-							client.close();
-					}
-				}
-				return null;
-	}});
+return null;
 	
 }
 
+
+
 }
 
-@Module
-final class ListeningExecutorServiceModule {
-  @Provides
-  @Production
-  static ListeningExecutorService executor() {
-	  return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
-    //return Executors.newCachedThreadPool();
-  }
-}

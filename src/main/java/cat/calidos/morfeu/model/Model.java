@@ -23,18 +23,8 @@ import com.sun.xml.xsom.XSSchemaSet;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Model implements Validable, Locatable {
+public class Model extends RemoteResource implements Validable, Locatable {
 
-protected URI uri;
 protected XSSchemaSet schema;
-
-
-@Override
-public URI getUri() {
-
-	// TODO Auto-generated method stub
-	return uri;
-}
-
 
 }

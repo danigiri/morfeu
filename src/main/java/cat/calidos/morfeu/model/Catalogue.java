@@ -16,7 +16,6 @@
 
 package cat.calidos.morfeu.model;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,17 +23,12 @@ import javax.inject.Inject;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////
-public class Catalogue implements Locatable {
+public class Catalogue extends RemoteResource {
 
-	protected URI uri;
 	protected List<Document> documents;
 	protected List<Cell> templatePartikles;
 	
 	@Inject public Catalogue(String catalogueJson) {
-	}
-	
-	public URI getUri() {
-		return uri;
 	}
 
 }

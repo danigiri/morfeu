@@ -1,0 +1,14 @@
+{
+	"name": "Catalogue 1"
+	,"desc": "First Catalogue"
+	,"documents": [
+		{ "name":"empty", "kind": "xml", "uri":"/test-resources/documents/document1.xml"}
+		,{ "name":"table", "kind": "xml", "uri":"/test-resources/documents/document1.xml"}
+		,{ "name":"other", "kind": "yaml", "uri":"/test-resources/documents/document1.xml"}
+		]
+	,"snippets": [
+		{ "name":"empty", "uri":"/test-resources/"}
+		,{ "name":"table"}
+		]
+		
+}

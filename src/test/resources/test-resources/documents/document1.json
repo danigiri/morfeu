@@ -1,0 +1,7 @@
+{
+	"name": "catalogue 1"
+	,"desc": "First catalogue"
+	,"type": "xml"
+	,"modelUri": "/test-resources/models/test-model.xsd"
+	
+}

@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.config;
+package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;

@@ -17,28 +17,62 @@
 package cat.calidos.morfeu.model.di;
 
 import java.net.URI;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 
-import javax.inject.Singleton;
-
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
+
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
+import dagger.producers.Production;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
+@ProducerModule
 public class RemoteResourcesModule {
 
 //TODO: this is stateful and non-reentrant
-@Provides
-CloseableHttpClient getAsyncHttpClient() {
+@Produces
+public static CloseableHttpClient produceHttpClient() {
 	return HttpClients.createDefault();	
 }
 
+
+@Produces
+public static HttpGet produceRequest(URI uri) {
+	return new HttpGet(uri);
 }
+
+
+@Produces
+public static ListenableFuture<HttpResponse> fetchHttpData(	HttpGet request, 
+															ListeningExecutorService s, 
+															CloseableHttpClient client) {
+	
+	return s.submit(new Callable<HttpResponse>() {
+		@Override
+		public HttpResponse call() throws Exception {
+			try {
+//				HttpGet request = new HttpGet(uri);
+				return client.execute(request);
+			} finally {
+				if (client!=null) {
+						client.close();
+				}
+			}
+		}});
+	
+}
+
+}
+

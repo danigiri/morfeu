@@ -18,8 +18,6 @@ package cat.calidos.morfeu.model.di;
 
 import java.net.URI;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 

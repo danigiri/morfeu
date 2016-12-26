@@ -1,0 +1,13 @@
+{
+	"name": "catalogue 2"
+	,"desc": "Second catalogue"
+	,"documents": [
+		{ "name":"empty2", "kind": "xml", "uri":"/test-resources/documents/document1.xml"}
+		,{ "name":"table2", "kind": "xml", "uri":"/test-resources/documents/document1.xml"}
+		]
+	,"snippets": [
+		{ "name":"empty", "uri":"/test-resources/"}
+		,{ "name":"table"}
+		]
+		
+}
