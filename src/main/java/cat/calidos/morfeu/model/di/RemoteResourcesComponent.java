@@ -28,7 +28,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules = RemoteResourcesModule.class)
+@ProductionComponent(modules ={RemoteResourcesModule.class, ListeningExecutorServiceModule.class})
 public interface RemoteResourcesComponent {
 
 CloseableHttpClient getHttpClient();

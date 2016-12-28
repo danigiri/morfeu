@@ -18,7 +18,6 @@ package cat.calidos.morfeu.model.di;
 
 import java.net.URI;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -27,13 +26,9 @@ import org.apache.http.impl.client.HttpClients;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
 
-import dagger.Module;
-import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
-import dagger.producers.Production;
 
 /**
 * @author daniel giribet
@@ -56,14 +51,13 @@ public static HttpGet produceRequest(URI uri) {
 
 @Produces
 public static ListenableFuture<HttpResponse> fetchHttpData(	HttpGet request, 
-															ListeningExecutorService s, 
+															ListeningExecutorService executorService, 
 															CloseableHttpClient client) {
 	
-	return s.submit(new Callable<HttpResponse>() {
+	return executorService.submit(new Callable<HttpResponse>() {
 		@Override
 		public HttpResponse call() throws Exception {
 			try {
-//				HttpGet request = new HttpGet(uri);
 				return client.execute(request);
 			} finally {
 				if (client!=null) {
@@ -74,17 +68,4 @@ public static ListenableFuture<HttpResponse> fetchHttpData(	HttpGet request,
 	
 }
 
-}
-
-
-@Module
-final class ListeningExecutorServiceModule {
-	
-	@Provides
-	@Production
-	public static ListeningExecutorService executor() {
-		// Following the Dagger 2 official docs, this private executor pool should be efficient for just the HTTP stuff
-		return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
-	}
-	
 }
