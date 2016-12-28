@@ -20,6 +20,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
 
 import dagger.producers.ProductionComponent;
 
@@ -27,7 +28,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules = {RemoteResourcesModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules = RemoteResourcesModule.class)
 public interface RemoteResourcesComponent {
 
 CloseableHttpClient getHttpClient();

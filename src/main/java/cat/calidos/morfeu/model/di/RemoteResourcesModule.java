@@ -76,3 +76,15 @@ public static ListenableFuture<HttpResponse> fetchHttpData(	HttpGet request,
 
 }
 
+
+@Module
+final class ListeningExecutorServiceModule {
+	
+	@Provides
+	@Production
+	public static ListeningExecutorService executor() {
+		// Following the Dagger 2 official docs, this private executor pool should be efficient for just the HTTP stuff
+		return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+	}
+	
+}

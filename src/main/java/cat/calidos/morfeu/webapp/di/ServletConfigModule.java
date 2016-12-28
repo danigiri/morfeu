@@ -31,7 +31,7 @@ import dagger.Provides;
 public class ServletConfigModule {
 
 @Provides
-public static Properties provideConfig(ServletConfig c) {
+public static Properties getProperties(ServletConfig c) {
 	
 	Properties p = new Properties();
 	Collections.list(c.getInitParameterNames())
