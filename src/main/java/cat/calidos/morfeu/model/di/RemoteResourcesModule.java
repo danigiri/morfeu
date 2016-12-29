@@ -19,6 +19,8 @@ package cat.calidos.morfeu.model.di;
 import java.net.URI;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -36,23 +38,31 @@ import dagger.producers.Produces;
 @ProducerModule
 public class RemoteResourcesModule {
 
-//TODO: this is stateful and non-reentrant
+protected ListeningExecutorService executorService;
+protected CloseableHttpClient client;
+
+@Inject 
+public RemoteResourcesModule(ListeningExecutorService executorService, CloseableHttpClient client) {
+	this.executorService = executorService;
+	this.client = client;
+}
+
+//TODO: this is stateful and non-reentrant and probably fairly expensive to allocate, break into two components or something
 @Produces
 public static CloseableHttpClient produceHttpClient() {
 	return HttpClients.createDefault();	
 }
 
 
+
 @Produces
-public static HttpGet produceRequest(URI uri) {
+public HttpGet produceRequest(URI uri) {
 	return new HttpGet(uri);
 }
 
 
 @Produces
-public static ListenableFuture<HttpResponse> fetchHttpData(	HttpGet request, 
-															ListeningExecutorService executorService, 
-															CloseableHttpClient client) {
+public ListenableFuture<HttpResponse> fetchHttpData(HttpGet request) {
 	
 	return executorService.submit(new Callable<HttpResponse>() {
 		@Override

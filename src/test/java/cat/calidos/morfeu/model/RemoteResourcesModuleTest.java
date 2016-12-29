@@ -48,25 +48,28 @@ public class RemoteResourcesModuleTest {
 
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-@Mock CloseableHttpClient client;
+@Mock CloseableHttpClient httpClient;
 @Mock CloseableHttpResponse response;
-HttpGet request;
-URI uri;
-ListeningExecutorService executor;
+private ListeningExecutorService executor;
+private URI uri;
+
+private RemoteResourcesModule remoteResources;
 
 @Before
 public void setup() throws Exception {
-
-	uri = new URI("http://www.foo.com");
-	request = RemoteResourcesModule.produceRequest(uri);
-	executor = ListeningExecutorServiceModule.executor();
 	
+	executor = ListeningExecutorServiceModule.executor();
+	uri = new URI("http://www.foo.com");
+	remoteResources = new RemoteResourcesModule(executor, httpClient);
+
 }
+
 
 @After
 public void teardown() {
 	executor.shutdownNow();
 }
+
 
 @Test
 public void testProduceHttpClient() {
@@ -77,7 +80,7 @@ public void testProduceHttpClient() {
 @Test
 public void testProduceRequest() {
 
-	HttpGet request = RemoteResourcesModule.produceRequest(uri);
+	HttpGet request = remoteResources.produceRequest(uri);
 	assertNotNull(request);
 	assertEquals("GET", request.getMethod());
 
@@ -86,14 +89,15 @@ public void testProduceRequest() {
 
 @Test
 public void testGetchHttpData() throws Exception {
-		
-	when(client.execute(request)).thenReturn(response);
 
-	ListenableFuture<HttpResponse> dataFuture = RemoteResourcesModule.fetchHttpData(request, executor, client);
+	HttpGet request = remoteResources.produceRequest(uri);
+	when(httpClient.execute(request)).thenReturn(response);
+
+	ListenableFuture<HttpResponse> dataFuture = remoteResources.fetchHttpData(request);
 	HttpResponse httpResponse = dataFuture.get();
 	
 	assertEquals(response, httpResponse);
-	verify(client, times(1)).close();	
+	verify(httpClient, times(1)).close();	
 
 }
 
@@ -101,12 +105,13 @@ public void testGetchHttpData() throws Exception {
 @Test
 public void testFaultyGetchHttpData() throws Exception {
 
-	when(client.execute(request)).thenThrow(new ClientProtocolException("Bad request type"));
+	HttpGet request = remoteResources.produceRequest(uri);
+	when(httpClient.execute(request)).thenThrow(new ClientProtocolException("Bad request type"));
 	
-	ListenableFuture<HttpResponse> dataFuture = RemoteResourcesModule.fetchHttpData(request, executor, client);
+	ListenableFuture<HttpResponse> dataFuture = remoteResources.fetchHttpData(request);
 	try {
 		dataFuture.get();
-		fail("Bad request should thrown an execution exception");
+		fail("Bad request should throw an execution exception");
 	} catch (ExecutionException e) {
 		Throwable cause = e.getCause();
 		assertEquals(ClientProtocolException.class, cause.getClass());
@@ -114,7 +119,7 @@ public void testFaultyGetchHttpData() throws Exception {
 	}
 
 	// connection was still closed even after exception!
-	verify(client, times(1)).close();	
+	verify(httpClient, times(1)).close();	
 
 }
 

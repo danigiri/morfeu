@@ -16,8 +16,6 @@
 
 package cat.calidos.morfeu.model;
 
-import java.net.URI;
-
 import com.sun.xml.xsom.XSSchemaSet;
 
 /**

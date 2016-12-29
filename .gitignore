@@ -8,5 +8,5 @@
 # angular 2 stuff
 node_modules
 /.apt_generated/
-app/**/*.js
-app/**/*.map
+src/main/webapp/app/**/*.js
+src/main/webapp/app/**/*.js.map
