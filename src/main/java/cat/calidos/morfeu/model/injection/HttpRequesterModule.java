@@ -14,9 +14,8 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.di;
+package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -24,7 +23,6 @@ import javax.inject.Inject;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -34,30 +32,17 @@ import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class RemoteResourcesModule {
+public class HttpRequesterModule {
 
 protected ListeningExecutorService executorService;
 protected CloseableHttpClient client;
 
-@Inject 
-public RemoteResourcesModule(ListeningExecutorService executorService, CloseableHttpClient client) {
+@Inject
+public HttpRequesterModule(ListeningExecutorService executorService, CloseableHttpClient client) {
 	this.executorService = executorService;
 	this.client = client;
-}
-
-//TODO: this is stateful and non-reentrant and probably fairly expensive to allocate, break into two components or something
-@Produces
-public static CloseableHttpClient produceHttpClient() {
-	return HttpClients.createDefault();	
-}
-
-
-
-@Produces
-public HttpGet produceRequest(URI uri) {
-	return new HttpGet(uri);
 }
 
 
@@ -77,5 +62,6 @@ public ListenableFuture<HttpResponse> fetchHttpData(HttpGet request) {
 		}});
 	
 }
+
 
 }

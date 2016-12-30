@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.di;
+package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 

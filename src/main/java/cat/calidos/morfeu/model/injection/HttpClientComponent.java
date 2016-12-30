@@ -14,25 +14,19 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.di;
+package cat.calidos.morfeu.model.injection;
 
-import java.util.concurrent.Executors;
+import cat.calidos.morfeu.injection.ApplicationScoped;
+import dagger.producers.ProductionComponent;
 
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.producers.Production;
+/**
+* @author daniel giribet
+*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ApplicationScoped
+@ProductionComponent(modules={HttpClientModule.class, ListeningExecutorServiceModule.class})
+public interface HttpClientComponent {
 
-@Module
-public final class ListeningExecutorServiceModule {
-	
-	@Provides
-	@Production
-	public static ListeningExecutorService executor() {
-		// Following the Dagger 2 official docs, this private executor pool should be OK for just the HTTP stuff
-		return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
-	}
-	
+HttpRequesterComponent httpRequestComponent(HttpRequesterModule requester);
+
 }

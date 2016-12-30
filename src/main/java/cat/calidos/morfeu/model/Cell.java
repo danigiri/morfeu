@@ -16,11 +16,20 @@
 
 package cat.calidos.morfeu.model;
 
+import javax.inject.Inject;
+
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class Cell extends RemoteResource implements Validable {
 
+protected String desc;
 protected String name;
+
+@Inject
+public Cell(String name, String desc) {
+	this.name = name;
+	this.desc = desc;
+}
 
 }

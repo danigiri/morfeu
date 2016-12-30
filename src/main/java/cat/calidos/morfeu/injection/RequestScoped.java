@@ -13,26 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+package cat.calidos.morfeu.injection;
 
-package cat.calidos.morfeu.model;
-
-import javax.inject.Inject;
+import javax.inject.Scope;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Document extends Cell {
-
-protected String type;
-protected String uri;
-protected String modelUri;
-
-@Inject
-public Document(String name, String desc, String type, String uri, String modelUri) {
-	super(name, desc);
-	this.type = type;
-	this.uri = uri;
-	this.modelUri = modelUri;
-}
-
-}
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Scope 
+public @interface RequestScoped {}

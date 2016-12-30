@@ -14,29 +14,12 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.di;
+package cat.calidos.morfeu.injection;
 
-import java.net.URI;
-
-import org.apache.http.HttpResponse;
-
-import com.google.common.util.concurrent.ListenableFuture;
-
-import dagger.producers.ProductionComponent;
-
+import javax.inject.Scope;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules ={RemoteResourcesModule.class, ListeningExecutorServiceModule.class})
-public interface RemoteResourcesComponent {
-
-ListenableFuture<HttpResponse> fetchHttpData();
-
-@ProductionComponent.Builder
-interface Builder {
-	Builder uri(URI uri);
-	RemoteResourcesComponent build();
-}
-
-}
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Scope 
+public @interface ApplicationScoped {}
