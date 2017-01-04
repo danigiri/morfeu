@@ -16,11 +16,11 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 
@@ -38,22 +38,26 @@ public class HttpRequesterModule {
 
 protected ListeningExecutorService executorService;
 protected CloseableHttpClient client;
+protected HttpGet request;
 
 @Inject
-public HttpRequesterModule(ListeningExecutorService executorService, CloseableHttpClient client) {
+public HttpRequesterModule(ListeningExecutorService executorService, CloseableHttpClient client, HttpGet request) {
 	this.executorService = executorService;
 	this.client = client;
+	this.request = request;
 }
 
 
 @Produces
-public ListenableFuture<HttpResponse> fetchHttpData(HttpGet request) {
+public ListenableFuture<InputStream> fetchHttpData() {
 	
-	return executorService.submit(new Callable<HttpResponse>() {
+	return executorService.submit(new Callable<InputStream>() {
 		@Override
-		public HttpResponse call() throws Exception {
+		public InputStream call() throws Exception {
 			try {
-				return client.execute(request);
+				 return client.execute(request)
+						 .getEntity()
+						 .getContent();
 			} finally {
 				if (client!=null) {
 						client.close();
@@ -62,6 +66,5 @@ public ListenableFuture<HttpResponse> fetchHttpData(HttpGet request) {
 		}});
 	
 }
-
 
 }

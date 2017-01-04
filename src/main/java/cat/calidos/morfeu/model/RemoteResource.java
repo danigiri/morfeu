@@ -17,7 +17,7 @@ public boolean couldBeFetched() {
 	return fetchException==null;
 }
 
-public void couldNotFetchResource(Exception e) {
+public void couldNotBeFetchedDueTo(Exception e) {
 	if (e==null) {
 		throw new NullArgumentException("Trying to assing a null fetch exception");
 	}

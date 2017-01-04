@@ -14,22 +14,22 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.xml.xsom.parser.XSOMParser;
+
+import cat.calidos.morfeu.injection.ApplicationScoped;
+import dagger.Component;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Locatable {
+*//////////////////////////////////////////////////////////////////////////////
+@ApplicationScoped
+@Component(modules = ParserModule.class)
+public interface ParserComponent {
 
-	/** @return the location of this resource
-	*///////////////////////////////////////////////////////////////////////////////////////////////
-	URI getUri();
-
-	/** @return true if the resource could be fetched effectively
-	*////////////////////////////////////////////////////////////////////////////////
-	boolean couldBeFetched();
+	XSOMParser provideSchemaParser();
+	ObjectMapper provideJSONObjectMapper();
 	
-	Exception fetchException();
 }

@@ -19,13 +19,17 @@ package cat.calidos.morfeu.model.injection;
 import cat.calidos.morfeu.model.Document;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -40,6 +44,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -47,6 +54,7 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.producers.Produced;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 import dagger.producers.Production;
@@ -54,38 +62,49 @@ import dagger.producers.Production;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
+@ProducerModule
 public class DocumentModule {
 
+protected String uri;
+protected ObjectMapper jsonMapper;
 protected XSOMParser parser;
+protected XSOMParser xsdParser;
 
-@Provides
-public SAXParserFactory provideSAXParserFactory() {
-	//TODO: double-check which parser to use that implements security like we want
-	return new SAXParserFactoryImpl();
+@Inject
+public DocumentModule(String uri, ObjectMapper jsonMapper, XSOMParser xsdParser) {
+	this.uri = uri;
+	this.jsonMapper = jsonMapper;
+	this.xsdParser = xsdParser;
 }
 
-@Provides
-public XSOMParser provideSchemaParser(SAXParserFactory factory) {
-	
-	factory.setNamespaceAware(true);
-    try {
-    	// TODO: checkout how to ensure we can load includes but only from the same origin and stuff
-    	factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-	} catch (SAXNotRecognizedException | SAXNotSupportedException | ParserConfigurationException e) {
+@Provides @Named("Unfetchable")
+public static Document unlocatableDocument(String uri, Exception e) {
+	Document document = new Document(null, null, null, uri, null);
+	document.couldNotBeFetchedDueTo(e);
+	return document;
+}
+
+
+
+@Produces
+public Document parseDocument(Produced<InputStream> remoteDocumentStream) {
+	try {
+		InputStream documentStream = remoteDocumentStream.get();
+		jsonMapper.readValue(documentStream, Document.class);
+	} catch (ExecutionException e) {
+		return DocumentModule.unlocatableDocument(uri, e);
+	} catch (JsonParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JsonMappingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-   return new XSOMParser(factory);
-    
-}
-
-
-@Provides
-public Document produceDocumentFromURL() {
-
-return null;
 	
+	return null;
 }
 
 

@@ -1,5 +1,7 @@
 package cat.calidos.morfeu.model.injection;
 
+import java.io.InputStream;
+
 import org.apache.http.HttpResponse;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -11,7 +13,7 @@ import dagger.producers.ProductionSubcomponent;
 @ProductionSubcomponent(modules = HttpRequesterModule.class)
 public interface HttpRequesterComponent {
 
-ListenableFuture<HttpResponse> fetchHttpData();
+ListenableFuture<InputStream> fetchHttpData();
 	
 @ProductionSubcomponent.Builder
 interface Builder {
