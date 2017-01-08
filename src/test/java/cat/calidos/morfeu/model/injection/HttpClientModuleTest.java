@@ -17,25 +17,12 @@
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.ExecutionException;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.junit.MockitoJUnit;
 
-import com.google.common.util.concurrent.ListenableFuture;
-
-import cat.calidos.morfeu.model.injection.ListeningExecutorServiceModule;
 import cat.calidos.morfeu.model.injection.HttpClientModule;
 
 /**
