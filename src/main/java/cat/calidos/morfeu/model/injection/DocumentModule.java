@@ -65,48 +65,50 @@ import dagger.producers.Production;
 @ProducerModule
 public class DocumentModule {
 
-protected String uri;
+protected URI uri;
 protected ObjectMapper jsonMapper;
 protected XSOMParser parser;
 protected XSOMParser xsdParser;
 
 @Inject
-public DocumentModule(String uri, ObjectMapper jsonMapper, XSOMParser xsdParser) {
+public DocumentModule(URI uri, ObjectMapper jsonMapper, XSOMParser xsdParser) {
 	this.uri = uri;
 	this.jsonMapper = jsonMapper;
 	this.xsdParser = xsdParser;
 }
 
+
 @Provides @Named("Unfetchable")
-public static Document unlocatableDocument(String uri, Exception e) {
-	Document document = new Document(null, null, null, uri, null);
+public static Document unlocatableDocument(URI uri, Exception e) {
+	Document document = new Document(null, null, null, uri, null, null);
 	document.couldNotBeFetchedDueTo(e);
 	return document;
 }
 
 
-
 @Produces
-public Document parseDocument(Produced<InputStream> remoteDocumentStream) {
+@Named("BareDocument")
+public Document parse(@Named("DocumentJSON") Produced<InputStream> remoteDocumentStream) throws Exception {
 	try {
 		InputStream documentStream = remoteDocumentStream.get();
-		jsonMapper.readValue(documentStream, Document.class);
+		return jsonMapper.readValue(documentStream, Document.class);
 	} catch (ExecutionException e) {
-		return DocumentModule.unlocatableDocument(uri, e);
+		throw new ExecutionException("Could not get remote document at '"+uri+"'", e);
 	} catch (JsonParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		throw new Exception("Could not parse document '"+uri+"'", e);
 	} catch (JsonMappingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		throw new Exception("Could not map json into object for '"+uri+"'", e);
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		throw new Exception("Could not read json document '"+uri+"'", e);
 	}
 	
-	return null;
 }
 
+
+@Produces
+public URI obtainModelURI(@Named("BareDocument") Document doc) {
+	return doc.getModelURI();
+}
 
 
 }

@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.model;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 
 /**
@@ -24,15 +26,20 @@ import javax.inject.Inject;
 public class Document extends Cell {
 
 protected String type;
-protected String uri;
-protected String modelUri;
+protected URI modelUri;
+protected URI docUri;
 
 @Inject
-public Document(String name, String desc, String type, String uri, String modelUri) {
+public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri) {
 	super(name, desc);
 	this.type = type;
 	this.uri = uri;
 	this.modelUri = modelUri;
+	this.docUri = docUri;
+}
+
+public URI getModelURI() {
+	return this.modelUri;
 }
 
 }

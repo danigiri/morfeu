@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -35,6 +36,7 @@ import dagger.producers.Produces;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//TODO: maybe this can be a provider?
 @ProducerModule(subcomponents = HttpRequesterComponent.class)
 public class HttpClientModule {
 

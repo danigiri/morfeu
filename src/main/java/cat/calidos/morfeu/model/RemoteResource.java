@@ -4,9 +4,12 @@ import java.net.URI;
 
 import org.apache.commons.lang.NullArgumentException;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 public class RemoteResource implements Locatable {
 
 protected Exception fetchException = null;
+//@JsonDeserialize(using=URIDeserializer.class)
 protected URI uri;
 
 public URI getUri() {
