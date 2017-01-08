@@ -47,7 +47,7 @@ public class URIDeserializer extends StdDeserializer<URI> {
 		try {
 			return new URI(p.getText());
 		} catch (URISyntaxException e) {
-			return new JSonPro
+			return null; //return new JSonPro
 		}
 	}
 

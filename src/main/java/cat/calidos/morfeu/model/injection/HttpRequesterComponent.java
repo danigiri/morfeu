@@ -2,22 +2,21 @@ package cat.calidos.morfeu.model.injection;
 
 import java.io.InputStream;
 
-import org.apache.http.HttpResponse;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.injection.RequestScoped;
-import dagger.producers.ProductionSubcomponent;
+import dagger.producers.ProductionComponent;
 
-@RequestScoped
-@ProductionSubcomponent(modules = HttpRequesterModule.class)
+@ProductionComponent(modules = {HttpRequesterModule.class, HttpClientModule.class, ListeningExecutorServiceModule.class})
 public interface HttpRequesterComponent {
 
 ListenableFuture<InputStream> fetchHttpData();
 	
-@ProductionSubcomponent.Builder
+@ProductionComponent.Builder
 interface Builder {
 	Builder httpRequesterModule(HttpRequesterModule m);
+	Builder httpClientModule(HttpClientModule m);
 	HttpRequesterComponent build();
 }
 

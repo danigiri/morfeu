@@ -19,6 +19,7 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
@@ -26,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,18 +45,19 @@ public class HttpClientModuleTest {
 
 
 @Test
-public void testProduceHttpClient() {
-	assertNotNull(HttpClientModule.produceHttpClient());
+public void testProduceHttpClient() throws Exception {
+	CloseableHttpClient client = HttpClientModule.produceHttpClient();
+	assertNotNull(client);
+	client.close();
 }
+
 
 @Test
-public void testProduceRequest() throws Exception {
-
-	URI uri = new URI("http://www.foo.com");
-	HttpGet request = HttpClientModule.produceRequest(uri);
-	assertNotNull(request);
-	assertEquals("GET", request.getMethod());
-
+public void testInjection() throws IOException {
+	CloseableHttpClient client = DaggerHttpClientComponent.create().httpClient();
+	assertNotNull(client);
+	client.close();
 }
+
 
 }

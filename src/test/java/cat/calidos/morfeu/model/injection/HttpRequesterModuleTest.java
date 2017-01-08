@@ -3,10 +3,13 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -29,35 +32,34 @@ public class HttpRequesterModuleTest {
 
 @Mock CloseableHttpClient httpClient;
 @Mock CloseableHttpResponse response;
-private URI uri;
-private HttpGet request;
-private ListeningExecutorService executor;
+@Mock HttpEntity entity;
+@Mock InputStream stream;
 
-@Before
-public void setup() throws Exception {
+private String uri = "http://www.foo.com";
 
-	uri = new URI("http://www.cisco.com");
-	request = HttpClientModule.produceRequest(uri);
-	executor = ListeningExecutorServiceModule.executor();
-}
+@Test
+public void testProduceRequest() throws Exception {
 
+	HttpGet request = produceRequest();
+	assertNotNull(request);
+	assertEquals("GET", request.getMethod());
 
-@After
-public void teardown() {
-	executor.shutdownNow();
 }
 
 
 @Test
 public void testGetchHttpData() throws Exception {
 
+	//FIXME: this is ridiculously exposing implementation details, is there no other way?
+	HttpGet request = produceRequest();
 	when(httpClient.execute(request)).thenReturn(response);
+	when(response.getEntity()).thenReturn(entity);
+	when(entity.getContent()).thenReturn(stream);
 	
-	HttpRequesterModule httpRequester = new HttpRequesterModule(executor, httpClient);
-	ListenableFuture<HttpResponse> dataFuture = httpRequester.fetchHttpData(request);
-	HttpResponse httpResponse = dataFuture.get();
+	HttpRequesterModule httpRequester = new HttpRequesterModule(uri);
+	InputStream streamResponse =  httpRequester.fetchHttpData(httpClient, request);
 	
-	assertEquals(response, httpResponse);
+	assertEquals(stream, streamResponse);
 	verify(httpClient, times(1)).close();	
 
 }
@@ -66,23 +68,40 @@ public void testGetchHttpData() throws Exception {
 @Test
 public void testFaultyGetchHttpData() throws Exception {
 
-	HttpGet request = HttpClientModule.produceRequest(uri);
+	HttpGet request = produceRequest();
 	when(httpClient.execute(request)).thenThrow(new ClientProtocolException("Bad request type"));
 
-	HttpRequesterModule httpRequester = new HttpRequesterModule(executor, httpClient);
-	ListenableFuture<HttpResponse> dataFuture = httpRequester.fetchHttpData(request);
+	HttpRequesterModule httpRequester = new HttpRequesterModule(uri);
 	try {
-		dataFuture.get();
+		httpRequester.fetchHttpData(httpClient, request);
 		fail("Bad request should throw an execution exception");
-	} catch (ExecutionException e) {
-		Throwable cause = e.getCause();
-		assertEquals(ClientProtocolException.class, cause.getClass());
-		assertEquals("Bad request type", cause.getMessage());
+	} catch (ClientProtocolException e) {
+		assertEquals("Bad request type", e.getMessage());
 	}
 
 	// connection was still closed even after exception!
 	verify(httpClient, times(1)).close();	
 
+}
+
+// kept as reference for working vanilla injection (no submodules or fancy stuff)
+//@Test
+//public void testInjection() throws Exception {
+//	
+//	HttpRequesterComponent component = DaggerHttpRequesterComponent.builder()
+//		.httpClientModule(new HttpClientModule())
+//		.httpRequesterModule(new HttpRequesterModule(uri))
+//		.build();
+//	InputStream stream = component.fetchHttpData().get();
+//
+//}
+
+
+private HttpGet produceRequest() throws URISyntaxException {
+
+	HttpRequesterModule module = new HttpRequesterModule(uri);
+	HttpGet request = module.produceRequest();
+	return request;
 }
 
 }

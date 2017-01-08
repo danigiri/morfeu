@@ -16,11 +16,16 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 
@@ -29,6 +34,7 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+import dagger.producers.ProductionComponent.Builder;
 
 /**
 * @author daniel giribet
@@ -36,24 +42,22 @@ import dagger.producers.Produces;
 @ProducerModule
 public class HttpRequesterModule {
 
-protected ListeningExecutorService executorService;
-protected CloseableHttpClient client;
-protected HttpGet request;
+protected String uriString;
 
-@Inject
-public HttpRequesterModule(ListeningExecutorService executorService, CloseableHttpClient client, HttpGet request) {
-	this.executorService = executorService;
-	this.client = client;
-	this.request = request;
+public HttpRequesterModule(String uri) {
+	this.uriString = uri;
+}
+
+@Produces 
+public HttpGet produceRequest() throws URISyntaxException {
+	URI uri = new URI(uriString);
+	return new HttpGet(uri);
 }
 
 
 @Produces
-public ListenableFuture<InputStream> fetchHttpData() {
+public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
 	
-	return executorService.submit(new Callable<InputStream>() {
-		@Override
-		public InputStream call() throws Exception {
 			try {
 				 return client.execute(request)
 						 .getEntity()
@@ -63,7 +67,6 @@ public ListenableFuture<InputStream> fetchHttpData() {
 						client.close();
 				}
 			}
-		}});
 	
 }
 

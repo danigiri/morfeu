@@ -16,17 +16,17 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import cat.calidos.morfeu.injection.ApplicationScoped;
-import dagger.producers.ProductionComponent;
+import org.apache.http.impl.client.CloseableHttpClient;
+
+import dagger.Component;
 
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ApplicationScoped
-@ProductionComponent(modules={HttpClientModule.class, ListeningExecutorServiceModule.class})
+@Component(modules=HttpClientModule.class)
 public interface HttpClientComponent {
 
-HttpRequesterComponent httpRequestComponent(HttpRequesterModule requester);
+CloseableHttpClient httpClient();
 
 }

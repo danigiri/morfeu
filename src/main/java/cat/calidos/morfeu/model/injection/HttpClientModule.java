@@ -16,40 +16,24 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
-import java.util.concurrent.Callable;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-
+import dagger.Module;
+import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: maybe this can be a provider?
-@ProducerModule(subcomponents = HttpRequesterComponent.class)
+@Module
 public class HttpClientModule {
 
 //TODO: this is stateful and non-reentrant and probably fairly expensive to allocate, break into two components or something
-@Produces
+@Provides
 public static CloseableHttpClient produceHttpClient() {
 	return HttpClients.createDefault();	
-}
-
-
-@Produces
-public static HttpGet produceRequest(URI uri) {
-	return new HttpGet(uri);
 }
 
 }

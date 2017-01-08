@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -30,9 +31,10 @@ public final class ListeningExecutorServiceModule {
 	
 	@Provides
 	@Production
-	public static ListeningExecutorService executor() {
+	public static Executor executor() {
 		// Following the Dagger 2 official docs, this private executor pool should be OK for just the HTTP stuff
-		return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+		//return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+		return Executors.newCachedThreadPool();
 	}
 	
 }

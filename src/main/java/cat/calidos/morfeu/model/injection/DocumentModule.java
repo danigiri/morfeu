@@ -77,15 +77,6 @@ public DocumentModule(URI uri, ObjectMapper jsonMapper, XSOMParser xsdParser) {
 	this.xsdParser = xsdParser;
 }
 
-
-@Provides @Named("Unfetchable")
-public static Document unlocatableDocument(URI uri, Exception e) {
-	Document document = new Document(null, null, null, uri, null, null);
-	document.couldNotBeFetchedDueTo(e);
-	return document;
-}
-
-
 @Produces
 @Named("BareDocument")
 public Document parse(@Named("DocumentJSON") Produced<InputStream> remoteDocumentStream) throws Exception {
@@ -93,7 +84,7 @@ public Document parse(@Named("DocumentJSON") Produced<InputStream> remoteDocumen
 		InputStream documentStream = remoteDocumentStream.get();
 		return jsonMapper.readValue(documentStream, Document.class);
 	} catch (ExecutionException e) {
-		throw new ExecutionException("Could not get remote document at '"+uri+"'", e);
+		throw new Exception("Could not get remote document at '"+uri+"'", e);
 	} catch (JsonParseException e) {
 		throw new Exception("Could not parse document '"+uri+"'", e);
 	} catch (JsonMappingException e) {
@@ -105,11 +96,11 @@ public Document parse(@Named("DocumentJSON") Produced<InputStream> remoteDocumen
 }
 
 
-@Produces
-public URI obtainModelURI(@Named("BareDocument") Document doc) {
-	return doc.getModelURI();
-}
-
+//@Produces
+//@Named("CompleteDocument")
+//public Document completeDocument(@Named a) {
+//	
+//}
 
 }
 
