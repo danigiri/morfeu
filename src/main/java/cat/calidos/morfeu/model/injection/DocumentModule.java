@@ -19,79 +19,68 @@ package cat.calidos.morfeu.model.injection;
 import cat.calidos.morfeu.model.Document;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.xerces.jaxp.SAXParserFactoryImpl;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.sun.xml.xsom.parser.XSOMParser;
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.producers.Produced;
+import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
-import dagger.producers.Production;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule
+@ProducerModule(subcomponents=HttpRequesterComponent.class, includes=ParserModule.class)
 public class DocumentModule {
 
-protected URI uri;
-protected ObjectMapper jsonMapper;
-protected XSOMParser parser;
-protected XSOMParser xsdParser;
+protected String uri;
+// FIXME: for the life of me, I can't figure out why this is not injected, let's do the injection by hand, to keep sanity
+@Inject ObjectMapper jsonMapper = ParserModule.provideJSONObjectMapper();
+@Inject XSOMParser xsdParser = ParserModule.provideSchemaParser();
 
-@Inject
-public DocumentModule(URI uri, ObjectMapper jsonMapper, XSOMParser xsdParser) {
+
+public DocumentModule(String uri) {
 	this.uri = uri;
-	this.jsonMapper = jsonMapper;
-	this.xsdParser = xsdParser;
 }
 
 @Produces
-@Named("BareDocument")
-public Document parse(@Named("DocumentJSON") Produced<InputStream> remoteDocumentStream) throws Exception {
-	try {
-		InputStream documentStream = remoteDocumentStream.get();
-		return jsonMapper.readValue(documentStream, Document.class);
-	} catch (ExecutionException e) {
-		throw new Exception("Could not get remote document at '"+uri+"'", e);
-	} catch (JsonParseException e) {
-		throw new Exception("Could not parse document '"+uri+"'", e);
-	} catch (JsonMappingException e) {
-		throw new Exception("Could not map json into object for '"+uri+"'", e);
-	} catch (IOException e) {
-		throw new Exception("Could not read json document '"+uri+"'", e);
-	}
+public Document parse(Producer<HttpRequesterComponent.Builder> requesterComponentBuilder) throws Exception {
+		try {
+			assert jsonMapper!=null;
+			HttpRequesterComponent component = requesterComponentBuilder.get().get()
+					.httpRequesterModule(new HttpRequesterModule(uri))
+					.build();
+//			InputStream documentStream = component.fetchHttpData()
+//					.get();
+//			return jsonMapper.readValue(documentStream, Document.class);
+			String v = component.fetchHttpDataAsString().get();
+			System.err.println("***********"+v);
+			return jsonMapper.readValue(v, Document.class);
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonParseException e) {
+			throw new Exception("Could not parse document '"+uri+"'", e);
+		} catch (JsonMappingException e) {
+			throw new Exception("Could not map json into object for '"+uri+"'", e);
+		} catch (IOException e) {
+			throw new Exception("Could not read json document '"+uri+"'", e);
+		}
+	return null;
+//	try {
+//		InputStream documentStream = remoteDocumentStream.get();
+//		return jsonMapper.readValue(documentStream, Document.class);
+//	} catch (ExecutionException e) {
+//		throw new Exception("Could not get remote document at '"+uri+"'", e);
+//	} catch (IOException e) {
+//		throw new Exception("Could not read json document '"+uri+"'", e);
+//	}
 	
 }
 

@@ -7,16 +7,17 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import dagger.producers.ProductionComponent;
+import dagger.producers.ProductionSubcomponent;
 
-@ProductionComponent(modules = {HttpRequesterModule.class, HttpClientModule.class, ListeningExecutorServiceModule.class})
+@ProductionSubcomponent(modules = {HttpRequesterModule.class, HttpClientModule.class, ListeningExecutorServiceModule.class})
 public interface HttpRequesterComponent {
 
 ListenableFuture<InputStream> fetchHttpData();
+ListenableFuture<String> fetchHttpDataAsString();
 	
-@ProductionComponent.Builder
+@ProductionSubcomponent.Builder
 interface Builder {
 	Builder httpRequesterModule(HttpRequesterModule m);
-	Builder httpClientModule(HttpClientModule m);
 	HttpRequesterComponent build();
 }
 

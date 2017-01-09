@@ -25,6 +25,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -62,6 +63,23 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) th
 				 return client.execute(request)
 						 .getEntity()
 						 .getContent();
+			} finally {
+				if (client!=null) {
+						client.close();
+				}
+			}
+	
+}
+
+
+@Produces
+public String fetchHttpDataAsString(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
+	
+			try {
+				 return IOUtils.toString(client.execute(request)
+						 .getEntity()
+						 .getContent()
+						 );
 			} finally {
 				if (client!=null) {
 						client.close();

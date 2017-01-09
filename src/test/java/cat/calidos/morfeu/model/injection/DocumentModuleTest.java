@@ -16,23 +16,26 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import java.util.concurrent.ExecutionException;
 
-import cat.calidos.morfeu.model.Document;
-import dagger.producers.ProductionComponent;
+import org.junit.Test;
 
 /**
 * @author daniel giribet
-*////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={DocumentModule.class, ListeningExecutorServiceModule.class, ParserModule.class})
-public interface DocumentComponent {
-	ListenableFuture<Document> fetch();
-	
-	@ProductionComponent.Builder
-	interface Builder {
-//		Builder parserModule(ParserModule m);
-		Builder documentModule(DocumentModule m);
-		DocumentComponent build();
-	}
-	
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class DocumentModuleTest {
+
+
+@Test
+public void testInjection() throws Exception {
+	DaggerDocumentComponent.builder()
+		//.parserModule(new ParserModule())
+		.documentModule(new DocumentModule("http://localhost:3000/test-resources/documents/document1.json"))
+		.build()
+		.fetch()
+		.get();
+		
+}
+
+
 }

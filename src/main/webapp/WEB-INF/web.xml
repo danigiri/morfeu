@@ -3,14 +3,14 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   
-  <context-param>  
+  <!--  context-param>  
     <description>Default resources uri prefix</description>  
     <param-name>REZ_URI_PREFIX</param-name>  
-    <param-value>/partikle/test-resources</param-value>  
-  </context-param>
+    <param-value>/morfeu/test-resources</param-value>  
+  </context-param-->
 
 	<!-- Proxy -->
-	<servlet>
+	<!-- servlet>
     	<display-name>catalogue-servlet</display-name>
     	<servlet-name>CatalogueServlet</servlet-name>
    		<servlet-class>cat.calidos.morfeu.webapp.ResourcesServlet</servlet-class>
@@ -19,6 +19,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 	<servlet-mapping>
     	<servlet-name>RemoteResourcesServlet</servlet-name>
     	<url-pattern>/remote</url-pattern>
-  	</servlet-mapping>
+  	</servlet-mapping-->
 
 </web-app>

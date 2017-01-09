@@ -20,12 +20,12 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.xerces.jaxp.SAXParserFactoryImpl;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.xsom.parser.XSOMParser;
+
 
 import dagger.Module;
 import dagger.Provides;
@@ -40,12 +40,12 @@ public class ParserModule {
 @Provides
 public static SAXParserFactory provideSAXParserFactory() {
 	//TODO: double-check which parser to use that implements security like we want
-	return new SAXParserFactoryImpl();
+	return SAXParserFactory.newInstance();
 }
 
 @Provides
-public static  XSOMParser provideSchemaParser(SAXParserFactory factory) {
-	
+public static XSOMParser provideSchemaParser() {
+	SAXParserFactory factory = provideSAXParserFactory();
 	factory.setNamespaceAware(true);
     try {
     	// TODO: checkout how to ensure we can load includes but only from the same origin and stuff
@@ -59,7 +59,7 @@ public static  XSOMParser provideSchemaParser(SAXParserFactory factory) {
 }
 
 @Provides 
-ObjectMapper provideJSONObjectMapper() {
+public static ObjectMapper provideJSONObjectMapper() {
 	return new ObjectMapper();	//TODO: is it necessary to 'provide' default constructor objects?
 }
 

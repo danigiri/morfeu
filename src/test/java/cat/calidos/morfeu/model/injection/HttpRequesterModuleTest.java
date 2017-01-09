@@ -77,6 +77,7 @@ public void testFaultyGetchHttpData() throws Exception {
 }
 
 // kept as reference for working vanilla injection (no submodules or fancy stuff)
+// though this is inefficient as it uses a new object graph all the time
 //@Test
 //public void testInjection() throws Exception {
 //	

@@ -21,15 +21,15 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.injection.ApplicationScoped;
 import dagger.Component;
+import dagger.Subcomponent;
+import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@ApplicationScoped
-@Component(modules = ParserModule.class)
+@Component(dependencies = ParserModule.class)
 public interface ParserComponent {
 
-	XSOMParser provideSchemaParser();
-	ObjectMapper provideJSONObjectMapper();
-	
+ObjectMapper provideJSONObjectMapper();
+
 }

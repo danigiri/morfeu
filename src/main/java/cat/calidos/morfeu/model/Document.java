@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
@@ -29,13 +30,13 @@ protected String type;
 protected URI modelUri;
 protected URI docUri;
 
-@Inject
-public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri) {
+//@Inject
+public Document(String name, String desc, String type,  String modelUri, String docUri) throws URISyntaxException {
 	super(name, desc);
 	this.type = type;
-	this.uri = uri;
-	this.modelUri = modelUri;
-	this.docUri = docUri;
+	//this.uri = uri;
+	this.modelUri = new URI(modelUri);
+	this.docUri = new URI(docUri);
 }
 
 public URI getModelURI() {
