@@ -25,7 +25,7 @@ import com.sun.xml.xsom.XSSchemaSet;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Model extends RemoteResource implements Validable, Locatable {
 
-Model(URI u, XSSchemaSet s) {
+public Model(URI u, XSSchemaSet s) {
 	super(u);
 	this.schema = s;
 }

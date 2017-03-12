@@ -25,14 +25,14 @@ import cat.calidos.morfeu.model.Document;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentModuleTest {
 
-
-//@Test
-//public void testInjection() throws Exception {
-//	
-//	String uri = "http://localhost:3000/test-resources/documents/document1.json";
-//	Document document = DaggerDocumentComponent.builder().URIModule(new URIModule(uri)).build().produce().get();
-//	System.err.println(document);
-//}
+// TODO: move to integration testing
+@Test
+public void testInjection() throws Exception {
+	
+	String uri = "http://localhost:3000/test-resources/documents/document1.json";
+	Document document = DaggerDocumentComponent.builder().URIModule(new URIModule(uri)).build().produce().get();
+	System.err.println(document);
+}
 
 //@Test
 //public void testFetchDocument() {

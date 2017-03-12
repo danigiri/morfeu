@@ -19,38 +19,37 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.inject.Inject;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Document extends Cell {
 
-protected String type;
-protected URI modelUri;
-protected URI docUri;
+@Inject @JsonProperty("type") public String type;
+@Inject @JsonProperty("modelURI") public URI modelURI;
+@Inject @JsonProperty("docURI") public URI docURI;
+@Inject public Model model;
 
-public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri) {
+
+public Document(URI u) {
+	super(u);
+}
+
+public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri, Model m) {
+	
 	super(name, uri, desc);
+
 	this.type = type;
 	this.uri = uri;
-	this.modelUri = modelUri;
-	this.docUri = docUri;
+	this.modelURI = modelUri;
+	this.docURI = docUri;
+	this.model = m;
+
 }
 
-public URI getModelURI() {
-	return this.modelUri;
-}
-
-public String getType() {
-	return type;
-}
-
-public URI getModelUri() {
-	return modelUri;
-}
-
-public URI getDocUri() {
-	return docUri;
-}
 
 /* (non-Javadoc)
 * @see java.lang.Object#toString()
@@ -58,7 +57,7 @@ public URI getDocUri() {
 @Override
 public String toString() {
 
-	return "{"+this.name+", ["+this.type+"], uri:"+this.uri+", model:"+this.modelUri+", doc:"+this.docUri+"}";
+	return "{"+this.name+", ["+this.type+"], uri:"+this.uri+", model:"+this.modelURI+", doc:"+this.docURI+"}";
 }
 
 

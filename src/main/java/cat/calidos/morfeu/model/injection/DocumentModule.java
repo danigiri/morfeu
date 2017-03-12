@@ -23,55 +23,39 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.sun.xml.xsom.parser.XSOMParser;
 
-import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-/**
+/** TODO: make all this asynchronous
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule
-public class DocumentModule {
+@ProducerModule(subcomponents=ModelComponent.class)
+public class DocumentModule extends RemoteModule {
 
 
-//@Produces
-//public Document produceDocument(@Named("name") String name, 
-//								@Named("desc") String desc, 
-//								@Named("type") String type, 
-//								@Named("modelURI") URI modelURI, 
-//								@Named("docURI") URI docURI) throws Exception {
-//	return new Document(name, desc, type, modelURI, docURI);
+@Produces
+public Document produceDocument(@Named("BasicDocument") Document doc, Provider<ModelComponent.Builder> modelComponentProvider) throws Exception {
+
+	ModelComponent builder = modelComponentProvider.get().builder();
+	doc.model = builder.model().get();
+		
+	return doc;
+	
+}
+
+//@Produces 
+//Document produceDocument(@Named("name") String name, URI uri) {
+//	return new Document(name, ,"",uri, uri, uri);
 //}
-
-@Produces 
-Document produceDocument(URI uri) {
-	return new Document("","","",uri, uri, uri);
-}
-
-
-@Produces
-@Named("name")
-String getName() {
-	return null;
-}
-
-
-@Produces
-@Named("desc")
-String getDesc() {
-	return null;
-}
 
 
 @Produces @Named("JSONDocumentStream")
@@ -80,39 +64,30 @@ InputStream fetchDocumentJSON(URI u, CloseableHttpClient c) throws ExecutionExce
 	try {
 		documentStream = fetchRemoteStream(u, c).get();
 	} catch (Exception e) {
-		throw new ExecutionException("Problem fetching document with uri:"+u+" ("+e.getMessage()+")",e);
+		throw new ExecutionException("Problem fetching document with uri:"+u+"",e);
 	}
 	return documentStream;
 }
 
 
 @Produces @Named("BasicDocument")
-Document fetchDocument(@Named("JSONDocumentStream") InputStream s, ObjectMapper mapper) 
+Document parseDocument(URI u, @Named("JSONDocumentStream") InputStream s, ObjectMapper mapper) 
 		throws JsonParseException, JsonMappingException, IOException {
-	return mapper.readValue(s, Document.class);
+	return mapper.readerForUpdating(new Document(u)).readValue(s);
 }
 
 
 @Produces @Named("ModelURI")
 URI modelURI(@Named("BasicDocument") Document doc) {
-	return doc.getDocUri();
+	//TODO: the problem here is that urls need to be absolute in the JSON, which is a PITA, we need to autodetect this
+	URI modelUri = doc.modelURI;
+	return modelUri;
 }
 
-
-@Produces @Named("ModelStream")
-ListenableFuture<InputStream> fetchDocumentModel(@Named("ModelURI") URI u, CloseableHttpClient c) {
-	return fetchRemoteStream(u, c);
-}
-
-
-private ListenableFuture<InputStream> fetchRemoteStream(URI u, CloseableHttpClient c) {
-
-	return DaggerHttpRequesterComponent.builder()
-			.forURI(u)
-			.withClient(c)
-			.build()
-			.fetchHttpData();
-}
+//@Produces 
+//Document produceDocument(@Named("name") String name, URI uri) {
+//	return new Document(name, ,"",uri, uri, uri);
+//}
 
 
 }

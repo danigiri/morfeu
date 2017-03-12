@@ -16,14 +16,18 @@ RemoteResource(URI u) {
 	this.uri = u;
 }
 
+
 public URI getUri() {
 	return uri;
 }
 
+@Deprecated
 public boolean couldBeFetched() {
 	return fetchException==null;
 }
 
+
+@Deprecated
 public void couldNotBeFetchedDueTo(Exception e) {
 	if (e==null) {
 		throw new NullArgumentException("Trying to assing a null fetch exception");
@@ -31,6 +35,8 @@ public void couldNotBeFetchedDueTo(Exception e) {
 	fetchException = e;
 }
 
+
+@Deprecated
 public Exception fetchException() {
 	return fetchException;
 }

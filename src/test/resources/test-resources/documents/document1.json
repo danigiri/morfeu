@@ -2,7 +2,7 @@
 	"name": "Document 1"
 	,"desc": "First document"
 	,"type": "xml"
-	,"modelUri": "/test-resources/models/test-model.xsd"
-	,"docUri": "/test-resources/documents/document1.xml"
+	,"modelURI": "http://localhost:3000/test-resources/models/test-model.xsd"
+	,"docURI": "http://localhost:3000/test-resources/documents/document1.xml"
 	
 }

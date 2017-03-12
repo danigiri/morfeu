@@ -20,6 +20,7 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
@@ -53,13 +54,17 @@ public static XSOMParser provideSchemaParser(SAXParserFactory factory) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-   return new XSOMParser(factory);
+    XSOMParser parser = new XSOMParser(factory);
+    
+    //parser.setErrorHandler(new ErrorHandler()); TODO: handle parse errors more gracefully
+    return parser;
     
 }
 
 @Provides 
 public static ObjectMapper provideJSONObjectMapper() {
-	return new ObjectMapper();	//TODO: is it necessary to 'provide' default constructor objects?
+	ObjectMapper mapper = new ObjectMapper();
+	return mapper;	//TODO: is it necessary to 'provide' default constructor objects?
 }
 
 

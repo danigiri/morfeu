@@ -20,19 +20,40 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class Cell extends RemoteResource implements Validable {
 
-protected String desc;
-protected String name;
+@Inject @JsonProperty("name") public String name;
+@Inject @JsonProperty("desc") public String desc;
 
-@Inject
+
+public Cell(URI u) {
+	super(u);
+}
+
+
 public Cell(String name, URI u, String desc) {
 	super(u);
 	this.name = name;
 	this.desc = desc;
 }
+
+
+public String getDesc() {
+
+	return desc;
+}
+
+
+public String getName() {
+
+	return name;
+}
+
+
 
 }

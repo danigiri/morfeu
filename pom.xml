@@ -105,8 +105,8 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.13</version>
         		<configuration>
-	          		<excludes>	<!-- no integration tests in unit testing -->
-	            		<exclude>**/*ITest*</exclude>
+	          		<excludes>	<!-- no UI/integration tests in unit testing -->
+	            		<exclude>**/*IntTest*</exclude>
 	            		<exclude>**/*UITest*</exclude>
 	          		</excludes>
 				</configuration>

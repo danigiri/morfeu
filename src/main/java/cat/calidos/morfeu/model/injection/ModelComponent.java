@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,22 +18,20 @@ package cat.calidos.morfeu.model.injection;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.model.Document;
-import dagger.BindsInstance;
-import dagger.producers.ProductionComponent;
+import cat.calidos.morfeu.model.Model;
+import dagger.producers.ProductionSubcomponent;
 
 /**
 * @author daniel giribet
-*////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={DocumentModule.class, URIModule.class, HttpClientModule.class, ParserModule.class, ListeningExecutorServiceModule.class})
-public interface DocumentComponent {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionSubcomponent(modules=ModelModule.class)
+public interface ModelComponent {
 
-ListenableFuture<Document> produce();
-	
-@ProductionComponent.Builder
+ListenableFuture<Model> model();
+
+@ProductionSubcomponent.Builder
 interface Builder {
-	Builder URIModule(URIModule m);
-	DocumentComponent build();
+		ModelComponent builder();
 }
-	
+
 }

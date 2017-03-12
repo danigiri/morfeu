@@ -54,9 +54,15 @@ public HttpGet produceRequest(URI u) {
 public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
 	
 	try {
-		 return client.execute(request)
+		 
+		// we want to close right now so we fetch all the content and close the input stream
+		InputStream content = client.execute(request)
 				 .getEntity()
 				 .getContent();
+		InputStream fetchedData = IOUtils.toBufferedInputStream(content);
+		 
+		return fetchedData;
+		 
 	} finally {
 		if (client!=null) {
 				client.close();
