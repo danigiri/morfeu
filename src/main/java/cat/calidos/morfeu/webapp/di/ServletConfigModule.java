@@ -26,7 +26,7 @@ import dagger.Provides;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ServletConfigModule {
 
@@ -36,6 +36,7 @@ public static Properties getProperties(ServletConfig c) {
 	Properties p = new Properties();
 	Collections.list(c.getInitParameterNames())
 		.forEach(name -> p.setProperty(name, c.getInitParameter(name)));
+	
 	return p;
 
 }

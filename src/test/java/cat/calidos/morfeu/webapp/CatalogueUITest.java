@@ -79,6 +79,7 @@ public void catalogueDetailTest() throws Exception {
 	$("#catalogue-list").should(appear);
 	$("#catalogue").shouldNotBe(visible);
 	$("#document-list").shouldNotBe(visible);
+	
 	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
 	catalogueEntries.get(0).click();
 	$("#catalogue").should(appear);

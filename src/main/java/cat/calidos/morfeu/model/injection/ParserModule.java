@@ -44,8 +44,7 @@ public static SAXParserFactory provideSAXParserFactory() {
 }
 
 @Provides
-public static XSOMParser provideSchemaParser() {
-	SAXParserFactory factory = provideSAXParserFactory();
+public static XSOMParser provideSchemaParser(SAXParserFactory factory) {
 	factory.setNamespaceAware(true);
     try {
     	// TODO: checkout how to ensure we can load includes but only from the same origin and stuff

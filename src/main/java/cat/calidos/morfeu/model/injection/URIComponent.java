@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,28 +17,16 @@
 package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
-import dagger.Module;
-import dagger.Provides;
-
-import cat.calidos.morfeu.model.Catalogue;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /**
 * @author daniel giribet
+* Note we're using a producer as we can declare explicit exceptions
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class CatalogueModule {
+public interface URIComponent {
 
-private String baseUri;
-
-public CatalogueModule(String baseUri) {
-	this.baseUri = baseUri;
-}
-
-@Provides 
-Catalogue provideCatalogue(String uri) {
-	URI catalogueUri = URI.create(baseUri+uri);
-	return null;
-}
+URI uri() throws URISyntaxException;
 
 }

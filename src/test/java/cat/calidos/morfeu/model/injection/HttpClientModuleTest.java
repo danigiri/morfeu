@@ -18,12 +18,8 @@ package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Test;
-
-import cat.calidos.morfeu.model.injection.HttpClientModule;
 
 /**
 * @author daniel giribet
@@ -33,18 +29,11 @@ public class HttpClientModuleTest {
 
 @Test
 public void testProduceHttpClient() throws Exception {
+	
 	CloseableHttpClient client = HttpClientModule.produceHttpClient();
 	assertNotNull(client);
 	client.close();
+	
 }
-
-
-@Test
-public void testInjection() throws IOException {
-	CloseableHttpClient client = DaggerHttpClientComponent.create().httpClient();
-	assertNotNull(client);
-	client.close();
-}
-
 
 }

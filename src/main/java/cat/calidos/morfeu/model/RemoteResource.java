@@ -12,6 +12,10 @@ protected Exception fetchException = null;
 //@JsonDeserialize(using=URIDeserializer.class)
 protected URI uri;
 
+RemoteResource(URI u) {
+	this.uri = u;
+}
+
 public URI getUri() {
 	return uri;
 }

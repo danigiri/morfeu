@@ -27,7 +27,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@Component(dependencies = ParserModule.class)
+//@Component
 public interface ParserComponent {
 
 ObjectMapper provideJSONObjectMapper();

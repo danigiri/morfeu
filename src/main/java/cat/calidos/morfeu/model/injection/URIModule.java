@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,17 +16,29 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import org.apache.http.impl.client.CloseableHttpClient;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import dagger.Component;
-
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=HttpClientModule.class)
-public interface HttpClientComponent {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProducerModule
+public class URIModule {
 
-CloseableHttpClient httpClient();
+
+private String uri;
+
+public URIModule(String u) {
+	this.uri = u;
+}
+
+@Produces
+URI uri() throws URISyntaxException {
+	System.err.println("[module] Producer for URI called");
+	return new URI(uri);
+}
 
 }

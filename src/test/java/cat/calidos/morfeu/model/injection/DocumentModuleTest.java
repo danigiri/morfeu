@@ -16,9 +16,9 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.util.concurrent.ExecutionException;
-
 import org.junit.Test;
+
+import cat.calidos.morfeu.model.Document;
 
 /**
 * @author daniel giribet
@@ -26,16 +26,19 @@ import org.junit.Test;
 public class DocumentModuleTest {
 
 
-@Test
-public void testInjection() throws Exception {
-	DaggerDocumentComponent.builder()
-		//.parserModule(new ParserModule())
-		.documentModule(new DocumentModule("http://localhost:3000/test-resources/documents/document1.json"))
-		.build()
-		.fetch()
-		.get();
-		
-}
+//@Test
+//public void testInjection() throws Exception {
+//	
+//	String uri = "http://localhost:3000/test-resources/documents/document1.json";
+//	Document document = DaggerDocumentComponent.builder().URIModule(new URIModule(uri)).build().produce().get();
+//	System.err.println(document);
+//}
+
+//@Test
+//public void testFetchDocument() {
+//	
+//	
+//}
 
 
 }

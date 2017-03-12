@@ -23,12 +23,12 @@ import javax.inject.Inject;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////
-public class Catalogue extends RemoteResource {
+public class Catalogue { //extends RemoteResource {
 
 	protected List<Document> documents;
 	protected List<Cell> templatePartikles;
 	
-	@Inject public Catalogue(String catalogueJson) {
-	}
+//	@Inject public Catalogue(URI u, String catalogueJson) {
+//	}
 
 }

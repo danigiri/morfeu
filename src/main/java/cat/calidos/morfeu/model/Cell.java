@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.model;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 
 /**
@@ -27,7 +29,8 @@ protected String desc;
 protected String name;
 
 @Inject
-public Cell(String name, String desc) {
+public Cell(String name, URI u, String desc) {
+	super(u);
 	this.name = name;
 	this.desc = desc;
 }

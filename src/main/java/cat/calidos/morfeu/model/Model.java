@@ -16,12 +16,20 @@
 
 package cat.calidos.morfeu.model;
 
+import java.net.URI;
+
 import com.sun.xml.xsom.XSSchemaSet;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Model extends RemoteResource implements Validable, Locatable {
+
+Model(URI u, XSSchemaSet s) {
+	super(u);
+	this.schema = s;
+}
+
 
 protected XSSchemaSet schema;
 

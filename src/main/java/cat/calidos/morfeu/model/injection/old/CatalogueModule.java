@@ -14,26 +14,31 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.model.injection.old;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import java.net.URI;
 
-import cat.calidos.morfeu.model.Document;
-import dagger.BindsInstance;
-import dagger.producers.ProductionComponent;
+import dagger.Module;
+import dagger.Provides;
+
+import cat.calidos.morfeu.model.Catalogue;
 
 /**
 * @author daniel giribet
-*////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={DocumentModule.class, URIModule.class, HttpClientModule.class, ListeningExecutorServiceModule.class})
-public interface DocumentComponent {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Module
+public class CatalogueModule {
 
-ListenableFuture<Document> produce();
-	
-@ProductionComponent.Builder
-interface Builder {
-	Builder URIModule(URIModule m);
-	DocumentComponent build();
+private String baseUri;
+
+public CatalogueModule(String baseUri) {
+	this.baseUri = baseUri;
 }
-	
+
+@Provides 
+Catalogue provideCatalogue(String uri) {
+	URI catalogueUri = URI.create(baseUri+uri);
+	return null;
+}
+
 }

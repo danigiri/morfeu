@@ -43,49 +43,40 @@ import dagger.producers.ProductionComponent.Builder;
 @ProducerModule
 public class HttpRequesterModule {
 
-protected String uriString;
-
-public HttpRequesterModule(String uri) {
-	this.uriString = uri;
-}
 
 @Produces 
-public HttpGet produceRequest() throws URISyntaxException {
-	URI uri = new URI(uriString);
-	return new HttpGet(uri);
+public HttpGet produceRequest(URI u) {
+	return new HttpGet(u);
 }
 
 
 @Produces
 public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
 	
-			try {
-				 return client.execute(request)
-						 .getEntity()
-						 .getContent();
-			} finally {
-				if (client!=null) {
-						client.close();
-				}
-			}
-	
+	try {
+		 return client.execute(request)
+				 .getEntity()
+				 .getContent();
+	} finally {
+		if (client!=null) {
+				client.close();
+		}
+	}
+
 }
 
 
-@Produces
-public String fetchHttpDataAsString(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
-	
-			try {
-				 return IOUtils.toString(client.execute(request)
-						 .getEntity()
-						 .getContent()
-						 );
-			} finally {
-				if (client!=null) {
-						client.close();
-				}
-			}
-	
-}
+//@Produces
+//public String fetchHttpDataAsString(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
+//	
+//	try {
+//		return IOUtils.toString(client.execute(request).getEntity().getContent());
+//	} finally {
+//		if (client != null) {
+//			client.close();
+//		}
+//	}
+//	
+//}
 
 }

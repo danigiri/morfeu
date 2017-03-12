@@ -35,7 +35,6 @@ public void testProvideConfigWithServletConfig() {
 		when(servletConfig.getInitParameter("c")).thenReturn("C");
 		
 		Properties p = (ServletConfigModule.getProperties(servletConfig));
-		
 		assertEquals("A", p.getProperty("a"));
 		assertEquals("B", p.getProperty("b"));
 		assertEquals("C", p.getProperty("c"));

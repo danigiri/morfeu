@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.http.HttpEntity;
@@ -48,7 +49,7 @@ public void testGetchHttpData() throws Exception {
 	when(response.getEntity()).thenReturn(entity);
 	when(entity.getContent()).thenReturn(stream);
 	
-	HttpRequesterModule httpRequester = new HttpRequesterModule(uri);
+	HttpRequesterModule httpRequester = new HttpRequesterModule();
 	InputStream streamResponse =  httpRequester.fetchHttpData(httpClient, request);
 	
 	assertEquals(stream, streamResponse);
@@ -63,7 +64,7 @@ public void testFaultyGetchHttpData() throws Exception {
 	HttpGet request = produceRequest();
 	when(httpClient.execute(request)).thenThrow(new ClientProtocolException("Bad request type"));
 
-	HttpRequesterModule httpRequester = new HttpRequesterModule(uri);
+	HttpRequesterModule httpRequester = new HttpRequesterModule();
 	try {
 		httpRequester.fetchHttpData(httpClient, request);
 		fail("Bad request should throw an execution exception");
@@ -92,8 +93,8 @@ public void testFaultyGetchHttpData() throws Exception {
 
 private HttpGet produceRequest() throws URISyntaxException {
 
-	HttpRequesterModule module = new HttpRequesterModule(uri);
-	HttpGet request = module.produceRequest();
+	HttpRequesterModule module = new HttpRequesterModule();
+	HttpGet request = module.produceRequest(new URI(uri));
 	return request;
 }
 

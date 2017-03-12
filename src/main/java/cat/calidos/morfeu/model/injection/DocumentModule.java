@@ -19,14 +19,19 @@ package cat.calidos.morfeu.model.injection;
 import cat.calidos.morfeu.model.Document;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import dagger.producers.Producer;
@@ -36,60 +41,78 @@ import dagger.producers.Produces;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(subcomponents=HttpRequesterComponent.class, includes=ParserModule.class)
+@ProducerModule
 public class DocumentModule {
-
-protected String uri;
-// FIXME: for the life of me, I can't figure out why this is not injected, let's do the injection by hand, to keep sanity
-@Inject ObjectMapper jsonMapper = ParserModule.provideJSONObjectMapper();
-@Inject XSOMParser xsdParser = ParserModule.provideSchemaParser();
-
-
-public DocumentModule(String uri) {
-	this.uri = uri;
-}
-
-@Produces
-public Document parse(Producer<HttpRequesterComponent.Builder> requesterComponentBuilder) throws Exception {
-		try {
-			assert jsonMapper!=null;
-			HttpRequesterComponent component = requesterComponentBuilder.get().get()
-					.httpRequesterModule(new HttpRequesterModule(uri))
-					.build();
-//			InputStream documentStream = component.fetchHttpData()
-//					.get();
-//			return jsonMapper.readValue(documentStream, Document.class);
-			String v = component.fetchHttpDataAsString().get();
-			System.err.println("***********"+v);
-			return jsonMapper.readValue(v, Document.class);
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonParseException e) {
-			throw new Exception("Could not parse document '"+uri+"'", e);
-		} catch (JsonMappingException e) {
-			throw new Exception("Could not map json into object for '"+uri+"'", e);
-		} catch (IOException e) {
-			throw new Exception("Could not read json document '"+uri+"'", e);
-		}
-	return null;
-//	try {
-//		InputStream documentStream = remoteDocumentStream.get();
-//		return jsonMapper.readValue(documentStream, Document.class);
-//	} catch (ExecutionException e) {
-//		throw new Exception("Could not get remote document at '"+uri+"'", e);
-//	} catch (IOException e) {
-//		throw new Exception("Could not read json document '"+uri+"'", e);
-//	}
-	
-}
 
 
 //@Produces
-//@Named("CompleteDocument")
-//public Document completeDocument(@Named a) {
-//	
+//public Document produceDocument(@Named("name") String name, 
+//								@Named("desc") String desc, 
+//								@Named("type") String type, 
+//								@Named("modelURI") URI modelURI, 
+//								@Named("docURI") URI docURI) throws Exception {
+//	return new Document(name, desc, type, modelURI, docURI);
 //}
 
+@Produces 
+Document produceDocument(URI uri) {
+	return new Document("","","",uri, uri, uri);
 }
 
+
+@Produces
+@Named("name")
+String getName() {
+	return null;
+}
+
+
+@Produces
+@Named("desc")
+String getDesc() {
+	return null;
+}
+
+
+@Produces @Named("JSONDocumentStream")
+InputStream fetchDocumentJSON(URI u, CloseableHttpClient c) throws ExecutionException {
+	InputStream documentStream;
+	try {
+		documentStream = fetchRemoteStream(u, c).get();
+	} catch (Exception e) {
+		throw new ExecutionException("Problem fetching document with uri:"+u+" ("+e.getMessage()+")",e);
+	}
+	return documentStream;
+}
+
+
+@Produces @Named("BasicDocument")
+Document fetchDocument(@Named("JSONDocumentStream") InputStream s, ObjectMapper mapper) 
+		throws JsonParseException, JsonMappingException, IOException {
+	return mapper.readValue(s, Document.class);
+}
+
+
+@Produces @Named("ModelURI")
+URI modelURI(@Named("BasicDocument") Document doc) {
+	return doc.getDocUri();
+}
+
+
+@Produces @Named("ModelStream")
+ListenableFuture<InputStream> fetchDocumentModel(@Named("ModelURI") URI u, CloseableHttpClient c) {
+	return fetchRemoteStream(u, c);
+}
+
+
+private ListenableFuture<InputStream> fetchRemoteStream(URI u, CloseableHttpClient c) {
+
+	return DaggerHttpRequesterComponent.builder()
+			.forURI(u)
+			.withClient(c)
+			.build()
+			.fetchHttpData();
+}
+
+
+}

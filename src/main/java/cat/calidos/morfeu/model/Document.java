@@ -19,8 +19,6 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,17 +28,39 @@ protected String type;
 protected URI modelUri;
 protected URI docUri;
 
-//@Inject
-public Document(String name, String desc, String type,  String modelUri, String docUri) throws URISyntaxException {
-	super(name, desc);
+public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri) {
+	super(name, uri, desc);
 	this.type = type;
-	//this.uri = uri;
-	this.modelUri = new URI(modelUri);
-	this.docUri = new URI(docUri);
+	this.uri = uri;
+	this.modelUri = modelUri;
+	this.docUri = docUri;
 }
 
 public URI getModelURI() {
 	return this.modelUri;
 }
+
+public String getType() {
+	return type;
+}
+
+public URI getModelUri() {
+	return modelUri;
+}
+
+public URI getDocUri() {
+	return docUri;
+}
+
+/* (non-Javadoc)
+* @see java.lang.Object#toString()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public String toString() {
+
+	return "{"+this.name+", ["+this.type+"], uri:"+this.uri+", model:"+this.modelUri+", doc:"+this.docUri+"}";
+}
+
+
 
 }
