@@ -47,10 +47,11 @@ ListenableFuture<InputStream> fetchModel(@Named("ModelURI") URI u, CloseableHttp
 
 @Produces
 Model parseModel(@Named("ModelURI") URI u, @Named("ModelStream") InputStream stream, Produced<XSOMParser> parserProducer) throws SAXException, ExecutionException {
+	
 	XSOMParser parser = parserProducer.get();
 	parser.parse(u.toString());
 	XSSchemaSet schemaSet = parser.getResult();
-	//schemaSet.getSchema()
+
 	return new Model(u, schemaSet);
 
 }

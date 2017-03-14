@@ -27,7 +27,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-//@Component
+//@Component TODO: candidate for removal unless this public interface is used
 public interface ParserComponent {
 
 ObjectMapper provideJSONObjectMapper();

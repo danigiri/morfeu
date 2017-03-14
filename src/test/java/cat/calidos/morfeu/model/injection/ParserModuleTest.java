@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,33 +16,28 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import cat.calidos.morfeu.model.Document;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.junit.Test;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentModuleTest {
+public class ParserModuleTest {
 
-// TODO: move to integration testing
 @Test
-public void testInjection() throws Exception {
-	
-	String uri = "http://localhost:3000/test-resources/documents/document1.json";
-	Document document = DaggerDocumentComponent.builder()
-						.URIModule(new URIModule(uri))
-						.build()
-						.produce()
-						.get();
-	System.err.println(document);
+public void testProvideSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
+	assertNotNull(ParserModule.provideSAXParserFactory());
 }
 
-//@Test
-//public void testFetchDocument() {
-//	
-//	
-//}
+@Test
+public void testProvideSchemaParser() {
+	
+}
 
 
 }

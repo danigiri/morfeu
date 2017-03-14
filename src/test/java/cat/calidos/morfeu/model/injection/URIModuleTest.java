@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,33 +16,30 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import cat.calidos.morfeu.model.Document;
+import java.net.URISyntaxException;
+
+import org.junit.Test;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentModuleTest {
+public class URIModuleTest {
 
-// TODO: move to integration testing
 @Test
-public void testInjection() throws Exception {
-	
-	String uri = "http://localhost:3000/test-resources/documents/document1.json";
-	Document document = DaggerDocumentComponent.builder()
-						.URIModule(new URIModule(uri))
-						.build()
-						.produce()
-						.get();
-	System.err.println(document);
+public void testURI() throws URISyntaxException {
+
+	String uri = "http://foo.com";
+	URIModule module = new URIModule(uri);
+	assertEquals(uri, module.uri().toString());
+
 }
 
-//@Test
-//public void testFetchDocument() {
-//	
-//	
-//}
 
+@Test(expected = URISyntaxException.class)
+public void testURIException() throws URISyntaxException {
+	new URIModule("://foo.com").uri();
+}
 
 }

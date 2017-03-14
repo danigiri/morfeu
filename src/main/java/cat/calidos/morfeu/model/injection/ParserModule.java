@@ -21,8 +21,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.SAXParseException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.xsom.parser.XSOMParser;
@@ -30,41 +32,75 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
-@Module
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProducerModule
 public class ParserModule {
 
 
-@Provides
-public static SAXParserFactory provideSAXParserFactory() {
+@Produces
+public static SAXParserFactory provideSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
 	//TODO: double-check which parser to use that implements security like we want
-	return SAXParserFactory.newInstance();
-}
-
-@Provides
-public static XSOMParser provideSchemaParser(SAXParserFactory factory) {
+	SAXParserFactory factory = SAXParserFactory.newInstance();
 	factory.setNamespaceAware(true);
-    try {
+//    try {
     	// TODO: checkout how to ensure we can load includes but only from the same origin and stuff
     	factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-	} catch (SAXNotRecognizedException | SAXNotSupportedException | ParserConfigurationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+//	} catch (SAXNotRecognizedException | SAXNotSupportedException | ParserConfigurationException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+	return factory;
+}
+
+
+@Produces
+public static XSOMParser provideSchemaParser(SAXParserFactory factory) {
+	
     XSOMParser parser = new XSOMParser(factory);
-    
     //parser.setErrorHandler(new ErrorHandler()); TODO: handle parse errors more gracefully
+    
+    parser.setErrorHandler(new SchemaParserErrorHandler());
     return parser;
     
 }
 
-@Provides 
+
+@Produces
 public static ObjectMapper provideJSONObjectMapper() {
 	ObjectMapper mapper = new ObjectMapper();
-	return mapper;	//TODO: is it necessary to 'provide' default constructor objects?
+	return mapper;	//TODO: check if it is necessary to 'provide' default constructor objects
+}
+
+
+private static final class SchemaParserErrorHandler implements ErrorHandler {
+
+@Override
+public void warning(SAXParseException exception) throws SAXException {
+	
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public void fatalError(SAXParseException exception) throws SAXException {
+	
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public void error(SAXParseException exception) throws SAXException {
+	
+	// TODO Auto-generated method stub
+	
+}
 }
 
 
