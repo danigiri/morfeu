@@ -29,9 +29,9 @@ import org.xml.sax.SAXParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.xsom.parser.XSOMParser;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import dagger.Module;
-import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -41,9 +41,13 @@ import dagger.producers.Produces;
 @ProducerModule
 public class ParserModule {
 
-
+final static Logger log = LoggerFactory.getLogger(ParserModule.class);
+		
 @Produces
 public static SAXParserFactory provideSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
+
+	log.trace("Producing saxParserFactory");
+	
 	//TODO: double-check which parser to use that implements security like we want
 	SAXParserFactory factory = SAXParserFactory.newInstance();
 	factory.setNamespaceAware(true);
@@ -59,48 +63,50 @@ public static SAXParserFactory provideSAXParserFactory() throws SAXNotRecognized
 
 
 @Produces
-public static XSOMParser provideSchemaParser(SAXParserFactory factory) {
+public static XSOMParser produceSchemaParser(SAXParserFactory factory) {
 	
+	log.trace("Producing XSOMParser");
+
     XSOMParser parser = new XSOMParser(factory);
-    //parser.setErrorHandler(new ErrorHandler()); TODO: handle parse errors more gracefully
-    
     parser.setErrorHandler(new SchemaParserErrorHandler());
+    
     return parser;
     
 }
 
 
 @Produces
-public static ObjectMapper provideJSONObjectMapper() {
-	ObjectMapper mapper = new ObjectMapper();
-	return mapper;	//TODO: check if it is necessary to 'provide' default constructor objects
+public static ObjectMapper produceJSONObjectMapper() {
+	
+	log.trace("Producing ObjectMapper");
+	
+	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects
+	
 }
 
 
 private static final class SchemaParserErrorHandler implements ErrorHandler {
 
-@Override
-public void warning(SAXParseException exception) throws SAXException {
+	@Override
+	public void warning(SAXParseException e) throws SAXException {
+		// not throwing this at the moment
+		log.warn("warning SAXParseException {} at {}", e.getMessage(), e.getSystemId());
+	}
 	
-	// TODO Auto-generated method stub
 	
-}
-
-
-@Override
-public void fatalError(SAXParseException exception) throws SAXException {
+	@Override
+	public void fatalError(SAXParseException e) throws SAXException {
+		log.error("Fatal problem SAXParseException {} at {}", e.getMessage(), e.getSystemId());
+		throw e;
+	}
 	
-	// TODO Auto-generated method stub
 	
-}
-
-
-@Override
-public void error(SAXParseException exception) throws SAXException {
+	@Override
+	public void error(SAXParseException e) throws SAXException {
+		log.error("Problem SAXParseException {} at {}", e.getMessage(), e.getSystemId());
+		throw e;
+	}
 	
-	// TODO Auto-generated method stub
-	
-}
 }
 
 
