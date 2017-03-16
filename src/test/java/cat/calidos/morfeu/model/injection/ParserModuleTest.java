@@ -19,10 +19,13 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
+
+import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
 * @author daniel giribet
@@ -30,14 +33,26 @@ import org.xml.sax.SAXNotSupportedException;
 public class ParserModuleTest {
 
 @Test
-public void testProvideSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
-	assertNotNull(ParserModule.provideSAXParserFactory());
+public void testProduceSAXParserFactory() throws Exception {
+	assertNotNull(ParserModule.produceSAXParserFactory());
 }
 
+
 @Test
-public void testProvideSchemaParser() {
+public void testProduceSchemaParser() throws Exception {
+	SAXParserFactory factory = ParserModule.produceSAXParserFactory();
+	XSOMParser parser = ParserModule.produceSchemaParser(factory);
+	assertNotNull(parser);
+	assertNotNull(parser.getErrorHandler());
 	
 }
+
+
+@Test
+public void testProduceJSONObjectMapper() throws Exception {
+	assertNotNull(ParserModule.produceJSONObjectMapper());
+}
+
 
 
 }

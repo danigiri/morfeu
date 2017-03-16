@@ -44,7 +44,7 @@ public class ParserModule {
 final static Logger log = LoggerFactory.getLogger(ParserModule.class);
 		
 @Produces
-public static SAXParserFactory provideSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
+public static SAXParserFactory produceSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
 
 	log.trace("Producing saxParserFactory");
 	

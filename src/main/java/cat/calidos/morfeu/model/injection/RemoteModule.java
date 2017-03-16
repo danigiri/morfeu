@@ -13,7 +13,7 @@ public RemoteModule() {
 	super();
 }
 
-protected ListenableFuture<InputStream> fetchRemoteStream(URI u, CloseableHttpClient c) {
+protected static ListenableFuture<InputStream> fetchRemoteStream(URI u, CloseableHttpClient c) {
 
 	return DaggerHttpRequesterComponent.builder()
 			.forURI(u)

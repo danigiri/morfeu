@@ -30,6 +30,7 @@ public class HttpRequesterModuleTest {
 
 private String uri = "http://www.foo.com";
 
+
 @Test
 public void testProduceRequest() throws Exception {
 
@@ -43,7 +44,7 @@ public void testProduceRequest() throws Exception {
 @Test
 public void testGetchHttpData() throws Exception {
 
-	//FIXME: this is ridiculously exposing implementation details, is there no other way?
+	//FIXME: this is ridiculously exposing implementation details, is there no other way? move to helper and reuse
 	HttpGet request = produceRequest();
 	when(httpClient.execute(request)).thenReturn(response);
 	when(response.getEntity()).thenReturn(entity);
