@@ -16,7 +16,22 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cat.calidos.morfeu.model.Document;
 
@@ -39,10 +54,43 @@ public class DocumentModuleTest {
 //}
 
 @Test
-public void testFetchDocument() {
+public void testParseDocument() throws Exception {
 	
+	Document document = parseLocation("test-resources/documents/document1.json");
+	
+	assertEquals("Document 1", document.getName());
+	assertEquals("First document", document.getDesc());
+	assertEquals("xml", document.getType());
+
+	URI modelURI = new URI("http://localhost:3000/test-resources/models/test-model.xsd");
+	URI contentURI = new URI("http://localhost:3000/test-resources/documents/document1.xml");
+	assertEquals(modelURI, document.getModelURI());
+	assertEquals(contentURI, document.getContentURI());
 	
 }
 
+
+@Test(expected = JsonParseException.class)
+public void testMalformedDocument() throws Exception {
+	parseLocation("test-resources/documents/malformed-document.json");
+}
+
+
+@Test(expected = JsonMappingException.class)
+public void testInvalidDocument() throws Exception {
+	parseLocation("test-resources/documents/invalid-document.json");
+}
+
+
+private Document parseLocation(String location) throws URISyntaxException, JsonParseException, JsonMappingException, IOException {
+
+	URI uri = new URI(location);
+	InputStream stream = this.getClass().getClassLoader().getResourceAsStream(location);
+	ObjectMapper mapper = ParserModule.produceJSONObjectMapper();
+	Document document = DocumentModule.parseDocument(uri, stream, mapper);
+
+	return document;
+
+}
 
 }

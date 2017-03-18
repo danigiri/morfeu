@@ -17,20 +17,37 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.util.Iterator;
+
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.XSType;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Model extends RemoteResource implements Validable, Locatable {
 
+protected XSSchemaSet schema;
+
+
 public Model(URI u, XSSchemaSet s) {
 	super(u);
 	this.schema = s;
 }
 
-
-protected XSSchemaSet schema;
+public int getTypeCount() {
+	
+	Iterator<XSType> iterateTypes = schema.iterateTypes();
+	int c = 0;
+	while (iterateTypes.hasNext()) {
+		iterateTypes.next();
+		c++;
+	}
+	
+	return c;
+	
+}
 
 }

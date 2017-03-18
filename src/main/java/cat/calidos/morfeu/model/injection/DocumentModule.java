@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.model.injection;
 
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.model.Model;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,10 +44,10 @@ public class DocumentModule extends RemoteModule {
 
 
 @Produces
-public Document produceDocument(@Named("BasicDocument") Document doc, Provider<ModelComponent.Builder> modelComponentProvider) throws Exception {
+public static Document produceDocument(@Named("BasicDocument") Document doc, Provider<ModelComponent.Builder> modelComponentProvider) throws Exception {
 
-	ModelComponent builder = modelComponentProvider.get().builder();
-	doc.model = builder.model().get();
+	Model model = modelComponentProvider.get().builder().model().get();
+	doc.setModel(model);
 		
 	return doc;
 	
@@ -59,7 +60,7 @@ public Document produceDocument(@Named("BasicDocument") Document doc, Provider<M
 
 
 @Produces @Named("JSONDocumentStream")
-InputStream fetchDocumentJSON(URI u, CloseableHttpClient c) throws ExecutionException {
+public static InputStream fetchDocumentJSON(URI u, CloseableHttpClient c) throws ExecutionException {
 	InputStream documentStream;
 	try {
 		documentStream = fetchRemoteStream(u, c).get();
@@ -71,23 +72,20 @@ InputStream fetchDocumentJSON(URI u, CloseableHttpClient c) throws ExecutionExce
 
 
 @Produces @Named("BasicDocument")
-Document parseDocument(URI u, @Named("JSONDocumentStream") InputStream s, ObjectMapper mapper) 
+public static Document parseDocument(URI u, @Named("JSONDocumentStream") InputStream s, ObjectMapper mapper) 
 		throws JsonParseException, JsonMappingException, IOException {
 	return mapper.readerForUpdating(new Document(u)).readValue(s);
 }
 
 
 @Produces @Named("ModelURI")
-URI modelURI(@Named("BasicDocument") Document doc) {
-	//TODO: the problem here is that urls need to be absolute in the JSON, which is a PITA, we need to autodetect this
-	URI modelUri = doc.modelURI;
-	return modelUri;
-}
+public static URI modelURI(@Named("BasicDocument") Document doc) {
 
-//@Produces 
-//Document produceDocument(@Named("name") String name, URI uri) {
-//	return new Document(name, ,"",uri, uri, uri);
-//}
+	//TODO: the problem here is that urls need to be absolute in the JSON, which is a PITA, we need to autodetect this
+	URI modelUri = doc.getModelURI();
+	return modelUri;
+
+}
 
 
 }

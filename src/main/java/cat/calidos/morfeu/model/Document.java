@@ -28,10 +28,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Document extends Cell {
 
-@Inject @JsonProperty("type") public String type;
-@Inject @JsonProperty("modelURI") public URI modelURI;
-@Inject @JsonProperty("docURI") public URI docURI;
-@Inject public Model model;
+protected String type;
+protected URI modelURI;
+protected URI contentURI;
+protected Model model;
 
 
 public Document(URI u) {
@@ -45,7 +45,7 @@ public Document(String name, String desc, String type, URI uri, URI modelUri, UR
 	this.type = type;
 	this.uri = uri;
 	this.modelURI = modelUri;
-	this.docURI = docUri;
+	this.contentURI = docUri;
 	this.model = m;
 
 }
@@ -57,9 +57,54 @@ public Document(String name, String desc, String type, URI uri, URI modelUri, UR
 @Override
 public String toString() {
 
-	return "{"+this.name+", ["+this.type+"], uri:"+this.uri+", model:"+this.modelURI+", doc:"+this.docURI+"}";
+	return "{"+this.name+", ["+this.type+"], uri:"+this.uri+", model:"+this.modelURI+", doc:"+this.contentURI+"}";
 }
 
 
+public String getType() {
+
+	return type;
+}
+
+
+@JsonProperty("type") 
+public void setType(String type) {
+	this.type = type;
+}
+
+
+public URI getModelURI() {
+	return modelURI;
+}
+
+
+@JsonProperty("modelURI") 
+public void setModelURI(URI modelURI) {
+	this.modelURI = modelURI;
+}
+
+
+public URI getContentURI() {
+	return contentURI;
+}
+
+
+@JsonProperty("contentURI") 
+public void setContentURI(URI docURI) {
+	this.contentURI = docURI;
+}
+
+
+public Model getModel() {
+	return model;
+}
+
+
+public void setModel(Model model) {
+
+	this.model = model;
+}
+
+ 
 
 }

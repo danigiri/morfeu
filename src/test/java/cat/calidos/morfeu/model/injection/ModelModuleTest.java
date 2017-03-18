@@ -16,45 +16,49 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import java.io.InputStream;
 import java.net.URI;
-import java.util.concurrent.ExecutionException;
+import java.net.URISyntaxException;
 
-import javax.inject.Named;
-
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.xml.sax.SAXException;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
 import dagger.producers.Produced;
-import dagger.producers.ProducerModule;
-import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule 
-public class ModelModule extends RemoteModule {
+public class ModelModuleTest {
 
-@Produces @Named("ModelStream")
-ListenableFuture<InputStream> fetchModel(@Named("ModelURI") URI u, CloseableHttpClient c) {
-	return fetchRemoteStream(u, c);
-}
+@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-@Produces
-public static Model parseModel(@Named("ModelURI") URI u, @Named("ModelStream") InputStream stream, Produced<XSOMParser> parserProducer) throws SAXException, ExecutionException {
+@Mock Produced<XSOMParser> parserProducer;
+
+@Test
+public void testParseModel() throws Exception {
 	
-	XSOMParser parser = parserProducer.get();
-//	parser.parse(stream);
-	parser.parse(u.toString());
-	XSSchemaSet schemaSet = parser.getResult();
+	String location = "http://localhost:3000/test-resources/models/test-model.xsd";
+	URI modelURI = new URI(location);
+	InputStream stream = this.getClass().getClassLoader().getResourceAsStream(location);
+	XSOMParser parser = DaggerParserComponent.builder().build().produceXSOMParser().get();
+	
+	when(parserProducer.get()).thenReturn(parser);
+	
+	Model model = ModelModule.parseModel(modelURI, stream, parserProducer);
 
-	return new Model(u, schemaSet);
-
+	assertEquals(modelURI, model.getUri());
+	
+	
 }
 
 }

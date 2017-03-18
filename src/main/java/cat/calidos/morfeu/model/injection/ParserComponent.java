@@ -17,19 +17,19 @@
 package cat.calidos.morfeu.model.injection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.sun.xml.xsom.parser.XSOMParser;
 
-import cat.calidos.morfeu.injection.ApplicationScoped;
-import dagger.Component;
-import dagger.Subcomponent;
 import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-//@Component TODO: candidate for removal unless this public interface is used
+@ProductionComponent(modules={ParserModule.class, ListeningExecutorServiceModule.class})
 public interface ParserComponent {
 
-ObjectMapper provideJSONObjectMapper();
+ListenableFuture<ObjectMapper> produceJSONObjectMapper();
+ListenableFuture<XSOMParser> produceXSOMParser();
+
 
 }

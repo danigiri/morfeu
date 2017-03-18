@@ -40,10 +40,12 @@ public void testProduceSAXParserFactory() throws Exception {
 
 @Test
 public void testProduceSchemaParser() throws Exception {
+	
 	SAXParserFactory factory = ParserModule.produceSAXParserFactory();
 	XSOMParser parser = ParserModule.produceSchemaParser(factory);
 	assertNotNull(parser);
 	assertNotNull(parser.getErrorHandler());
+	
 	
 }
 

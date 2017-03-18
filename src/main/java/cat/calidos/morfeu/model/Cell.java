@@ -27,8 +27,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class Cell extends RemoteResource implements Validable {
 
-@Inject @JsonProperty("name") public String name;
-@Inject @JsonProperty("desc") public String desc;
+protected String name;
+protected String desc;
 
 
 public Cell(URI u) {
@@ -44,16 +44,24 @@ public Cell(String name, URI u, String desc) {
 
 
 public String getDesc() {
-
 	return desc;
 }
 
 
-public String getName() {
+@JsonProperty("name") 
+public void setName(String name) {
+	this.name = name;
+}
 
+
+public String getName() {
 	return name;
 }
 
 
+@JsonProperty("desc") 
+public void setDesc(String desc) {
+	this.desc = desc;
+}
 
 }
