@@ -46,44 +46,42 @@ public class DocumentModule extends RemoteModule {
 @Produces
 public static Document produceDocument(@Named("BasicDocument") Document doc, Provider<ModelComponent.Builder> modelComponentProvider) throws Exception {
 
-	Model model = modelComponentProvider.get().builder().model().get();
+	Model model;
+	try {
+		 model = modelComponentProvider.get().builder().model().get();
+	} catch (Exception e) {
+		throw new ExecutionException("Problem fetching model of document '"+doc.getName()+"' from uri: '"+doc.getModelURI()+"'",e);
+	}
 	doc.setModel(model);
 		
 	return doc;
 	
 }
 
-//@Produces 
-//Document produceDocument(@Named("name") String name, URI uri) {
-//	return new Document(name, ,"",uri, uri, uri);
-//}
-
 
 @Produces @Named("JSONDocumentStream")
-public static InputStream fetchDocumentJSON(URI u, CloseableHttpClient c) throws ExecutionException {
+public static InputStream fetchDocumentJSON(URI uri, CloseableHttpClient client) throws ExecutionException {
 	InputStream documentStream;
 	try {
-		documentStream = fetchRemoteStream(u, c).get();
+		documentStream = fetchRemoteStream(uri, client).get();
 	} catch (Exception e) {
-		throw new ExecutionException("Problem fetching document with uri:"+u+"",e);
+		throw new ExecutionException("Problem fetching document with uri: '"+uri+"'",e);
 	}
 	return documentStream;
 }
 
 
 @Produces @Named("BasicDocument")
-public static Document parseDocument(URI u, @Named("JSONDocumentStream") InputStream s, ObjectMapper mapper) 
+public static Document parseDocument(URI uri, @Named("JSONDocumentStream") InputStream docStream, ObjectMapper mapper) 
 		throws JsonParseException, JsonMappingException, IOException {
-	return mapper.readerForUpdating(new Document(u)).readValue(s);
+	return mapper.readerForUpdating(new Document(uri)).readValue(docStream);
 }
 
 
 @Produces @Named("ModelURI")
 public static URI modelURI(@Named("BasicDocument") Document doc) {
 
-	//TODO: the problem here is that urls need to be absolute in the JSON, which is a PITA, we need to autodetect this
-	URI modelUri = doc.getModelURI();
-	return modelUri;
+	return doc.getModelURI();
 
 }
 

@@ -19,17 +19,16 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.xml.sax.SAXException;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
@@ -47,18 +46,37 @@ public class ModelModuleTest {
 @Test
 public void testParseModel() throws Exception {
 	
-	String location = "http://localhost:3000/test-resources/models/test-model.xsd";
-	URI modelURI = new URI(location);
-	InputStream stream = this.getClass().getClassLoader().getResourceAsStream(location);
-	XSOMParser parser = DaggerParserComponent.builder().build().produceXSOMParser().get();
-	
-	when(parserProducer.get()).thenReturn(parser);
-	
-	Model model = ModelModule.parseModel(modelURI, stream, parserProducer);
+	// TODO: see what we can do about these ugly maven specific paths
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	Model model = parseURI(modelURI);
 
 	assertEquals(modelURI, model.getUri());
-	
+	assertEquals(4, model.getComplextTypeCount());
 	
 }
+
+
+@Test(expected = SAXException.class)
+public void testParseNonValidModel() throws Exception  {
+
+	// TODO: see what we can do about these ugly maven specific paths
+
+	System.err.println("Following SAXParseException is expected as we are testing non valid schema");
+	
+	URI modelURI = new URI("target/test-classes/test-resources/models/nonvalid-model.xsd");
+	parseURI(modelURI);
+
+}
+
+
+private Model parseURI(URI u) throws InterruptedException, ExecutionException, SAXException {
+
+	XSOMParser parser = DaggerParserComponent.builder().build().produceXSOMParser().get();
+	when(parserProducer.get()).thenReturn(parser);
+	
+	Model model = ModelModule.parseModel(u, parserProducer);
+	return model;
+}
+
 
 }

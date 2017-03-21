@@ -17,17 +17,23 @@
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.inject.Provider;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -40,52 +46,72 @@ import cat.calidos.morfeu.model.Document;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentModuleTest {
 
-// TODO: move to integration testing
-//@Test
-//public void testInjection() throws Exception {
-//	
-//	String uri = "http://localhost:3000/test-resources/documents/document1.json";
-//	Document document = DaggerDocumentComponent.builder()
-//						.URIModule(new URIModule(uri))
-//						.build()
-//						.produce()
-//						.get();
-//	System.err.println(document);
-//}
+@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+
 
 @Test
 public void testParseDocument() throws Exception {
 	
-	Document document = parseLocation("test-resources/documents/document1.json");
+	Document document = parseRelativeLocation("test-resources/documents/document1.json");
 	
+	testDocument1(document);
+	
+}
+
+
+private void testDocument1(Document document) throws URISyntaxException {
+
 	assertEquals("Document 1", document.getName());
 	assertEquals("First document", document.getDesc());
 	assertEquals("xml", document.getType());
 
-	URI modelURI = new URI("http://localhost:3000/test-resources/models/test-model.xsd");
-	URI contentURI = new URI("http://localhost:3000/test-resources/documents/document1.xml");
+	// FIXME: this is a bit ridiculous and should not leak maven structure
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	URI contentURI = new URI("target/test-classes/test-resources/documents/document1.xml");
 	assertEquals(modelURI, document.getModelURI());
 	assertEquals(contentURI, document.getContentURI());
-	
 }
 
 
 @Test(expected = JsonParseException.class)
 public void testMalformedDocument() throws Exception {
-	parseLocation("test-resources/documents/malformed-document.json");
+	parseRelativeLocation("test-resources/documents/malformed-document.json");
 }
 
 
 @Test(expected = JsonMappingException.class)
 public void testInvalidDocument() throws Exception {
-	parseLocation("test-resources/documents/invalid-document.json");
+	parseRelativeLocation("test-resources/documents/nonvalid-document.json");
+}
+
+@Test
+public void testProduceDocument() throws Exception {
+
+	// I leave this here as justification of using Dagger directly for the test
+	// Document document = parseLocation("test-resources/documents/document1.json");	
+	// ModelModule.parseModel(new URI(document.getModelURI()), parserProducer);
+	// when(modelComponentProvider.get().builder().model().get()).thenReturn(...);
+	// DocumentModule.produceDocument(document, modelComponentProvider);
+
+	//System.getenv().keySet().stream().forEach(s->System.err.println(s+":"+System.getenv(s)));
+	
+	String doc1Path = this.getClass().getClassLoader().getResource("test-resources/documents/document1.json").toString();
+	URIModule uriModule = new URIModule(doc1Path);
+	DocumentComponent docComponent = DaggerDocumentComponent.builder().URIModule(uriModule).build();
+	Document doc = docComponent.produce().get();
+
+	assertNotNull(doc);
+	
+	testDocument1(doc);
+	
 }
 
 
-private Document parseLocation(String location) throws URISyntaxException, JsonParseException, JsonMappingException, IOException {
+private Document parseRelativeLocation(String location) throws URISyntaxException, JsonParseException, JsonMappingException, IOException {
 
-	URI uri = new URI(location);
-	InputStream stream = this.getClass().getClassLoader().getResourceAsStream(location);
+	String absoluteLocation = this.getClass().getClassLoader().getResource(location).toString();
+	URI uri = new URI(absoluteLocation);
+	InputStream stream = FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
 	ObjectMapper mapper = ParserModule.produceJSONObjectMapper();
 	Document document = DocumentModule.parseDocument(uri, stream, mapper);
 

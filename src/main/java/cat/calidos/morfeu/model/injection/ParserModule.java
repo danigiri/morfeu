@@ -16,11 +16,15 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.io.IOException;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
@@ -69,6 +73,16 @@ public static XSOMParser produceSchemaParser(SAXParserFactory factory) {
 
     XSOMParser parser = new XSOMParser(factory);
     parser.setErrorHandler(new SchemaParserErrorHandler());
+//    parser.setEntityResolver(new EntityResolver() {
+//	
+//	@Override
+//	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+//		
+//		// TODO Auto-generated method stub
+//		System.err.println(publicId+","+systemId);
+//		return null;
+//	}
+//	});
     
     return parser;
     

@@ -16,16 +16,13 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.io.InputStream;
 import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Named;
 
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.xml.sax.SAXException;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
@@ -40,16 +37,11 @@ import dagger.producers.Produces;
 @ProducerModule 
 public class ModelModule extends RemoteModule {
 
-@Produces @Named("ModelStream")
-ListenableFuture<InputStream> fetchModel(@Named("ModelURI") URI u, CloseableHttpClient c) {
-	return fetchRemoteStream(u, c);
-}
 
 @Produces
-public static Model parseModel(@Named("ModelURI") URI u, @Named("ModelStream") InputStream stream, Produced<XSOMParser> parserProducer) throws SAXException, ExecutionException {
+public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws SAXException, ExecutionException {
 	
 	XSOMParser parser = parserProducer.get();
-//	parser.parse(stream);
 	parser.parse(u.toString());
 	XSSchemaSet schemaSet = parser.getResult();
 

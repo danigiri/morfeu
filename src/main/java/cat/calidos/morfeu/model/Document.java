@@ -19,8 +19,6 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -38,14 +36,14 @@ public Document(URI u) {
 	super(u);
 }
 
-public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri, Model m) {
+public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri, Model m) throws URISyntaxException {
 	
 	super(name, uri, desc);
 
 	this.type = type;
 	this.uri = uri;
-	this.modelURI = modelUri;
-	this.contentURI = docUri;
+	setModelURI(modelUri);
+	setContentURI(docUri);
 	this.model = m;
 
 }
@@ -79,10 +77,11 @@ public URI getModelURI() {
 
 
 @JsonProperty("modelURI") 
-public void setModelURI(URI modelURI) {
-	this.modelURI = modelURI;
+public void setModelURI(URI modelURI) throws URISyntaxException {
+	
+	this.modelURI = makeAbsoluteURIIfNeeded(modelURI);
+	
 }
-
 
 public URI getContentURI() {
 	return contentURI;
@@ -90,8 +89,8 @@ public URI getContentURI() {
 
 
 @JsonProperty("contentURI") 
-public void setContentURI(URI docURI) {
-	this.contentURI = docURI;
+public void setContentURI(URI contentURI) throws URISyntaxException {
+	this.contentURI = makeAbsoluteURIIfNeeded(contentURI);
 }
 
 
@@ -103,6 +102,23 @@ public Model getModel() {
 public void setModel(Model model) {
 
 	this.model = model;
+}
+
+
+private URI makeAbsoluteURIIfNeeded(URI relativeURI) throws URISyntaxException {
+
+	String path = uri.getPath();
+	String uriString = uri.toString();
+	String uriHostPart = uriString.substring(0,uriString.length()-path.length());
+	
+	// there may be a better way to do this but tests will protect us
+	if (uri!=null && !relativeURI.isAbsolute() && !uri.getScheme().equals("file"))  {
+		return new URI(uriHostPart+relativeURI); 
+	} else { 
+		return relativeURI;
+	}
+	
+	
 }
 
  

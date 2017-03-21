@@ -18,13 +18,16 @@ package cat.calidos.morfeu.model.injection;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
@@ -33,6 +36,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 
+import dagger.Lazy;
+import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 import dagger.producers.ProductionComponent.Builder;
@@ -41,18 +46,32 @@ import dagger.producers.ProductionComponent.Builder;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class HttpRequesterModule {
+public class DataFetcherModule {
 
 
-@Produces 
-public HttpGet produceRequest(URI u) {
-	return new HttpGet(u);
+@Produces
+public HttpGet produceRequest(URI uri) {
+	return new HttpGet(uri);
 }
 
 
 @Produces
-public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
-	
+public ListenableFuture<InputStream> fetchData(URI uri,  
+							 @Named("httpData") Producer<InputStream> httpData, 
+							 @Named("fileData") Producer<InputStream> fileData ) 
+									 throws UnsupportedOperationException, ClientProtocolException, IOException {
+	if (uri.getScheme().equals("file")) {
+		return fileData.get();
+	} else {
+		return httpData.get();
+	}
+}
+
+
+@Produces @Named("httpData")
+public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request)
+		throws IOException, UnsupportedOperationException, ClientProtocolException {
+
 	try {
 		 
 		// we want to close right now so we fetch all the content and close the input stream
@@ -68,21 +87,17 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) th
 				client.close();
 		}
 	}
-
+	
 }
 
 
-//@Produces
-//public String fetchHttpDataAsString(CloseableHttpClient client, HttpGet request) throws UnsupportedOperationException, ClientProtocolException, IOException {
-//	
-//	try {
-//		return IOUtils.toString(client.execute(request).getEntity().getContent());
-//	} finally {
-//		if (client != null) {
-//			client.close();
-//		}
-//	}
-//	
-//}
+@Produces @Named("fileData")
+public InputStream fetchFileData(URI uri) throws IOException {
+	
+	return FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
+	
+	//return uri.toURL().openStream();
+}
+
 
 }

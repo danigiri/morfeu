@@ -19,10 +19,8 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.util.Iterator;
 
-import org.apache.commons.lang3.mutable.MutableInt;
-
+import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.XSType;
 
 /**
 * @author daniel giribet
@@ -35,19 +33,22 @@ protected XSSchemaSet schema;
 public Model(URI u, XSSchemaSet s) {
 	super(u);
 	this.schema = s;
+	//schema.
 }
 
-public int getTypeCount() {
+
+
+public int getComplextTypeCount() {
 	
-	Iterator<XSType> iterateTypes = schema.iterateTypes();
+	Iterator<XSComplexType> typeIterator = schema.iterateComplexTypes();
 	int c = 0;
-	while (iterateTypes.hasNext()) {
-		iterateTypes.next();
+	while (typeIterator.hasNext()) {
+		typeIterator.next();
 		c++;
 	}
 	
 	return c;
-	
 }
+
 
 }
