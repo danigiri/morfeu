@@ -24,9 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Document extends Cell {
+public class Document extends Cell implements Validable {
 
-protected String type;
+protected String kind;
 protected URI modelURI;
 protected URI contentURI;
 protected Model model;
@@ -36,11 +36,11 @@ public Document(URI u) {
 	super(u);
 }
 
-public Document(String name, String desc, String type, URI uri, URI modelUri, URI docUri, Model m) throws URISyntaxException {
+public Document(String name, String desc, String kind, URI uri, URI modelUri, URI docUri, Model m) throws URISyntaxException {
 	
 	super(name, uri, desc);
 
-	this.type = type;
+	this.kind = kind;
 	this.uri = uri;
 	setModelURI(modelUri);
 	setContentURI(docUri);
@@ -49,25 +49,32 @@ public Document(String name, String desc, String type, URI uri, URI modelUri, UR
 }
 
 
+@Override
+public void validate() throws RuntimeException {
+
+	// TODO Auto-generated method stub
+	
+}
+
 /* (non-Javadoc)
 * @see java.lang.Object#toString()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 public String toString() {
 
-	return "{"+this.name+", ["+this.type+"], uri:"+this.uri+", model:"+this.modelURI+", doc:"+this.contentURI+"}";
+	return "{"+this.name+", ["+this.kind+"], uri:"+this.uri+", model:"+this.modelURI+", doc:"+this.contentURI+"}";
 }
 
 
 public String getType() {
 
-	return type;
+	return kind;
 }
 
 
-@JsonProperty("type") 
-public void setType(String type) {
-	this.type = type;
+@JsonProperty("kind") 
+public void setKind(String kind) {
+	this.kind = kind;
 }
 
 

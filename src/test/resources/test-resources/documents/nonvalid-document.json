@@ -1,8 +1,8 @@
 {
 	"name": "Document 1"
 	,"desc": "First document"
-	,"type": "xml"
-	,"not-valid-modelURI": "http://localhost:3000/test-resources/models/test-model.xsd"
+	,"kind": "xml"
+	,"not-valid-field-modelURI": "http://localhost:3000/test-resources/models/test-model.xsd"
 	,"contentURI": "http://localhost:3000/test-resources/documents/document1.xml"
 	
 }

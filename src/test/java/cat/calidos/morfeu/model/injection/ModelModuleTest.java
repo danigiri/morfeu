@@ -75,6 +75,7 @@ private Model parseURI(URI u) throws InterruptedException, ExecutionException, S
 	when(parserProducer.get()).thenReturn(parser);
 	
 	Model model = ModelModule.parseModel(u, parserProducer);
+
 	return model;
 }
 

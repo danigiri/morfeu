@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Cell extends RemoteResource implements Validable {
+public class Cell extends RemoteResource {
 
 protected String name;
 protected String desc;

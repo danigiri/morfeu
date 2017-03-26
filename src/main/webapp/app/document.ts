@@ -19,5 +19,7 @@ export class Document {
     name: string;
     uri: string;
     kind: string;
+    modelURI: string;
+    contentURI: string;
 
 }

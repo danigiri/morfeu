@@ -25,7 +25,7 @@ import com.sun.xml.xsom.XSSchemaSet;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Model extends RemoteResource implements Validable, Locatable {
+public class Model extends RemoteResource implements Locatable {
 
 protected XSSchemaSet schema;
 
@@ -40,6 +40,7 @@ public Model(URI u, XSSchemaSet s) {
 
 public int getComplextTypeCount() {
 	
+	//	XSSchema modelSchema = schema.getSchema("http://dani.calidos.com/morfeu/model");
 	Iterator<XSComplexType> typeIterator = schema.iterateComplexTypes();
 	int c = 0;
 	while (typeIterator.hasNext()) {
