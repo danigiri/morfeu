@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,19 +16,12 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.sun.xml.xsom.parser.XSOMParser;
-
-import dagger.producers.ProductionComponent;
+import dagger.producers.ProductionSubcomponent;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ParserModule.class, ListeningExecutorServiceModule.class})
-public interface ParserComponent {
-
-ListenableFuture<ObjectMapper> produceJSONObjectMapper();
-ListenableFuture<XSOMParser> produceXSOMParser();
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionSubcomponent
+public interface ValidationComponent {
 
 }

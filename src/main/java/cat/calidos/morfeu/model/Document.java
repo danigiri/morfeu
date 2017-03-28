@@ -30,13 +30,15 @@ protected String kind;
 protected URI modelURI;
 protected URI contentURI;
 protected Model model;
+private Validable validator;
 
 
 public Document(URI u) {
 	super(u);
 }
 
-public Document(String name, String desc, String kind, URI uri, URI modelUri, URI docUri, Model m) throws URISyntaxException {
+public Document(String name, String desc, String kind, URI uri, URI modelUri, URI docUri, Model m, Validable v) 
+		throws URISyntaxException {
 	
 	super(name, uri, desc);
 
@@ -45,15 +47,14 @@ public Document(String name, String desc, String kind, URI uri, URI modelUri, UR
 	setModelURI(modelUri);
 	setContentURI(docUri);
 	this.model = m;
+	this.validator = v;
 
 }
 
 
 @Override
 public void validate() throws RuntimeException {
-
-	// TODO Auto-generated method stub
-	
+	validator.validate();
 }
 
 /* (non-Javadoc)

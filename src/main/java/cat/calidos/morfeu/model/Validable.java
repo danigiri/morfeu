@@ -16,7 +16,6 @@
 
 package cat.calidos.morfeu.model;
 
-import java.util.List;
 
 /**
 * @author daniel giribet

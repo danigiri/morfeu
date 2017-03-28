@@ -39,7 +39,7 @@ import dagger.producers.Produces;
 /** TODO: make all this asynchronous
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(subcomponents=ModelComponent.class)
+@ProducerModule(subcomponents={ModelComponent.class, ValidationComponent.class})
 public class DocumentModule extends RemoteModule {
 
 

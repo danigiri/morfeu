@@ -46,7 +46,9 @@ import cat.calidos.morfeu.model.Document;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentModuleTest {
 
-@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+@Rule 
+public MockitoRule mockitoRule = MockitoJUnit.rule();
+
 
 
 @Test
@@ -55,21 +57,7 @@ public void testParseDocument() throws Exception {
 	Document document = parseRelativeLocation("test-resources/documents/document1.json");
 	
 	testDocument1(document);
-	
-}
 
-
-private void testDocument1(Document document) throws URISyntaxException {
-
-	assertEquals("Document 1", document.getName());
-	assertEquals("First document", document.getDesc());
-	assertEquals("xml", document.getType());
-
-	// FIXME: this is a bit ridiculous and should not leak maven structure
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
-	URI contentURI = new URI("target/test-classes/test-resources/documents/document1.xml");
-	assertEquals(modelURI, document.getModelURI());
-	assertEquals(contentURI, document.getContentURI());
 }
 
 
@@ -84,28 +72,6 @@ public void testInvalidDocument() throws Exception {
 	parseRelativeLocation("test-resources/documents/nonvalid-document.json");
 }
 
-@Test
-public void testProduceDocument() throws Exception {
-
-	// I leave this here as justification of using Dagger directly for the test
-	// Document document = parseLocation("test-resources/documents/document1.json");	
-	// ModelModule.parseModel(new URI(document.getModelURI()), parserProducer);
-	// when(modelComponentProvider.get().builder().model().get()).thenReturn(...);
-	// DocumentModule.produceDocument(document, modelComponentProvider);
-
-	//System.getenv().keySet().stream().forEach(s->System.err.println(s+":"+System.getenv(s)));
-	
-	String doc1Path = this.getClass().getClassLoader().getResource("test-resources/documents/document1.json").toString();
-	URIModule uriModule = new URIModule(doc1Path);
-	DocumentComponent docComponent = DaggerDocumentComponent.builder().URIModule(uriModule).build();
-	Document doc = docComponent.produce().get();
-
-	assertNotNull(doc);
-	
-	testDocument1(doc);
-	
-}
-
 
 private Document parseRelativeLocation(String location) throws URISyntaxException, JsonParseException, JsonMappingException, IOException {
 
@@ -117,6 +83,20 @@ private Document parseRelativeLocation(String location) throws URISyntaxExceptio
 
 	return document;
 
+}
+
+
+public static void testDocument1(Document document) throws URISyntaxException {
+
+	assertEquals("Document 1", document.getName());
+	assertEquals("First document", document.getDesc());
+	assertEquals("xml", document.getType());
+
+	// FIXME: this is a bit ridiculous and should not leak maven structure
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	URI contentURI = new URI("target/test-classes/test-resources/documents/document1.xml");
+	assertEquals(modelURI, document.getModelURI());
+	assertEquals(contentURI, document.getContentURI());
 }
 
 }

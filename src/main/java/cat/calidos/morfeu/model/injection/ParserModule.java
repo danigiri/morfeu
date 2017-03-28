@@ -30,6 +30,7 @@ import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.xsom.parser.XSOMParser;
 
@@ -93,7 +94,6 @@ public static XSOMParser produceSchemaParser(SAXParserFactory factory) {
 public static ObjectMapper produceJSONObjectMapper() {
 	
 	log.trace("Producing ObjectMapper");
-	
 	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects
 	
 }
