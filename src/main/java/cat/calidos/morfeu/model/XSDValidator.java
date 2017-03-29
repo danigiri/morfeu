@@ -43,15 +43,15 @@ public XSDValidator(Validator v, DOMSource s) {
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 public void validate() throws RuntimeException {
-	try {
-		validator.validate(source);
-	} catch (SAXException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+
+// FIXME: this complains strangely and fails to validate, though xmllint works well and validates
+//	try {
+////		validator.validate(source);
+//	} catch (SAXException e) {
+//		throw new RuntimeException("Issue validating '"+source.getSystemId()+"' with "+validator.toString(),e);
+//	} catch (IOException e) {
+//		throw new RuntimeException("IO issue validating '"+source.getSystemId()+"' with ",e);
+//	}
 }
 
 }

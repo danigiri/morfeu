@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		   xmlns:pk="http://dani.calidos.com/morfeu/model">
+		   >
 
 	 <xs:include schemaLocation="test-types.xsd" />
 	
@@ -14,9 +14,6 @@
 		<xs:annotation>
 			<xs:documentation>
 			</xs:documentation>
-            <xs:appinfo>
-                <pk:input>col-cell</pk:input>
-            </xs:appinfo>
 		</xs:annotation>
 		<xs:attribute name="text" type="textField" />
 		<xs:attribute name="number" type="numberField" />
@@ -27,9 +24,6 @@
 		<xs:annotation>
 			<xs:documentation>
 			</xs:documentation>
-            <xs:appinfo>
-                <pk:input>col-cell</pk:input>
-            </xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="test" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
@@ -41,9 +35,6 @@
 		<xs:annotation>
 			<xs:documentation>
 			</xs:documentation>
-            <xs:appinfo>
-                <pk:input>row-cell</pk:input>
-            </xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
 				<xs:element name="col" type="colCell" minOccurs="0" maxOccurs="unbounded"/>

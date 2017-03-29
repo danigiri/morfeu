@@ -36,10 +36,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-/** TODO: make all this asynchronous
+/** TODO: ensure all this is actually asynchronous
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(subcomponents={ModelComponent.class, ValidationComponent.class})
+@ProducerModule(subcomponents=ModelComponent.class)
 public class DocumentModule extends RemoteModule {
 
 
@@ -82,6 +82,14 @@ public static Document parseDocument(URI uri, @Named("JSONDocumentStream") Input
 public static URI modelURI(@Named("BasicDocument") Document doc) {
 
 	return doc.getModelURI();
+
+}
+
+
+@Produces @Named("ContentURI")
+public static URI contentURI(@Named("BasicDocument") Document doc) {
+
+	return doc.getContentURI();
 
 }
 

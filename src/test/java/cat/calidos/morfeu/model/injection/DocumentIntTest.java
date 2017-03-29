@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import cat.calidos.morfeu.model.Document;
 
-public class DocumentIntTest {
+public class DocumentIntTest extends IntT3st {
 
 
 @Test
@@ -18,10 +18,10 @@ public void testProduceCompleteDocument() throws Exception {
 	// when(modelComponentProvider.get().builder().model().get()).thenReturn(...);
 	// DocumentModule.produceDocument(document, modelComponentProvider);
 
-	String doc1Path = this.getClass().getClassLoader().getResource("test-resources/documents/document1.json").toString();
+	String doc1Path = uriModuleForPath("test-resources/documents/document1.json");
 	URIModule uriModule = new URIModule(doc1Path);
 	DocumentComponent docComponent = DaggerDocumentComponent.builder().URIModule(uriModule).build();
-	Document doc = docComponent.produce().get();
+	Document doc = docComponent.produceDocument().get();
 
 	assertNotNull(doc);
 	

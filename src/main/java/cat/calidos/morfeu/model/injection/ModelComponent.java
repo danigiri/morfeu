@@ -31,7 +31,7 @@ ListenableFuture<Model> model();
 
 @ProductionSubcomponent.Builder
 interface Builder {
-		ModelComponent builder();
+	ModelComponent builder();
 }
 
 }

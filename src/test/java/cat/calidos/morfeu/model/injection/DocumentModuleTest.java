@@ -73,19 +73,6 @@ public void testInvalidDocument() throws Exception {
 }
 
 
-private Document parseRelativeLocation(String location) throws URISyntaxException, JsonParseException, JsonMappingException, IOException {
-
-	String absoluteLocation = this.getClass().getClassLoader().getResource(location).toString();
-	URI uri = new URI(absoluteLocation);
-	InputStream stream = FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
-	ObjectMapper mapper = ParserModule.produceJSONObjectMapper();
-	Document document = DocumentModule.parseDocument(uri, stream, mapper);
-
-	return document;
-
-}
-
-
 public static void testDocument1(Document document) throws URISyntaxException {
 
 	assertEquals("Document 1", document.getName());
@@ -97,6 +84,20 @@ public static void testDocument1(Document document) throws URISyntaxException {
 	URI contentURI = new URI("target/test-classes/test-resources/documents/document1.xml");
 	assertEquals(modelURI, document.getModelURI());
 	assertEquals(contentURI, document.getContentURI());
+	
+}
+
+
+private Document parseRelativeLocation(String location) throws URISyntaxException, JsonParseException, JsonMappingException, IOException {
+
+	String absoluteLocation = this.getClass().getClassLoader().getResource(location).toString();
+	URI uri = new URI(absoluteLocation);
+	InputStream stream = FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
+	ObjectMapper mapper = ParserModule.produceJSONObjectMapper();
+	Document document = DocumentModule.parseDocument(uri, stream, mapper);
+
+	return document;
+
 }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		   xmlns:pk="http://dani.calidos.com/morfeu/model">
+		   >
 
 	<xs:annotation>
 		<xs:documentation>
@@ -13,9 +13,7 @@
 		<xs:annotation>
 			<xs:documentation>
 			</xs:documentation>
-            <xs:appinfo>
-                <pk:input>text</pk:input>
-            </xs:appinfo>
+
 		</xs:annotation>
 
 		<xs:restriction base="xs:integer" />
@@ -25,9 +23,7 @@
 		<xs:annotation>
 			<xs:documentation>
 			</xs:documentation>
-            <xs:appinfo>
-                <pk:input>col</pk:input>
-            </xs:appinfo>
+
 		</xs:annotation>
 
 		<xs:restriction base="xs:integer">
@@ -40,9 +36,6 @@
 		<xs:annotation>
 			<xs:documentation>
 			</xs:documentation>
-            <xs:appinfo>
-                <pk:input>text</pk:input>
-            </xs:appinfo>
 		</xs:annotation>
 
 		<xs:restriction base="xs:string" />

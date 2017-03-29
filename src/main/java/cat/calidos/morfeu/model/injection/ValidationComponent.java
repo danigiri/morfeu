@@ -16,12 +16,28 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import dagger.producers.ProductionSubcomponent;
+import java.net.URI;
+
+import javax.inject.Named;
+
+import com.google.common.util.concurrent.ListenableFuture;
+
+import cat.calidos.morfeu.model.Validable;
+import dagger.BindsInstance;
+import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent
+@ProductionComponent(modules={ValidationModule.class, ListeningExecutorServiceModule.class})
 public interface ValidationComponent {
 
+ListenableFuture<Validable> validator();
+
+@ProductionComponent.Builder
+interface Builder {
+	@BindsInstance Builder forDocument(@Named("ContentURI") URI u);
+	@BindsInstance Builder withModel(@Named("ModelURI") URI u);
+	ValidationComponent build();
+}
 }
