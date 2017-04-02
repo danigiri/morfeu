@@ -37,7 +37,7 @@ public Document(URI u) {
 	super(u);
 }
 
-public Document(String name, String desc, String kind, URI uri, URI modelUri, URI docUri, Model m, Validable v) 
+public Document(String name, String desc, String kind, URI uri, URI modelUri, URI docUri, Model m) 
 		throws URISyntaxException {
 	
 	super(name, uri, desc);
@@ -47,13 +47,15 @@ public Document(String name, String desc, String kind, URI uri, URI modelUri, UR
 	setModelURI(modelUri);
 	setContentURI(docUri);
 	this.model = m;
-	this.validator = v;
 
 }
 
 
 @Override
 public void validate() throws RuntimeException {
+	if (validator==null) {
+		throw new RuntimeException("Document does not have a validation mechanism");
+	}
 	validator.validate();
 }
 
@@ -108,10 +110,13 @@ public Model getModel() {
 
 
 public void setModel(Model model) {
-
 	this.model = model;
 }
 
+
+public void setValidator(Validable validator) {
+	this.validator = validator;
+}
 
 private URI makeAbsoluteURIIfNeeded(URI relativeURI) throws URISyntaxException {
 

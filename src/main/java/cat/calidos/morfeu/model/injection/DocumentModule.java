@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model.injection;
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.model.Validable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,21 +40,32 @@ import dagger.producers.Produces;
 /** TODO: ensure all this is actually asynchronous
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(subcomponents=ModelComponent.class)
+@ProducerModule(subcomponents={ModelComponent.class, ValidatorComponent.class})
 public class DocumentModule extends RemoteModule {
 
 
 @Produces
-public static Document produceDocument(@Named("BasicDocument") Document doc, Provider<ModelComponent.Builder> modelComponentProvider) throws Exception {
+public static Document produceDocument(@Named("BasicDocument") Document doc, 
+											  Provider<ModelComponent.Builder> modelComponentProvider,
+											  Provider<ValidatorComponent.Builder> validatorComponentProvider) throws Exception {
 
 	Model model;
 	try {
 		 model = modelComponentProvider.get().builder().model().get();
 	} catch (Exception e) {
-		throw new ExecutionException("Problem fetching model of document '"+doc.getName()+"' from uri: '"+doc.getModelURI()+"'",e);
+		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);
 	}
 	doc.setModel(model);
 		
+	Validable validator;
+	try {
+		validator = validatorComponentProvider.get().builder().validator().get();
+		doc.setValidator(validator);
+		doc.validate();
+	} catch (Exception e) {
+		throw new ExecutionException("Problem validating document '"+doc.getName()+"' from content: '"+doc.getContentURI()+"'",e);
+	}
+	
 	return doc;
 	
 }

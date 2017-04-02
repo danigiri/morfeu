@@ -66,15 +66,28 @@ public void testSetModelURI() throws Exception {
 	
 }
 
+@Test(expected=RuntimeException.class)
+public void testEmptyValidator() throws Exception {
+	
+	String site = "http://foo.com";
+	String path = "/whatever.json";
+	String relative = "/relative.xsd";
+	Document doc = createDocumentWithModel(site, path, relative);
+
+	doc.validate();
+}
 
 
 
 private Document createDocumentWithModel(String site, String path, String model) throws URISyntaxException {
+
 	URI uri = new URI(site+path);
 	URI modelURI = new URI(model);
 	Document doc = new Document(uri);
 	doc.setModelURI(modelURI);
+
 	return doc;
+
 }
 
 }

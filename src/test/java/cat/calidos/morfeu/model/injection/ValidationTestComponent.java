@@ -30,7 +30,7 @@ import dagger.producers.ProductionComponent;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ValidationModule.class, ListeningExecutorServiceModule.class})
-public interface ValidationComponent {
+public interface ValidationTestComponent {
 
 ListenableFuture<Validable> validator();
 
@@ -38,6 +38,6 @@ ListenableFuture<Validable> validator();
 interface Builder {
 	@BindsInstance Builder forDocument(@Named("ContentURI") URI u);
 	@BindsInstance Builder withModel(@Named("ModelURI") URI u);
-	ValidationComponent build();
+	ValidationTestComponent build();
 }
 }

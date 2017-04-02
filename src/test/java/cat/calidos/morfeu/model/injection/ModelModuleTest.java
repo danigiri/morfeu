@@ -47,7 +47,7 @@ public class ModelModuleTest {
 public void testParseModel() throws Exception {
 	
 	// TODO: see what we can do about these ugly maven specific paths
-	URI modelURI = new URI("target/test-classes/test-resources/documents/test-model.xsd");
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	Model model = parseURI(modelURI);
 
 	assertEquals(modelURI, model.getUri());

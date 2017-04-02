@@ -30,11 +30,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.apache.xml.utils.DefaultErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -50,7 +48,7 @@ import dagger.producers.Produces;
 @ProducerModule
 public class ValidationModule {
 
-final static Logger log = LoggerFactory.getLogger(ValidationModule.class);
+protected final static Logger log = LoggerFactory.getLogger(ValidationModule.class);
 
 @Produces
 public static DocumentBuilderFactory produceDcoumentBuilderFactory() {

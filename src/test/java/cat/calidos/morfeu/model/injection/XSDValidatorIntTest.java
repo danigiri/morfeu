@@ -14,21 +14,17 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.ExecutionException;
-
-import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
-import cat.calidos.morfeu.model.injection.DaggerValidationComponent;
-import cat.calidos.morfeu.model.injection.IntT3st;
+import cat.calidos.morfeu.model.Validable;
+import cat.calidos.morfeu.model.injection.DaggerValidationTestComponent;
 
 /**
 * @author daniel giribet
@@ -41,7 +37,7 @@ public void testValidate() throws Exception {
 
 	String docPath = uriModuleForPath("test-resources/documents/document1.xml");
 	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
-	Validable validator = DaggerValidationComponent.builder()
+	Validable validator = DaggerValidationTestComponent.builder()
 							.forDocument(new URI(docPath))
 							.withModel(new URI(modelPath))
 							.build()
@@ -58,13 +54,14 @@ public void testNonValidDocument() throws Exception {
 
 	String docPath = uriModuleForPath("test-resources/documents/nonvalid-document.xml");
 	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
-	Validable validator = DaggerValidationComponent.builder()
+	Validable validator = DaggerValidationTestComponent.builder()
 							.forDocument(new URI(docPath))
 							.withModel(new URI(modelPath))
 							.build()
 							.validator()
 							.get();
 	try {
+		System.err.println("Please ignore next SAXParseException, it is expected as we are testing non valid doc");
 		validator.validate();
 	} catch (RuntimeException e) {
 		Throwable cause = e.getCause();

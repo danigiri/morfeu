@@ -1,0 +1,8 @@
+{
+	"name": "Document 1"
+	,"desc": "First document"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/nonvalid-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/documents/document1.xml"
+	
+}

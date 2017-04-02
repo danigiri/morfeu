@@ -16,28 +16,23 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.util.concurrent.ExecutionException;
+import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.model.Validable;
+import dagger.producers.ProductionSubcomponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class IntT3st {
+@ProductionSubcomponent(modules={ValidationModule.class, ListeningExecutorServiceModule.class})
+public interface ValidatorComponent {
 
-protected String uriModuleForPath(String path) {
-	return this.getClass().getClassLoader().getResource(path).toString();
+ListenableFuture<Validable> validator();
+
+
+@ProductionSubcomponent.Builder
+interface Builder {
+	ValidatorComponent builder();
 }
-
-protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException {
-	
-	String doc1Path = uriModuleForPath(path);
-	URIModule uriModule = new URIModule(doc1Path);
-	DocumentComponent docComponent = DaggerDocumentComponent.builder().URIModule(uriModule).build();
-	
-	return docComponent.produceDocument().get();
-
-}
-
 
 }

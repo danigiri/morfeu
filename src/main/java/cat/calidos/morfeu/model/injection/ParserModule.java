@@ -46,7 +46,7 @@ import dagger.producers.Produces;
 @ProducerModule
 public class ParserModule {
 
-final static Logger log = LoggerFactory.getLogger(ParserModule.class);
+protected final static Logger log = LoggerFactory.getLogger(ParserModule.class);
 		
 @Produces
 public static SAXParserFactory produceSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
