@@ -50,13 +50,15 @@ public class ValidationModule {
 
 @Produces
 public static DocumentBuilderFactory produceDcoumentBuilderFactory() {
-	return DocumentBuilderFactory.newInstance();
+	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	dbf.setNamespaceAware(true);
+	return dbf;
 }
 
 
 @Produces
 public static DocumentBuilder produceDocumentBuilder(DocumentBuilderFactory dbf, Schema s) throws ParserConfigurationException {
-	dbf.setSchema(s);
+	//dbf.setSchema(s);
 	DocumentBuilder db = dbf.newDocumentBuilder();
 	db.setErrorHandler(new DefaultErrorHandler());
 	return db;
@@ -119,6 +121,7 @@ public static Validator produceValidator(Schema s) {
 @Produces
 public static Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI uri) throws SAXException, IOException {
 	// TODO: we can probably parse with something faster than building into dom
+	//db.parse(new Inpu)
 	Document dom = db.parse(uri.toString());
 	String childNodes = dom.getChildNodes().item(0).getNodeName();
 	System.err.println(childNodes);

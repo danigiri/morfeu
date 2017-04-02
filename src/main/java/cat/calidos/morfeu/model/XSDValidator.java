@@ -45,13 +45,14 @@ public XSDValidator(Validator v, DOMSource s) {
 public void validate() throws RuntimeException {
 
 // FIXME: this complains strangely and fails to validate, though xmllint works well and validates
-//	try {
-////		validator.validate(source);
-//	} catch (SAXException e) {
-//		throw new RuntimeException("Issue validating '"+source.getSystemId()+"' with "+validator.toString(),e);
-//	} catch (IOException e) {
-//		throw new RuntimeException("IO issue validating '"+source.getSystemId()+"' with ",e);
-//	}
+// IDEA: Don' use nonamespacelocation and specify just the schema id, try that with setSchema
+	try {
+		validator.validate(source);
+	} catch (SAXException e) {
+		throw new RuntimeException("Issue validating '"+source.getSystemId()+"' with "+validator.toString(),e);
+	} catch (IOException e) {
+		throw new RuntimeException("IO issue validating '"+source.getSystemId()+"' with ",e);
+	}
 }
 
 }
