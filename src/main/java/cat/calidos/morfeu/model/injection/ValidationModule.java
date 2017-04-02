@@ -31,6 +31,8 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.apache.xml.utils.DefaultErrorHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
@@ -48,6 +50,8 @@ import dagger.producers.Produces;
 @ProducerModule
 public class ValidationModule {
 
+final static Logger log = LoggerFactory.getLogger(ValidationModule.class);
+
 @Produces
 public static DocumentBuilderFactory produceDcoumentBuilderFactory() {
 	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -58,18 +62,22 @@ public static DocumentBuilderFactory produceDcoumentBuilderFactory() {
 
 @Produces
 public static DocumentBuilder produceDocumentBuilder(DocumentBuilderFactory dbf, Schema s) throws ParserConfigurationException {
+
 	//dbf.setSchema(s);
 	DocumentBuilder db = dbf.newDocumentBuilder();
-	db.setErrorHandler(new DefaultErrorHandler());
+	
 	return db;
+
 }
 
 
 @Produces
 public static SchemaFactory produceSchemaFactory() {
+	
 	SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	sf.setErrorHandler(new DefaultErrorHandler());
+	
 	return sf;
+
 }
 
 @Produces
@@ -80,19 +88,24 @@ public static StreamSource produceStreamSource(@Named("ModelURI") URI u) {
 
 @Produces
 public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) throws SAXException {
+	
 	Schema schema = sf.newSchema(schemaSource);
+
 	return schema;
+
 }
 
 
 @Produces
 public static Validator produceValidator(Schema s) {
+	
 	Validator v = s.newValidator();
 	v.setErrorHandler(new ErrorHandler() {
 	
 	@Override
 	public void warning(SAXParseException exception) throws SAXException {
 		
+		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
 		throw exception;
 		
 	}
@@ -101,6 +114,7 @@ public static Validator produceValidator(Schema s) {
 	@Override
 	public void fatalError(SAXParseException exception) throws SAXException {
 		
+		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
 		throw exception;
 		
 	}
@@ -109,8 +123,8 @@ public static Validator produceValidator(Schema s) {
 	@Override
 	public void error(SAXParseException exception) throws SAXException {
 		
+		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
 		throw exception;
-
 		
 	}
 	});
@@ -120,12 +134,12 @@ public static Validator produceValidator(Schema s) {
 
 @Produces
 public static Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI uri) throws SAXException, IOException {
+	
 	// TODO: we can probably parse with something faster than building into dom
-	//db.parse(new Inpu)
 	Document dom = db.parse(uri.toString());
-	String childNodes = dom.getChildNodes().item(0).getNodeName();
-	System.err.println(childNodes);
+
 	return dom;
+
 }
 
 @Produces

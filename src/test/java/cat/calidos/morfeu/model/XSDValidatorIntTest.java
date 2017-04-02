@@ -16,12 +16,16 @@
 
 package cat.calidos.morfeu.model;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
+import javax.xml.parsers.SAXParserFactory;
+
 import org.junit.Test;
+import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.injection.DaggerValidationComponent;
 import cat.calidos.morfeu.model.injection.IntT3st;
@@ -36,7 +40,7 @@ public class XSDValidatorIntTest  extends IntT3st {
 public void testValidate() throws Exception {
 
 	String docPath = uriModuleForPath("test-resources/documents/document1.xml");
-	String modelPath = uriModuleForPath("test-resources/documents/test-model.xsd");
+	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
 	Validable validator = DaggerValidationComponent.builder()
 							.forDocument(new URI(docPath))
 							.withModel(new URI(modelPath))
@@ -46,6 +50,32 @@ public void testValidate() throws Exception {
 	validator.validate();
 	
 	// should not throw exception
+}
+
+
+@Test
+public void testNonValidDocument() throws Exception {
+
+	String docPath = uriModuleForPath("test-resources/documents/nonvalid-document.xml");
+	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
+	Validable validator = DaggerValidationComponent.builder()
+							.forDocument(new URI(docPath))
+							.withModel(new URI(modelPath))
+							.build()
+							.validator()
+							.get();
+	try {
+		validator.validate();
+	} catch (RuntimeException e) {
+		Throwable cause = e.getCause();
+		if (cause instanceof SAXParseException) {
+			SAXParseException parseException = (SAXParseException)cause;
+			assertTrue(parseException.getMessage().contains("notvalid"));
+		} else {
+			fail("Should throw a parse exception and instead something else failed");
+		}
+	}
+
 }
 
 }

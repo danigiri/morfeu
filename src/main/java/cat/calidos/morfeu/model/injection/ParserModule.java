@@ -103,8 +103,8 @@ private static final class SchemaParserErrorHandler implements ErrorHandler {
 
 	@Override
 	public void warning(SAXParseException e) throws SAXException {
-		// not throwing this at the moment
 		log.warn("warning SAXParseException {} at {}", e.getMessage(), e.getSystemId());
+		throw e;
 	}
 	
 	
