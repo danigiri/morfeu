@@ -64,7 +64,10 @@ ngOnInit() {
 
     // TODO: make this configurable
     this.catalogueService.getAll('/test-resources/catalogues.json')
-    .subscribe(c => this.catalogues = c,
+    .subscribe(c => { 
+                     this.catalogues = c;
+                     this.allOK();
+                    },
                error => this.reportProblem(error));
 
 }

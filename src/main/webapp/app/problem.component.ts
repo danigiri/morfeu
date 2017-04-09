@@ -24,9 +24,10 @@ import { ProblemService } from './problem.service';
     moduleId: module.id,
     selector: 'problem',
     template: `
-        <div *ngIf="problem" class="alert alert-danger" role="alert">{{problem}}</div>        
+        <div id="problem" *ngIf="problem" class="alert alert-danger" role="alert">{{problem}}</div>        
         `,
     styles:[`
+     #problem {}
 
 `]
 })

@@ -70,7 +70,10 @@ constructor(private catalogueService : CatalogueService, problemService: Problem
 @Input() 
 set selectedCatalogueUri(selectedCatalogueUri: string) {
     this.catalogueService.getCatalogue(selectedCatalogueUri)
-    .subscribe(c => this.catalogue = c,
+    .subscribe(c => { 
+                     this.catalogue = c;
+                     this.allOK();
+        },
                error => {
                          this.reportProblem(error);
                          this.catalogue = null;

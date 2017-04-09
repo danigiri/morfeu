@@ -28,5 +28,8 @@ reportProblem(p: any) {
         this.problemService.reportProblem(p);
 }
 
+allOK() {
+    this.problemService.clearProblem();
+}
     
 }

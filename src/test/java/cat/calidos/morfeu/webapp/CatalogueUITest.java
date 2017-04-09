@@ -34,6 +34,7 @@ import static com.codeborne.selenide.Condition.*;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CatalogueUITest {
 
+private static final int CATALOGUE_SIZE = 3;
 private static final String URL_PROPERTY = "app-url";
 private static final String DEFAULT_URL = "http://localhost:3000";
 private static final String BROWSER_PROPERTY = "selenide.browser";
@@ -60,11 +61,11 @@ public static void setUpClass() throws Exception {
 @Test
 public void catalogueListTest() throws Exception {
 
-	// catalogue list appears and has two entries
+	// catalogue list appears and has three entries
 	open(appBaseURL);
 	$("#catalogue-list").should(appear);
 	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
-	catalogueEntries.shouldHaveSize(2);
+	catalogueEntries.shouldHaveSize(CATALOGUE_SIZE);
 	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).getText());
 	
@@ -78,6 +79,7 @@ public void catalogueDetailTest() throws Exception {
 	open(appBaseURL);
 	$("#catalogue-list").should(appear);
 	$("#catalogue").shouldNotBe(visible);
+	$("#problem").shouldNotBe(visible);
 	$("#document-list").shouldNotBe(visible);
 	
 	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
@@ -94,6 +96,26 @@ public void catalogueDetailTest() throws Exception {
 	assertEquals("Wrong catalogue content", "empty\nxml", documentEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "table\nxml", documentEntries.get(1).getText());
 	assertEquals("Wrong catalogue content", "other\nyaml", documentEntries.get(2).getText());
+	
+}
+
+
+@Test
+public void catalogueDetailErrorTest() {
+	
+	open(appBaseURL);
+	$("#catalogue-list").should(appear);
+	$("#catalogue").shouldNotBe(visible);
+	$("#problem").shouldNotBe(visible);
+	
+	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
+	catalogueEntries.get(2).click();
+
+	$("#problem").should(appear);
+	assertTrue($("#problem").getText().contains("Not Found"));
+
+	catalogueEntries.get(0).click();
+	$("#problem").should(disappear);
 	
 }
 
