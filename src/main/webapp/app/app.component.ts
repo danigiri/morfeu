@@ -17,10 +17,13 @@
 import { Component } from '@angular/core';
 
 import { CatalogueListComponent } from './catalogue-list.component';
+import { ProblemComponent } from './problem.component';
+import { ProblemService } from './problem.service';
+
 
 @Component({
-  selector: 'my-app',
-  template: `
+    selector: 'my-app',
+    template: `
       <div class="page-header">
           <h1>Partikle application</h1>
       </div>
@@ -29,16 +32,23 @@ import { CatalogueListComponent } from './catalogue-list.component';
           <div class="row">
             <div class="col-md-4">
               <catalogue-list></catalogue-list>
-              </div>
+            </div>
             <div class="col-md-8">
 
             </div>
           </div>
+          <div class="row">
+              <div class="col-md-12">
+              <problem></problem>
+              </div>
+          </div>
       </div>
 
 
-      `
-})
+      `,
+    providers:    [ProblemService                    
+                     ]
+                     })
 
 export class AppComponent {
     

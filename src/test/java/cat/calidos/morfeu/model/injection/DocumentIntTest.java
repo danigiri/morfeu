@@ -79,6 +79,7 @@ public void testNonValidModelDocument() throws Exception {
 		assertTrue(rootCause.getMessage().contains("undefined"));
 		
 	}
+	
 }
 
 

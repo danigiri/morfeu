@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,6 +19,9 @@ import { Component, Input } from '@angular/core';
 import { Catalogue } from './catalogue';
 import { Document } from './document';
 import { CatalogueService } from './catalogue.service';
+import { ProblemService } from './problem.service';
+import { Widget } from './widget.class';
+
 
 @Component({
 	moduleId: module.id,
@@ -51,26 +54,33 @@ import { CatalogueService } from './catalogue.service';
     #document-list {}
     #document-list-entry {}
     `]
-	})
+})
 	
 	//`
-export class CatalogueComponent {
+export class CatalogueComponent extends Widget {
 	
 catalogue: Catalogue;
 currentDocument: Document;
 
-constructor(private catalogueService : CatalogueService) {}
+constructor(private catalogueService : CatalogueService, problemService: ProblemService) {
+    super(problemService);
+}
+
 
 @Input() 
 set selectedCatalogueUri(selectedCatalogueUri: string) {
     this.catalogueService.getCatalogue(selectedCatalogueUri)
-    .subscribe(c => this.catalogue = c);
+    .subscribe(c => this.catalogue = c,
+               error => {
+                         this.reportProblem(error);
+                         this.catalogue = null;
+                         }
+               );
 }
 
 selectdocument(d: Document) {
     console.log("Selected document="+d.uri);
     this.currentDocument = d;
 }
-
 
 }

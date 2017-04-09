@@ -19,16 +19,25 @@ package cat.calidos.morfeu.model.injection;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import dagger.Module;
 import dagger.Provides;
 import dagger.producers.Production;
 
+
+//TODO: this should be a singleton that is reused between requests, etc.
 @Module
 public final class ListeningExecutorServiceModule {
-	
+
+
+protected final static Logger log = LoggerFactory.getLogger(ListeningExecutorServiceModule.class);
+
 	@Provides
 	@Production
 	public static Executor executor() {
+		log.trace("[Executor producer called]");
 		return Executors.newCachedThreadPool();
 	}
 	

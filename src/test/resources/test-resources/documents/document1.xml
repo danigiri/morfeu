@@ -4,8 +4,6 @@
 		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
 >
     <row>
-    	
     	<col></col>
-    	
     </row>
 </test>

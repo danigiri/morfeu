@@ -1,4 +1,5 @@
 [
 	{ "name":"Catalogue 1", "uri":"/test-resources/catalogues/catalogue1.json" }
 	,{ "name":"Catalogue 2", "uri":"/test-resources/catalogues/catalogue2.json"  }
+	,{ "name":"Catalogue not found", "uri":"/test-resources/catalogues/catalogue-nonexistant.json"  }
 ]	

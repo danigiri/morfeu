@@ -20,6 +20,9 @@ import { Observable } from 'rxjs/Observable';
 import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
+import { ProblemService } from './problem.service';
+import { Widget } from './widget.class';
+
 
 @Component({
     moduleId: module.id,
@@ -39,7 +42,7 @@ import { CatalogueService } from './catalogue.service';
         </div>
       </div>
     </div>
-    <catalogue [selectedCatalogueUri]="currentCatalogue.uri" *ngIf="currentCatalogue"></catalogue>
+    <catalogue *ngIf="currentCatalogue" [selectedCatalogueUri]="currentCatalogue.uri"></catalogue>
     `,
     styles:[`
     #catalogue-list {}
@@ -48,21 +51,30 @@ import { CatalogueService } from './catalogue.service';
     providers: [CatalogueService]
     })
     
-export class CatalogueListComponent {
+export class CatalogueListComponent extends Widget {
     
 catalogues: Catalogue[];
 currentCatalogue: Catalogue;
     
-constructor(private catalogueService : CatalogueService) {}
+constructor(private catalogueService: CatalogueService, problemService: ProblemService) {
+    super(problemService);
+}
 
 ngOnInit() {
-    this.catalogueService.getAll()
-    .subscribe(c => this.catalogues = c);
+
+    // TODO: make this configurable
+    this.catalogueService.getAll('/test-resources/catalogues.json')
+    .subscribe(c => this.catalogues = c,
+               error => this.reportProblem(error));
+
 }
 
 selectCatalogue(c:Catalogue) {
+
     console.log("Selected catalogue="+c.uri);
     this.currentCatalogue = c;
+
 }
+
 
 }

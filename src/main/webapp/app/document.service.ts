@@ -21,25 +21,18 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
-import { Catalogue } from './catalogue';
+import { Document } from './document';
 
 @Injectable()
-export class CatalogueService {
+export class DocumentService {
     
-    catalogues: Observable<Catalogue[]>;
- 
+    document: Document;
+    
     constructor(private http: Http) {}
     
-    getAll(uri:string) : Observable<Catalogue[]> {
-        console.log("CatalogueService::getAll("+uri+")"); 
-        return this.http.get(uri)
-            .map(response => response.json());
-    }
     
-    getCatalogue(uri:string) : Observable<Catalogue> {
-        console.log("CatalogueService::getCatalogue("+uri+")"); 
-        return this.http.get(uri)
-            .map(response => response.json());
+    getDocument(uri:string) {
+        console.log("DocumentService::getDocument("+uri+")"); 
     }
     
 }

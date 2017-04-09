@@ -21,6 +21,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent }   from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
+import { ProblemComponent } from './problem.component';
 
 @NgModule({
   imports:      [ BrowserModule
@@ -29,8 +30,9 @@ import { CatalogueComponent } from './catalogue.component';
   declarations: [ AppComponent
                   ,CatalogueListComponent 
                   ,CatalogueComponent 
+                  ,ProblemComponent 
                 ],
-  providers:    [
+  providers:    [                    
                  ],
   bootstrap:    [ AppComponent ]
 })
