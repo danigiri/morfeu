@@ -11,8 +11,10 @@
 	<inceptionYear>2016</inceptionYear>
 
 	<properties>
-		<jetty.http.port>8080</jetty.http.port>
+		<jetty-http-port>8080</jetty-http-port>
 		<jetty-stop-port>8180</jetty-stop-port>
+		<jetty-context-path>/morfeu</jetty-context-path>
+		<jetty-url>http://localhost:${jetty-http-port}/${jetty-context-path}</jetty-url>
 		<jackson-2-version>2.8.5</jackson-2-version>
 		<dagger-2-version>2.9</dagger-2-version>
 	</properties>
@@ -39,27 +41,33 @@
 			<plugin>	
 			    <groupId>org.eclipse.jetty</groupId>
 			    <artifactId>jetty-maven-plugin</artifactId>
-			    <version>9.4.0.v20161208</version>
+			    <version>9.4.4-SNAPSHOT</version>
 				<configuration>
 					<scanIntervalSeconds>1</scanIntervalSeconds>
 					<stopPort>${jetty-stop-port}</stopPort>
 					<stopKey>STOP</stopKey>
 					<useTestScope>true</useTestScope>
 					<webApp>
-						<contextPath>/morfeu</contextPath>
+						<contextPath>${jetty-context-path}</contextPath>
 						<resourceBases>
 							<resourceBase>${basedir}/src/main/webapp</resourceBase>	<!-- angular2 -->
 							<resourceBase>${basedir}/src/test/resources</resourceBase>	<!-- angular2 -->
+							<!-- fallback for testing: /morfeu/target/test-classes/test-resrources/.. is ok -->
+							<resourceBase>${basedir}</resourceBase>
 						</resourceBases>
 					</webApp>
 					<systemProperties>
 						<systemProperty>
-						<name>org.eclipse.jetty.annotations.maxWait</name>
-						<value>60000</value>
+							<name>org.eclipse.jetty.annotations.maxWait</name>
+							<value>60000</value>
 						</systemProperty>
-						</systemProperties>
+						<systemProperty>
+							<name>RESOURCES_PREFIX</name>
+							<value>${jetty-url}</value>
+						</systemProperty>
+					</systemProperties>
 					<httpConnector>
-						<port>${jetty.http.port}</port>
+						<port>${jetty-http-port}</port>
 					</httpConnector>
 				</configuration>
 				<executions>

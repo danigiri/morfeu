@@ -49,13 +49,13 @@ import { Widget } from './widget.class';
     .catalogue-list-entry {}
     `],
     providers: [CatalogueService]
-    })
+})
     
 export class CatalogueListComponent extends Widget {
     
 catalogues: Catalogue[];
 currentCatalogue: Catalogue;
-    
+
 constructor(private catalogueService: CatalogueService, problemService: ProblemService) {
     super(problemService);
 }

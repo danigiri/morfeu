@@ -64,10 +64,13 @@ public void catalogueListTest() throws Exception {
 	// catalogue list appears and has three entries
 	open(appBaseURL);
 	$("#catalogue-list").should(appear);
+	$("#problem").shouldNotBe(visible);
+	
 	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
 	catalogueEntries.shouldHaveSize(CATALOGUE_SIZE);
 	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).getText());
+	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(2).getText());
 	
 }
 
