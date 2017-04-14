@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	metadata-complete="true">
   
   <context-param>  
     <description>Default resources uri prefix (default value is only for integration testing)</description>  
     <param-name>RESOURCES_PREFIX</param-name>  
     <param-value>CHANGE ME</param-value>  
   </context-param>
+
 
 	<!-- Proxy -->
 	<!-- servlet>
@@ -20,5 +22,5 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     	<servlet-name>RemoteResourcesServlet</servlet-name>
     	<url-pattern>/remote</url-pattern>
   	</servlet-mapping-->
-
+	
 </web-app>

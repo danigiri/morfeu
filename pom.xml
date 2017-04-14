@@ -17,6 +17,8 @@
 		<jetty-url>http://localhost:${jetty-http-port}/${jetty-context-path}</jetty-url>
 		<jackson-2-version>2.8.5</jackson-2-version>
 		<dagger-2-version>2.9</dagger-2-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<build>
@@ -41,7 +43,7 @@
 			<plugin>	
 			    <groupId>org.eclipse.jetty</groupId>
 			    <artifactId>jetty-maven-plugin</artifactId>
-			    <version>9.4.4-SNAPSHOT</version>
+			    <version>9.4.3.v20170317</version>
 				<configuration>
 					<scanIntervalSeconds>1</scanIntervalSeconds>
 					<stopPort>${jetty-stop-port}</stopPort>
@@ -52,7 +54,7 @@
 						<resourceBases>
 							<resourceBase>${basedir}/src/main/webapp</resourceBase>	<!-- angular2 -->
 							<resourceBase>${basedir}/src/test/resources</resourceBase>	<!-- angular2 -->
-							<!-- fallback for testing: /morfeu/target/test-classes/test-resrources/.. is ok -->
+							<!-- fallback for testing: /morfeu/target/test-classes/test-resources/.. is ok -->
 							<resourceBase>${basedir}</resourceBase>
 						</resourceBases>
 					</webApp>
@@ -95,19 +97,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-failsafe-plugin</artifactId>
-		        <version>2.19.1</version>
-		        <executions>
-		          <execution>
-		            <goals>
-		              <goal>integration-test</goal>
-		              <goal>verify</goal>
-		            </goals>
-		          </execution>
-		        </executions>
-	      </plugin>
 	      <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -119,6 +108,25 @@
 	          		</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-failsafe-plugin</artifactId>
+		        <version>2.20</version>
+		        <executions>
+		          <execution>
+		            <goals>
+		              <goal>integration-test</goal>
+		              <goal>verify</goal>
+		            </goals>
+					<configuration>
+						<includes>
+		            		<include>**/*IntTest*</include>
+	    		       		<include>**/*UITest*</include>
+						</includes>
+					</configuration>
+		          </execution>
+		        </executions>
+	      </plugin>
 		</plugins>
 		
 	</build>

@@ -63,7 +63,7 @@ constructor(private catalogueService: CatalogueService, problemService: ProblemS
 ngOnInit() {
 
     // TODO: make this configurable
-    this.catalogueService.getAll('/test-resources/catalogues.json')
+    this.catalogueService.getAll('/morfeu/test-resources/catalogues.json')
     .subscribe(c => { 
                      this.catalogues = c;
                      this.allOK();

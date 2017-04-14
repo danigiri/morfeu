@@ -1,6 +1,9 @@
 {
-	"server": [
-		"./"
-		,"../../test/resources"
-	  ]
+	"reloadDelay": 100,
+	"server": {
+		"baseDir": "./"
+		,"routes": {
+		"/morfeu": "../../test/resources"
+		}
+	}
 }

@@ -36,7 +36,7 @@ public class CatalogueUITest {
 
 private static final int CATALOGUE_SIZE = 3;
 private static final String URL_PROPERTY = "app-url";
-private static final String DEFAULT_URL = "http://localhost:3000";
+private static final String DEFAULT_URL = "http://localhost:8080/morfeu";
 private static final String BROWSER_PROPERTY = "selenide.browser";
 private static final String DEFAULT_BROWSER = "chrome";
 private static final String DRIVER_LOCATION_PROPERTY = "webdriver.chrome.driver";
