@@ -31,8 +31,8 @@ import dagger.producers.Production;
 @Module
 public final class ListeningExecutorServiceModule {
 
-
 protected final static Logger log = LoggerFactory.getLogger(ListeningExecutorServiceModule.class);
+
 
 	@Provides
 	@Production

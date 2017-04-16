@@ -32,11 +32,9 @@ import cat.calidos.morfeu.webapp.di.DaggerServletConfigComponent;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-public class ResourcesServlet extends HttpServlet {
+public class MorfeuServlet extends HttpServlet {
 
-	// TODO: doublecheck visibility is needed (it probably is)
-	@Inject
-	public Properties configuration;
+	protected Properties configuration;
 
 	/* (non-Javadoc)
 	* @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
@@ -50,26 +48,9 @@ public class ResourcesServlet extends HttpServlet {
 			.servletConfig(this.getServletConfig())
 			.build()
 			.getProperties();
+		p.putAll(System.getenv());
+		configuration = p;
 
-		//TODO: refactor into more dagger2 friendliness
-//		RemoteResourcesComponent resourcesComponent = DaggerRemoteResourcesComponent.builder()
-//		.remoteResourcesModule(new RemoteResourcesModule(p.getProperty("")))
-//		.build();
-//		HttpClient httpClient = resourcesComponent.getHttpClient();
-		
 	}
-
-
-	/* (non-Javadoc)
-	* @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	*//////////////////////////////////////////////////////////////////////////////
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		// TODO Auto-generated method stub
-		super.doGet(req, resp);
-	}
-
-
 
 }

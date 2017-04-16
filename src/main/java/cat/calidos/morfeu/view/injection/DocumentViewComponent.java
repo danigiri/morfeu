@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,31 +14,29 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection.old;
+package cat.calidos.morfeu.view.injection;
 
-import java.net.URI;
+import javax.inject.Named;
 
-import dagger.Module;
-import dagger.Provides;
+import dagger.BindsInstance;
+import dagger.Component;
 
-import cat.calidos.morfeu.model.Catalogue;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class CatalogueModule {
+@Component(modules = DocumentViewModule.class)
+public interface DocumentViewComponent {
 
-private String baseUri;
+String render();
 
-public CatalogueModule(String baseUri) {
-	this.baseUri = baseUri;
-}
 
-@Provides 
-Catalogue provideCatalogue(String uri) {
-	URI catalogueUri = URI.create(baseUri+uri);
-	return null;
+@Component.Builder
+interface Builder {
+	@BindsInstance Builder withValue(@Named("value") Object v);
+	@BindsInstance Builder withTemplate(@Named("templatePath") String p);
+	@BindsInstance Builder withProblem(@Named("problem") String p);
+	DocumentViewComponent build();
 }
 
 }

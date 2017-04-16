@@ -32,10 +32,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 
+import cat.calidos.morfeu.problems.FetchingException;
 import dagger.Lazy;
 import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
@@ -47,6 +50,8 @@ import dagger.producers.ProductionComponent.Builder;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class DataFetcherModule {
+
+protected final static Logger log = LoggerFactory.getLogger(DataFetcherModule.class);
 
 
 @Produces
@@ -69,22 +74,29 @@ public ListenableFuture<InputStream> fetchData(URI uri,
 
 
 @Produces @Named("httpData")
-public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request)
-		throws IOException, UnsupportedOperationException, ClientProtocolException {
+public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) throws FetchingException {
 
 	try {
 		 
+		log.trace("Fetching http data from {}", request.getURI());
 		// we want to close right now so we fetch all the content and close the input stream
 		InputStream content = client.execute(request)
-				 .getEntity()
-				 .getContent();
-		InputStream fetchedData = IOUtils.toBufferedInputStream(content);
-		 
-		return fetchedData;
-		 
+					 .getEntity()
+					 .getContent();
+		
+			InputStream fetchedData = IOUtils.toBufferedInputStream(content);
+			
+			return fetchedData;
+
+	} catch (Exception e) {
+		throw new FetchingException(e);
 	} finally {
 		if (client!=null) {
-				client.close();
+				try {
+					client.close();
+				} catch (IOException e) {
+					throw new FetchingException(e);
+				}
 		}
 	}
 	
@@ -92,11 +104,18 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request)
 
 
 @Produces @Named("fileData")
-public InputStream fetchFileData(URI uri) throws IOException {
+public InputStream fetchFileData(URI uri) throws FetchingException {
 	
-	return FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
+	try {
+		
+		log.trace("Fetching local data from {}",uri);
 	
-	//return uri.toURL().openStream();
+		return FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
+
+	} catch (Exception e) {
+		throw new FetchingException(e);
+	}
+
 }
 
 

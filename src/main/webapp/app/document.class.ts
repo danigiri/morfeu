@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2016 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,25 +14,13 @@
  *   limitations under the License.
  */
 
+export class Document {
+    
+    name: string;
+    uri: string;
+    kind: string;
+    modelURI: string;
+    contentURI: string;
+    problem: string;
 
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
-
-import { Document } from './document.class';
-
-@Injectable()
-export class DocumentService {
-    
-    document: Document;
-    
-    constructor(private http: Http) {}
-    
-    
-    getDocument(uri:string) {
-        console.log("DocumentService::getDocument("+uri+")"); 
-    }
-    
 }

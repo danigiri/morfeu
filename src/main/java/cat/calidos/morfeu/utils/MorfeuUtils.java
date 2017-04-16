@@ -14,25 +14,27 @@
  *   limitations under the License.
  */
 
+package cat.calidos.morfeu.utils;
 
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
+import java.util.concurrent.ExecutionException;
 
-import { Document } from './document.class';
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class MorfeuUtils {
 
-@Injectable()
-export class DocumentService {
-    
-    document: Document;
-    
-    constructor(private http: Http) {}
-    
-    
-    getDocument(uri:string) {
-        console.log("DocumentService::getDocument("+uri+")"); 
-    }
-    
+
+public static Throwable findRootCauseFrom(ExecutionException e) {
+
+	Throwable cause = e;
+	while (cause.getCause()!=null) {
+		cause = cause.getCause();
+	}
+	
+	return cause;
+
+}
+
+
+
 }

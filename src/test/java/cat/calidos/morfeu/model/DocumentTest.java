@@ -75,6 +75,7 @@ public void testEmptyValidator() throws Exception {
 	Document doc = createDocumentWithModel(site, path, relative);
 
 	doc.validate();
+
 }
 
 

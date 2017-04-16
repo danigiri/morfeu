@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,12 +14,15 @@
  *   limitations under the License.
  */
 
-export class Document {
-    
-    name: string;
-    uri: string;
-    kind: string;
-    modelURI: string;
-    contentURI: string;
+package cat.calidos.morfeu.problems;
+
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class ParsingException extends Exception {
+
+public ParsingException(Exception e) {
+	super(e);
+}
 
 }

@@ -14,25 +14,18 @@
  *   limitations under the License.
  */
 
+package cat.calidos.morfeu.problems;
 
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
-import { Document } from './document.class';
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class ValidationException extends SAXException {
 
-@Injectable()
-export class DocumentService {
-    
-    document: Document;
-    
-    constructor(private http: Http) {}
-    
-    
-    getDocument(uri:string) {
-        console.log("DocumentService::getDocument("+uri+")"); 
-    }
-    
+	public ValidationException(SAXParseException exception) {
+		super(exception);
+	}
+
 }

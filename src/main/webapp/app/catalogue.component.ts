@@ -17,7 +17,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Catalogue } from './catalogue';
-import { Document } from './document';
+import { Document } from './document.class';
 import { CatalogueService } from './catalogue.service';
 import { ProblemService } from './problem.service';
 import { Widget } from './widget.class';
@@ -41,6 +41,7 @@ import { Widget } from './widget.class';
                     class="document-list-entry list-group-item" 
                     [class.active]="d === currentDocument"
                     (click)="selectdocument(d)">
+                    <!-- TODO: move kind attribute to a call to the document to remove coupling -->
                     {{d.name}} <span class="badge">{{d.kind}}</span>
                 </a> 
         </div>

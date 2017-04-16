@@ -11,16 +11,16 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   </context-param>
 
 
-	<!-- Proxy -->
-	<!-- servlet>
-    	<display-name>catalogue-servlet</display-name>
-    	<servlet-name>CatalogueServlet</servlet-name>
-   		<servlet-class>cat.calidos.morfeu.webapp.ResourcesServlet</servlet-class>
+	<!-- Document -->
+	<servlet>
+    	<display-name>document-servlet</display-name>
+    	<servlet-name>DocumentsServlet</servlet-name>
+   		<servlet-class>cat.calidos.morfeu.webapp.DocumentsServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-    	<servlet-name>RemoteResourcesServlet</servlet-name>
-    	<url-pattern>/remote</url-pattern>
-  	</servlet-mapping-->
+    	<servlet-name>DocumentsServlet</servlet-name>
+    	<url-pattern>/documents/*</url-pattern>
+  	</servlet-mapping>
 	
 </web-app>

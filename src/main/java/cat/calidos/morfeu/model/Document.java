@@ -93,6 +93,7 @@ public void setModelURI(URI modelURI) throws URISyntaxException {
 	
 }
 
+
 public URI getContentURI() {
 	return contentURI;
 }
@@ -118,11 +119,12 @@ public void setValidator(Validable validator) {
 	this.validator = validator;
 }
 
+
 private URI makeAbsoluteURIIfNeeded(URI relativeURI) throws URISyntaxException {
 
 	String path = uri.getPath();
 	String uriString = uri.toString();
-	String uriHostPart = uriString.substring(0,uriString.length()-path.length());
+	String uriHostPart = uriString.substring(0, uriString.length()-path.length());
 	
 	// there may be a better way to do this but tests will protect us
 	if (uri!=null && !relativeURI.isAbsolute() && !uri.getScheme().equals("file"))  {

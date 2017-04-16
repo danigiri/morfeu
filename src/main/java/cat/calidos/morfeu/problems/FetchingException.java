@@ -14,25 +14,16 @@
  *   limitations under the License.
  */
 
+package cat.calidos.morfeu.problems;
 
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
 
-import { Document } from './document.class';
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class FetchingException extends Exception {
 
-@Injectable()
-export class DocumentService {
-    
-    document: Document;
-    
-    constructor(private http: Http) {}
-    
-    
-    getDocument(uri:string) {
-        console.log("DocumentService::getDocument("+uri+")"); 
-    }
-    
+	public FetchingException(Exception e) {
+		super(e);
+	}
+
 }

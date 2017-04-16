@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.MorfeuUtils;
 
 public class DocumentIntTest extends IntT3st {
 
@@ -39,8 +42,8 @@ public void testNonValidContentDocument() throws Exception {
 
 	} catch (ExecutionException e) {
 		
-		Throwable rootCause = findRootCause(e);
-		assertTrue(rootCause instanceof SAXParseException);
+		Throwable rootCause = MorfeuUtils.findRootCauseFrom(e);
+		assertTrue(rootCause instanceof ValidationException);
 		assertTrue(rootCause.getMessage().contains("Invalid content"));
 		
 	}
@@ -57,7 +60,7 @@ public void testNotFoundModelDocument() throws Exception {
 
 	} catch (ExecutionException e) {
 	
-		Throwable rootCause = findRootCause(e);
+		Throwable rootCause = MorfeuUtils.findRootCauseFrom(e);
 		assertTrue(rootCause instanceof FileNotFoundException);
 	
 	}
@@ -69,29 +72,17 @@ public void testNonValidModelDocument() throws Exception {
 	
 	try {
 
-		System.err.println("Please ignore next SAXParseException, it is expected as the content is not valid");
+		System.err.println("Please ignore next SAXParseException, it is expected as the model is not valid");
 		produceDocumentFromPath("test-resources/documents/document-with-nonvalid-model.json");
 
 	} catch (ExecutionException e) {
 		
-		Throwable rootCause = findRootCause(e);
-		assertTrue(rootCause instanceof SAXParseException);
+		Throwable rootCause = MorfeuUtils.findRootCauseFrom(e);
+		assertTrue(rootCause instanceof ParsingException);
 		assertTrue(rootCause.getMessage().contains("undefined"));
 		
 	}
 	
-}
-
-
-private Throwable findRootCause(ExecutionException e) {
-
-	Throwable cause = e;
-	while (cause.getCause()!=null) {
-		cause = cause.getCause();
-	}
-	
-	return cause;
-
 }
 
 

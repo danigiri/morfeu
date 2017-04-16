@@ -45,6 +45,7 @@
 			    <artifactId>jetty-maven-plugin</artifactId>
 			    <version>9.4.3.v20170317</version>
 				<configuration>
+					<dumpOnStart>false</dumpOnStart> <!-- set to true for debugging -->
 					<scanIntervalSeconds>1</scanIntervalSeconds>
 					<stopPort>${jetty-stop-port}</stopPort>
 					<stopKey>STOP</stopKey>
@@ -211,6 +212,12 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+		
+		<dependency>
+       		<groupId>org.jtwig</groupId>
+        	<artifactId>jtwig-core</artifactId>
+        	<version>5.85.3.RELEASE</version>
+	    </dependency>
 
 		<!-- UNIT TESTING -->
 		<dependency>
@@ -283,13 +290,17 @@
 
 
 
-  <repositories>
-    <repository>
-      <id>RedHat-GA</id>
-      <name>RedHat GA repository</name>
-      <url>https://maven.repository.redhat.com/ga/</url>
-    </repository>
-</repositories>
+	<repositories>
+	    <repository>
+	      <id>RedHat-GA</id>
+	      <name>RedHat GA repository</name>
+	      <url>https://maven.repository.redhat.com/ga/</url>
+	    </repository>
+	    <repository>
+	        <id>jcenter</id>
+	        <url>https://jcenter.bintray.com/</url>
+	    </repository>
+	</repositories>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>

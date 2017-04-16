@@ -16,7 +16,7 @@
 
 import { Component, Input } from '@angular/core';
 
-import { Document } from './document';
+import { Document } from './document.class';
 
 @Component({
     moduleId: module.id,

@@ -19,6 +19,8 @@ package cat.calidos.morfeu.model.injection;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Validable;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +31,11 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,7 +48,9 @@ import dagger.producers.Produces;
 @ProducerModule(subcomponents={ModelComponent.class, ValidatorComponent.class})
 public class DocumentModule extends RemoteModule {
 
-
+protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class);
+		
+		
 @Produces
 public static Document produceDocument(@Named("BasicDocument") Document doc, 
 											  Provider<ModelComponent.Builder> modelComponentProvider,
@@ -57,14 +64,8 @@ public static Document produceDocument(@Named("BasicDocument") Document doc,
 	}
 	doc.setModel(model);
 		
-	Validable validator;
-	try {
-		validator = validatorComponentProvider.get().builder().validator().get();
-		doc.setValidator(validator);
-		doc.validate();
-	} catch (Exception e) {
-		throw new ExecutionException("Problem validating document '"+doc.getName()+"' from content: '"+doc.getContentURI()+"'",e);
-	}
+	Validable validator = validatorComponentProvider.get().builder().validator().get();
+	doc.setValidator(validator);
 	
 	return doc;
 	
@@ -73,36 +74,44 @@ public static Document produceDocument(@Named("BasicDocument") Document doc,
 
 @Produces @Named("JSONDocumentStream")
 public static InputStream fetchDocumentJSON(URI uri, CloseableHttpClient client) throws ExecutionException {
+
 	InputStream documentStream;
 	try {
 		documentStream = fetchRemoteStream(uri, client).get();
 	} catch (Exception e) {
 		throw new ExecutionException("Problem fetching document with uri: '"+uri+"'",e);
 	}
+	
 	return documentStream;
+	
 }
 
 
 @Produces @Named("BasicDocument")
 public static Document parseDocument(URI uri, @Named("JSONDocumentStream") InputStream docStream, ObjectMapper mapper) 
-		throws JsonParseException, JsonMappingException, IOException {
-	return mapper.readerForUpdating(new Document(uri)).readValue(docStream);
+		throws ParsingException, FetchingException {
+	
+	try {
+		return mapper.readerForUpdating(new Document(uri)).readValue(docStream);
+		
+	} catch (JsonProcessingException jpe) {
+		throw new ParsingException(jpe);
+	} catch (IOException ioe) {
+		throw new FetchingException(ioe);
+	}
+
 }
 
 
 @Produces @Named("ModelURI")
 public static URI modelURI(@Named("BasicDocument") Document doc) {
-
 	return doc.getModelURI();
-
 }
 
 
 @Produces @Named("ContentURI")
 public static URI contentURI(@Named("BasicDocument") Document doc) {
-
 	return doc.getContentURI();
-
 }
 
 

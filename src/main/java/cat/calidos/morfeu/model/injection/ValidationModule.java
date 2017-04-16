@@ -39,6 +39,7 @@ import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.XSDValidator;
+import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -104,7 +105,7 @@ public static Validator produceValidator(Schema s) {
 	public void warning(SAXParseException exception) throws SAXException {
 		
 		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
+		throw new ValidationException(exception);
 		
 	}
 	
@@ -113,7 +114,7 @@ public static Validator produceValidator(Schema s) {
 	public void fatalError(SAXParseException exception) throws SAXException {
 		
 		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
+		throw new ValidationException(exception);
 		
 	}
 	
@@ -122,7 +123,7 @@ public static Validator produceValidator(Schema s) {
 	public void error(SAXParseException exception) throws SAXException {
 		
 		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
+		throw new ValidationException(exception);
 		
 	}
 	});
