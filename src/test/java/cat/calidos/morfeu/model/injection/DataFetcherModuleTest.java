@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import cat.calidos.morfeu.problems.FetchingException;
 import dagger.Lazy;
 
 
@@ -72,8 +73,8 @@ public void testFaultyGetchHttpData() throws Exception {
 	try {
 		httpRequester.fetchHttpData(httpClient, request);
 		fail("Bad request should throw an execution exception");
-	} catch (ClientProtocolException e) {
-		assertEquals("Bad request type", e.getMessage());
+	} catch (FetchingException e) {
+		assertTrue(e.getMessage().contains("Bad request type"));
 	}
 
 	// connection should still closed even after exception

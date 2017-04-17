@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.injection.DaggerDocumentComponent;
 import cat.calidos.morfeu.model.injection.URIModule;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerDocumentViewComponent;
 import cat.calidos.morfeu.view.injection.DocumentViewModule;
@@ -67,6 +69,12 @@ public static String loadDocument(String uri) {
 		template = "templates/document-problem.twig";
 		log.error(message);
 
+	} catch (ParsingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (FetchingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	
 	

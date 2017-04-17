@@ -22,8 +22,8 @@ package cat.calidos.morfeu.problems;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class FetchingException extends Exception {
 
-	public FetchingException(Exception e) {
-		super(e);
+	public FetchingException(String message, Throwable e) {
+		super(message+"("+e.getMessage()+")", e);
 	}
 
 }

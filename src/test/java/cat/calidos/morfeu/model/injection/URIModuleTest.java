@@ -22,13 +22,15 @@ import java.net.URISyntaxException;
 
 import org.junit.Test;
 
+import cat.calidos.morfeu.problems.FetchingException;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class URIModuleTest {
 
 @Test
-public void testURI() throws URISyntaxException {
+public void testURI() throws FetchingException {
 
 	String uri = "http://foo.com";
 	URIModule module = new URIModule(uri);
@@ -37,8 +39,8 @@ public void testURI() throws URISyntaxException {
 }
 
 
-@Test(expected = URISyntaxException.class)
-public void testURIException() throws URISyntaxException {
+@Test(expected = FetchingException.class)
+public void testURIException() throws FetchingException {
 	new URIModule("://foo.com").uri();
 }
 

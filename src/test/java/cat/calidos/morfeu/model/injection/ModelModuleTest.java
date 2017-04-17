@@ -32,6 +32,9 @@ import org.xml.sax.SAXException;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.ConfigurationException;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.Produced;
 
 /**
@@ -56,12 +59,12 @@ public void testParseModel() throws Exception {
 }
 
 
-@Test(expected = SAXException.class)
+@Test(expected = ParsingException.class)
 public void testParseNonValidModel() throws Exception  {
 
 	// TODO: see what we can do about these ugly maven specific paths
 
-	System.err.println("Please ignore next SAXParseException, it is expected as we are testing non valid schema");
+	System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid schema");
 	
 	URI modelURI = new URI("target/test-classes/test-resources/models/nonvalid-model.xsd");
 	parseURI(modelURI);
@@ -69,7 +72,7 @@ public void testParseNonValidModel() throws Exception  {
 }
 
 
-private Model parseURI(URI u) throws InterruptedException, ExecutionException, SAXException {
+private Model parseURI(URI u) throws ConfigurationException, InterruptedException, ExecutionException, ValidationException {
 
 	XSOMParser parser = DaggerParserComponent.builder().build().produceXSOMParser().get();
 	when(parserProducer.get()).thenReturn(parser);

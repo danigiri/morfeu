@@ -19,6 +19,9 @@ package cat.calidos.morfeu.model.injection;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.Validable;
+import cat.calidos.morfeu.problems.ConfigurationException;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 import dagger.producers.ProductionSubcomponent;
 
 /**
@@ -27,7 +30,7 @@ import dagger.producers.ProductionSubcomponent;
 @ProductionSubcomponent(modules={ValidationModule.class, ListeningExecutorServiceModule.class})
 public interface ValidatorComponent {
 
-ListenableFuture<Validable> validator();
+ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
 
 
 @ProductionSubcomponent.Builder

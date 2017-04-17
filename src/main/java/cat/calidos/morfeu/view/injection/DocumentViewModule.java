@@ -70,7 +70,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 			.parser()
 			.syntax()
 				.withStartCode("$%").withEndCode("%$")
-				.withStartOutput("$(").withEndOutput(")$")
+				.withStartOutput("$[").withEndOutput("]$")
 				.withStartComment("$#").withEndComment("#$")
 			.and()
 		.and()

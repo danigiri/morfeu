@@ -19,6 +19,7 @@ package cat.calidos.morfeu.model.injection;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import cat.calidos.morfeu.problems.FetchingException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -36,9 +37,13 @@ public URIModule(String u) {
 }
 
 @Produces
-URI uri() throws URISyntaxException {
+URI uri() throws FetchingException {
 	System.err.println("[module] Producer for URI called");
-	return new URI(uri);
+	try {
+		return new URI(uri);
+	} catch (URISyntaxException e) {
+		throw new FetchingException("Problem due to invalid URI '"+uri+"'", e);
+	}
 }
 
 }

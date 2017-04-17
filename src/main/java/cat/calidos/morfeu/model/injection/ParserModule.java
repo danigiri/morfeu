@@ -29,6 +29,8 @@ import org.xml.sax.SAXParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.xsom.parser.XSOMParser;
 
+import cat.calidos.morfeu.problems.ConfigurationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,42 +46,34 @@ public class ParserModule {
 protected final static Logger log = LoggerFactory.getLogger(ParserModule.class);
 		
 @Produces
-public static SAXParserFactory produceSAXParserFactory() throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
+public static SAXParserFactory produceSAXParserFactory() throws ConfigurationException {
 
-	log.trace("Producing saxParserFactory");
+	log.trace("[Producing saxParserFactory]");
 	
 	//TODO: double-check which parser to use that implements security like we want
 	SAXParserFactory factory = SAXParserFactory.newInstance();
 	factory.setNamespaceAware(true);
-//    try {
+    try {
     	// TODO: checkout how to ensure we can load includes but only from the same origin and stuff
     	factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-//	} catch (SAXNotRecognizedException | SAXNotSupportedException | ParserConfigurationException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-	return factory;
+	} catch (SAXNotRecognizedException | SAXNotSupportedException | ParserConfigurationException e) {
+		throw new ConfigurationException("Problem building schema parser", e);
+	}
+
+    return factory;
+
 }
 
 
 @Produces
 public static XSOMParser produceSchemaParser(SAXParserFactory factory) {
 	
-	log.trace("Producing XSOMParser");
+	log.trace("[Producing XSOMParser]");
 
     XSOMParser parser = new XSOMParser(factory);
-    parser.setErrorHandler(new SchemaParserErrorHandler());
-//    parser.setEntityResolver(new EntityResolver() {
-//	
-//	@Override
-//	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-//		
-//		// TODO Auto-generated method stub
-//		System.err.println(publicId+","+systemId);
-//		return null;
-//	}
-//	});
-    
+    // TODO: is explicit setting of a schema parsing error handler needed?
+    //parser.setErrorHandler(new SchemaParserErrorHandler());
+   
     return parser;
     
 }
@@ -88,8 +82,8 @@ public static XSOMParser produceSchemaParser(SAXParserFactory factory) {
 @Produces
 public static ObjectMapper produceJSONObjectMapper() {
 	
-	log.trace("Producing ObjectMapper");
-	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects
+	log.trace("[Producing ObjectMapper]");
+	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects in Dagger2
 	
 }
 

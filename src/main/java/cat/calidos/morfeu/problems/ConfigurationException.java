@@ -14,32 +14,17 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.problems;
 
-import java.util.concurrent.ExecutionException;
-
-import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class IntT3st {
+public class ConfigurationException extends Exception {
 
-protected String uriModuleForPath(String path) {
-	return this.getClass().getClassLoader().getResource(path).toString();
+public ConfigurationException(String message, Throwable e) {
+	super(message+"("+e.getMessage()+")", e);
 }
-
-protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException, ParsingException, FetchingException {
-	
-	String doc1Path = uriModuleForPath(path);
-	URIModule uriModule = new URIModule(doc1Path);
-	DocumentComponent docComponent = DaggerDocumentComponent.builder().URIModule(uriModule).build();
-	
-	return docComponent.produceDocument().get();
-
-}
-
 
 }

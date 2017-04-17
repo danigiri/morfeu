@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.sun.xml.xsom.parser.XSOMParser;
 
+import cat.calidos.morfeu.problems.ConfigurationException;
 import dagger.producers.ProductionComponent;
 
 /**
@@ -29,6 +30,6 @@ import dagger.producers.ProductionComponent;
 public interface ParserComponent {
 
 ListenableFuture<ObjectMapper> produceJSONObjectMapper();
-ListenableFuture<XSOMParser> produceXSOMParser();
+ListenableFuture<XSOMParser> produceXSOMParser() throws ConfigurationException;
 
 }

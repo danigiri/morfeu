@@ -64,7 +64,7 @@ public HttpGet produceRequest(URI uri) {
 public ListenableFuture<InputStream> fetchData(URI uri,  
 							 @Named("httpData") Producer<InputStream> httpData, 
 							 @Named("fileData") Producer<InputStream> fileData ) 
-									 throws UnsupportedOperationException, ClientProtocolException, IOException {
+									 throws FetchingException {
 	if (uri.getScheme().equals("file")) {
 		return fileData.get();
 	} else {
@@ -89,13 +89,13 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) th
 			return fetchedData;
 
 	} catch (Exception e) {
-		throw new FetchingException(e);
+		throw new FetchingException("Problem fetching http data", e);
 	} finally {
 		if (client!=null) {
 				try {
 					client.close();
 				} catch (IOException e) {
-					throw new FetchingException(e);
+					throw new FetchingException("Problem closing client when fetching http data", e);
 				}
 		}
 	}
@@ -113,7 +113,7 @@ public InputStream fetchFileData(URI uri) throws FetchingException {
 		return FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
 
 	} catch (Exception e) {
-		throw new FetchingException(e);
+		throw new FetchingException("Problem fetching local data at '"+uri+"'", e);
 	}
 
 }

@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -34,6 +35,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 
 /**
 * @author daniel giribet
@@ -55,13 +58,13 @@ public void testParseDocument() throws Exception {
 }
 
 
-@Test(expected = JsonParseException.class)
+@Test(expected = ParsingException.class)
 public void testMalformedDocument() throws Exception {
 	parseRelativeLocation("test-resources/documents/malformed-document.json");
 }
 
 
-@Test(expected = JsonMappingException.class)
+@Test(expected = ParsingException.class)
 public void testInvalidDocument() throws Exception {
 	parseRelativeLocation("test-resources/documents/nonvalid-document.json");
 }
@@ -82,7 +85,7 @@ public static void testDocument1(Document document) throws URISyntaxException {
 }
 
 
-private Document parseRelativeLocation(String location) throws URISyntaxException, JsonParseException, JsonMappingException, IOException {
+private Document parseRelativeLocation(String location) throws ParsingException, FetchingException, URISyntaxException, MalformedURLException, IOException {
 
 	String absoluteLocation = this.getClass().getClassLoader().getResource(location).toString();
 	URI uri = new URI(absoluteLocation);

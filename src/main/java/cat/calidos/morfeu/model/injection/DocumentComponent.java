@@ -20,6 +20,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Validable;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
@@ -30,7 +32,7 @@ import dagger.producers.ProductionComponent;
 							  ListeningExecutorServiceModule.class})
 public interface DocumentComponent {
 
-ListenableFuture<Document> produceDocument();
+ListenableFuture<Document> produceDocument() throws ParsingException, FetchingException;
 
 @ProductionComponent.Builder
 interface Builder {

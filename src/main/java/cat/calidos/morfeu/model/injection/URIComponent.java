@@ -21,12 +21,14 @@ import java.net.URISyntaxException;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import cat.calidos.morfeu.problems.FetchingException;
+
 /**
 * @author daniel giribet
 * Note we're using a producer as we can declare explicit exceptions
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public interface URIComponent {
 
-URI uri() throws URISyntaxException;
+URI uri() throws FetchingException;
 
 }

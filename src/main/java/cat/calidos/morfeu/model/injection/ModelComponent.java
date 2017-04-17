@@ -16,9 +16,12 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.util.concurrent.ExecutionException;
+
 import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.ProductionSubcomponent;
 
 /**
@@ -27,7 +30,7 @@ import dagger.producers.ProductionSubcomponent;
 @ProductionSubcomponent(modules=ModelModule.class)
 public interface ModelComponent {
 
-ListenableFuture<Model> model();
+ListenableFuture<Model> model() throws ValidationException, ExecutionException;
 
 @ProductionSubcomponent.Builder
 interface Builder {

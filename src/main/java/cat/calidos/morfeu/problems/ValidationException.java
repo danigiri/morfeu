@@ -16,16 +16,14 @@
 
 package cat.calidos.morfeu.problems;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ValidationException extends SAXException {
+public class ValidationException extends Exception {
 
-	public ValidationException(SAXParseException exception) {
-		super(exception);
+	public ValidationException(String message, Throwable e) {
+		super(message+"("+e.getMessage()+")", e);
 	}
 
 }

@@ -27,7 +27,7 @@ import dagger.Provides;
 import dagger.producers.Production;
 
 
-//TODO: this should be a singleton that is reused between requests, etc.
+//FIXME: this should be a singleton that is reused between requests, etc.
 @Module
 public final class ListeningExecutorServiceModule {
 
@@ -37,7 +37,7 @@ protected final static Logger log = LoggerFactory.getLogger(ListeningExecutorSer
 	@Provides
 	@Production
 	public static Executor executor() {
-		log.trace("[Executor producer called]");
+		log.info("[Executor producer called]");
 		return Executors.newCachedThreadPool();
 	}
 	

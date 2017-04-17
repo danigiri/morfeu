@@ -27,6 +27,8 @@ import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.Produced;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
@@ -39,11 +41,17 @@ public class ModelModule extends RemoteModule {
 
 
 @Produces
-public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws SAXException, ExecutionException {
+public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws ValidationException, ExecutionException {
 	
 	XSOMParser parser = parserProducer.get();
-	parser.parse(u.toString());
-	XSSchemaSet schemaSet = parser.getResult();
+	XSSchemaSet schemaSet = null;
+	String uri = u.toString();
+	try {
+		parser.parse(uri);
+		schemaSet = parser.getResult();
+	} catch (SAXException e) {
+		throw new ValidationException("Problem parsing model '"+uri+"'", e);
+	}
 
 	return new Model(u, schemaSet);
 

@@ -56,6 +56,7 @@ public static Document produceDocument(@Named("BasicDocument") Document doc,
 											  Provider<ModelComponent.Builder> modelComponentProvider,
 											  Provider<ValidatorComponent.Builder> validatorComponentProvider) throws Exception {
 
+	// FIXME: what exception should we throw here?
 	Model model;
 	try {
 		 model = modelComponentProvider.get().builder().model().get();
@@ -95,9 +96,9 @@ public static Document parseDocument(URI uri, @Named("JSONDocumentStream") Input
 		return mapper.readerForUpdating(new Document(uri)).readValue(docStream);
 		
 	} catch (JsonProcessingException jpe) {
-		throw new ParsingException(jpe);
+		throw new ParsingException("Problem with the json format of '"+uri+"'", jpe);
 	} catch (IOException ioe) {
-		throw new FetchingException(ioe);
+		throw new FetchingException("Problem fetching '"+uri+"'", ioe);
 	}
 
 }

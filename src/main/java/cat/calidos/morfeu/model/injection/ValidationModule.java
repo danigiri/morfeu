@@ -39,6 +39,9 @@ import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.XSDValidator;
+import cat.calidos.morfeu.problems.ConfigurationException;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
@@ -60,10 +63,15 @@ public static DocumentBuilderFactory produceDcoumentBuilderFactory() {
 
 
 @Produces
-public static DocumentBuilder produceDocumentBuilder(DocumentBuilderFactory dbf, Schema s) throws ParserConfigurationException {
+public static DocumentBuilder produceDocumentBuilder(DocumentBuilderFactory dbf, Schema s) throws ConfigurationException {
 
 	//dbf.setSchema(s);
-	DocumentBuilder db = dbf.newDocumentBuilder();
+	DocumentBuilder db;
+	try {
+		db = dbf.newDocumentBuilder();
+	} catch (ParserConfigurationException e) {
+		throw new ConfigurationException("Problem when configuring the xml parsing system", e);
+	}
 	
 	return db;
 
@@ -86,9 +94,14 @@ public static StreamSource produceStreamSource(@Named("ModelURI") URI u) {
 
 
 @Produces
-public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) throws SAXException {
+public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) throws ParsingException {
 	
-	Schema schema = sf.newSchema(schemaSource);
+	Schema schema;
+	try {
+		schema = sf.newSchema(schemaSource);
+	} catch (SAXException e) {
+		throw new ParsingException("Problem when reading the model schema", e);
+	}
 
 	return schema;
 
@@ -99,43 +112,52 @@ public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) 
 public static Validator produceValidator(Schema s) {
 	
 	Validator v = s.newValidator();
-	v.setErrorHandler(new ErrorHandler() {
-	
-	@Override
-	public void warning(SAXParseException exception) throws SAXException {
-		
-		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw new ValidationException(exception);
-		
-	}
-	
-	
-	@Override
-	public void fatalError(SAXParseException exception) throws SAXException {
-		
-		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw new ValidationException(exception);
-		
-	}
-	
-	
-	@Override
-	public void error(SAXParseException exception) throws SAXException {
-		
-		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw new ValidationException(exception);
-		
-	}
-	});
+	// TODO: check if this is needed
+//	v.setErrorHandler(new ErrorHandler() {
+//	
+//	@Override
+//	public void warning(SAXParseException exception) throws SAXException {
+//		
+//		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
+//		throw new ValidationException(exception);
+//		
+//	}
+//	
+//	
+//	@Override
+//	public void fatalError(SAXParseException exception) throws SAXException {
+//		
+//		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
+//		throw new ValidationException(exception);
+//		
+//	}
+//	
+//	
+//	@Override
+//	public void error(SAXParseException exception) throws SAXException {
+//		
+//		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
+//		throw new ValidationException(exception);
+//		
+//	}
+//	});
 	return v;
 }
 
 
 @Produces
-public static Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI uri) throws SAXException, IOException {
+public static Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI u) throws ParsingException, FetchingException {
 	
 	// TODO: we can probably parse with something faster than building into dom
-	Document dom = db.parse(uri.toString());
+	Document dom;
+	String uri = u.toString();
+	try {
+		dom = db.parse(uri);
+	} catch (SAXException e) {
+		throw new ParsingException("Problem when parsing '"+uri+"'", e);
+	} catch (IOException e) {
+		throw new FetchingException("Problem when fetching '"+uri+"'", e);
+	}
 
 	return dom;
 
