@@ -33,6 +33,7 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ConfigurationException;
+import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.Produced;
@@ -72,7 +73,8 @@ public void testParseNonValidModel() throws Exception  {
 }
 
 
-private Model parseURI(URI u) throws ConfigurationException, InterruptedException, ExecutionException, ValidationException {
+private Model parseURI(URI u) 
+		throws ConfigurationException, InterruptedException, ExecutionException, ParsingException, FetchingException {
 
 	XSOMParser parser = DaggerParserComponent.builder().build().produceXSOMParser().get();
 	when(parserProducer.get()).thenReturn(parser);

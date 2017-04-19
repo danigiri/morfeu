@@ -23,6 +23,9 @@ import javax.xml.validation.Validator;
 
 import org.xml.sax.SAXException;
 
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ValidationException;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,16 +45,16 @@ public XSDValidator(Validator v, DOMSource s) {
 * @see cat.calidos.morfeu.model.Validable#validate()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
-public void validate() throws RuntimeException {
+public void validate() throws ValidationException, FetchingException {
 
 // FIXME: this complains strangely and fails to validate, though xmllint works well and validates
 // IDEA: Don' use nonamespacelocation and specify just the schema id, try that with setSchema
 	try {
 		validator.validate(source);
 	} catch (SAXException e) {
-		throw new RuntimeException("Issue validating '"+source.getSystemId()+"' with "+validator.toString(),e);
+		throw new ValidationException("Issue validating '"+source.getSystemId()+"' with "+validator.toString(),e);
 	} catch (IOException e) {
-		throw new RuntimeException("IO issue validating '"+source.getSystemId()+"' with ",e);
+		throw new FetchingException("IO issue validating '"+source.getSystemId()+"' with ",e);
 	}
 }
 

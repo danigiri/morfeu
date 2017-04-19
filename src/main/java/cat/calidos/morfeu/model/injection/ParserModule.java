@@ -71,8 +71,7 @@ public static XSOMParser produceSchemaParser(SAXParserFactory factory) {
 	log.trace("[Producing XSOMParser]");
 
     XSOMParser parser = new XSOMParser(factory);
-    // TODO: is explicit setting of a schema parsing error handler needed?
-    //parser.setErrorHandler(new SchemaParserErrorHandler());
+    parser.setErrorHandler(new SchemaParserErrorHandler());
    
     return parser;
     

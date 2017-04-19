@@ -25,6 +25,8 @@ import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.injection.DaggerValidationTestComponent;
+import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.MorfeuUtils;
 
 /**
 * @author daniel giribet
@@ -61,16 +63,10 @@ public void testNonValidDocument() throws Exception {
 							.validator()
 							.get();
 	try {
-		System.err.println("Please ignore next SAXParseException, it is expected as we are testing non valid doc");
+		System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid doc");
 		validator.validate();
-	} catch (RuntimeException e) {
-		Throwable cause = e.getCause();
-		if (cause instanceof SAXParseException) {
-			SAXParseException parseException = (SAXParseException)cause;
-			assertTrue(parseException.getMessage().contains("notvalid"));
-		} else {
-			fail("Should throw a parse exception and instead something else failed");
-		}
+	} catch (ValidationException e) {
+		assertTrue(e.getMessage().contains("notvalid"));
 	}
 
 }

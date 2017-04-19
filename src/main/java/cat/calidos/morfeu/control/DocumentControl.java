@@ -26,6 +26,7 @@ import cat.calidos.morfeu.model.injection.DaggerDocumentComponent;
 import cat.calidos.morfeu.model.injection.URIModule;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerDocumentViewComponent;
 import cat.calidos.morfeu.view.injection.DocumentViewModule;
@@ -38,7 +39,7 @@ public class DocumentControl {
 protected final static Logger log = LoggerFactory.getLogger(DocumentControl.class);
 
 
-public static String loadDocument(String uri) {
+public static String loadDocument(String uri) throws ParsingException {
 	
 	Document document = null;
 	String message = null;
@@ -69,7 +70,7 @@ public static String loadDocument(String uri) {
 		template = "templates/document-problem.twig";
 		log.error(message);
 
-	} catch (ParsingException e) {
+	} catch (ValidationException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} catch (FetchingException e) {

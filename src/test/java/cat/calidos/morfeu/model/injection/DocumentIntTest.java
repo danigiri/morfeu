@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
@@ -43,7 +44,7 @@ public void testNonValidContentDocument() throws Exception {
 	} catch (ExecutionException e) {
 		
 		Throwable rootCause = MorfeuUtils.findRootCauseFrom(e);
-		assertTrue(rootCause instanceof ValidationException);
+		assertEquals(ValidationException.class, rootCause.getClass());
 		assertTrue(rootCause.getMessage().contains("Invalid content"));
 		
 	}
@@ -61,7 +62,7 @@ public void testNotFoundModelDocument() throws Exception {
 	} catch (ExecutionException e) {
 	
 		Throwable rootCause = MorfeuUtils.findRootCauseFrom(e);
-		assertTrue(rootCause instanceof FileNotFoundException);
+		assertEquals(FetchingException.class, rootCause.getClass());
 	
 	}
 }
@@ -72,13 +73,13 @@ public void testNonValidModelDocument() throws Exception {
 	
 	try {
 
-		System.err.println("Please ignore next SAXParseException, it is expected as the model is not valid");
+		System.err.println("Please ignore next ParsingException, it is expected as the model is not valid");
 		produceDocumentFromPath("test-resources/documents/document-with-nonvalid-model.json");
 
 	} catch (ExecutionException e) {
 		
 		Throwable rootCause = MorfeuUtils.findRootCauseFrom(e);
-		assertTrue(rootCause instanceof ParsingException);
+		assertEquals(ParsingException.class, rootCause.getClass());
 		assertTrue(rootCause.getMessage().contains("undefined"));
 		
 	}

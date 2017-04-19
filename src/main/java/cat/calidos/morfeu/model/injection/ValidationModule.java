@@ -113,38 +113,41 @@ public static Validator produceValidator(Schema s) {
 	
 	Validator v = s.newValidator();
 	// TODO: check if this is needed
-//	v.setErrorHandler(new ErrorHandler() {
-//	
-//	@Override
-//	public void warning(SAXParseException exception) throws SAXException {
-//		
-//		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
-//		throw new ValidationException(exception);
-//		
-//	}
-//	
-//	
-//	@Override
-//	public void fatalError(SAXParseException exception) throws SAXException {
-//		
-//		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-//		throw new ValidationException(exception);
-//		
-//	}
-//	
-//	
-//	@Override
-//	public void error(SAXParseException exception) throws SAXException {
-//		
-//		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-//		throw new ValidationException(exception);
-//		
-//	}
-//	});
+	v.setErrorHandler(new ErrorHandler() {
+	
+	@Override
+	public void warning(SAXParseException exception) throws SAXException {
+		
+		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
+		throw exception;
+		
+	}
+	
+	
+	@Override
+	public void fatalError(SAXParseException exception) throws SAXException {
+		
+		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
+		throw exception;
+		
+	}
+	
+	
+	@Override
+	public void error(SAXParseException exception) throws SAXException {
+		
+		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
+		throw exception;
+		
+	}
+	});
+	
 	return v;
+	
 }
 
 
+// notic this is a DOM Document
 @Produces
 public static Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI u) throws ParsingException, FetchingException {
 	

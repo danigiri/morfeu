@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
@@ -27,6 +28,7 @@ import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.Produced;
@@ -41,7 +43,7 @@ public class ModelModule extends RemoteModule {
 
 
 @Produces
-public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws ValidationException, ExecutionException {
+public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws ParsingException, ExecutionException, FetchingException {
 	
 	XSOMParser parser = parserProducer.get();
 	XSSchemaSet schemaSet = null;
@@ -50,7 +52,12 @@ public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> pa
 		parser.parse(uri);
 		schemaSet = parser.getResult();
 	} catch (SAXException e) {
-		throw new ValidationException("Problem parsing model '"+uri+"'", e);
+		// either it's a broken or invalid model or the model is just not found
+		if (e.getCause() instanceof FileNotFoundException) {
+			throw new FetchingException("Problem fetching model '"+uri+"'", e);
+		} else {
+			throw new ParsingException("Problem parsing model '"+uri+"'", e);
+		}
 	}
 
 	return new Model(u, schemaSet);

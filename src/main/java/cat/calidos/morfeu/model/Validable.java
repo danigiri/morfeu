@@ -16,13 +16,15 @@
 
 package cat.calidos.morfeu.model;
 
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ValidationException;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public interface Validable {
 
-public void validate() throws RuntimeException;
+public void validate() throws ValidationException, FetchingException;
 
 
 }

@@ -21,6 +21,9 @@ import java.net.URISyntaxException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ValidationException;
+
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,9 +55,9 @@ public Document(String name, String desc, String kind, URI uri, URI modelUri, UR
 
 
 @Override
-public void validate() throws RuntimeException {
+public void validate() throws ValidationException, FetchingException {
 	if (validator==null) {
-		throw new RuntimeException("Document does not have a validation mechanism");
+		throw new ValidationException("Document does not have a validation mechanism", new NullPointerException());
 	}
 	validator.validate();
 }

@@ -27,7 +27,7 @@ public class MorfeuUtils {
 public static Throwable findRootCauseFrom(ExecutionException e) {
 
 	Throwable cause = e;
-	while (cause.getCause()!=null) {
+	while (cause!=null && cause instanceof ExecutionException) {
 		cause = cause.getCause();
 	}
 	

@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import org.junit.Test;
 
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.problems.ValidationException;
 
 /**
 * @author daniel giribet
@@ -66,7 +67,7 @@ public void testSetModelURI() throws Exception {
 	
 }
 
-@Test(expected=RuntimeException.class)
+@Test(expected=ValidationException.class)
 public void testEmptyValidator() throws Exception {
 	
 	String site = "http://foo.com";

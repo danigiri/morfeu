@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.problems;
 
+import org.xml.sax.SAXParseException;
 
 /**
 * @author daniel giribet
