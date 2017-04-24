@@ -52,6 +52,8 @@
 					<useTestScope>true</useTestScope>
 					<webApp>
 						<contextPath>${jetty-context-path}</contextPath>
+						<!-- we add this extra classpath so jetty loads templates and all jar deps like jackson and stuff -->
+						<extraClasspath>${project.build.sourceDirectory}/../resources:${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/lib</extraClasspath>
 						<resourceBases>
 							<resourceBase>${basedir}/src/main/webapp</resourceBase>	<!-- angular2 -->
 							<resourceBase>${basedir}/src/test/resources</resourceBase>	<!-- angular2 -->

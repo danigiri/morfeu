@@ -38,16 +38,18 @@ public class DocumentControl {
 protected final static Logger log = LoggerFactory.getLogger(DocumentControl.class);
 
 
-public static String loadDocument(String uri) {
+public static String loadDocument(String prefix, String uri) {
 	
-	log.trace("DocumentControll::loadDocument('{}')", uri);
+	log.trace("DocumentControl::loadDocument('{}', '{}')", prefix, uri);
 	
 	Document document = null;
 	String problemMessage = null;
 	try {
 		
+		// FIXME: URI module should be killed for a binds instance and deal with prefixing in a sane way
 		document = DaggerDocumentComponent.builder()
-											.URIModule(new URIModule(uri))
+											.URIModule(new URIModule(prefix+uri))
+											.withPrefix(prefix+"/")
 											.build()
 											.produceDocument()
 											.get();
@@ -57,7 +59,7 @@ public static String loadDocument(String uri) {
 	} catch (InterruptedException e) {
 		problemMessage = "Interrupted processing document '"+uri+"' ("+e.getMessage()+")";		
 	} catch (ExecutionException e) {
-	
+		e.printStackTrace();
 		Throwable root = MorfeuUtils.findRootCauseFrom(e);
 		problemMessage = "Problem processing document '"+uri+"' ("+root.getMessage()+")";
 

@@ -109,22 +109,25 @@ public static Document parseDocument(URI uri, @Named("JSONDocumentStream") Input
 
 @Produces @Named("NormalisedDocument")
 public static Document normaliseDocumentURIs(@Named("ParsedDocument") Document doc,
-											 @Named("Prefix") URI prefix,
+											 @Named("PrefixURI") URI prefix,
 											 @Named("ModelURI") URI model, 
 											 @Named("ContentURI") URI content) {
+	
+	log.trace("DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}", prefix, model, content);
 	
 	doc.setModelURI(model);
 	doc.setContentURI(content);
 	doc.setPrefix(prefix);
-	
+		
 	return doc;
 	
 }
 
-@Produces  @Named("Prefix")
-public static URI documentPrefix(@Named("ParsedDocument") Document doc) throws ParsingException {
-	URI prefix = doc.getPrefix();
-	if (prefix==null) {
+@Produces  @Named("PrefixURI")
+public static URI documentPrefix(@Named("ParsedDocument") Document doc, 
+								 @Named("Prefix") String prefix) throws ParsingException {
+	URI prefixURI = null;
+	if (prefix==null || prefix.length()==0) {
 		// we make a best effort to guess the prefix
 		String uri = doc.getUri().toString();
 		try {
@@ -132,24 +135,30 @@ public static URI documentPrefix(@Named("ParsedDocument") Document doc) throws P
 			if (index==-1) {
 				throw new ParsingException("Problem guessing prefix as no / found on '"+uri+"'",new IndexOutOfBoundsException());
 			}
-			prefix = new URI(uri.substring(0, index+1));
+			prefixURI = new URI(uri.substring(0, index+1));
 		} catch (URISyntaxException e) {
 			throw new ParsingException("Problem guessing prefix of '"+uri+"'", e);
 		}
+	} else {
+		try {
+			prefixURI = new URI(prefix);
+		} catch (URISyntaxException e) {
+			throw new ParsingException("Problem with invalid URI of prefix '"+prefix+"'", e);
+		}
 	}
-	return prefix;
+	return prefixURI;
 	
 }
 
 
 @Produces @Named("ModelURI")
-public static URI modelURI(@Named("prefix") URI prefix, @Named("BasicDocument") Document doc) throws ParsingException {
+public static URI modelURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
 	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getModelURI());
 }
 
 
 @Produces @Named("ContentURI")
-public static URI contentURI(@Named("prefix") URI prefix, @Named("BasicDocument") Document doc) throws ParsingException {
+public static URI contentURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
 	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getContentURI());
 }
 

@@ -75,14 +75,14 @@ public void testDocumentPrefix() throws Exception {
 	
 	URI u = new URI("http://foo.com/well/whatever.json");
 	Document doc = new Document(u);
-	URI prefix = new URI("http://bar.com");
-	doc.setPrefix(prefix);
+	String pref = "http://bar.com";
+
+	URI expected = new URI(pref);
+	assertEquals(expected, DocumentModule.documentPrefix(doc, pref));
 	
-	assertEquals(prefix, DocumentModule.documentPrefix(doc));
-	
-	doc = new Document(u);	// no prefix defined so we guess
-	prefix = new URI("http://foo.com/well/");
-	assertEquals(prefix, DocumentModule.documentPrefix(doc));
+	doc = new Document(u);	// empty prefix defined so we guess
+	expected = new URI("http://foo.com/well/");
+	assertEquals(expected, DocumentModule.documentPrefix(doc, ""));
 
 }
 
@@ -125,14 +125,6 @@ public void testModelURI() throws Exception {
 	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
 
 }
-
-
-
-@Test
-public void testContentURI() {
-	
-}
-
 
 
 public static void testDocument1(Document document) throws URISyntaxException {

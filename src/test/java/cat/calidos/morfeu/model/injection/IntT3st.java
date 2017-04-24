@@ -35,7 +35,10 @@ protected Document produceDocumentFromPath(String path) throws InterruptedExcept
 	
 	String doc1Path = uriModuleForPath(path);
 	URIModule uriModule = new URIModule(doc1Path);
-	DocumentComponent docComponent = DaggerDocumentComponent.builder().URIModule(uriModule).build();
+	DocumentComponent docComponent = DaggerDocumentComponent.builder()
+										.URIModule(uriModule)
+										.withPrefix("")
+										.build();
 	
 	return docComponent.produceDocument().get();
 

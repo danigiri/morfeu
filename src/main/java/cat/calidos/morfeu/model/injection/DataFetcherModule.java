@@ -65,7 +65,7 @@ public ListenableFuture<InputStream> fetchData(URI uri,
 							 @Named("httpData") Producer<InputStream> httpData, 
 							 @Named("fileData") Producer<InputStream> fileData ) 
 									 throws FetchingException {
-	if (uri.getScheme().equals("file")) {
+	if (uri.getScheme()!=null && uri.getScheme().equals("file")) {
 		return fileData.get();
 	} else {
 		return httpData.get();

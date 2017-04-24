@@ -56,7 +56,8 @@ protected final static String RESOURCES_PREFIX = "RESOURCES_PREFIX";
 			.build()
 			.getProperties();
 		p.putAll(System.getenv());
-		// FIXME:
+		// FIXME: this is being ignored so we hardcode
+		log.info("Configured RESOURCE_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
 		p.put(RESOURCES_PREFIX, "http://localhost:8080/morfeu");
 		System.err.println(p);
 		log.info("Using RESOURCE_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
