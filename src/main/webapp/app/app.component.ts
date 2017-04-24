@@ -25,7 +25,7 @@ import { ProblemService } from './problem.service';
     selector: 'my-app',
     template: `
       <div class="page-header">
-          <h1>Partikle application</h1>
+          <h1>Morfeu application</h1>
       </div>
       
       <div class="container-fluid">

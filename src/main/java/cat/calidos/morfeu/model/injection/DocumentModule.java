@@ -21,10 +21,12 @@ import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.MorfeuUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Named;
@@ -52,7 +54,7 @@ protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class
 		
 		
 @Produces
-public static Document produceDocument(@Named("BasicDocument") Document doc, 
+public static Document produceDocument(@Named("NormalisedDocument") Document doc, 
 											  Provider<ModelComponent.Builder> modelComponentProvider,
 											  Provider<ValidatorComponent.Builder> validatorComponentProvider) throws Exception {
 
@@ -74,25 +76,26 @@ public static Document produceDocument(@Named("BasicDocument") Document doc,
 
 
 @Produces @Named("JSONDocumentStream")
-public static InputStream fetchDocumentJSON(URI uri, CloseableHttpClient client) throws ExecutionException {
+public static InputStream fetchDocumentJSON(URI uri, CloseableHttpClient client) throws FetchingException {
 
-	InputStream documentStream;
 	try {
-		documentStream = fetchRemoteStream(uri, client).get();
-	} catch (Exception e) {
-		throw new ExecutionException("Problem fetching document with uri: '"+uri+"'",e);
+		
+		return fetchRemoteStream(uri, client).get();
+		
+	} catch (InterruptedException | ExecutionException e) {
+		throw new FetchingException("Problem while fetching '"+uri+"'", e);
 	}
-	
-	return documentStream;
+
 	
 }
 
 
-@Produces @Named("BasicDocument")
+@Produces @Named("ParsedDocument")
 public static Document parseDocument(URI uri, @Named("JSONDocumentStream") InputStream docStream, ObjectMapper mapper) 
 		throws ParsingException, FetchingException {
 	
 	try {
+		
 		return mapper.readerForUpdating(new Document(uri)).readValue(docStream);
 		
 	} catch (JsonProcessingException jpe) {
@@ -104,15 +107,69 @@ public static Document parseDocument(URI uri, @Named("JSONDocumentStream") Input
 }
 
 
+@Produces @Named("NormalisedDocument")
+public static Document normaliseDocumentURIs(@Named("ParsedDocument") Document doc,
+											 @Named("Prefix") URI prefix,
+											 @Named("ModelURI") URI model, 
+											 @Named("ContentURI") URI content) {
+	
+	doc.setModelURI(model);
+	doc.setContentURI(content);
+	doc.setPrefix(prefix);
+	
+	return doc;
+	
+}
+
+@Produces  @Named("Prefix")
+public static URI documentPrefix(@Named("ParsedDocument") Document doc) throws ParsingException {
+	URI prefix = doc.getPrefix();
+	if (prefix==null) {
+		// we make a best effort to guess the prefix
+		String uri = doc.getUri().toString();
+		try {
+			int index = uri.lastIndexOf("/");
+			if (index==-1) {
+				throw new ParsingException("Problem guessing prefix as no / found on '"+uri+"'",new IndexOutOfBoundsException());
+			}
+			prefix = new URI(uri.substring(0, index+1));
+		} catch (URISyntaxException e) {
+			throw new ParsingException("Problem guessing prefix of '"+uri+"'", e);
+		}
+	}
+	return prefix;
+	
+}
+
+
 @Produces @Named("ModelURI")
-public static URI modelURI(@Named("BasicDocument") Document doc) {
-	return doc.getModelURI();
+public static URI modelURI(@Named("prefix") URI prefix, @Named("BasicDocument") Document doc) throws ParsingException {
+	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getModelURI());
 }
 
 
 @Produces @Named("ContentURI")
-public static URI contentURI(@Named("BasicDocument") Document doc) {
-	return doc.getContentURI();
+public static URI contentURI(@Named("prefix") URI prefix, @Named("BasicDocument") Document doc) throws ParsingException {
+	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getContentURI());
+}
+
+
+// if the uri is absolute we don't modify it, if prefix is a file://, we don't modify it either, otherwise we prepend the prefix
+private static URI makeAbsoluteURIIfNeeded(URI prefix, URI uri) throws ParsingException {
+	
+	URI finalURI = null;
+	if (!uri.isAbsolute() && prefix.getScheme()!=null && !prefix.getScheme().equals("file")) {
+		try {
+			finalURI = new URI(prefix+uri.toString());
+		} catch (URISyntaxException e) {
+			throw new ParsingException("Problem composing absolute urls with prefix:'"+prefix+"', and:'"+uri+"'",e);
+		}
+	} else {
+		finalURI = uri;
+	}
+	
+	return finalURI;
+
 }
 
 

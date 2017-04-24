@@ -18,6 +18,7 @@ package cat.calidos.morfeu.view.injection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -38,7 +39,7 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class DocumentViewModule {
+public class ViewModule {
 
 
 @Provides
@@ -52,7 +53,7 @@ public static String renderTemplate(JtwigTemplate template, JtwigModel model) {
 public Map<String, Object> values(@Named("problem") String problem, @Named("value") Object v) {
 	
 	Map<String, Object> value = new HashMap<String, Object>(1);
-	if (problem!=null) {
+	if (problem!="") {
 		value.put("problem", problem);
 	} else {
 		value.put("v", v);

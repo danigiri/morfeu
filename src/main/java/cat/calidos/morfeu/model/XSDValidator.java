@@ -56,6 +56,7 @@ public void validate() throws ValidationException, FetchingException {
 	} catch (IOException e) {
 		throw new FetchingException("IO issue validating '"+source.getSystemId()+"' with ",e);
 	}
+	
 }
 
 }

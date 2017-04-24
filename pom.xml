@@ -218,6 +218,11 @@
         	<artifactId>jtwig-core</artifactId>
         	<version>5.85.3.RELEASE</version>
 	    </dependency>
+		<dependency>
+       		<groupId>org.jtwig</groupId>
+        	<artifactId>jtwig-reflection</artifactId>
+        	<version>5.85.3.RELEASE</version>
+	    </dependency>
 
 		<!-- UNIT TESTING -->
 		<dependency>

@@ -16,17 +16,19 @@
 
 package cat.calidos.morfeu.view.injection;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import dagger.BindsInstance;
+import dagger.BindsOptionalOf;
 import dagger.Component;
 
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = DocumentViewModule.class)
-public interface DocumentViewComponent {
+@Component(modules = ViewModule.class)
+public interface ViewComponent {
 
 String render();
 
@@ -35,8 +37,8 @@ String render();
 interface Builder {
 	@BindsInstance Builder withValue(@Named("value") Object v);
 	@BindsInstance Builder withTemplate(@Named("templatePath") String p);
-	@BindsInstance Builder withProblem(@Named("problem") String p);
-	DocumentViewComponent build();
+	@BindsInstance Builder withProblem( @Named("problem") String p);
+	ViewComponent build();
 }
 
 }

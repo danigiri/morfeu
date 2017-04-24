@@ -26,6 +26,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cat.calidos.morfeu.webapp.di.DaggerServletConfigComponent;
 
 
@@ -33,6 +36,10 @@ import cat.calidos.morfeu.webapp.di.DaggerServletConfigComponent;
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
 public class MorfeuServlet extends HttpServlet {
+
+protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
+protected final static String RESOURCES_PREFIX = "RESOURCES_PREFIX";
+
 
 	protected Properties configuration;
 
@@ -43,12 +50,16 @@ public class MorfeuServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 
-		//TODO: think of refactoring to a servlet module?
+		//TODO: check if there is a more dagger friendly way of doing this
 		Properties p = DaggerServletConfigComponent.builder()
 			.servletConfig(this.getServletConfig())
 			.build()
 			.getProperties();
 		p.putAll(System.getenv());
+		// FIXME:
+		p.put(RESOURCES_PREFIX, "http://localhost:8080/morfeu");
+		System.err.println(p);
+		log.info("Using RESOURCE_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
 		configuration = p;
 
 	}

@@ -31,49 +31,18 @@ import cat.calidos.morfeu.problems.ValidationException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentTest {
 
-@Test
-public void testSetModelURI() throws Exception {
-	
-	String site = "http://foo.com";
-	String path = "/whatever.json";
-	String relative = "/relative.xsd";
-	Document doc = createDocumentWithModel(site, path, relative);
-	
-	// url should be "http://foo.com/relative.xsd" as we want to ensure we reach the server
-	URI expectedAbsoluteModelURI = new URI(site+relative);
-	assertEquals(expectedAbsoluteModelURI, doc.getModelURI());
-	
-	
-	site = "http://foo.com:8080";
-	doc = createDocumentWithModel(site, path, relative);
-
-	expectedAbsoluteModelURI = new URI(site+relative);
-	assertEquals(expectedAbsoluteModelURI, doc.getModelURI());
-	
-	
-	// for file paths we don't make them absolute
-	site = "file://";
-	doc = createDocumentWithModel(site, path, relative);
-
-	expectedAbsoluteModelURI = new URI(relative);
-	assertEquals(expectedAbsoluteModelURI, doc.getModelURI());
-	
-	
-	String absoluteModel = "http://bar.com/absolute.xsd";
-	doc = createDocumentWithModel(site, path, absoluteModel);
-
-	expectedAbsoluteModelURI = new URI(absoluteModel);
-	assertEquals(expectedAbsoluteModelURI, doc.getModelURI());
-	
-}
 
 @Test(expected=ValidationException.class)
 public void testEmptyValidator() throws Exception {
 	
 	String site = "http://foo.com";
 	String path = "/whatever.json";
-	String relative = "/relative.xsd";
-	Document doc = createDocumentWithModel(site, path, relative);
+	URI uri = new URI(site+path);
+	URI modelURI = new URI("/relative.xsd");
+	URI contentURI = new URI("/content.xsd");
+	Document doc = new Document(uri);
+	doc.setModelURI(modelURI);
+	doc.setContentURI(contentURI);
 
 	doc.validate();
 
@@ -81,15 +50,5 @@ public void testEmptyValidator() throws Exception {
 
 
 
-private Document createDocumentWithModel(String site, String path, String model) throws URISyntaxException {
-
-	URI uri = new URI(site+path);
-	URI modelURI = new URI(model);
-	Document doc = new Document(uri);
-	doc.setModelURI(modelURI);
-
-	return doc;
-
-}
 
 }

@@ -70,6 +70,71 @@ public void testInvalidDocument() throws Exception {
 }
 
 
+@Test
+public void testDocumentPrefix() throws Exception {
+	
+	URI u = new URI("http://foo.com/well/whatever.json");
+	Document doc = new Document(u);
+	URI prefix = new URI("http://bar.com");
+	doc.setPrefix(prefix);
+	
+	assertEquals(prefix, DocumentModule.documentPrefix(doc));
+	
+	doc = new Document(u);	// no prefix defined so we guess
+	prefix = new URI("http://foo.com/well/");
+	assertEquals(prefix, DocumentModule.documentPrefix(doc));
+
+}
+
+
+@Test
+public void testModelURI() throws Exception {
+	
+	String site = "http://foo.com/well/";
+	URI prefixURI = new URI(site);
+	String path = "whatever.json";
+	String model = "model.xsd";
+	String content = "content.xml";
+	Document doc = createDocument(site, path, model, content);
+	
+	// url should be "http://foo.com/well/model.xsd" as we want to ensure we reach the server
+	URI expected = new URI(site+model);
+	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+	
+	site = "http://foo.com:8080/well/";
+	prefixURI = new URI(site);
+	doc = createDocument(site, path, model, content);
+	
+	expected = new URI(site+model);
+	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+	
+	// for file paths we don't make them absolute as per current contract, so unmodified model URI
+	site = "file://tmp/";
+	doc = createDocument(site, path, model, content);
+	prefixURI = new URI(site);
+	
+	expected = new URI(model);
+	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+
+	model = "http://bar.com/absolute.xsd";
+	site = "http://foo.com/well/";
+	doc = createDocument(site, path, model, content);
+	prefixURI = new URI(site);
+
+	expected = new URI(model);
+	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+
+}
+
+
+
+@Test
+public void testContentURI() {
+	
+}
+
+
+
 public static void testDocument1(Document document) throws URISyntaxException {
 
 	assertEquals("Document 1", document.getName());
@@ -94,6 +159,21 @@ private Document parseRelativeLocation(String location) throws ParsingException,
 	Document document = DocumentModule.parseDocument(uri, stream, mapper);
 
 	return document;
+
+}
+
+
+
+private Document createDocument(String site, String path, String model, String content) throws URISyntaxException {
+
+	URI uri = new URI(site+path);
+	URI modelURI = new URI(model);
+	URI contentURI = new URI(content);
+	Document doc = new Document(uri);
+	doc.setModelURI(modelURI);
+	doc.setContentURI(contentURI);
+	
+	return doc;
 
 }
 

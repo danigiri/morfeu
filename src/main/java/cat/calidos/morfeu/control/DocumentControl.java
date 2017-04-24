@@ -28,8 +28,7 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
-import cat.calidos.morfeu.view.injection.DaggerDocumentViewComponent;
-import cat.calidos.morfeu.view.injection.DocumentViewModule;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 * @author daniel giribet
@@ -39,11 +38,12 @@ public class DocumentControl {
 protected final static Logger log = LoggerFactory.getLogger(DocumentControl.class);
 
 
-public static String loadDocument(String uri) throws ParsingException {
+public static String loadDocument(String uri) {
+	
+	log.trace("DocumentControll::loadDocument('{}')", uri);
 	
 	Document document = null;
-	String message = null;
-	String template = null;
+	String problemMessage = null;
 	try {
 		
 		document = DaggerDocumentComponent.builder()
@@ -51,41 +51,42 @@ public static String loadDocument(String uri) throws ParsingException {
 											.build()
 											.produceDocument()
 											.get();
-		template = "templages/document.twig";
-		
 		document.validate();
 		
+		
 	} catch (InterruptedException e) {
-		
-		message = "Interrupted processing document '"+uri+"' ("+e.getMessage()+")";
-		template = "templates/document-problem.twig";
-		log.error(message);
-		
+		problemMessage = "Interrupted processing document '"+uri+"' ("+e.getMessage()+")";		
 	} catch (ExecutionException e) {
 	
-		Throwable problem = MorfeuUtils.findRootCauseFrom(e);
-		//if () {}
-		
-		message = "Problem processing document '"+uri+"' ("+problem.getMessage()+")";
-		template = "templates/document-problem.twig";
-		log.error(message);
+		Throwable root = MorfeuUtils.findRootCauseFrom(e);
+		problemMessage = "Problem processing document '"+uri+"' ("+root.getMessage()+")";
 
 	} catch (ValidationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		problemMessage = "Problem validating document '"+uri+"' ("+e.getMessage()+")";
 	} catch (FetchingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		problemMessage = "Problem fetching data for document '"+uri+"' ("+e.getMessage()+")";
+	} catch (ParsingException e) {
+		problemMessage = "Problem parsing document '"+uri+"' ("+e.getMessage()+")";
 	}
+
+	if (problemMessage!=null) {
+		log.error(problemMessage);
+		return DaggerViewComponent.builder()
+									.withTemplate("templates/document-problem.twig")
+									.withValue(new Object())	//no data
+									.withProblem(problemMessage)
+									.build()
+									.render();
+
+	} else {
 	
-	
-	return DaggerDocumentViewComponent.builder()
-										.withTemplate(template)
-										.withValue(document)
-										.withProblem(message)
-										.build()
-										.render();
-	
+		return DaggerViewComponent.builder()
+									.withTemplate("templages/document.twig")
+									.withValue(document)
+									.withProblem("")
+									.build()
+									.render();
+	}
 }
 
 }

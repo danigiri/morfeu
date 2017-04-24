@@ -24,6 +24,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public interface Validable {
 
+
 public void validate() throws ValidationException, FetchingException;
 
 

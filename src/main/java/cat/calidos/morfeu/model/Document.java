@@ -30,6 +30,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 public class Document extends Cell implements Validable {
 
 protected String kind;
+protected URI prefix;
 protected URI modelURI;
 protected URI contentURI;
 protected Model model;
@@ -40,11 +41,12 @@ public Document(URI u) {
 	super(u);
 }
 
-public Document(String name, String desc, String kind, URI uri, URI modelUri, URI docUri, Model m) 
+public Document(String name, String desc, String kind, URI prefix, URI uri, URI modelUri, URI docUri, Model m) 
 		throws URISyntaxException {
 	
 	super(name, uri, desc);
 
+	this.prefix = prefix;	// this may be moved to the supperclass
 	this.kind = kind;
 	this.uri = uri;
 	setModelURI(modelUri);
@@ -68,7 +70,7 @@ public void validate() throws ValidationException, FetchingException {
 @Override
 public String toString() {
 
-	return "{"+this.name+", ["+this.kind+"], uri:"+this.uri+", model:"+this.modelURI+", doc:"+this.contentURI+"}";
+	return "{"+this.name+", ["+this.kind+"], uri:"+this.uri+", prefix:"+prefix+", model:"+this.modelURI+", doc:"+this.contentURI+"}";
 }
 
 
@@ -84,15 +86,26 @@ public void setKind(String kind) {
 }
 
 
+@JsonProperty("prefix") 
+public void setPrefix(URI prefix) {
+	this.prefix = prefix;
+}
+
+
+public URI getPrefix() {
+	return prefix;
+}
+
+
 public URI getModelURI() {
 	return modelURI;
 }
 
 
 @JsonProperty("modelURI") 
-public void setModelURI(URI modelURI) throws URISyntaxException {
+public void setModelURI(URI modelURI) {
 	
-	this.modelURI = makeAbsoluteURIIfNeeded(modelURI);
+	this.modelURI = modelURI;
 	
 }
 
@@ -103,8 +116,8 @@ public URI getContentURI() {
 
 
 @JsonProperty("contentURI") 
-public void setContentURI(URI contentURI) throws URISyntaxException {
-	this.contentURI = makeAbsoluteURIIfNeeded(contentURI);
+public void setContentURI(URI contentURI) {
+	this.contentURI = contentURI;
 }
 
 
@@ -120,25 +133,6 @@ public void setModel(Model model) {
 
 public void setValidator(Validable validator) {
 	this.validator = validator;
-}
-
-
-private URI makeAbsoluteURIIfNeeded(URI relativeURI) throws URISyntaxException {
-
-	String path = uri.getPath();
-	String uriString = uri.toString();
-	String uriHostPart = uriString.substring(0, uriString.length()-path.length());
-	
-	// there may be a better way to do this but tests will protect us
-	if (uri!=null && !relativeURI.isAbsolute() && !uri.getScheme().equals("file"))  {
-		return new URI(uriHostPart+relativeURI); 
-	} else { 
-		return relativeURI;
-	}
-	
-	
-}
-
- 
+} 
 
 }

@@ -46,7 +46,6 @@ public void testProduceSchemaParser() throws Exception {
 	assertNotNull(parser);
 	assertNotNull(parser.getErrorHandler());
 	
-	
 }
 
 

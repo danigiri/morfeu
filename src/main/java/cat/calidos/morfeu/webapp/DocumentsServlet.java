@@ -42,12 +42,13 @@ protected final static Logger log = LoggerFactory.getLogger(DocumentsServlet.cla
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	//super.doGet(req, resp);
+	String prefix = configuration.getProperty(RESOURCES_PREFIX);
 	String path = req.getPathInfo();
-	log.trace("DocumentsServlet::doGet '{}'", path);
+	log.trace("DocumentsServlet::doGet '[{}]{}'",prefix, path);
 	
 	resp.setContentType("application/json");
 	
-	String doc = DocumentControl.loadDocument(path);
+	String doc = DocumentControl.loadDocument(prefix+path);
 	PrintWriter out = resp.getWriter();
 	out.print(doc);
 	out.close();
