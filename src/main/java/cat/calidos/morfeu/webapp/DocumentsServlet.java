@@ -33,8 +33,8 @@ import cat.calidos.morfeu.control.DocumentControl;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentsServlet extends MorfeuServlet {
 
-private static final String DEFAULT_RESOURCE_PREFIX = "";
 protected final static Logger log = LoggerFactory.getLogger(DocumentsServlet.class);
+private static final String DEFAULT_RESOURCE_PREFIX = "";
 
 /* (non-Javadoc)
 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)

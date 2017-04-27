@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -55,12 +56,15 @@ protected final static String RESOURCES_PREFIX = "RESOURCES_PREFIX";
 			.servletConfig(this.getServletConfig())
 			.build()
 			.getProperties();
-		p.putAll(System.getenv());
+		log.info("Configured RESOURCES_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
+		Map<String, String> env = System.getenv();
+		System.err.println(env);
+		log.info("Environment RESOURCES_PREFIX='{}'", env.get(RESOURCES_PREFIX));		
+		p.putAll(env);
+		log.info("After override RESOURCES_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
 		// FIXME: this is being ignored so we hardcode
-		log.info("Configured RESOURCE_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
 		p.put(RESOURCES_PREFIX, "http://localhost:8080/morfeu");
-		System.err.println(p);
-		log.info("Using RESOURCE_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
+		log.info("Final RESOURCES_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
 		configuration = p;
 
 	}

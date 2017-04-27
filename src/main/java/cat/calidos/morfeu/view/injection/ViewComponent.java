@@ -1,4 +1,5 @@
 /*
+
  *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +17,9 @@
 
 package cat.calidos.morfeu.view.injection;
 
-import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import dagger.BindsInstance;
-import dagger.BindsOptionalOf;
 import dagger.Component;
 
 

@@ -16,10 +16,7 @@
 
 package cat.calidos.morfeu.model;
 
-import static org.junit.Assert.*;
-
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.junit.Test;
 
@@ -43,6 +40,7 @@ public void testEmptyValidator() throws Exception {
 	Document doc = new Document(uri);
 	doc.setModelURI(modelURI);
 	doc.setContentURI(contentURI);
+	//notice we do not set a validator for this document
 
 	doc.validate();
 

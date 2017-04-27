@@ -71,23 +71,22 @@ public static String loadDocument(String prefix, String uri) {
 		problemMessage = "Problem parsing document '"+uri+"' ("+e.getMessage()+")";
 	}
 
-	if (problemMessage!=null) {
+	if (problemMessage==null) {
+		return DaggerViewComponent.builder()
+				.withTemplate("templates/document.twig")
+				.withValue(document)
+				.withProblem("")
+				.build()
+				.render();
+	} else {
 		log.error(problemMessage);
 		return DaggerViewComponent.builder()
-									.withTemplate("templates/document-problem.twig")
-									.withValue(new Object())	//no data
-									.withProblem(problemMessage)
-									.build()
-									.render();
-
-	} else {
+				.withTemplate("templates/document-problem.twig")
+				.withValue(new Object())	//no data
+				.withProblem(problemMessage)
+				.build()
+				.render();
 	
-		return DaggerViewComponent.builder()
-									.withTemplate("templages/document.twig")
-									.withValue(document)
-									.withProblem("")
-									.build()
-									.render();
 	}
 }
 
