@@ -34,8 +34,6 @@ import cat.calidos.morfeu.control.DocumentControl;
 public class DocumentsServlet extends MorfeuServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentsServlet.class);
-private static final String DEFAULT_RESOURCE_PREFIX = "";
-
 /* (non-Javadoc)
 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 *//////////////////////////////////////////////////////////////////////////////
@@ -43,14 +41,15 @@ private static final String DEFAULT_RESOURCE_PREFIX = "";
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	//super.doGet(req, resp);
-	String prefix = configuration.getProperty(RESOURCES_PREFIX);
-	prefix = (prefix!=null) ? prefix : DEFAULT_RESOURCE_PREFIX; 
 	String path = req.getPathInfo();
-	log.trace("DocumentsServlet::doGet '[{}]{}'", prefix, path);
+	if (path.startsWith("/")) {
+		path = path.substring(1);
+	}
+	log.trace("DocumentsServlet::doGet '[{}]{}'", resourcesPrefix, path);
 	
 	resp.setContentType("application/json");
 	
-	String doc = DocumentControl.loadDocument(prefix, path);
+	String doc = DocumentControl.loadDocument(resourcesPrefix, path);
 	PrintWriter out = resp.getWriter();
 	out.print(doc);
 	out.close();

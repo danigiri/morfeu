@@ -3,6 +3,9 @@
 	,"desc": "$[v.Desc]$"
 	,"kind": "$[v.Kind]$"
 	,"modelURI": "$[v.ModelURI]$"
-	,"contentURI": "$[v.ContentlURI]$"
+	,"contentURI": "$[v.ContentURI]$"
 	,"valid": true
+	$( if defined(problem) )$
+			,"problem": $[problem]$
+	$( endif )$
 }

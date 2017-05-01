@@ -43,13 +43,13 @@ public static String loadDocument(String prefix, String uri) {
 	log.trace("DocumentControl::loadDocument('{}', '{}')", prefix, uri);
 	
 	Document document = null;
-	String problemMessage = null;
+	String problem = "";
 	try {
 		
-		// FIXME: URI module should be killed for a binds instance and deal with prefixing in a sane way
+		// FIXME: URI module should be killed for a binds instance
 		document = DaggerDocumentComponent.builder()
 											.URIModule(new URIModule(prefix+uri))
-											.withPrefix(prefix+"/")
+											.withPrefix(prefix)
 											.build()
 											.produceDocument()
 											.get();
@@ -57,36 +57,40 @@ public static String loadDocument(String prefix, String uri) {
 		
 		
 	} catch (InterruptedException e) {
-		problemMessage = "Interrupted processing document '"+uri+"' ("+e.getMessage()+")";		
+		problem = "Interrupted processing document '"+uri+"' ("+e.getMessage()+")";		
 	} catch (ExecutionException e) {
 		e.printStackTrace();
 		Throwable root = MorfeuUtils.findRootCauseFrom(e);
-		problemMessage = "Problem processing document '"+uri+"' ("+root.getMessage()+")";
+		problem = "Problem processing document '"+uri+"' ("+root.getMessage()+")";
 
 	} catch (ValidationException e) {
-		problemMessage = "Problem validating document '"+uri+"' ("+e.getMessage()+")";
+		problem = "Problem validating document '"+uri+"' ("+e.getMessage()+")";
+		log.error(problem);
 	} catch (FetchingException e) {
-		problemMessage = "Problem fetching data for document '"+uri+"' ("+e.getMessage()+")";
+		problem = "Problem fetching data for document '"+uri+"' ("+e.getMessage()+")";
 	} catch (ParsingException e) {
-		problemMessage = "Problem parsing document '"+uri+"' ("+e.getMessage()+")";
+		problem = "Problem parsing document '"+uri+"' ("+e.getMessage()+")";
 	}
 
-	if (problemMessage==null) {
+	if (document!=null) {
+	
 		return DaggerViewComponent.builder()
 				.withTemplate("templates/document.twig")
 				.withValue(document)
-				.withProblem("")
+				.withProblem(problem)
 				.build()
 				.render();
-	} else {
-		log.error(problemMessage);
+
+	} else  {
+
+		log.error(problem);
 		return DaggerViewComponent.builder()
 				.withTemplate("templates/document-problem.twig")
 				.withValue(new Object())	//no data
-				.withProblem(problemMessage)
+				.withProblem(problem)
 				.build()
 				.render();
-	
+		
 	}
 }
 

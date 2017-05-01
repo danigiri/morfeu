@@ -25,11 +25,12 @@ import cat.calidos.morfeu.problems.ParsingException;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class IntT3st {
+public class ModelInjectionIntT3st {
 
 protected String uriModuleForPath(String path) {
 	return this.getClass().getClassLoader().getResource(path).toString();
 }
+
 
 protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException, ParsingException, FetchingException {
 	

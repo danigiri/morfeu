@@ -131,7 +131,7 @@ public static void testDocument1(Document document) throws URISyntaxException {
 
 	assertEquals("Document 1", document.getName());
 	assertEquals("First document", document.getDesc());
-	assertEquals("xml", document.getType());
+	assertEquals("xml", document.getKind());
 
 	// FIXME: this is a bit ridiculous, we should not leak maven structure
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");

@@ -14,7 +14,7 @@
 		<jetty-http-port>8080</jetty-http-port>
 		<jetty-stop-port>8180</jetty-stop-port>
 		<jetty-context-path>/morfeu</jetty-context-path>
-		<jetty-url>http://localhost:${jetty-http-port}/${jetty-context-path}</jetty-url>
+		<webapp-prefix>http://localhost:${jetty-http-port}/${jetty-context-path}</webapp-prefix>
 		<jackson-2-version>2.8.5</jackson-2-version>
 		<dagger-2-version>2.9</dagger-2-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,7 +68,7 @@
 						</systemProperty>
 						<systemProperty>
 							<name>RESOURCES_PREFIX</name>
-							<value>${jetty-url}</value>
+							<value>${webapp-prefix}</value>
 						</systemProperty>
 					</systemProperties>
 					<httpConnector>

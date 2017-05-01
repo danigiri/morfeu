@@ -31,7 +31,7 @@ import cat.calidos.morfeu.utils.MorfeuUtils;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class XSDValidatorIntTest  extends IntT3st {
+public class XSDValidatorIntTest  extends ModelInjectionIntT3st {
 
 
 @Test

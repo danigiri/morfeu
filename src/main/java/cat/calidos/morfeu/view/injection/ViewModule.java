@@ -55,9 +55,8 @@ public Map<String, Object> values(@Named("problem") String problem, @Named("valu
 	Map<String, Object> value = new HashMap<String, Object>(1);
 	if (problem!="") {
 		value.put("problem", problem);
-	} else {
-		value.put("v", v);
 	}
+	value.put("v", v);
 	
 	return value;
 
@@ -70,7 +69,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 	return EnvironmentConfigurationBuilder.configuration()
 			.parser()
 			.syntax()
-				.withStartCode("$%").withEndCode("%$")
+				.withStartCode("$(").withEndCode(")$")
 				.withStartOutput("$[").withEndOutput("]$")
 				.withStartComment("$#").withEndComment("#$")
 			.and()

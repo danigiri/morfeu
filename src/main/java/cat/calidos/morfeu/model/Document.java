@@ -74,7 +74,7 @@ public String toString() {
 }
 
 
-public String getType() {
+public String getKind() {
 
 	return kind;
 }
