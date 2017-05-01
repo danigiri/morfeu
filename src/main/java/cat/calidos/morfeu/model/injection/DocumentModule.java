@@ -113,7 +113,7 @@ public static Document normaliseDocumentURIs(@Named("ParsedDocument") Document d
 											 @Named("ModelURI") URI model, 
 											 @Named("ContentURI") URI content) {
 	
-	log.trace("DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}", prefix, model, content);
+	log.trace("[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]", prefix, model, content);
 	
 	doc.setModelURI(model);
 	doc.setContentURI(content);

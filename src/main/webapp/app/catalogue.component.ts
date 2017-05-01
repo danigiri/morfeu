@@ -16,11 +16,12 @@
 
 import { Component, Input } from '@angular/core';
 
-import { Catalogue } from './catalogue';
-import { Document } from './document.class';
-import { CatalogueService } from './catalogue.service';
-import { ProblemService } from './problem.service';
 import { Widget } from './widget.class';
+import { Catalogue } from './catalogue';
+import { CatalogueService } from './catalogue.service';
+import { Document } from './document.class';
+import { DocumentService } from './document.service';
+import { ProblemService } from './problem.service';
 
 
 @Component({
@@ -54,7 +55,9 @@ import { Widget } from './widget.class';
     #catalogue-desc {}
     #document-list {}
     #document-list-entry {}
-    `]
+    `],
+    providers:[
+    ]
 })
 	
 	//`
@@ -63,28 +66,46 @@ export class CatalogueComponent extends Widget {
 catalogue: Catalogue;
 currentDocument: Document;
 
-constructor(private catalogueService : CatalogueService, problemService: ProblemService) {
+constructor(private catalogueService : CatalogueService, 
+            problemService: ProblemService, 
+            private documentService: DocumentService) {
     super(problemService);
 }
 
 
 @Input() 
 set selectedCatalogueUri(selectedCatalogueUri: string) {
+    
     this.catalogueService.getCatalogue(selectedCatalogueUri)
     .subscribe(c => { 
-                     this.catalogue = c;
-                     this.allOK();
-        },
-               error => {
-                         this.reportProblem(error);
-                         this.catalogue = null;
-                         }
-               );
+        this.catalogue = c;
+        this.allOK();
+    },
+    error => {
+        this.reportProblem(error);
+        this.catalogue = null;
+    }
+    );
+    
 }
+ 
 
 selectdocument(d: Document) {
+        
     console.log("Selected document="+d.uri);
-    this.currentDocument = d;
+    this.documentService.getDocument("/morfeu/documents/"+d.uri)
+    .subscribe(d => {
+        console.log("Got document from Morfeu service ("+d.name+")");
+        this.currentDocument = d;
+        this.documentService.setDocument(d);
+        this.allOK();
+    },
+    error => {
+        this.reportProblem(error);
+        this.currentDocument = null;
+    }
+    );
+    
 }
 
 }

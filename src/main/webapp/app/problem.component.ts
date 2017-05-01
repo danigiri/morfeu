@@ -43,7 +43,9 @@ constructor(private problemService: ProblemService) {
     console.log("ProblemComponent::constructor()");
     this.problemSubscription = problemService.announcedProblems$.subscribe(
             p => {
-                console.log("***** service gets problem *****");
+                if (p!=null) {
+                    console.log("***** service gets problem *****");
+                }
                 this.problem = p;
                 
             }

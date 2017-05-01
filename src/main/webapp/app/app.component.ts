@@ -17,6 +17,8 @@
 import { Component } from '@angular/core';
 
 import { CatalogueListComponent } from './catalogue-list.component';
+import { DocumentComponent } from './document.component';
+import { DocumentService } from './document.service';
 import { ProblemComponent } from './problem.component';
 import { ProblemService } from './problem.service';
 
@@ -34,7 +36,7 @@ import { ProblemService } from './problem.service';
               <catalogue-list></catalogue-list>
             </div>
             <div class="col-md-8">
-
+                <document></document>
             </div>
           </div>
           <div class="row">
@@ -46,7 +48,8 @@ import { ProblemService } from './problem.service';
 
 
       `,
-    providers:    [ProblemService                    
+    providers:    [ProblemService
+                   ,DocumentService
                      ]
                      })
 

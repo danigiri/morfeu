@@ -39,6 +39,7 @@
     "@types/core-js": "^0.9.34",
     "@types/node": "^6.0.45",
     "concurrently": "^3.0.0",
+    "http-proxy-middleware": "^0.17.4",
     "lite-server": "^2.2.2",
     "typescript": "^2.0.3"
   }

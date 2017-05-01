@@ -37,9 +37,12 @@ export class CatalogueService {
     }
     
     getCatalogue(uri:string) : Observable<Catalogue> {
+        
         console.log("CatalogueService::getCatalogue("+uri+")"); 
+    
         return this.http.get(uri)
             .map(response => response.json());
+    
     }
     
 }

@@ -54,6 +54,8 @@ public Map<String, Object> values(@Named("problem") String problem, @Named("valu
 	
 	Map<String, Object> value = new HashMap<String, Object>(1);
 	if (problem!="") {
+		problem = problem.replaceAll("\t|\n", " ");	// error messages may contain illegal JSON text
+		problem = problem.replaceAll("\"", "'");	// 
 		value.put("problem", problem);
 	}
 	value.put("v", v);
@@ -67,11 +69,15 @@ public Map<String, Object> values(@Named("problem") String problem, @Named("valu
 public static EnvironmentConfiguration defaultConfiguration() {
 	
 	return EnvironmentConfigurationBuilder.configuration()
+//			.escape()
+//			.withDefaultEngine("js")
+//			.and()
 			.parser()
 			.syntax()
 				.withStartCode("$(").withEndCode(")$")
 				.withStartOutput("$[").withEndOutput("]$")
 				.withStartComment("$#").withEndComment("#$")
+			
 			.and()
 		.and()
 		.build();

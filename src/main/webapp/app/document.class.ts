@@ -21,6 +21,7 @@ export class Document {
     kind: string;
     modelURI: string;
     contentURI: string;
+    valid:boolean;
     problem: string;
 
 }

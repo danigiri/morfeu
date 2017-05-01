@@ -2,9 +2,9 @@
 	"name": "Catalogue 1"
 	,"desc": "First Catalogue"
 	,"documents": [
-		{ "name":"empty", "kind": "xml", "uri":"/test-resources/documents/document1.json"}
-		,{ "name":"table", "kind": "xml", "uri":"/test-resources/documents/document1.json"}
-		,{ "name":"other", "kind": "yaml", "uri":"/test-resources/documents/document1.json"}
+		{ "name":"empty", "kind": "xml", "uri":"test-resources/documents/document1.json"}
+		,{ "name":"table", "kind": "xml", "uri":"test-resources/documents/document1.json"}
+		,{ "name":"other", "kind": "yaml", "uri":"test-resources/documents/document1.json"}
 		]
 	,"snippets": [
 		{ "name":"empty", "uri":"/test-resources/"}

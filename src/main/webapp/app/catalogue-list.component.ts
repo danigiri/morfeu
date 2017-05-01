@@ -20,6 +20,7 @@ import { Observable } from 'rxjs/Observable';
 import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
+import { DocumentService } from './document.service';
 import { ProblemService } from './problem.service';
 import { Widget } from './widget.class';
 
@@ -48,7 +49,8 @@ import { Widget } from './widget.class';
     #catalogue-list {}
     .catalogue-list-entry {}
     `],
-    providers: [CatalogueService]
+    providers: [CatalogueService
+                ]
 })
     
 export class CatalogueListComponent extends Widget {

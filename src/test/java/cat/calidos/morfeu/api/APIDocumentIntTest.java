@@ -104,14 +104,38 @@ public void testNonValidModelDocument() throws Exception {
 	
 	JsonNode doc = parseJson(content);
 	assertEquals("Problematic document", doc.get("name").asText());
-
-	assertEquals("Unknown", doc.get("contentURI").asText());
 	assertFalse(doc.get("valid").asBoolean());
-	 
-	assertTrue(doc.get("problem").asText().contains("Problem parsing model "));
+	assertTrue(doc.get("problem").asText().contains("Problem parsing model"));
 	
 }
 
+
+@Test
+public void testNotFoundModelDocument() throws Exception {
+	
+	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document-with-notfound-model.json");
+	assertNotNull(content);
+	
+	JsonNode doc = parseJson(content);
+	assertEquals("Problematic document", doc.get("name").asText());
+	assertFalse(doc.get("valid").asBoolean());
+	assertTrue(doc.get("problem").asText().contains("Problem fetching model"));
+	
+}
+
+
+@Test
+public void testMalformedDocument() throws Exception {
+	
+	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/malformed-document.json");
+	assertNotNull(content);
+	
+	JsonNode doc = parseJson(content);
+	assertEquals("Problematic document", doc.get("name").asText());
+	assertFalse(doc.get("valid").asBoolean());
+	assertTrue(doc.get("problem").asText().contains("Problem with the json format"));
+	
+}
 
 
 @After

@@ -18,21 +18,34 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject }    from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 
 import { Document } from './document.class';
 
+
 @Injectable()
 export class DocumentService {
     
+    private documentSource = new Subject<Document>();
+    
+    announcedDocument$ = this.documentSource.asObservable();
     document: Document;
     
     constructor(private http: Http) {}
     
     
     getDocument(uri:string) {
+    
         console.log("DocumentService::getDocument("+uri+")"); 
+        
+        return this.http.get(uri)
+            .map(response => response.json());
+
     }
     
+    
+    setDocument(d:Document) {
+        this.documentSource.next(d);
+    }
 }

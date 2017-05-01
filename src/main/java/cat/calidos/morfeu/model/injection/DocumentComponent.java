@@ -38,9 +38,13 @@ ListenableFuture<Document> produceDocument() throws ParsingException, FetchingEx
 
 @ProductionComponent.Builder
 interface Builder {
+
 	Builder URIModule(URIModule m);
+	
 	@BindsInstance Builder withPrefix(@Named("Prefix") String p);
+	
 	DocumentComponent build();
+
 }
 	
 }

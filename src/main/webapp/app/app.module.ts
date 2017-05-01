@@ -21,6 +21,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent }   from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
+import { DocumentComponent } from './document.component';
 import { ProblemComponent } from './problem.component';
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ProblemComponent } from './problem.component';
   declarations: [ AppComponent
                   ,CatalogueListComponent 
                   ,CatalogueComponent 
+                  ,DocumentComponent
                   ,ProblemComponent 
                 ],
   providers:    [                    
