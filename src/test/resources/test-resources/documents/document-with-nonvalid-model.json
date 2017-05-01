@@ -1,5 +1,5 @@
 {
-	"name": "Document 1"
+	"name": "Document with non-valid model"
 	,"desc": "First document"
 	,"kind": "xml"
 	,"modelURI": "target/test-classes/test-resources/models/nonvalid-model.xsd"

@@ -4,8 +4,8 @@
 	,"kind": "$[v.Kind]$"
 	,"modelURI": "$[v.ModelURI]$"
 	,"contentURI": "$[v.ContentURI]$"
-	,"valid": true
+	,"valid": $[v.isValid]$
 	$( if defined(problem) )$
-			,"problem": $[problem]$
+		,"problem": "$[problem]$"
 	$( endif )$
 }

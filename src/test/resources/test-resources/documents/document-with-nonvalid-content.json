@@ -1,6 +1,6 @@
 {
-	"name": "Document 1"
-	,"desc": "First document"
+	"name": "Document with non-valid content"
+	,"desc": "Another document"
 	,"kind": "xml"
 	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
 	,"contentURI": "target/test-classes/test-resources/documents/nonvalid-document.xml"

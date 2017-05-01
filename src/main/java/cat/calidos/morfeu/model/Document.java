@@ -34,7 +34,8 @@ protected URI prefix;
 protected URI modelURI;
 protected URI contentURI;
 protected Model model;
-private Validable validator;
+protected Validable validator;
+protected boolean isValid = false;
 
 
 public Document(URI u) {
@@ -56,13 +57,23 @@ public Document(String name, String desc, String kind, URI prefix, URI uri, URI 
 }
 
 
+
 @Override
 public void validate() throws ValidationException, FetchingException {
 	if (validator==null) {
 		throw new ValidationException("Document does not have a validation mechanism", new NullPointerException());
 	}
 	validator.validate();
+	// if there is no exception
+	isValid = true;
 }
+ 
+
+@Override
+public boolean isValid() {
+	return isValid;
+}
+
 
 /* (non-Javadoc)
 * @see java.lang.Object#toString()

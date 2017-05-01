@@ -34,8 +34,10 @@ public class XSDValidator implements Validable {
 
 private Validator validator;
 private DOMSource source;
+private boolean isValid = false;
 
 public XSDValidator(Validator v, DOMSource s) {
+
 	this.validator = v;
 	this.source = s;
 	
@@ -51,12 +53,18 @@ public void validate() throws ValidationException, FetchingException {
 // IDEA: Don' use nonamespacelocation and specify just the schema id, try that with setSchema
 	try {
 		validator.validate(source);
+		isValid = true;
 	} catch (SAXException e) {
 		throw new ValidationException("Issue validating '"+source.getSystemId()+"' with "+validator.toString(),e);
 	} catch (IOException e) {
 		throw new FetchingException("IO issue validating '"+source.getSystemId()+"' with ",e);
 	}
 	
+}
+
+@Override
+public boolean isValid() {
+	return isValid;
 }
 
 }

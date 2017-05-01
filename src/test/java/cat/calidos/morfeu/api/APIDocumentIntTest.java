@@ -21,7 +21,9 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -29,6 +31,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
  
@@ -58,16 +61,10 @@ public void tearup() {
 public void testDocument() throws Exception {
 	
 
-	String uri = webappPrefix+"documents/test-resources/documents/document1.json";
-	URI u = new URI(uri);
-	HttpGet request = new HttpGet(u);
-	InputStream content = client.execute(request)
-			 .getEntity()
-			 .getContent();
+	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document1.json");
 	assertNotNull(content);
 	
-	ObjectMapper mapper = new ObjectMapper();
-	JsonNode doc = mapper.readTree(content);
+	JsonNode doc = parseJson(content);
 	assertEquals("Document 1", doc.get("name").asText());
 	assertEquals("First document", doc.get("desc").asText());
 	assertEquals("xml", doc.get("kind").asText());
@@ -80,9 +77,69 @@ public void testDocument() throws Exception {
 }
 
 
+@Test
+public void testNonValidContentDocument() throws Exception {
+	
+	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-content.json");
+	assertNotNull(content);
+	
+	JsonNode doc = parseJson(content);
+	assertEquals("Document with non-valid content", doc.get("name").asText());
+
+	String expected = webappPrefix+"target/test-classes/test-resources/documents/nonvalid-document.xml";
+	assertEquals(expected, doc.get("contentURI").asText());
+	assertFalse(doc.get("valid").asBoolean());
+	 
+	assertTrue(doc.get("problem").asText().contains("Invalid content"));
+	
+}
+
+
+
+@Test
+public void testNonValidModelDocument() throws Exception {
+	
+	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-model.json");
+	assertNotNull(content);
+	
+	JsonNode doc = parseJson(content);
+	assertEquals("Problematic document", doc.get("name").asText());
+
+	assertEquals("Unknown", doc.get("contentURI").asText());
+	assertFalse(doc.get("valid").asBoolean());
+	 
+	assertTrue(doc.get("problem").asText().contains("Problem parsing model "));
+	
+}
+
+
+
 @After
-public void deardown() throws IOException {
+public void teardown() throws IOException {
 	client.close();
+}
+
+
+private InputStream fetchInputStreamFrom(String location)
+		throws URISyntaxException, IOException, UnsupportedOperationException, ClientProtocolException {
+
+	String uri = webappPrefix+location;
+	URI u = new URI(uri);
+	HttpGet request = new HttpGet(u);
+	InputStream content = client.execute(request)
+							 .getEntity()
+							 .getContent();
+	
+	return content;
+	
+}
+
+
+private JsonNode parseJson(InputStream content) throws IOException, JsonProcessingException {
+
+	ObjectMapper mapper = new ObjectMapper();
+	JsonNode doc = mapper.readTree(content);
+	return doc;
 }
 
 }
