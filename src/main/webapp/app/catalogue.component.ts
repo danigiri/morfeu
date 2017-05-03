@@ -21,7 +21,7 @@ import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
 import { Document } from './document.class';
 import { DocumentService } from './document.service';
-import { ProblemService } from './problem.service';
+import { EventService } from './events/event.service';
 
 
 @Component({
@@ -50,11 +50,11 @@ import { ProblemService } from './problem.service';
       </div>
 	`,
     styles:[`
-    #catalogue {}
-    #catalogue-name {}
-    #catalogue-desc {}
-    #document-list {}
-    #document-list-entry {}
+        #catalogue {}
+        #catalogue-name {}
+        #catalogue-desc {}
+        #document-list {}
+        #document-list-entry {}
     `],
     providers:[
     ]
@@ -67,9 +67,9 @@ catalogue: Catalogue;
 currentDocument: Document;
 
 constructor(private catalogueService : CatalogueService, 
-            problemService: ProblemService, 
+            eventService: EventService, 
             private documentService: DocumentService) {
-    super(problemService);
+    super(eventService);
 }
 
 
@@ -93,10 +93,10 @@ set selectedCatalogueUri(selectedCatalogueUri: string) {
 selectdocument(d: Document) {
         
     console.log("Selected document="+d.uri);
+    this.currentDocument = d;                   // notice this is the context of the loaded doc proxies
     this.documentService.getDocument("/morfeu/documents/"+d.uri)
     .subscribe(d => {
         console.log("Got document from Morfeu service ("+d.name+")");
-        this.currentDocument = d;
         this.documentService.setDocument(d);
         this.allOK();
     },

@@ -17,8 +17,8 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { ProblemService } from './problem.service';
-
+import { EventService } from './events/event.service';
+import { ProblemEvent } from './events/problem.event';
 
 @Component({
     moduleId: module.id,
@@ -38,18 +38,19 @@ export class ProblemComponent implements OnDestroy {
 problem: any;
 problemSubscription: Subscription;
 
-constructor(private problemService: ProblemService) {
+constructor(private eventService: EventService) {
     
     console.log("ProblemComponent::constructor()");
-    this.problemSubscription = problemService.announcedProblems$.subscribe(
-            p => {
-                if (p!=null) {
-                    console.log("***** service gets problem *****");
-                }
-                this.problem = p;
-                
-            }
-    );
+    this.problemSubscription = this.eventService.of( ProblemEvent ).subscribe( p => {
+        if ( p.message != null ) {
+            console.log( "-> ProblemComponent gets problem"+p.message );
+        } else {
+            //console.log( "-> ProblemComponent clears problem" );
+        }
+        this.problem = p.message;
+    });
+    
+
 }
 
 
@@ -57,4 +58,5 @@ ngOnDestroy() {
     //TODO: prevent memory leak when component destroyed (from the angular docs, is this needed?)
     this.problemSubscription.unsubscribe();
 }
+
 }

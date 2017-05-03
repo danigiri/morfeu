@@ -21,6 +21,8 @@ import { DocumentComponent } from './document.component';
 import { DocumentService } from './document.service';
 import { ProblemComponent } from './problem.component';
 import { ProblemService } from './problem.service';
+import { EventService } from './events/event.service';
+
 
 
 @Component({
@@ -34,21 +36,22 @@ import { ProblemService } from './problem.service';
           <div class="row">
             <div class="col-md-4">
               <catalogue-list></catalogue-list>
+              <document></document>
             </div>
             <div class="col-md-8">
-                <document></document>
             </div>
           </div>
           <div class="row">
               <div class="col-md-12">
-              <problem></problem>
+                  <problem></problem>
               </div>
           </div>
       </div>
 
 
       `,
-    providers:    [ProblemService
+    providers:    [
+                   EventService
                    ,DocumentService
                      ]
                      })

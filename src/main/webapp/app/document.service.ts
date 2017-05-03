@@ -46,6 +46,8 @@ export class DocumentService {
     
     
     setDocument(d:Document) {
+        console.log("DocumentService::setDocument("+d.name+")"); 
+        
         this.documentSource.next(d);
     }
 }

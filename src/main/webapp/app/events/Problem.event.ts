@@ -14,28 +14,6 @@
  *   limitations under the License.
  */
 
-
-import { EventService } from './events/event.service';
-import { ProblemEvent } from './events/problem.event';
-
-export class Widget {
-    
-protected constructor(protected eventService: EventService) {}
-    
-    
-reportProblem(p: any) {
-        
-    console.error("Widget::reportProblem("+p+")");
-    //this.problemService.reportProblem(p);
-    this.eventService.publish(new ProblemEvent(p));
-    
-}
-
-allOK() {
-    //this.problemService.clearProblem();
-    this.eventService.publish(new ProblemEvent(null));
-
-}
-   
-
+export class ProblemEvent {
+    constructor(public message: String) {}
 }

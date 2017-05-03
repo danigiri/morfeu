@@ -21,7 +21,7 @@ import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
 import { DocumentService } from './document.service';
-import { ProblemService } from './problem.service';
+import { EventService } from './events/event.service';
 import { Widget } from './widget.class';
 
 
@@ -37,7 +37,8 @@ import { Widget } from './widget.class';
         <div id="catalogue-list" class="list-group">
             <a *ngFor="let c of catalogues"
                  href="#" 
-                class="catalogue-list-entry list-group-item" [class.active]="c === currentCatalogue"
+                class="catalogue-list-entry list-group-item" 
+                [class.active]="c === currentCatalogue"
                 (click)="selectCatalogue(c)">
             {{c.name}}</a>
         </div>
@@ -58,8 +59,8 @@ export class CatalogueListComponent extends Widget {
 catalogues: Catalogue[];
 currentCatalogue: Catalogue;
 
-constructor(private catalogueService: CatalogueService, problemService: ProblemService) {
-    super(problemService);
+constructor(private catalogueService: CatalogueService, eventService: EventService) {
+    super(eventService);
 }
 
 ngOnInit() {
