@@ -51,8 +51,8 @@ import { EventService } from './events/event.service';
 
 
       `,
-    providers:    [CatalogueService,
-                   EventService
+    providers:    [CatalogueService
+                   ,EventService
                    ,DocumentService
                      ]
                      })

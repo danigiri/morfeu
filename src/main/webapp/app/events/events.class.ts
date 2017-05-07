@@ -17,10 +17,9 @@
 
 import { EventService } from './event.service';
 import { ProblemEvent } from './problem.event';
-import { SelectionEvent } from './selection.event';
 
 export class Events {
-    
+
 constructor(public service: EventService) {}
 
 public problem(p: any) {
@@ -31,7 +30,7 @@ public problem(p: any) {
 }
 
 public ok() {
-    //this.problemService.clearProblem();
+    
     this.service.publish(new ProblemEvent(null));
 
 }
