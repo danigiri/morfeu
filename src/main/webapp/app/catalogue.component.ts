@@ -19,9 +19,10 @@ import { Component, Input } from '@angular/core';
 import { Widget } from './widget.class';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
-import { Document } from './document.class';
 import { DocumentService } from './document.service';
+import { Document } from './document.class';
 import { EventService } from './events/event.service';
+import { DocumentSelectionEvent } from './events/document-selection.event';
 
 
 @Component({
@@ -67,7 +68,7 @@ catalogue: Catalogue;
 currentDocument: Document;
 
 constructor(private catalogueService : CatalogueService, 
-            eventService: EventService, 
+            eventService: EventService,
             private documentService: DocumentService) {
     super(eventService);
 }
@@ -79,10 +80,10 @@ set selectedCatalogueUri(selectedCatalogueUri: string) {
     this.catalogueService.getCatalogue(selectedCatalogueUri)
     .subscribe(c => { 
         this.catalogue = c;
-        this.allOK();
+        this.events.ok();
     },
     error => {
-        this.reportProblem(error);
+        this.events.problem(error);
         this.catalogue = null;
     }
     );
@@ -97,11 +98,13 @@ selectdocument(d: Document) {
     this.documentService.getDocument("/morfeu/documents/"+d.uri)
     .subscribe(d => {
         console.log("Got document from Morfeu service ("+d.name+")");
-        this.documentService.setDocument(d);
-        this.allOK();
+       // this.documentService.setDocument(d);
+        this.events.service.publish(new DocumentSelectionEvent(d));
+        this.events.ok();
     },
     error => {
-        this.reportProblem(error);
+        this.events.problem(error);
+        this.events.service.publish(new DocumentSelectionEvent(null));
         this.currentDocument = null;
     }
     );

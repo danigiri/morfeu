@@ -15,16 +15,25 @@
  */
 
 
-import { EventService } from './events/event.service';
-import { Events } from './events/events.class';
+import { EventService } from './event.service';
+import { ProblemEvent } from './problem.event';
+import { SelectionEvent } from './selection.event';
 
-export class Widget {
+export class Events {
     
-protected events: Events;
+constructor(public service: EventService) {}
 
-protected constructor(private eventService: EventService) {
-    this.events = new Events(eventService);
+public problem(p: any) {
+    
+    console.error("Widget::reportProblem("+p+")");
+    this.service.publish(new ProblemEvent(p));
+    
 }
 
+public ok() {
+    //this.problemService.clearProblem();
+    this.service.publish(new ProblemEvent(null));
 
+}
+   
 }

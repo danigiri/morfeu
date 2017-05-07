@@ -14,17 +14,8 @@
  *   limitations under the License.
  */
 
+import { Document } from '../document.class';
 
-import { EventService } from './events/event.service';
-import { Events } from './events/events.class';
-
-export class Widget {
-    
-protected events: Events;
-
-protected constructor(private eventService: EventService) {
-    this.events = new Events(eventService);
-}
-
-
+export class DocumentSelectionEvent {
+    constructor(public document: Document) {}
 }

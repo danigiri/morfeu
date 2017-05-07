@@ -16,6 +16,7 @@
 
 import { Component } from '@angular/core';
 
+import { CatalogueService } from './catalogue.service';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { DocumentComponent } from './document.component';
 import { DocumentService } from './document.service';
@@ -50,7 +51,7 @@ import { EventService } from './events/event.service';
 
 
       `,
-    providers:    [
+    providers:    [CatalogueService,
                    EventService
                    ,DocumentService
                      ]

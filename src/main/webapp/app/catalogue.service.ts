@@ -26,15 +26,16 @@ import { Catalogue } from './catalogue';
 @Injectable()
 export class CatalogueService {
     
-    catalogues: Observable<Catalogue[]>;
+catalogues: Observable<Catalogue[]>;
  
-    constructor(private http: Http) {}
+constructor(private http: Http) {}
     
-    getAll(uri:string) : Observable<Catalogue[]> {
-        console.log("CatalogueService::getAll("+uri+")"); 
-        return this.http.get(uri)
-            .map(response => response.json());
-    }
+getAll(uri:string) : Observable<Catalogue[]> {
+    console.log("CatalogueService::getAll("+uri+")"); 
+    
+    return this.http.get(uri)
+        .map(response => response.json());
+}
     
     getCatalogue(uri:string) : Observable<Catalogue> {
         

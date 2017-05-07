@@ -21,6 +21,7 @@ import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
 import { DocumentService } from './document.service';
+import { DocumentSelectionEvent } from './events/document-selection.event';
 import { EventService } from './events/event.service';
 import { Widget } from './widget.class';
 
@@ -50,7 +51,7 @@ import { Widget } from './widget.class';
     #catalogue-list {}
     .catalogue-list-entry {}
     `],
-    providers: [CatalogueService
+    providers: [
                 ]
 })
     
@@ -65,19 +66,20 @@ constructor(private catalogueService: CatalogueService, eventService: EventServi
 
 ngOnInit() {
 
-    // TODO: make this configurable
+    // TODO: make this configurable and into an event
     this.catalogueService.getAll('/morfeu/test-resources/catalogues.json')
     .subscribe(c => { 
                      this.catalogues = c;
-                     this.allOK();
+                     this.events.ok();
                     },
-               error => this.reportProblem(error));
+               error => this.events.problem(error));
 
 }
 
 selectCatalogue(c:Catalogue) {
 
     console.log("Selected catalogue="+c.uri);
+    this.events.service.publish(new DocumentSelectionEvent(null));  // reset document selection
     this.currentCatalogue = c;
 
 }

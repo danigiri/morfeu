@@ -18,9 +18,10 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { Document } from './document.class';
-import { DocumentService } from './document.service';
 import { Widget } from './widget.class';
+
 import { EventService } from './events/event.service';
+import { DocumentSelectionEvent } from './events/document-selection.event';
 
 
 @Component({
@@ -51,16 +52,17 @@ document: Document;
 documentSubscription: Subscription;
 
 
-constructor(private documentService: DocumentService, eventService: EventService) {
+constructor(eventService: EventService) {
     super(eventService);
     
     console.log("DocumentComponent::constructor()");
-    this.documentSubscription = documentService.announcedDocument$.subscribe(
-            d => {
-                if (d!=null) {
-                    this.loadDocument(d);
+    this.documentSubscription = this.events.service.of(DocumentSelectionEvent).subscribe(
+            selected => {
+                if (selected.document!=null) {
+                    this.loadDocument(selected.document);
                 } else {
-                    console.log("DocumentComponent::Constructor() subscriber received null Document");
+                    console.log("DocumentComponent::Constructor() subscriber (no document selected)");
+                    this.document = null;
                 }
                 
             }
@@ -72,7 +74,7 @@ loadDocument(d: Document) {
     console.log("-> service gets Document ("+d.name+")");
     this.document = d;
     if (d.problem==null || d.problem!="") {
-        this.reportProblem(d.problem);
+        this.events.problem(d.problem);
     }
 }
 

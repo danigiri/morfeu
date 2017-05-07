@@ -27,10 +27,7 @@ import { Document } from './document.class';
 @Injectable()
 export class DocumentService {
     
-    private documentSource = new Subject<Document>();
-    
-    announcedDocument$ = this.documentSource.asObservable();
-    document: Document;
+    private document: Document;
     
     constructor(private http: Http) {}
     
@@ -43,11 +40,6 @@ export class DocumentService {
             .map(response => response.json());
 
     }
+   
     
-    
-    setDocument(d:Document) {
-        console.log("DocumentService::setDocument("+d.name+")"); 
-        
-        this.documentSource.next(d);
-    }
 }
