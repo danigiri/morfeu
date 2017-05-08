@@ -63,35 +63,38 @@ public void catalogueListTest() throws Exception {
 
 	// catalogue list appears and has three entries
 	open(appBaseURL);
-	$("#catalogue-list").should(appear);
-	$("#problem").shouldNotBe(visible);
+
 	
-	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
-	catalogueEntries.shouldHaveSize(CATALOGUE_SIZE);
+	ElementsCollection catalogueEntries = UICatalogues.openCatalogues()
+													  .shouldAppear()
+													  .getCatalogueEntries();
 	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).getText());
 	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(2).getText());
+	catalogueEntries.shouldHaveSize(CATALOGUE_SIZE);
+	UIProblem.shouldNotBeVisible();
 	
 }
+
 
 
 @Test
 public void catalogueDetailTest() throws Exception {
 
 	// click on catalogue list entry and it appears
-	open(appBaseURL);
-	$("#catalogue-list").should(appear);
-	$("#catalogue").shouldNotBe(visible);
-	$("#problem").shouldNotBe(visible);
+	UICatalogues catalogues = UICatalogues.openCatalogues()
+										  .shouldAppear();
+	UICatalogue.shouldNotBeVisible();
+	UIProblem.shouldNotBeVisible();
 	$("#document-list").shouldNotBe(visible);
 	
-	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
-	catalogueEntries.get(0).click();
-	$("#catalogue").should(appear);
+	UICatalogue catalogue = catalogues.clickOn(0);
+	catalogue.shouldAppear();
+
 	$("#document-list").should(appear);
 
-	assertEquals("Wrong catalogue selected", "Catalogue 1", $("#catalogue-name").getText());
-	assertEquals("Wrong catalogue selected", "First Catalogue", $("#catalogue-desc").getText());
+	assertEquals("Wrong catalogue selected", "Catalogue 1", catalogue.getName());
+	assertEquals("Wrong catalogue selected", "First Catalogue", catalogue.getDesc());
 	
 	// test listing of documents
 	ElementsCollection documentEntries = $$(".document-list-entry");
@@ -110,7 +113,7 @@ public void catalogueDetailErrorTest() {
 	open(appBaseURL);
 	$("#catalogue-list").should(appear);
 	$("#catalogue").shouldNotBe(visible);
-	$("#problem").shouldNotBe(visible);
+	UIProblem.shouldNotBeVisible();
 	
 	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
 	catalogueEntries.get(2).click();

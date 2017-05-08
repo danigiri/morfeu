@@ -70,6 +70,7 @@ constructor(eventService: EventService) {
     
 }
 
+
 loadDocument(d: Document) {
     console.log("-> service gets Document ("+d.name+")");
     this.document = d;

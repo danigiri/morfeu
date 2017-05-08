@@ -14,26 +14,19 @@
  *   limitations under the License.
  */
 
+package cat.calidos.morfeu.webapp;
 
-import { Injectable } from '@angular/core';
-import { Subject }    from 'rxjs/Subject';
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class UIProblem {
+
+public static void shouldNotBeVisible() {
+	$("#problem").shouldNotBe(visible);
+}
 
 
-@Injectable()
-export class ProblemService {
-    
-    private problemSource = new Subject<any>();
-    
-    announcedProblems$ = this.problemSource.asObservable();
-    
-    
-    reportProblem(p: any) {
-        console.error("ProblemService::reportProblem("+p+")");
-        this.problemSource.next(p);
-    }
-    
-    clearProblem() {
-        this.problemSource.next(null);
-    }
-    
 }

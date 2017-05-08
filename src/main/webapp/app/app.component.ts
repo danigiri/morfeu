@@ -21,7 +21,6 @@ import { CatalogueListComponent } from './catalogue-list.component';
 import { DocumentComponent } from './document.component';
 import { DocumentService } from './document.service';
 import { ProblemComponent } from './problem.component';
-import { ProblemService } from './problem.service';
 import { EventService } from './events/event.service';
 
 
