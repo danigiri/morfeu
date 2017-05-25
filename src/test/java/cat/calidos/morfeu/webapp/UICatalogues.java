@@ -52,7 +52,8 @@ public ElementsCollection getCatalogueEntries() {
 public UICatalogue clickOn(int i) {
 
 	ElementsCollection catalogueEntries = this.getCatalogueEntries();
-	assertTrue("", catalogueEntries.size()<i);
+	int count = catalogueEntries.size();
+	assertTrue("Could not click on catalogue entry "+i+" as there are only "+count+" entries", i<count);
 	catalogueEntries.get(i).click();
 
 	return new UICatalogue();

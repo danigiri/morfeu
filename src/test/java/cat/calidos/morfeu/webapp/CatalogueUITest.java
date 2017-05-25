@@ -64,7 +64,6 @@ public void catalogueListTest() throws Exception {
 	// catalogue list appears and has three entries
 	open(appBaseURL);
 
-	
 	ElementsCollection catalogueEntries = UICatalogues.openCatalogues()
 													  .shouldAppear()
 													  .getCatalogueEntries();
@@ -77,9 +76,10 @@ public void catalogueListTest() throws Exception {
 }
 
 
-
 @Test
 public void catalogueDetailTest() throws Exception {
+
+	open(appBaseURL);
 
 	// click on catalogue list entry and it appears
 	UICatalogues catalogues = UICatalogues.openCatalogues()
@@ -111,20 +111,22 @@ public void catalogueDetailTest() throws Exception {
 public void catalogueDetailErrorTest() {
 	
 	open(appBaseURL);
-	$("#catalogue-list").should(appear);
-	$("#catalogue").shouldNotBe(visible);
+	UICatalogues catalogues = UICatalogues.openCatalogues()
+			  .shouldAppear();
+	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
 	
-	ElementsCollection catalogueEntries = $$(".catalogue-list-entry");
+	ElementsCollection catalogueEntries = catalogues.getCatalogueEntries();
 	catalogueEntries.get(2).click();
 
-	$("#problem").should(appear);
-	assertTrue($("#problem").getText().contains("Not Found"));
+	UIProblem problem = UIProblem.problem().shouldAppear();
+	assertTrue(problem.getText().contains("Not Found"));
 
 	catalogueEntries.get(0).click();
-	$("#problem").should(disappear);
+	problem.shouldDisappear();
 	
 }
+
 
 @AfterClass
 public static void tearDownClass() {
