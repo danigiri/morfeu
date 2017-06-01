@@ -18,11 +18,8 @@ package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.codeborne.selenide.ElementsCollection;
 
@@ -32,31 +29,9 @@ import static com.codeborne.selenide.Condition.*;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CatalogueUITest {
+public class CatalogueUITest extends UITezt {
 
 private static final int CATALOGUE_SIZE = 3;
-private static final String URL_PROPERTY = "app-url";
-private static final String DEFAULT_URL = "http://localhost:8080/morfeu";
-private static final String BROWSER_PROPERTY = "selenide.browser";
-private static final String DEFAULT_BROWSER = "chrome";
-private static final String DRIVER_LOCATION_PROPERTY = "webdriver.chrome.driver";
-private static final String DEFAULT_DRIVER_LOCATION = "/Applications/chromedriver";
-
-private static String appBaseURL;
-private static WebDriver driver;
-
-@BeforeClass
-public static void setUpClass() throws Exception {
-	
-
-	defineSystemVariable(BROWSER_PROPERTY, DEFAULT_BROWSER);
-	defineSystemVariable(DRIVER_LOCATION_PROPERTY, DEFAULT_DRIVER_LOCATION);
-
-	appBaseURL = defineSystemVariable(URL_PROPERTY, DEFAULT_URL);
-
-	driver = new ChromeDriver();
-}
-
 
 @Test
 public void catalogueListTest() throws Exception {
@@ -81,23 +56,13 @@ public void catalogueDetailTest() throws Exception {
 
 	open(appBaseURL);
 
-	// click on catalogue list entry and it appears
-	UICatalogues catalogues = UICatalogues.openCatalogues()
-										  .shouldAppear();
-	UICatalogue.shouldNotBeVisible();
-	UIProblem.shouldNotBeVisible();
-	$("#document-list").shouldNotBe(visible);
-	
-	UICatalogue catalogue = catalogues.clickOn(0);
-	catalogue.shouldAppear();
-
-	$("#document-list").should(appear);
+	UICatalogue catalogue = clickOnCatalogue(0);
 
 	assertEquals("Wrong catalogue selected", "Catalogue 1", catalogue.getName());
 	assertEquals("Wrong catalogue selected", "First Catalogue", catalogue.getDesc());
 	
 	// test listing of documents
-	ElementsCollection documentEntries = $$(".document-list-entry");
+	ElementsCollection documentEntries = catalogue.getDocuments();
 	documentEntries.shouldHaveSize(4);
 	assertEquals("Wrong catalogue content", "Document 1\nxml", documentEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Document with non-valid content\nxml", documentEntries.get(1).getText());
@@ -110,6 +75,7 @@ public void catalogueDetailTest() throws Exception {
 @Test
 public void catalogueDetailErrorTest() {
 	
+	// notice here we are not using the helper method to open a catalogue given that they don't expect errors
 	open(appBaseURL);
 	UICatalogues catalogues = UICatalogues.openCatalogues()
 			  .shouldAppear();
@@ -125,28 +91,6 @@ public void catalogueDetailErrorTest() {
 	catalogueEntries.get(0).click();
 	problem.shouldDisappear();
 	
-}
-
-
-@AfterClass
-public static void tearDownClass() {
-	
-	//Close the browser
-	if (driver!=null) {
-		driver.quit();
-	}
-	
-}
-
-
-private static String defineSystemVariable(String systemProperty, String defaultValue) {
-
-	String value = System.getProperty(systemProperty);
-	if (value==null) {
-		value = defaultValue;
-		System.setProperty(systemProperty, defaultValue);
-	}
-	return value;
 }
 
 }

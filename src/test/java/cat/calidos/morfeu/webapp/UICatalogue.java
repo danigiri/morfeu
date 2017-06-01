@@ -16,9 +16,18 @@
 
 package cat.calidos.morfeu.webapp;
 
+import static org.junit.Assert.*;
+
+import java.util.Optional;
+
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+
 
 /**
 * @author daniel giribet
@@ -26,12 +35,18 @@ import static com.codeborne.selenide.Selenide.$;
 public class UICatalogue {
 
 public static void shouldNotBeVisible() {
+
 	$("#catalogue").shouldNotBe(visible);
+	$("#document-list").shouldNotBe(visible);
+
 }
 
 
 public void shouldAppear() {
+
 	$("#catalogue").should(appear);
+	$("#document-list").should(appear);
+
 }
 
 
@@ -42,7 +57,47 @@ public String getName() {
 
 public String getDesc() {
 	return $("#catalogue-desc").getText();
-} 
+}
 
+
+public UIDocument clickOnDocument(int i) {
+	
+	ElementsCollection documentEntries = getDocuments();
+	int count = documentEntries.size();
+	assertTrue("Could not click on document entry "+i+" as there are only "+count+" entries", count<i);
+	
+	documentEntries.get(i).click();
+	
+	return currentlySelectedDocument();
+	
+}
+
+
+public UIDocument clickOnDocumentNamed(String name) {
+	
+	ElementsCollection documentEntries = getDocuments();
+	Optional<SelenideElement> foundDocument = documentEntries.stream()
+												.filter(d -> d.getText().equals(name)).findFirst();
+	assertTrue("Could not find document named '"+name+"'", foundDocument.isPresent());
+	foundDocument.get().click();
+	
+	return currentlySelectedDocument();
+	
+}
+
+
+private UIDocument currentlySelectedDocument() {
+
+	UIDocument document = new UIDocument();
+	document.shouldBeVisible();
+	
+	return document;
+	
+}
+
+
+public ElementsCollection getDocuments() {
+	return $$(".document-list-entry");
+}
 
 }

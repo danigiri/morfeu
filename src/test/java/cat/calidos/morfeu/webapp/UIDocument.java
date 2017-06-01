@@ -16,49 +16,31 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.Assert.*;
-
 import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
-import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UICatalogues {
+public class UIDocument {
 
-public static UICatalogues openCatalogues() {
-
-	return new UICatalogues();
-
+public UIDocument() {
+	// TODO Auto-generated constructor stub
 }
 
+//public void shouldAppear() {
+//	$("#document-info").should(appear);
+//}
 
-public UICatalogues shouldAppear() {
-	
-	$("#catalogue-list").should(appear);
-
-	return this;
-
+public void shouldBeVisible() {
+	$("#document-info").shouldBe(visible);
 }
 
-
-public ElementsCollection getCatalogueEntries() {
-	return $$(".catalogue-list-entry");
-}
-
-
-public UICatalogue clickOn(int i) {
-
-	ElementsCollection catalogueEntries = this.getCatalogueEntries();
-	int count = catalogueEntries.size();
-	assertTrue("Could not click on catalogue entry "+i+" as there are only "+count+" entries", i<count);
-	catalogueEntries.get(i).click();
-
-	return new UICatalogue();
-
+public static void shouldNotBeVisible() {
+	$("#document-info").shouldNotBe(visible);
 }
 
 
