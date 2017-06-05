@@ -35,6 +35,7 @@ getAll(uri:string) : Observable<Catalogue[]> {
     
     return this.http.get(uri)
         .map(response => response.json());
+        //TODO: handle errors with .catch here
 }
     
     getCatalogue(uri:string) : Observable<Catalogue> {

@@ -18,11 +18,13 @@ import { Component } from '@angular/core';
 
 import { CatalogueService } from './catalogue.service';
 import { CatalogueListComponent } from './catalogue-list.component';
+import { ContentComponent } from './content.component';
 import { DocumentComponent } from './document.component';
 import { DocumentService } from './document.service';
 import { ProblemComponent } from './problem.component';
-import { EventService } from './events/event.service';
+import { StatusComponent } from './status.component';
 
+import { EventService } from './events/event.service';
 
 
 @Component({
@@ -39,10 +41,12 @@ import { EventService } from './events/event.service';
               <document></document>
             </div>
             <div class="col-md-8">
+                <content></content>
             </div>
           </div>
           <div class="row">
               <div class="col-md-12">
+                  <status></status>
                   <problem></problem>
               </div>
           </div>
@@ -54,9 +58,6 @@ import { EventService } from './events/event.service';
                    ,EventService
                    ,DocumentService
                      ]
-                     })
+})
 
-export class AppComponent {
-    
-
-}
+export class AppComponent {}

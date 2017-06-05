@@ -16,9 +16,11 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static com.codeborne.selenide.Selenide.open;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
+import static com.codeborne.selenide.Selenide.open;
+
 
 /**
 * @author daniel giribet
@@ -39,6 +41,17 @@ public void documentBasicDataTest() {
 	
 	UICatalogue catalogue = catalogues.clickOn(0);
 	catalogue.shouldAppear();
+	
+	UIDocument document = catalogue.clickOnDocumentNamed("Document 1");
+	assertEquals("Document 1 xml", document.title());
+	assertEquals("First document", document.desc());
+	assertTrue(document.isValid());
+
+	
+	document = catalogue.clickOnDocumentNamed("Document with non-valid content");
+	assertEquals("Document with non-valid content xml", document.title());
+	assertEquals("Another document", document.desc());
+	assertFalse(document.isValid());
 	
 }
 

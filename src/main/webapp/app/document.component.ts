@@ -30,12 +30,13 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
     template: `
     <div id="document-info" class="panel panel-default" *ngIf="document">
         <div class="panel-heading">
-          <h4 id="document-name" class="panel-title">{{document.name}}</h4>
+          <h4 id="document-name" class="panel-title">{{document.name}} <span class="badge">{{document.kind}}</span></h4>
+            
         </div>
         <div class="panel-body">
-            <span *ngIf="document.valid" class="label label-success">VALID</span>
-            <span *ngIf="!document.valid" class="label label-danger">NON VALID</span>
-            
+            <span id="document-desc">{{document.desc}}</span>
+            <span id="document-valid" *ngIf="document.valid" class="label label-success">VALID</span>
+            <span id="document-valid" *ngIf="!document.valid" class="label label-danger">NON VALID</span>
         
         </div>
     </div>
@@ -43,11 +44,14 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
     styles:[`
             #document-info {}
             #document-name {}
+            #document-desc {}
+            #document-valid {}
+
    `]
 })
 
 export class DocumentComponent extends Widget implements OnDestroy {
-    
+
 document: Document;
 documentSubscription: Subscription;
 
@@ -61,8 +65,7 @@ constructor(eventService: EventService) {
                 if (selected.document!=null) {
                     this.loadDocument(selected.document);
                 } else {
-                    console.log("DocumentComponent::Constructor() subscriber (no document selected)");
-                    this.document = null;
+                    this.clearDocument();
                 }
                 
             }
@@ -72,7 +75,7 @@ constructor(eventService: EventService) {
 
 
 loadDocument(d: Document) {
-    console.log("-> service gets Document ("+d.name+")");
+    console.log("-> document component gets Document ("+d.name+")");
     this.document = d;
     if (d.problem==null || d.problem!="") {
         this.events.problem(d.problem);
@@ -80,8 +83,13 @@ loadDocument(d: Document) {
 }
 
 
+clearDocument() {
+    console.log("-> document component gets null document (no document selected)");
+    this.document = null;
+}
+
+
 ngOnDestroy() {
-    //TODO: prevent memory leak when component destroyed (from the angular docs, is this needed?)
     this.documentSubscription.unsubscribe();
 }
 

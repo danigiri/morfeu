@@ -16,11 +16,9 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
@@ -39,9 +37,24 @@ public void shouldBeVisible() {
 	$("#document-info").shouldBe(visible);
 }
 
+
 public static void shouldNotBeVisible() {
 	$("#document-info").shouldNotBe(visible);
 }
 
+
+public String title() {
+	return $("#document-name").getText();
+	
+}
+
+
+public String desc() {
+	return $("#document-desc").getText();
+}
+
+public boolean isValid() {
+	return $("#document-valid").getText().equals("VALID");
+}
 
 }

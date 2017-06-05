@@ -16,23 +16,29 @@
 
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent }   from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
+import { ContentComponent } from './content.component';
 import { DocumentComponent } from './document.component';
 import { ProblemComponent } from './problem.component';
+import { StatusComponent } from './status.component';
 
 @NgModule({
   imports:      [ BrowserModule
                   ,HttpModule
+                  ,BrowserAnimationsModule
                   ],
   declarations: [ AppComponent
                   ,CatalogueListComponent 
                   ,CatalogueComponent 
+                  ,ContentComponent 
                   ,DocumentComponent
                   ,ProblemComponent 
+                  ,StatusComponent 
                 ],
   providers:    [                    
                  ],

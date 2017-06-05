@@ -21,8 +21,10 @@ import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
 import { DocumentService } from './document.service';
 import { Document } from './document.class';
+
 import { EventService } from './events/event.service';
 import { DocumentSelectionEvent } from './events/document-selection.event';
+import { StatusEvent } from './events/status.event';
 
 
 @Component({
@@ -43,9 +45,8 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
                     class="document-list-entry list-group-item" 
                     [class.active]="d === currentDocument"
                     (click)="selectdocument(d)">
-                    <!-- TODO: move kind attribute to a call to the document to remove coupling -->
-                    {{d.name}} <span class="badge">{{d.kind}}</span>
-                </a> 
+                    {{d.name}}
+                </a>
         </div>
         </div>
       </div>
@@ -77,6 +78,7 @@ constructor(private catalogueService : CatalogueService,
 @Input() 
 set selectedCatalogueUri(selectedCatalogueUri: string) {
     
+    this.events.service.publish(new StatusEvent("Fetching catalogue"));
     this.catalogueService.getCatalogue(selectedCatalogueUri)
     .subscribe(c => { 
         this.catalogue = c;
@@ -85,7 +87,8 @@ set selectedCatalogueUri(selectedCatalogueUri: string) {
     error => {
         this.events.problem(error);
         this.catalogue = null;
-    }
+    },
+    () => {this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))}
     );
     
 }
@@ -94,19 +97,22 @@ set selectedCatalogueUri(selectedCatalogueUri: string) {
 selectdocument(d: Document) {
         
     console.log("Selected document="+d.uri);
-    this.currentDocument = d;                   // notice this is the context of the loaded doc proxies
+    this.currentDocument = d;                   // notice 'd' is a stub from the catalogue, not a full doc
+    this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
+    this.events.service.publish(new StatusEvent("Fetching document"));
     this.documentService.getDocument("/morfeu/documents/"+d.uri)
     .subscribe(d => {
         console.log("Got document from Morfeu service ("+d.name+")");
        // this.documentService.setDocument(d);
-        this.events.service.publish(new DocumentSelectionEvent(d));
+        this.events.service.publish(new DocumentSelectionEvent(d)); // now we have it =)
         this.events.ok();
     },
     error => {
         this.events.problem(error);
         this.events.service.publish(new DocumentSelectionEvent(null));
         this.currentDocument = null;
-    }
+    },
+    () =>     this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
     );
     
 }

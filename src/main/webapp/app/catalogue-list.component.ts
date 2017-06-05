@@ -17,13 +17,16 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
+import { Widget } from './widget.class';
+
 import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
 import { DocumentService } from './document.service';
-import { DocumentSelectionEvent } from './events/document-selection.event';
+
 import { EventService } from './events/event.service';
-import { Widget } from './widget.class';
+import { StatusEvent } from './events/status.event';
+import { DocumentSelectionEvent } from './events/document-selection.event';
 
 
 @Component({
@@ -66,13 +69,17 @@ constructor(private catalogueService: CatalogueService, eventService: EventServi
 
 ngOnInit() {
 
+    this.events.service.publish(new StatusEvent("Fetching catalogue list"));
     // TODO: make this configurable and into an event
-    this.catalogueService.getAll('/morfeu/test-resources/catalogues.json')
+    this.catalogueService.getAll("/morfeu/test-resources/catalogues.json")
     .subscribe(c => { 
+                     
                      this.catalogues = c;
                      this.events.ok();
                     },
-               error => this.events.problem(error));
+               error => this.events.problem(error),
+               () => this.events.service.publish(new StatusEvent("Fetching catalogue list", StatusEvent.DONE))
+               );
 
 }
 

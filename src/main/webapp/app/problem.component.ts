@@ -20,6 +20,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { EventService } from './events/event.service';
 import { ProblemEvent } from './events/problem.event';
 
+
 @Component({
     moduleId: module.id,
     selector: 'problem',
@@ -32,6 +33,7 @@ import { ProblemEvent } from './events/problem.event';
 `]
 })
 //`
+
 
 export class ProblemComponent implements OnDestroy {
     
@@ -50,7 +52,6 @@ constructor(private eventService: EventService) {
         this.problem = p.message;
     });
     
-
 }
 
 
