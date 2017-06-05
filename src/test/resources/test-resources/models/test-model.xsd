@@ -17,6 +17,7 @@
                     <xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:choice>
 			</xs:sequence>
+			<xs:attribute name="text" type="textField" />
 		</xs:complexType>
 	</xs:element>
 

@@ -14,39 +14,36 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
-
-import org.junit.Test;
+import java.util.concurrent.ExecutionException;
 
 import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentTest {
+public class ModelInjectionIntTezt {
 
-
-@Test(expected=ValidationException.class)
-public void testEmptyValidator() throws Exception {
-	
-	String site = "http://foo.com";
-	String path = "/whatever.json";
-	URI uri = new URI(site+path);
-	URI modelURI = new URI("/relative.xsd");
-	URI contentURI = new URI("/content.xsd");
-	Document doc = new Document(uri, "name");
-	doc.setModelURI(modelURI);
-	doc.setContentURI(contentURI);
-	//notice we do not set a validator for this document
-
-	doc.validate();
-
+protected String uriModuleForPath(String path) {
+	return this.getClass().getClassLoader().getResource(path).toString();
 }
 
 
+protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException, ParsingException, FetchingException {
+	
+	String doc1Path = uriModuleForPath(path);
+	URIModule uriModule = new URIModule(doc1Path);
+	DocumentComponent docComponent = DaggerDocumentComponent.builder()
+										.URIModule(uriModule)
+										.withPrefix("")
+										.build();
+	
+	return docComponent.produceDocument().get();
+
+}
 
 
 }

@@ -103,7 +103,6 @@ selectdocument(d: Document) {
     this.documentService.getDocument("/morfeu/documents/"+d.uri)
     .subscribe(d => {
         console.log("Got document from Morfeu service ("+d.name+")");
-       // this.documentService.setDocument(d);
         this.events.service.publish(new DocumentSelectionEvent(d)); // now we have it =)
         this.events.ok();
     },

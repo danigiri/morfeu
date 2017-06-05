@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,19 +14,26 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import cat.calidos.morfeu.model.CompositeCell;
+import dagger.producers.ProductionSubcomponent;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Locatable {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionSubcomponent(modules=CellModule.class)
+@Deprecated
+public interface CellComponent {
 
-/** @return the location of this resource
-*///////////////////////////////////////////////////////////////////////////////////////////////
-URI getUri();
+ListenableFuture<CompositeCell> cell();
 
-String getName();
-	
+
+@ProductionSubcomponent.Builder
+interface Builder {
+	CellComponent builder();
+}
+
 }

@@ -27,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class Cell extends RemoteResource {
 
-protected String name;
 protected String desc;
 
 
@@ -35,11 +34,16 @@ public Cell(URI u) {
 	super(u);
 }
 
+public Cell(URI u, String name) {
+	super(u, name);
+}
 
-public Cell(String name, URI u, String desc) {
-	super(u);
-	this.name = name;
+
+public Cell(URI u, String name, String desc) {
+	super(u, name);
+
 	this.desc = desc;
+
 }
 
 
@@ -48,17 +52,14 @@ public String getDesc() {
 }
 
 
+// TODO: is this specific setter needed?
 @JsonProperty("name") 
 public void setName(String name) {
 	this.name = name;
 }
 
 
-public String getName() {
-	return name;
-}
-
-
+//TODO: is this specific setter needed?
 @JsonProperty("desc") 
 public void setDesc(String desc) {
 	this.desc = desc;

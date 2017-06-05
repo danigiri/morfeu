@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,19 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
+import com.sun.xml.xsom.XSElementDecl;
+
+import cat.calidos.morfeu.model.CellModel;
+import dagger.BindsInstance;
+import dagger.Component;
+
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Locatable {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Component(modules = CellModelModule.class)
+public interface CellModelComponent {
 
-/** @return the location of this resource
-*///////////////////////////////////////////////////////////////////////////////////////////////
-URI getUri();
+CellModel cellModel();
 
-String getName();
+
+@Component.Builder
+interface Builder {
+
+	@BindsInstance Builder withElement(XSElementDecl elem);
+	CellModelComponent build();
 	
+}
+
 }

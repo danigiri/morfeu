@@ -18,16 +18,22 @@ package cat.calidos.morfeu.model.injection;
 
 import java.io.FileNotFoundException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Named;
 
 import org.xml.sax.SAXException;
 
+import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
+import cat.calidos.morfeu.model.CompositeCell;
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
@@ -43,7 +49,7 @@ public class ModelModule extends RemoteModule {
 
 
 @Produces
-public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws ParsingException, ExecutionException, FetchingException {
+public static XSSchemaSet parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws ParsingException, ExecutionException, FetchingException {
 	
 	XSOMParser parser = parserProducer.get();
 	XSSchemaSet schemaSet = null;
@@ -59,9 +65,33 @@ public static Model parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> pa
 			throw new ParsingException("Problem parsing model '"+uri+"'", e);
 		}
 	}
+	
+	return schemaSet;
+	
+}
 
-	return new Model(u, schemaSet);
 
+@Produces
+public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet) {
+
+	ArrayList<CellModel> rootTypes = new ArrayList<CellModel>();
+	Iterator<XSElementDecl> iterator = schemaSet.iterateElementDecls();
+	iterator.forEachRemaining(elem -> rootTypes.add(buildCellModel(elem)));
+
+	return rootTypes;
+
+}
+
+
+public static CellModel buildCellModel(XSElementDecl elem) {
+	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();
+}
+
+
+
+@Produces
+public static Model model(@Named("ModelURI") URI u, XSSchemaSet schemaSet, List<CellModel> rootTypes) {
+	return new Model(u, schemaSet, rootTypes);
 }
 
 }

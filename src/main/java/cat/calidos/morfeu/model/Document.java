@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
-/**
+/** TODO: check if document extends cell or not
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Document extends Cell implements Validable {
@@ -42,11 +42,17 @@ public Document(URI u) {
 	super(u);
 }
 
+public Document(URI u, String name) {
+	super(u, name);
+}
+
+
 public Document(String name, String desc, String kind, URI prefix, URI uri, URI modelUri, URI docUri, Model m) 
 		throws URISyntaxException {
 	
-	super(name, uri, desc);
+	super(uri, name);
 
+	this.desc = desc;
 	this.prefix = prefix;	// this may be moved to the supperclass
 	this.kind = kind;
 	this.uri = uri;

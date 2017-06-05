@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,45 +14,33 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
+
+import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.util.Iterator;
-import java.util.List;
 
-import com.sun.xml.xsom.XSComplexType;
+import org.junit.Test;
+
 import com.sun.xml.xsom.XSSchemaSet;
+
+import cat.calidos.morfeu.model.Model;
+
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Model extends RemoteResource {
-
-protected XSSchemaSet schema;
-protected List<CellModel> roots;
+public class CellModuleTest extends ModelTezt {
 
 
-public Model(URI u, XSSchemaSet s, List<CellModel> rootTypes) {
-	super(u, u.getPath().substring(u.getPath().lastIndexOf("/")));
+@Test
+public void testBuildCell() throws Exception {
+	assertTrue(true);
 
-	this.schema = s;
-	this.roots = rootTypes;
-	
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
+
+	//CellModule.(schemaSet);
 }
-
-
-public int getComplextTypeCount() {
-	
-	//	XSSchema modelSchema = schema.getSchema("http://dani.calidos.com/morfeu/model");
-	Iterator<XSComplexType> typeIterator = schema.iterateComplexTypes();
-	int c = 0;
-	while (typeIterator.hasNext()) {
-		typeIterator.next();
-		c++;
-	}
-	
-	return c;
-}
-
 
 }

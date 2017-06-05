@@ -20,32 +20,18 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.net.URI;
-import java.util.concurrent.ExecutionException;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.xml.sax.SAXException;
 
-import com.sun.xml.xsom.parser.XSOMParser;
-
 import cat.calidos.morfeu.model.Model;
-import cat.calidos.morfeu.problems.ConfigurationException;
-import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
-import dagger.producers.Produced;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelModuleTest {
-
-@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
-
-@Mock Produced<XSOMParser> parserProducer;
+public class ModelModuleTest extends ModelTezt {
 
 @Test
 public void testParseModel() throws Exception {
@@ -70,18 +56,6 @@ public void testParseNonValidModel() throws Exception  {
 	URI modelURI = new URI("target/test-classes/test-resources/models/nonvalid-model.xsd");
 	parseURI(modelURI);
 
-}
-
-
-private Model parseURI(URI u) 
-		throws ConfigurationException, InterruptedException, ExecutionException, ParsingException, FetchingException {
-
-	XSOMParser parser = DaggerParserComponent.builder().build().produceXSOMParser().get();
-	when(parserProducer.get()).thenReturn(parser);
-	
-	Model model = ModelModule.parseModel(u, parserProducer);
-
-	return model;
 }
 
 

@@ -30,8 +30,6 @@ import org.junit.Test;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cat.calidos.morfeu.model.Document;
@@ -45,7 +43,6 @@ public class DocumentModuleTest {
 
 @Rule 
 public MockitoRule mockitoRule = MockitoJUnit.rule();
-
 
 
 @Test
@@ -74,13 +71,13 @@ public void testInvalidDocument() throws Exception {
 public void testDocumentPrefix() throws Exception {
 	
 	URI u = new URI("http://foo.com/well/whatever.json");
-	Document doc = new Document(u);
+	Document doc = new Document(u, "");
 	String pref = "http://bar.com";
 
 	URI expected = new URI(pref);
 	assertEquals(expected, DocumentModule.documentPrefix(doc, pref));
 	
-	doc = new Document(u);	// empty prefix defined so we guess
+	doc = new Document(u, "");	// empty prefix defined so we guess
 	expected = new URI("http://foo.com/well/");
 	assertEquals(expected, DocumentModule.documentPrefix(doc, ""));
 
@@ -161,7 +158,7 @@ private Document createDocument(String site, String path, String model, String c
 	URI uri = new URI(site+path);
 	URI modelURI = new URI(model);
 	URI contentURI = new URI(content);
-	Document doc = new Document(uri);
+	Document doc = new Document(uri, "doc");
 	doc.setModelURI(modelURI);
 	doc.setContentURI(contentURI);
 	

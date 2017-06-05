@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,24 +16,16 @@
 
 package cat.calidos.morfeu.model;
 
-import java.util.List;
+import java.net.URI;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
-public class Composite {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class CellModel extends RemoteResource {
 
-	protected List<Cell> children;
+public CellModel(URI u, String name) {
+	super(u, name);
+}
 
-	
-	public List<Cell> children() {
-		return children;
-	}
-	
-	public Cell childAt(int i) {
-		if (children==null) {
-			throw new NullPointerException("Attempt to get particle on null list position "+i);
-		}
-		return children.get(i);
-	}
+
 }

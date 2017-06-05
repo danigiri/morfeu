@@ -16,34 +16,27 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.util.concurrent.ExecutionException;
+import com.sun.xml.xsom.XSType;
 
-import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.Type;
+import dagger.BindsInstance;
+import dagger.Component;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelInjectionIntT3st {
+@Component(modules=TypeModule.class)
+public interface TypeComponent {
 
-protected String uriModuleForPath(String path) {
-	return this.getClass().getClassLoader().getResource(path).toString();
-}
+Type type();
 
+@Component.Builder
+interface Builder {
 
-protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException, ParsingException, FetchingException {
+	@BindsInstance Builder withXSType(XSType xsType);
+	@BindsInstance Builder withDefaultName(String name);
 	
-	String doc1Path = uriModuleForPath(path);
-	URIModule uriModule = new URIModule(doc1Path);
-	DocumentComponent docComponent = DaggerDocumentComponent.builder()
-										.URIModule(uriModule)
-										.withPrefix("")
-										.build();
-	
-	return docComponent.produceDocument().get();
-
+	TypeComponent build();
 }
-
-
 }

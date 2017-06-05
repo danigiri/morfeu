@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,45 +14,29 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.utils;
 
-import java.net.URI;
-import java.util.Iterator;
 import java.util.List;
 
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSSchemaSet;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Model extends RemoteResource {
+public interface Composite<T> {
 
-protected XSSchemaSet schema;
-protected List<CellModel> roots;
-
-
-public Model(URI u, XSSchemaSet s, List<CellModel> rootTypes) {
-	super(u, u.getPath().substring(u.getPath().lastIndexOf("/")));
-
-	this.schema = s;
-	this.roots = rootTypes;
-	
-}
+/** @return all children of this composite object */
+public List<T> children();
 
 
-public int getComplextTypeCount() {
-	
-	//	XSSchema modelSchema = schema.getSchema("http://dani.calidos.com/morfeu/model");
-	Iterator<XSComplexType> typeIterator = schema.iterateComplexTypes();
-	int c = 0;
-	while (typeIterator.hasNext()) {
-		typeIterator.next();
-		c++;
-	}
-	
-	return c;
-}
+/** @return child element at position i */
+public T child(int i);
 
+
+/** Clear all the children and return the old list */
+public List<T> clearChildren();
+
+
+/** add this child and return the new children count */
+public int addChild(T c);
 
 }

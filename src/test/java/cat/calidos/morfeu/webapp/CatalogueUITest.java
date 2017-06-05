@@ -19,12 +19,10 @@ package cat.calidos.morfeu.webapp;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 
 import com.codeborne.selenide.ElementsCollection;
 
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Condition.*;
 
 /**
 * @author daniel giribet
@@ -64,7 +62,7 @@ public void catalogueDetailTest() throws Exception {
 	// test listing of documents
 	ElementsCollection documentEntries = catalogue.getDocuments();
 	documentEntries.shouldHaveSize(4);
-	assertEquals("Wrong catalogue content", "Document 1\nxml", documentEntries.get(0).getText());
+	assertEquals("Wrong catalogue content", "Document 1", documentEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Document with non-valid content", documentEntries.get(1).getText());
 	assertEquals("Wrong catalogue content", "Document with non-valid model", documentEntries.get(2).getText());
 	assertEquals("Wrong catalogue content", "Document with not-found content", documentEntries.get(3).getText());
