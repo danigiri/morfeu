@@ -34,6 +34,7 @@ public Type(URI u, String name, XSType xsType) {
 	
 }
 
+
 public boolean isSimple() {
 	return xsType.isSimpleType();
 }

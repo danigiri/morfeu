@@ -14,29 +14,16 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.problems;
 
-import java.net.URI;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CellModel extends RemoteResource {
+public class InternalException extends RuntimeException {
 
-protected Type type;
-
-public CellModel(URI u, String name, Type type) {
-	
-	super(u, name);
-	
-	this.type = type;
-	
-}
-
-
-public Type getType() {
-	return type;
-}
-
+	public InternalException(String message) {
+		super(message);
+	}
 
 }

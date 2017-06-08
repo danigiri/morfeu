@@ -18,11 +18,16 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Locator;
 
+import com.sun.xml.xsom.XSAttributeUse;
+import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
 import cat.calidos.morfeu.model.Type;
@@ -53,5 +58,21 @@ public static Type buildType(String defaultName, XSType xsType) {
 	return new Type(null, name, xsType);
 	
 }
+
+
+// STASHED REFERENCE
+// get the types from a complex type
+//XSComplexType complexType = xsType.asComplexType();
+//XSTerm t = complexType.getContentType().asParticle().getTerm();
+//while (t.isModelGroup()) {
+//	t = t.asModelGroup().getChild(0).getTerm();
+//}
+//XSElementDecl asElementDecl = t.asElementDecl();
+//
+// get the attributes
+//Collection<? extends XSAttributeUse> attributeUses = complexType.getAttributeUses();
+
+
+
 
 }

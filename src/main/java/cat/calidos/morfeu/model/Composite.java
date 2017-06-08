@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.utils;
+package cat.calidos.morfeu.model;
 
 import java.util.List;
 
@@ -38,5 +38,9 @@ public List<T> clearChildren();
 
 /** add this child and return the new children count */
 public int addChild(T c);
+
+/** we may not have any (we are a composite instance, it's just that we don't have children at the moment) */
+public boolean hasChildren();
+
 
 }

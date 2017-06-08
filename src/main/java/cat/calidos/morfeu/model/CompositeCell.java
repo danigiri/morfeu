@@ -19,48 +19,48 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.util.List;
 
-import cat.calidos.morfeu.utils.Composite;
+import cat.calidos.morfeu.utils.ArrayComposite;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
 public class CompositeCell extends Cell implements Composite<Cell> {
 
-	public CompositeCell(URI u, String name, String desc) {
-		super(u, name);
-		this.desc = desc;
-	}
+public CompositeCell(URI u, String name, String desc) {
+	super(u, name);
+	this.desc = desc;
+}
 
-	protected List<Cell> children;
+protected ArrayComposite<Cell> children;
 
+
+@Override
+public List<Cell> children() {
+	return children.children();
+}
+
+
+@Override
+public Cell child(int i) {
+	return children.child(i);
+}
+
+
+@Override
+public List<Cell> clearChildren() {
+	return children.clearChildren();
+}
+
+
+@Override
+public int addChild(Cell c) {
+	return children.addChild(c);
+}
+
+
+@Override
+public boolean hasChildren() {
+	return children.hasChildren();
+}
 	
-	@Override
-	public List<Cell> children() {
-		return children;
-	}
-	
-
-	@Override
-	public Cell child(int i) {
-		if (children==null) {
-			throw new NullPointerException("Attempt to get cell on null list position "+i);
-		}
-		return children.get(i);
-	}
-
-
-	@Override
-	public List<Cell> clearChildren() {
-
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	@Override
-	public int addChild(Cell c) {
-
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

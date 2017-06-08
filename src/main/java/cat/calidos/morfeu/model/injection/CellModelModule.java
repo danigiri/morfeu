@@ -47,7 +47,7 @@ public static CellModel buildCellModelFrom(XSElementDecl elem) throws RuntimeExc
 	try {
 		//TODO: build a real URI that can be accessed in the future
 		URI u = new URI(locator.getSystemId());
-		cellModel = new CellModel(u, elem.getName());
+		cellModel = new CellModel(u, elem.getName(), null);
 	} catch (URISyntaxException e) {
 		log.error("What the heck, URI '{}' of element '{}' is not valid ", locator.getSystemId(), elem.getName());
 	}

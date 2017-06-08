@@ -20,15 +20,30 @@ import static org.junit.Assert.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.plaf.synth.SynthSeparatorUI;
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.sun.xml.xsom.ForeignAttributes;
+import com.sun.xml.xsom.XSAttGroupDecl;
+import com.sun.xml.xsom.XSAttributeUse;
+import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSComponent;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
+import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
+import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
 import cat.calidos.morfeu.model.Type;
@@ -54,12 +69,49 @@ public void setup() throws Exception {
 @Test
 public void testRootAnonymousType() throws Exception {
 
+	XSSchema schema = schemaSet.getSchema("");
+	XSElementDecl elementDecl = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
 	
-	XSType xsType = schemaSet.getElementDecl(MODEL_NAMESPACE, "test").getType();
+	XSType xsType = elementDecl.getType();
 	Type type = TypeModule.buildType("cell-model-name", xsType);
 	assertEquals("cell-model-name", type.getName());
 	assertFalse(type.isSimple());
-	assertFalse(type.isContentValid(new Object()));
+		
+	
+//	attributeUses.iterator().forEachRemaining(au -> System.err.println(au.getDecl().getName()));
+//	complexType.getSubtypes().iterator().forEachRemaining(e->System.err.println(e.getName()));
+//	Collection<XSComponent> select = complexType.select("/test/*", new NamespaceContext() {
+//	
+//	@Override
+//	public Iterator getPrefixes(String namespaceURI) {
+//		
+//		// TODO Auto-generated method stub
+//		 ArrayList<String> arrayList = new ArrayList<String>(1);
+//		 arrayList.add("");
+//		return arrayList.iterator();
+//	}
+//	
+//	
+//	@Override
+//	public String getPrefix(String namespaceURI) {
+//		
+//		// TODO Auto-generated method stub
+//		return "";
+//	}
+//	
+//	
+//	@Override
+//	public String getNamespaceURI(String prefix) {
+//		
+//		// TODO Auto-generated method stub
+//		return "";
+//	}
+//	});
+//	select.iterator().forEachRemaining(e->System.err.println(e.toString()));
+	
+//	complexType.getElementDecls().stream().forEach(e->System.err.println(e.getName()));
+//	schemaSet.iterateElementDecls().forEachRemaining(e -> e.);
+//	schemaSet.iterateModelGroupDecls().forEachRemaining(gd -> System.err.println(gd.getName()));
 	
 }
 

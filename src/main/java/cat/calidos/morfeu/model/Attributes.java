@@ -16,27 +16,12 @@
 
 package cat.calidos.morfeu.model;
 
-import java.net.URI;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CellModel extends RemoteResource {
+public interface Attributes<T> {
 
-protected Type type;
-
-public CellModel(URI u, String name, Type type) {
-	
-	super(u, name);
-	
-	this.type = type;
-	
-}
-
-
-public Type getType() {
-	return type;
-}
-
+boolean hasAttributes();
 
 }
