@@ -17,8 +17,11 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.google.common.collect.SortedSetMultimap;
 
 import cat.calidos.morfeu.problems.InternalException;
 
@@ -27,64 +30,96 @@ import cat.calidos.morfeu.problems.InternalException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ComplexCellModel extends CellModel implements Composite<CellModel>, Attributes<CellModel> {
 
-private List<CellModel> attributes;
 
+private Attributes<CellModel> attributes;
+private Composite<CellModel> children;
 
-public ComplexCellModel(URI u, String name, Type type, List<CellModel> attributes) {
+public ComplexCellModel(URI u, String name, Type type, Attributes<CellModel> attributes, Composite<CellModel> children) {
 	
 	super(u, name, type);
 	
 	this.attributes = attributes;
-	
+	this.children = children;
 }
 
 
 @Override
 public boolean hasAttributes() {
-	return !attributes.isEmpty();
+	return attributes.hasAttributes();
 }
 
 
-public List<CellModel> getAttributes() {
-	return attributes;
+@Override
+public boolean hasAttribute(String name) {
+	return attributes.hasAttribute(name);
+}
+
+
+public List<CellModel> attributes() {
+	return attributes.attributes();
 }
 
 
 public CellModel attribute(int i) {
 	
-	int size = attributes.size();
-	if (i>=size) {
-		throw new InternalException("Cannot get attribute "+i+" at "+name+" of type "+type+" with only "+size+" attributes");
+	try {
+		return attributes.attribute(i);
+	} catch (InternalException e) {
+		throw new InternalException("Tried to get attribute "+i+" on cell model "+name+" of type "+type.getName(), e);
 	}
-
-	return attributes.get(i);
 	
 }
 
 
 public CellModel attribute(String name) {
-
-	Optional<CellModel> maybeCellModel = attributes.stream()
-											.filter(cellModel -> cellModel.getName().equals(name)).findFirst();
-	if (!maybeCellModel.isPresent()) {
+	
+	try {
+		return attributes.attribute(name);
+	} catch (InternalException e) {
 		throw new InternalException("Cannot get attribute "+name+" at "+name+" of type "+type);
 	}
+	
+}
 
-	return maybeCellModel.get();
+
+public boolean addAttribute(String name, CellModel attribute) {
+	return attributes.addAttribute(name, attribute);
+}
+
+
+@Override
+public List<CellModel> clearAttributes() {
+
 	
 }
 
 
 @Override
-public List children() {
+public boolean hasChildren() {
+	return children.hasChildren();
+}
 
-	// TODO Auto-generated method stub
-	return null;
+
+@Override
+public List<CellModel> children() {
+	return children.children();
 }
 
 
 @Override
 public CellModel child(int i) {
+	return children.child(i);
+}
+
+
+@Override
+public List<CellModel> clearChildren() {
+	return children.clearChildren();
+}
+
+
+@Override
+public CellModel child(String name) {
 
 	// TODO Auto-generated method stub
 	return null;
@@ -92,27 +127,12 @@ public CellModel child(int i) {
 
 
 @Override
-public List clearChildren() {
-
-	// TODO Auto-generated method stub
-	return null;
-}
-
-
-@Override
-public int addChild(CellModel c) {
-
-	// TODO Auto-generated method stub
-	return 0;
-}
-
-
-@Override
-public boolean hasChildren() {
+public boolean addChild(String key, CellModel c) {
 
 	// TODO Auto-generated method stub
 	return false;
 }
+
 
 
 }

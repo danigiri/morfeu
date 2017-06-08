@@ -22,8 +22,12 @@ package cat.calidos.morfeu.problems;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class InternalException extends RuntimeException {
 
-	public InternalException(String message) {
-		super(message);
-	}
+public InternalException(String message) {
+	super(message);
+}
+
+public InternalException(String message, Throwable e) {
+	super(message+"("+e.getMessage()+")", e);
+}
 
 }

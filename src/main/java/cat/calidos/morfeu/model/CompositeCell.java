@@ -19,7 +19,7 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.util.List;
 
-import cat.calidos.morfeu.utils.ArrayComposite;
+import cat.calidos.morfeu.utils.BasicComposite;
 
 /**
 * @author daniel giribet
@@ -31,7 +31,7 @@ public CompositeCell(URI u, String name, String desc) {
 	this.desc = desc;
 }
 
-protected ArrayComposite<Cell> children;
+protected BasicComposite<Cell> children;
 
 
 @Override

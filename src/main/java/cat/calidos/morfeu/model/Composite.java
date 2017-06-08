@@ -28,19 +28,22 @@ public interface Composite<T> {
 public List<T> children();
 
 
+/** we may not have any (we are a composite instance, it's just that we don't have children at the moment) */
+public boolean hasChildren();
+
+
 /** @return child element at position i */
 public T child(int i);
+
+
+public T child(String name);
 
 
 /** Clear all the children and return the old list */
 public List<T> clearChildren();
 
 
-/** add this child and return the new children count */
-public int addChild(T c);
-
-/** we may not have any (we are a composite instance, it's just that we don't have children at the moment) */
-public boolean hasChildren();
-
+/** add this child and return true if it was added or false if it was replacedt */
+public boolean addChild(String key, T c);
 
 }

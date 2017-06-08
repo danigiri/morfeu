@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.model;
 
+import java.util.List;
 
 /**
 * @author daniel giribet
@@ -23,5 +24,21 @@ package cat.calidos.morfeu.model;
 public interface Attributes<T> {
 
 boolean hasAttributes();
+
+boolean hasAttribute(String name);
+
+List<T> attributes();
+
+T attribute(int i);
+
+T attribute(String name);
+
+/** If the attribute already exists it will replace the value with the new one
+*	@return true if the attribute was new and false if it was replaced
+*/
+boolean addAttribute(String name, T a);
+
+List<T> clearAttributes();
+
 
 }
