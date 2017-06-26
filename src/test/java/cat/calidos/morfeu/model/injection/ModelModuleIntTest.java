@@ -17,37 +17,45 @@
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.net.URI;
 
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
-import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSSchemaSet;
-
-import cat.calidos.morfeu.model.CellModel;
-
+import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CellModelModuleTest extends ModelTezt {
-
+public class ModelModuleIntTest extends ModelTezt {
 
 @Test
-public void testBuildCellModelFrom() throws Exception {
+public void testParseModel() throws Exception {
 	
+	// TODO: see what we can do about these ugly maven specific paths
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
-	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
+	Model model = parseURI(modelURI);
+
+	assertEquals(modelURI, model.getUri());
+	assertEquals(4, model.getComplextTypeCount());
 	
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
-	assertNotNull(elem);
+}
+
+
+@Test(expected = ParsingException.class)
+public void testParseNonValidModel() throws Exception  {
+
+	// TODO: see what we can do about these ugly maven specific paths
+
+	System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid schema");
 	
-	CellModel cellModel = CellModelModule.buildCellModelFrom(elem);
-	assertNotNull(cellModel);
-	
-	assertEquals("test", cellModel.getName());
-	
+	URI modelURI = new URI("target/test-classes/test-resources/models/nonvalid-model.xsd");
+	parseURI(modelURI);
+
 }
 
 

@@ -53,7 +53,7 @@ import cat.calidos.morfeu.model.Type;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TypeModuleTest extends ModelTezt {
+public class TypeModuleIntTest extends ModelTezt {
 
 private XSSchemaSet schemaSet;
 
@@ -69,7 +69,6 @@ public void setup() throws Exception {
 @Test
 public void testRootAnonymousType() throws Exception {
 
-	XSSchema schema = schemaSet.getSchema("");
 	XSElementDecl elementDecl = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
 	
 	XSType xsType = elementDecl.getType();
@@ -120,7 +119,7 @@ public void testRootAnonymousType() throws Exception {
 public void testTextSimpleType() {
 	
 	XSType xsType = schemaSet.getType(MODEL_NAMESPACE, "textField");
-	Type type = TypeModule.buildType("not used", xsType);
+	Type type = TypeModule.buildType("not used default", xsType);
 	assertEquals("textField", type.getName());
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
@@ -136,13 +135,14 @@ public void testTextSimpleType() {
 public void testIntegerSimpleType() {
 	
 	XSType xsType = schemaSet.getType(MODEL_NAMESPACE, "numberField");
-	Type type = TypeModule.buildType("not used", xsType);
+	Type type = TypeModule.buildType("not used default", xsType);
 	assertEquals("numberField", type.getName());
 	assertTrue(type.isSimple());
 	
 	validateInteger(type);
 
 }
+
 
 @Test
 public void testColFieldSimpleType() {
@@ -154,6 +154,7 @@ public void testColFieldSimpleType() {
 		
 	// notice that we are not writing a full validation as XML Schema will do this for us
 	validateInteger(type);
+	
 }
 
 

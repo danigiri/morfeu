@@ -31,7 +31,7 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
-import cat.calidos.morfeu.model.CompositeCell;
+import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.problems.FetchingException;
@@ -46,6 +46,12 @@ import dagger.producers.Produces;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule 
 public class ModelModule extends RemoteModule {
+
+
+@Produces
+public static Model produceModel(@Named("ModelURI") URI u, XSSchemaSet schemaSet, List<CellModel> rootTypes) {
+	return new Model(u, schemaSet, rootTypes);
+}
 
 
 @Produces
@@ -85,13 +91,6 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet) {
 
 public static CellModel buildCellModel(XSElementDecl elem) {
 	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();
-}
-
-
-
-@Produces
-public static Model model(@Named("ModelURI") URI u, XSSchemaSet schemaSet, List<CellModel> rootTypes) {
-	return new Model(u, schemaSet, rootTypes);
 }
 
 }

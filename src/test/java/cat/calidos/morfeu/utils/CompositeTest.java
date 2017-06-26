@@ -74,7 +74,7 @@ public void testChildren() {
 @Test(expected=InternalException.class)
 public void testBadGet() {
 	
-	composite.addChild("foo", "bar");
+	assertTrue(composite.addChild("foo", "bar"));
 	composite.child(1);
 	
 }
@@ -83,7 +83,7 @@ public void testBadGet() {
 @Test(expected=InternalException.class)
 public void testBadGetName() {
 	
-	composite.addChild("foo", "bar");
+	assertTrue(composite.addChild("foo", "bar"));
 	composite.child("nope");
 	
 }

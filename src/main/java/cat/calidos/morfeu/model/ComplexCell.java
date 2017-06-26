@@ -19,19 +19,21 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.util.List;
 
-import cat.calidos.morfeu.utils.BasicComposite;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-public class CompositeCell extends Cell implements Composite<Cell> {
+public class ComplexCell extends Cell implements Composite<Cell> {
 
-public CompositeCell(URI u, String name, String desc) {
+public ComplexCell(URI u, String name, String desc, Composite<Cell> children) {
+	
 	super(u, name);
+	
 	this.desc = desc;
+	this.children = children;
 }
 
-protected BasicComposite<Cell> children;
+protected Composite<Cell> children;
 
 
 @Override
@@ -53,8 +55,8 @@ public List<Cell> clearChildren() {
 
 
 @Override
-public int addChild(Cell c) {
-	return children.addChild(c);
+public boolean addChild(String name, Cell c) {
+	return children.addChild(name, c);
 }
 
 
@@ -62,5 +64,12 @@ public int addChild(Cell c) {
 public boolean hasChildren() {
 	return children.hasChildren();
 }
-	
+
+
+@Override
+public Cell child(String name) {
+	return children.child(name);
+}
+
+
 }

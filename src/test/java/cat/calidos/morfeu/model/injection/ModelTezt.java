@@ -50,7 +50,7 @@ protected Model parseURI(URI u) throws ConfigurationException, InterruptedExcept
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 		
 	//TODO: complete model tests
-	return ModelModule.model(u, schemaSet, null);
+	return ModelModule.produceModel(u, schemaSet, null);
 		
 }
 

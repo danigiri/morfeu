@@ -26,7 +26,7 @@ import dagger.Component;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = CellModelModule.class)
+@Component(modules = {CellModelModule.class, TypeModule.class})
 public interface CellModelComponent {
 
 CellModel cellModel();

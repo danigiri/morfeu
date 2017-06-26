@@ -37,10 +37,7 @@ public class CellModuleTest extends ModelTezt {
 public void testBuildCell() throws Exception {
 	assertTrue(true);
 
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
-	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
 
-	//CellModule.(schemaSet);
 }
 
 }

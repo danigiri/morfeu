@@ -20,6 +20,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Locator;
@@ -43,7 +45,7 @@ public class TypeModule {
 protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 
 @Provides
-public static Type buildType(String defaultName, XSType xsType) {
+public static Type buildType(@Named("TypeDefaultName") String defaultName, XSType xsType) {
 	
 	Locator locator = xsType.getLocator();
 	URI u = null;
@@ -55,10 +57,16 @@ public static Type buildType(String defaultName, XSType xsType) {
 	}
 	// if it's an anonymous type we use the cell model name
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
-	return new Type(null, name, xsType);
+	
+	return new Type(u, name, xsType);
 	
 }
 
+
+@Provides
+public static XSType xsTypeFrom(XSElementDecl elem) {
+	return elem.getType();
+}
 
 // STASHED REFERENCE
 // get the types from a complex type

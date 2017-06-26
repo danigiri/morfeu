@@ -17,11 +17,7 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import com.google.common.collect.SortedSetMultimap;
 
 import cat.calidos.morfeu.problems.InternalException;
 
@@ -89,8 +85,7 @@ public boolean addAttribute(String name, CellModel attribute) {
 
 @Override
 public List<CellModel> clearAttributes() {
-
-	
+	return attributes.clearAttributes();
 }
 
 

@@ -28,6 +28,7 @@ public class Type extends RemoteResource {
 protected XSType xsType;
 
 public Type(URI u, String name, XSType xsType) {
+
 	super(u, name);
 	
 	this.xsType = xsType;
