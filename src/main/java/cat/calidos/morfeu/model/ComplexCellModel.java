@@ -24,7 +24,7 @@ import cat.calidos.morfeu.problems.InternalException;
 /** A Cell Model that has attributes (which cannot be repeated), order is considered important so using list and not set
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ComplexCellModel extends CellModel implements Composite<CellModel>, Attributes<CellModel> {
+public class ComplexCellModel extends CellModel {
 
 
 private Attributes<CellModel> attributes;
@@ -39,100 +39,34 @@ public ComplexCellModel(URI u, String name, Type type, Attributes<CellModel> att
 }
 
 
-@Override
-public boolean hasAttributes() {
-	return attributes.hasAttributes();
+public Attributes<CellModel> attributes() {
+	return attributes;
+}
+
+public Composite<CellModel> children() {
+	return children;
 }
 
 
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.CellModel#toString()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
-public boolean hasAttribute(String name) {
-	return attributes.hasAttribute(name);
-}
+public String toString() {
 
-
-@Override
-public List<CellModel> attributes() {
-	return attributes.attributes();
-}
-
-
-@Override
-public int size() {
-	return attributes.size();
-}
-
-
-public CellModel attribute(int i) {
-	
-	try {
-		return attributes.attribute(i);
-	} catch (InternalException e) {
-		throw new InternalException("Tried to get attribute "+i+" on cell model "+name+" of type "+type.getName(), e);
+	StringBuilder sb = new StringBuilder(super.toString());
+	if (attributes.size()>0) {
+		sb.append("\n\tattributes:\n");
+		sb.append(attributes.toString());
 	}
-	
-}
-
-
-public CellModel attribute(String name) {
-	
-	try {
-		return attributes.attribute(name);
-	} catch (InternalException e) {
-		throw new InternalException("Cannot get attribute "+name+" at "+name+" of type "+type);
+	if (children.size()>0) {
+		// TODO: replace \ns with \n\t's here for correct indendation
+		sb.append("\nchildren:\n");
+		sb.append(children.toString());
 	}
-	
-}
 
+	return sb.toString();
 
-public boolean addAttribute(String name, CellModel attribute) {
-	return attributes.addAttribute(name, attribute);
-}
-
-
-@Override
-public List<CellModel> clearAttributes() {
-	return attributes.clearAttributes();
-}
-
-
-@Override
-public boolean hasChildren() {
-	return children.hasChildren();
-}
-
-
-@Override
-public List<CellModel> children() {
-	return children.children();
-}
-
-
-@Override
-public CellModel child(int i) {
-	return children.child(i);
-}
-
-
-@Override
-public List<CellModel> clearChildren() {
-	return children.clearChildren();
-}
-
-
-@Override
-public CellModel child(String name) {
-
-	// TODO Auto-generated method stub
-	return null;
-}
-
-
-@Override
-public boolean addChild(String key, CellModel c) {
-
-	// TODO Auto-generated method stub
-	return false;
 }
 
 

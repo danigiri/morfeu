@@ -18,7 +18,9 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Named;
@@ -31,7 +33,10 @@ import org.xml.sax.Locator;
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSModelGroup;
+import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
 import cat.calidos.morfeu.model.Attributes;
@@ -90,7 +95,7 @@ public static Type getTypeFrom(XSElementDecl elem) {
 
 
 @Provides
-public static  Attributes<CellModel> attributesOf(XSElementDecl elem, 
+public static Attributes<CellModel> attributesOf(XSElementDecl elem, 
 												  Type t,
 												  Lazy<Collection<? extends XSAttributeUse>> attributesProducer) {
 
@@ -98,15 +103,7 @@ public static  Attributes<CellModel> attributesOf(XSElementDecl elem,
 		return new OrderedMap<CellModel>(0);
 	}
 	Collection<? extends XSAttributeUse> rawAttributes = attributesProducer.get();
-	Attributes<CellModel> attributes = new OrderedMap<CellModel>(rawAttributes.size());
-
-	rawAttributes.forEach(a -> {
-								XSAttributeDecl attributeDecl = a.getDecl();
-								CellModel cellModel = cellModelFrom(attributeDecl);
-								attributes.addAttribute(attributeDecl.getName(), cellModel);
-	});
-
-	return attributes;
+	return attributesFrom(rawAttributes);
 
 }
 
@@ -122,9 +119,48 @@ public static Collection<? extends XSAttributeUse> rawAttributes(XSElementDecl e
 
 
 @Provides
-public static Composite<CellModel> childrenOf(Type t) {
+public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t) {
 	
-	return null;
+	// Magic happens here: 
+	// BASE CASES:
+	//	if we are a simple type we are at a leaf
+	//	if we are an empty type we do not have children
+	// RECURSIVE CASE:
+	//	we go through all the children and we add them
+	if (t.isSimple()) {
+		return new OrderedMap<CellModel>(0);						// base case, simple type sanity check
+	}
+	
+	Composite<CellModel> children = new OrderedMap<CellModel>();
+	
+	XSComplexType complexType = elem.getType().asComplexType();
+	XSContentType contentType = complexType.getContentType();
+	if (contentType.asEmpty()!=null) {
+		return new OrderedMap<CellModel>(0);						// base case, no children, we return
+	}
+	
+	System.err.println("TYPE:"+t);
+	XSTerm termType = contentType.asParticle().getTerm();			// recursive case, go through all children
+	LinkedList<XSTerm> termTypes = new LinkedList<XSTerm>();
+	termTypes.add(termType);
+	while (!termTypes.isEmpty()) {
+		termType = termTypes.removeFirst();
+		
+		if (termType.isModelGroup()) {
+			XSModelGroup typeModelGroup = termType.asModelGroup();
+			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.getTerm()));
+			System.err.print("\t["+typeModelGroup.getSize()+"]");
+		} else {
+			XSElementDecl child = termType.asElementDecl();
+			CellModel childCellModel = cellModelFrom(child);
+			children.addChild(childCellModel.getName(), childCellModel);
+		}
+	
+	}
+	System.err.println();
+
+	return children;
+	
 }
 
 
@@ -140,8 +176,22 @@ public static String getDefaultTypeName(XSElementDecl elem) {
 }
 
 
-public static List<CellModel> attributes(XSElementDecl elem) {
-	return null;
+private static CellModel cellModelFrom(XSElementDecl elem) {
+	
+	Type t = getTypeFrom(elem);
+	URI u = getDefaultURI(elem);
+	if(t.isSimple()) {
+
+		return buildCellModelFrom(u, elem, t);
+
+	} else {
+		Attributes<CellModel> attributes = attributesFrom(elem);
+		Composite<CellModel> children = childrenOf(elem, t);
+		
+		return buildComplexCellModelFrom(u, elem, t, attributes, children);
+		
+	}
+	
 }
 
 
@@ -157,6 +207,29 @@ private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl) {
 									.type();
 		
 	return new CellModel(uri, name, type);
+
+}
+
+
+private static Attributes<CellModel> attributesFrom(Collection<? extends XSAttributeUse> rawAttributes) {
+
+	Attributes<CellModel> attributes = new OrderedMap<CellModel>(rawAttributes.size());
+
+	rawAttributes.forEach(a -> {
+								XSAttributeDecl attributeDecl = a.getDecl();
+								CellModel cellModel = cellModelFrom(attributeDecl);
+								attributes.addAttribute(attributeDecl.getName(), cellModel);
+	});
+
+	return attributes;
+}
+
+
+private static Attributes<CellModel> attributesFrom(XSElementDecl elem) {
+	
+	Collection<? extends XSAttributeUse> rawAttributes = rawAttributes(elem);
+
+	return attributesFrom(rawAttributes);
 
 }
 

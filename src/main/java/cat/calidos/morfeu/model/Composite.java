@@ -28,8 +28,8 @@ public interface Composite<T> {
 public List<T> children();
 
 
-/** we may not have any (we are a composite instance, it's just that we don't have children at the moment) */
-public boolean hasChildren();
+/** how many children do we have */
+public int size();
 
 
 /** @return child element at position i */

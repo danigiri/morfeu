@@ -44,11 +44,11 @@ public void setup() {
 public void testChildren() {
 
 	assertTrue(composite.children().isEmpty());
-	assertFalse(composite.hasChildren());
+	assertEquals(0, composite.size());
 	
 	assertTrue(composite.addChild("foo", "bar"));
 	assertFalse(composite.children().isEmpty());
-	assertTrue(composite.hasChildren());
+	assertEquals(1, composite.size());
 	
 	assertEquals("bar", composite.children().get(0));
 	
@@ -66,7 +66,7 @@ public void testChildren() {
 		
 	assertEquals(2, composite.clearChildren().size());
 	assertTrue(composite.children().isEmpty());
-	assertFalse(composite.hasChildren());
+	assertEquals(0, composite.size());
 	
 }
 

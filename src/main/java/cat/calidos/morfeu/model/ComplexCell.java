@@ -61,8 +61,8 @@ public boolean addChild(String name, Cell c) {
 
 
 @Override
-public boolean hasChildren() {
-	return children.hasChildren();
+public int size() {
+	return children.size();
 }
 
 

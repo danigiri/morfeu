@@ -77,4 +77,16 @@ protected boolean validateIntegers(Object content) {
 	return isValid;
 }
 
+
+/* (non-Javadoc)
+* @see java.lang.Object#toString()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public String toString() {
+	return "["+name+", "+(isSimple() ? "simple]" : "complex]");
+}
+
+
+
+
 }

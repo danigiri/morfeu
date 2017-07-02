@@ -36,6 +36,7 @@ import com.sun.xml.xsom.XSSchemaSet;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Type;
 import dagger.Lazy;
 
@@ -89,12 +90,13 @@ public void testBuildComplexCellModelFrom() {
 public void testAttributesOf() {
 	
 	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
-	Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
+//	Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
 	Type type = provideElementType(elem);
 	Collection<? extends XSAttributeUse> rawAttributes = CellModelModule.rawAttributes(elem);
-
 	doReturn(rawAttributes).when(mockAttributesProducer).get();
+
 	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, mockAttributesProducer);
+	assertNotNull(attributes);
 	assertEquals(1, attributes.size());
 	CellModel attribute = attributes.attribute(0);
 	assertNotNull(attribute);
@@ -106,6 +108,19 @@ public void testAttributesOf() {
 	assertTrue(attributeType.isSimple());
 	assertEquals("textField", attributeType.getName());
 		
+}
+
+
+@Test
+public void testChildrenOf() {
+
+	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
+	Type type = provideElementType(elem);
+	
+	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type);
+	assertEquals("row", children.child("row").getName());
+
+	// CONTINUE HERE HERE HERE TEST THAT THE STRUCTURE HAS BEEN CREATED RIGHT
 }
 
 

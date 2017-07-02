@@ -121,10 +121,6 @@ public List<T> children() {
 	return attributes();	// reuse implementation
 }
 
-@Override
-public boolean hasChildren() {
-	return hasAttributes();	// reuse implementation
-}
 
 @Override
 public T child(int i) {
@@ -147,6 +143,22 @@ public List<T> clearChildren() {
 @Override
 public boolean addChild(String key, T c) {
 	return addAttribute(key,c);		// reuse implementation
+}
+
+
+
+
+/* (non-Javadoc)
+* @see java.lang.Object#toString()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public String toString() {
+
+	StringBuilder s = new StringBuilder("{\n");
+	// inefficent but only used in debugging
+	keys.forEach(k -> s.append(k +":" +values.get(k) + ","));
+	s.append("}");
+	return s.toString();
 }
 
 
