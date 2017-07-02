@@ -78,6 +78,18 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 
 
 @Provides
+public static Type getTypeFrom(XSElementDecl elem) {
+	
+	return DaggerTypeComponent.builder()
+								.withDefaultName(elem.getName())
+								.withXSType(elem.getType())
+								.build()
+								.type();
+			
+}
+
+
+@Provides
 public static  Attributes<CellModel> attributesOf(XSElementDecl elem, 
 												  Type t,
 												  Lazy<Collection<? extends XSAttributeUse>> attributesProducer) {
@@ -90,7 +102,8 @@ public static  Attributes<CellModel> attributesOf(XSElementDecl elem,
 
 	rawAttributes.forEach(a -> {
 								XSAttributeDecl attributeDecl = a.getDecl();
-								attributes.addAttribute(attributeDecl.getName(), cellModelFrom(attributeDecl));
+								CellModel cellModel = cellModelFrom(attributeDecl);
+								attributes.addAttribute(attributeDecl.getName(), cellModel);
 	});
 
 	return attributes;
@@ -115,20 +128,9 @@ public static Composite<CellModel> childrenOf(Type t) {
 }
 
 
-
 @Provides
 public static URI getDefaultURI(XSElementDecl elem) throws RuntimeException {
-	
-	Locator locator = elem.getLocator();
-	try {
-	
-		return new URI(locator.getSystemId());
-		
-	} catch (URISyntaxException e) {
-		log.error("What the heck, URI '{}' of element '{}' is not valid ", locator.getSystemId(), elem.getName());
-		throw new RuntimeException("Somehow we failed to create URI of element "+elem.getName(), e);
-	}
-
+	return getDefaultURIFrom(elem.getLocator(), elem.getName());
 }
 
 
@@ -144,9 +146,32 @@ public static List<CellModel> attributes(XSElementDecl elem) {
 
 
 private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl) {
-	CONTINUE HERE
-	// TODO Auto-generated method stub
-	return null;
+
+	String name = xsAttributeDecl.getName();
+	URI uri = getDefaultURIFrom(xsAttributeDecl.getLocator(), name);
+	
+	Type type = DaggerTypeComponent.builder()
+									.withDefaultName(name)
+									.withXSType(xsAttributeDecl.getType())
+									.build()
+									.type();
+		
+	return new CellModel(uri, name, type);
+
+}
+
+
+private static URI getDefaultURIFrom(Locator locator, String name) throws RuntimeException {
+	//TODO: create the correct uri with an aditional parameter
+	try {
+		
+		return new URI(locator.getSystemId());
+		
+	} catch (URISyntaxException e) {
+		log.error("What the heck, URI '{}' of element '{}' is not valid ", locator.getSystemId(), name);
+		throw new RuntimeException("Somehow we failed to create URI of element "+name, e);
+	}
+
 }
 
 

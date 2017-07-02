@@ -44,7 +44,7 @@ public void testProduceRequest() throws Exception {
 }
 
 
-//@Test
+//@Test FIXME: this test hangs
 public void testGetchHttpData() throws Exception {
 
 	//FIXME: this is ridiculously exposing implementation details, is there no other way? move to helper and reuse

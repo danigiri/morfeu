@@ -66,10 +66,15 @@ public boolean hasAttribute(String name) {
 }
 
 
-
 @Override
 public List<T> attributes() {
 	return new ArrayList<T>(values.values());
+}
+
+
+@Override
+public int size() {
+	return values.size();
 }
 
 

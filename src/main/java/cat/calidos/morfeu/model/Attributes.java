@@ -29,6 +29,8 @@ boolean hasAttribute(String name);
 
 List<T> attributes();
 
+int size();
+
 T attribute(int i);
 
 T attribute(String name);
@@ -39,6 +41,7 @@ T attribute(String name);
 boolean addAttribute(String name, T a);
 
 List<T> clearAttributes();
+
 
 
 }

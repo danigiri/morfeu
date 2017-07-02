@@ -45,7 +45,7 @@ public class TypeModule {
 protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 
 @Provides
-public static Type buildType(@Named("TypeDefaultName") String defaultName, XSType xsType) {
+public static Type buildType(String defaultName, XSType xsType) {
 	
 	Locator locator = xsType.getLocator();
 	URI u = null;

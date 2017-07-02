@@ -51,8 +51,15 @@ public boolean hasAttribute(String name) {
 }
 
 
+@Override
 public List<CellModel> attributes() {
 	return attributes.attributes();
+}
+
+
+@Override
+public int size() {
+	return attributes.size();
 }
 
 
