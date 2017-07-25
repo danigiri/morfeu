@@ -62,27 +62,13 @@ public void setup() throws Exception {
 
 
 @Test
-public void testBuildCellModelFrom() {
+public void testProvideCellModel() throws Exception {
 	
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
-	Type type = provideElementType(elem);
-
-	CellModel cellModel = CellModelModule.buildCellModelFrom(modelURI, elem, type);
+	CellModel cellModel = cellModelFrom(modelURI, "test");
 	assertNotNull(cellModel);
 	assertEquals("test", cellModel.getName());
-	assertEquals(type, cellModel.getType());
-				
-}
-
-
-@Test
-public void testBuildComplexCellModelFrom() {
-
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
-	Type type = provideElementType(elem);
+	assertEquals("test-type", cellModel.getType().getName()); // default name for inner types is <elem>-type
 		
-	CellModelModule.buildComplexCellModelFrom(modelURI, elem, type, null, null);
-
 }
 
 
@@ -118,7 +104,8 @@ public void testChildrenOf() {
 	Type type = provideElementType(elem);
 	
 	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type);
-	assertEquals("row", children.child("row").getName());
+	CellModel row = children.child("row");
+	assertEquals("row", row.getName());
 
 	// CONTINUE HERE HERE HERE TEST THAT THE STRUCTURE HAS BEEN CREATED RIGHT
 }
@@ -130,16 +117,6 @@ public void testGetDefaultTypeName() throws Exception {
 	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
 	assertEquals("test-type", CellModelModule.getDefaultTypeName(elem));
 
-}
-
-
-private Type provideElementType(XSElementDecl elem) {
-
-	return DaggerTypeComponent.builder()	//awfully convenient to inject the dependencies, ok on integration tests
-			.withDefaultName("default-type-name")
-			.withXSType(elem.getType())
-			.build()
-			.type();
 }
 
 

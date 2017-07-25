@@ -34,6 +34,10 @@ public CellModel(URI u, String name, Type type) {
 }
 
 
+public boolean isComplex() {
+	return false;
+}
+
 public Type getType() {
 	return type;
 }

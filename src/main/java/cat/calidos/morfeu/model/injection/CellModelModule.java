@@ -61,32 +61,33 @@ private static final String DEFAULT_TYPE_POSTFIX = "-type";
 protected final static Logger log = LoggerFactory.getLogger(CellModelModule.class);
 
 
+//FIXME: move to dagger friendly providers
 @Provides
-public static CellModel buildCellModelFrom(URI u, XSElementDecl elem, Type t) {
+public static CellModel provideCellModel(XSElementDecl elem) {
+	
+	Type t = getTypeFrom(elem);
+	URI u = getDefaultURI(elem);
+	if(t.isSimple()) {
 
-	return new CellModel(u, elem.getName(), t);
+		return buildCellModelFrom(u, elem, t);
 
+	} else {
+		Attributes<CellModel> attributes = attributesFrom(elem);
+		Composite<CellModel> children = childrenOf(elem, t);
+		
+		return buildComplexCellModelFrom(u, elem, t, attributes, children);
+		
+	}
+	
 }
 
-
-@Provides
-public static ComplexCellModel buildComplexCellModelFrom(URI u, 
-														 XSElementDecl elem, 
-														 Type t,  
-														 Attributes<CellModel> attributes, 
-														 Composite<CellModel> children) {
-	
-	
-	return new ComplexCellModel(u, elem.getName(), t, attributes, children);
-	
-}
 
 
 @Provides
 public static Type getTypeFrom(XSElementDecl elem) {
 	
 	return DaggerTypeComponent.builder()
-								.withDefaultName(elem.getName())
+								.withDefaultName(elem.getName()+DEFAULT_TYPE_POSTFIX)
 								.withXSType(elem.getType())
 								.build()
 								.type();
@@ -141,7 +142,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t) {
 	
 	System.err.println("TYPE:"+t);
 	XSTerm termType = contentType.asParticle().getTerm();			// recursive case, go through all children
-	LinkedList<XSTerm> termTypes = new LinkedList<XSTerm>();
+	LinkedList<XSTerm> termTypes = new LinkedList<XSTerm>();		// this is a list of all the terms left to process
 	termTypes.add(termType);
 	while (!termTypes.isEmpty()) {
 		termType = termTypes.removeFirst();
@@ -152,7 +153,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t) {
 			System.err.print("\t["+typeModelGroup.getSize()+"]");
 		} else {
 			XSElementDecl child = termType.asElementDecl();
-			CellModel childCellModel = cellModelFrom(child);
+			CellModel childCellModel = provideCellModel(child);
 			children.addChild(childCellModel.getName(), childCellModel);
 		}
 	
@@ -173,25 +174,6 @@ public static URI getDefaultURI(XSElementDecl elem) throws RuntimeException {
 @Provides @Named("TypeDefaultName")
 public static String getDefaultTypeName(XSElementDecl elem) {
 	return elem.getName()+DEFAULT_TYPE_POSTFIX;
-}
-
-
-private static CellModel cellModelFrom(XSElementDecl elem) {
-	
-	Type t = getTypeFrom(elem);
-	URI u = getDefaultURI(elem);
-	if(t.isSimple()) {
-
-		return buildCellModelFrom(u, elem, t);
-
-	} else {
-		Attributes<CellModel> attributes = attributesFrom(elem);
-		Composite<CellModel> children = childrenOf(elem, t);
-		
-		return buildComplexCellModelFrom(u, elem, t, attributes, children);
-		
-	}
-	
 }
 
 
@@ -245,6 +227,26 @@ private static URI getDefaultURIFrom(Locator locator, String name) throws Runtim
 		throw new RuntimeException("Somehow we failed to create URI of element "+name, e);
 	}
 
+}
+
+
+
+private static CellModel buildCellModelFrom(URI u, XSElementDecl elem, Type t) {
+	
+	return new CellModel(u, elem.getName(), t);
+
+}
+
+
+
+private static ComplexCellModel buildComplexCellModelFrom(URI u, 
+														 XSElementDecl elem, 
+														 Type t,  
+														 Attributes<CellModel> attributes, 
+														 Composite<CellModel> children) {
+		
+	return new ComplexCellModel(u, elem.getName(), t, attributes, children);
+	
 }
 
 

@@ -14,30 +14,34 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.model;
 
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.junit.Test;
 
-import com.sun.xml.xsom.XSSchemaSet;
-
-import cat.calidos.morfeu.model.Model;
-
+import cat.calidos.morfeu.model.injection.ModelTezt;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CellModuleTest extends ModelTezt {
+public class ComplexCellModelntTest extends ModelTezt {
 
 
-//@Test
-public void testBuildCell() throws Exception {
-
-	//TODO: complete test
-
+@Test
+public void testSimpleToComplex() throws Exception {
+	
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	CellModel cellModel = complexCellModelFrom(modelURI, "test");
+	
+	assertTrue(cellModel.isComplex());
+	ComplexCellModel extractedCellModel = ComplexCellModel.from(cellModel);
+	assertNotNull(extractedCellModel);
+	
 }
+
 
 }

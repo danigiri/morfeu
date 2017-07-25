@@ -26,10 +26,15 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
+import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.ComplexCellModel;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -66,5 +71,36 @@ protected XSSchemaSet parseSchemaFrom(URI uri)
 
 }
 
+
+protected Type provideElementType(XSElementDecl elem) {
+
+	return DaggerTypeComponent.builder()	//awfully convenient to inject the dependencies, ok on integration tests
+			.withDefaultName("default-type-name")
+			.withXSType(elem.getType())
+			.build()
+			.type();
 	
+}
+
+
+protected CellModel cellModelFrom(URI u, String name) throws Exception {
+
+	XSSchemaSet schemaSet = parseSchemaFrom(u);
+	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, name);
+
+	return CellModelModule.provideCellModel(elem);
+	
+}
+
+
+protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Exception {
+	
+	XSSchemaSet schemaSet = parseSchemaFrom(u);
+	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, name);
+
+	return ComplexCellModel.from(CellModelModule.provideCellModel(elem));	// from simple to complex
+	
+}
+
+
 }

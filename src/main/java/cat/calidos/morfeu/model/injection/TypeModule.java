@@ -63,11 +63,6 @@ public static Type buildType(String defaultName, XSType xsType) {
 }
 
 
-@Provides
-public static XSType xsTypeFrom(XSElementDecl elem) {
-	return elem.getType();
-}
-
 // STASHED REFERENCE
 // get the types from a complex type
 //XSComplexType complexType = xsType.asComplexType();

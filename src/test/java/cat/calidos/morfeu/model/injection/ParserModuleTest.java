@@ -18,12 +18,9 @@ package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
 
 import com.sun.xml.xsom.parser.XSOMParser;
 
