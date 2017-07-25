@@ -38,6 +38,17 @@ public boolean isComplex() {
 	return false;
 }
 
+
+public boolean isSimple() {
+	return !isComplex();	// for convenience and readability
+}
+
+
+public ComplexCellModel asComplexCellModel() {
+	throw new ClassCastException("Tried to access simple cell model as complex ("+getName()+")");
+}
+
+
 public Type getType() {
 	return type;
 }
@@ -48,9 +59,7 @@ public Type getType() {
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 public String toString() {
-
 	return "["+name+", ("+type+")]";
-	
 }
 
 

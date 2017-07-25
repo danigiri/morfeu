@@ -88,17 +88,16 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, name);
 
-	return CellModelModule.provideCellModel(elem);
+	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();
 	
 }
 
 
 protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Exception {
 	
-	XSSchemaSet schemaSet = parseSchemaFrom(u);
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, name);
-
-	return ComplexCellModel.from(CellModelModule.provideCellModel(elem));	// from simple to complex
+	CellModel cellModel = cellModelFrom(u, name);
+	
+	return ComplexCellModel.from(cellModel);	// from simple to complex
 	
 }
 

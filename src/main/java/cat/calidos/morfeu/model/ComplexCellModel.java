@@ -48,6 +48,16 @@ public boolean isComplex() {
 }
 
 
+
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.CellModel#asComplexCellModel()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public ComplexCellModel asComplexCellModel() {
+	return this;
+}
+
+
 public Attributes<CellModel> attributes() {
 	return attributes;
 }
@@ -81,11 +91,13 @@ public String toString() {
 
 
 public static ComplexCellModel from(CellModel m) {
+	
 	if (m.isComplex()) {
 		return (ComplexCellModel)m;
 	} else {
 		throw new IllegalArgumentException("Tried to extract complex cell model from a simple one ("+m.getName()+"");
 	}
+	
 }
 
 }

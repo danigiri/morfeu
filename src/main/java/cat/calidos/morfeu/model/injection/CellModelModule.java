@@ -63,23 +63,43 @@ protected final static Logger log = LoggerFactory.getLogger(CellModelModule.clas
 
 //FIXME: move to dagger friendly providers
 @Provides
-public static CellModel provideCellModel(XSElementDecl elem) {
-	
-	Type t = getTypeFrom(elem);
-	URI u = getDefaultURI(elem);
+public static CellModel provideCellModel(Type t,
+										 @Named("SimpleInstance") Provider<CellModel> provCellModule,
+										 @Named("ComplexInstance") Provider<ComplexCellModel> provComplexCellModule) {
+
 	if(t.isSimple()) {
-
-		return buildCellModelFrom(u, elem, t);
-
-	} else {
-		Attributes<CellModel> attributes = attributesFrom(elem);
-		Composite<CellModel> children = childrenOf(elem, t);
 		
-		return buildComplexCellModelFrom(u, elem, t, attributes, children);
+		return provCellModule.get();
+	
+	} else {
+
+		return provComplexCellModule.get();
 		
 	}
 	
 }
+
+
+@Provides @Named("SimpleInstance")
+public static CellModel buildCellModelFrom(URI u, XSElementDecl elem, Type t) {
+	
+	return new CellModel(u, elem.getName(), t);
+
+}
+
+
+@Provides @Named("ComplexInstance")
+public static ComplexCellModel buildComplexCellModelFrom(URI u, 
+														 XSElementDecl elem, 
+														 Type t,  
+														 Attributes<CellModel> attributes, 
+														 Composite<CellModel> children) {
+		
+	return new ComplexCellModel(u, elem.getName(), t, attributes, children);
+	
+}
+
+
 
 
 
@@ -153,7 +173,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t) {
 			System.err.print("\t["+typeModelGroup.getSize()+"]");
 		} else {
 			XSElementDecl child = termType.asElementDecl();
-			CellModel childCellModel = provideCellModel(child);
+			CellModel childCellModel = DaggerCellModelComponent.builder().withElement(child).build().cellModel();
 			children.addChild(childCellModel.getName(), childCellModel);
 		}
 	
@@ -227,26 +247,6 @@ private static URI getDefaultURIFrom(Locator locator, String name) throws Runtim
 		throw new RuntimeException("Somehow we failed to create URI of element "+name, e);
 	}
 
-}
-
-
-
-private static CellModel buildCellModelFrom(URI u, XSElementDecl elem, Type t) {
-	
-	return new CellModel(u, elem.getName(), t);
-
-}
-
-
-
-private static ComplexCellModel buildComplexCellModelFrom(URI u, 
-														 XSElementDecl elem, 
-														 Type t,  
-														 Attributes<CellModel> attributes, 
-														 Composite<CellModel> children) {
-		
-	return new ComplexCellModel(u, elem.getName(), t, attributes, children);
-	
 }
 
 

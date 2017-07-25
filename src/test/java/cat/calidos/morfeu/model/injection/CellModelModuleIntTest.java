@@ -36,6 +36,7 @@ import com.sun.xml.xsom.XSSchemaSet;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Type;
 import dagger.Lazy;
@@ -64,11 +65,49 @@ public void setup() throws Exception {
 @Test
 public void testProvideCellModel() throws Exception {
 	
-	CellModel cellModel = cellModelFrom(modelURI, "test");
-	assertNotNull(cellModel);
-	assertEquals("test", cellModel.getName());
-	assertEquals("test-type", cellModel.getType().getName()); // default name for inner types is <elem>-type
+	CellModel test = cellModelFrom(modelURI, "test");							// TEST
+	checkComplexCellModel(test, "test", "test-type");	// default name for anonymous types is <elem>-type
+	
+	ComplexCellModel testComplex = test.asComplexCellModel();
+	assertNotNull(testComplex);
+	assertEquals(1, testComplex.attributes().size());
+	assertEquals(1, testComplex.children().size());
+	
+	CellModel textAttribute = testComplex.attributes().attribute("text");		// TEST . TEXT
+	checkAttribute(textAttribute, "text", "textField");
+	
+	CellModel row = testComplex.children().child("row");						// TEST -> ROW
+	checkComplexCellModel(row, "row", "rowCell");	// not anonymous type
+
+	ComplexCellModel rowComplex = row.asComplexCellModel();
+	assertNotNull(rowComplex);
+	assertEquals(1, rowComplex.attributes().size());
+	assertEquals(1, rowComplex.children().size());
+	
+	CellModel numberAttribute = rowComplex.attributes().attribute("number");	// TEST -> ROW . NUMBER
+	assertNotNull(numberAttribute);
+	assertEquals("number", numberAttribute.getName());
+	assertEquals("numberField", numberAttribute.getType().getName());
+	assertTrue(numberAttribute.isSimple());
+	
+	CellModel col = rowComplex.children().child("col");							// TEST -> ROW -> COL
+	checkComplexCellModel(col, "col", "colCell");
+	
+	ComplexCellModel colComplex = col.asComplexCellModel();
+	assertNotNull(colComplex);
+	assertEquals(0, colComplex.attributes().size());
+	assertEquals(2, colComplex.children().size());
+	
+	CellModel testFromCol = colComplex.children().child("test");				// TEST -> ROW -> COL -> TEST
+	checkComplexCellModel(testFromCol, "test", "testCell");
+	
+	ComplexCellModel testFromColComplex = testFromCol.asComplexCellModel();
+	assertNotNull(testFromColComplex);
+	assertEquals(2, testFromColComplex.attributes().size());
+	assertEquals(0, testFromColComplex.children().size());
 		
+	assertNotNull(colComplex.children().child("test2"));						// TEST -> ROW -> COL -> TEST2
+	
 }
 
 
@@ -85,15 +124,11 @@ public void testAttributesOf() {
 	assertNotNull(attributes);
 	assertEquals(1, attributes.size());
 	CellModel attribute = attributes.attribute(0);
-	assertNotNull(attribute);
-	assertEquals("text", attribute.getName());
-	assertEquals(attribute, attributes.attribute("text"));
-	
-	Type attributeType = attribute.getType();
-	assertNotNull(attributeType);
-	assertTrue(attributeType.isSimple());
-	assertEquals("textField", attributeType.getName());
-		
+	checkAttribute(attribute, "text", "textField");
+
+	attribute = attributes.attribute("text");
+	checkAttribute(attribute, "text", "textField");
+
 }
 
 
@@ -106,8 +141,8 @@ public void testChildrenOf() {
 	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type);
 	CellModel row = children.child("row");
 	assertEquals("row", row.getName());
-
-	// CONTINUE HERE HERE HERE TEST THAT THE STRUCTURE HAS BEEN CREATED RIGHT
+	assertEquals(row, children.child(0));
+	
 }
 
 
@@ -116,6 +151,26 @@ public void testGetDefaultTypeName() throws Exception {
 	
 	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
 	assertEquals("test-type", CellModelModule.getDefaultTypeName(elem));
+
+}
+
+
+private void checkComplexCellModel(CellModel m, String name, String typeName) {
+	
+	assertNotNull(m);
+	assertEquals(name, m.getName());
+	assertEquals(typeName, m.getType().getName());
+	assertTrue(m.isComplex());
+
+}
+
+
+private void checkAttribute(CellModel a, String name, String typeName) {
+
+	assertNotNull(a);
+	assertEquals(name, a.getName());
+	assertEquals(typeName, a.getType().getName());
+	assertTrue(a.isSimple());
 
 }
 
