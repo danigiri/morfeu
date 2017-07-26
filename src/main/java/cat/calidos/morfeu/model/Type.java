@@ -28,8 +28,8 @@ public class Type extends RemoteResource {
 protected XSType xsType;
 
 public Type(URI u, String name, XSType xsType) {
-
-	super(u, name);
+	//TODO: extract description for types from annotation
+	super(u, name, "FILL DESC");
 	
 	this.xsType = xsType;
 	

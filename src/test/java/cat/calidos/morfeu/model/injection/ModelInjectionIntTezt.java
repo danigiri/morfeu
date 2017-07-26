@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 import cat.calidos.morfeu.model.Document;
@@ -35,9 +36,10 @@ protected String uriModuleForPath(String path) {
 protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException, ParsingException, FetchingException {
 	
 	String doc1Path = uriModuleForPath(path);
-	URIModule uriModule = new URIModule(doc1Path);
+	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
+
 	DocumentComponent docComponent = DaggerDocumentComponent.builder()
-										.URIModule(uriModule)
+										.from(uri)
 										.withPrefix("")
 										.build();
 	

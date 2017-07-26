@@ -16,25 +16,30 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
 import java.util.concurrent.ExecutionException;
+
+import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ValidationException;
-import dagger.producers.ProductionSubcomponent;
+import dagger.BindsInstance;
+import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ModelModule.class})
+@ProductionComponent(modules={ModelModule.class, ParserModule.class, ListeningExecutorServiceModule.class})
 public interface ModelComponent {
 
 ListenableFuture<Model> model() throws ValidationException, ExecutionException;
 
-@ProductionSubcomponent.Builder
+@ProductionComponent.Builder
 interface Builder {
-	ModelComponent builder();
+	@BindsInstance Builder from(@Named("ModelURI") URI u);
+	ModelComponent build();
 }
 
 }

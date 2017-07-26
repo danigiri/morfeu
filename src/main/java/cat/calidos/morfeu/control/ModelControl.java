@@ -22,66 +22,59 @@ import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.model.injection.DaggerDocumentComponent;
+import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.model.injection.DaggerModelComponent;
 import cat.calidos.morfeu.model.injection.DaggerURIComponent;
-import cat.calidos.morfeu.model.injection.URIModule;
 import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentControl extends Control {
-
-protected final static Logger log = LoggerFactory.getLogger(DocumentControl.class);
+public class ModelControl extends Control{
 
 
-public static String loadDocument(String prefix, String path) {
+protected final static Logger log = LoggerFactory.getLogger(ModelControl.class);
+
+public static String loadModel(String prefix, String path) {
+
+	log.trace("ModelControl::loadModel('{}', '{}')", prefix, path);
 	
-	log.trace("DocumentControl::loadDocument('{}', '{}')", prefix, path);
-	
-	Document document = null;
+	Model model = null;
 	String problem = "";
+	
 	try {
 		
 		URI uri = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
-		document = DaggerDocumentComponent.builder()
-											.from(uri)
-											.withPrefix(prefix)
-											.build()
-											.produceDocument()
-											.get();
-		document.validate();
-				
+		model = DaggerModelComponent.builder()
+										.from(uri)
+										.build()
+										.model()
+										.get();
+		
 	} catch (InterruptedException e) {
-		problem = "Interrupted processing document '"+path+"' ("+e.getMessage()+")";		
+		problem = "Interrupted processing model '"+path+"' ("+e.getMessage()+")";	
 	} catch (ExecutionException e) {
 		e.printStackTrace();
 		Throwable root = MorfeuUtils.findRootCauseFrom(e);
-		problem = "Problem processing document '"+path+"' ("+root.getMessage()+")";
+		problem = "Problem processing model '"+path+"' ("+root.getMessage()+")";
 	} catch (ValidationException e) {
-		problem = "Problem validating document '"+path+"' ("+e.getMessage()+")";
+		problem = "Problem validating model '"+path+"' ("+e.getMessage()+")";
 	} catch (FetchingException e) {
-		problem = "Problem fetching data for document '"+path+"' ("+e.getMessage()+")";
-	} catch (ParsingException e) {
-		problem = "Problem parsing document '"+path+"' ("+e.getMessage()+")";
+		problem = "Problem fetching data for model '"+path+"' ("+e.getMessage()+")";
 	}
-
+	
 	if (problem.length()>0) {
 		log.error(problem);
 	}
 
-	if (document!=null) {
-	
-		return render("templates/document.twig", document, problem);
-
-	} else  {
-
-		return render("templates/document-problem.twig", new Object(), problem);	// no data, so passing empty object
+	if (model!=null) {
 		
+		return render("templates/model.twig", model, problem);
+		
+	} else {
+		return render("templates/model-problem.twig", new Object(), problem);
 	}
 	
 }

@@ -25,12 +25,14 @@ import java.util.List;
 *//////////////////////////////////////////////////////////////////////////////
 public class ComplexCell extends Cell implements Composite<Cell> {
 
+
+
 public ComplexCell(URI u, String name, String desc, Composite<Cell> children) {
 	
-	super(u, name);
+	super(u, name, desc);
 	
-	this.desc = desc;
 	this.children = children;
+
 }
 
 protected Composite<Cell> children;

@@ -19,6 +19,7 @@ package cat.calidos.morfeu.model.injection;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Rule;
@@ -45,17 +46,15 @@ import dagger.producers.Produced;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelTezt {
 
-protected static final String MODEL_NAMESPACE = "";
-
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 @Mock Produced<XSOMParser> parserProducer;
 
-protected Model parseURI(URI u) throws ConfigurationException, InterruptedException, ExecutionException, ParsingException, FetchingException {
+protected Model parseModelFrom(URI u) throws ConfigurationException, InterruptedException, ExecutionException, ParsingException, FetchingException {
 		
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 		
-	//TODO: complete model tests
-	return ModelModule.produceModel(u, schemaSet, null);
+	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet);
+	return ModelModule.produceModel(u, "Test Model", schemaSet, rootCellModels);
 		
 }
 
@@ -86,7 +85,7 @@ protected Type provideElementType(XSElementDecl elem) {
 protected CellModel cellModelFrom(URI u, String name) throws Exception {
 
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, name);
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 
 	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();
 	

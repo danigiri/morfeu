@@ -11,7 +11,16 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   </context-param>
 
 
-	<!-- Document -->
+	<!-- It is important to distinguish between 'raw' content (RESOURCES_PREFIX) from data processed and by
+		 enriched by the servlets themselves.
+		 For example, in the default maven jetty configuration:
+		 	[/morfeu/documents/]test-resources/documents/document1.json will invoke the servlet and then the 
+	 	 servlet will go and fetch the raw data from 
+	 	 	[RESOURCES_PREFIX]test-resources/documents/document1.json
+	 	 then it will process it and enrich it in any way necessary. Usually the content will be a superset of
+	 	 the raw data. -->
+
+	<!-- Documents -->
 	<servlet>
     	<display-name>document-servlet</display-name>
     	<servlet-name>DocumentsServlet</servlet-name>
@@ -22,5 +31,19 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     	<servlet-name>DocumentsServlet</servlet-name>
     	<url-pattern>/documents/*</url-pattern>
   	</servlet-mapping>
+	
+	
+	<!-- Models -->
+	<servlet>
+    	<display-name>model-servlet</display-name>
+    	<servlet-name>ModelsServlet</servlet-name>
+   		<servlet-class>cat.calidos.morfeu.webapp.ModelsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+    	<servlet-name>ModelsServlet</servlet-name>
+    	<url-pattern>/models/*</url-pattern>
+  	</servlet-mapping>
+	
 	
 </web-app>

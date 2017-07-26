@@ -30,14 +30,20 @@ public class Model extends RemoteResource {
 
 protected XSSchemaSet schema;
 protected List<CellModel> roots;
+public static final String MODEL_NAMESPACE = "";
 
 
-public Model(URI u, XSSchemaSet s, List<CellModel> rootTypes) {
-	super(u, u.getPath().substring(u.getPath().lastIndexOf("/")));
+public Model(URI u, String desc, XSSchemaSet s, List<CellModel> rootTypes) {
+	super(u, u.getPath().substring(u.getPath().lastIndexOf("/")), desc);
 
 	this.schema = s;
 	this.roots = rootTypes;
 	
+}
+
+
+public List<CellModel> getRootCellModels() {
+	return roots;
 }
 
 

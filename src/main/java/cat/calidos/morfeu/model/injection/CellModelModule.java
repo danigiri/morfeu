@@ -227,15 +227,6 @@ private static Attributes<CellModel> attributesFrom(Collection<? extends XSAttri
 }
 
 
-private static Attributes<CellModel> attributesFrom(XSElementDecl elem) {
-	
-	Collection<? extends XSAttributeUse> rawAttributes = rawAttributes(elem);
-
-	return attributesFrom(rawAttributes);
-
-}
-
-
 private static URI getDefaultURIFrom(Locator locator, String name) throws RuntimeException {
 	//TODO: create the correct uri with an aditional parameter
 	try {

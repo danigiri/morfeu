@@ -27,7 +27,9 @@ import javax.inject.Named;
 
 import org.xml.sax.SAXException;
 
+import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
@@ -49,8 +51,8 @@ public class ModelModule extends RemoteModule {
 
 
 @Produces
-public static Model produceModel(@Named("ModelURI") URI u, XSSchemaSet schemaSet, List<CellModel> rootTypes) {
-	return new Model(u, schemaSet, rootTypes);
+public static Model produceModel(@Named("ModelURI") URI u, String desc, XSSchemaSet schemaSet, List<CellModel> rootTypes) {
+	return new Model(u, desc, schemaSet, rootTypes);
 }
 
 
@@ -89,7 +91,15 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet) {
 }
 
 
-public static CellModel buildCellModel(XSElementDecl elem) {
+@Produces
+public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
+	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
+	XSAnnotation annotation = schema.getAnnotation();
+	
+	return "";
+}
+
+private static CellModel buildCellModel(XSElementDecl elem) {
 	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();
 }
 

@@ -47,7 +47,7 @@ import dagger.producers.Produces;
 /** TODO: ensure all this is actually asynchronous
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(subcomponents={ModelComponent.class, ValidatorComponent.class})
+@ProducerModule(subcomponents={ModelSubcomponent.class, ValidatorComponent.class})
 public class DocumentModule extends RemoteModule {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class);
@@ -55,7 +55,7 @@ protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class
 		
 @Produces
 public static Document produceDocument(@Named("NormalisedDocument") Document doc, 
-											  Provider<ModelComponent.Builder> modelComponentProvider,
+											  Provider<ModelSubcomponent.Builder> modelComponentProvider,
 											  Provider<ValidatorComponent.Builder> validatorComponentProvider) throws Exception {
 
 	// FIXME: what exception should we throw here?

@@ -38,6 +38,7 @@ import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import dagger.Lazy;
 
@@ -114,7 +115,7 @@ public void testProvideCellModel() throws Exception {
 @Test
 public void testAttributesOf() {
 	
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 //	Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
 	Type type = provideElementType(elem);
 	Collection<? extends XSAttributeUse> rawAttributes = CellModelModule.rawAttributes(elem);
@@ -135,7 +136,7 @@ public void testAttributesOf() {
 @Test
 public void testChildrenOf() {
 
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	Type type = provideElementType(elem);
 	
 	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type);
@@ -149,7 +150,7 @@ public void testChildrenOf() {
 @Test
 public void testGetDefaultTypeName() throws Exception {
 	
-	XSElementDecl elem = schemaSet.getElementDecl(MODEL_NAMESPACE, "test");
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	assertEquals("test-type", CellModelModule.getDefaultTypeName(elem));
 
 }

@@ -17,7 +17,6 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,14 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.DocumentControl;
+import cat.calidos.morfeu.control.ModelControl;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentsServlet extends MorfeuServlet {
+public class ModelsServlet extends MorfeuServlet {
 
-protected final static Logger log = LoggerFactory.getLogger(DocumentsServlet.class);
+protected final static Logger log = LoggerFactory.getLogger(ModelsServlet.class);
 
 
 /* (non-Javadoc)
@@ -43,18 +42,12 @@ protected final static Logger log = LoggerFactory.getLogger(DocumentsServlet.cla
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	String path = normalisedPathFrom(req);
-	log.trace("DocumentsServlet::doGet '[{}]{}'", resourcesPrefix, path);
+	log.trace("ModelsServlet::doGet '[{}]{}'", resourcesPrefix, path);
 	
 	resp.setContentType("application/json");
-	
-	String doc = DocumentControl.loadDocument(resourcesPrefix, path);
-	PrintWriter out = resp.getWriter();
-	out.print(doc);
-	out.close();
+
+	String model = ModelControl.loadModel(resourcesPrefix, path);
 	
 }
-
-
-
 
 }

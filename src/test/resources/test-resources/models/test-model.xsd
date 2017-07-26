@@ -4,6 +4,7 @@
 
 	<xs:annotation>
 		<xs:documentation>
+		Description goes here
 		</xs:documentation>
 	</xs:annotation>
 

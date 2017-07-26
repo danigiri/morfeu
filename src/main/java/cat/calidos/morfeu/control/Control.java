@@ -14,39 +14,22 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.control;
 
-import java.net.URI;
-
-import org.junit.Test;
-
-import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentTest {
+public class Control {
 
-
-@Test(expected=ValidationException.class)
-public void testEmptyValidator() throws Exception {
-	
-	String site = "http://foo.com";
-	String path = "/whatever.json";
-	URI uri = new URI(site+path);
-	URI modelURI = new URI("/relative.xsd");
-	URI contentURI = new URI("/content.xsd");
-	Document doc = new Document(uri, "name", "desc");
-	doc.setModelURI(modelURI);
-	doc.setContentURI(contentURI);
-	//notice we do not set a validator for this document
-
-	doc.validate();
-
-}
-
-
-
+	protected static String render(String template, Object value, String problem) {
+		return DaggerViewComponent.builder()
+									.withTemplate(template)
+									.withValue(value)
+									.withProblem(problem)
+									.build()
+									.render();
+	}
 
 }

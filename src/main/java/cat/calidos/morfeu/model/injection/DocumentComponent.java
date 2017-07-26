@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+
 import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -30,7 +32,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={DocumentModule.class, URIModule.class, HttpClientModule.class, ParserModule.class, 
+@ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, ParserModule.class, 
 							  ListeningExecutorServiceModule.class})
 public interface DocumentComponent {
 
@@ -39,10 +41,8 @@ ListenableFuture<Document> produceDocument() throws ParsingException, FetchingEx
 @ProductionComponent.Builder
 interface Builder {
 
-	Builder URIModule(URIModule m);
-	
+	@BindsInstance Builder from(URI u);
 	@BindsInstance Builder withPrefix(@Named("Prefix") String p);
-	
 	DocumentComponent build();
 
 }

@@ -20,6 +20,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import cat.calidos.morfeu.problems.FetchingException;
+import dagger.Module;
+import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -29,15 +31,8 @@ import dagger.producers.Produces;
 @ProducerModule
 public class URIModule {
 
-
-private String uri;
-
-public URIModule(String u) {
-	this.uri = u;
-}
-
 @Produces
-URI uri() throws FetchingException {
+public static URI uri(String uri) throws FetchingException {
 	System.err.println("[module] Producer for URI called");
 	try {
 		return new URI(uri);

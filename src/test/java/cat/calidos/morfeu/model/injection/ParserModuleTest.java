@@ -21,7 +21,9 @@ import static org.junit.Assert.*;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
+import org.xml.sax.ErrorHandler;
 
+import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
@@ -39,7 +41,9 @@ public void testProduceSAXParserFactory() throws Exception {
 public void testProduceSchemaParser() throws Exception {
 	
 	SAXParserFactory factory = ParserModule.produceSAXParserFactory();
-	XSOMParser parser = ParserModule.produceSchemaParser(factory);
+	ErrorHandler errorHandler = ParserModule.errorHandler();
+	AnnotationParserFactory annotationParserFactory = ParserModule.annotationParserFactory();
+	XSOMParser parser = ParserModule.produceSchemaParser(factory, errorHandler, annotationParserFactory);
 	assertNotNull(parser);
 	assertNotNull(parser.getErrorHandler());
 	

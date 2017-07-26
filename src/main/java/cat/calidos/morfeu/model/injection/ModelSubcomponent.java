@@ -14,39 +14,27 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
+import java.util.concurrent.ExecutionException;
 
-import org.junit.Test;
+import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ValidationException;
+import dagger.producers.ProductionSubcomponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentTest {
+@ProductionSubcomponent(modules={ModelModule.class})
+public interface ModelSubcomponent {
 
+ListenableFuture<Model> model() throws ValidationException, ExecutionException;
 
-@Test(expected=ValidationException.class)
-public void testEmptyValidator() throws Exception {
-	
-	String site = "http://foo.com";
-	String path = "/whatever.json";
-	URI uri = new URI(site+path);
-	URI modelURI = new URI("/relative.xsd");
-	URI contentURI = new URI("/content.xsd");
-	Document doc = new Document(uri, "name", "desc");
-	doc.setModelURI(modelURI);
-	doc.setContentURI(contentURI);
-	//notice we do not set a validator for this document
-
-	doc.validate();
-
+@ProductionSubcomponent.Builder
+interface Builder {
+	ModelSubcomponent builder();
 }
-
-
-
 
 }

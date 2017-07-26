@@ -26,8 +26,8 @@ public class CellModel extends RemoteResource {
 protected Type type;
 
 public CellModel(URI u, String name, Type type) {
-	
-	super(u, name);
+	//TODO: come up with a useful description or leave empty
+	super(u, name, "DESC");
 	
 	this.type = type;
 	

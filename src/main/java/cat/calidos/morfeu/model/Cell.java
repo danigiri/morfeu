@@ -20,49 +20,18 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class Cell extends RemoteResource {
 
-protected String desc;
-
-
 public Cell(URI u) {
 	super(u);
 }
 
-public Cell(URI u, String name) {
-	super(u, name);
-}
-
 
 public Cell(URI u, String name, String desc) {
-	super(u, name);
-
-	this.desc = desc;
-
-}
-
-
-public String getDesc() {
-	return desc;
-}
-
-
-// TODO: is this specific setter needed?
-@JsonProperty("name") 
-public void setName(String name) {
-	this.name = name;
-}
-
-
-//TODO: is this specific setter needed?
-@JsonProperty("desc") 
-public void setDesc(String desc) {
-	this.desc = desc;
+	super(u, name, desc);
 }
 
 }

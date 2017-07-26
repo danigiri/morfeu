@@ -27,7 +27,9 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import com.sun.xml.xsom.parser.XSOMParser;
+import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
 import cat.calidos.morfeu.problems.ConfigurationException;
 
@@ -66,15 +68,30 @@ public static SAXParserFactory produceSAXParserFactory() throws ConfigurationExc
 
 
 @Produces
-public static XSOMParser produceSchemaParser(SAXParserFactory factory) {
+public static XSOMParser produceSchemaParser(SAXParserFactory factory, 
+											 ErrorHandler parserErrorHandler, 
+											 AnnotationParserFactory annotationParserFactory) {
 	
 	log.trace("[Producing XSOMParser]");
 
     XSOMParser parser = new XSOMParser(factory);
-    parser.setErrorHandler(new SchemaParserErrorHandler());
-   
+    parser.setErrorHandler(parserErrorHandler);
+    parser.setAnnotationParser(annotationParserFactory);
+    
     return parser;
     
+}
+
+
+@Produces
+public static ErrorHandler errorHandler() {
+	return new SchemaParserErrorHandler();
+}
+
+
+@Produces
+public static AnnotationParserFactory annotationParserFactory() {
+	return new DomAnnotationParserFactory();
 }
 
 

@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 
 import java.net.URISyntaxException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.problems.FetchingException;
@@ -29,19 +30,23 @@ import cat.calidos.morfeu.problems.FetchingException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class URIModuleTest {
 
+private String uri;
+
+
+@Before
+public void setup() {
+	uri = "http://foo.com";
+}
+
 @Test
 public void testURI() throws FetchingException {
-
-	String uri = "http://foo.com";
-	URIModule module = new URIModule(uri);
-	assertEquals(uri, module.uri().toString());
-
+	assertEquals(uri, URIModule.uri(uri).toString());
 }
 
 
 @Test(expected = FetchingException.class)
 public void testURIException() throws FetchingException {
-	new URIModule("://foo.com").uri();
+	URIModule.uri(":/foo.com");
 }
 
 }

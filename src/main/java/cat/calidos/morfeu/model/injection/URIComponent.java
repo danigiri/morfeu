@@ -22,13 +22,26 @@ import java.net.URISyntaxException;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.problems.FetchingException;
+import dagger.BindsInstance;
+import dagger.Component;
+import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 * Note we're using a producer as we can declare explicit exceptions
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionComponent(modules={URIModule.class, ListeningExecutorServiceModule.class})
 public interface URIComponent {
 
-URI uri() throws FetchingException;
+ListenableFuture<URI> uri() throws FetchingException;
+
+@ProductionComponent.Builder
+interface Builder {
+
+	@BindsInstance Builder from(String uri);
+	URIComponent builder();
+	
+}
+
 
 }
