@@ -12,8 +12,8 @@
 	<xs:simpleType name="numberField">
 		<xs:annotation>
 			<xs:documentation>
+			numberField desc
 			</xs:documentation>
-
 		</xs:annotation>
 
 		<xs:restriction base="xs:integer" />
@@ -22,6 +22,7 @@
 	<xs:simpleType name="colField">
 		<xs:annotation>
 			<xs:documentation>
+			colField desc
 			</xs:documentation>
 
 		</xs:annotation>
@@ -35,6 +36,7 @@
 	<xs:simpleType name="textField">
 		<xs:annotation>
 			<xs:documentation>
+			textField desc
 			</xs:documentation>
 		</xs:annotation>
 

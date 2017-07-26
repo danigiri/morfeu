@@ -20,12 +20,17 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Named;
 
 import org.xml.sax.SAXException;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
@@ -51,7 +56,10 @@ public class ModelModule extends RemoteModule {
 
 
 @Produces
-public static Model produceModel(@Named("ModelURI") URI u, String desc, XSSchemaSet schemaSet, List<CellModel> rootTypes) {
+public static Model produceModel(@Named("ModelURI") URI u, 
+								 @Named("desc") String desc, 
+								 XSSchemaSet schemaSet, 
+								 List<CellModel> rootTypes) {
 	return new Model(u, desc, schemaSet, rootTypes);
 }
 
@@ -91,13 +99,40 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet) {
 }
 
 
-@Produces
+@Produces @Named("desc")
 public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
+	
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
+	Element annotationDOM = (Element)annotation.getAnnotation();	// as we are using the DomAnnotationParserFactory from XSOM
+	String desc = contentOfAnnotationNamed(annotationDOM, "mf:desc").trim();
 	
-	return "";
+	return desc;
+
 }
+
+
+// reverse breadth-first search
+private static String contentOfAnnotationNamed(Element annotations, String name) {
+	String content = "";
+	LinkedList<Node> pending = new LinkedList<Node>();
+	pending.add(annotations);
+	while (pending.size()>0 && content.length()==0) {
+		Node currentNode = pending.pop();
+		if (currentNode.getNodeName().equals(name)) {
+			content = currentNode.getTextContent();
+		} else {
+			if (currentNode.hasChildNodes()) {
+				NodeList childNodes = currentNode.getChildNodes();
+				for (int i=0;i<childNodes.getLength();i++) {
+					pending.add(childNodes.item(i));
+				}
+			}
+		}
+	}
+	return content;
+}
+
 
 private static CellModel buildCellModel(XSElementDecl elem) {
 	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();

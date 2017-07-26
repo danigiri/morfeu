@@ -54,7 +54,8 @@ protected Model parseModelFrom(URI u) throws ConfigurationException, Interrupted
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 		
 	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet);
-	return ModelModule.produceModel(u, "Test Model", schemaSet, rootCellModels);
+	String desc = ModelModule.descriptionFromSchemaAnnotation(schemaSet);
+	return ModelModule.produceModel(u, desc, schemaSet, rootCellModels);
 		
 }
 

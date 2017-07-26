@@ -43,7 +43,7 @@ public void testParseModel() throws Exception {
 
 	Model model = parseModelFrom(modelURI);
 	assertEquals(modelURI, model.getUri());
-	
+	assertEquals("Description of test model", model.getDesc());
 	
 	List<CellModel> rootCellModels = model.getRootCellModels();
 	assertNotNull(rootCellModels);

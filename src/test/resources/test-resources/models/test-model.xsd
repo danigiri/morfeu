@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:mf="http://dani.calidos.com/morfeu/metadata"
 		   >
 
 	<xs:annotation>
-		<xs:documentation>
-		Description goes here
-		</xs:documentation>
+		<xs:appinfo>
+			<mf:desc>Description of test model</mf:desc>
+		</xs:appinfo>
 	</xs:annotation>
 
 	 <xs:include schemaLocation="test-types.xsd" />

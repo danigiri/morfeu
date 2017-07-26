@@ -13,6 +13,7 @@
 	<xs:complexType name="testCell">
 		<xs:annotation>
 			<xs:documentation>
+			testCell desc
 			</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="text" type="textField" />
@@ -23,6 +24,7 @@
 	<xs:complexType name="colCell">
 		<xs:annotation>
 			<xs:documentation>
+			colCell desc
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -35,6 +37,7 @@
 	<xs:complexType name="rowCell">
 		<xs:annotation>
 			<xs:documentation>
+			rowcell desc
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>

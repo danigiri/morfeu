@@ -83,7 +83,8 @@ public static CellModel provideCellModel(Type t,
 @Provides @Named("SimpleInstance")
 public static CellModel buildCellModelFrom(URI u, XSElementDecl elem, Type t) {
 	
-	return new CellModel(u, elem.getName(), t);
+	WORK CONTINUES HERE
+	return new CellModel(u, elem.getName(), desc, t);
 
 }
 

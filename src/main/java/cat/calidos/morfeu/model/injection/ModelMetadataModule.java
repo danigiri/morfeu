@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,21 +14,14 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.model.injection;
 
-import java.util.List;
 
-import javax.inject.Inject;
-
-/** A catalogue is a logical entity
+/** Model Metadata helper module to enrich the model definitions with useful information
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////
-public class Catalogue { //extends RemoteResource {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class ModelMetadataModule {
 
-	protected List<Document> documents;
-	protected List<Cell> templatePartikles;
-	
-//	@Inject public Catalogue(URI u, String catalogueJson) {
-//	}
+WORK ALSO CONTINUES HERE
 
 }
