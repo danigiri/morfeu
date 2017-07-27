@@ -44,7 +44,7 @@ public boolean isSimple() {
 }
 
 
-public ComplexCellModel asComplexCellModel() {
+public ComplexCellModel asComplex() {
 	throw new ClassCastException("Tried to access simple cell model as complex ("+getName()+")");
 }
 

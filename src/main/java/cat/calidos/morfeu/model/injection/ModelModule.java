@@ -104,7 +104,7 @@ public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
 	
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
-	Element annotationDOM = (Element)annotation.getAnnotation();	// as we are using the DomAnnotationParserFactory from XSOM
+	Node annotationDOM = (Node)annotation.getAnnotation();	// as we are using the DomAnnotationParserFactory from XSOM
 	String desc = DaggerModelMetadataComponent.builder().from(annotationDOM).named("m:desc").build().value();
 	
 	return desc;

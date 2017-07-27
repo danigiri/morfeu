@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,9 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	resp.setContentType("application/json");
 
 	String model = ModelControl.loadModel(resourcesPrefix, path);
+	PrintWriter out = resp.getWriter();
+	out.print(model);
+	out.close();
 	
 }
 

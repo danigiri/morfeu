@@ -67,12 +67,6 @@ public boolean hasAttribute(String name) {
 
 
 @Override
-public List<T> attributes() {
-	return new ArrayList<T>(values.values());
-}
-
-
-@Override
 public int size() {
 	return values.size();
 }
@@ -105,9 +99,9 @@ public boolean addAttribute(String name, T a) {
 
 
 @Override
-public List<T> clearAttributes() {
+public List<T> clear() {
 
-	List<T> oldAttributes = attributes();
+	List<T> oldAttributes = asList();
 	values.clear();
 	keys.clear();
 	
@@ -117,8 +111,8 @@ public List<T> clearAttributes() {
 
 
 @Override
-public List<T> children() {
-	return attributes();	// reuse implementation
+public List<T> asList() {
+	return new ArrayList<T>(values.values());
 }
 
 
@@ -131,12 +125,6 @@ public T child(int i) {
 @Override
 public T child(String name) {
 	return get(name, CHILD);
-}
-
-
-@Override
-public List<T> clearChildren() {
-	return clearAttributes();
 }
 
 

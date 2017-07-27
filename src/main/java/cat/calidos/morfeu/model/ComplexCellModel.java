@@ -53,7 +53,7 @@ public boolean isComplex() {
 * @see cat.calidos.morfeu.model.CellModel#asComplexCellModel()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
-public ComplexCellModel asComplexCellModel() {
+public ComplexCellModel asComplex() {
 	return this;
 }
 

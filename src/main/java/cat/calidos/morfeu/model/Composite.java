@@ -25,7 +25,7 @@ import java.util.List;
 public interface Composite<T> {
 
 /** @return all children of this composite object */
-public List<T> children();
+public List<T> asList();
 
 
 /** how many children do we have */
@@ -40,7 +40,7 @@ public T child(String name);
 
 
 /** Clear all the children and return the old list */
-public List<T> clearChildren();
+public List<T> clear();
 
 
 /** add this child and return true if it was added or false if it was replacedt */

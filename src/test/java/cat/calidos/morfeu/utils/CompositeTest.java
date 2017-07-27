@@ -43,29 +43,29 @@ public void setup() {
 @Test
 public void testChildren() {
 
-	assertTrue(composite.children().isEmpty());
+	assertTrue(composite.asList().isEmpty());
 	assertEquals(0, composite.size());
 	
 	assertTrue(composite.addChild("foo", "bar"));
-	assertFalse(composite.children().isEmpty());
+	assertFalse(composite.asList().isEmpty());
 	assertEquals(1, composite.size());
 	
-	assertEquals("bar", composite.children().get(0));
+	assertEquals("bar", composite.asList().get(0));
 	
 	assertEquals("bar", composite.child(0));
 
 	assertTrue(composite.addChild("foo2", "bar2"));
-	assertEquals("bar", composite.children().get(0));
-	assertEquals("bar2", composite.children().get(1));
+	assertEquals("bar", composite.asList().get(0));
+	assertEquals("bar2", composite.asList().get(1));
 	
 	assertFalse(composite.addChild("foo2", "bar3"));
-	assertEquals("bar3", composite.children().get(1));
+	assertEquals("bar3", composite.asList().get(1));
 	
 	assertEquals("bar", composite.child(0));
 	assertEquals("bar3", composite.child(1));
 		
-	assertEquals(2, composite.clearChildren().size());
-	assertTrue(composite.children().isEmpty());
+	assertEquals(2, composite.clear().size());
+	assertTrue(composite.asList().isEmpty());
 	assertEquals(0, composite.size());
 	
 }

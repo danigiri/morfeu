@@ -27,7 +27,7 @@ boolean hasAttributes();
 
 boolean hasAttribute(String name);
 
-List<T> attributes();
+List<T> asList();
 
 int size();
 
@@ -40,7 +40,7 @@ T attribute(String name);
 */
 boolean addAttribute(String name, T a);
 
-List<T> clearAttributes();
+List<T> clear();
 
 
 

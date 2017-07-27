@@ -69,7 +69,7 @@ public void testProvideCellModel() throws Exception {
 	CellModel test = cellModelFrom(modelURI, "test");							// TEST
 	checkComplexCellModel(test, "test", "test-type");	// default name for anonymous types is <elem>-type
 	
-	ComplexCellModel testComplex = test.asComplexCellModel();
+	ComplexCellModel testComplex = test.asComplex();
 	assertNotNull(testComplex);
 	assertEquals(1, testComplex.attributes().size());
 	assertEquals(1, testComplex.children().size());
@@ -80,7 +80,7 @@ public void testProvideCellModel() throws Exception {
 	CellModel row = testComplex.children().child("row");						// TEST -> ROW
 	checkComplexCellModel(row, "row", "rowCell");	// not anonymous type
 
-	ComplexCellModel rowComplex = row.asComplexCellModel();
+	ComplexCellModel rowComplex = row.asComplex();
 	assertNotNull(rowComplex);
 	assertEquals(1, rowComplex.attributes().size());
 	assertEquals(1, rowComplex.children().size());
@@ -94,7 +94,7 @@ public void testProvideCellModel() throws Exception {
 	CellModel col = rowComplex.children().child("col");							// TEST -> ROW -> COL
 	checkComplexCellModel(col, "col", "colCell");
 	
-	ComplexCellModel colComplex = col.asComplexCellModel();
+	ComplexCellModel colComplex = col.asComplex();
 	assertNotNull(colComplex);
 	assertEquals(0, colComplex.attributes().size());
 	assertEquals(2, colComplex.children().size());
@@ -102,7 +102,7 @@ public void testProvideCellModel() throws Exception {
 	CellModel testFromCol = colComplex.children().child("test");				// TEST -> ROW -> COL -> TEST
 	checkComplexCellModel(testFromCol, "test", "testCell");
 	
-	ComplexCellModel testFromColComplex = testFromCol.asComplexCellModel();
+	ComplexCellModel testFromColComplex = testFromCol.asComplex();
 	assertNotNull(testFromColComplex);
 	assertEquals(2, testFromColComplex.attributes().size());
 	assertEquals(0, testFromColComplex.children().size());

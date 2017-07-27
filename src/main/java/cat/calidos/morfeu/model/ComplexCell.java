@@ -39,8 +39,8 @@ protected Composite<Cell> children;
 
 
 @Override
-public List<Cell> children() {
-	return children.children();
+public List<Cell> asList() {
+	return children.asList();
 }
 
 
@@ -51,8 +51,8 @@ public Cell child(int i) {
 
 
 @Override
-public List<Cell> clearChildren() {
-	return children.clearChildren();
+public List<Cell> clear() {
+	return children.clear();
 }
 
 
