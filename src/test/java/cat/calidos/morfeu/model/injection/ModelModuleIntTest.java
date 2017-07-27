@@ -17,18 +17,16 @@
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import java.net.URI;
 import java.util.List;
 
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.problems.ValidationException;
+
 
 /**
 * @author daniel giribet

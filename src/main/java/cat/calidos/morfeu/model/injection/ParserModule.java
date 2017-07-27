@@ -85,7 +85,7 @@ public static XSOMParser produceSchemaParser(SAXParserFactory factory,
 
 @Produces
 public static ErrorHandler errorHandler() {
-	return new SchemaParserErrorHandler();
+	return new LoggingSchemaParserErrorHandler();
 }
 
 
@@ -104,7 +104,7 @@ public static ObjectMapper produceJSONObjectMapper() {
 }
 
 
-private static final class SchemaParserErrorHandler implements ErrorHandler {
+private static final class LoggingSchemaParserErrorHandler implements ErrorHandler {
 
 	@Override
 	public void warning(SAXParseException e) throws SAXException {

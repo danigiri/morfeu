@@ -16,36 +16,29 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.net.URI;
-import java.util.concurrent.ExecutionException;
+import javax.inject.Named;
 
-import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
+import org.w3c.dom.Node;
+
+import dagger.BindsInstance;
+import dagger.Component;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelInjectionIntTezt {
+@Component(modules=ModelMetadataModule.class)
+public interface ModelMetadataComponent {
 
-protected String uriModuleForPath(String path) {
-	return this.getClass().getClassLoader().getResource(path).toString();
-}
+String value();
 
+@Component.Builder
+interface Builder {
 
-protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException, ParsingException, FetchingException {
+	@BindsInstance Builder from(Node a);
+	@BindsInstance Builder named(@Named("tag") String tag);
 	
-	String doc1Path = uriModuleForPath(path);
-	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
-
-	DocumentComponent docComponent = DaggerDocumentComponent.builder()
-										.from(uri)
-										.withPrefix("")
-										.build();
-	
-	return docComponent.produceDocument().get();
+	ModelMetadataComponent build();
 
 }
-
 
 }

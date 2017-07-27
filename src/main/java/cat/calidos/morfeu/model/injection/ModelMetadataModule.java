@@ -16,12 +16,50 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.util.LinkedList;
+
+import javax.inject.Named;
+
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import dagger.Module;
+import dagger.Provides;
+import dagger.producers.ProducerModule;
 
 /** Model Metadata helper module to enrich the model definitions with useful information
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Module
 public class ModelMetadataModule {
 
-WORK ALSO CONTINUES HERE
+//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
+@Provides
+public String produceContentOfAnnotation(Node annotationNode, @Named("tag") String tag) {
+	
+	String content = "";
+	LinkedList<Node> pending = new LinkedList<Node>();
+	pending.add(annotationNode);
+	while (pending.size()>0 && content.length()==0) {
+		
+		Node currentNode = pending.pop();
+		if (currentNode.getNodeName().equals(tag)) {
+			content = currentNode.getTextContent();
+		} else {
+			if (currentNode.hasChildNodes()) {
+				NodeList childNodes = currentNode.getChildNodes();
+				for (int i=0;i<childNodes.getLength();i++) {
+					pending.add(childNodes.item(i));
+				}
+			}
+		}
+		
+	}
+	
+	// this will probably have lots of leading/trailing whitespace stuff, we'll leave that outside our scope
+	return content;
+	
+}
+
 
 }

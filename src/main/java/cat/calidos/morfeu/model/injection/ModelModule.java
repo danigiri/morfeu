@@ -105,32 +105,10 @@ public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
 	Element annotationDOM = (Element)annotation.getAnnotation();	// as we are using the DomAnnotationParserFactory from XSOM
-	String desc = contentOfAnnotationNamed(annotationDOM, "mf:desc").trim();
+	String desc = DaggerModelMetadataComponent.builder().from(annotationDOM).named("m:desc").build().value();
 	
 	return desc;
 
-}
-
-
-// reverse breadth-first search
-private static String contentOfAnnotationNamed(Element annotations, String name) {
-	String content = "";
-	LinkedList<Node> pending = new LinkedList<Node>();
-	pending.add(annotations);
-	while (pending.size()>0 && content.length()==0) {
-		Node currentNode = pending.pop();
-		if (currentNode.getNodeName().equals(name)) {
-			content = currentNode.getTextContent();
-		} else {
-			if (currentNode.hasChildNodes()) {
-				NodeList childNodes = currentNode.getChildNodes();
-				for (int i=0;i<childNodes.getLength();i++) {
-					pending.add(childNodes.item(i));
-				}
-			}
-		}
-	}
-	return content;
 }
 
 

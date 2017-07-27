@@ -82,9 +82,8 @@ public static CellModel provideCellModel(Type t,
 
 @Provides @Named("SimpleInstance")
 public static CellModel buildCellModelFrom(URI u, XSElementDecl elem, Type t) {
-	
-	WORK CONTINUES HERE
-	return new CellModel(u, elem.getName(), desc, t);
+	// TODO: add cell description from metadata
+	return new CellModel(u, elem.getName(), "DESC GOES HERE", t);
 
 }
 
@@ -96,7 +95,7 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 														 Attributes<CellModel> attributes, 
 														 Composite<CellModel> children) {
 		
-	return new ComplexCellModel(u, elem.getName(), t, attributes, children);
+	return new ComplexCellModel(u, elem.getName(), "DESC GOES HERE", t, attributes, children);
 	
 }
 
@@ -209,7 +208,7 @@ private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl) {
 									.build()
 									.type();
 		
-	return new CellModel(uri, name, type);
+	return new CellModel(uri, name, "DESC GOES HERE", type);
 
 }
 
