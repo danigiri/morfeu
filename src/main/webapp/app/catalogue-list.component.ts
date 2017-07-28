@@ -14,7 +14,8 @@
  *   limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 import { Widget } from './widget.class';
@@ -26,6 +27,7 @@ import { DocumentService } from './document.service';
 
 import { EventService } from './events/event.service';
 import { StatusEvent } from './events/status.event';
+import { CatalogueLoadEvent } from './events/catalogue-load.event';
 import { DocumentSelectionEvent } from './events/document-selection.event';
 
 
@@ -58,10 +60,11 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
                 ]
 })
     
-export class CatalogueListComponent extends Widget {
+export class CatalogueListComponent extends Widget implements OnDestroy {
     
 catalogues: Catalogue[];
 currentCatalogue: Catalogue;
+eventSubscription: Subscription;
 
 constructor(private catalogueService: CatalogueService, eventService: EventService) {
     super(eventService);
@@ -69,9 +72,20 @@ constructor(private catalogueService: CatalogueService, eventService: EventServi
 
 ngOnInit() {
 
+    console.log("StatusComponent::ngOnInit()");
+    this.eventSubscription = this.events.service.of( CatalogueLoadEvent ).subscribe( s => {
+        console.log("-> catalogue-list component gets load event for '"+s.url+"'");
+        this.fetchCatalogue(s.url);
+    });
+
+}
+
+
+fetchCatalogue(url: string) {
+
     this.events.service.publish(new StatusEvent("Fetching catalogue list"));
     // TODO: make this configurable and into an event
-    this.catalogueService.getAll("/morfeu/test-resources/catalogues.json")
+    this.catalogueService.getAll(url)
     .subscribe(c => { 
                      
                      this.catalogues = c;
@@ -80,7 +94,6 @@ ngOnInit() {
                error => this.events.problem(error),
                () => this.events.service.publish(new StatusEvent("Fetching catalogue list", StatusEvent.DONE))
                );
-
 }
 
 selectCatalogue(c:Catalogue) {
@@ -89,6 +102,11 @@ selectCatalogue(c:Catalogue) {
     this.events.service.publish(new DocumentSelectionEvent(null));  // reset document selection
     this.currentCatalogue = c;
 
+}
+
+//TODO: we should pull this up to the widget superclass
+ngOnDestroy() {
+    this.eventSubscription.unsubscribe();
 }
 
 

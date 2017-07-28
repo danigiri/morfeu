@@ -31,7 +31,9 @@
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
       // drag and drop
-      'ng2-dnd': 'node_modules/ng2-dnd/bundles/index.umd.js'
+      'ng2-dnd': 'node_modules/ng2-dnd/bundles/index.umd.js',
+      // tree view
+   	  'ng2-tree': 'node_modules/ng2-tree/bundles/ng2-tree.umd.min.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {

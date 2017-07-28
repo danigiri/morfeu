@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 
 import { CatalogueService } from './catalogue.service';
 import { CatalogueListComponent } from './catalogue-list.component';
@@ -24,7 +24,10 @@ import { DocumentService } from './document.service';
 import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
 
+import { Widget } from './widget.class';
+
 import { EventService } from './events/event.service';
+import { CatalogueLoadEvent } from './events/catalogue-load.event';
 
 
 @Component({
@@ -36,12 +39,14 @@ import { EventService } from './events/event.service';
       
       <div class="container-fluid">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
               <catalogue-list></catalogue-list>
               <document></document>
             </div>
             <div class="col-md-8">
                 <content></content>
+            </div>
+            <div class="col-md-2">
             </div>
           </div>
           <div class="row">
@@ -60,4 +65,23 @@ import { EventService } from './events/event.service';
                      ]
 })
 
-export class AppComponent {}
+export class AppComponent extends Widget implements AfterViewInit {
+    
+constructor(eventService: EventService) {
+    super(eventService);
+}
+
+
+// this hoock is called "after Angular initializes the component's views and child views." so everyone has
+// been able to to register
+ngAfterViewInit() {
+    
+    console.log("AppComponent::ngAfterViewInit()");
+    
+    // this event loads the default catalogue and starts everything in motion
+    this.events.service.publish(new CatalogueLoadEvent("/morfeu/test-resources/catalogues.json"));
+    
+}
+
+}
+

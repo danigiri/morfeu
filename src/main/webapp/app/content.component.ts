@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { Document } from './document.class';
@@ -41,15 +41,21 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
     ]
 })
 
-export class ContentComponent extends Widget {
+
+export class ContentComponent extends Widget implements OnInit, OnDestroy {
     
 document: Document;
 documentSubscription: Subscription;
 
+
 constructor(eventService: EventService) {
     super(eventService);
-    
-    console.log("DocumentComponent::constructor()");
+}
+
+
+ngOnInit() {
+
+    console.log("DocumentComponent::ngOnInit()");
     this.documentSubscription = this.events.service.of(DocumentSelectionEvent).subscribe(
             selected => {
                 this.document = selected.document;
@@ -58,6 +64,7 @@ constructor(eventService: EventService) {
     );
     
 }
+
 
 ngOnDestroy() {
     this.documentSubscription.unsubscribe();
