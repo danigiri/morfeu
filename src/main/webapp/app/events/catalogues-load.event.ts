@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-export class CatalogueLoadEvent {
+export class CataloguesLoadEvent {
     
 constructor(public url: string) {}
 }

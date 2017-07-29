@@ -27,7 +27,7 @@ import { StatusComponent } from './status.component';
 import { Widget } from './widget.class';
 
 import { EventService } from './events/event.service';
-import { CatalogueLoadEvent } from './events/catalogue-load.event';
+import { CataloguesLoadEvent } from './events/catalogues-load.event';
 
 
 @Component({
@@ -73,13 +73,26 @@ constructor(eventService: EventService) {
 
 
 // this hoock is called "after Angular initializes the component's views and child views." so everyone has
-// been able to to register
+// been able to to register their listeners to appropriate events
 ngAfterViewInit() {
     
     console.log("AppComponent::ngAfterViewInit()");
     
     // this event loads the default catalogue and starts everything in motion
-    this.events.service.publish(new CatalogueLoadEvent("/morfeu/test-resources/catalogues.json"));
+    //
+    // See https://hackernoon.com/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error-e3fd9ce7dbb4
+    // the problem here is that we have created components with specific data bindings (for instance the
+    // animation state of the status bar, which is setup to be hidden) and the load event will change some of
+    // them. The changes will happen after the lifecycle stage of (re)setting data-bound input properties of
+    // components) and will end up in an inconsistent state when verified. Therefore we're scheduling this to 
+    // be fired asynchronously in a micro-event that runs after the data-binding verification step
+    // Also see https://angular.io/guide/lifecycle-hooks
+    // 
+    // This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
+    // events can use binding properties that have been setup properly
+    
+    let allCatalogues = "/morfeu/test-resources/catalogues.json";
+    Promise.resolve(null).then(() => this.events.service.publish(new CataloguesLoadEvent(allCatalogues)));
     
 }
 

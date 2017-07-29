@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 import { trigger, state, style, animate, transition } from '@angular/animations';
   
@@ -50,7 +50,7 @@ import { StatusEvent } from './events/status.event';
     ]
 })
 
-export class StatusComponent implements OnDestroy {
+export class StatusComponent implements OnInit, OnDestroy {
  
 MAX_BARS = 4;
     
@@ -59,8 +59,11 @@ statuses: StatusEvent[];
 pendingStatuses : StatusEvent[];
 eventSubscription: Subscription;
 
-constructor(private eventService: EventService) {
+constructor(private eventService: EventService) {}
     
+    
+ngOnInit() {
+        
     //*ngIf="statuses.length!=0"
     console.log("StatusComponent::constructor()");
     this.statuses = new Array();

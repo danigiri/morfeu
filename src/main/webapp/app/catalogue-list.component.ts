@@ -27,7 +27,7 @@ import { DocumentService } from './document.service';
 
 import { EventService } from './events/event.service';
 import { StatusEvent } from './events/status.event';
-import { CatalogueLoadEvent } from './events/catalogue-load.event';
+import { CataloguesLoadEvent } from './events/catalogues-load.event';
 import { DocumentSelectionEvent } from './events/document-selection.event';
 
 
@@ -70,18 +70,20 @@ constructor(private catalogueService: CatalogueService, eventService: EventServi
     super(eventService);
 }
 
+
 ngOnInit() {
 
     console.log("StatusComponent::ngOnInit()");
-    this.eventSubscription = this.events.service.of( CatalogueLoadEvent ).subscribe( s => {
+    
+    this.eventSubscription = this.events.service.of( CataloguesLoadEvent ).subscribe( s => {
         console.log("-> catalogue-list component gets load event for '"+s.url+"'");
-        this.fetchCatalogue(s.url);
+        this.fetchCatalogues(s.url);
     });
 
 }
 
 
-fetchCatalogue(url: string) {
+fetchCatalogues(url: string) {
 
     this.events.service.publish(new StatusEvent("Fetching catalogue list"));
     // TODO: make this configurable and into an event
