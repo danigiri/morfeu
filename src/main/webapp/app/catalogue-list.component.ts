@@ -28,6 +28,7 @@ import { DocumentService } from './document.service';
 import { EventService } from './events/event.service';
 import { StatusEvent } from './events/status.event';
 import { CataloguesLoadEvent } from './events/catalogues-load.event';
+import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 import { DocumentSelectionEvent } from './events/document-selection.event';
 
 
@@ -50,7 +51,7 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
         </div>
       </div>
     </div>
-    <catalogue *ngIf="currentCatalogue" [selectedCatalogueUri]="currentCatalogue.uri"></catalogue>
+    <catalogue></catalogue>
     `,
     styles:[`
     #catalogue-list {}
@@ -76,8 +77,10 @@ ngOnInit() {
     console.log("StatusComponent::ngOnInit()");
     
     this.eventSubscription = this.events.service.of( CataloguesLoadEvent ).subscribe( s => {
-        console.log("-> catalogue-list component gets load event for '"+s.url+"'");
-        this.fetchCatalogues(s.url);
+       if (s.isRequested()) {
+           console.log("-> catalogue-list component gets load event for '"+s.url+"'");
+           this.fetchCatalogues(s.url);
+       }
     });
 
 }
@@ -91,6 +94,7 @@ fetchCatalogues(url: string) {
     .subscribe(c => { 
                      
                      this.catalogues = c;
+                     this.events.service.publish(new CataloguesLoadEvent(url, CataloguesLoadEvent.DONE));
                      this.events.ok();
                     },
                error => this.events.problem(error),
@@ -98,11 +102,14 @@ fetchCatalogues(url: string) {
                );
 }
 
+
 selectCatalogue(c:Catalogue) {
 
     console.log("Selected catalogue="+c.uri);
     this.events.service.publish(new DocumentSelectionEvent(null));  // reset document selection
     this.currentCatalogue = c;
+    this.events.service.publish(new CatalogueSelectionEvent(c.uri));  
+    
 
 }
 

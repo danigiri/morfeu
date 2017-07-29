@@ -14,19 +14,8 @@
  *   limitations under the License.
  */
 
-export class CataloguesLoadEvent {
-    
-public static START:boolean = true;
-public static DONE:boolean = false;
-    
-constructor(public url: string, private requested: boolean = CataloguesLoadEvent.START) {}
+export class CatalogueSelectionEvent {
 
-isRequested() {
-    return this.requested;
-}
-
-isCompleted() {
-    return !this.requested;
-}
+constructor(public url: string) {}
 
 }

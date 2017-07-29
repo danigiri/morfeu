@@ -60,9 +60,10 @@ constructor(eventService: EventService) {
     super(eventService);
 }
 
+
 ngOnInit() {
 
-    console.log("DocumentComponent::constructor()");
+    console.log("DocumentComponent::ngOnInit()");
     this.documentSubscription = this.events.service.of(DocumentSelectionEvent).subscribe(
             selected => {
                 if (selected.document!=null) {

@@ -14,7 +14,8 @@
  *   limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Subscription }   from 'rxjs/Subscription';
 
 import { Widget } from './widget.class';
 import { Catalogue } from './catalogue';
@@ -24,6 +25,7 @@ import { Document } from './document.class';
 
 import { EventService } from './events/event.service';
 import { DocumentSelectionEvent } from './events/document-selection.event';
+import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 import { StatusEvent } from './events/status.event';
 
 
@@ -67,6 +69,7 @@ export class CatalogueComponent extends Widget {
 	
 catalogue: Catalogue;
 currentDocument: Document;
+eventSubscription: Subscription;
 
 constructor(private catalogueService : CatalogueService, 
             eventService: EventService,
@@ -74,9 +77,17 @@ constructor(private catalogueService : CatalogueService,
     super(eventService);
 }
 
+ngOnInit() {
+    
+    console.log("DocumentComponent::ngOnInit()");
+    this.eventSubscription = this.events.service.of(CatalogueSelectionEvent).subscribe(
+            selected => this.selectedCatalogueUri(selected.url)
+    );
+            
+}
 
-@Input() 
-set selectedCatalogueUri(selectedCatalogueUri: string) {
+
+selectedCatalogueUri(selectedCatalogueUri: string) {
     
     this.events.service.publish(new StatusEvent("Fetching catalogue"));
     this.catalogueService.getCatalogue(selectedCatalogueUri)
@@ -88,6 +99,7 @@ set selectedCatalogueUri(selectedCatalogueUri: string) {
         this.events.problem(error);
         this.catalogue = null;
     },
+    // FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated for some reason
     () => {this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))}
     );
     

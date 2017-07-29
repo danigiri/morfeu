@@ -15,6 +15,8 @@
  */
 
 import { Component, AfterViewInit } from '@angular/core';
+import { Subscription }   from 'rxjs/Subscription';
+import { isDevMode } from '@angular/core';
 
 import { CatalogueService } from './catalogue.service';
 import { CatalogueListComponent } from './catalogue-list.component';
@@ -28,6 +30,7 @@ import { Widget } from './widget.class';
 
 import { EventService } from './events/event.service';
 import { CataloguesLoadEvent } from './events/catalogues-load.event';
+import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 
 
 @Component({
@@ -67,6 +70,8 @@ import { CataloguesLoadEvent } from './events/catalogues-load.event';
 
 export class AppComponent extends Widget implements AfterViewInit {
     
+eventSubscription: Subscription;
+    
 constructor(eventService: EventService) {
     super(eventService);
 }
@@ -90,6 +95,16 @@ ngAfterViewInit() {
     // 
     // This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
     // events can use binding properties that have been setup properly
+   
+    // THIS IS TO SPEED UP DEVELOPMENT
+    if (isDevMode()) {
+        this.eventSubscription = this.events.service.of( CataloguesLoadEvent ).subscribe( s => {
+            if (s.isCompleted()) {
+                this.events.service.publish(new CatalogueSelectionEvent("/morfeu/test-resources/catalogues/catalogue1.json"));
+            }
+        
+        });
+    }
     
     let allCatalogues = "/morfeu/test-resources/catalogues.json";
     Promise.resolve(null).then(() => this.events.service.publish(new CataloguesLoadEvent(allCatalogues)));
