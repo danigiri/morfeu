@@ -23,7 +23,7 @@ import { AppComponent }   from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
 import { ContentComponent } from './content.component';
-import { DocumentComponent } from './document.component';
+import { CellDocumentComponent } from './cell-document.component';
 import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
 
@@ -36,7 +36,7 @@ import { StatusComponent } from './status.component';
                   ,CatalogueListComponent 
                   ,CatalogueComponent 
                   ,ContentComponent 
-                  ,DocumentComponent
+                  ,CellDocumentComponent
                   ,ProblemComponent 
                   ,StatusComponent 
                 ],

@@ -14,8 +14,32 @@
  *   limitations under the License.
  */
 
-import { Document } from '../document.class';
 
-export class DocumentSelectionEvent {
-    constructor(public document: Document) {}
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { Subject }    from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
+
+import { CellDocument } from './cell-document.class';
+
+
+@Injectable()
+export class CellDocumentService {
+    
+    private document: Document;
+    
+    constructor(private http: Http) {}
+    
+    
+    getDocument(uri:string) {
+    
+        console.log("DocumentService::getDocument("+uri+")"); 
+        
+        return this.http.get(uri)
+            .map(response => response.json());
+
+    }
+   
+    
 }

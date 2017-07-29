@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,14 +14,11 @@
  *   limitations under the License.
  */
 
-import { CellDocument } from './cell-document.class';
+import { Catalogue } from '../catalogue';
 
-export class Catalogue {
-    
-    name: string;
-    uri: string;
-    desc: string;
 
-    documents: CellDocument[];
+export class CatalogueLoadedEvent {
+
+constructor(public catalogue: Catalogue) {}
 
 }

@@ -14,32 +14,10 @@
  *   limitations under the License.
  */
 
-
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { Subject }    from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
-
-import { Document } from './document.class';
-
-
-@Injectable()
-export class DocumentService {
+export class CataloguesRequestEvent {
     
-    private document: Document;
-    
-    constructor(private http: Http) {}
-    
-    
-    getDocument(uri:string) {
-    
-        console.log("DocumentService::getDocument("+uri+")"); 
-        
-        return this.http.get(uri)
-            .map(response => response.json());
-
-    }
    
-    
+constructor(public url: string) {}
+
+
 }

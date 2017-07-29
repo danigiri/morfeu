@@ -14,14 +14,15 @@
  *   limitations under the License.
  */
 
-import { CellDocument } from './cell-document.class';
-
-export class Catalogue {
+// we use an underscore not to clash with standard js object
+export class CellDocument {
     
     name: string;
     uri: string;
-    desc: string;
-
-    documents: CellDocument[];
+    kind: string;
+    modelURI: string;
+    contentURI: string;
+    valid:boolean;
+    problem: string;
 
 }

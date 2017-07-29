@@ -23,13 +23,13 @@ import { Widget } from './widget.class';
 import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
-import { DocumentService } from './document.service';
 
+import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
+import { CataloguesRequestEvent } from './events/catalogues-request.event';
+import { CataloguesLoadedEvent } from './events/catalogues-loaded.event';
+import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { EventService } from './events/event.service';
 import { StatusEvent } from './events/status.event';
-import { CataloguesLoadEvent } from './events/catalogues-load.event';
-import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
-import { DocumentSelectionEvent } from './events/document-selection.event';
 
 
 @Component({
@@ -45,8 +45,8 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
             <a *ngFor="let c of catalogues"
                  href="#" 
                 class="catalogue-list-entry list-group-item" 
-                [class.active]="c === currentCatalogue"
-                (click)="selectCatalogue(c)">
+                [class.active]="c.uri === selectedCatalogueURI"
+                (click)="clickOnCatalogue(c)">
             {{c.name}}</a>
         </div>
       </div>
@@ -64,7 +64,7 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
 export class CatalogueListComponent extends Widget implements OnDestroy {
     
 catalogues: Catalogue[];
-currentCatalogue: Catalogue;
+selectedCatalogueURI: string;
 eventSubscription: Subscription;
 
 constructor(private catalogueService: CatalogueService, eventService: EventService) {
@@ -76,42 +76,50 @@ ngOnInit() {
 
     console.log("StatusComponent::ngOnInit()");
     
-    this.eventSubscription = this.events.service.of( CataloguesLoadEvent ).subscribe( s => {
-       if (s.isRequested()) {
-           console.log("-> catalogue-list component gets load event for '"+s.url+"'");
+    this.eventSubscription = this.events.service.of( CataloguesRequestEvent ).subscribe( s => {
+           console.log("-> catalogue-list component gets request event for '"+s.url+"'");
            this.fetchCatalogues(s.url);
-       }
     });
-
+    
+    // on catalogue selection we highlight the selected catalogue
+    this.eventSubscription = this.events.service.of( CatalogueSelectionEvent ).subscribe( s => {
+        console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
+        this.markCatalogueAsSelected(s.url);
+    });
+    
 }
 
 
 fetchCatalogues(url: string) {
 
-    this.events.service.publish(new StatusEvent("Fetching catalogue list"));
+    this.selectedCatalogueURI = null;
+    this.events.service.publish(new StatusEvent("Fetching catalogues"));
     // TODO: make this configurable and into an event
     this.catalogueService.getAll(url)
     .subscribe(c => { 
                      
                      this.catalogues = c;
-                     this.events.service.publish(new CataloguesLoadEvent(url, CataloguesLoadEvent.DONE));
+                     this.events.service.publish(new CataloguesLoadedEvent(c));
                      this.events.ok();
                     },
                error => this.events.problem(error),
-               () => this.events.service.publish(new StatusEvent("Fetching catalogue list", StatusEvent.DONE))
+               () => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
                );
 }
 
 
-selectCatalogue(c:Catalogue) {
+clickOnCatalogue(c: Catalogue) {
 
-    console.log("Selected catalogue="+c.uri);
-    this.events.service.publish(new DocumentSelectionEvent(null));  // reset document selection
-    this.currentCatalogue = c;
-    this.events.service.publish(new CatalogueSelectionEvent(c.uri));  
+    console.log("Clicked on catalogue="+c.uri);
+    this.events.service.publish(new CatalogueSelectionEvent(c.uri));    // catalogue component will pick this 
     
-
 }
+
+
+markCatalogueAsSelected(uri: string) {
+    this.selectedCatalogueURI = uri;
+}
+
 
 //TODO: we should pull this up to the widget superclass
 ngOnDestroy() {

@@ -20,14 +20,14 @@ import { Subscription }   from 'rxjs/Subscription';
 import { Widget } from './widget.class';
 import { Catalogue } from './catalogue';
 import { CatalogueService } from './catalogue.service';
-import { DocumentService } from './document.service';
-import { Document } from './document.class';
+import { CellDocumentService } from './cell-document.service';
+import { CellDocument } from './cell-document.class';
 
-import { EventService } from './events/event.service';
-import { DocumentSelectionEvent } from './events/document-selection.event';
 import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
+import { CatalogueLoadedEvent } from './events/catalogue-loaded.event';
+import { EventService } from './events/event.service';
+import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { StatusEvent } from './events/status.event';
-
 
 @Component({
 	moduleId: module.id,
@@ -45,8 +45,8 @@ import { StatusEvent } from './events/status.event';
                 <a *ngFor="let d of catalogue.documents"
                     href="#" 
                     class="document-list-entry list-group-item" 
-                    [class.active]="d === currentDocument"
-                    (click)="selectdocument(d)">
+                    [class.active]="d.uri === selectedDocumentURI"
+                    (click)="clickOnDocument(d)">
                     {{d.name}}
                 </a>
         </div>
@@ -68,12 +68,10 @@ import { StatusEvent } from './events/status.event';
 export class CatalogueComponent extends Widget {
 	
 catalogue: Catalogue;
-currentDocument: Document;
+selectedDocumentURI: string;
 eventSubscription: Subscription;
 
-constructor(private catalogueService : CatalogueService, 
-            eventService: EventService,
-            private documentService: DocumentService) {
+constructor(private catalogueService : CatalogueService, eventService: EventService) {
     super(eventService);
 }
 
@@ -81,51 +79,47 @@ ngOnInit() {
     
     console.log("DocumentComponent::ngOnInit()");
     this.eventSubscription = this.events.service.of(CatalogueSelectionEvent).subscribe(
-            selected => this.selectedCatalogueUri(selected.url)
+            selected => this.loadCatalogueAt(selected.url)
+    );
+    
+    this.eventSubscription = this.events.service.of(CellDocumentSelectionEvent).subscribe(
+            selected => this.markDocumentAsSelected(selected.url)
     );
             
 }
 
 
-selectedCatalogueUri(selectedCatalogueUri: string) {
-    
+loadCatalogueAt(selectedCatalogueUri: string) {
+
+    this.selectedDocumentURI = null;
+    this.events.service.publish(new CellDocumentSelectionEvent(null));  // reset document selection
+
     this.events.service.publish(new StatusEvent("Fetching catalogue"));
     this.catalogueService.getCatalogue(selectedCatalogueUri)
-    .subscribe(c => { 
-        this.catalogue = c;
-        this.events.ok();
-    },
-    error => {
-        this.events.problem(error);
-        this.catalogue = null;
-    },
-    // FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated for some reason
-    () => {this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))}
-    );
-    
+            .subscribe(c => { 
+                this.catalogue = c;
+                this.events.service.publish(new CatalogueLoadedEvent(c));
+                this.events.ok();
+            },
+            error => {
+                this.events.problem(error);
+                this.catalogue = null;
+            },
+            // FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??
+            () => {this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))}
+        );
+        
 }
  
 
-selectdocument(d: Document) {
-        
-    console.log("Selected document="+d.uri);
-    this.currentDocument = d;                   // notice 'd' is a stub from the catalogue, not a full doc
-    this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
-    this.events.service.publish(new StatusEvent("Fetching document"));
-    this.documentService.getDocument("/morfeu/documents/"+d.uri)
-    .subscribe(d => {
-        console.log("Got document from Morfeu service ("+d.name+")");
-        this.events.service.publish(new DocumentSelectionEvent(d)); // now we have it =)
-        this.events.ok();
-    },
-    error => {
-        this.events.problem(error);
-        this.events.service.publish(new DocumentSelectionEvent(null));
-        this.currentDocument = null;
-    },
-    () =>     this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
-    );
+clickOnDocument(stub: CellDocument) {
+    console.log("Clicked on document='"+stub.uri+"' from catalogue");
+    this.events.service.publish(new CellDocumentSelectionEvent(stub.uri));
     
+}
+
+markDocumentAsSelected(uri: string) {
+    this.selectedDocumentURI = uri;
 }
 
 }

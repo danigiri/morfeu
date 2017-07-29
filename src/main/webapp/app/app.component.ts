@@ -21,16 +21,19 @@ import { isDevMode } from '@angular/core';
 import { CatalogueService } from './catalogue.service';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { ContentComponent } from './content.component';
-import { DocumentComponent } from './document.component';
-import { DocumentService } from './document.service';
+import { CellDocumentComponent } from './cell-document.component';
+import { CellDocumentService } from './cell-document.service';
 import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
 
 import { Widget } from './widget.class';
 
-import { EventService } from './events/event.service';
-import { CataloguesLoadEvent } from './events/catalogues-load.event';
+import { CataloguesRequestEvent } from './events/catalogues-request.event';
+import { CataloguesLoadedEvent } from './events/catalogues-loaded.event';
+import { CatalogueLoadedEvent } from './events/catalogue-loaded.event';
 import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
+import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { EventService } from './events/event.service';
 
 
 @Component({
@@ -64,7 +67,7 @@ import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
       `,
     providers:    [CatalogueService
                    ,EventService
-                   ,DocumentService
+                   ,CellDocumentService
                      ]
 })
 
@@ -96,18 +99,22 @@ ngAfterViewInit() {
     // This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
     // events can use binding properties that have been setup properly
    
-    // THIS IS TO SPEED UP DEVELOPMENT
+    // THIS IS TO SPEED UP DEVELOPMENT, WE SPEED THE STATE INTO THE DESIRED ONE
+    //if (false) {
     if (isDevMode()) {
-        this.eventSubscription = this.events.service.of( CataloguesLoadEvent ).subscribe( s => {
-            if (s.isCompleted()) {
-                this.events.service.publish(new CatalogueSelectionEvent("/morfeu/test-resources/catalogues/catalogue1.json"));
-            }
-        
+        this.eventSubscription = this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
+            let catalogue = loaded.catalogues[0].uri;
+            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
         });
+        this.eventSubscription = this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
+            let document = loaded.catalogue.documents[0].uri;
+            this.events.service.publish(new CellDocumentSelectionEvent(document));
+        }); 
     }
     
+    console.log("\t\t\t\t\t ** APPLICATION STARTS **");
     let allCatalogues = "/morfeu/test-resources/catalogues.json";
-    Promise.resolve(null).then(() => this.events.service.publish(new CataloguesLoadEvent(allCatalogues)));
+    Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(allCatalogues)));
     
 }
 

@@ -17,11 +17,14 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { Document } from './document.class';
+import { CellDocument } from './cell-document.class';
+import { CellDocumentService } from './cell-document.service';
 import { Widget } from './widget.class';
 
 import { EventService } from './events/event.service';
-import { DocumentSelectionEvent } from './events/document-selection.event';
+import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
+import { StatusEvent } from './events/status.event';
 
 
 @Component({
@@ -50,13 +53,13 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
    `]
 })
 
-export class DocumentComponent extends Widget implements OnInit, OnDestroy {
+export class CellDocumentComponent extends Widget implements OnInit, OnDestroy {
 
-document: Document;
+document: CellDocument;
 documentSubscription: Subscription;
+ 
 
-
-constructor(eventService: EventService) {
+constructor(eventService: EventService, private documentService: CellDocumentService) {
     super(eventService);
 }
 
@@ -64,21 +67,47 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
     console.log("DocumentComponent::ngOnInit()");
-    this.documentSubscription = this.events.service.of(DocumentSelectionEvent).subscribe(
+    
+    this.documentSubscription = this.events.service.of(CellDocumentSelectionEvent).subscribe(
             selected => {
-                if (selected.document!=null) {
-                    this.loadDocument(selected.document);
+                
+                if (selected.url!=null) {
+                    this.loadDocument(selected.url);
                 } else {
-                    this.clearDocument();
+                    this.clear();
                 }
                 
             }
     );
     
+    this.documentSubscription = this.events.service.of(CellDocumentLoadedEvent).subscribe(
+            loaded => this.display(loaded.document)
+    );
+    
+}
+
+loadDocument(url: string) {
+
+    //this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
+    this.events.service.publish(new StatusEvent("Fetching document"));
+    // notice we're using the enriched url here, as we want to display the JSON enriched data
+    this.documentService.getDocument("/morfeu/documents/"+url).subscribe(d => {
+                console.log("Got document from Morfeu service ("+d.name+")");
+                this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
+                this.events.ok();
+            },
+            error => {
+                this.events.problem(error);
+                this.events.service.publish(new CellDocumentSelectionEvent(null));
+                this.document = null;
+            },
+            () =>     this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
+        );
+
 }
 
 
-loadDocument(d: Document) {
+display(d: CellDocument) {
     console.log("-> document component gets Document ("+d.name+")");
     this.document = d;
     if (d.problem==null || d.problem!="") {
@@ -87,7 +116,7 @@ loadDocument(d: Document) {
 }
 
 
-clearDocument() {
+clear() {
     console.log("-> document component gets null document (no document selected)");
     this.document = null;
 }

@@ -14,19 +14,8 @@
  *   limitations under the License.
  */
 
-export class CataloguesLoadEvent {
-    
-public static START:boolean = true;
-public static DONE:boolean = false;
-    
-constructor(public url: string, private requested: boolean = CataloguesLoadEvent.START) {}
+import { CellDocument } from '../cell-document.class';
 
-isRequested() {
-    return this.requested;
-}
-
-isCompleted() {
-    return !this.requested;
-}
-
+export class CellDocumentLoadedEvent {
+    constructor(public document: CellDocument) {}
 }

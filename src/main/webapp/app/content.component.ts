@@ -17,11 +17,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { Document } from './document.class';
+import { CellDocument } from './cell-document.class';
 import { Widget } from './widget.class';
 
 import { EventService } from './events/event.service';
-import { DocumentSelectionEvent } from './events/document-selection.event';
+import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 
 
 @Component({
@@ -44,7 +44,7 @@ import { DocumentSelectionEvent } from './events/document-selection.event';
 
 export class ContentComponent extends Widget implements OnInit, OnDestroy {
     
-document: Document;
+document: CellDocument;
 documentSubscription: Subscription;
 
 
@@ -56,7 +56,7 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
     console.log("DocumentComponent::ngOnInit()");
-    this.documentSubscription = this.events.service.of(DocumentSelectionEvent).subscribe(
+    this.documentSubscription = this.events.service.of(CellDocumentLoadedEvent).subscribe(
             selected => {
                 this.document = selected.document;
                 
