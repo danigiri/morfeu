@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Provider;
 
@@ -57,11 +58,12 @@ import dagger.producers.Producer;
 @Module
 public class CellModelModule {
 
+private static final String NODE_SEPARATOR = "/";
+private static final String ATTRIBUTE_SEPARATOR = "@";
 private static final String DEFAULT_TYPE_POSTFIX = "-type";
 protected final static Logger log = LoggerFactory.getLogger(CellModelModule.class);
 
 
-//FIXME: move to dagger friendly providers
 @Provides
 public static CellModel provideCellModel(Type t,
 										 @Named("SimpleInstance") Provider<CellModel> provCellModule,
@@ -81,21 +83,22 @@ public static CellModel provideCellModel(Type t,
 
 
 @Provides @Named("SimpleInstance")
-public static CellModel buildCellModelFrom(URI u, XSElementDecl elem, Type t) {
+public static CellModel buildCellModelFrom(XSElementDecl elem, @Named("name") String name, Type t, URI u) {
 	// TODO: add cell description from metadata
-	return new CellModel(u, elem.getName(), "DESC GOES HERE", t);
+	return new CellModel(u, name, "DESC GOES HERE", t);
 
 }
 
 
 @Provides @Named("ComplexInstance")
-public static ComplexCellModel buildComplexCellModelFrom(URI u, 
-														 XSElementDecl elem, 
+public static ComplexCellModel buildComplexCellModelFrom(XSElementDecl elem,
+														 @Named("name") String name,
 														 Type t,  
 														 Attributes<CellModel> attributes, 
-														 Composite<CellModel> children) {
+														 Composite<CellModel> children,
+														 URI u) {
 		
-	return new ComplexCellModel(u, elem.getName(), "DESC GOES HERE", t, attributes, children);
+	return new ComplexCellModel(u, name, "DESC GOES HERE", t, attributes, children);
 	
 }
 
@@ -104,10 +107,10 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 
 
 @Provides
-public static Type getTypeFrom(XSElementDecl elem) {
+public static Type getTypeFrom(XSElementDecl elem, @Named("TypeDefaultName") String defaultName) {
 	
 	return DaggerTypeComponent.builder()
-								.withDefaultName(elem.getName()+DEFAULT_TYPE_POSTFIX)
+								.withDefaultName(defaultName)
 								.withXSType(elem.getType())
 								.build()
 								.type();
@@ -118,13 +121,14 @@ public static Type getTypeFrom(XSElementDecl elem) {
 @Provides
 public static Attributes<CellModel> attributesOf(XSElementDecl elem, 
 												  Type t,
-												  Lazy<Collection<? extends XSAttributeUse>> attributesProducer) {
+												  Lazy<Collection<? extends XSAttributeUse>> attributesProducer,
+												  URI u) {
 
 	if (t.isSimple()) {
 		return new OrderedMap<CellModel>(0);
 	}
 	Collection<? extends XSAttributeUse> rawAttributes = attributesProducer.get();
-	return attributesFrom(rawAttributes);
+	return attributesFrom(rawAttributes, u);
 
 }
 
@@ -140,7 +144,7 @@ public static Collection<? extends XSAttributeUse> rawAttributes(XSElementDecl e
 
 
 @Provides
-public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t) {
+public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u) {
 	
 	// Magic happens here: 
 	// BASE CASES:
@@ -173,7 +177,11 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t) {
 			System.err.print("\t["+typeModelGroup.getSize()+"]");
 		} else {
 			XSElementDecl child = termType.asElementDecl();
-			CellModel childCellModel = DaggerCellModelComponent.builder().withElement(child).build().cellModel();
+			CellModel childCellModel = DaggerCellModelComponent.builder()
+										.withElement(child)
+										.withURIPrefix(u.toString())
+										.build()
+										.cellModel();
 			children.addChild(childCellModel.getName(), childCellModel);
 		}
 	
@@ -186,8 +194,39 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t) {
 
 
 @Provides
-public static URI getDefaultURI(XSElementDecl elem) throws RuntimeException {
-	return getDefaultURIFrom(elem.getLocator(), elem.getName());
+public Locator locatorFrom(XSElementDecl elem) {
+	return elem.getLocator();
+}
+
+
+@Provides @Named("name")
+public String nameFrom(XSElementDecl elem) {
+	return elem.getName();
+}
+
+@Provides @Named("URIString")
+public String getURIString(Provider<Locator> locatorProvider, @Nullable String uriPrefix, @Named("name") String name) {
+	
+	String uri = (uriPrefix==null) ? locatorProvider.get().getSystemId() : uriPrefix;
+	uri += NODE_SEPARATOR+name;
+
+	return uri;
+
+}
+
+
+@Provides
+public static URI getURIFrom(@Named("URIString") String uri, @Named("name") String name) throws RuntimeException {
+	
+	try {
+		
+		return new URI(uri);
+		
+	} catch (URISyntaxException e) {
+		log.error("What the heck, URI '{}' of element '{}' is not valid ", uri, name);
+		throw new RuntimeException("Somehow we failed to create URI of element "+name, e);
+	}
+	
 }
 
 
@@ -197,10 +236,11 @@ public static String getDefaultTypeName(XSElementDecl elem) {
 }
 
 
-private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl) {
+
+private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl, URI nodeURI) {
 
 	String name = xsAttributeDecl.getName();
-	URI uri = getDefaultURIFrom(xsAttributeDecl.getLocator(), name);
+	URI attributeURI = getURIFrom(nodeURI.toString()+ATTRIBUTE_SEPARATOR+name, name);
 	
 	Type type = DaggerTypeComponent.builder()
 									.withDefaultName(name)
@@ -208,18 +248,19 @@ private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl) {
 									.build()
 									.type();
 		
-	return new CellModel(uri, name, "DESC GOES HERE", type);
+	return new CellModel(attributeURI, name, "DESC GOES HERE", type);
 
 }
 
 
-private static Attributes<CellModel> attributesFrom(Collection<? extends XSAttributeUse> rawAttributes) {
+private static Attributes<CellModel> attributesFrom(Collection<? extends XSAttributeUse> rawAttributes, 
+													URI nodeURI) {
 
 	Attributes<CellModel> attributes = new OrderedMap<CellModel>(rawAttributes.size());
 
 	rawAttributes.forEach(a -> {
 								XSAttributeDecl attributeDecl = a.getDecl();
-								CellModel cellModel = cellModelFrom(attributeDecl);
+								CellModel cellModel = cellModelFrom(attributeDecl, nodeURI);
 								attributes.addAttribute(attributeDecl.getName(), cellModel);
 	});
 
@@ -227,18 +268,12 @@ private static Attributes<CellModel> attributesFrom(Collection<? extends XSAttri
 }
 
 
-private static URI getDefaultURIFrom(Locator locator, String name) throws RuntimeException {
-	//TODO: create the correct uri with an aditional parameter
-	try {
-		
-		return new URI(locator.getSystemId());
-		
-	} catch (URISyntaxException e) {
-		log.error("What the heck, URI '{}' of element '{}' is not valid ", locator.getSystemId(), name);
-		throw new RuntimeException("Somehow we failed to create URI of element "+name, e);
-	}
-
-}
+//private static URI getDefaultURIFrom(Locator locator, @Nullable String uriPrefix, String name) throws RuntimeException {
+//
+//
+//
+//
+//}
 
 
 }

@@ -34,13 +34,16 @@ public class ComplexCellModelntTest extends ModelTezt {
 @Test
 public void testSimpleToComplex() throws Exception {
 	
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	String path = "target/test-classes/test-resources/models/test-model.xsd";
+	URI modelURI = new URI(path);
 	CellModel cellModel = complexCellModelFrom(modelURI, "test");
 	
 	assertTrue(cellModel.isComplex());
 	ComplexCellModel extractedCellModel = ComplexCellModel.from(cellModel);
 	assertNotNull(extractedCellModel);
-	
+	assertEquals("test", extractedCellModel.getName());
+	assertEquals(path+"/test", extractedCellModel.getUri().toString());
+		
 }
 
 

@@ -112,7 +112,7 @@ ngAfterViewInit() {
         }); 
     }
     
-    console.log("\t\t\t\t\t ** APPLICATION STARTS **");
+    console.log("\t\t\t\t\t **** APPLICATION STARTS ****");
     let allCatalogues = "/morfeu/test-resources/catalogues.json";
     Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(allCatalogues)));
     

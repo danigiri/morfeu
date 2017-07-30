@@ -88,7 +88,7 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 
-	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();
+	return DaggerCellModelComponent.builder().withElement(elem).withURIPrefix(u.toString()).build().cellModel();
 	
 }
 

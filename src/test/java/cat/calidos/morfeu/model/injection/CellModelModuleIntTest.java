@@ -67,7 +67,7 @@ public void setup() throws Exception {
 public void testProvideCellModel() throws Exception {
 	
 	CellModel test = cellModelFrom(modelURI, "test");							// TEST
-	checkComplexCellModel(test, "test", "test-type");	// default name for anonymous types is <elem>-type
+	checkComplexCellModel(test, "test", "test-type", modelURI+"/test");	// default name for anonymous types is <elem>-type
 	
 	ComplexCellModel testComplex = test.asComplex();
 	assertNotNull(testComplex);
@@ -75,10 +75,10 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(1, testComplex.children().size());
 	
 	CellModel textAttribute = testComplex.attributes().attribute("text");		// TEST . TEXT
-	checkAttribute(textAttribute, "text", "textField");
+	checkAttribute(textAttribute, "text", "textField", modelURI+"/test@text");
 	
 	CellModel row = testComplex.children().child("row");						// TEST -> ROW
-	checkComplexCellModel(row, "row", "rowCell");	// not anonymous type
+	checkComplexCellModel(row, "row", "rowCell", modelURI+"/test/row");	// not anonymous type
 
 	ComplexCellModel rowComplex = row.asComplex();
 	assertNotNull(rowComplex);
@@ -86,13 +86,10 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(1, rowComplex.children().size());
 	
 	CellModel numberAttribute = rowComplex.attributes().attribute("number");	// TEST -> ROW . NUMBER
-	assertNotNull(numberAttribute);
-	assertEquals("number", numberAttribute.getName());
-	assertEquals("numberField", numberAttribute.getType().getName());
-	assertTrue(numberAttribute.isSimple());
+	checkAttribute(numberAttribute, "number","numberField", modelURI+"/test/row@number");
 	
 	CellModel col = rowComplex.children().child("col");							// TEST -> ROW -> COL
-	checkComplexCellModel(col, "col", "colCell");
+	checkComplexCellModel(col, "col", "colCell", modelURI+"/test/row/col");
 	
 	ComplexCellModel colComplex = col.asComplex();
 	assertNotNull(colComplex);
@@ -100,7 +97,7 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(2, colComplex.children().size());
 	
 	CellModel testFromCol = colComplex.children().child("test");				// TEST -> ROW -> COL -> TEST
-	checkComplexCellModel(testFromCol, "test", "testCell");
+	checkComplexCellModel(testFromCol, "test", "testCell", modelURI+"/test/row/col/test");
 	
 	ComplexCellModel testFromColComplex = testFromCol.asComplex();
 	assertNotNull(testFromColComplex);
@@ -115,20 +112,22 @@ public void testProvideCellModel() throws Exception {
 @Test
 public void testAttributesOf() {
 	
-	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
+	String name = "test";
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 //	Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
 	Type type = provideElementType(elem);
 	Collection<? extends XSAttributeUse> rawAttributes = CellModelModule.rawAttributes(elem);
 	doReturn(rawAttributes).when(mockAttributesProducer).get();
 
-	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, mockAttributesProducer);
+	URI uri = CellModelModule.getURIFrom(modelURI+"/"+name, name);
+	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, mockAttributesProducer, uri);
 	assertNotNull(attributes);
 	assertEquals(1, attributes.size());
 	CellModel attribute = attributes.attribute(0);
-	checkAttribute(attribute, "text", "textField");
+	checkAttribute(attribute, "text", "textField", modelURI+"/test@text");
 
 	attribute = attributes.attribute("text");
-	checkAttribute(attribute, "text", "textField");
+	checkAttribute(attribute, "text", "textField", modelURI+"/test@text");
 
 }
 
@@ -139,7 +138,7 @@ public void testChildrenOf() {
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	Type type = provideElementType(elem);
 	
-	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type);
+	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI);
 	CellModel row = children.child("row");
 	assertEquals("row", row.getName());
 	assertEquals(row, children.child(0));
@@ -156,21 +155,23 @@ public void testGetDefaultTypeName() throws Exception {
 }
 
 
-private void checkComplexCellModel(CellModel m, String name, String typeName) {
+private void checkComplexCellModel(CellModel m, String name, String typeName, String uri) {
 	
 	assertNotNull(m);
 	assertEquals(name, m.getName());
 	assertEquals(typeName, m.getType().getName());
+	assertEquals(uri, m.getUri().toString());
 	assertTrue(m.isComplex());
 
 }
 
 
-private void checkAttribute(CellModel a, String name, String typeName) {
+private void checkAttribute(CellModel a, String name, String typeName, String uri) {
 
 	assertNotNull(a);
 	assertEquals(name, a.getName());
 	assertEquals(typeName, a.getType().getName());
+	assertEquals(uri, a.getUri().toString());
 	assertTrue(a.isSimple());
 
 }

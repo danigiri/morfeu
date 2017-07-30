@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import javax.annotation.Nullable;
+
 import com.sun.xml.xsom.XSElementDecl;
 
 import cat.calidos.morfeu.model.CellModel;
@@ -36,6 +38,7 @@ CellModel cellModel();
 interface Builder {
 
 	@BindsInstance Builder withElement(XSElementDecl elem);
+	@BindsInstance Builder withURIPrefix(@Nullable String uriPrefix);
 	CellModelComponent build();
 	
 }
