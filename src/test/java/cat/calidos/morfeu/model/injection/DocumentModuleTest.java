@@ -96,14 +96,14 @@ public void testModelURI() throws Exception {
 	
 	// url should be "http://foo.com/well/model.xsd" as we want to ensure we reach the server
 	URI expected = new URI(site+model);
-	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
 	
 	site = "http://foo.com:8080/well/";
 	prefixURI = new URI(site);
 	doc = createDocument(site, path, model, content);
 	
 	expected = new URI(site+model);
-	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
 	
 	// for file paths we don't make them absolute as per current contract, so unmodified model URI
 	site = "file://tmp/";
@@ -111,7 +111,7 @@ public void testModelURI() throws Exception {
 	prefixURI = new URI(site);
 	
 	expected = new URI(model);
-	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
 
 	model = "http://bar.com/absolute.xsd";
 	site = "http://foo.com/well/";
@@ -119,7 +119,7 @@ public void testModelURI() throws Exception {
 	prefixURI = new URI(site);
 
 	expected = new URI(model);
-	assertEquals(expected, DocumentModule.modelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
 
 }
 

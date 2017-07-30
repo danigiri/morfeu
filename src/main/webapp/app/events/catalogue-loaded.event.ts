@@ -14,11 +14,15 @@
  *   limitations under the License.
  */
 
-import { Catalogue } from '../catalogue';
+import { Catalogue } from '../catalogue.class';
 
 
 export class CatalogueLoadedEvent {
 
 constructor(public catalogue: Catalogue) {}
+
+public toString = () : string => {
+    return "CatalogueLoadedEvent:{catalogue:'"+this.catalogue.name+"'}";
+}
 
 }

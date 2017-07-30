@@ -7,7 +7,7 @@
 		,"problem": "$[ problem ]$"
 	$( endif )$
 	
-	,"cellmodels": [$( for cellModel in v.rootCellModels )$
+	,"cellModels": [$( for cellModel in v.rootCellModels )$
 			$( include "cell-model.twig" with {'cm': cellModel} only )$ $( if (loop.last) )$ $(else)$,,$(endif)$
 		$( endfor )$]
 }

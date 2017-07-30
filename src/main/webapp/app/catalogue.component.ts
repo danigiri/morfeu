@@ -14,14 +14,14 @@
  *   limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { Widget } from './widget.class';
-import { Catalogue } from './catalogue';
-import { CatalogueService } from './catalogue.service';
-import { CellDocumentService } from './cell-document.service';
+import { Catalogue } from './catalogue.class';
+
 import { CellDocument } from './cell-document.class';
+import { RemoteDataService } from './services/remote-data.service';
 
 import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 import { CatalogueLoadedEvent } from './events/catalogue-loaded.event';
@@ -69,22 +69,24 @@ export class CatalogueComponent extends Widget {
 	
 catalogue: Catalogue;
 selectedDocumentURI: string;
-eventSubscription: Subscription;
 
-constructor(private catalogueService : CatalogueService, eventService: EventService) {
+constructor(eventService: EventService,
+            @Inject("CatalogueService") private catalogueService: RemoteDataService<Catalogue> ) {
     super(eventService);
 }
 
 ngOnInit() {
     
     console.log("DocumentComponent::ngOnInit()");
-    this.eventSubscription = this.events.service.of(CatalogueSelectionEvent).subscribe(
-            selected => this.loadCatalogueAt(selected.url)
-    );
     
-    this.eventSubscription = this.events.service.of(CellDocumentSelectionEvent).subscribe(
+    this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
             selected => this.markDocumentAsSelected(selected.url)
-    );
+    ));
+
+    this.subscribe(this.events.service.of(CatalogueSelectionEvent).subscribe(
+            selected => this.loadCatalogueAt(selected.url)
+    ));
+    
             
 }
 
@@ -95,7 +97,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
     this.events.service.publish(new CellDocumentSelectionEvent(null));  // reset document selection
 
     this.events.service.publish(new StatusEvent("Fetching catalogue"));
-    this.catalogueService.getCatalogue(selectedCatalogueUri)
+    this.catalogueService.get(selectedCatalogueUri)
             .subscribe(c => { 
                 this.catalogue = c;
                 this.events.service.publish(new CatalogueLoadedEvent(c));
@@ -113,12 +115,13 @@ loadCatalogueAt(selectedCatalogueUri: string) {
  
 
 clickOnDocument(stub: CellDocument) {
-    console.log("Clicked on document='"+stub.uri+"' from catalogue");
+    console.log("[UI] Clicked on document='"+stub.uri+"' from catalogue");
     this.events.service.publish(new CellDocumentSelectionEvent(stub.uri));
     
 }
 
 markDocumentAsSelected(uri: string) {
+    console.log("[UI] Marking document='"+uri+"' as selected in catalogue");
     this.selectedDocumentURI = uri;
 }
 

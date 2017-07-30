@@ -42,10 +42,9 @@ import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 })
 
 
-export class ContentComponent extends Widget implements OnInit, OnDestroy {
+export class ContentComponent extends Widget implements OnInit {
     
 document: CellDocument;
-documentSubscription: Subscription;
 
 
 constructor(eventService: EventService) {
@@ -56,18 +55,13 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
     console.log("DocumentComponent::ngOnInit()");
-    this.documentSubscription = this.events.service.of(CellDocumentLoadedEvent).subscribe(
+    this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
             selected => {
                 this.document = selected.document;
                 
             }
-    );
+    ));
     
-}
-
-
-ngOnDestroy() {
-    this.documentSubscription.unsubscribe();
 }
 
 

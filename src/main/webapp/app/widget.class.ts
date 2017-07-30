@@ -14,16 +14,47 @@
  *   limitations under the License.
  */
 
+import { OnDestroy } from '@angular/core';
+import { Subscription }   from 'rxjs/Subscription';
 
 import { EventService } from './events/event.service';
 import { Events } from './events/events.class';
 
-export class Widget {
+
+export class Widget implements OnDestroy {
     
 protected events: Events;
+private subscriptions: Subscription[];
 
 protected constructor(private eventService: EventService) {
+
     this.events = new Events(eventService);
+    this.subscriptions = [];
+
+}
+
+
+// at some point we will have to handle unsubscriptions more effectively
+protected subscribe(s: Subscription): Subscription {
+    
+    this.subscriptions.push(s);
+    return s;
+    
+}
+
+
+protected unsubscribe(s:Subscription) {
+
+   s.unsubscribe();
+   this.subscriptions = this.subscriptions.filter(sub => sub!==s);
+
+}
+
+
+ngOnDestroy() {
+    for (let s of this.subscriptions) {
+        s.unsubscribe();
+    }
 }
 
 

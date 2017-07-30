@@ -28,7 +28,7 @@ public publish<T>(event: T, subtype?: string): void {
 
     const type_ = (<any>event.constructor).name;
     const channel_ = (subtype) ? type_+subtype : type_;
-    console.log("\tSending event "+channel_);
+    console.log("\tSending event "+channel_+" -> ("+event.toString()+")");
     this.event$.next({ channel: channel_, data: event });
 
 }

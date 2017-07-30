@@ -14,16 +14,17 @@
  *   limitations under the License.
  */
 
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { CellDocument } from './cell-document.class';
-import { CellDocumentService } from './cell-document.service';
 import { Widget } from './widget.class';
+import { RemoteDataService } from './services/remote-data.service';
 
 import { EventService } from './events/event.service';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
+import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
 
 
@@ -34,7 +35,6 @@ import { StatusEvent } from './events/status.event';
     <div id="document-info" class="panel panel-default" *ngIf="document">
         <div class="panel-heading">
           <h4 id="document-name" class="panel-title">{{document.name}} <span class="badge">{{document.kind}}</span></h4>
-            
         </div>
         <div class="panel-body">
             <span id="document-desc">{{document.desc}}</span>
@@ -50,16 +50,17 @@ import { StatusEvent } from './events/status.event';
             #document-desc {}
             #document-valid {}
 
-   `]
+    `] 
+   
 })
+//`
 
-export class CellDocumentComponent extends Widget implements OnInit, OnDestroy {
+export class CellDocumentComponent extends Widget implements OnInit {
 
 document: CellDocument;
-documentSubscription: Subscription;
- 
 
-constructor(eventService: EventService, private documentService: CellDocumentService) {
+constructor(eventService: EventService,
+            @Inject("CatalogueService") private documentService: RemoteDataService<CellDocument> ) {
     super(eventService);
 }
 
@@ -68,7 +69,7 @@ ngOnInit() {
 
     console.log("DocumentComponent::ngOnInit()");
     
-    this.documentSubscription = this.events.service.of(CellDocumentSelectionEvent).subscribe(
+    this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
             selected => {
                 
                 if (selected.url!=null) {
@@ -78,22 +79,25 @@ ngOnInit() {
                 }
                 
             }
-    );
+    ));
     
-    this.documentSubscription = this.events.service.of(CellDocumentLoadedEvent).subscribe(
+    this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
             loaded => this.display(loaded.document)
-    );
+    ));
     
 }
+
 
 loadDocument(url: string) {
 
     //this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
     this.events.service.publish(new StatusEvent("Fetching document"));
     // notice we're using the enriched url here, as we want to display the JSON enriched data
-    this.documentService.getDocument("/morfeu/documents/"+url).subscribe(d => {
-                console.log("Got document from Morfeu service ("+d.name+")");
+    this.documentService.get("/morfeu/documents/"+url).subscribe(d => {
+                console.log("DocumentComponent::loadDocument() Got document from Morfeu service ("+d.name+")");
                 this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
+                this.events.service.publish(new ModelRequestEvent(d.modelURI)); // now we have it =)
+                
                 this.events.ok();
             },
             error => {
@@ -108,7 +112,7 @@ loadDocument(url: string) {
 
 
 display(d: CellDocument) {
-    console.log("-> document component gets Document ("+d.name+")");
+    console.log("[UI] document component gets Document ("+d.name+")");
     this.document = d;
     if (d.problem==null || d.problem!="") {
         this.events.problem(d.problem);
@@ -117,13 +121,8 @@ display(d: CellDocument) {
 
 
 clear() {
-    console.log("-> document component gets null document (no document selected)");
+    console.log("[UI] document component gets null document (no document selected)");
     this.document = null;
-}
-
-
-ngOnDestroy() {
-    this.documentSubscription.unsubscribe();
 }
 
 }

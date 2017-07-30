@@ -17,14 +17,19 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 import { isDevMode } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { Http } from '@angular/http';
 
-import { CatalogueService } from './catalogue.service';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { ContentComponent } from './content.component';
 import { CellDocumentComponent } from './cell-document.component';
-import { CellDocumentService } from './cell-document.service';
 import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
+import { RemoteDataService } from './services/remote-data.service';
+
+import { Model } from './model.class';
+import { Catalogue } from './catalogue.class';
+import { CellDocument } from './cell-document.class';
 
 import { Widget } from './widget.class';
 
@@ -53,6 +58,7 @@ import { EventService } from './events/event.service';
                 <content></content>
             </div>
             <div class="col-md-2">
+                <model></model>
             </div>
           </div>
           <div class="row">
@@ -65,19 +71,26 @@ import { EventService } from './events/event.service';
 
 
       `,
-    providers:    [CatalogueService
+    providers:    [
+                   // note that Http is injected by the HttpModule imported in the application module
+                   {provide: 'CatalogueService', useFactory: (http:Http) => (new RemoteDataService<Catalogue>(http)), deps: [Http]}                   
                    ,EventService
-                   ,CellDocumentService
+                   ,{provide: 'CellDocumentService', useFactory: (http:Http) => (new RemoteDataService<CellDocument>(http)), deps: [Http]}
+                   ,{provide: 'ModelService', useFactory: (http:Http) => (new RemoteDataService<Model>(http)), deps: [Http]}
                      ]
 })
 
+
 export class AppComponent extends Widget implements AfterViewInit {
-    
-eventSubscription: Subscription;
-    
+   
+private cataloguesLoadedEventSubscription: Subscription;
+private catalogueLoadedEventSubscription: Subscription
+
 constructor(eventService: EventService) {
     super(eventService);
 }
+
+//export function dataService = (http:Http) => {return new RemoteDataService<Model>(http)}
 
 
 // this hoock is called "after Angular initializes the component's views and child views." so everyone has
@@ -100,17 +113,20 @@ ngAfterViewInit() {
     // events can use binding properties that have been setup properly
    
     // THIS IS TO SPEED UP DEVELOPMENT, WE SPEED THE STATE INTO THE DESIRED ONE
-    //if (false) {
-    if (isDevMode()) {
-        this.eventSubscription = this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
-            let catalogue = loaded.catalogues[0].uri;
-            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
-        });
-        this.eventSubscription = this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
-            let document = loaded.catalogue.documents[0].uri;
-            this.events.service.publish(new CellDocumentSelectionEvent(document));
-        }); 
-    }
+
+//    if (isDevMode()) {
+//        // we only want to do these once, hence the unsubscriptions
+//        this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
+//            this.unsubscribe(this.cataloguesLoadedEventSubscription);
+//            let catalogue = loaded.catalogues[0].uri;
+//            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
+//        }));
+//        this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
+//            this.unsubscribe(this.catalogueLoadedEventSubscription);
+//            let document = loaded.catalogue.documents[0].uri;
+//            this.events.service.publish(new CellDocumentSelectionEvent(document));
+//        })); 
+//    }
     
     console.log("\t\t\t\t\t **** APPLICATION STARTS ****");
     let allCatalogues = "/morfeu/test-resources/catalogues.json";

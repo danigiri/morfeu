@@ -14,8 +14,10 @@
  *   limitations under the License.
  */
 
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
+
+import { Widget } from './widget.class';
 
 import { EventService } from './events/event.service';
 import { ProblemEvent } from './events/problem.event';
@@ -35,29 +37,26 @@ import { ProblemEvent } from './events/problem.event';
 //`
 
 
-export class ProblemComponent implements OnDestroy {
+export class ProblemComponent extends Widget implements OnInit  {
     
 problem: any;
-problemSubscription: Subscription;
 
-constructor(private eventService: EventService) {
-    
-    console.log("ProblemComponent::constructor()");
-    this.problemSubscription = this.eventService.of( ProblemEvent ).subscribe( p => {
+constructor(eventService: EventService) {
+    super(eventService);
+}
+
+
+ngOnInit() {
+    console.log("ProblemComponent::ngOnInit()");
+    this.subscribe(this.events.service.of( ProblemEvent ).subscribe( p => {
         if ( p.message != null ) {
             console.log( "-> ProblemComponent gets problem"+p.message );
         } else {
             //console.log( "-> ProblemComponent clears problem" );
         }
         this.problem = p.message;
-    });
+    }));
     
-}
-
-
-ngOnDestroy() {
-    //TODO: prevent memory leak when component destroyed (from the angular docs, is this needed?)
-    this.problemSubscription.unsubscribe();
 }
 
 }

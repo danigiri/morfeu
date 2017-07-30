@@ -14,12 +14,8 @@
  *   limitations under the License.
  */
 
-import { Catalogue } from '../catalogue.class';
-
-export class CataloguesLoadedEvent {
+export class ModelRequestEvent {
     
-   
-constructor(public catalogues: Catalogue[]) {}
-
+constructor(public url: string) {}
 
 }

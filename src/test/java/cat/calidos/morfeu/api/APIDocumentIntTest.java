@@ -68,8 +68,10 @@ public void testDocument() throws Exception {
 	assertEquals("Document 1", doc.get("name").asText());
 	assertEquals("First document", doc.get("desc").asText());
 	assertEquals("xml", doc.get("kind").asText());
-	String expected = webappPrefix+"target/test-classes/test-resources/models/test-model.xsd";
-	assertEquals(expected, doc.get("modelURI").asText());
+	String modelURI = "target/test-classes/test-resources/models/test-model.xsd";
+	assertEquals(modelURI, doc.get("modelURI").asText());
+	String expected = webappPrefix+modelURI;
+	assertEquals(expected, doc.get("fetchableModelURI").asText());
 	expected = webappPrefix+"target/test-classes/test-resources/documents/document1.xml";
 	assertEquals(expected, doc.get("contentURI").asText());
 	assertTrue(doc.get("valid").asBoolean());

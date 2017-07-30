@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+import { CellModel } from './cell-model.class';
 
 export class Model {
     
@@ -22,6 +23,6 @@ export class Model {
     desc: string;
     valid: boolean;
 
-    //cellModels: CellModel[];
+    cellModels: CellModel[];
 
 }

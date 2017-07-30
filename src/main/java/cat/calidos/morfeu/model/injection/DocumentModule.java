@@ -110,18 +110,19 @@ public static Document parseDocument(URI uri, @Named("JSONDocumentStream") Input
 @Produces @Named("NormalisedDocument")
 public static Document normaliseDocumentURIs(@Named("ParsedDocument") Document doc,
 											 @Named("PrefixURI") URI prefix,
-											 @Named("ModelURI") URI model, 
-											 @Named("ContentURI") URI content) {
+											 @Named("FetchableModelURI") URI fetchableModelURI, 
+											 @Named("ContentURI") URI contentURI) {
 	
-	log.trace("[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]", prefix, model, content);
+	log.trace("[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]", prefix, fetchableModelURI, contentURI);
 	
-	doc.setModelURI(model);
-	doc.setContentURI(content);
+	doc.setFetchableModelURI(fetchableModelURI);
+	doc.setContentURI(contentURI);
 	doc.setPrefix(prefix);
 		
 	return doc;
 	
 }
+
 
 @Produces  @Named("PrefixURI")
 public static URI documentPrefix(@Named("ParsedDocument") Document doc, 
@@ -150,9 +151,17 @@ public static URI documentPrefix(@Named("ParsedDocument") Document doc,
 	
 }
 
-
+// this is the basic model uri, usually relative and easy to read and understand, cannot necesarily be fetched from
+// the runtime context
 @Produces @Named("ModelURI")
-public static URI modelURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
+public static URI modelURI(@Named("ParsedDocument") Document doc) {
+	return doc.getModelURI();
+}
+
+
+// this is a model uri that is absolute and fetchable, guaranteed to be reachable from any runtime context
+@Produces @Named("FetchableModelURI")
+public static URI fetchableModelURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
 	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getModelURI());
 }
 

@@ -55,6 +55,8 @@ import dagger.producers.Produces;
 public class ModelModule extends RemoteModule {
 
 
+// here we're using the model uri as it will be used to populate internal uri of cell models and it's a neat 
+// representation
 @Produces
 public static Model produceModel(@Named("ModelURI") URI u, 
 								 @Named("desc") String desc, 
@@ -64,8 +66,9 @@ public static Model produceModel(@Named("ModelURI") URI u,
 }
 
 
+// notice here we are using the fetchable uri to get the schema and parse it, as this one is guaranteed to be fetchable
 @Produces
-public static XSSchemaSet parseModel(@Named("ModelURI") URI u, Produced<XSOMParser> parserProducer) throws ParsingException, ExecutionException, FetchingException {
+public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, Produced<XSOMParser> parserProducer) throws ParsingException, ExecutionException, FetchingException {
 	
 	XSOMParser parser = parserProducer.get();
 	XSSchemaSet schemaSet = null;

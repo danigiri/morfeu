@@ -14,15 +14,14 @@
  *   limitations under the License.
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription }   from 'rxjs/Subscription';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Widget } from './widget.class';
 
 import { CatalogueComponent } from './catalogue.component';
-import { Catalogue } from './catalogue';
-import { CatalogueService } from './catalogue.service';
+import { Catalogue } from './catalogue.class';
+import { RemoteDataService } from './services/remote-data.service';
 
 import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 import { CataloguesRequestEvent } from './events/catalogues-request.event';
@@ -61,13 +60,14 @@ import { StatusEvent } from './events/status.event';
                 ]
 })
     
-export class CatalogueListComponent extends Widget implements OnDestroy {
+export class CatalogueListComponent extends Widget {
     
 catalogues: Catalogue[];
 selectedCatalogueURI: string;
-eventSubscription: Subscription;
 
-constructor(private catalogueService: CatalogueService, eventService: EventService) {
+
+constructor(eventService: EventService, 
+            @Inject("CatalogueService") private catalogueService: RemoteDataService<Catalogue> ) {
     super(eventService);
 }
 
@@ -76,16 +76,16 @@ ngOnInit() {
 
     console.log("StatusComponent::ngOnInit()");
     
-    this.eventSubscription = this.events.service.of( CataloguesRequestEvent ).subscribe( s => {
+    this.subscribe(this.events.service.of( CataloguesRequestEvent ).subscribe( s => {
            console.log("-> catalogue-list component gets request event for '"+s.url+"'");
            this.fetchCatalogues(s.url);
-    });
+    }));
     
-    // on catalogue selection we highlight the selected catalogue
-    this.eventSubscription = this.events.service.of( CatalogueSelectionEvent ).subscribe( s => {
+    // on catalogue selection we highlight the selected catalogue and clear the document selection
+    this.subscribe(this.events.service.of( CatalogueSelectionEvent ).subscribe( s => {
         console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
         this.markCatalogueAsSelected(s.url);
-    });
+    }));
     
 }
 
@@ -110,7 +110,7 @@ fetchCatalogues(url: string) {
 
 clickOnCatalogue(c: Catalogue) {
 
-    console.log("Clicked on catalogue="+c.uri);
+    console.log("[UI] Clicked on catalogue="+c.uri);
     this.events.service.publish(new CatalogueSelectionEvent(c.uri));    // catalogue component will pick this 
     
 }
@@ -119,12 +119,5 @@ clickOnCatalogue(c: Catalogue) {
 markCatalogueAsSelected(uri: string) {
     this.selectedCatalogueURI = uri;
 }
-
-
-//TODO: we should pull this up to the widget superclass
-ngOnDestroy() {
-    this.eventSubscription.unsubscribe();
-}
-
 
 }

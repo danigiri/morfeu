@@ -49,7 +49,9 @@ public class ModelTezt {
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 @Mock Produced<XSOMParser> parserProducer;
 
-protected Model parseModelFrom(URI u) throws ConfigurationException, InterruptedException, ExecutionException, ParsingException, FetchingException {
+protected Model parseModelFrom(URI u) throws ConfigurationException, 
+											 InterruptedException, 
+											 ExecutionException, ParsingException, FetchingException {
 		
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 		

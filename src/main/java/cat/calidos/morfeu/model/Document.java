@@ -32,6 +32,7 @@ public class Document extends Cell implements Validable {
 protected String kind;
 protected URI prefix;
 protected URI modelURI;
+protected URI fetchableModelURI;
 protected URI contentURI;
 protected Model model;
 protected Validable validator;
@@ -117,13 +118,29 @@ public URI getModelURI() {
 	return modelURI;
 }
 
-
+/** this is the user-friendly, relative URI used to easily identify this document model */
 @JsonProperty("modelURI") 
-public void setModelURI(URI modelURI) {
+public void setModelURI(URI uri) {
 	
-	this.modelURI = modelURI;
+	this.modelURI = uri;
 	
 }
+
+
+/** This is the url that will be used to fetch the raw model data */
+public URI getFetchableModelURI() {
+	return fetchableModelURI;
+}
+
+
+@JsonProperty("fetchableModelURI") 
+public void setFetchableModelURI(URI uri) {
+	
+	this.fetchableModelURI = uri;
+	
+}
+
+
 
 
 public URI getContentURI() {

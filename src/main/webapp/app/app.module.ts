@@ -24,6 +24,7 @@ import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
 import { ContentComponent } from './content.component';
 import { CellDocumentComponent } from './cell-document.component';
+import { ModelComponent } from './model.component';
 import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
 
@@ -34,13 +35,14 @@ import { StatusComponent } from './status.component';
                   ],
   declarations: [ AppComponent
                   ,CatalogueListComponent 
-                  ,CatalogueComponent 
+                  ,CatalogueComponent
                   ,ContentComponent 
                   ,CellDocumentComponent
+                  ,ModelComponent
                   ,ProblemComponent 
                   ,StatusComponent 
                 ],
-  providers:    [                    
+  providers:    [
                  ],
   bootstrap:    [ AppComponent ]
 })

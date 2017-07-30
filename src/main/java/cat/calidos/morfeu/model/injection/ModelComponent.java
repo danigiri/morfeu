@@ -38,7 +38,8 @@ ListenableFuture<Model> model() throws ValidationException, ExecutionException;
 
 @ProductionComponent.Builder
 interface Builder {
-	@BindsInstance Builder from(@Named("ModelURI") URI u);
+	@BindsInstance Builder identifiedBy(@Named("ModelURI") URI u);
+	@BindsInstance Builder fromFetchable(@Named("FetchableModelURI") URI u);
 	ModelComponent build();
 }
 

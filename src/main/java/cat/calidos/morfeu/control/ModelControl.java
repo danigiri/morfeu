@@ -47,8 +47,10 @@ public static String loadModel(String prefix, String path) {
 	try {
 		
 		URI uri = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
+		URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
 		model = DaggerModelComponent.builder()
-										.from(uri)
+										.identifiedBy(uri)
+										.fromFetchable(uri)
 										.build()
 										.model()
 										.get();

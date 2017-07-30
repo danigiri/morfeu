@@ -17,5 +17,11 @@
 import { CellDocument } from '../cell-document.class';
 
 export class CellDocumentSelectionEvent {
-    constructor(public url: string) {}
+
+constructor(public url: string) {}
+
+public toString = () : string => {
+    return "CellDocumentSelectionEvent:{url:'"+this.url+"'}";
+}
+
 }

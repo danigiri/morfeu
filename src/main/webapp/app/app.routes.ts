@@ -17,7 +17,6 @@
 import { Routes } from '@angular/router';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
-import { CatalogueService } from './catalogue.service';
 
 export const AppRoutes: Routes = [
   { path: 'catalogues', component: CatalogueListComponent },

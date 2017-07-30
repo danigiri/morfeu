@@ -37,7 +37,7 @@ ListenableFuture<Validable> validator();
 @ProductionComponent.Builder
 interface Builder {
 	@BindsInstance Builder forDocument(@Named("ContentURI") URI u);
-	@BindsInstance Builder withModel(@Named("ModelURI") URI u);
+	@BindsInstance Builder withModel(@Named("FetchableModelURI") URI u);
 	ValidationTestComponent build();
 }
 }

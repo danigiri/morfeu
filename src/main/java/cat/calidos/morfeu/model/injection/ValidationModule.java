@@ -88,7 +88,7 @@ public static SchemaFactory produceSchemaFactory() {
 }
 
 @Produces
-public static StreamSource produceStreamSource(@Named("ModelURI") URI u) {
+public static StreamSource produceStreamSource(@Named("FetchableModelURI") URI u) {
 	return new StreamSource(u.toString());
 }
 
