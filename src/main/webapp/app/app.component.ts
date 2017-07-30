@@ -77,7 +77,7 @@ import { EventService } from './events/event.service';
                    ,EventService
                    ,{provide: 'CellDocumentService', useFactory: (http:Http) => (new RemoteDataService<CellDocument>(http)), deps: [Http]}
                    ,{provide: 'ModelService', useFactory: (http:Http) => (new RemoteDataService<Model>(http)), deps: [Http]}
-                     ]
+                   ]
 })
 
 

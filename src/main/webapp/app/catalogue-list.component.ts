@@ -21,6 +21,7 @@ import { Widget } from './widget.class';
 
 import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue.class';
+
 import { RemoteDataService } from './services/remote-data.service';
 
 import { CatalogueSelectionEvent } from './events/catalogue-selection.event';

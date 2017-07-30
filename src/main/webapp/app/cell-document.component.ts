@@ -96,8 +96,7 @@ loadDocument(url: string) {
     this.documentService.get("/morfeu/documents/"+url).subscribe(d => {
                 console.log("DocumentComponent::loadDocument() Got document from Morfeu service ("+d.name+")");
                 this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
-                this.events.service.publish(new ModelRequestEvent(d.modelURI)); // now we have it =)
-                
+                this.events.service.publish(new ModelRequestEvent(d.modelURI));
                 this.events.ok();
             },
             error => {

@@ -94,7 +94,7 @@ ngOnInit() {
 loadCatalogueAt(selectedCatalogueUri: string) {
 
     this.selectedDocumentURI = null;
-    this.events.service.publish(new CellDocumentSelectionEvent(null));  // reset document selection
+    this.events.service.publish(new CellDocumentSelectionEvent(null));  // reset document selection and related
 
     this.events.service.publish(new StatusEvent("Fetching catalogue"));
     this.catalogueService.get(selectedCatalogueUri)

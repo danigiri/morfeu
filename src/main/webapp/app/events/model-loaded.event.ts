@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+//TODO: not used at the moment,
 import { Model } from '../model.class';
 
 export class ModelLoadedEvent {

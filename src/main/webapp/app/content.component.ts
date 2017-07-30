@@ -54,7 +54,13 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-    console.log("DocumentComponent::ngOnInit()");
+    console.log("ContentComponent::ngOnInit()");
+    
+//    this.subscribe(this.events.service.of(CellDocumentSelectionEvent).filter(s => s.url==null).subscribe(
+//            selected => this.clearModel()
+//    ));
+
+    
     this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
             selected => {
                 this.document = selected.document;
@@ -64,6 +70,13 @@ ngOnInit() {
     
 }
 
+clearContent() {
+    
+}
+
+displayContent() {
+    
+}
 
 }
 

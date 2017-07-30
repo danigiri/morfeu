@@ -34,9 +34,12 @@ id: string;
 attributes?: CellModel[];
 children?: CellModel[];
 
-    // type
-
+constructor() {}
     
     
+normaliseToTreeModel() {
+    
+    
+}
     
 }

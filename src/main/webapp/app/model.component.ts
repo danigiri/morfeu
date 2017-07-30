@@ -22,6 +22,7 @@ import { Model } from './model.class';
 import { Widget } from './widget.class';
 import { RemoteDataService } from './services/remote-data.service';
 
+import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { EventService } from './events/event.service';
 import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
@@ -63,9 +64,15 @@ ngOnInit() {
     
     console.log("ModelComponent::ngOnInit()"); 
     
+    this.subscribe(this.events.service.of(CellDocumentSelectionEvent).filter(s => s.url==null).subscribe(
+            selected => this.clearModel()
+    ));
+
+    
     this.subscribe(this.events.service.of(ModelRequestEvent).subscribe( requested =>
             this.loadModel(requested.url)           
     ));
+    
     
 }
 
@@ -74,7 +81,7 @@ loadModel(uri: string) {
     let modelURI = "/morfeu/models/"+uri;
     this.modelService.get(modelURI).subscribe( model => {
             console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
-            this.model = model;
+            this.diplayModel(model);
             this.events.ok();
     },
     error => {
@@ -84,5 +91,18 @@ loadModel(uri: string) {
     );
 }
 
+clearModel() {
+
+    console.log("[UI] ModelComponent::clearModel()");
+    this.model = null;
+
+}
+
+diplayModel(m: Model) {
+    
+    console.log("[UI] ModelComponent::diplayModel("+m.name+")");
+    this.model = m;
+    
+}
 
 }
