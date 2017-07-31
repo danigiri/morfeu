@@ -40,7 +40,7 @@ public void testParseModel() throws Exception {
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 
 	Model model = parseModelFrom(modelURI);
-	assertEquals(modelURI, model.getUri());
+	assertEquals(modelURI, model.getURI());
 	assertEquals("Description of test model", model.getDesc());
 	
 	List<CellModel> rootCellModels = model.getRootCellModels();

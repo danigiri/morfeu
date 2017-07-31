@@ -55,7 +55,7 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 		
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 		
-	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet);
+	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u);
 	String desc = ModelModule.descriptionFromSchemaAnnotation(schemaSet);
 	return ModelModule.produceModel(u, desc, schemaSet, rootCellModels);
 		
@@ -90,7 +90,7 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 
-	return DaggerCellModelComponent.builder().withElement(elem).withURIPrefix(u.toString()).build().cellModel();
+	return DaggerCellModelComponent.builder().withElement(elem).withParentURI(u).build().cellModel();
 	
 }
 

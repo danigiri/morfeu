@@ -79,9 +79,9 @@ ngOnInit() {
 loadModel(uri: string) {
     this.events.service.publish(new StatusEvent("Fetching model"));
     let modelURI = "/morfeu/models/"+uri;
-    this.modelService.get(modelURI).subscribe( model => {
+    this.modelService.get(modelURI).subscribe( (model:Model) => {
             console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
-            this.diplayModel(model);
+            this.diplayModel(model);    // not firing a load event yet if not needed
             this.events.ok();
     },
     error => {
@@ -101,6 +101,7 @@ clearModel() {
 diplayModel(m: Model) {
     
     console.log("[UI] ModelComponent::diplayModel("+m.name+")");
+    m.normalise();
     this.model = m;
     
 }

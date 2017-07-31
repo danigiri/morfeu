@@ -20,3 +20,4 @@ name: string;
 isSimple: boolean;
 
 }
+

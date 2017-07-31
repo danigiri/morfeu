@@ -179,7 +179,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u)
 			XSElementDecl child = termType.asElementDecl();
 			CellModel childCellModel = DaggerCellModelComponent.builder()
 										.withElement(child)
-										.withURIPrefix(u.toString())
+										.withParentURI(u)
 										.build()
 										.cellModel();
 			children.addChild(childCellModel.getName(), childCellModel);
@@ -205,13 +205,8 @@ public String nameFrom(XSElementDecl elem) {
 }
 
 @Provides @Named("URIString")
-public String getURIString(Provider<Locator> locatorProvider, @Nullable String uriPrefix, @Named("name") String name) {
-	
-	String uri = (uriPrefix==null) ? locatorProvider.get().getSystemId() : uriPrefix;
-	uri += NODE_SEPARATOR+name;
-
-	return uri;
-
+public String getURIString(@Named("ParentURI") URI parentURI, @Named("name") String name) {
+	return parentURI+NODE_SEPARATOR+name;
 }
 
 

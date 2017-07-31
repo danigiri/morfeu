@@ -25,7 +25,7 @@ RemoteResource(URI u, String name, String desc) {
 }
 
 
-public URI getUri() {
+public URI getURI() {
 	return uri;
 }
 

@@ -121,7 +121,7 @@ public URI getModelURI() {
 /** this is the user-friendly, relative URI used to easily identify this document model */
 @JsonProperty("modelURI") 
 public void setModelURI(URI uri) {
-	
+	System.err.println("***************** MODELURI="+uri);
 	this.modelURI = uri;
 	
 }

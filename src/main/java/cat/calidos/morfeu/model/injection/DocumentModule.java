@@ -130,7 +130,7 @@ public static URI documentPrefix(@Named("ParsedDocument") Document doc,
 	URI prefixURI = null;
 	if (prefix==null || prefix.length()==0) {
 		// we make a best effort to guess the prefix
-		String uri = doc.getUri().toString();
+		String uri = doc.getURI().toString();
 		try {
 			int index = uri.lastIndexOf("/");
 			if (index==-1) {
@@ -147,9 +147,11 @@ public static URI documentPrefix(@Named("ParsedDocument") Document doc,
 			throw new ParsingException("Problem with invalid URI of prefix '"+prefix+"'", e);
 		}
 	}
+	
 	return prefixURI;
 	
 }
+
 
 // this is the basic model uri, usually relative and easy to read and understand, cannot necesarily be fetched from
 // the runtime context

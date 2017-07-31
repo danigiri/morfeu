@@ -25,7 +25,7 @@ public interface Locatable {
 
 /** @return the location of this resource
 *///////////////////////////////////////////////////////////////////////////////////////////////
-URI getUri();
+URI getURI();
 
 String getName();
 	

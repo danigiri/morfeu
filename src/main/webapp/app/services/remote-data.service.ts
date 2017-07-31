@@ -24,7 +24,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class RemoteDataService<T> {
 
-
+// HERE HERE HERE add reviver stuff from 
 constructor(private http:Http) {}
 
 
@@ -32,7 +32,7 @@ getAll(uri: string): Observable<T[]> {
     
     console.log("[SERVICE] RemoteService::getAll("+uri+")"); 
     //TODO: handle errors with .catch here
-    return this.http.get(uri).map(response => response.json());
+    return this.http.get(uri).map(response => <T[]>response.json());
 
 }
 
@@ -41,7 +41,7 @@ get(uri: string): Observable<T> {
 
     console.log("[SERVICE] RemoteService::get("+uri+")"); 
     //TODO: handle errors with .catch here
-    return this.http.get(uri).map(response => response.json());
+    return this.http.get(uri).map(response => <T>response.json());
 
 }
 

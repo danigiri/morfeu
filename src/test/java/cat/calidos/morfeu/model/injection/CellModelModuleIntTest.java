@@ -160,7 +160,7 @@ private void checkComplexCellModel(CellModel m, String name, String typeName, St
 	assertNotNull(m);
 	assertEquals(name, m.getName());
 	assertEquals(typeName, m.getType().getName());
-	assertEquals(uri, m.getUri().toString());
+	assertEquals(uri, m.getURI().toString());
 	assertTrue(m.isComplex());
 
 }
@@ -171,7 +171,7 @@ private void checkAttribute(CellModel a, String name, String typeName, String ur
 	assertNotNull(a);
 	assertEquals(name, a.getName());
 	assertEquals(typeName, a.getType().getName());
-	assertEquals(uri, a.getUri().toString());
+	assertEquals(uri, a.getURI().toString());
 	assertTrue(a.isSimple());
 
 }

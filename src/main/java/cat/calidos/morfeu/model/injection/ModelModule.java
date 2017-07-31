@@ -91,11 +91,11 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, Produced
 
 
 @Produces
-public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet) {
+public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet, @Named("ModelURI") URI u) {
 
 	ArrayList<CellModel> rootTypes = new ArrayList<CellModel>();
 	Iterator<XSElementDecl> iterator = schemaSet.iterateElementDecls();
-	iterator.forEachRemaining(elem -> rootTypes.add(buildCellModel(elem)));
+	iterator.forEachRemaining(elem -> rootTypes.add(buildCellModel(elem, u)));
 
 	return rootTypes;
 
@@ -115,8 +115,8 @@ public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
 }
 
 
-private static CellModel buildCellModel(XSElementDecl elem) {
-	return DaggerCellModelComponent.builder().withElement(elem).build().cellModel();
+private static CellModel buildCellModel(XSElementDecl elem, URI u) {
+	return DaggerCellModelComponent.builder().withElement(elem).withParentURI(u).build().cellModel();
 }
 
 }

@@ -21,25 +21,28 @@ import { Type_ } from './type_.class';
 
 export class CellModel implements TreeModel {
     
-schema: number;
-name: string;
-desc: string;
-isSimple: boolean;
-
-type_: Type_; 
-
 value: string;
 id: string;
+
 
 attributes?: CellModel[];
 children?: CellModel[];
 
-constructor() {}
+constructor(schema: number, name: string, desc: string, isSimple: boolean, type_: Type_) {  
+    this.value = name;
+    this.id =;
+}    
     
+normalised():CellModel {
     
-normaliseToTreeModel() {
-    
-    
+    // WORK CONTINUES HERE
+    return this;
 }
-    
+
+toJSON: CellModelJSON {
+    return Object.assign({}, this, {cellModels: this.cellModels.toString()});
 }
+
+}
+
+interface CellModelJSON {}

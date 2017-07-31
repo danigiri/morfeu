@@ -17,12 +17,31 @@
 import { CellModel } from './cell-model.class';
 
 export class Model {
+
+public cellModels: CellModel[];
+
+constructor(schema: number, name: string, desc: string, valid: boolean) {
+    this.cellModels = [];
+}
+
+normalise() {
+    this.cellModels = this.cellModels.map(cm => cm.normalised());
+}
+
+toJSON(): ModelJSON {
+    return Object.assign({}, this, {cellModels: this.cellModels.toString()});
+}
+
+}
+
+
+interface ModelJSON {
+
+schema: number;
+name: string;
+desc: string;
+valid: boolean;
+cellModels: CellModelJSON[];
+ 
     
-    schema: number;
-    name: string;
-    desc: string;
-    valid: boolean;
-
-    cellModels: CellModel[];
-
 }

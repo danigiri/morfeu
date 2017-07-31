@@ -16,7 +16,10 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+
 import javax.annotation.Nullable;
+import javax.inject.Named;
 
 import com.sun.xml.xsom.XSElementDecl;
 
@@ -38,7 +41,7 @@ CellModel cellModel();
 interface Builder {
 
 	@BindsInstance Builder withElement(XSElementDecl elem);
-	@BindsInstance Builder withURIPrefix(@Nullable String uriPrefix);
+	@BindsInstance Builder withParentURI(@Named("ParentURI") URI uri);
 	CellModelComponent build();
 	
 }
