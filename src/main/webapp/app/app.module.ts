@@ -19,6 +19,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 
+import { TreeModule } from 'ng2-tree';
+
 import { AppComponent }   from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
@@ -30,8 +32,9 @@ import { StatusComponent } from './status.component';
 
 @NgModule({
   imports:      [ BrowserModule
-                  ,HttpModule
                   ,BrowserAnimationsModule
+                  ,HttpModule
+                  ,TreeModule
                   ],
   declarations: [ AppComponent
                   ,CatalogueListComponent 

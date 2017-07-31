@@ -26,8 +26,10 @@ import { CellDocumentComponent } from './cell-document.component';
 import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
 import { RemoteDataService } from './services/remote-data.service';
+import { RemoteObjectService } from './services/remote-object.service';
 
-import { Model } from './model.class';
+
+import { Model, ModelJSON } from './model.class';
 import { Catalogue } from './catalogue.class';
 import { CellDocument } from './cell-document.class';
 
@@ -76,7 +78,7 @@ import { EventService } from './events/event.service';
                    {provide: 'CatalogueService', useFactory: (http:Http) => (new RemoteDataService<Catalogue>(http)), deps: [Http]}                   
                    ,EventService
                    ,{provide: 'CellDocumentService', useFactory: (http:Http) => (new RemoteDataService<CellDocument>(http)), deps: [Http]}
-                   ,{provide: 'ModelService', useFactory: (http:Http) => (new RemoteDataService<Model>(http)), deps: [Http]}
+                   ,{provide: 'ModelService', useFactory: (http:Http) => (new RemoteObjectService<Model, ModelJSON>(http)), deps: [Http]}
                    ]
 })
 
@@ -114,19 +116,19 @@ ngAfterViewInit() {
    
     // THIS IS TO SPEED UP DEVELOPMENT, WE SPEED THE STATE INTO THE DESIRED ONE
 
-//    if (isDevMode()) {
-//        // we only want to do these once, hence the unsubscriptions
-//        this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
-//            this.unsubscribe(this.cataloguesLoadedEventSubscription);
-//            let catalogue = loaded.catalogues[0].uri;
-//            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
-//        }));
-//        this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
-//            this.unsubscribe(this.catalogueLoadedEventSubscription);
-//            let document = loaded.catalogue.documents[0].uri;
-//            this.events.service.publish(new CellDocumentSelectionEvent(document));
-//        })); 
-//    }
+    if (isDevMode()) {
+        // we only want to do these once, hence the unsubscriptions
+        this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
+            this.unsubscribe(this.cataloguesLoadedEventSubscription);
+            let catalogue = loaded.catalogues[0].uri;
+            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
+        }));
+        this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
+            this.unsubscribe(this.catalogueLoadedEventSubscription);
+            let document = loaded.catalogue.documents[0].uri;
+            this.events.service.publish(new CellDocumentSelectionEvent(document));
+        })); 
+    }
     
     console.log("\t\t\t\t\t **** APPLICATION STARTS ****");
     let allCatalogues = "/morfeu/test-resources/catalogues.json";

@@ -21,28 +21,89 @@ import { Type_ } from './type_.class';
 
 export class CellModel implements TreeModel {
     
-value: string;
-id: string;
-
+public value: string;
+public id: string;
 
 attributes?: CellModel[];
 children?: CellModel[];
 
-constructor(schema: number, name: string, desc: string, isSimple: boolean, type_: Type_) {  
-    this.value = name;
-    this.id =;
+constructor(public schema: number, 
+            public URI: string, 
+            public name: string, 
+            public desc: string, 
+            public isSimple: boolean, 
+            public type_: Type_) {  
+
+    this.init();
+
 }    
+
+
+// there are 
+init() {
+    this.value = this.name;
+    this.id = this.URI;  // this is guaranteed to be unique 
+}
+
+
+toJSON(): CellModelJSON {
+
+    let serialisedCellModel:CellModelJSON = Object.assign({}, this);
+    if (this.attributes) {
+        serialisedCellModel.attributes = this.attributes.map(a => a.toJSON());
+    }
+    if (this.children) {
+        serialisedCellModel.children = this.children.map(c => c.toJSON());
+    }
     
-normalised():CellModel {
+    return serialisedCellModel;
     
-    // WORK CONTINUES HERE
-    return this;
 }
 
-toJSON: CellModelJSON {
-    return Object.assign({}, this, {cellModels: this.cellModels.toString()});
+
+static fromJSON(json: CellModelJSON|string): CellModel {
+
+    if (typeof json === 'string') {
+        
+        return JSON.parse(json, CellModel.reviver);
+        
+    } else {
+    
+        let cellModel = Object.create(CellModel.prototype);
+        cellModel = Object.assign(cellModel, json); // add parsed attributes like schema, URI, name...
+        cellModel.init();                           // make sure we have all attributes ok
+        
+        if (json.attributes) {
+            cellModel = Object.assign(cellModel, 
+                                      {attributes: json.attributes.map(a => CellModel.fromJSON(a))});
+        }
+        if (json.children) {
+            cellModel = Object.assign(cellModel, 
+                                      {children: json.children.map(c => CellModel.fromJSON(c))});
+        }
+    
+        return cellModel;
+
+    }
+}
+
+
+static reviver(key: string, value: any): any {
+    return key === "" ? CellModel.fromJSON(value) : value;
 }
 
 }
 
-interface CellModelJSON {}
+export interface CellModelJSON {
+    
+schema: number; 
+URI: string;
+name: string; 
+desc: string;
+isSimple: boolean; 
+type_: Type_;
+    
+attributes?: CellModelJSON[];
+children?: CellModelJSON[];
+
+}

@@ -17,10 +17,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
+import { TreeModel } from 'ng2-tree';
 
-import { Model } from './model.class';
+import { Model, ModelJSON } from './model.class';
 import { Widget } from './widget.class';
-import { RemoteDataService } from './services/remote-data.service';
+import { RemoteObjectService } from './services/remote-object.service';
 
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { EventService } from './events/event.service';
@@ -38,6 +39,7 @@ import { StatusEvent } from './events/status.event';
         </div>
         <div class="panel-body">
             <span id="model-desc">{{model.desc}}</span>
+            <tree *ngFor="let cm of model.cellModels "[tree]="cm"></tree>
         </div>
     </div>
     `,
@@ -55,7 +57,7 @@ model: Model;
     
     
 constructor(eventService: EventService, 
-            @Inject("ModelService") private modelService: RemoteDataService<Model> ) {
+            @Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
     super(eventService);
 }
     
@@ -76,10 +78,12 @@ ngOnInit() {
     
 }
 
+
 loadModel(uri: string) {
+
     this.events.service.publish(new StatusEvent("Fetching model"));
     let modelURI = "/morfeu/models/"+uri;
-    this.modelService.get(modelURI).subscribe( (model:Model) => {
+    this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
             console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
             this.diplayModel(model);    // not firing a load event yet if not needed
             this.events.ok();
@@ -89,7 +93,9 @@ loadModel(uri: string) {
     },
     () =>     this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
     );
+    
 }
+
 
 clearModel() {
 
@@ -98,10 +104,11 @@ clearModel() {
 
 }
 
+
 diplayModel(m: Model) {
     
     console.log("[UI] ModelComponent::diplayModel("+m.name+")");
-    m.normalise();
+    //m.normalise();
     this.model = m;
     
 }

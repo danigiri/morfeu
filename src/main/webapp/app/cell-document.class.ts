@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 
-// we use an underscore not to clash with standard js object
 export class CellDocument {
     
     name: string;

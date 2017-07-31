@@ -14,34 +14,60 @@
  *   limitations under the License.
  */
 
-import { CellModel } from './cell-model.class';
+import { CellModel, CellModelJSON } from './cell-model.class';
+//import { SerialisableJSONStatic, SerialisableJSON } from './serialisable-json.interface';
+import { SerialisableJSON } from './serialisable-json.interface';
 
-export class Model {
+//interface Model extends SerialisableJSON<typeof Model, ModelJSON>;
+//export class Model implements SerialisableJSON<typeof Model, ModelJSON> {
+export class Model implements SerialisableJSON<Model, ModelJSON> {
 
 public cellModels: CellModel[];
 
-constructor(schema: number, name: string, desc: string, valid: boolean) {
+constructor(public schema: number, public name: string, public desc: string, public valid: boolean) {
     this.cellModels = [];
 }
 
-normalise() {
-    this.cellModels = this.cellModels.map(cm => cm.normalised());
-}
+// check out this excellent post http://choly.ca/post/typescript-json/ to find out how to deserialize objects
+//normalise() {
+//    this.cellModels = this.cellModels.map(cm => cm.normalised());
+//}
 
 toJSON(): ModelJSON {
-    return Object.assign({}, this, {cellModels: this.cellModels.toString()});
+    return Object.assign({}, this, {cellModels: this.cellModels.map(cm => cm.toJSON()) });
+}
+
+
+fromJSON(json: ModelJSON|string): Model {
+    
+    if (typeof json === 'string') {
+    
+        return JSON.parse(json, Model.reviver);
+    
+    } else {
+        
+        let model = Object.create(Model.prototype);
+        
+        return Object.assign(model, json, {cellModels: json.cellModels.map( cm => CellModel.fromJSON(cm))});
+
+    }
+    
+}
+
+
+static reviver(key: string, value: any): any {
+    return key === "" ? (Object.create(Model.prototype)).fromJSON(value) : value;
 }
 
 }
 
 
-interface ModelJSON {
+export interface ModelJSON {
 
 schema: number;
 name: string;
 desc: string;
 valid: boolean;
 cellModels: CellModelJSON[];
- 
     
 }

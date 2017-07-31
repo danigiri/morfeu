@@ -20,17 +20,18 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
-
+/** This only creates plain JSON structures, not object instances, use RemoteObjectService instead 
+*/
 @Injectable()
 export class RemoteDataService<T> {
 
-// HERE HERE HERE add reviver stuff from 
+
 constructor(private http:Http) {}
 
 
 getAll(uri: string): Observable<T[]> {
     
-    console.log("[SERVICE] RemoteService::getAll("+uri+")"); 
+    console.log("[SERVICE] RemoteDataService::getAll("+uri+")"); 
     //TODO: handle errors with .catch here
     return this.http.get(uri).map(response => <T[]>response.json());
 
@@ -39,7 +40,7 @@ getAll(uri: string): Observable<T[]> {
 
 get(uri: string): Observable<T> {
 
-    console.log("[SERVICE] RemoteService::get("+uri+")"); 
+    console.log("[SERVICE] RemoteDataService::get("+uri+")"); 
     //TODO: handle errors with .catch here
     return this.http.get(uri).map(response => <T>response.json());
 
