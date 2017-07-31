@@ -16,11 +16,11 @@
 
 import { CellModel, CellModelJSON } from './cell-model.class';
 //import { SerialisableJSONStatic, SerialisableJSON } from './serialisable-json.interface';
-import { SerialisableJSON } from './serialisable-json.interface';
+import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 //interface Model extends SerialisableJSON<typeof Model, ModelJSON>;
 //export class Model implements SerialisableJSON<typeof Model, ModelJSON> {
-export class Model implements SerialisableJSON<Model, ModelJSON> {
+export class Model implements SerialisableToJSON<Model, ModelJSON> {
 
 public cellModels: CellModel[];
 

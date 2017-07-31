@@ -33,7 +33,7 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue',
 	template: `
-    <div id="catalogue" class="panel panel-default" *ngIf="catalogue">
+    <div id="catalogue" class="panel panel-primary" *ngIf="catalogue">
         <div class="panel-heading">
           <h4 id="catalogue-name" class="panel-title">{{catalogue.name}}</h4>
         </div>
@@ -105,6 +105,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
             },
             error => {
                 this.events.problem(error);
+                this.events.service.publish(new CellDocumentSelectionEvent(null));  // also clear selection
                 this.catalogue = null;
             },
             // FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??

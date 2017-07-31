@@ -15,7 +15,7 @@
  */
 
 
-import { TreeModel } from 'ng2-tree';
+import { TreeModel, TreeModelSettings } from 'ng2-tree';
 
 import { Type_ } from './type_.class';
 
@@ -23,6 +23,7 @@ export class CellModel implements TreeModel {
     
 public value: string;
 public id: string;
+public settings?:TreeModelSettings;
 
 attributes?: CellModel[];
 children?: CellModel[];
@@ -39,12 +40,22 @@ constructor(public schema: number,
 }    
 
 
-// there are 
+// there are values specific to comply wit the treemodel model, we set them explicitly here 
 init() {
+   
     this.value = this.name;
     this.id = this.URI;  // this is guaranteed to be unique 
+   
 }
 
+
+setTreeSettings(s:TreeModelSettings): CellModel {
+    
+    this.settings = s;
+
+    return this;
+
+}
 
 toJSON(): CellModelJSON {
 

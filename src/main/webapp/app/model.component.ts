@@ -17,7 +17,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { TreeModel } from 'ng2-tree';
+import { TreeModel, TreeModelSettings } from 'ng2-tree';
 
 import { Model, ModelJSON } from './model.class';
 import { Widget } from './widget.class';
@@ -33,12 +33,16 @@ import { StatusEvent } from './events/status.event';
     moduleId: module.id,
     selector: 'model',
     template: `
-    <div id="model-info" class="panel panel-default" *ngIf="model">
+    <div id="model-info" class="panel panel-info" *ngIf="model">
         <div class="panel-heading">
             <h4 id="model-name" class="panel-title">Model: {{model.name}}</h4>
         </div>
         <div class="panel-body">
-            <span id="model-desc">{{model.desc}}</span>
+            <div class="panel panel-info">
+              <div id="model-desc" class="panel-body">
+                {{model.desc}}
+              </div>
+            </div>
             <tree *ngFor="let cm of model.cellModels "[tree]="cm"></tree>
         </div>
     </div>
@@ -55,7 +59,39 @@ export class ModelComponent extends Widget implements OnInit {
     
 model: Model;
     
-    
+
+private demoTreeSettings:TreeModelSettings = {
+            cssClasses: {
+              expanded: 'fa fa-caret-down',
+              collapsed: 'fa fa-caret-right',
+              empty: 'fa fa-caret-right disabled',
+              leaf: 'fa'
+            },
+            templates: {
+              node: '<i class="fa fa-folder-o"></i>',
+              leaf: '<i class="fa fa-file-o"></i>'
+            }
+};
+
+private treeSettings:TreeModelSettings = {
+        'static': true,
+        'rightMenu': true,
+        'leftMenu': true,
+        'cssClasses': {
+            'expanded': 'glyphicon glyphicon-collapse-down',
+            'collapsed': 'glyphicon glyphicon-expand',
+            'empty': 'glyphicon glyphicon-unchecked',
+            'leaf': 'glyphicon glyphicon-unchecked'
+        },
+        'templates': {
+            'node': '<i class="fa fa-folder-o"></i>',
+            'leaf': '<i class="fa fa-file-o"></i>',
+            'leftMenu': 'xxxx'
+        }
+        
+        
+};
+
 constructor(eventService: EventService, 
             @Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
     super(eventService);
@@ -109,6 +145,7 @@ diplayModel(m: Model) {
     
     console.log("[UI] ModelComponent::diplayModel("+m.name+")");
     //m.normalise();
+    m.cellModels = m.cellModels.map(m => m.setTreeSettings(this.treeSettings))
     this.model = m;
     
 }

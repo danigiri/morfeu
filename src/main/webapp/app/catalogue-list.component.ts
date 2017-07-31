@@ -36,7 +36,7 @@ import { StatusEvent } from './events/status.event';
     moduleId: module.id,
     selector: 'catalogue-list',
     template: `
-     <div class="panel panel-default">
+     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">Catalogues</h4>
       </div>
