@@ -35,7 +35,7 @@ public void documentBasicDataTest() {
 
 	// click on catalogue list entry and it appears
 	UICatalogues catalogues = UICatalogues.openCatalogues()
-										  .shouldAppear();
+										  	.shouldAppear();
 	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
 	

@@ -58,7 +58,8 @@ import { StatusEvent } from './events/status.event';
                 #model-info {}
                 #model-name {}
                 #model-desc {}
-                #model-cell-models {}
+                #model-cell-model-list {}
+                
     `]
 })
 

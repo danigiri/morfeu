@@ -29,7 +29,9 @@ import static com.codeborne.selenide.Selenide.*;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CatalogueUITest extends UITezt {
 
-private static final int CATALOGUE_SIZE = 3;
+private static final int EXPECTED_CATALOGUES_COUNT = 3;
+private static final int EXPECTED_DOCUMENTS_SIZE = 4;
+
 
 @Test
 public void catalogueListTest() throws Exception {
@@ -43,7 +45,7 @@ public void catalogueListTest() throws Exception {
 	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).getText());
 	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(2).getText());
-	catalogueEntries.shouldHaveSize(CATALOGUE_SIZE);
+	catalogueEntries.shouldHaveSize(EXPECTED_CATALOGUES_COUNT);
 	UIProblem.shouldNotBeVisible();
 	
 }
@@ -61,7 +63,7 @@ public void catalogueDetailTest() throws Exception {
 	
 	// test listing of documents
 	ElementsCollection documentEntries = catalogue.getDocuments();
-	documentEntries.shouldHaveSize(4);
+	documentEntries.shouldHaveSize(EXPECTED_DOCUMENTS_SIZE);
 	assertEquals("Wrong catalogue content", "Document 1", documentEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Document with non-valid content", documentEntries.get(1).getText());
 	assertEquals("Wrong catalogue content", "Document with non-valid model", documentEntries.get(2).getText());

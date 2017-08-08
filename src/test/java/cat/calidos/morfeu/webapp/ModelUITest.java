@@ -16,48 +16,38 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIDocument {
-
-public UIDocument() {
-}
-
-//public void shouldAppear() {
-//	$("#document-info").should(appear);
-//}
-
-public void shouldBeVisible() {
-	$("#document-info").shouldBe(visible);
-}
+public class ModelUITest extends UITezt {
 
 
-public static void shouldNotBeVisible() {
-	$("#document-info").shouldNotBe(visible);
-}
-
-
-public String title() {
-	return $("#document-name").getText();
+@Test
+public void modelTest() {
 	
-}
+	open(appBaseURL);
 
-
-public String desc() {
-	return $("#document-desc").getText();
-}
-
-public boolean isValid() {
-	return $("#document-valid").getText().equals("VALID");
-}
-
-public UIModel getModel() {
-	return new UIModel();
+	UICatalogues catalogues = UICatalogues.openCatalogues()
+											.shouldAppear();
+	UIModel.shouldNotBeVisible();
+	
+	UICatalogue catalogue = catalogues.clickOn(0);
+	catalogue.shouldAppear();
+	UIModel.shouldNotBeVisible();
+	
+	UIModel model = catalogue.clickOnDocumentNamed("Document 1")
+								.getModel()
+								.shouldAppear();
+	
+	assertEquals("Model: /test-model.xsd", model.name());
+	assertEquals("Description of test model", model.desc());
+	
 }
 
 }
