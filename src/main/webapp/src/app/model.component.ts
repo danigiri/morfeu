@@ -46,7 +46,7 @@ import { StatusEvent } from './events/status.event';
                 <tree-root
                     [nodes]="model.cellModels">
                     <template #treeNodeTemplate let-node let-index="index">
-                       <span>{{ node.data.name }}</span>
+                       <span>{{ node.data.name }}</span> -  <span>{{ node.data.desc }}</span>
                     </template>
                 </tree-root>
             </div>

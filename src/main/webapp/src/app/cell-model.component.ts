@@ -17,10 +17,14 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
 
+import { TreeNode } from 'angular-tree-component';
+
+
 @Component({
     moduleId: module.id,
     selector: 'cell-model',
     template: `
+        <span>{{ node.data.name }}</span> -  <span>{{ node.data.desc }}</span>
         `,
 
         styles:[`
