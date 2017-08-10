@@ -13,6 +13,11 @@
 	 <xs:include schemaLocation="test-cells.xsd" />
 	
 	<xs:element name="test">
+		<xs:annotation>
+		<xs:appinfo>
+			<mf:desc>Root cell-model desc</mf:desc>
+		</xs:appinfo>
+		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
 				<xs:choice minOccurs="0" maxOccurs="unbounded">

@@ -54,8 +54,8 @@ import { StatusEvent } from './events/status.event';
     <catalogue></catalogue>
     `,
     styles:[`
-    #catalogue-list {}
-    .catalogue-list-entry {}
+        #catalogue-list {}
+        .catalogue-list-entry {}
     `],
     providers: [
                 ]

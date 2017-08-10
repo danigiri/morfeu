@@ -15,7 +15,7 @@
  */
 
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { TreeNode } from 'angular-tree-component';
 
@@ -24,14 +24,20 @@ import { TreeNode } from 'angular-tree-component';
     moduleId: module.id,
     selector: 'cell-model',
     template: `
-        <span>{{ node.data.name }}</span> -  <span>{{ node.data.desc }}</span>
+        <div class="cell-model-entry">
+            <span class="cell-model-name">{{ node.data.name }}</span> - <span class="cell-model-desc">{{ node.data.desc }}</span>
+        </div>
         `,
 
         styles:[`
+                .cell-model-entry {}
+                .cell-model-name {}
+                .cell-model-desc {}
     `]
 })
 
 export class CellModelComponent {
-    
+
+@Input() node: TreeNode;
     
 }

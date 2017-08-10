@@ -16,9 +16,12 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.w3c.dom.Node;
+
+import com.sun.xml.xsom.XSAnnotation;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -34,7 +37,7 @@ String value();
 @Component.Builder
 interface Builder {
 
-	@BindsInstance Builder from(Node a);
+	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
 	@BindsInstance Builder named(@Named("tag") String tag);
 	
 	ModelMetadataComponent build();

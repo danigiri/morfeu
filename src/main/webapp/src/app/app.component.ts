@@ -28,7 +28,6 @@ import { StatusComponent } from './status.component';
 import { RemoteDataService } from './services/remote-data.service';
 import { RemoteObjectService } from './services/remote-object.service';
 
-
 import { Model, ModelJSON } from './model.class';
 import { Catalogue } from './catalogue.class';
 import { CellDocument } from './cell-document.class';

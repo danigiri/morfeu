@@ -17,6 +17,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
+import { CellModelComponent } from './cell-model.component';
+
 import { Model, ModelJSON } from './model.class';
 import { Widget } from './widget.class';
 import { RemoteObjectService } from './services/remote-object.service';
@@ -42,12 +44,13 @@ import { StatusEvent } from './events/status.event';
               </div>
             </div>
             <!-- non-intuitively, the nodes binding expects an array and not a root node-->
+            <!-- we use direct binding as opposed to events for the moment -->
             <div id="model-cell-models" class="panel panel-info">
                 <tree-root
                     [nodes]="model.cellModels">
-                    <template #treeNodeTemplate let-node let-index="index">
-                       <span>{{ node.data.name }}</span> -  <span>{{ node.data.desc }}</span>
-                    </template>
+                    <ng-template #treeNodeTemplate let-node let-index="index">
+                       <cell-model [node]="node"></cell-model>
+                    </ng-template>
                 </tree-root>
             </div>
         </div>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:mf="http://dani.calidos.com/morfeu/metadata"
 		   >
 
 	 <xs:include schemaLocation="test-types.xsd" />
@@ -12,10 +13,12 @@
 	
 	<xs:complexType name="testCell">
 		<xs:annotation>
-			<xs:documentation>
-			testCell desc
-			</xs:documentation>
+			<xs:appinfo>
+				<mf:desc>testCell desc</mf:desc>			
+			</xs:appinfo>
 		</xs:annotation>
+		
+		
 		<xs:attribute name="text" type="textField" />
 		<xs:attribute name="number" type="numberField" />
 	</xs:complexType>
@@ -23,9 +26,9 @@
 	
 	<xs:complexType name="colCell">
 		<xs:annotation>
-			<xs:documentation>
-			colCell desc
-			</xs:documentation>
+			<xs:appinfo>
+				<mf:desc>colCell desc</mf:desc>
+			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="test" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
@@ -36,9 +39,9 @@
 		   
 	<xs:complexType name="rowCell">
 		<xs:annotation>
-			<xs:documentation>
-			rowcell desc
-			</xs:documentation>
+			<xs:appinfo>
+				<mf:desc>rowCell desc</mf:desc>
+			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
 				<xs:element name="col" type="colCell" minOccurs="0" maxOccurs="unbounded"/>

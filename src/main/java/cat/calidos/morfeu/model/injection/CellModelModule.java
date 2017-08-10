@@ -29,14 +29,17 @@ import javax.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 import org.xml.sax.Locator;
 
+import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
+import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
@@ -50,6 +53,7 @@ import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 import dagger.producers.Producer;
+import dagger.producers.Produces;
 
 
 /**
@@ -83,9 +87,13 @@ public static CellModel provideCellModel(Type t,
 
 
 @Provides @Named("SimpleInstance")
-public static CellModel buildCellModelFrom(XSElementDecl elem, @Named("name") String name, Type t, URI u) {
+public static CellModel buildCellModelFrom(XSElementDecl elem, 
+										   @Named("name") String name, 
+										   @Named("desc") String desc, 
+										   Type t, 
+										   URI u) {
 	// TODO: add cell description from metadata
-	return new CellModel(u, name, "DESC GOES HERE", t);
+	return new CellModel(u, name, desc, t);
 
 }
 
@@ -93,25 +101,35 @@ public static CellModel buildCellModelFrom(XSElementDecl elem, @Named("name") St
 @Provides @Named("ComplexInstance")
 public static ComplexCellModel buildComplexCellModelFrom(XSElementDecl elem,
 														 @Named("name") String name,
+														 @Named("desc") String desc, 
 														 Type t,  
 														 Attributes<CellModel> attributes, 
 														 Composite<CellModel> children,
 														 URI u) {
 		
-	return new ComplexCellModel(u, name, "DESC GOES HERE", t, attributes, children);
+	return new ComplexCellModel(u, name, desc, t, attributes, children);
 	
 }
 
 
+@Provides @Named("desc")
+public static String descriptionFromSchemaAnnotation(XSElementDecl elem, XSType type) {
 
+	// note that we prioritise the element annotation if any, if not we default to the XSType one
+	String desc = "";
+	XSAnnotation annotation = (elem.getAnnotation()!=null) ? elem.getAnnotation() : type.getAnnotation();
+	desc = DaggerModelMetadataComponent.builder().from(annotation).named("mf:desc").build().value();
+	
+	return desc;
+}
 
 
 @Provides
-public static Type getTypeFrom(XSElementDecl elem, @Named("TypeDefaultName") String defaultName) {
+public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String defaultName) {
 	
 	return DaggerTypeComponent.builder()
 								.withDefaultName(defaultName)
-								.withXSType(elem.getType())
+								.withXSType(type)
 								.build()
 								.type();
 			
@@ -164,7 +182,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u)
 		return new OrderedMap<CellModel>(0);						// base case, no children, we return
 	}
 	
-	System.err.println("TYPE:"+t);
+	//System.err.println("TYPE:"+t);
 	XSTerm termType = contentType.asParticle().getTerm();			// recursive case, go through all children
 	LinkedList<XSTerm> termTypes = new LinkedList<XSTerm>();		// this is a list of all the terms left to process
 	termTypes.add(termType);
@@ -174,7 +192,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u)
 		if (termType.isModelGroup()) {
 			XSModelGroup typeModelGroup = termType.asModelGroup();
 			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.getTerm()));
-			System.err.print("\t["+typeModelGroup.getSize()+"]");
+			//System.err.print("\t["+typeModelGroup.getSize()+"]");
 		} else {
 			XSElementDecl child = termType.asElementDecl();
 			CellModel childCellModel = DaggerCellModelComponent.builder()
@@ -231,6 +249,11 @@ public static String getDefaultTypeName(XSElementDecl elem) {
 }
 
 
+@Provides
+public static XSType type(XSElementDecl elem) {
+	return elem.getType();
+}
+
 
 private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl, URI nodeURI) {
 
@@ -261,6 +284,7 @@ private static Attributes<CellModel> attributesFrom(Collection<? extends XSAttri
 
 	return attributes;
 }
+
 
 
 //private static URI getDefaultURIFrom(Locator locator, @Nullable String uriPrefix, String name) throws RuntimeException {

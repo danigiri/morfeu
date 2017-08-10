@@ -72,7 +72,7 @@ public static XSOMParser produceSchemaParser(SAXParserFactory factory,
 											 ErrorHandler parserErrorHandler, 
 											 AnnotationParserFactory annotationParserFactory) {
 	
-	log.trace("[Producing XSOMParser]");
+	log.trace("[Producing XSOMParser] with custom error handler and annotation parser");
 
     XSOMParser parser = new XSOMParser(factory);
     parser.setErrorHandler(parserErrorHandler);

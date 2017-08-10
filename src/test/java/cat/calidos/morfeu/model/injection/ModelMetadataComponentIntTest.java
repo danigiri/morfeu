@@ -42,9 +42,8 @@ public void testValue() throws Exception {
 	
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
-	Node annotationDOM = (Node)annotation.getAnnotation();	// as we are using the DomAnnotationParserFactory from XSOM
 	
-	String desc = DaggerModelMetadataComponent.builder().from(annotationDOM).named("mf:desc").build().value().trim();
+	String desc = DaggerModelMetadataComponent.builder().from(annotation).named("mf:desc").build().value().trim();
 	assertEquals("Description of test model", desc);
 	
 }
