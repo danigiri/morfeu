@@ -18,6 +18,10 @@ package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -45,14 +49,15 @@ public UICatalogues shouldAppear() {
 }
 
 
-public ElementsCollection getCatalogueEntries() {
-	return $$(".catalogue-list-entry");
+public List<UICatalogueEntry> getCatalogueEntries() {
+	return $$(".catalogue-list-entry").stream().map( e -> new UICatalogueEntry(e)).collect(Collectors.toList());
+
 }
 
 
 public UICatalogue clickOn(int i) {
 
-	ElementsCollection catalogueEntries = this.getCatalogueEntries();
+	List<UICatalogueEntry> catalogueEntries = this.getCatalogueEntries();
 	int count = catalogueEntries.size();
 	assertTrue("Could not click on catalogue entry "+i+" as there are only "+count+" entries", i<count);
 	catalogueEntries.get(i).click();

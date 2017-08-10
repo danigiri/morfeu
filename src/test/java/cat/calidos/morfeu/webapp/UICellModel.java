@@ -16,42 +16,10 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIModel {
-
-
-public UIModel shouldAppear() {
-
-	$("#model-info").should(appear);
-
-	return this;
-
-}
-
-
-public void shouldBeVisible() {
-	$("#model-info").shouldBe(visible);
-}
-
-
-public static void shouldNotBeVisible() {
-	$("#model-info").shouldNotBe(visible);
-}
-
-
-public String name() {
-	return $("#model-name").getText();
-}
-
-public String desc() {
-	return $("#model-desc").getText();
-}
-
-
+public class UICellModel {
 
 }

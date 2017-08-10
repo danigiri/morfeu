@@ -16,40 +16,25 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
+import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIModel {
+public class UICatalogueEntry {
 
+private SelenideElement element;
 
-public UIModel shouldAppear() {
-
-	$("#model-info").should(appear);
-
-	return this;
-
+public UICatalogueEntry(SelenideElement e) {
+	this.element = e;
 }
 
-
-public void shouldBeVisible() {
-	$("#model-info").shouldBe(visible);
+public void click() {
+	this.element.click();
 }
-
-
-public static void shouldNotBeVisible() {
-	$("#model-info").shouldNotBe(visible);
-}
-
 
 public String name() {
-	return $("#model-name").getText();
-}
-
-public String desc() {
-	return $("#model-desc").getText();
+	return element.getText();
 }
 
 

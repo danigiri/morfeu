@@ -18,6 +18,8 @@ package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import com.codeborne.selenide.ElementsCollection;
@@ -39,13 +41,13 @@ public void catalogueListTest() throws Exception {
 	// catalogue list appears and has three entries
 	open(appBaseURL);
 
-	ElementsCollection catalogueEntries = UICatalogues.openCatalogues()
-													  .shouldAppear()
-													  .getCatalogueEntries();
-	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).getText());
-	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).getText());
-	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(2).getText());
-	catalogueEntries.shouldHaveSize(EXPECTED_CATALOGUES_COUNT);
+	List<UICatalogueEntry> catalogueEntries = UICatalogues.openCatalogues()
+													  		.shouldAppear()
+													  		.getCatalogueEntries();
+	assertEquals(EXPECTED_CATALOGUES_COUNT, catalogueEntries.size());
+	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).name());
+	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).name());
+	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(2).name());
 	UIProblem.shouldNotBeVisible();
 	
 }
@@ -82,7 +84,7 @@ public void catalogueDetailErrorTest() {
 	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
 	
-	ElementsCollection catalogueEntries = catalogues.getCatalogueEntries();
+	List<UICatalogueEntry> catalogueEntries = catalogues.getCatalogueEntries();
 	catalogueEntries.get(2).click();
 
 	UIProblem problem = UIProblem.problem().shouldAppear();

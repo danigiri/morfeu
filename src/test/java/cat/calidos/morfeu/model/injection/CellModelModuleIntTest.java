@@ -68,7 +68,7 @@ public void testProvideCellModel() throws Exception {
 	
 	CellModel test = cellModelFrom(modelURI, "test");							// TEST
 	// default name for anonymous types is <elem>-type
-	checkComplexCellModel(test, "test", "Root cell-model desc", "test-type", modelURI+"/test");
+	checkComplexCellModel(test, "test", "Root cell-model desc ", "test-type", modelURI+"/test");
 	
 	
 	ComplexCellModel testComplex = test.asComplex();
