@@ -23,7 +23,6 @@ import javax.inject.Named;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import dagger.BindsInstance;
@@ -32,7 +31,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, ParserModule.class, 
+@ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, JSONParserModule.class, 
 							  ListeningExecutorServiceModule.class})
 public interface DocumentComponent {
 

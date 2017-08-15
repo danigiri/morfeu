@@ -31,7 +31,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ModelModule.class, ParserModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ModelModule.class, ListeningExecutorServiceModule.class})
 public interface ModelComponent {
 
 ListenableFuture<Model> model() throws ValidationException, ExecutionException;

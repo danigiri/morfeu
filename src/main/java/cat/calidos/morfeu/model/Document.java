@@ -63,7 +63,6 @@ public Document(String name, String desc, String kind, URI prefix, URI uri, URI 
 }
 
 
-
 @Override
 public void validate() throws ValidationException, FetchingException {
 	if (validator==null) {

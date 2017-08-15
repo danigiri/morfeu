@@ -33,13 +33,12 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
-import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
-import dagger.producers.Produced;
+
 
 /**
 * @author daniel giribet
@@ -47,7 +46,7 @@ import dagger.producers.Produced;
 public class ModelTezt {
 
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
-@Mock Produced<XSOMParser> parserProducer;
+
 
 protected Model parseModelFrom(URI u) throws ConfigurationException, 
 											 InterruptedException, 
@@ -64,12 +63,9 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 protected XSSchemaSet parseSchemaFrom(URI uri)
 		throws InterruptedException, ExecutionException, ConfigurationException, ParsingException, FetchingException {
 
-	XSOMParser parser = DaggerParserComponent.builder().build().produceXSOMParser().get();
-	when(parserProducer.get()).thenReturn(parser);
-		
-	XSSchemaSet schemaSet = ModelModule.parseModel(uri, parserProducer);
+	XSOMParser parser = DaggerSchemaParserComponent.builder().build().produceXSOMParser().get();
 
-	return schemaSet;
+	return ModelModule.parseModel(uri, parser);
 
 }
 

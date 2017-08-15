@@ -19,19 +19,27 @@ package cat.calidos.morfeu.model.injection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dagger.Module;
-import dagger.producers.ProducerModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class CellModule {
+public class JSONParserModule {
 
-protected final static Logger log = LoggerFactory.getLogger(CellModule.class);
+protected final static Logger log = LoggerFactory.getLogger(JSONParserModule.class);
 		
-
+		
+@Produces
+public static ObjectMapper produceJSONObjectMapper() {
+	
+	log.trace("[Producing ObjectMapper]");
+	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects in Dagger2
+	
+}
 
 
 }

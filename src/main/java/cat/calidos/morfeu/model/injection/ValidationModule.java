@@ -42,7 +42,6 @@ import cat.calidos.morfeu.model.XSDValidator;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.problems.ValidationException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -86,6 +85,7 @@ public static SchemaFactory produceSchemaFactory() {
 	return sf;
 
 }
+
 
 @Produces
 public static StreamSource produceStreamSource(@Named("FetchableModelURI") URI u) {
@@ -147,9 +147,10 @@ public static Validator produceValidator(Schema s) {
 }
 
 
-// notic this is a DOM Document
+// notice this is a DOM Document and not a morfeu document
 @Produces
-public static Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI u) throws ParsingException, FetchingException {
+public static org.w3c.dom.Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI u) 
+		throws ParsingException, FetchingException {
 	
 	// TODO: we can probably parse with something faster than building into dom
 	Document dom;
@@ -167,7 +168,7 @@ public static Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI
 }
 
 @Produces
-public static DOMSource produceDOMSource(Document xmldoc) {
+public static DOMSource produceDOMSource(org.w3c.dom.Document xmldoc) {
 	return new DOMSource(xmldoc);
 }
 

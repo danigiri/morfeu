@@ -43,9 +43,9 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class ParserModule {
+public class SchemaParserModule {
 
-protected final static Logger log = LoggerFactory.getLogger(ParserModule.class);
+protected final static Logger log = LoggerFactory.getLogger(SchemaParserModule.class);
 		
 @Produces
 public static SAXParserFactory produceSAXParserFactory() throws ConfigurationException {
@@ -92,15 +92,6 @@ public static ErrorHandler errorHandler() {
 @Produces
 public static AnnotationParserFactory annotationParserFactory() {
 	return new DomAnnotationParserFactory();
-}
-
-
-@Produces
-public static ObjectMapper produceJSONObjectMapper() {
-	
-	log.trace("[Producing ObjectMapper]");
-	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects in Dagger2
-	
 }
 
 

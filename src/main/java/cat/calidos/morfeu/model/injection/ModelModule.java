@@ -51,7 +51,7 @@ import dagger.producers.Produces;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule 
+@ProducerModule(includes=SchemaParserModule.class)
 public class ModelModule extends RemoteModule {
 
 
@@ -68,9 +68,8 @@ public static Model produceModel(@Named("ModelURI") URI u,
 
 // notice here we are using the fetchable uri to get the schema and parse it, as this one is guaranteed to be fetchable
 @Produces
-public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, Produced<XSOMParser> parserProducer) throws ParsingException, ExecutionException, FetchingException {
+public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMParser parser) throws ParsingException, ExecutionException, FetchingException {
 	
-	XSOMParser parser = parserProducer.get();
 	XSSchemaSet schemaSet = null;
 	String uri = u.toString();
 	try {

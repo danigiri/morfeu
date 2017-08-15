@@ -144,7 +144,7 @@ private Document parseRelativeLocation(String location) throws ParsingException,
 	String absoluteLocation = this.getClass().getClassLoader().getResource(location).toString();
 	URI uri = new URI(absoluteLocation);
 	InputStream stream = FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
-	ObjectMapper mapper = ParserModule.produceJSONObjectMapper();
+	ObjectMapper mapper = SchemaParserModule.produceJSONObjectMapper();
 	Document document = DocumentModule.parseDocument(uri, stream, mapper);
 
 	return document;

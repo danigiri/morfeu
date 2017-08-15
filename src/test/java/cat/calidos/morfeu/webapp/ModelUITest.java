@@ -19,11 +19,14 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
+import cat.calidos.morfeu.webapp.ui.UICellModelEntry;
 import cat.calidos.morfeu.webapp.ui.UIModel;
 
 
@@ -105,7 +108,15 @@ public void testCellModels() {
 				 					.getModel()
 				 					.shouldAppear();
 
-	//model.rootCellModels();
+	List<UICellModelEntry> rootCellModels = model.rootCellModels();
+	assertEquals(1, rootCellModels.size());
+	
+	UICellModelEntry cellModelEntry = rootCellModels.get(0);
+	assertEquals("test", cellModelEntry.name());
+	assertEquals("Root cell-model desc", cellModelEntry.desc());
+	
+	//TODO: add cell model children testing
+	
 }
 
 }
