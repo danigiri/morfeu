@@ -54,7 +54,6 @@ public static String loadDocument(String prefix, String path) {
 											.build()
 											.produceDocument()
 											.get();
-		document.validate();
 				
 	} catch (InterruptedException e) {
 		problem = "Interrupted processing document '"+path+"' ("+e.getMessage()+")";		
@@ -80,7 +79,7 @@ public static String loadDocument(String prefix, String path) {
 
 	} else  {
 
-		return render("templates/document-problem.twig", new Object(), problem);	// no data, so passing empty object
+		return render("templates/document-problem.twig", path, problem);	// path as data to help diagnostics
 		
 	}
 	

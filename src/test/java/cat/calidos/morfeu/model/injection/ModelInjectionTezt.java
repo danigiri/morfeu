@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 
 /**
 * @author daniel giribet
@@ -33,7 +34,8 @@ protected String uriModuleForPath(String path) {
 }
 
 
-protected Document produceDocumentFromPath(String path) throws InterruptedException, ExecutionException, ParsingException, FetchingException {
+protected Document produceDocumentFromPath(String path) 
+		throws InterruptedException, ExecutionException, ParsingException, FetchingException, ValidationException {
 	
 	String doc1Path = uriModuleForPath(path);
 	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();

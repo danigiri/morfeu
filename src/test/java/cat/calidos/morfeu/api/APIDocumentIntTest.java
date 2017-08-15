@@ -86,13 +86,9 @@ public void testNonValidContentDocument() throws Exception {
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
-	assertEquals("Document with non-valid content", doc.get("name").asText());
-
-	String expected = webappPrefix+"target/test-classes/test-resources/documents/nonvalid-document.xml";
-	assertEquals(expected, doc.get("contentURI").asText());
+	assertEquals("Problematic document", doc.get("name").asText());
+	assertTrue(doc.get("problem").asText().contains("One of '{col}' is expected"));
 	assertFalse(doc.get("valid").asBoolean());
-	 
-	assertTrue(doc.get("problem").asText().contains("Invalid content"));
 	
 }
 

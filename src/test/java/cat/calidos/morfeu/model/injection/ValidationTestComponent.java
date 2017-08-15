@@ -29,7 +29,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ValidationModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ContentParserModule.class, ListeningExecutorServiceModule.class})
 public interface ValidationTestComponent {
 
 ListenableFuture<Validable> validator();

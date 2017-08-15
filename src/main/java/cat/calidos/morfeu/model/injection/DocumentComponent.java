@@ -25,17 +25,18 @@ import com.google.common.util.concurrent.ListenableFuture;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, JSONParserModule.class, 
+@ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, DocumentParserModule.class, 
 							  ListeningExecutorServiceModule.class})
 public interface DocumentComponent {
 
-ListenableFuture<Document> produceDocument() throws ParsingException, FetchingException;
+ListenableFuture<Document> produceDocument() throws ParsingException, FetchingException, ValidationException;
 
 @ProductionComponent.Builder
 interface Builder {

@@ -28,9 +28,9 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class JSONParserModule {
+public class DocumentParserModule {
 
-protected final static Logger log = LoggerFactory.getLogger(JSONParserModule.class);
+protected final static Logger log = LoggerFactory.getLogger(DocumentParserModule.class);
 		
 		
 @Produces

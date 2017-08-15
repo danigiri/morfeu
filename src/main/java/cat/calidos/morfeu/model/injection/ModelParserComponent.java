@@ -22,13 +22,12 @@ import com.sun.xml.xsom.parser.XSOMParser;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import dagger.producers.ProductionComponent;
 
-/**
+/** This is at the moment only used for testing, as SchemaParserModule is included directly as a dependency
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={SchemaParserModule.class, ListeningExecutorServiceModule.class})
-public interface SchemaParserComponent {
+@ProductionComponent(modules={ModelParserModule.class, ListeningExecutorServiceModule.class})
+public interface ModelParserComponent {
 
-//ListenableFuture<ObjectMapper> produceJSONObjectMapper();
 ListenableFuture<XSOMParser> produceXSOMParser() throws ConfigurationException;
 
 }

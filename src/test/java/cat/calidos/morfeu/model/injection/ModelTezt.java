@@ -63,7 +63,7 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 protected XSSchemaSet parseSchemaFrom(URI uri)
 		throws InterruptedException, ExecutionException, ConfigurationException, ParsingException, FetchingException {
 
-	XSOMParser parser = DaggerSchemaParserComponent.builder().build().produceXSOMParser().get();
+	XSOMParser parser = DaggerModelParserComponent.builder().build().produceXSOMParser().get();
 
 	return ModelModule.parseModel(uri, parser);
 

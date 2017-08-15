@@ -27,15 +27,15 @@ import dagger.producers.ProductionSubcomponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ValidationModule.class, ListeningExecutorServiceModule.class})
-public interface ValidatorComponent {
+@ProductionSubcomponent(modules={ContentParserModule.class, ListeningExecutorServiceModule.class})
+public interface ContentParserComponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
 
 
 @ProductionSubcomponent.Builder
 interface Builder {
-	ValidatorComponent builder();
+	ContentParserComponent builder();
 }
 
 }

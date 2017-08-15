@@ -43,9 +43,9 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class SchemaParserModule {
+public class ModelParserModule {
 
-protected final static Logger log = LoggerFactory.getLogger(SchemaParserModule.class);
+protected final static Logger log = LoggerFactory.getLogger(ModelParserModule.class);
 		
 @Produces
 public static SAXParserFactory produceSAXParserFactory() throws ConfigurationException {

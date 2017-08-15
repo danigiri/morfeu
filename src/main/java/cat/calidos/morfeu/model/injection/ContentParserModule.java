@@ -49,9 +49,9 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class ValidationModule {
+public class ContentParserModule {
 
-protected final static Logger log = LoggerFactory.getLogger(ValidationModule.class);
+protected final static Logger log = LoggerFactory.getLogger(ContentParserModule.class);
 
 @Produces
 public static DocumentBuilderFactory produceDcoumentBuilderFactory() {

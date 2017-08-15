@@ -55,8 +55,8 @@ public void documentBasicDataTest() {
 
 	
 	document = catalogue.clickOnDocumentNamed("Document with non-valid content");
-	assertEquals("Document with non-valid content xml", document.title());
-	assertEquals("Another document", document.desc());
+	assertEquals("Problematic document Unknown", document.title());
+	assertEquals("Unknown", document.desc());
 	assertFalse(document.isValid());
 	
 }

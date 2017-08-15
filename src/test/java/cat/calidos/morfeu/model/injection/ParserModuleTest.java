@@ -33,17 +33,17 @@ public class ParserModuleTest {
 
 @Test
 public void testProduceSAXParserFactory() throws Exception {
-	assertNotNull(SchemaParserModule.produceSAXParserFactory());
+	assertNotNull(ModelParserModule.produceSAXParserFactory());
 }
 
 
 @Test
 public void testProduceSchemaParser() throws Exception {
 	
-	SAXParserFactory factory = SchemaParserModule.produceSAXParserFactory();
-	ErrorHandler errorHandler = SchemaParserModule.errorHandler();
-	AnnotationParserFactory annotationParserFactory = SchemaParserModule.annotationParserFactory();
-	XSOMParser parser = SchemaParserModule.produceSchemaParser(factory, errorHandler, annotationParserFactory);
+	SAXParserFactory factory = ModelParserModule.produceSAXParserFactory();
+	ErrorHandler errorHandler = ModelParserModule.errorHandler();
+	AnnotationParserFactory annotationParserFactory = ModelParserModule.annotationParserFactory();
+	XSOMParser parser = ModelParserModule.produceSchemaParser(factory, errorHandler, annotationParserFactory);
 	assertNotNull(parser);
 	assertNotNull(parser.getErrorHandler());
 	
@@ -52,7 +52,7 @@ public void testProduceSchemaParser() throws Exception {
 
 @Test
 public void testProduceJSONObjectMapper() throws Exception {
-	assertNotNull(SchemaParserModule.produceJSONObjectMapper());
+	assertNotNull(DocumentParserModule.produceJSONObjectMapper());
 }
 
 
