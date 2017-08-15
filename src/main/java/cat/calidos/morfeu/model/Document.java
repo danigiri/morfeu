@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ protected URI prefix;
 protected URI modelURI;
 protected URI fetchableModelURI;
 protected URI contentURI;
+protected URI fetchableContentURI;
+protected org.w3c.dom.Document content;
 protected Model model;
 protected Validable validator;
 protected boolean isValid = false;
@@ -120,7 +122,7 @@ public URI getModelURI() {
 /** this is the user-friendly, relative URI used to easily identify this document model */
 @JsonProperty("modelURI") 
 public void setModelURI(URI uri) {
-	System.err.println("***************** MODELURI="+uri);
+//	System.err.println("***************** MODELURI="+uri);
 	this.modelURI = uri;
 	
 }
@@ -139,9 +141,7 @@ public void setFetchableModelURI(URI uri) {
 	
 }
 
-
-
-
+/** this is the user-friendly, relative URI used to easily identify this document content */
 public URI getContentURI() {
 	return contentURI;
 }
@@ -150,6 +150,25 @@ public URI getContentURI() {
 @JsonProperty("contentURI") 
 public void setContentURI(URI contentURI) {
 	this.contentURI = contentURI;
+}
+
+
+/** This is the url that will be used to fetch the raw model content */
+public URI getFetchableContentURI() {
+	return fetchableContentURI;
+}
+
+
+@JsonProperty("fetchableContentURI") 
+public void setFetchableContentURI(URI uri) {
+	this.fetchableContentURI = uri;
+}
+
+
+public void setContent(org.w3c.dom.Document content) {
+
+	this.content = content;
+	
 }
 
 

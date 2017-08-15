@@ -16,26 +16,33 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+
+import javax.inject.Named;
+
 import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
-import dagger.producers.ProductionSubcomponent;
+import dagger.BindsInstance;
+import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ContentParserModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ContentParserModule.class, ListeningExecutorServiceModule.class})
 public interface ContentParserComponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
+ListenableFuture<org.w3c.dom.Document> parsedContent();
 
-
-@ProductionSubcomponent.Builder
+@ProductionComponent.Builder
 interface Builder {
-	ContentParserComponent builder();
+	@BindsInstance Builder forContent(@Named("FetchableContentURI") URI u);
+	@BindsInstance Builder withModel(@Named("FetchableModelURI") URI u);
+	ContentParserComponent build();
 }
 
 }

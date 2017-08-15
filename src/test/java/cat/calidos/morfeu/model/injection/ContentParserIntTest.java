@@ -21,26 +21,25 @@ import static org.junit.Assert.*;
 import java.net.URI;
 
 import org.junit.Test;
-import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.model.injection.DaggerValidationTestComponent;
+import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
 import cat.calidos.morfeu.problems.ValidationException;
-import cat.calidos.morfeu.utils.MorfeuUtils;
+
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class XSDValidatorIntTest  extends ModelInjectionTezt {
+public class ContentParserIntTest extends ModelInjectionTezt {
 
 
 @Test
 public void testValidate() throws Exception {
 
-	String docPath = uriModuleForPath("test-resources/documents/document1.xml");
+	String contentPath = uriModuleForPath("test-resources/documents/document1.xml");
 	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
-	Validable validator = DaggerValidationTestComponent.builder()
-							.forDocument(new URI(docPath))
+	Validable validator = DaggerContentParserComponent.builder()
+							.forContent(new URI(contentPath))
 							.withModel(new URI(modelPath))
 							.build()
 							.validator()
@@ -54,10 +53,10 @@ public void testValidate() throws Exception {
 @Test
 public void testNonValidDocument() throws Exception {
 
-	String docPath = uriModuleForPath("test-resources/documents/nonvalid-document.xml");
+	String contentPath = uriModuleForPath("test-resources/documents/nonvalid-document.xml");
 	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
-	Validable validator = DaggerValidationTestComponent.builder()
-							.forDocument(new URI(docPath))
+	Validable validator = DaggerContentParserComponent.builder()
+							.forContent(new URI(contentPath))
 							.withModel(new URI(modelPath))
 							.build()
 							.validator()

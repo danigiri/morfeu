@@ -54,7 +54,67 @@ public class ContentParserModule {
 protected final static Logger log = LoggerFactory.getLogger(ContentParserModule.class);
 
 @Produces
-public static DocumentBuilderFactory produceDcoumentBuilderFactory() {
+public static Validator produceValidator(Schema s) {
+	
+	Validator v = s.newValidator();
+	// TODO: check if this is needed
+	v.setErrorHandler(new ErrorHandler() {
+	
+	@Override
+	public void warning(SAXParseException exception) throws SAXException {
+		
+		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
+		throw exception;
+		
+	}
+	
+	
+	@Override
+	public void fatalError(SAXParseException exception) throws SAXException {
+		
+		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
+		throw exception;
+		
+	}
+	
+	
+	@Override
+	public void error(SAXParseException exception) throws SAXException {
+		
+		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
+		throw exception;
+		
+	}
+	});
+	
+	return v;
+	
+}
+
+
+// notice this is a DOM Document and not a morfeu document
+@Produces
+public static org.w3c.dom.Document produceParsedContent(DocumentBuilder db, @Named("FetchableContentURI") URI u) 
+		throws ParsingException, FetchingException {
+	
+	// TODO: we can probably parse with something faster than building into dom
+	Document dom;
+	String uri = u.toString();
+	try {
+		dom = db.parse(uri);
+	} catch (SAXException e) {
+		throw new ParsingException("Problem when parsing '"+uri+"'", e);
+	} catch (IOException e) {
+		throw new FetchingException("Problem when fetching '"+uri+"'", e);
+	}
+
+	return dom;
+
+}
+
+
+@Produces
+public static DocumentBuilderFactory produceDocumentBuilderFactory() {
 	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	dbf.setNamespaceAware(true);
 	return dbf;
@@ -107,65 +167,6 @@ public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) 
 
 }
 
-
-@Produces
-public static Validator produceValidator(Schema s) {
-	
-	Validator v = s.newValidator();
-	// TODO: check if this is needed
-	v.setErrorHandler(new ErrorHandler() {
-	
-	@Override
-	public void warning(SAXParseException exception) throws SAXException {
-		
-		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
-		
-	}
-	
-	
-	@Override
-	public void fatalError(SAXParseException exception) throws SAXException {
-		
-		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
-		
-	}
-	
-	
-	@Override
-	public void error(SAXParseException exception) throws SAXException {
-		
-		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
-		
-	}
-	});
-	
-	return v;
-	
-}
-
-
-// notice this is a DOM Document and not a morfeu document
-@Produces
-public static org.w3c.dom.Document produceXMLDocument(DocumentBuilder db, @Named("ContentURI") URI u) 
-		throws ParsingException, FetchingException {
-	
-	// TODO: we can probably parse with something faster than building into dom
-	Document dom;
-	String uri = u.toString();
-	try {
-		dom = db.parse(uri);
-	} catch (SAXException e) {
-		throw new ParsingException("Problem when parsing '"+uri+"'", e);
-	} catch (IOException e) {
-		throw new FetchingException("Problem when fetching '"+uri+"'", e);
-	}
-
-	return dom;
-
-}
 
 @Produces
 public static DOMSource produceDOMSource(org.w3c.dom.Document xmldoc) {

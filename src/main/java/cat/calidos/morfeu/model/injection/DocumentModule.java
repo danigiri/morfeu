@@ -47,7 +47,7 @@ import dagger.producers.Produces;
 /** TODO: ensure all this is actually asynchronous
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(subcomponents={ModelSubcomponent.class, ContentParserComponent.class})
+@ProducerModule(subcomponents={ModelSubcomponent.class, ContentParserSubcomponent.class})
 public class DocumentModule extends RemoteModule {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class);
@@ -56,20 +56,22 @@ protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class
 @Produces
 public static Document produceDocument(@Named("NormalisedDocument") Document doc, 
 											  Provider<ModelSubcomponent.Builder> modelComponentProvider,
-											  Provider<ContentParserComponent.Builder> validatorComponentProvider) throws Exception {
+											  Provider<ContentParserSubcomponent.Builder> contentParserComponentProvider) throws ExecutionException {
 
 	// FIXME: what exception should we throw here?
 	Model model;
 	try {
+		
 		 model = modelComponentProvider.get().builder().model().get();
+		 doc.setModel(model);		 
+		 ContentParserSubcomponent contentParser = contentParserComponentProvider.get().builder();
+		 doc.setValidator(contentParser.validator().get());
+		 doc.validate();	// if this does not throw an exception, it means content is valid
+		 doc.setContent(contentParser.parsedContent().get());	// not used at the moment
+
 	} catch (Exception e) {
 		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);
 	}
-	doc.setModel(model);
-		
-	Validable validator = validatorComponentProvider.get().builder().validator().get();
-	doc.setValidator(validator);
-	doc.validate();
 	
 	return doc;
 	
@@ -112,12 +114,15 @@ public static Document parseDocument(URI uri, @Named("JSONDocumentStream") Input
 public static Document normaliseDocumentURIs(@Named("ParsedDocument") Document doc,
 											 @Named("PrefixURI") URI prefix,
 											 @Named("FetchableModelURI") URI fetchableModelURI, 
-											 @Named("ContentURI") URI contentURI) {
+											 @Named("ContentURI") URI contentURI,
+											 @Named("FetchableContentURI") URI fetchableContentURI
+											 ) {
 	
 	log.trace("[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]", prefix, fetchableModelURI, contentURI);
 	
 	doc.setFetchableModelURI(fetchableModelURI);
 	doc.setContentURI(contentURI);
+	doc.setFetchableContentURI(fetchableContentURI);
 	doc.setPrefix(prefix);
 		
 	return doc;
@@ -168,9 +173,15 @@ public static URI fetchableModelURI(@Named("PrefixURI") URI prefix, @Named("Pars
 	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getModelURI());
 }
 
-
 @Produces @Named("ContentURI")
-public static URI contentURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
+public static URI contentURI(@Named("ParsedDocument") Document doc) {
+	return doc.getContentURI();
+}
+
+
+//this is a content uri that is absolute and fetchable, guaranteed to be reachable from any runtime context
+@Produces @Named("FetchableContentURI")
+public static URI fetchableContentURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
 	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getContentURI());
 }
 

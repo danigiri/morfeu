@@ -60,7 +60,6 @@ public void tearup() {
 @Test
 public void testDocument() throws Exception {
 	
-
 	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document1.json");
 	assertNotNull(content);
 	
@@ -68,12 +67,17 @@ public void testDocument() throws Exception {
 	assertEquals("Document 1", doc.get("name").asText());
 	assertEquals("First document", doc.get("desc").asText());
 	assertEquals("xml", doc.get("kind").asText());
+	
 	String modelURI = "target/test-classes/test-resources/models/test-model.xsd";
 	assertEquals(modelURI, doc.get("modelURI").asText());
 	String expected = webappPrefix+modelURI;
 	assertEquals(expected, doc.get("fetchableModelURI").asText());
-	expected = webappPrefix+"target/test-classes/test-resources/documents/document1.xml";
-	assertEquals(expected, doc.get("contentURI").asText());
+	
+	String contentURI = "target/test-classes/test-resources/documents/document1.xml";
+	assertEquals(contentURI, doc.get("contentURI").asText());
+	expected = webappPrefix+contentURI;
+	assertEquals(expected, doc.get("fetchableContentURI").asText());
+	
 	assertTrue(doc.get("valid").asBoolean());
 	
 }
