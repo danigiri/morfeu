@@ -19,7 +19,12 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import cat.calidos.morfeu.webapp.ui.UICatalogue;
+import cat.calidos.morfeu.webapp.ui.UICatalogues;
+import cat.calidos.morfeu.webapp.ui.UIModel;
 
 
 /**
@@ -28,13 +33,17 @@ import org.junit.Test;
 public class ModelUITest extends UITezt {
 
 
-@Test
+@Before
+public void setup() {	
+	open(appBaseURL);
+}
+
+
+//@Test
 public void modelTest() {
 	
-	open(appBaseURL);
-
-	UICatalogues catalogues = UICatalogues.openCatalogues()
-											.shouldAppear();
+	UICatalogues catalogues = UICatalogues.openCatalogues();
+	catalogues.shouldAppear();
 	UIModel.shouldNotBeVisible();
 	
 	UICatalogue catalogue = catalogues.clickOn(0);
@@ -42,12 +51,61 @@ public void modelTest() {
 	UIModel.shouldNotBeVisible();
 	
 	UIModel model = catalogue.clickOnDocumentNamed("Document 1")
-								.getModel()
-								.shouldAppear();
+								.getModel();
+	model.shouldAppear();
 	
 	assertEquals("Model: /test-model.xsd", model.name());
 	assertEquals("Description of test model", model.desc());
 	
+}
+
+
+//@Test
+public void modelDisappearsOnClickingOtherCatalogue() {	
+	
+	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
+	UICatalogue catalogue = catalogues.clickOn(0);
+
+	UIModel model = catalogue.clickOnDocumentNamed("Document 1").getModel();
+	model.shouldAppear();
+	
+	// click on a different catalogue model should disappear
+	catalogues.clickOn(1);
+	model.shouldDisappear();
+	
+	catalogue = catalogues.clickOn(0);
+	UIModel.shouldNotBeVisible();
+	
+}
+
+
+@Test
+public void documentWithNonValidModelIsSelected() {	
+	
+	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
+	UICatalogue catalogue = catalogues.clickOn(0).shouldAppear();
+
+	UIModel model = catalogue.clickOnDocumentNamed("Document 1").getModel();
+	model.shouldAppear();
+	
+	// click on a different document model should change (for instance an problematic doc)
+	catalogue.clickOnDocumentNamed("Document with non-valid model").getModel();
+	model.shouldDisappear();
+	
+}
+
+
+//@Test
+public void testCellModels() {
+
+	UIModel model = UICatalogues.openCatalogues()
+				 					.shouldAppear()
+				 					.clickOn(0)
+				 					.clickOnDocumentNamed("Document 1")
+				 					.getModel()
+				 					.shouldAppear();
+
+	//model.rootCellModels();
 }
 
 }

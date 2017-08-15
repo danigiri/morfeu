@@ -82,7 +82,23 @@ ngOnInit() {
     ));
     
     this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
-            loaded => this.display(loaded.document)
+            loaded => { 
+    
+                this.display(loaded.document);
+            
+                if (loaded.document.problem==null || loaded.document.problem.length==0) {
+                    this.events.ok();
+                    this.events.service.publish(new ModelRequestEvent(loaded.document.modelURI));
+                } else {
+                    // even though there is a case where we could display the model of a problematic document,
+                    // for instance, when the model is ok but the content is not found, we're conservative
+                    // and not fetch the model, just display the problem
+                    this.events.problem(loaded.document.problem);
+                }
+                
+
+            
+            }
     ));
     
 }
@@ -96,8 +112,6 @@ loadDocument(url: string) {
     this.documentService.get("/morfeu/documents/"+url).subscribe(d => {
                 console.log("DocumentComponent::loadDocument() Got document from Morfeu service ("+d.name+")");
                 this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
-                this.events.service.publish(new ModelRequestEvent(d.modelURI));
-                this.events.ok();
             },
             error => {
                 this.events.problem(error);
@@ -111,17 +125,18 @@ loadDocument(url: string) {
 
 
 display(d: CellDocument) {
+
     console.log("[UI] document component gets Document ("+d.name+")");
     this.document = d;
-    if (d.problem==null || d.problem!="") {
-        this.events.problem(d.problem);
-    }
+
 }
 
 
 clear() {
+
     console.log("[UI] document component gets null document (no document selected)");
     this.document = null;
+
 }
 
 }

@@ -15,5 +15,12 @@
  */
 
 export class ProblemEvent {
-    constructor(public message: String) {}
+    
+constructor(public message: String) {}
+
+public toString = () : string => {
+    return "ProblemEvent:{:'"+this.message==null ? "NO PROBLEMO" :+this.message+"'}";
+}
+
+
 }

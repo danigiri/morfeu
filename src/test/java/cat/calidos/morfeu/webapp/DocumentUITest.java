@@ -19,6 +19,12 @@ package cat.calidos.morfeu.webapp;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import cat.calidos.morfeu.webapp.ui.UICatalogue;
+import cat.calidos.morfeu.webapp.ui.UICatalogues;
+import cat.calidos.morfeu.webapp.ui.UIDocument;
+import cat.calidos.morfeu.webapp.ui.UIProblem;
+
 import static com.codeborne.selenide.Selenide.open;
 
 

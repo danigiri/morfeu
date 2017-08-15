@@ -14,12 +14,50 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.webapp.ui;
+
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UICellModel {
+public class UIDocument {
+
+public UIDocument() {
+}
+
+//public void shouldAppear() {
+//	$("#document-info").should(appear);
+//}
+
+public void shouldBeVisible() {
+	$("#document-info").shouldBe(visible);
+}
+
+
+public static void shouldNotBeVisible() {
+	$("#document-info").shouldNotBe(visible);
+}
+
+
+public String title() {
+	return $("#document-name").getText();
+	
+}
+
+
+public String desc() {
+	return $("#document-desc").getText();
+}
+
+public boolean isValid() {
+	return $("#document-valid").getText().equals("VALID");
+}
+
+public UIModel getModel() {
+	return new UIModel();
+}
 
 }

@@ -20,6 +20,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import cat.calidos.morfeu.webapp.ui.UICatalogue;
+import cat.calidos.morfeu.webapp.ui.UICatalogues;
+import cat.calidos.morfeu.webapp.ui.UIProblem;
 
 /**
 * @author daniel giribet
@@ -40,13 +45,15 @@ protected static WebDriver driver;
 @BeforeClass
 public static void setUpClass() throws Exception {
 	
-
 	defineSystemVariable(BROWSER_PROPERTY, DEFAULT_BROWSER);
 	defineSystemVariable(DRIVER_LOCATION_PROPERTY, DEFAULT_DRIVER_LOCATION);
 
 	appBaseURL = defineSystemVariable(URL_PROPERTY, DEFAULT_URL);
 
-	driver = new ChromeDriver();
+	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+	capabilities.setCapability("chrome.verbose", false);
+	driver = new ChromeDriver(capabilities);
+
 }
 
 

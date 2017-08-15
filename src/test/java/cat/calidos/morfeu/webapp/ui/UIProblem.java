@@ -14,44 +14,47 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.webapp.ui;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.disappear;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIModel {
+public class UIProblem {
 
 
-public UIModel shouldAppear() {
-
-	$("#model-info").should(appear);
-
-	return this;
-
+public static UIProblem problem() {
+	return new UIProblem();
 }
-
-
-public void shouldBeVisible() {
-	$("#model-info").shouldBe(visible);
-}
-
 
 public static void shouldNotBeVisible() {
-	$("#model-info").shouldNotBe(visible);
+	$("#problem").shouldNotBe(visible);
+}
+
+public UIProblem shouldAppear() {
+	
+	$("#problem").should(appear);
+	
+	return this;
+	
+}
+
+public UIProblem shouldDisappear() {
+
+	$("#problem").should(disappear);
+	
+	return this;
+	
 }
 
 
-public String name() {
-	return $("#model-name").getText();
-}
-
-public String desc() {
-	return $("#model-desc").getText();
-}
-
+public String getText() {
+	return $("#problem").getText();
+} 
 
 
 }

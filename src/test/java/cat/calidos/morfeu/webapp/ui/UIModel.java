@@ -14,50 +14,55 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.webapp.ui;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIDocument {
+public class UIModel {
 
-public UIDocument() {
+
+public UIModel shouldAppear() {
+
+	$("#model-info").should(appear);
+
+	return this;
+
 }
 
-//public void shouldAppear() {
-//	$("#document-info").should(appear);
-//}
+public void shouldDisappear() {
+	$("#model-info").should(disappear);
+}
+
 
 public void shouldBeVisible() {
-	$("#document-info").shouldBe(visible);
+	$("#model-info").shouldBe(visible);
 }
 
 
 public static void shouldNotBeVisible() {
-	$("#document-info").shouldNotBe(visible);
+	$("#model-info").shouldNotBe(visible);
 }
 
 
-public String title() {
-	return $("#document-name").getText();
-	
+public String name() {
+	return $("#model-name").getText();
 }
 
 
 public String desc() {
-	return $("#document-desc").getText();
+	return $("#model-desc").getText();
 }
 
-public boolean isValid() {
-	return $("#document-valid").getText().equals("VALID");
-}
 
-public UIModel getModel() {
-	return new UIModel();
+public List<UICellModelEntry> rootCellModels() {
+	return $$(".cell-model-level-1").stream().map( e -> new UICellModelEntry(e) ).collect(Collectors.toList());
 }
 
 }

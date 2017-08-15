@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.webapp.ui;
 
 import static org.junit.Assert.*;
 
@@ -42,11 +42,13 @@ public static void shouldNotBeVisible() {
 }
 
 
-public void shouldAppear() {
+public UICatalogue shouldAppear() {
 
 	$("#catalogue").should(appear);
 	$("#document-list").should(appear);
 
+	return this;
+	
 }
 
 
@@ -76,8 +78,8 @@ public UIDocument clickOnDocument(int i) {
 public UIDocument clickOnDocumentNamed(String name) {
 	
 	ElementsCollection documentEntries = getDocuments();
-	Optional<SelenideElement> foundDocument = documentEntries.stream()
-												.filter(d -> d.getText().equals(name)).findFirst();
+	Optional<SelenideElement> foundDocument = documentEntries.stream() //.map(d -> { System.out.println("XX"+d.getText().trim()+"=="+name);return d;} )
+												.filter(d -> d.getText().trim().equals(name)).findFirst();
 	assertTrue("Could not find document named '"+name+"'", foundDocument.isPresent());
 	foundDocument.get().click();
 	

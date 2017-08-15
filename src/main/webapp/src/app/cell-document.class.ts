@@ -25,3 +25,5 @@ export class CellDocument {
     problem: string;
 
 }
+
+// TODO: replace all the problem!=null && problem.length>0 with proper method as we're leaking implementation

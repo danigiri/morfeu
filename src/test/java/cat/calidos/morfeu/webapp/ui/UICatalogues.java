@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.webapp.ui;
 
 import static org.junit.Assert.*;
 
@@ -51,7 +51,6 @@ public UICatalogues shouldAppear() {
 
 public List<UICatalogueEntry> getCatalogueEntries() {
 	return $$(".catalogue-list-entry").stream().map( e -> new UICatalogueEntry(e)).collect(Collectors.toList());
-
 }
 
 

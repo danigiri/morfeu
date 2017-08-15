@@ -14,47 +14,29 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.webapp.ui;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.disappear;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIProblem {
+public class UICatalogueEntry {
 
+private SelenideElement element;
 
-public static UIProblem problem() {
-	return new UIProblem();
+public UICatalogueEntry(SelenideElement e) {
+	this.element = e;
 }
 
-public static void shouldNotBeVisible() {
-	$("#problem").shouldNotBe(visible);
+public void click() {
+	this.element.click();
 }
 
-public UIProblem shouldAppear() {
-	
-	$("#problem").should(appear);
-	
-	return this;
-	
+public String name() {
+	return element.getText();
 }
 
-public UIProblem shouldDisappear() {
-
-	$("#problem").should(disappear);
-	
-	return this;
-	
-}
-
-
-public String getText() {
-	return $("#problem").getText();
-} 
 
 
 }

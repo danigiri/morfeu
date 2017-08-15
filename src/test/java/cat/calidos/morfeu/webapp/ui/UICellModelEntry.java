@@ -14,29 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.webapp.ui;
 
 import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UICatalogueEntry {
+public class UICellModelEntry {
 
 private SelenideElement element;
 
-public UICatalogueEntry(SelenideElement e) {
+
+public UICellModelEntry(SelenideElement e) {
 	this.element = e;
 }
 
-public void click() {
-	this.element.click();
-}
 
 public String name() {
-	return element.getText();
+	return element.$("cell-model-name").getText();
 }
 
 
+public String desc() {
+	return element.$("cell-model-desc").getText();
+}
 
 }

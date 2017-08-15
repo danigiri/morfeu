@@ -21,6 +21,7 @@ export class CatalogueLoadedEvent {
 
 constructor(public catalogue: Catalogue) {}
 
+
 public toString = () : string => {
     return "CatalogueLoadedEvent:{catalogue:'"+this.catalogue.name+"'}";
 }

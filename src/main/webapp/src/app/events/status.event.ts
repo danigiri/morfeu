@@ -18,6 +18,12 @@ export class StatusEvent {
 
 public static DONE:number = 100;
 
+
 constructor(public message: String, public percentage?: number) {}
+
+
+public toString = () : string => {
+    return "StatusEvent:{'"+this.message+(this.percentage ? " ["+this.percentage+"]" : "")+"'}";
+}
 
 }

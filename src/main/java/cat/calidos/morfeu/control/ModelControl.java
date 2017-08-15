@@ -76,7 +76,9 @@ public static String loadModel(String prefix, String path) {
 		return render("templates/model.twig", model, problem);
 		
 	} else {
-		return render("templates/model-problem.twig", new Object(), problem);
+		
+		// we pass the path as the object to print it on the model template as the URI
+		return render("templates/model-problem.twig", path, problem);
 	}
 	
 }

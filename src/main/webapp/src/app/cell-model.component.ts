@@ -24,7 +24,7 @@ import { TreeNode } from 'angular-tree-component';
     moduleId: module.id,
     selector: 'cell-model',
     template: `
-        <div class="cell-model-entry">
+        <div id="{{node.data.id}}" class="cell-model-entry cell-model-level-{{node.level}}">
             <span class="cell-model-name">{{ node.data.name }}</span> - <span class="cell-model-desc">{{ node.data.desc }}</span>
         </div>
         `,
@@ -33,11 +33,21 @@ import { TreeNode } from 'angular-tree-component';
                 .cell-model-entry {}
                 .cell-model-name {}
                 .cell-model-desc {}
+                .cell-model-level-1 {}
+                .cell-model-level-2 {}
+                .cell-model-level-3 {}
+                .cell-model-level-4 {}
+                .cell-model-level-5 {}
+                .cell-model-level-6 {}
+                .cell-model-level-7 {}
+                .cell-model-level-8 {}
+                .cell-model-level-9 {}
     `]
 })
 
 export class CellModelComponent {
 
 @Input() node: TreeNode;
+@Input() index: number;
     
 }

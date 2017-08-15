@@ -24,6 +24,11 @@ import org.junit.Test;
 
 import com.codeborne.selenide.ElementsCollection;
 
+import cat.calidos.morfeu.webapp.ui.UICatalogue;
+import cat.calidos.morfeu.webapp.ui.UICatalogueEntry;
+import cat.calidos.morfeu.webapp.ui.UICatalogues;
+import cat.calidos.morfeu.webapp.ui.UIProblem;
+
 import static com.codeborne.selenide.Selenide.*;
 
 /**

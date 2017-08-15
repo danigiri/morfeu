@@ -23,6 +23,7 @@ import { Model, ModelJSON } from './model.class';
 import { Widget } from './widget.class';
 import { RemoteObjectService } from './services/remote-object.service';
 
+import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { EventService } from './events/event.service';
 import { ModelRequestEvent } from './events/model-request.event';
@@ -49,7 +50,7 @@ import { StatusEvent } from './events/status.event';
                 <tree-root
                     [nodes]="model.cellModels">
                     <ng-template #treeNodeTemplate let-node let-index="index">
-                       <cell-model [node]="node"></cell-model>
+                       <cell-model [node]="node" [index]="index"></cell-model>
                     </ng-template>
                 </tree-root>
             </div>
@@ -85,11 +86,15 @@ ngOnInit() {
             selected => this.clearModel()
     ));
 
+    // if we load a problematic document we don't display anything (enjoying event-based coding right now)
+    this.subscribe(this.events.service.of(CellDocumentLoadedEvent)
+            .filter(loaded => loaded.document.problem!=null && loaded.document.problem.length>0 )
+            .subscribe(loadedProblematicDocument => this.clearModel())
+    );
     
     this.subscribe(this.events.service.of(ModelRequestEvent).subscribe( requested =>
             this.loadModel(requested.url)           
     ));
-    
     
 }
 
@@ -123,7 +128,6 @@ clearModel() {
 diplayModel(m: Model) {
     
     console.log("[UI] ModelComponent::diplayModel("+m.name+")");
-
     this.model = m;
     
 }
