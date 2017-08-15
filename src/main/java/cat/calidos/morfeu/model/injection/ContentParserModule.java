@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import javax.inject.Named;
 import javax.xml.XMLConstants;
@@ -37,6 +38,8 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.XSDValidator;
 import cat.calidos.morfeu.problems.ConfigurationException;
@@ -92,32 +95,21 @@ public static Validator produceValidator(Schema s) {
 }
 
 
-// notice this is a DOM Document and not a morfeu document
 @Produces
-public static org.w3c.dom.Document produceParsedContent(DocumentBuilder db, @Named("FetchableContentURI") URI u) 
-		throws ParsingException, FetchingException {
+public static List<Cell> produceContent(Model m) {
 	
-	// TODO: we can probably parse with something faster than building into dom
-	Document dom;
-	String uri = u.toString();
-	try {
-		dom = db.parse(uri);
-	} catch (SAXException e) {
-		throw new ParsingException("Problem when parsing '"+uri+"'", e);
-	} catch (IOException e) {
-		throw new FetchingException("Problem when fetching '"+uri+"'", e);
-	}
-
-	return dom;
-
+	return null;
 }
 
 
 @Produces
 public static DocumentBuilderFactory produceDocumentBuilderFactory() {
+	
 	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	dbf.setNamespaceAware(true);
+	
 	return dbf;
+
 }
 
 
@@ -164,6 +156,27 @@ public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) 
 	}
 
 	return schema;
+
+}
+
+
+// notice this is a DOM Document and not a morfeu document
+@Produces
+public static org.w3c.dom.Document produceParsedContent(DocumentBuilder db, @Named("FetchableContentURI") URI u) 
+		throws ParsingException, FetchingException {
+	
+	// TODO: we can probably parse with something faster than building into dom
+	Document dom;
+	String uri = u.toString();
+	try {
+		dom = db.parse(uri);
+	} catch (SAXException e) {
+		throw new ParsingException("Problem when parsing '"+uri+"'", e);
+	} catch (IOException e) {
+		throw new FetchingException("Problem when fetching '"+uri+"'", e);
+	}
+
+	return dom;
 
 }
 

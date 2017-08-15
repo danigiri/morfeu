@@ -26,14 +26,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.ModelControl;
+import cat.calidos.morfeu.control.ContentControl;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelsServlet extends MorfeuServlet {
+public class ContentServlet extends MorfeuServlet {
 
-protected final static Logger log = LoggerFactory.getLogger(ModelsServlet.class);
+protected final static Logger log = LoggerFactory.getLogger(ContentServlet.class);
 
 
 /* (non-Javadoc)
@@ -43,15 +43,18 @@ protected final static Logger log = LoggerFactory.getLogger(ModelsServlet.class)
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	String path = normalisedPathFrom(req);
-	log.trace("ModelsServlet::doGet '[{}]{}'", resourcesPrefix, path);
+	log.trace("ContentServlet::doGet '[{}]{}'", resourcesPrefix, path);
 	
 	resp.setContentType("application/json");
 
-	String model = ModelControl.loadModel(resourcesPrefix, path);
-	PrintWriter out = resp.getWriter();
-	out.print(model);
-	out.close();
 	
+
+	String modelPath = req.getParameter("model");
+	String content = ContentControl.loadContent(resourcesPrefix, path, modelPath); 
+					
+	PrintWriter out = resp.getWriter();
+	out.print(content);
+	out.close();
 }
 
 }

@@ -28,16 +28,20 @@ import com.sun.xml.xsom.XSSchemaSet;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Model extends RemoteResource {
 
+protected URI fetchableURI;
 protected XSSchemaSet schema;
 protected List<CellModel> roots;
 public static final String MODEL_NAMESPACE = "";
 
 
-public Model(URI u, String desc, XSSchemaSet s, List<CellModel> rootTypes) {
+public Model(URI u, String desc, URI fetchableURI, XSSchemaSet s, List<CellModel> rootTypes) {
+
+	// TODO: fetch description from annotation
 	super(u, u.getPath().substring(u.getPath().lastIndexOf("/")), desc);
 
 	this.schema = s;
 	this.roots = rootTypes;
+	this.fetchableURI = fetchableURI;
 	
 }
 
@@ -58,6 +62,11 @@ public int getComplextTypeCount() {
 	}
 	
 	return c;
+}
+
+
+public URI getFetchableURI() {
+	return fetchableURI;
 }
 
 

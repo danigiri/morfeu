@@ -67,8 +67,7 @@ public static Document produceDocument(@Named("NormalisedDocument") Document doc
 		 ContentParserSubcomponent contentParser = contentParserComponentProvider.get().builder();
 		 doc.setValidator(contentParser.validator().get());
 		 doc.validate();	// if this does not throw an exception, it means content is valid
-		 doc.setContent(contentParser.parsedContent().get());	// not used at the moment
-
+		
 	} catch (Exception e) {
 		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);
 	}

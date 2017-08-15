@@ -67,12 +67,14 @@ public Document(String name, String desc, String kind, URI prefix, URI uri, URI 
 
 @Override
 public void validate() throws ValidationException, FetchingException {
+	
 	if (validator==null) {
 		throw new ValidationException("Document does not have a validation mechanism", new NullPointerException());
 	}
 	validator.validate();
 	// if there is no exception
 	isValid = true;
+	
 }
  
 
@@ -87,13 +89,11 @@ public boolean isValid() {
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 public String toString() {
-
 	return "{"+this.name+", ["+this.kind+"], uri:"+this.uri+", prefix:"+prefix+", model:"+this.modelURI+", doc:"+this.contentURI+"}";
 }
 
 
 public String getKind() {
-
 	return kind;
 }
 

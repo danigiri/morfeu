@@ -14,36 +14,22 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model;
+package cat.calidos.morfeu.control;
 
-import java.net.URI;
-
-import javax.inject.Inject;
+import javax.annotation.Nullable;
 
 /**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
-public class Cell extends RemoteResource {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class ContentControl extends Control {
 
-protected CellModel cellModel;
+public static String loadContent(String resourcesPrefix, String path, @Nullable String modelPath) {
 
-
-public Cell(URI u) {
-	super(u);
+	// TODO Auto-generated method stub
+	return null;
 }
 
 
-public Cell(URI u, String name, String desc) {
-	super(u, name, desc);
-}
 
-
-public Cell(URI u, String name, String desc, CellModel cm) {
-
-	super(u, name, desc);
-
-	this.cellModel = cm;
-
-}
-
+	
 }

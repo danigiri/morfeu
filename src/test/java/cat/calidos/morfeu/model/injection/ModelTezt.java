@@ -56,7 +56,7 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 		
 	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u);
 	String desc = ModelModule.descriptionFromSchemaAnnotation(schemaSet);
-	return ModelModule.produceModel(u, desc, schemaSet, rootCellModels);
+	return ModelModule.produceModel(u, desc, u, schemaSet, rootCellModels);
 		
 }
 

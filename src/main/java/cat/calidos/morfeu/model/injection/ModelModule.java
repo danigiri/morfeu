@@ -60,9 +60,10 @@ public class ModelModule extends RemoteModule {
 @Produces
 public static Model produceModel(@Named("ModelURI") URI u, 
 								 @Named("desc") String desc, 
+								 @Named("FetchableModelURI") URI fetchableURI,
 								 XSSchemaSet schemaSet, 
 								 List<CellModel> rootTypes) {
-	return new Model(u, desc, schemaSet, rootTypes);
+	return new Model(u, desc, fetchableURI, schemaSet, rootTypes);
 }
 
 
@@ -73,8 +74,10 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 	XSSchemaSet schemaSet = null;
 	String uri = u.toString();
 	try {
+
 		parser.parse(uri);
 		schemaSet = parser.getResult();
+	
 	} catch (SAXException e) {
 		// either it's a broken or invalid model or the model is just not found
 		if (e.getCause() instanceof FileNotFoundException) {

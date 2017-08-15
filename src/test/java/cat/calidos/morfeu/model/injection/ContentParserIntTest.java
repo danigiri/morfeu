@@ -37,10 +37,12 @@ public class ContentParserIntTest extends ModelInjectionTezt {
 public void testValidate() throws Exception {
 
 	String contentPath = uriModuleForPath("test-resources/documents/document1.xml");
-	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
+	String modelPath = "test-resources/models/test-model.xsd";
+	String testAwareModelPath = uriModuleForPath(modelPath);
 	Validable validator = DaggerContentParserComponent.builder()
 							.forContent(new URI(contentPath))
 							.withModel(new URI(modelPath))
+							.modelFetchableFrom(new URI(testAwareModelPath))
 							.build()
 							.validator()
 							.get();
@@ -54,10 +56,12 @@ public void testValidate() throws Exception {
 public void testNonValidDocument() throws Exception {
 
 	String contentPath = uriModuleForPath("test-resources/documents/nonvalid-document.xml");
-	String modelPath = uriModuleForPath("test-resources/models/test-model.xsd");
+	String modelPath = "test-resources/models/test-model.xsd";
+	String testAwareModelPath = uriModuleForPath(modelPath);
 	Validable validator = DaggerContentParserComponent.builder()
 							.forContent(new URI(contentPath))
 							.withModel(new URI(modelPath))
+							.modelFetchableFrom(new URI(testAwareModelPath))
 							.build()
 							.validator()
 							.get();
