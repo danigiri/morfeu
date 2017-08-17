@@ -19,18 +19,19 @@ package cat.calidos.morfeu.model.injection;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.ComplexCell;
+import dagger.Component;
 import dagger.producers.ProductionSubcomponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules=CellModule.class)
+@Component(modules=CellModule.class)
 public interface CellComponent {
 
-ListenableFuture<ComplexCell> cell();
+Cell cell();
 
 
-@ProductionSubcomponent.Builder
+@Component.Builder
 interface Builder {
 	CellComponent builder();
 }

@@ -19,19 +19,25 @@ package cat.calidos.morfeu.model.injection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Model;
 import dagger.Module;
+import dagger.Provides;
 import dagger.producers.ProducerModule;
 
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule
+@Module
 public class CellModule {
 
 protected final static Logger log = LoggerFactory.getLogger(CellModule.class);
 		
-
+@Provides
+public static Cell provideCellFrom(Model m, Node n) {
+	
+}
 
 
 }

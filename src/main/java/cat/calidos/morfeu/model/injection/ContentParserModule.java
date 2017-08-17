@@ -18,6 +18,8 @@ package cat.calidos.morfeu.model.injection;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Named;
@@ -34,17 +36,20 @@ import javax.xml.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.XSDValidator;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.OrderedMap;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -95,11 +100,31 @@ public static Validator produceValidator(Schema s) {
 }
 
 
+
 @Produces
-public static List<Cell> produceContent(Model m) {
+public static Composite<Cell> produceContent(Model m, org.w3c.dom.Document xmldoc) {
 	
-	return null;
+	// TODO: add root node attributes as cells
+	//xmldoc.getAttributes()
+	//xmldoc.getDocumentElement()
+	
+	LinkedList<Node> pendingNodes = new LinkedList<Node>();
+	pendingNodes.add(xmldoc.getFirstChild());
+	
+	return contentCells(m, pendingNodes);
+	
 }
+
+
+private static Composite<Cell> contentCells(Model m, LinkedList<Node> pendingNodes) {
+
+	Composite<Cell> contentCells = new OrderedMap<Cell>();
+
+	
+	return contentCells;
+
+}
+
 
 
 @Produces
