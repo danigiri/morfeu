@@ -47,7 +47,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	
 	resp.setContentType("application/json");
 
-	String model = ModelControl.loadModel(resourcesPrefix, path);
+	String model = new ModelControl(resourcesPrefix, path).processRequest();
 	PrintWriter out = resp.getWriter();
 	out.print(model);
 	out.close();

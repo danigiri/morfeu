@@ -16,20 +16,90 @@
 
 package cat.calidos.morfeu.control;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Control {
+public abstract class Control {
 
-	protected static String render(String template, Object value, String problem) {
-		return DaggerViewComponent.builder()
-									.withTemplate(template)
-									.withValue(value)
-									.withProblem(problem)
-									.build()
-									.render();
+protected String operation;
+private String template;
+private String problemTemplate;
+
+
+public Control(String operation, String template, String problemTemplate) {
+	
+	this.operation = operation;
+	this.template = template;
+	this.problemTemplate = problemTemplate;
+
+}
+
+
+protected String render(String template, Object value, String problem) {
+	return DaggerViewComponent.builder()
+								.withTemplate(template)
+								.withValue(value)
+								.withProblem(problem)
+								.build()
+								.render();
+}
+
+
+public String processRequest() {
+	
+	logProcess();
+	
+	Object result = null;
+	String problem = "";
+	String parsedResult = null;
+	
+	try {
+		result = process();
+		
+	} catch (InterruptedException e) {
+		problem = "Interrupted processing '"+operation+"' ("+e.getMessage()+")";	
+	} catch (ExecutionException e) {
+		e.printStackTrace();
+		Throwable root = MorfeuUtils.findRootCauseFrom(e);
+		problem = "Problem processing '"+operation+"' ("+root.getMessage()+")";
+	} catch (ValidationException e) {
+		problem = "Problem validating '"+operation+"' ("+e.getMessage()+")";
+	} catch (FetchingException e) {
+		problem = "Problem fetching data for '"+operation+"' ("+e.getMessage()+")";
+	} catch (ParsingException e) {
+		problem = "Problem parsing for '"+operation+"' ("+e.getMessage()+")";
 	}
+		
+	if (problem.length()==0) {
+		parsedResult = render(template, result, problem);
+	} else {
+		logProblem(problem);
+		Object problemInformation = problemInformation(); 
+		parsedResult = render(problemTemplate, problemInformation, problem);		
+	}
+	
+	return parsedResult;
+	
+}
+
+
+protected abstract Object process() 
+		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException;
+
+protected abstract void logProcess();
+
+protected abstract void logProblem(String problem);
+
+protected abstract Object problemInformation();
 
 }

@@ -47,7 +47,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	
 	resp.setContentType("application/json");
 	
-	String doc = DocumentControl.loadDocument(resourcesPrefix, path);
+	String doc = new DocumentControl(resourcesPrefix, path).processRequest();
 	PrintWriter out = resp.getWriter();
 	out.print(doc);
 	out.close();

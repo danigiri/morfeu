@@ -37,52 +37,50 @@ import cat.calidos.morfeu.utils.MorfeuUtils;
 public class DocumentControl extends Control {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentControl.class);
+private String prefix;
+private String path;
 
 
-public static String loadDocument(String prefix, String path) {
+public DocumentControl(String prefix, String path) {
+
+	super("document", "templates/document.twig", "templates/document-problem.twig");
+
+	this.prefix = prefix;
+	this.path = path;
 	
+}
+
+
+@Override
+protected Object process() 
+		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
+
+	URI uri = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
+	return DaggerDocumentComponent.builder()
+										.from(uri)
+										.withPrefix(prefix)
+										.build()
+										.produceDocument()
+										.get();
+			
+}
+
+
+@Override
+protected void logProcess() {
 	log.trace("DocumentControl::loadDocument('{}', '{}')", prefix, path);
-	
-	Document document = null;
-	String problem = "";
-	try {
-		
-		URI uri = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
-		document = DaggerDocumentComponent.builder()
-											.from(uri)
-											.withPrefix(prefix)
-											.build()
-											.produceDocument()
-											.get();
-				
-	} catch (InterruptedException e) {
-		problem = "Interrupted processing document '"+path+"' ("+e.getMessage()+")";		
-	} catch (ExecutionException e) {
-		e.printStackTrace();
-		Throwable root = MorfeuUtils.findRootCauseFrom(e);
-		problem = "Problem processing document '"+path+"' ("+root.getMessage()+")";
-	} catch (ValidationException e) {
-		problem = "Problem validating document '"+path+"' ("+e.getMessage()+")";
-	} catch (FetchingException e) {
-		problem = "Problem fetching data for document '"+path+"' ("+e.getMessage()+")";
-	} catch (ParsingException e) {
-		problem = "Problem parsing document '"+path+"' ("+e.getMessage()+")";
-	}
+}
 
-	if (problem.length()>0) {
-		log.error(problem);
-	}
 
-	if (document!=null) {
-	
-		return render("templates/document.twig", document, problem);
+@Override
+protected void logProblem(String problem) {
+	log.trace("Problem loading document('{}', '{}'): {}", prefix, path, problem);
+}
 
-	} else  {
 
-		return render("templates/document-problem.twig", path, problem);	// path as data to help diagnostics
-		
-	}
-	
+@Override
+protected Object problemInformation() {
+	return path;	// we show the problematic path on the template
 }
 
 
