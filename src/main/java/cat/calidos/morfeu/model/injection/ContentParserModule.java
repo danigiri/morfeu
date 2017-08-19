@@ -18,9 +18,12 @@ package cat.calidos.morfeu.model.injection;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.xml.XMLConstants;
@@ -42,6 +45,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Validable;
@@ -102,23 +106,60 @@ public static Validator produceValidator(Schema s) {
 
 
 @Produces
-public static Composite<Cell> produceContent(Model m, org.w3c.dom.Document xmldoc) {
+public static Composite<Cell> produceContent(@Named("ContentURI") URI u, org.w3c.dom.Document xmldoc, Model m) throws ParsingException {
 	
-	// TODO: add root node attributes as cells
+	// TODO: add root node attributes and value as cells
 	//xmldoc.getAttributes()
 	//xmldoc.getDocumentElement()
 	
 	LinkedList<Node> pendingNodes = new LinkedList<Node>();
-	pendingNodes.add(xmldoc.getFirstChild());
-	
-	return contentCells(m, pendingNodes);
+
+	Node rootNode = xmldoc.getFirstChild();
+	while (rootNode!=null) {
+		pendingNodes.add(rootNode);
+		rootNode = rootNode.getNextSibling();
+	}
+		
+	List<CellModel> rootCellModels = m.getRootCellModels();
+	return contentCells(pendingNodes, u, rootCellModels);
 	
 }
 
 
-private static Composite<Cell> contentCells(Model m, LinkedList<Node> pendingNodes) {
+private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI uri, List<CellModel> cellModels) throws ParsingException {
 
 	Composite<Cell> contentCells = new OrderedMap<Cell>();
+	
+	pendingNodes.stream().map(node -> {
+		
+		String name = node.getNodeName();
+		String nodeValue = node.getNodeValue();
+		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
+		if (!matchedCellModel.isPresent()) {
+			log.error("Could not match content node '{}' with any cellmodel even tough content is valid", name);
+			return null;
+		}
+		CellModel cellModel = matchedCellModel.get();
+		
+		URI cellURI;
+		String proposedCellURI = uri+"/"+name;
+		try {
+			cellURI = new URI(proposedCellURI);
+		} catch (URISyntaxException e) {
+			log.error("Could not build URI of content node '{}'", name);
+			return null;
+		}
+		
+		return DaggerCellComponent.builder()
+				.fromURI(cellURI)
+				.named(name)
+				.value(nodeValue)
+				.withDesc("")
+				.withCellModel(cellModel)
+				.builder()
+				.createCell();
+								
+	}).forEach(cell -> contentCells.addChild(cell.getName(), cell));
 
 	
 	return contentCells;

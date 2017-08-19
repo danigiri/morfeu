@@ -33,11 +33,13 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
+import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 
 
 /**
@@ -48,6 +50,21 @@ public class ModelTezt {
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 
+protected Document produceDocumentFromPath(String path)
+throws InterruptedException, ExecutionException, ParsingException, FetchingException, ValidationException {
+	
+	String doc1Path = testAwareFullPathFrom(path);
+	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
+
+	DocumentComponent docComponent = DaggerDocumentComponent.builder()
+										.from(uri)
+										.withPrefix("")
+										.build();
+	
+	return docComponent.produceDocument().get();
+
+}
+
 protected Model parseModelFrom(URI u) throws ConfigurationException, 
 											 InterruptedException, 
 											 ExecutionException, ParsingException, FetchingException {
@@ -56,13 +73,31 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 		
 	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u);
 	String desc = ModelModule.descriptionFromSchemaAnnotation(schemaSet);
+	
 	return ModelModule.produceModel(u, desc, u, schemaSet, rootCellModels);
 		
 }
 
+protected CellModel cellModelFrom(URI u, String name) throws Exception {
+
+	XSSchemaSet schemaSet = parseSchemaFrom(u);
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
+
+	return DaggerCellModelComponent.builder().withElement(elem).withParentURI(u).build().cellModel();
+	
+}
+
+protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Exception {
+	
+	CellModel cellModel = cellModelFrom(u, name);
+	
+	return ComplexCellModel.from(cellModel);	// from simple to complex
+	
+}
+
 protected XSSchemaSet parseSchemaFrom(URI uri)
 		throws InterruptedException, ExecutionException, ConfigurationException, ParsingException, FetchingException {
-
+ 
 	XSOMParser parser = DaggerModelParserComponent.builder().build().produceXSOMParser().get();
 
 	return ModelModule.parseModel(uri, parser);
@@ -81,22 +116,8 @@ protected Type provideElementType(XSElementDecl elem) {
 }
 
 
-protected CellModel cellModelFrom(URI u, String name) throws Exception {
-
-	XSSchemaSet schemaSet = parseSchemaFrom(u);
-	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
-
-	return DaggerCellModelComponent.builder().withElement(elem).withParentURI(u).build().cellModel();
-	
-}
-
-
-protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Exception {
-	
-	CellModel cellModel = cellModelFrom(u, name);
-	
-	return ComplexCellModel.from(cellModel);	// from simple to complex
-	
+protected String testAwareFullPathFrom(String path) {
+	return this.getClass().getClassLoader().getResource(path).toString();
 }
 
 

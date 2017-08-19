@@ -26,6 +26,7 @@ import javax.inject.Inject;
 public class Cell extends RemoteResource {
 
 protected CellModel cellModel;
+protected String value;
 
 
 public Cell(URI u) {
@@ -38,10 +39,11 @@ public Cell(URI u, String name, String desc) {
 }
 
 
-public Cell(URI u, String name, String desc, CellModel cm) {
+public Cell(URI u, String name, String desc, String value, CellModel cm) {
 
 	super(u, name, desc);
 
+	this.value = value;
 	this.cellModel = cm;
 
 }

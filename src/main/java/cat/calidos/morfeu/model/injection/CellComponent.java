@@ -16,11 +16,16 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import java.net.URI;
 
-import cat.calidos.morfeu.model.ComplexCell;
+import javax.inject.Named;
+
+import dagger.BindsInstance;
 import dagger.Component;
-import dagger.producers.ProductionSubcomponent;
+
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.CellModel;
+
 
 /**
 * @author daniel giribet
@@ -28,11 +33,15 @@ import dagger.producers.ProductionSubcomponent;
 @Component(modules=CellModule.class)
 public interface CellComponent {
 
-Cell cell();
-
+Cell createCell();
 
 @Component.Builder
 interface Builder {
+	@BindsInstance Builder fromURI(URI u);
+	@BindsInstance Builder named(@Named("name") String name);	
+	@BindsInstance Builder withDesc(@Named("desc") String desc);
+	@BindsInstance Builder value(@Named("value") String value);
+	@BindsInstance Builder withCellModel(CellModel cm);
 	CellComponent builder();
 }
 

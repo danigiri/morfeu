@@ -22,22 +22,32 @@ import java.net.URI;
 
 import org.junit.Test;
 
-import com.sun.xml.xsom.XSSchemaSet;
-
-import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.CellModel;
 
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CellModuleTest extends ModelTezt {
+public class CellModuleIntTest extends ModelTezt {
 
 
-//@Test
+@Test
 public void testBuildCell() throws Exception {
 
-	//TODO: complete test
+	//TODO: complete test HEREHRE REHREHRE HERE 
+	
+	String contentPath = testAwareFullPathFrom("test-resources/documents/nonvalid-document.xml");
+	String modelPath = "test-resources/models/test-model.xsd";
+	URI modelURI = new URI(modelPath);
+	URI contentURI = new URI(contentPath);
+	CellModel testCellModel = cellModelFrom(modelURI, "test");	
 
+	Cell cell = CellModule.provideCellFrom(contentURI, "name", "desc", "value", testCellModel);
+	assertNotNull(cell);
+
+	
+	
 }
 
 }

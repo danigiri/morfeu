@@ -30,19 +30,22 @@ import cat.calidos.morfeu.problems.ValidationException;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ContentParserIntTest extends ModelInjectionTezt {
+public class ContentParserIntTest extends ModelTezt {
 
 
 @Test
 public void testValidate() throws Exception {
 
-	String contentPath = uriModuleForPath("test-resources/documents/document1.xml");
+	String contentPath = "test-resources/documents/document1.xml";
+	
+	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "test-resources/models/test-model.xsd";
-	String testAwareModelPath = uriModuleForPath(modelPath);
+	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 	Validable validator = DaggerContentParserComponent.builder()
-							.forContent(new URI(contentPath))
-							.withModel(new URI(modelPath))
-							.modelFetchableFrom(new URI(testAwareModelPath))
+							.content(new URI(contentPath))
+							.fetchedContentFrom(new URI(fullContentPath))
+							.model(new URI(modelPath))
+							.withModelFetchedFrom(new URI(testAwareModelPath))
 							.build()
 							.validator()
 							.get();
@@ -55,13 +58,13 @@ public void testValidate() throws Exception {
 @Test
 public void testNonValidDocument() throws Exception {
 
-	String contentPath = uriModuleForPath("test-resources/documents/nonvalid-document.xml");
+	String contentPath = testAwareFullPathFrom("test-resources/documents/nonvalid-document.xml");
 	String modelPath = "test-resources/models/test-model.xsd";
-	String testAwareModelPath = uriModuleForPath(modelPath);
+	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 	Validable validator = DaggerContentParserComponent.builder()
-							.forContent(new URI(contentPath))
-							.withModel(new URI(modelPath))
-							.modelFetchableFrom(new URI(testAwareModelPath))
+							.fetchedContentFrom(new URI(contentPath))
+							.model(new URI(modelPath))
+							.withModelFetchedFrom(new URI(testAwareModelPath))
 							.build()
 							.validator()
 							.get();
@@ -73,5 +76,8 @@ public void testNonValidDocument() throws Exception {
 	}
 
 }
+
+
+// HEREH HERHERHER EHREREH TEST CONTENT CELLS
 
 }

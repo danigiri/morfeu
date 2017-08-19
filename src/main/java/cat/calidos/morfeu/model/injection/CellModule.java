@@ -16,14 +16,18 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.model.Cell;
-import cat.calidos.morfeu.model.Model;
 import dagger.Module;
 import dagger.Provides;
-import dagger.producers.ProducerModule;
+
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.CellModel;
 
 
 /**
@@ -33,10 +37,11 @@ import dagger.producers.ProducerModule;
 public class CellModule {
 
 protected final static Logger log = LoggerFactory.getLogger(CellModule.class);
-		
-@Provides
-public static Cell provideCellFrom(Model m, Node n) {
 	
+
+@Provides
+public static Cell provideCellFrom(URI u, @Named("name") String name, @Named("desc") String desc, @Named("value") String value, CellModel cm) {
+	return new Cell(u, name, desc, value, cm);
 }
 
 

@@ -21,6 +21,11 @@ package cat.calidos.morfeu.problems;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ParsingException extends Exception {
 
+public ParsingException(String message) {
+	super(message);
+}
+
+
 public ParsingException(String message, Throwable e) {
 	super(message+"("+e.getMessage()+")", e);
 }

@@ -14,7 +14,7 @@ import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 
-public class DocumentIntTest extends ModelInjectionTezt {
+public class DocumentIntTest extends ModelTezt {
 
 
 @Test
