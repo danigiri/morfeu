@@ -37,7 +37,6 @@ public class ContentParserIntTest extends ModelTezt {
 public void testValidate() throws Exception {
 
 	String contentPath = "test-resources/documents/document1.xml";
-	
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "test-resources/models/test-model.xsd";
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
@@ -58,11 +57,13 @@ public void testValidate() throws Exception {
 @Test
 public void testNonValidDocument() throws Exception {
 
-	String contentPath = testAwareFullPathFrom("test-resources/documents/nonvalid-document.xml");
+	String contentPath = "test-resources/documents/nonvalid-document.xml";
+	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "test-resources/models/test-model.xsd";
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 	Validable validator = DaggerContentParserComponent.builder()
-							.fetchedContentFrom(new URI(contentPath))
+							.content(new URI(contentPath))
+							.fetchedContentFrom(new URI(fullContentPath))
 							.model(new URI(modelPath))
 							.withModelFetchedFrom(new URI(testAwareModelPath))
 							.build()

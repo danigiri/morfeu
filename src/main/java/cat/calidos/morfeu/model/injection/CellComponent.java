@@ -20,6 +20,9 @@ import java.net.URI;
 
 import javax.inject.Named;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import dagger.BindsInstance;
 import dagger.Component;
 
@@ -37,10 +40,8 @@ Cell createCell();
 
 @Component.Builder
 interface Builder {
-	@BindsInstance Builder fromURI(URI u);
-	@BindsInstance Builder named(@Named("name") String name);	
-	@BindsInstance Builder withDesc(@Named("desc") String desc);
-	@BindsInstance Builder value(@Named("value") String value);
+	@BindsInstance Builder withURI(URI u);
+	@BindsInstance Builder fromElement(Element node);
 	@BindsInstance Builder withCellModel(CellModel cm);
 	CellComponent builder();
 }

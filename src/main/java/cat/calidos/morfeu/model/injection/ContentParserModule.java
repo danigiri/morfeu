@@ -133,11 +133,10 @@ private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI u
 	pendingNodes.stream().map(node -> {
 		
 		String name = node.getNodeName();
-		String nodeValue = node.getNodeValue();
 		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
 		if (!matchedCellModel.isPresent()) {
 			log.error("Could not match content node '{}' with any cellmodel even tough content is valid", name);
-			return null;
+			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 		CellModel cellModel = matchedCellModel.get();
 		
@@ -147,20 +146,19 @@ private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI u
 			cellURI = new URI(proposedCellURI);
 		} catch (URISyntaxException e) {
 			log.error("Could not build URI of content node '{}'", name);
-			return null;
+			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 		
-		return DaggerCellComponent.builder()
-				.fromURI(cellURI)
-				.named(name)
-				.value(nodeValue)
-				.withDesc("")
-				.withCellModel(cellModel)
-				.builder()
-				.createCell();
-								
-	}).forEach(cell -> contentCells.addChild(cell.getName(), cell));
-
+//		return DaggerCellComponent.builder()
+//				.withURI(cellURI)
+//				.fromElem(node)
+//				.withCellModel(cellModel)
+//				.builder()
+//				.createCell();
+		return name;
+	});//.forEach(cell -> contentCells.addChild(cell.getName(), cell));
+	
+	
 	
 	return contentCells;
 

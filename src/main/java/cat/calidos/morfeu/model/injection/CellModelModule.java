@@ -70,16 +70,16 @@ protected final static Logger log = LoggerFactory.getLogger(CellModelModule.clas
 
 @Provides
 public static CellModel provideCellModel(Type t,
-										 @Named("SimpleInstance") Provider<CellModel> provCellModule,
-										 @Named("ComplexInstance") Provider<ComplexCellModel> provComplexCellModule) {
+										 @Named("SimpleInstance") Provider<CellModel> providerCell,
+										 @Named("ComplexInstance") Provider<ComplexCellModel> providerComplexCell) {
 
 	if(t.isSimple()) {
 		
-		return provCellModule.get();
+		return providerCell.get();
 	
 	} else {
 
-		return provComplexCellModule.get();
+		return providerComplexCell.get();
 		
 	}
 	

@@ -21,9 +21,11 @@ import static org.junit.Assert.*;
 import java.net.URI;
 
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.Composite;
 
 
 /**
@@ -37,16 +39,41 @@ public void testBuildCell() throws Exception {
 
 	//TODO: complete test HEREHRE REHREHRE HERE 
 	
-	String contentPath = testAwareFullPathFrom("test-resources/documents/nonvalid-document.xml");
+	String contentPath = "test-resources/documents/document1.xml";
+	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "test-resources/models/test-model.xsd";
-	URI modelURI = new URI(modelPath);
+	String testAwareModelPath = testAwareFullPathFrom(modelPath);
+	//CellModel testCellModel = cellModelFrom(modelURI, "test");	
+
+//	Cell cell = CellModule.provideCellFrom(contentURI, "name", "desc", "value", testCellModel);
+//	assertNotNull(cell);
+
+
+}
+
+@Test
+public void testChildrenFrom() throws Exception {
+
+	String contentPath = "target/test-classes/test-resources/documents/document1.xml";
 	URI contentURI = new URI(contentPath);
-	CellModel testCellModel = cellModelFrom(modelURI, "test");	
-
-	Cell cell = CellModule.provideCellFrom(contentURI, "name", "desc", "value", testCellModel);
-	assertNotNull(cell);
-
+	String modelPath = "target/test-classes/test-resources/models/test-model.xsd";
+	URI modelURI = new URI(modelPath);
 	
+	// we're expecting a fetchable relative path here
+	CellModel testCellModel = cellModelFrom(modelURI, "test");	
+	
+	Document document = DaggerContentParserTeztComponent.builder()
+															.content(contentURI)
+															.fetchedContentFrom(contentURI)
+															.model(modelURI)
+															.withModelFetchedFrom(modelURI)
+															.build()
+															.parsedXMLDocument()
+															.get();
+	
+	
+	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
+	assertNotNull(children);
 	
 }
 

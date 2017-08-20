@@ -22,6 +22,7 @@ import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import cat.calidos.morfeu.model.injection.ContentParserComponent.Builder;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
@@ -29,7 +30,6 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Deprecated
 @ProductionComponent(modules={ContentParserModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
 public interface ContentParserTeztComponent {
 
@@ -42,9 +42,10 @@ ListenableFuture<org.w3c.dom.Document> parsedXMLDocument();
 // d) duplicate the builder interface here (* chosen option as it duplicates interface, not implementation *) 
 @ProductionComponent.Builder
 interface Builder {
-	@BindsInstance Builder forTestContent(@Named("FetchableContentURI") URI u);
-	@BindsInstance Builder withTestModel(@Named("ModelURI") URI u);
-	@BindsInstance Builder testModelFetchableFrom(@Named("FetchableModelURI") URI u);
+	@BindsInstance Builder content(@Named("ContentURI") URI u);
+	@BindsInstance Builder fetchedContentFrom(@Named("FetchableContentURI") URI u);
+	@BindsInstance Builder model(@Named("ModelURI") URI u);
+	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
 	ContentParserTeztComponent build();
 }
 

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.Composite;
@@ -169,5 +170,6 @@ private T get(String name, String what) throws InternalException {
 		throw new InternalException("Cannot get '"+what+"' named '"+name+"'");
 	}
 }
+
 
 }

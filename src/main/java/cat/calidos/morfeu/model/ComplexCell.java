@@ -18,24 +18,27 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-public class ComplexCell extends Cell implements Composite<Cell> {
+public class ComplexCell extends Cell implements Composite<Cell>, Attributes<Cell> {
+
+protected Composite<Cell> children;
+protected Attributes<Cell> attributes;
 
 
-
-public ComplexCell(URI u, String name, String desc, Composite<Cell> children) {
+public ComplexCell(URI u, String name, String desc, String value, CellModel cm, Composite<Cell> children, Attributes<Cell> attributes) {
 	
-	super(u, name, desc);
+	super(u, name, value, desc, cm);
 	
 	this.children = children;
+	this.attributes = attributes;
 
 }
 
-protected Composite<Cell> children;
 
 
 @Override
@@ -73,5 +76,38 @@ public Cell child(String name) {
 	return children.child(name);
 }
 
+
+@Override
+public boolean hasAttributes() {
+
+	// TODO Auto-generated method stub
+	return false;
+}
+
+
+@Override
+public boolean hasAttribute(String name) {
+
+	// TODO Auto-generated method stub
+	return false;
+}
+
+
+@Override
+public Cell attribute(int i) {
+	return attributes.attribute(i);
+}
+
+
+@Override
+public Cell attribute(String name) {
+	return attributes.attribute(name);
+}
+
+
+@Override
+public boolean addAttribute(String name, Cell a) {
+	return attributes.addAttribute(name, a);
+}
 
 }

@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.model;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -26,7 +27,6 @@ public interface Composite<T> {
 
 /** @return all children of this composite object */
 public List<T> asList();
-
 
 /** how many children do we have */
 public int size();
@@ -45,5 +45,6 @@ public List<T> clear();
 
 /** add this child and return true if it was added or false if it was replacedt */
 public boolean addChild(String key, T c);
+
 
 }
