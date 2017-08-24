@@ -67,13 +67,13 @@ protected Object process()
 
 
 @Override
-protected void logProcess() {
+protected void beforeProcess() {
 	log.trace("DocumentControl::loadDocument('{}', '{}')", prefix, path);
 }
 
 
 @Override
-protected void logProblem(String problem) {
+protected void afterProblem(String problem) {
 	log.trace("Problem loading document('{}', '{}'): {}", prefix, path, problem);
 }
 

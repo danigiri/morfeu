@@ -32,6 +32,8 @@ import org.mockito.junit.MockitoRule;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;

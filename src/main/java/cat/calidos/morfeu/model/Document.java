@@ -35,7 +35,7 @@ protected URI modelURI;
 protected URI fetchableModelURI;
 protected URI contentURI;
 protected URI fetchableContentURI;
-protected org.w3c.dom.Document content;
+protected Composite<Cell> content;
 protected Model model;
 protected Validable validator;
 protected boolean isValid = false;
@@ -165,12 +165,15 @@ public void setFetchableContentURI(URI uri) {
 }
 
 
-public void setContent(org.w3c.dom.Document content) {
+public Composite<Cell> getContent() {
+	return content;
+}
+
+public void setContent(Composite<Cell> content) {
 
 	this.content = content;
 	
 }
-
 
 public Model getModel() {
 	return model;

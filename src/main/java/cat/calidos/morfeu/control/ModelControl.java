@@ -67,14 +67,14 @@ protected Object process()
 
 
 @Override
-protected void logProcess() {
+protected void beforeProcess() {
 	log.trace("ModelControl::loadModel('{}', '{}')", prefix, path);
 }
 
 
 @Override
-protected void logProblem(String problem) {
-	log.trace("Problem loading model ('{}', '{}'): {}", prefix, path, problem);
+protected void afterProblem(String problem) {
+	log.trace("Problem loading model ('{}', '{}'): '{}'", prefix, path, problem);
 }
 
 

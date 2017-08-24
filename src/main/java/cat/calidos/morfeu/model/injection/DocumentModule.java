@@ -16,12 +16,6 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.model.Model;
-import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.utils.MorfeuUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,13 +30,17 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+
+import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
+
 
 /** TODO: ensure all this is actually asynchronous
 * @author daniel giribet
@@ -67,6 +65,7 @@ public static Document produceDocument(@Named("NormalisedDocument") Document doc
 		 ContentParserSubcomponent contentParser = contentParserComponentProvider.get().builder();
 		 doc.setValidator(contentParser.validator().get());
 		 doc.validate();	// if this does not throw an exception, it means content is valid
+		 doc.setContent(contentParser.content().get());
 		
 	} catch (Exception e) {
 		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);

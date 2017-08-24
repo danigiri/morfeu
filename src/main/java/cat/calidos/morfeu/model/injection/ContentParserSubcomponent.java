@@ -16,25 +16,25 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.util.List;
-
 import com.google.common.util.concurrent.ListenableFuture;
 
+import dagger.producers.ProductionSubcomponent;
+
 import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
-import dagger.producers.ProductionSubcomponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ContentParserModule.class, ListeningExecutorServiceModule.class})
+@ProductionSubcomponent(modules={ContentParserModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
 public interface ContentParserSubcomponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
-//ListenableFuture<List<Cell>> content();
+ListenableFuture<Composite<Cell>> content() throws ParsingException;
 
 @ProductionSubcomponent.Builder
 interface Builder {

@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -31,6 +33,8 @@ public void testProduceCompleteDocument() throws Exception {
 	
 	DocumentModuleTest.testDocument1(doc);
 	
+	Composite<Cell> content = doc.getContent();
+	assertNotNull(content);
 }
 
 

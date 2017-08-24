@@ -45,5 +45,16 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     	<url-pattern>/models/*</url-pattern>
   	</servlet-mapping>
 	
+	<!-- Content -->
+	<servlet>
+    	<display-name>content-servlet</display-name>
+    	<servlet-name>ContentServlet</servlet-name>
+   		<servlet-class>cat.calidos.morfeu.webapp.ContentServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+    	<servlet-name>ContentServlet</servlet-name>
+    	<url-pattern>/content/*</url-pattern>
+  	</servlet-mapping>
 	
 </web-app>

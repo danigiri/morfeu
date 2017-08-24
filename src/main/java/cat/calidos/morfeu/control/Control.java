@@ -57,7 +57,7 @@ protected String render(String template, Object value, String problem) {
 
 public String processRequest() {
 	
-	logProcess();
+	beforeProcess();
 	
 	Object result = null;
 	String problem = "";
@@ -83,7 +83,7 @@ public String processRequest() {
 	if (problem.length()==0) {
 		parsedResult = render(template, result, problem);
 	} else {
-		logProblem(problem);
+		afterProblem(problem);
 		Object problemInformation = problemInformation(); 
 		parsedResult = render(problemTemplate, problemInformation, problem);		
 	}
@@ -96,9 +96,9 @@ public String processRequest() {
 protected abstract Object process() 
 		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException;
 
-protected abstract void logProcess();
+protected abstract void beforeProcess();
 
-protected abstract void logProblem(String problem);
+protected abstract void afterProblem(String problem);
 
 protected abstract Object problemInformation();
 

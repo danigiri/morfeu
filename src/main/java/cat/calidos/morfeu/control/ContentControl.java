@@ -24,6 +24,9 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
 import cat.calidos.morfeu.model.injection.DaggerURIComponent;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -42,7 +45,7 @@ private String modelPath;
 
 public ContentControl(String prefix, String path, @Nullable String modelPath) {
 	
-	super("content:"+path, "", "templates/content-problem.twig");
+	super("content:"+path, "templates/content.twig", "templates/content-problem.twig");
 	
 	this.prefix = prefix;
 	this.path = path;
@@ -57,21 +60,32 @@ protected Object process()
 
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
+	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
+	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
 	
-	return null;
+	Composite<Cell> content = DaggerContentParserComponent.builder()
+															.content(uri)
+															.fetchedContentFrom(fetchableURI)
+															.model(modelURI)
+															.withModelFetchedFrom(fetchableModelPath)
+															.build()
+															.content()
+															.get();
+	
+	return content.asList();
+	
 }
 
 
 @Override
-protected void logProcess() {
+protected void beforeProcess() {
 	log.trace("ContentControl::loadContent('{}', '{}', '{}')", prefix, path, modelPath);
 }
 
 
 @Override
-protected void logProblem(String problem) {
-
-	// TODO Auto-generated method stub
+protected void afterProblem(String problem) {
+	log.trace("Problem loading content('{}', '{}', '{}'): '{}'", prefix, path, modelPath, problem);
 	
 }
 
