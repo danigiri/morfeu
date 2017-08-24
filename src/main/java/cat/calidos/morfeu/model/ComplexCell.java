@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-public class ComplexCell extends Cell implements Composite<Cell>, Attributes<Cell> {
+public class ComplexCell extends Cell {
 
 protected Composite<Cell> children;
 protected Attributes<Cell> attributes;
@@ -40,74 +40,34 @@ public ComplexCell(URI u, String name, String desc, String value, CellModel cm, 
 }
 
 
-
-@Override
-public List<Cell> asList() {
-	return children.asList();
+public Composite<Cell> children() {
+	return children;
 }
 
-
-@Override
-public Cell child(int i) {
-	return children.child(i);
+public Attributes<Cell> attributes() {
+	return attributes;
 }
 
-
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.Cell#isSimple()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
-public List<Cell> clear() {
-	return children.clear();
-}
-
-
-@Override
-public boolean addChild(String name, Cell c) {
-	return children.addChild(name, c);
-}
-
-
-@Override
-public int size() {
-	return children.size();
-}
-
-
-@Override
-public Cell child(String name) {
-	return children.child(name);
-}
-
-
-@Override
-public boolean hasAttributes() {
-
-	// TODO Auto-generated method stub
+public boolean isSimple() {
 	return false;
 }
 
 
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.Cell#asComplex()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
-public boolean hasAttribute(String name) {
-
-	// TODO Auto-generated method stub
-	return false;
+public ComplexCell asComplex() {
+	return this;
 }
 
 
-@Override
-public Cell attribute(int i) {
-	return attributes.attribute(i);
-}
-
-
-@Override
-public Cell attribute(String name) {
-	return attributes.attribute(name);
-}
-
-
-@Override
-public boolean addAttribute(String name, Cell a) {
-	return attributes.addAttribute(name, a);
+public static ComplexCell from(Cell c) {
+	return (ComplexCell)c;
 }
 
 }

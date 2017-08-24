@@ -19,12 +19,16 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Composite;
 
 
@@ -34,46 +38,82 @@ import cat.calidos.morfeu.model.Composite;
 public class CellModuleIntTest extends ModelTezt {
 
 
+private Document document;
+private URI modelURI;
+private URI contentURI;
+
+
+@Before
+public void setup() throws Exception {
+	
+	String contentPath = "target/test-classes/test-resources/documents/document1.xml";
+	contentURI = new URI(contentPath);
+	String modelPath = "target/test-classes/test-resources/models/test-model.xsd";
+	modelURI = new URI(modelPath);
+		
+	document = DaggerContentParserTeztComponent.builder()
+												.content(contentURI)
+												.fetchedContentFrom(contentURI)
+												.model(modelURI)
+												.withModelFetchedFrom(modelURI)
+												.build()
+												.parsedXMLDocument()
+												.get();
+
+}
+
 @Test
 public void testBuildCell() throws Exception {
 
 	//TODO: complete test HEREHRE REHREHRE HERE 
-	
-	String contentPath = "test-resources/documents/document1.xml";
-	String fullContentPath = testAwareFullPathFrom(contentPath);
-	String modelPath = "test-resources/models/test-model.xsd";
-	String testAwareModelPath = testAwareFullPathFrom(modelPath);
-	//CellModel testCellModel = cellModelFrom(modelURI, "test");	
-
-//	Cell cell = CellModule.provideCellFrom(contentURI, "name", "desc", "value", testCellModel);
-//	assertNotNull(cell);
-
 
 }
 
 @Test
 public void testChildrenFrom() throws Exception {
 
-	String contentPath = "target/test-classes/test-resources/documents/document1.xml";
-	URI contentURI = new URI(contentPath);
-	String modelPath = "target/test-classes/test-resources/models/test-model.xsd";
-	URI modelURI = new URI(modelPath);
-	
+
 	// we're expecting a fetchable relative path here
 	CellModel testCellModel = cellModelFrom(modelURI, "test");	
 	
-	Document document = DaggerContentParserTeztComponent.builder()
-															.content(contentURI)
-															.fetchedContentFrom(contentURI)
-															.model(modelURI)
-															.withModelFetchedFrom(modelURI)
-															.build()
-															.parsedXMLDocument()
-															.get();
-	
-	
 	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 	assertNotNull(children);
+	assertEquals(1, children.size());
+	Cell row = children.child(0);
+	assertEquals("row", row.getName());
+	assertEquals(contentURI+"/row", row.getURI().toString());
+	assertEquals("row", row.getCellModel().getName());
+	assertEquals("rowCell", row.getCellModel().getType().getName());
+	assertTrue(row.isComplex());
+
+	ComplexCell complexRow = ComplexCell.from(row);
+	assertNotNull(complexRow);
+	assertEquals(2, complexRow.children().size());
+	assertEquals("col", complexRow.children().child(0).getName());
+	assertEquals("col", complexRow.children().child(0).getCellModel().getName());
+	assertEquals("colCell", complexRow.children().child(0).getCellModel().getType().getName());
+	assertEquals("col", complexRow.children().child(1).getName());
+	assertEquals("col", complexRow.children().child("col[0]").getName());
+	assertEquals("col", complexRow.children().child("col[1]").getName());
+
+}
+
+
+@Test
+public void testAttributesFrom() throws Exception {
+
+	CellModel testCellModel = cellModelFrom(modelURI, "test");	
+
+	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
+
+	Cell cell = children.child("row[0]").asComplex().children().child("col[0]").asComplex().children().child("test[0]");
+	assertNotNull(cell);
+	assertTrue(cell.isComplex());
+	ComplexCell complexCell = cell.asComplex();
+	
+	Attributes<Cell> attributes = complexCell.attributes();
+	assertNotNull(attributes);
+	assertEquals(2, attributes.size());
 	
 }
 

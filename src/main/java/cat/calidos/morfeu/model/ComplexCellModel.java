@@ -68,6 +68,8 @@ public Composite<CellModel> children() {
 }
 
 
+
+
 /* (non-Javadoc)
 * @see cat.calidos.morfeu.model.CellModel#toString()
 *//////////////////////////////////////////////////////////////////////////////

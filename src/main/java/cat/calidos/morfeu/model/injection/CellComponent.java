@@ -41,7 +41,7 @@ Cell createCell();
 @Component.Builder
 interface Builder {
 	@BindsInstance Builder withURI(URI u);
-	@BindsInstance Builder fromElement(Element node);
+	@BindsInstance Builder fromNode(Node node);
 	@BindsInstance Builder withCellModel(CellModel cm);
 	CellComponent builder();
 }

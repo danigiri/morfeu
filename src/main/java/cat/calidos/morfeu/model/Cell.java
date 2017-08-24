@@ -48,4 +48,24 @@ public Cell(URI u, String name, String desc, String value, CellModel cm) {
 
 }
 
+
+public CellModel getCellModel() {
+	return this.cellModel;
+}
+
+
+public boolean isSimple() {
+	return false;
+}
+
+
+public boolean isComplex() {
+	return !isSimple();
+}
+
+
+public ComplexCell asComplex() {
+	throw new ClassCastException("Tried to access simple cell as complex ("+getName()+")");
+}
+
 }
