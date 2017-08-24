@@ -175,18 +175,19 @@ public static Attributes<Cell> attributesFrom(Node node, URI uri, CellModel cell
 	for (int i=0; i<elemAttributes.getLength(); i++) {
 		
 		Node attribute = elemAttributes.item(i);
-		String attributeName = attribute.getNodeName();
-		CellModel attributeCellModel = findAttributeWithName(cellModel, attributeName);
-		URI childURI = cellURI(uri, cellModel, attributeName);
-
-		Cell attributeCell = DaggerCellComponent.builder()
-													.withURI(childURI)
-													.fromNode(attribute)
-													.withCellModel(attributeCellModel)
-													.builder()
-													.createCell();
-		attributes.addChild(attributeName, attributeCell);
-		
+		String attributeName = attribute.getNodeName();	// the root element may have xml namespace stuff
+		if (!(attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:") )) {
+			CellModel attributeCellModel = findAttributeWithName(cellModel, attributeName);
+			URI childURI = cellURI(uri, cellModel, attributeName);
+	
+			Cell attributeCell = DaggerCellComponent.builder()
+														.withURI(childURI)
+														.fromNode(attribute)
+														.withCellModel(attributeCellModel)
+														.builder()
+														.createCell();
+			attributes.addChild(attributeName, attributeCell);
+		}
 	}
 	
 	return attributes;
@@ -213,15 +214,12 @@ private static CellModel findChildWithName(CellModel cellModel, String childName
 
 private static URI cellURI(URI uri, CellModel cellModel, String childName) throws RuntimeException {
 
-	URI childURI;
 	try {
-		childURI = new URI(uri+"/"+childName);
+		return new URI(uri+"/"+childName);
 	} catch (URISyntaxException e) {
 		log.error("Child '{}' could not build uri of '{}'", childName, cellModel.getName());
 		throw new RuntimeException("Wrong uri for cell", e);
 	}
-	
-	return childURI;
 	
 }
 

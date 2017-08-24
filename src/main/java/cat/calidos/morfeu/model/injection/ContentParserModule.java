@@ -57,7 +57,7 @@ import cat.calidos.morfeu.utils.OrderedMap;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-/**
+/** Module to validate and parse document content
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
@@ -121,21 +121,25 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI u, org.w3c
 	}
 		
 	List<CellModel> rootCellModels = m.getRootCellModels();
-	return contentCells(pendingNodes, u, rootCellModels);
+return contentCells(pendingNodes, u, rootCellModels);
+
+	
 	
 }
 
 
 private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI uri, List<CellModel> cellModels) throws ParsingException {
 
-	Composite<Cell> contentCells = new OrderedMap<Cell>();
+	//TODO: this is a bit repetitive from cellmodule, but let's leave it like this for the moment
 	
+	Composite<Cell> contentCells = new OrderedMap<Cell>();
+	int cellIndex = 0;
 	pendingNodes.stream().map(node -> {
 		
 		String name = node.getNodeName();
 		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
 		if (!matchedCellModel.isPresent()) {
-			log.error("Could not match content node '{}' with any cellmodel even tough content is valid", name);
+			log.error("Could not match root ontent node '{}' with any cellmodel even tough content is valid", name);
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 		CellModel cellModel = matchedCellModel.get();
@@ -145,20 +149,18 @@ private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI u
 		try {
 			cellURI = new URI(proposedCellURI);
 		} catch (URISyntaxException e) {
-			log.error("Could not build URI of content node '{}'", name);
+			log.error("Could not build URI of root content node '{}'", name);
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 		
-//		return DaggerCellComponent.builder()
-//				.withURI(cellURI)
-//				.fromElem(node)
-//				.withCellModel(cellModel)
-//				.builder()
-//				.createCell();
-		return name;
-	});//.forEach(cell -> contentCells.addChild(cell.getName(), cell));
-	
-	
+		return DaggerCellComponent.builder()
+				.withURI(cellURI)
+				.fromNode(node)
+				.withCellModel(cellModel)
+				.builder()
+				.createCell();
+//		return name;
+	}).forEach(cell -> contentCells.addChild(cell.getName()+"["+cellIndex+"]", cell));
 	
 	return contentCells;
 

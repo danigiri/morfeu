@@ -57,7 +57,7 @@ public void modelTest() {
 								.getModel();
 	model.shouldAppear();
 	
-	assertEquals("Model: /test-model.xsd", model.name());
+	assertEquals("Model: test-model.xsd", model.name());
 	assertEquals("Description of test model", model.desc());
 	
 }

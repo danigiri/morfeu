@@ -68,4 +68,9 @@ public ComplexCell asComplex() {
 	throw new ClassCastException("Tried to access simple cell as complex ("+getName()+")");
 }
 
+
+public String getValue() {
+	return value;
+}
+
 }

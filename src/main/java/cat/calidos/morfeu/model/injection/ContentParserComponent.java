@@ -24,6 +24,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
@@ -36,6 +38,8 @@ import cat.calidos.morfeu.problems.ParsingException;
 public interface ContentParserComponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
+ListenableFuture<Composite<Cell>> content() throws ParsingException;
+
 
 @ProductionComponent.Builder
 interface Builder {

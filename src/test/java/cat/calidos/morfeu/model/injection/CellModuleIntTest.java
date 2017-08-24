@@ -115,6 +115,18 @@ public void testAttributesFrom() throws Exception {
 	assertNotNull(attributes);
 	assertEquals(2, attributes.size());
 	
+	Cell number = attributes.attribute("number");
+	assertNotNull(number);
+	assertEquals("42", number.getValue());
+	assertEquals("number", number.getCellModel().getName());
+	assertEquals("numberField", number.getCellModel().getType().getName());
+	
+	Cell text = attributes.attribute("text");
+	assertNotNull(text);
+	assertEquals("blahblah", text.getValue());
+	assertEquals("text", text.getCellModel().getName());
+	assertEquals("textField", text.getCellModel().getType().getName());
+
 }
 
 }

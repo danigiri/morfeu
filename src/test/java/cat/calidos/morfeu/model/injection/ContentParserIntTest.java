@@ -19,11 +19,17 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.ComplexCell;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
+import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
 
@@ -78,7 +84,36 @@ public void testNonValidDocument() throws Exception {
 
 }
 
+@Test
+public void testProduceContent() throws Exception {
 
-// HEREH HERHERHER EHREREH TEST CONTENT CELLS
+	
+	String contentPath = "test-resources/documents/document1.xml";
+	String fullContentPath = testAwareFullPathFrom(contentPath);
+	String modelPath = "test-resources/models/test-model.xsd";
+	String testAwareModelPath = testAwareFullPathFrom(modelPath);
+	
+	Composite<Cell> content = DaggerContentParserComponent.builder()
+															.content(new URI(contentPath))
+															.fetchedContentFrom(new URI(fullContentPath))
+															.model(new URI(modelPath))
+															.withModelFetchedFrom(new URI(testAwareModelPath))
+															.build()
+															.content()
+															.get();
+	assertNotNull(content);
+	assertEquals(1, content.size());
+	
+	Cell rootNode = content.child("test[0]");
+	assertNotNull(rootNode);
+	assertEquals("test", rootNode.getName());
+	assertTrue(rootNode.isComplex());
+	
+	ComplexCell rootComplexNode = rootNode.asComplex();
+	assertNotNull(rootComplexNode);
+	assertEquals(1, rootComplexNode.children().size());
+	assertEquals("row", rootComplexNode.children().child(0).getName());
+	
+}
 
 }

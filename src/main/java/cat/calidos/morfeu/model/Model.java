@@ -37,7 +37,7 @@ public static final String MODEL_NAMESPACE = "";
 public Model(URI u, String desc, URI fetchableURI, XSSchemaSet s, List<CellModel> rootTypes) {
 
 	// TODO: fetch description from annotation
-	super(u, u.getPath().substring(u.getPath().lastIndexOf("/")), desc);
+	super(u, u.getPath().substring(u.getPath().lastIndexOf("/")).substring(1), desc);
 
 	this.schema = s;
 	this.roots = rootTypes;
