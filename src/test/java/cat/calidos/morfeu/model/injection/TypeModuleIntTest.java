@@ -73,8 +73,9 @@ public void testRootAnonymousType() throws Exception {
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.buildType("cell-model-name", xsType);
+	Type type = TypeModule.buildType("cell-model-name", xsType, "PRESENTATION");
 	assertEquals("cell-model-name", type.getName());
+	assertEquals("PRESENTATION", type.getPresentation());
 	assertFalse(type.isSimple());
 		
 	
@@ -120,7 +121,7 @@ public void testRootAnonymousType() throws Exception {
 public void testTextSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "textField");
-	Type type = TypeModule.buildType("not used default", xsType);
+	Type type = TypeModule.buildType("not used default", xsType, "PRESENTATION");
 	assertEquals("textField", type.getName());
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
@@ -136,7 +137,7 @@ public void testTextSimpleType() {
 public void testIntegerSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "numberField");
-	Type type = TypeModule.buildType("not used default", xsType);
+	Type type = TypeModule.buildType("not used default", xsType, "PRESENTATION");
 	assertEquals("numberField", type.getName());
 	assertTrue(type.isSimple());
 	
@@ -149,7 +150,7 @@ public void testIntegerSimpleType() {
 public void testColFieldSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colField");
-	Type type = TypeModule.buildType("not used", xsType);
+	Type type = TypeModule.buildType("not used", xsType, "PRESENTATION");
 	assertEquals("colField", type.getName());
 	assertTrue(type.isSimple());
 		

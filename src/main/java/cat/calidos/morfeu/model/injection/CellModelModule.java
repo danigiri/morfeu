@@ -89,11 +89,12 @@ public static CellModel provideCellModel(Type t,
 @Provides @Named("SimpleInstance")
 public static CellModel buildCellModelFrom(XSElementDecl elem, 
 										   @Named("name") String name, 
-										   @Named("desc") String desc, 
+										   @Named("desc") String desc,
 										   Type t, 
+										   @Named("presentation") String presentation,
 										   URI u) {
 	// TODO: add cell description from metadata
-	return new CellModel(u, name, desc, t);
+	return new CellModel(u, name, desc, t, presentation);
 
 }
 
@@ -102,12 +103,13 @@ public static CellModel buildCellModelFrom(XSElementDecl elem,
 public static ComplexCellModel buildComplexCellModelFrom(XSElementDecl elem,
 														 @Named("name") String name,
 														 @Named("desc") String desc, 
-														 Type t,  
+														 Type t,
+														 @Named("presentation") String presentation,
 														 Attributes<CellModel> attributes, 
 														 Composite<CellModel> children,
 														 URI u) {
 		
-	return new ComplexCellModel(u, name, desc, t, attributes, children);
+	return new ComplexCellModel(u, name, desc, t, presentation, attributes, children);
 	
 }
 
@@ -116,6 +118,7 @@ public static ComplexCellModel buildComplexCellModelFrom(XSElementDecl elem,
 public static String descriptionFromSchemaAnnotation(XSElementDecl elem, XSType type) {
 
 	// note that we prioritise the element annotation if any, if not we default to the XSType one
+	// TODO: move to getter internal logic? (to keep coherence with presentation field)
 	String desc = "";
 	XSAnnotation annotation = (elem.getAnnotation()!=null) ? elem.getAnnotation() : type.getAnnotation();
 	desc = DaggerModelMetadataComponent.builder().from(annotation).named("mf:desc").build().value();
@@ -255,6 +258,15 @@ public static XSType type(XSElementDecl elem) {
 }
 
 
+@Provides @Named("presentation")
+public static String presentation(XSElementDecl elem) {
+		return  DaggerModelMetadataComponent.builder()
+			.from(elem.getAnnotation())
+			.named(ModelMetadataComponent.PRESENTATION_FIELD)
+			.build()
+			.value();
+}
+
 private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl, URI nodeURI) {
 
 	String name = xsAttributeDecl.getName();
@@ -266,7 +278,8 @@ private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl, URI node
 									.build()
 									.type();
 		
-	return new CellModel(attributeURI, name, "DESC GOES HERE", type);
+	// attributes have the presentation of the corresponding type
+	return new CellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED_VALUE);
 
 }
 

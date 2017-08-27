@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:mf="http://dani.calidos.com/morfeu/metadata"
 		   >
 
 	<xs:annotation>
@@ -21,10 +22,10 @@
 
 	<xs:simpleType name="colField">
 		<xs:annotation>
-			<xs:documentation>
-			colField desc
-			</xs:documentation>
-
+			<xs:appinfo>
+				<mf:desc>colField desc</mf:desc>
+				<mf:presentation>COLUMN-FIELD</mf:presentation>
+			</xs:appinfo>
 		</xs:annotation>
 
 		<xs:restriction base="xs:integer">

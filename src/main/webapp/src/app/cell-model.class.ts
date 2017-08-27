@@ -29,6 +29,7 @@ constructor(public schema: number,
             public URI: string, 
             public name: string, 
             public desc: string, 
+            public presentation: string, 
             public isSimple: boolean, 
             public type_: Type_) {  
 
@@ -101,6 +102,7 @@ schema: number;
 URI: string;
 name: string; 
 desc: string;
+presentation: string;
 isSimple: boolean; 
 type_: Type_;
     

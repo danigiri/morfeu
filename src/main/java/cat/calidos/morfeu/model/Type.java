@@ -26,18 +26,25 @@ import com.sun.xml.xsom.XSType;
 public class Type extends RemoteResource {
 
 protected XSType xsType;
+private String presentation;
 
-public Type(URI u, String name, XSType xsType) {
+public Type(URI u, String name, XSType xsType, String presentation) {
 	//TODO: extract description for types from annotation
 	super(u, name, "FILL DESC");
 	
 	this.xsType = xsType;
+	this.presentation = presentation;
 	
 }
 
 
 public boolean isSimple() {
 	return xsType.isSimpleType();
+}
+
+
+public String getPresentation() {
+	return presentation;
 }
 
 
@@ -58,6 +65,16 @@ public boolean isContentValid(Object content) {
 	}
 }
 
+
+/* (non-Javadoc)
+* @see java.lang.Object#toString()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public String toString() {
+	return "["+name+", "+(isSimple() ? "simple]" : "complex]");
+}
+
+
 protected boolean validateIntegers(Object content) {
 
 	boolean isValid = true;
@@ -75,15 +92,6 @@ protected boolean validateIntegers(Object content) {
 	} 
 	
 	return isValid;
-}
-
-
-/* (non-Javadoc)
-* @see java.lang.Object#toString()
-*//////////////////////////////////////////////////////////////////////////////
-@Override
-public String toString() {
-	return "["+name+", "+(isSimple() ? "simple]" : "complex]");
 }
 
 

@@ -41,9 +41,9 @@ public class ModelMetadataModule {
 @Provides
 public String provideContentOfAnnotation(LinkedList<Node> annotationNodes, @Named("tag") String tag) {
 	
-	String content = "";
+	String content = null;
 
-	while (annotationNodes.size()>0 && content.length()==0) {
+	while (annotationNodes.size()>0 && content==null) {
 		
 		Node currentNode = annotationNodes.pop();
 		if (currentNode.getNodeName().equals(tag)) {
@@ -60,7 +60,7 @@ public String provideContentOfAnnotation(LinkedList<Node> annotationNodes, @Name
 	}
 	
 	// this will probably have lots of leading/trailing whitespace stuff, we'll leave that outside our scope
-	return content;
+	return (content==null) ? ModelMetadataComponent.UNDEFINED_VALUE: content;
 	
 }
 

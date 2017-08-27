@@ -28,12 +28,14 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:desc>colCell desc</mf:desc>
+				<mf:presentation>COLUMN-WELL</mf:presentation>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="data" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data2" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="size" type="colField" />
 	</xs:complexType>
 		   
 		   

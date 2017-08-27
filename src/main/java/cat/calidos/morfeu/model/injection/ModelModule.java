@@ -54,6 +54,8 @@ import dagger.producers.Produces;
 @ProducerModule(includes=ModelParserModule.class)
 public class ModelModule extends RemoteModule {
 
+private static final String METADATA_DESC_FIELD = "mf:desc";
+
 
 // here we're using the model uri as it will be used to populate internal uri of cell models and it's a neat 
 // representation
@@ -110,7 +112,7 @@ public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
 	
-	return DaggerModelMetadataComponent.builder().from(annotation).named("mf:desc").build().value();
+	return DaggerModelMetadataComponent.builder().from(annotation).named(METADATA_DESC_FIELD).build().value();
 	
 }
 

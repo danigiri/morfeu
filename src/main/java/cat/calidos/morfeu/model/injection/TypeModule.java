@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Locator;
 
+import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
@@ -45,7 +46,7 @@ public class TypeModule {
 protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 
 @Provides
-public static Type buildType(String defaultName, XSType xsType) {
+public static Type buildType(String defaultName, XSType xsType, @Named("presentation") String presentation) {
 	
 	Locator locator = xsType.getLocator();
 	URI u = null;
@@ -58,10 +59,19 @@ public static Type buildType(String defaultName, XSType xsType) {
 	// if it's an anonymous type we use the cell model name
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
 	
-	return new Type(u, name, xsType);
+	return new Type(u, name, xsType, presentation);
 	
 }
 
+
+@Provides  @Named("presentation")
+public static String presentationFrom(XSType xsType) {
+	return  DaggerModelMetadataComponent.builder()
+			.from(xsType.getAnnotation())
+			.named(ModelMetadataComponent.PRESENTATION_FIELD)
+			.build()
+			.value();
+}
 
 // STASHED REFERENCE
 // get the types from a complex type

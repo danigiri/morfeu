@@ -18,6 +18,8 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 
+import cat.calidos.morfeu.model.injection.ModelMetadataComponent;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,12 +27,15 @@ public class CellModel extends RemoteResource {
 
 protected Type type;
 protected boolean isSimple = true;
+protected String presentation;
 
-public CellModel(URI u, String name, String desc, Type type) {
+
+public CellModel(URI u, String name, String desc, Type type, String presentation) {
 	//TODO: come up with a useful description or leave empty
 	super(u, name, desc);
 	
 	this.type = type;
+	this.presentation = presentation;
 	
 }
 
@@ -52,6 +57,11 @@ public ComplexCellModel asComplex() {
 
 public Type getType() {
 	return type;
+}
+
+
+public String getPresentation() {
+	return (presentation.equals(ModelMetadataComponent.UNDEFINED_VALUE)) ? type.getPresentation() : presentation;
 }
 
 

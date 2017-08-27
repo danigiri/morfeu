@@ -32,6 +32,9 @@ import dagger.Component;
 @Component(modules=ModelMetadataModule.class)
 public interface ModelMetadataComponent {
 
+String PRESENTATION_FIELD = "mf:presentation";
+String UNDEFINED_VALUE = "UNDEFINED";
+
 String value();
 
 @Component.Builder
