@@ -87,7 +87,7 @@ public String processRequest() {
 		Object problemInformation = problemInformation(); 
 		parsedResult = render(problemTemplate, problemInformation, problem);		
 	}
-	
+		
 	return parsedResult;
 	
 }

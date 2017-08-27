@@ -82,10 +82,12 @@ public void init(ServletConfig config) throws ServletException {
 
 protected String normalisedPathFrom(HttpServletRequest req) {
 
+	//String path = req.getPathTranslated();
 	String path = req.getPathInfo();	// internal model paths are not started with a slash (see tests)
 	if (path.startsWith("/")) {
 		path = path.substring(1);
 	}
+	
 	return path;
 }
 

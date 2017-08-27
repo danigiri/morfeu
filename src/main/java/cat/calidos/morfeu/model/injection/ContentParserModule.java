@@ -108,10 +108,7 @@ public static Validator produceValidator(Schema s) {
 @Produces
 public static Composite<Cell> produceContent(@Named("ContentURI") URI u, org.w3c.dom.Document xmldoc, Model m) throws ParsingException {
 	
-	// TODO: add root node attributes and value as cells
-	//xmldoc.getAttributes()
-	//xmldoc.getDocumentElement()
-	
+	// TODO: test root node attributes and value as cells
 	LinkedList<Node> pendingNodes = new LinkedList<Node>();
 
 	Node rootNode = xmldoc.getFirstChild();

@@ -27,6 +27,7 @@ public class Cell extends RemoteResource {
 
 protected CellModel cellModel;
 protected String value;
+protected boolean isSimple = true;
 
 
 public Cell(URI u) {
@@ -55,7 +56,7 @@ public CellModel getCellModel() {
 
 
 public boolean isSimple() {
-	return false;
+	return isSimple;
 }
 
 

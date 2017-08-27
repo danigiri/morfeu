@@ -1,1 +1,9 @@
-xx
+{
+	"schema": 0
+	,"cells": [$( for cell in v )$
+		$( include "cell.twig" with {'cell': cell} only )$ $( if (loop.last) )$ $(else)$,,$(endif)$
+	$( endfor )$]
+	$( if defined(problem) )$
+		,"problem": "$[ problem ]$"
+	$( endif )$
+}

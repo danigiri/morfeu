@@ -42,6 +42,7 @@ protected final static Logger log = LoggerFactory.getLogger(ContentServlet.class
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+	//http://localhost:8080/morfeu/content/target/test-classes/test-resources/documents/document1.xml?model=target/test-classes/test-resources/models/test-model.xsd
 	String path = normalisedPathFrom(req);
 	log.trace("ContentServlet::doGet '[{}]{}'", resourcesPrefix, path);
 	

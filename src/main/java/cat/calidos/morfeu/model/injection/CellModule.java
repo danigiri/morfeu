@@ -159,7 +159,7 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, CellModel cellMod
 @Provides
 public static Attributes<Cell> attributesFrom(Node node, URI uri, CellModel cellModel) {
 	
-	if (!node.hasAttributes()) {	// base case, save some memory on the list
+	if (!node.hasAttributes()) {	// base case, save some memory on the list returning a zero-sized one
 		
 		return new OrderedMap<Cell>(0);
 	}

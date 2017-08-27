@@ -36,25 +36,7 @@ public ComplexCellModel(URI u, String name, String desc, Type type, Attributes<C
 	
 	this.attributes = attributes;
 	this.children = children;
-}
-
-
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.model.CellModel#isComplex()
-*//////////////////////////////////////////////////////////////////////////////
-@Override
-public boolean isComplex() {
-	return true;
-}
-
-
-
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.model.CellModel#asComplexCellModel()
-*//////////////////////////////////////////////////////////////////////////////
-@Override
-public ComplexCellModel asComplex() {
-	return this;
+	this.isSimple = false;
 }
 
 
@@ -66,8 +48,6 @@ public Attributes<CellModel> attributes() {
 public Composite<CellModel> children() {
 	return children;
 }
-
-
 
 
 /* (non-Javadoc)

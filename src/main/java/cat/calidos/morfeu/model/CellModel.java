@@ -24,6 +24,7 @@ import java.net.URI;
 public class CellModel extends RemoteResource {
 
 protected Type type;
+protected boolean isSimple = true;
 
 public CellModel(URI u, String name, String desc, Type type) {
 	//TODO: come up with a useful description or leave empty
@@ -34,13 +35,13 @@ public CellModel(URI u, String name, String desc, Type type) {
 }
 
 
-public boolean isComplex() {
-	return false;
+public boolean isSimple() {
+	return isSimple;
 }
 
 
-public boolean isSimple() {
-	return !isComplex();	// for convenience and readability
+public boolean isComplex() {
+	return !isSimple();
 }
 
 
