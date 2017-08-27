@@ -31,8 +31,8 @@
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="test" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="test2" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="data" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="data2" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 		   

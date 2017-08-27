@@ -5,7 +5,7 @@
 >
     <row>
     	<col>
-    		<test number="42" text="blahblah"/>
+    		<data number="42" text="blahblah"/>
     	</col>
     	<col></col>
     </row>

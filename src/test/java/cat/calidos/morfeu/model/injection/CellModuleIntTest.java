@@ -106,7 +106,7 @@ public void testAttributesFrom() throws Exception {
 
 	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 
-	Cell cell = children.child("row[0]").asComplex().children().child("col[0]").asComplex().children().child("test[0]");
+	Cell cell = children.child("row[0]").asComplex().children().child("col[0]").asComplex().children().child("data[0]");
 	assertNotNull(cell);
 	assertTrue(cell.isComplex());
 	ComplexCell complexCell = cell.asComplex();

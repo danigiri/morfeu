@@ -18,7 +18,6 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 
-import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.sun.xml.xsom.XSElementDecl;

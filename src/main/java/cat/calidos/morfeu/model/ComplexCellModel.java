@@ -51,6 +51,15 @@ public Composite<CellModel> children() {
 
 
 /* (non-Javadoc)
+* @see cat.calidos.morfeu.model.CellModel#asComplexCellModel()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public ComplexCellModel asComplex() {
+	return this;
+}
+
+
+/* (non-Javadoc)
 * @see cat.calidos.morfeu.model.CellModel#toString()
 *//////////////////////////////////////////////////////////////////////////////
 @Override

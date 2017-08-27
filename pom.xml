@@ -191,11 +191,11 @@
 			<artifactId>jetty-server</artifactId>
 			<version>8.1.9.v20130131</version>
 		</dependency>
-		<dependency>
+		<!-- dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
 			<version>1.7</version>
-		</dependency>
+		</dependency-->
 
 		<!-- HELPERS -->
 		<dependency>

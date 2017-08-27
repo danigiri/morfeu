@@ -98,15 +98,15 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(0, colComplex.attributes().size());
 	assertEquals(2, colComplex.children().size());
 	
-	CellModel testFromCol = colComplex.children().child("test");				// TEST -> ROW -> COL -> TEST
-	checkComplexCellModel(testFromCol, "test", "testCell desc", "testCell", modelURI+"/test/row/col/test");
+	CellModel testFromCol = colComplex.children().child("data");				// TEST -> ROW -> COL -> DATA
+	checkComplexCellModel(testFromCol, "data", "testCell desc", "testCell", modelURI+"/test/row/col/data");
 	
 	ComplexCellModel testFromColComplex = testFromCol.asComplex();
 	assertNotNull(testFromColComplex);
 	assertEquals(2, testFromColComplex.attributes().size());
 	assertEquals(0, testFromColComplex.children().size());
 		
-	assertNotNull(colComplex.children().child("test2"));						// TEST -> ROW -> COL -> TEST2
+	assertNotNull(colComplex.children().child("data2"));						// TEST -> ROW -> COL -> DATA2
 	
 }
 
@@ -165,6 +165,7 @@ private void checkComplexCellModel(CellModel m, String name, String desc, String
 	assertEquals(typeName, m.getType().getName());
 	assertEquals(uri, m.getURI().toString());
 	assertTrue(m.isComplex());
+	assertFalse(m.isSimple());
 
 }
 
