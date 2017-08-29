@@ -14,10 +14,11 @@
  *   limitations under the License.
  */
 
+import { Model } from '../model.class';
+
+
 export class ContentRequestEvent {
     
-   
-constructor(public url: string) {}
-
+constructor(public url: string, public model: Model) {}
 
 }

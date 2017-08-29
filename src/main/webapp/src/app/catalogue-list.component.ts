@@ -106,6 +106,7 @@ fetchCatalogues(url: string) {
                error => this.events.problem(error),
                () => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
                );
+    
 }
 
 

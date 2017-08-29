@@ -14,8 +14,10 @@
  *   limitations under the License.
  */
 
+import { CellDocument } from '../cell-document.class';
+
 export class ModelRequestEvent {
     
-constructor(public url: string) {}
+constructor(public document:CellDocument) {}
 
 }

@@ -24,6 +24,7 @@ import { RemoteDataService } from './services/remote-data.service';
 import { EventService } from './events/event.service';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
+import { ContentRequestEvent } from './events/content-request.event';
 import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
 
@@ -88,7 +89,8 @@ ngOnInit() {
             
                 if (loaded.document.problem==null || loaded.document.problem.length==0) {
                     this.events.ok();
-                    this.events.service.publish(new ModelRequestEvent(loaded.document.modelURI));
+                    this.events.service.publish(new ModelRequestEvent(loaded.document));
+                    
                 } else {
                     // even though there is a case where we could display the model of a problematic document,
                     // for instance, when the model is ok but the content is not found, we're conservative

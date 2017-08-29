@@ -31,6 +31,7 @@ import { RemoteObjectService } from './services/remote-object.service';
 import { Model, ModelJSON } from './model.class';
 import { Catalogue } from './catalogue.class';
 import { CellDocument } from './cell-document.class';
+import { Content, ContentJSON } from './content.class';
 
 import { Widget } from './widget.class';
 
@@ -76,6 +77,7 @@ import { EventService } from './events/event.service';
                    // note that Http is injected by the HttpModule imported in the application module
                    {provide: 'CatalogueService', useFactory: (http:Http) => (new RemoteDataService<Catalogue>(http)), deps: [Http]}                   
                    ,EventService
+                   ,{provide: 'ContentService', useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)), deps: [Http]}
                    ,{provide: 'CellDocumentService', useFactory: (http:Http) => (new RemoteDataService<CellDocument>(http)), deps: [Http]}
                    ,{provide: 'ModelService', useFactory: (http:Http) => (new RemoteObjectService<Model, ModelJSON>(http)), deps: [Http]}
                    ]
@@ -98,7 +100,24 @@ constructor(eventService: EventService) {
 // been able to to register their listeners to appropriate events
 ngAfterViewInit() {
     
+    console.log("\t\t\t\t\t ****** APPLICATION STARTS ******");
     console.log("AppComponent::ngAfterViewInit()");
+ 
+    // THIS IS TO SPEED UP DEVELOPMENT, WE SPEED THE STATE INTO THE DESIRED ONE
+    if (isDevMode()) {
+        // we only want to do these once, hence the unsubscriptions
+        this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
+            this.unsubscribe(this.cataloguesLoadedEventSubscription);
+            let catalogue = loaded.catalogues[0].uri;
+            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
+        }));
+        this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
+            this.unsubscribe(this.catalogueLoadedEventSubscription);
+            let document = loaded.catalogue.documents[0].uri;
+            this.events.service.publish(new CellDocumentSelectionEvent(document));
+        })); 
+    }
+    
     
     // this event loads the default catalogue and starts everything in motion
     //
@@ -112,24 +131,8 @@ ngAfterViewInit() {
     // 
     // This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
     // events can use binding properties that have been setup properly
-   
-    // THIS IS TO SPEED UP DEVELOPMENT, WE SPEED THE STATE INTO THE DESIRED ONE
-
-    if (isDevMode()) {
-        // we only want to do these once, hence the unsubscriptions
-//        this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
-//            this.unsubscribe(this.cataloguesLoadedEventSubscription);
-//            let catalogue = loaded.catalogues[0].uri;
-//            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
-//        }));
-//        this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
-//            this.unsubscribe(this.catalogueLoadedEventSubscription);
-//            let document = loaded.catalogue.documents[0].uri;
-//            this.events.service.publish(new CellDocumentSelectionEvent(document));
-//        })); 
-    }
+ 
     
-    console.log("\t\t\t\t\t **** APPLICATION STARTS ****");
     let allCatalogues = "/morfeu/test-resources/catalogues.json";
     Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(allCatalogues)));
     

@@ -22,12 +22,15 @@ import { CellModelComponent } from './cell-model.component';
 import { Model, ModelJSON } from './model.class';
 import { Widget } from './widget.class';
 import { RemoteObjectService } from './services/remote-object.service';
+import { CellDocument } from './cell-document.class';
 
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { ContentRequestEvent } from './events/content-request.event';
 import { EventService } from './events/event.service';
 import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
+
 
 
 @Component({
@@ -93,19 +96,22 @@ ngOnInit() {
     );
     
     this.subscribe(this.events.service.of(ModelRequestEvent).subscribe( requested =>
-            this.loadModel(requested.url)           
+            this.loadModel(requested.document) 
     ));
     
 }
 
 
-loadModel(uri: string) {
+loadModel(document:CellDocument) {
 
-    this.events.service.publish(new StatusEvent("Fetching model"));
-    let modelURI = "/morfeu/models/"+uri;
+    this.events.service.publish(new StatusEvent("Fetching model for document"));
+    let modelURI = "/morfeu/models/"+document.modelURI;
     this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
             console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
             this.diplayModel(model);    // not firing a load event yet if not needed
+            
+            // now that we have loaded the model we can safely load the content (as both are related
+            this.events.service.publish(new ContentRequestEvent(document.contentURI, model));
             this.events.ok();
     },
     error => {

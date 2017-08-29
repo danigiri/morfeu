@@ -3,7 +3,7 @@
 	,"name": "$[cell.Name]$"
 	,"desc": "$[cell.Desc | trim]$"
 	,"value": "$[cell.Value]$"
-	,"cellModel": "$[cell.CellModel.URI]$"
+	,"cellModelURI": "$[cell.CellModel.URI]$"
 	,"isSimple": $[cell.isSimple]$
 	$( if cell.isComplex )$
 		,"attributes": [$( for a in cell.asComplex.attributes.asList )$

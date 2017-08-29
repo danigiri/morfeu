@@ -15,18 +15,17 @@
  */
 
 import { CellModel, CellModelJSON } from './cell-model.class';
-//import { SerialisableJSONStatic, SerialisableJSON } from './serialisable-json.interface';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
-//interface Model extends SerialisableJSON<typeof Model, ModelJSON>;
-//export class Model implements SerialisableJSON<typeof Model, ModelJSON> {
 export class Model implements SerialisableToJSON<Model, ModelJSON> {
 
 public cellModels: CellModel[];
 
+
 constructor(public schema: number, public name: string, public desc: string, public valid: boolean) {
     this.cellModels = [];
 }
+
 
 // check out this excellent post http://choly.ca/post/typescript-json/ to find out how to deserialize objects
 toJSON(): ModelJSON {

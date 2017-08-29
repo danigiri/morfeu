@@ -14,14 +14,19 @@
  *   limitations under the License.
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { CellDocument } from './cell-document.class';
+import { Content, ContentJSON } from './content.class';
+import { Model } from './model.class';
+import { RemoteObjectService } from './services/remote-object.service';
 import { Widget } from './widget.class';
+import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 import { EventService } from './events/event.service';
-import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
+import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { ContentRequestEvent } from './events/content-request.event';
 
 
 @Component({
@@ -47,7 +52,8 @@ export class ContentComponent extends Widget implements OnInit {
 document: CellDocument;
 
 
-constructor(eventService: EventService) {
+constructor(eventService: EventService,
+            @Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON> ) {
     super(eventService);
 }
 
@@ -56,18 +62,19 @@ ngOnInit() {
 
     console.log("ContentComponent::ngOnInit()");
     
-//    this.subscribe(this.events.service.of(CellDocumentSelectionEvent).filter(s => s.url==null).subscribe(
-//            selected => this.clearModel()
-//    ));
+    this.subscribe(this.events.service.of(CellDocumentSelectionEvent).filter(s => s.url==null).subscribe(
+            selected => this.clearContent()
+    ));
 
     
-    this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
-            selected => {
-                this.document = selected.document;
-                
-            }
+    this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
+            requested => this.fetchContent(requested.url, requested.model)
     ));
     
+}
+
+fetchContent(url:String, model:Model) {
+
 }
 
 clearContent() {
