@@ -22,7 +22,11 @@ export class Model implements SerialisableToJSON<Model, ModelJSON> {
 public cellModels: CellModel[];
 
 
-constructor(public schema: number, public name: string, public desc: string, public valid: boolean) {
+constructor(public schema: number, 
+            public URI:string,
+            public name: string, 
+            public desc: string, 
+            public valid: boolean) {
     this.cellModels = [];
 }
 
@@ -60,6 +64,7 @@ static reviver(key: string, value: any): any {
 export interface ModelJSON {
 
 schema: number;
+URI: string;
 name: string;
 desc: string;
 valid: boolean;

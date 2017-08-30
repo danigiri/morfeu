@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-
 import { Type_ } from './type_.class';
+
 
 export class CellModel {
 

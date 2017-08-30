@@ -32,7 +32,6 @@ import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
 
 
-
 @Component({
     moduleId: module.id,
     selector: 'model',
@@ -104,7 +103,7 @@ ngOnInit() {
 
 loadModel(document:CellDocument) {
 
-    this.events.service.publish(new StatusEvent("Fetching model for document"));
+    this.events.service.publish(new StatusEvent("Fetching model"));
     let modelURI = "/morfeu/models/"+document.modelURI;
     this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
             console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
@@ -123,6 +122,14 @@ loadModel(document:CellDocument) {
 }
 
 
+diplayModel(m: Model) {
+    
+    console.log("[UI] ModelComponent::diplayModel("+m.name+")");
+    this.model = m;
+    
+}
+
+
 clearModel() {
 
     console.log("[UI] ModelComponent::clearModel()");
@@ -130,12 +137,5 @@ clearModel() {
 
 }
 
-
-diplayModel(m: Model) {
-    
-    console.log("[UI] ModelComponent::diplayModel("+m.name+")");
-    this.model = m;
-    
-}
 
 }

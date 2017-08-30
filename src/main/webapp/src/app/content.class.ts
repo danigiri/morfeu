@@ -15,6 +15,7 @@
  */
 
 import { Cell, CellJSON } from './cell.class';
+import { Model } from './model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 
@@ -25,7 +26,12 @@ cells:Cell[];
 constructor(public schema: number) {}
 
 
-toJSON(): ContentJSON {    
+associateWith(model: Model) {
+   this.cells = this.cells.map(c => c.associateWith(model));
+}
+
+
+toJSON(): ContentJSON {
    return Object.assign({}, this, {cells: this.cells.map(c => c.toJSON())});
 }   
 
@@ -40,9 +46,9 @@ fromJSON(json: ContentJSON|string): Content {
         
         let content = Object.create(Content.prototype);
         content = Object.assign(content, json);
-
-        return Object.assign(content, {cells: json.cells.map(c => Cell.fromJSON(c))});
+        content = Object.assign(content, {cells: json.cells.map(c => Cell.fromJSON(c))});
         
+        return content;
         
     }
     

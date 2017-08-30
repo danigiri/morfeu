@@ -25,6 +25,7 @@ import { AppComponent }   from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
 import { ContentComponent } from './content.component';
+import { CellComponent } from './cell.component';
 import { CellDocumentComponent } from './cell-document.component';
 import { CellModelComponent } from './cell-model.component';
 import { ModelComponent } from './model.component';
@@ -41,6 +42,7 @@ import { StatusComponent } from './status.component';
                   ,CatalogueListComponent 
                   ,CatalogueComponent
                   ,ContentComponent 
+                  ,CellComponent
                   ,CellDocumentComponent
                   ,CellModelComponent
                   ,ModelComponent

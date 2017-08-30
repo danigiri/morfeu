@@ -27,15 +27,18 @@ import { SerialisableToJSON } from './serialisable-to-json.interface';
 import { EventService } from './events/event.service';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { ContentRequestEvent } from './events/content-request.event';
+import { StatusEvent } from './events/status.event';
 
 
 @Component({
     moduleId: module.id,
     selector: 'content',
     template: `
-    <div class="panel panel-default" *ngIf="document">
+    <div class="panel panel-default" *ngIf="content">
         <div id="#content" class="panel-body">
-
+            <ng-container *ngFor="let cell of content.cells">
+                <cell [cell]="cell"></cell>
+            </ng-container>
         </div>
     </div>
     `,
@@ -49,7 +52,7 @@ import { ContentRequestEvent } from './events/content-request.event';
 
 export class ContentComponent extends Widget implements OnInit {
     
-document: CellDocument;
+content: Content;
 
 
 constructor(eventService: EventService,
@@ -75,15 +78,35 @@ ngOnInit() {
 
 fetchContent(url:String, model:Model) {
 
+    this.events.service.publish(new StatusEvent("Fetching content"));
+    let contentURI = "/morfeu/content/"+url+"?model="+model.URI;
+    this.contentService.get(contentURI, Content).subscribe( (content:Content) => {
+        console.log("ContentComponent::fetchContent() Got content from Morfeu service ("+url+")");
+        content.associateWith(model);
+        this.displayContent(content);
+        this.events.ok();
+    },
+    error => {
+        this.events.problem(error);
+    },
+    () =>     this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
+    );
+    
 }
+
+
+
+displayContent(content: Content) {
+    console.log("[UI] ContentComponent::displayContent()");
+    this.content = content;
+}
+
 
 clearContent() {
+    console.log("[UI] ContentComponent::clearContent()");
     
 }
 
-displayContent() {
-    
-}
 
 }
 

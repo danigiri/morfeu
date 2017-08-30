@@ -4,9 +4,9 @@
 		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
 >
     <row>
-    	<col>
+    	<col size="8">
     		<data number="42" text="blahblah"/>
     	</col>
-    	<col></col>
+    	<col size="4"></col>
     </row>
 </test>

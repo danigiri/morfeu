@@ -15,18 +15,87 @@
  */
 
 import { CellModel } from './cell-model.class';
+import { Model } from './model.class';
+
 
 export class Cell {
 
 attributes?: Cell[];
 children?: Cell[];
+cellModel?: CellModel;
     
 constructor(public schema: number,
             public name: string,
             public desc: string,
+            public value: string,
             public cellModelURI: string,
             public isSimple: boolean) {}
+    
+
+associateWith(model: Model):Cell {
+
+    this.associateWith_(model.cellModels);
+    
+    return this;
+}
+
+attribute(name:string):string {
+
+    let value:string;
+    if (this.attributes) {
+        let attribute:Cell = this.attributes.find(a => a.name==name);
+        if (attribute) {
+            value = attribute.value;
+        }
+    }
+    
+    return value;
+
+}
+
+// we look for a field that has representation of COLUMN-FIELD or 1 as default
+columnFieldValue():string {
+
+    let value: string = "1";
+
+    if (this.attributes) { 
+        let attribute:Cell = this.attributes.find(a => a.cellModel.presentation=="COLUMN-FIELD");
+        if (attribute) {
+            value = attribute.value;
+        }
+    }
+    return value;
+}
+
+private associateWith_(cellModels:CellModel[]):Cell {
+
+    let cellModel:CellModel = undefined;
+    if (cellModels) {
+        
+        cellModel = cellModels.find(cm => cm.URI===this.cellModelURI);  // current cell model level
+
+        //TODO: handle inconsistent cell that cannot find cellmodule even though the content is valid        
+//        if (!cellModel) {                                               // cell model children maybe?
+//            cellModel = cellModels.map(cm => this.associateWith_(cm.children)).find(cm => cm!=undefined);
+//        }
+
+        if (cellModel) {                                                // now attributes and cell children
+           if (this.attributes) {
+               this.attributes = this.attributes.map(a => a.associateWith_(cellModel.attributes));
+           }
+           if (this.children) {
+               this.children = this.children.map(c => c.associateWith_(cellModel.children));
+           }
+        }
        
+    this.cellModel = cellModel;
+    
+    }
+
+    return this;
+    
+}
+
 
 toJSON(): CellJSON {
 
@@ -52,6 +121,7 @@ static fromJSON(json: CellJSON|string):Cell {
     } else {
         
         let cell:Cell = Object.create(Cell.prototype);
+        cell = Object.assign(cell, json);
         
         if (json.attributes) {
             cell = Object.assign(cell, {attributes: json.attributes.map(a => Cell.fromJSON(a))});
@@ -79,6 +149,7 @@ export interface CellJSON {
 schema: number,
 name: string,
 desc: string,
+value: string;
 cellModelURI: string,
 isSimple: boolean,
     

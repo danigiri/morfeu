@@ -43,6 +43,7 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:desc>rowCell desc</mf:desc>
+				<mf:presentation>ROW-WELL</mf:presentation>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>

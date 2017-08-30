@@ -33,7 +33,7 @@ import dagger.Component;
 public interface ModelMetadataComponent {
 
 String PRESENTATION_FIELD = "mf:presentation";
-String UNDEFINED_VALUE = "UNDEFINED";
+String UNDEFINED_VALUE = "CELL";
 
 String value();
 
