@@ -2,8 +2,6 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 
-import org.apache.commons.lang.NullArgumentException;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
