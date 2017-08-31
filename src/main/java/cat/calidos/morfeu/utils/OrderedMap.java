@@ -17,9 +17,12 @@
 package cat.calidos.morfeu.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import cat.calidos.morfeu.model.Attributes;
@@ -113,7 +116,12 @@ public List<T> clear() {
 
 @Override
 public List<T> asList() {
-	return new ArrayList<T>(values.values());
+
+	List<T> asList = new ArrayList<T>(keys.size());
+	keys.forEach(k -> asList.add(values.get(k)));
+
+	return asList;
+
 }
 
 

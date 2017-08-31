@@ -18,8 +18,11 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -240,5 +243,6 @@ private static CellModel findAttributeWithName(CellModel cellModel, String attri
 	return matchedAttribute.get();
 
 }
+
 
 }

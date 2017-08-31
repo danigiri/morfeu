@@ -111,6 +111,7 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI u, org.w3c
 	// TODO: test root node attributes and value as cells
 	LinkedList<Node> pendingNodes = new LinkedList<Node>();
 
+	// TODO: we may be doing the list in reverse
 	Node rootNode = xmldoc.getFirstChild();
 	while (rootNode!=null) {
 		pendingNodes.add(rootNode);

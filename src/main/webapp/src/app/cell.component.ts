@@ -27,12 +27,20 @@ import { EventService } from './events/event.service';
     moduleId: module.id,
     selector: 'cell',
     template: `
-    <div class="{{cellClass()}}">
-        <span *ngIf="cell.cellModel.presentation=='CELL'">{{cell.name}}</span>
-        <cell *ngFor="let c of cell.children" [cell]="c"></cell>
-    </div>
+            <ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
+                <img src="assets/images/cell.svg" class="img-fluid cell-img" alt="{{cell.name}}"/>
+            </ng-container>
+            <ng-template #well>
+        <div class="{{cellClass()}}">
+                <cell *ngFor="let c of cell.children" [cell]="c"></cell>
+        </div>
+            </ng-template>
     `,
     styles:[`
+    .cell-img {
+        width: 100%;
+        height: auto;
+    }
     .show-grid [class^=col-] {
         padding-top: 10px;
         padding-bottom: 10px;
@@ -69,7 +77,7 @@ cellClass() {
    } else if (this.cell.cellModel.presentation=="COLUMN-WELL") {
        return "col-md-"+this.cell.columnFieldValue();
    } else {
-        return "panel panel-default";
+        return "";
     }
 }
 
