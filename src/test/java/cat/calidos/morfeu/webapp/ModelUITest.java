@@ -82,7 +82,7 @@ public void modelDisappearsOnClickingOtherCatalogue() {
 }
 
 
-@Test
+//@Test
 public void documentWithNonValidModelIsSelected() {	
 	
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
@@ -98,7 +98,7 @@ public void documentWithNonValidModelIsSelected() {
 }
 
 
-//@Test
+@Test
 public void testCellModels() {
 
 	UIModel model = UICatalogues.openCatalogues()
@@ -111,12 +111,32 @@ public void testCellModels() {
 	List<UICellModelEntry> rootCellModels = model.rootCellModels();
 	assertEquals(1, rootCellModels.size());
 	
-	UICellModelEntry cellModelEntry = rootCellModels.get(0);
-	assertEquals("test", cellModelEntry.name());
-	assertEquals("Root cell-model desc", cellModelEntry.desc());
+	UICellModelEntry testModelEntry = rootCellModels.get(0);				// TEST
+	assertEquals("test", testModelEntry.name());
+	assertEquals("Root cell-model desc", testModelEntry.desc());
 	
 	//TODO: add cell model children testing
 	
+	testModelEntry.check(cm -> cm.isExpanded(), "Model is not expanded by default")
+	.clickOnArrow()
+	.check(cm -> cm.isCollapsed(), "Model should collapse when clicked")
+	.clickOnArrow();	// let's expand again so we can find the children =)
+	
+	List<UICellModelEntry> testModelChildren = testModelEntry.children();
+	assertEquals(1, testModelChildren.size());
+	
+	UICellModelEntry rowModel = testModelChildren.get(0);					// TEST/ROW
+	assertEquals("row", rowModel.name());
+	
+	List<UICellModelEntry> rowChildren = rowModel.children();
+	assertEquals(1, rowChildren.size());
+
+	UICellModelEntry colModel = rowChildren.get(0);							// TEST/ROW/COL
+	assertEquals("col", colModel.name());
+	
+	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
+	assertEquals(3, colChildren.size());
+
 }
 
 }

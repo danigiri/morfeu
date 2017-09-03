@@ -28,7 +28,7 @@ import { EventService } from './events/event.service';
     selector: 'cell',
     template: `
             <ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
-                <img src="assets/images/cell.svg" class="img-fluid cell-img" alt="{{cell.name}}"/>
+                <img src="assets/images/cell.svg" class="cell img-fluid cell-img" alt="{{cell.name}}"/>
             </ng-container>
             <ng-template #well>
         <div class="{{cellClass()}}">
@@ -37,6 +37,10 @@ import { EventService } from './events/event.service';
             </ng-template>
     `,
     styles:[`
+    .cell {}
+    .well {}
+    .row-well {}
+    .column-well {}
     .cell-img {
         width: 100%;
         height: auto;
@@ -70,13 +74,14 @@ ngOnInit() {
 }    
         
 //TODO: depending on the level go from -md- to -xs- col styling
+//TODO: this function gets called and we should have an attribute or input to optimise the app
 cellClass() {
     if (this.cell.cellModel.presentation=="WELL") {
-        return "container-fluid";
+        return "well container-fluid";
     } else if (this.cell.cellModel.presentation=="ROW-WELL") {
-        return "row show-grid";
+        return "row-well row show-grid";
    } else if (this.cell.cellModel.presentation=="COLUMN-WELL") {
-       return "col-sm-"+this.cell.columnFieldValue();
+       return "column-well col-sm-"+this.cell.columnFieldValue();
    } else {
         return "";
     }

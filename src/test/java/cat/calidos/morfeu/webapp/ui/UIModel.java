@@ -62,7 +62,7 @@ public String desc() {
 
 
 public List<UICellModelEntry> rootCellModels() {
-	return $$(".cell-model-level-1").stream().map( e -> new UICellModelEntry(e) ).collect(Collectors.toList());
+	return $$(".tree-node-level-1").stream().map( e -> new UICellModelEntry(e, 1) ).collect(Collectors.toList());
 }
 
 }
