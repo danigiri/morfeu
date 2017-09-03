@@ -24,18 +24,18 @@ import cat.calidos.morfeu.problems.InternalException;
 /** A Cell Model that has attributes (which cannot be repeated), order is considered important so using list and not set
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ComplexCellModel extends CellModel {
+public class ComplexCellModel extends BasicCellModel {
 
 
 private Attributes<CellModel> attributes;
 private Composite<CellModel> children;
 
-public ComplexCellModel(URI u, String name, String desc, Type type, String presentation, Attributes<CellModel> attributes, Composite<CellModel> children) {
+public ComplexCellModel(URI u, String name, String desc, Type type, String presentation, Attributes<CellModel> attributes2, Composite<CellModel> children2) {
 	
 	super(u, name, desc, type, presentation);
 	
-	this.attributes = attributes;
-	this.children = children;
+	this.attributes = attributes2;
+	this.children = children2;
 	this.isSimple = false;
 }
 

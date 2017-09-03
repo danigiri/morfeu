@@ -200,11 +200,11 @@ public static Attributes<Cell> attributesFrom(Node node, URI uri, CellModel cell
 private static CellModel findChildWithName(CellModel cellModel, String childName) {
 	
 	Optional<CellModel> matchedChild = ComplexCellModel.from(cellModel)
-							.children()
-							.asList()
-							.stream()
-							.filter(cm -> cm.getName().equals(childName))
-							.findFirst();
+														.children()
+														.asList()
+														.stream()
+														.filter(cm -> cm.getName().equals(childName))
+														.findFirst();
 	if (!matchedChild.isPresent()) {
 		log.error("Elem '{}' could not match any children of '{}'", childName, cellModel.getName());
 		throw new RuntimeException("Node and model mismatch", new IllegalArgumentException());

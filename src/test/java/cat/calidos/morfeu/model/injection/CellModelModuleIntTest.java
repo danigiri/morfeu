@@ -23,7 +23,9 @@ import static org.mockito.Mockito.doReturn;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.xalan.xsltc.compiler.util.AttributeSetMethodGenerator;
 import org.junit.Before;
@@ -35,6 +37,7 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 
 import cat.calidos.morfeu.model.Attributes;
+import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
@@ -141,8 +144,9 @@ public void testChildrenOf() {
 
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	Type type = provideElementType(elem);
+	Set<Type> processed = new HashSet<Type>();
 	
-	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI);
+	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI, processed);
 	CellModel row = children.child("row");
 	assertEquals("row", row.getName());
 	assertEquals(row, children.child(0));
@@ -159,26 +163,26 @@ public void testGetDefaultTypeName() throws Exception {
 }
 
 
-private void checkComplexCellModel(CellModel m, String name, String desc, String typeName, String uri) {
+private void checkComplexCellModel(CellModel test, String name, String desc, String typeName, String uri) {
 	
-	assertNotNull(m);
-	assertEquals(name, m.getName());
-	assertEquals(desc, m.getDesc());
-	assertEquals(typeName, m.getType().getName());
-	assertEquals(uri, m.getURI().toString());
-	assertTrue(m.isComplex());
-	assertFalse(m.isSimple());
+	assertNotNull(test);
+	assertEquals(name, test.getName());
+	assertEquals(desc, test.getDesc());
+	assertEquals(typeName, test.getType().getName());
+	assertEquals(uri, test.getURI().toString());
+	assertTrue(test.isComplex());
+	assertFalse(test.isSimple());
 
 }
 
 
-private void checkAttribute(CellModel a, String name, String typeName, String uri) {
+private void checkAttribute(CellModel textAttribute, String name, String typeName, String uri) {
 
-	assertNotNull(a);
-	assertEquals(name, a.getName());
-	assertEquals(typeName, a.getType().getName());
-	assertEquals(uri, a.getURI().toString());
-	assertTrue(a.isSimple());
+	assertNotNull(textAttribute);
+	assertEquals(name, textAttribute.getName());
+	assertEquals(typeName, textAttribute.getType().getName());
+	assertEquals(uri, textAttribute.getURI().toString());
+	assertTrue(textAttribute.isSimple());
 
 }
 

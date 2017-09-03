@@ -20,8 +20,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -44,7 +47,9 @@ import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
 import cat.calidos.morfeu.model.Attributes;
+import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.CellModelWeakReference;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Type;
@@ -70,38 +75,43 @@ protected final static Logger log = LoggerFactory.getLogger(CellModelModule.clas
 
 @Provides
 public static CellModel provideCellModel(Type t,
-										 @Named("SimpleInstance") Provider<CellModel> providerCell,
-										 @Named("ComplexInstance") Provider<ComplexCellModel> providerComplexCell) {
+										 @Named("Processed") Set<Type> processed,
+										 Provider<BasicCellModel> providerCell,
+										 Provider<ComplexCellModel> providerComplexCell,
+										 Provider<CellModelWeakReference> providerRefCell) {
 
-	if(t.isSimple()) {
-		
-		return providerCell.get();
-	
+	CellModel cellModel;
+	if (processed.stream().anyMatch(pt -> pt.getName().equals(t.getName()))) {
+		cellModel = providerRefCell.get();
 	} else {
-
-		return providerComplexCell.get();
-		
+		if (t.isGlobal()) {
+			processed.add(t);	// in essence, our recursive algorithm is post-processing, once we do the recursive
+		}						// calls to get cell model children, they will know this global type is done
+		if (t.isSimple()) {
+			cellModel = providerCell.get();
+		} else {
+			cellModel = providerComplexCell.get();
+		}
 	}
 	
+	return cellModel;
 }
 
 
-@Provides @Named("SimpleInstance")
-public static CellModel buildCellModelFrom(XSElementDecl elem, 
-										   @Named("name") String name, 
+@Provides
+public static BasicCellModel buildCellModelFrom(@Named("name") String name, 
 										   @Named("desc") String desc,
 										   Type t, 
 										   @Named("presentation") String presentation,
 										   URI u) {
 	// TODO: add cell description from metadata
-	return new CellModel(u, name, desc, t, presentation);
+	return new BasicCellModel(u, name, desc, t, presentation);
 
 }
 
 
-@Provides @Named("ComplexInstance")
-public static ComplexCellModel buildComplexCellModelFrom(XSElementDecl elem,
-														 @Named("name") String name,
+@Provides
+public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String name,
 														 @Named("desc") String desc, 
 														 Type t,
 														 @Named("presentation") String presentation,
@@ -111,6 +121,16 @@ public static ComplexCellModel buildComplexCellModelFrom(XSElementDecl elem,
 		
 	return new ComplexCellModel(u, name, desc, t, presentation, attributes, children);
 	
+}
+
+
+@Provides
+public static CellModelWeakReference buildReferenceCellModelFrom(@Named("name") String name, 
+															     @Named("desc") String desc,
+															     Type t, 
+															     @Named("presentation") String presentation,
+															     URI u) {
+	return new CellModelWeakReference(u, name, desc, t, presentation);
 }
 
 
@@ -163,9 +183,21 @@ public static Collection<? extends XSAttributeUse> rawAttributes(XSElementDecl e
 	
 }
 
+@Provides @Named("Processed")
+public static Set<Type> processed(@Nullable Set<Type> processed) {
+
+	if (processed==null) {
+		return new HashSet<Type>();
+	} else {
+		return processed;
+	} 
+
+}
+
+
 
 @Provides
-public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u) {
+public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u, @Named("Processed") Set<Type> processed) {
 	
 	// Magic happens here: 
 	// BASE CASES:
@@ -176,7 +208,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u)
 	if (t.isSimple()) {
 		return new OrderedMap<CellModel>(0);						// base case, simple type sanity check
 	}
-	
+
 	Composite<CellModel> children = new OrderedMap<CellModel>();
 	
 	XSComplexType complexType = elem.getType().asComplexType();
@@ -194,21 +226,21 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u)
 		
 		if (termType.isModelGroup()) {
 			XSModelGroup typeModelGroup = termType.asModelGroup();
-			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.getTerm()));
+			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.getTerm())); //FIXME: this is reversed!!!
 			//System.err.print("\t["+typeModelGroup.getSize()+"]");
 		} else {
+			
 			XSElementDecl child = termType.asElementDecl();
 			CellModel childCellModel = DaggerCellModelComponent.builder()
-										.withElement(child)
-										.withParentURI(u)
-										.build()
-										.cellModel();
-			children.addChild(childCellModel.getName(), childCellModel);
-		}
-	
+												.withElement(child)
+												.withParentURI(u)
+												.havingProcessed(processed)
+												.build()
+												.cellModel();
+				children.addChild(childCellModel.getName(), childCellModel);
+			}
 	}
-	System.err.println();
-
+	
 	return children;
 	
 }
@@ -279,7 +311,7 @@ private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl, URI node
 									.type();
 		
 	// attributes have the presentation of the corresponding type
-	return new CellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED_VALUE);
+	return new BasicCellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED_VALUE);
 
 }
 

@@ -14,28 +14,56 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.model;
 
-import com.sun.xml.xsom.XSType;
-
-import cat.calidos.morfeu.model.Type;
-import dagger.BindsInstance;
-import dagger.Component;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=TypeModule.class)
-public interface TypeComponent {
+public class BasicCellModelReference extends BasicCellModel implements CellModelReference {
 
-Type type();
+private CellModel reference;
 
-@Component.Builder
-interface Builder {
+public BasicCellModelReference(CellModel ref) {
+	super(ref.getURI(), ref.getName(), ref.getDesc(), ref.getType(), ref.getPresentation());
 
-	@BindsInstance Builder withXSType(XSType xsType);
-	@BindsInstance Builder withDefaultName(String name);
-	
-	TypeComponent build();
+	this.reference = ref;
+	this.isReference = true;
 }
+
+
+@Override
+public boolean isSimple() {
+	return reference.isSimple();
+}
+
+
+@Override
+public boolean isComplex() {
+	return reference.isComplex();
+}
+
+@Override
+public Type getType() {
+	return reference.getType();
+}
+
+@Override
+public String getPresentation() {
+	return reference.getPresentation();
+}
+
+
+@Override
+public boolean isWeak() {
+	return false;
+}
+
+
+@Override
+public CellModel reference() {
+	return this.reference;
+}
+
+
 }

@@ -18,9 +18,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 
-import javax.inject.Named;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import dagger.BindsInstance;
@@ -28,6 +26,7 @@ import dagger.Component;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
+
 
 
 /**

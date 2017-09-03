@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -20,15 +20,24 @@ import java.net.URI;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Locatable {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class CellModelWeakReference extends BasicCellModel implements CellModelReference {
 
-/** @return the location of this resource
-*///////////////////////////////////////////////////////////////////////////////////////////////
-URI getURI();
+public CellModelWeakReference(URI u, String name, String desc, Type type, String presentation) {
+	super(u, name, desc, type, presentation);
+}
 
-String getName();
-	
-String getDesc();
+@Override
+public boolean isWeak() {
+	return true;
+}
+
+
+@Override
+public CellModel reference() {
+	throw new ClassCastException("Tried to access reference of unresolved weak reference ("+getName()+")");
+}
+
+
 
 }

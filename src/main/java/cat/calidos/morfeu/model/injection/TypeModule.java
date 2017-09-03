@@ -56,10 +56,11 @@ public static Type buildType(String defaultName, XSType xsType, @Named("presenta
 	} catch (URISyntaxException e) {
 		log.error("What the heck, URI '{}' of element '{}' is not valid ", locator.getSystemId(), xsType.getName());
 	}
-	// if it's an anonymous type we use the cell model name
+	// if it's a local type we use the cell model name
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
+	boolean global = xsType.isGlobal();
 	
-	return new Type(u, name, xsType, presentation);
+	return new Type(u, name, xsType, global, presentation);
 	
 }
 

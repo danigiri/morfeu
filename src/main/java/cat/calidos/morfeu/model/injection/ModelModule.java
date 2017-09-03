@@ -28,23 +28,16 @@ import javax.inject.Named;
 
 import org.xml.sax.SAXException;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
-import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.problems.ValidationException;
-import dagger.producers.Produced;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 

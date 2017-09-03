@@ -17,9 +17,12 @@ RemoteResource(URI u) {
 	this.uri = u;
 }
 RemoteResource(URI u, String name, String desc) {
+	
 	this(u);
+	
 	this.name = name;
 	this.desc = desc;
+	
 }
 
 

@@ -25,21 +25,27 @@ import com.sun.xml.xsom.XSType;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Type extends RemoteResource {
 
-protected XSType xsType;
+private XSType xsType;
 private String presentation;
+private boolean isGlobal;
 
-public Type(URI u, String name, XSType xsType, String presentation) {
+public Type(URI u, String name, XSType xsType, boolean isGlobal, String presentation) {
 	//TODO: extract description for types from annotation
 	super(u, name, "FILL DESC");
 	
 	this.xsType = xsType;
 	this.presentation = presentation;
-	
+	this.isGlobal = isGlobal;
 }
 
 
 public boolean isSimple() {
 	return xsType.isSimpleType();
+}
+
+
+public boolean isGlobal() {
+	return isGlobal;
 }
 
 

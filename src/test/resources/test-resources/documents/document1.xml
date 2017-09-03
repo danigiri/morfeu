@@ -6,6 +6,10 @@
     <row>
     	<col size="4">
     		<data number="42" text="blahblah"/>
+    		<row>
+    		<col size="2"></col>
+    		<col size="2"></col>
+    		</row>
     	</col>
     	<col size="8"></col>
     </row>

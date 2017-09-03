@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ParsingException;

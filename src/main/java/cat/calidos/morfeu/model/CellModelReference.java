@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,19 +16,14 @@
 
 package cat.calidos.morfeu.model;
 
-import java.net.URI;
 
 /**
 * @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Locatable {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public interface CellModelReference extends CellModel {
 
-/** @return the location of this resource
-*///////////////////////////////////////////////////////////////////////////////////////////////
-URI getURI();
+boolean isWeak();
 
-String getName();
-	
-String getDesc();
+CellModel reference();
 
 }

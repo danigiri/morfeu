@@ -29,6 +29,7 @@ import org.w3c.dom.Document;
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Composite;
 
