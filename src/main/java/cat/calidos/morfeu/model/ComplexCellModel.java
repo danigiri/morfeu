@@ -45,6 +45,11 @@ public Attributes<CellModel> attributes() {
 }
 
 
+public void setAttributes(Attributes<CellModel> attributes) {
+	this.attributes = attributes;	
+}
+
+
 public Composite<CellModel> children() {
 	return children;
 }
@@ -66,11 +71,11 @@ public ComplexCellModel asComplex() {
 public String toString() {
 
 	StringBuilder sb = new StringBuilder(super.toString());
-	if (attributes.size()>0) {
+	if (attributes!=null && attributes.size()>0) {
 		sb.append("\n\tattributes:\n");
 		sb.append(attributes.toString());
 	}
-	if (children.size()>0) {
+	if (children!=null && children.size()>0) {
 		// TODO: replace \ns with \n\t's here for correct indendation
 		sb.append("\nchildren:\n");
 		sb.append(children.toString());
@@ -89,6 +94,11 @@ public static ComplexCellModel from(CellModel m) {
 		throw new IllegalArgumentException("Tried to extract complex cell model from a simple one ("+m.getName()+"");
 	}
 	
+}
+
+
+public void setChildren(Composite<CellModel> children) {
+	this.children = children;
 }
 
 }

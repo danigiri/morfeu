@@ -19,7 +19,9 @@ package cat.calidos.morfeu.model.injection;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Rule;
@@ -83,8 +85,14 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
+	Map<String,CellModel> globals = new HashMap<String, CellModel>();
 
-	return DaggerCellModelComponent.builder().withElement(elem).withParentURI(u).build().cellModel();
+	return DaggerCellModelComponent.builder()
+									.withElement(elem)
+									.withParentURI(u)
+									.andExistingGlobals(globals)
+									.build()
+									.cellModel();
 	
 }
 

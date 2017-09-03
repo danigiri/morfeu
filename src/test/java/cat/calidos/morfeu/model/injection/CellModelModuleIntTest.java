@@ -23,6 +23,7 @@ import static org.mockito.Mockito.doReturn;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -101,17 +102,33 @@ public void testProvideCellModel() throws Exception {
 	assertNotNull(colComplex);
 	assertEquals(1, colComplex.attributes().size());
 	assertEquals("COLUMN-FIELD", colComplex.attributes().attribute("size").getPresentation());
-	assertEquals(2, colComplex.children().size());
+	assertEquals(3, colComplex.children().size());
 	
-	CellModel testFromCol = colComplex.children().child("data");				// TEST -> ROW -> COL -> DATA
-	checkComplexCellModel(testFromCol, "data", "testCell desc", "testCell", modelURI+"/test/row/col/data");
+	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
+	checkComplexCellModel(data, "data", "testCell desc", "testCell", modelURI+"/test/row/col/data");
+
+	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
+	checkComplexCellModel(data2, "data2", "testCell desc", "testCell", modelURI+"/test/row/col/data2");
+
+	assertTrue(data.isReference() || data2.isReference());
 	
-	ComplexCellModel testFromColComplex = testFromCol.asComplex();
-	assertNotNull(testFromColComplex);
-	assertEquals(2, testFromColComplex.attributes().size());
-	assertEquals(0, testFromColComplex.children().size());
-		
-	assertNotNull(colComplex.children().child("data2"));						// TEST -> ROW -> COL -> DATA2
+	CellModel testCell;
+	if (data.isReference()) {	// it's undetermined which one will be processed first, both are testCell so any will do
+		testCell = data.asReference().reference();
+	} else {
+		testCell = data2.asReference().reference();		
+	}	
+	assertNotNull(testCell);
+	
+	ComplexCellModel testComplexCell = testCell.asComplex();
+	assertNotNull(testComplex);
+	assertEquals(2, testComplexCell.attributes().size());
+	assertEquals(0, testComplexCell.children().size());
+	
+	
+	CellModel rowRef = colComplex.children().child("row");						// TEST -> ROW -> COL -> @ROW
+	assertTrue(rowRef.isReference());
+	assertEquals("Row reference in col does not reference original", row, rowRef.asReference().reference());
 	
 }
 
@@ -123,11 +140,11 @@ public void testAttributesOf() {
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 //	Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
 	Type type = provideElementType(elem);
-	Collection<? extends XSAttributeUse> rawAttributes = CellModelModule.rawAttributes(elem);
-	doReturn(rawAttributes).when(mockAttributesProducer).get();
 
 	URI uri = CellModelModule.getURIFrom(modelURI+"/"+name, name);
-	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, mockAttributesProducer, uri);
+	HashMap<String, CellModel> globals = new HashMap<String, CellModel>();
+	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, globals);
+	
 	assertNotNull(attributes);
 	assertEquals(1, attributes.size());
 	CellModel attribute = attributes.attribute(0);
@@ -144,9 +161,9 @@ public void testChildrenOf() {
 
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	Type type = provideElementType(elem);
-	Set<Type> processed = new HashSet<Type>();
+	Map<String,CellModel> globals = new HashMap<String, CellModel>();
 	
-	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI, processed);
+	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI, globals);
 	CellModel row = children.child("row");
 	assertEquals("row", row.getName());
 	assertEquals(row, children.child(0));

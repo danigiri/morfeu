@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,14 +43,13 @@ import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
-import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.BasicCellModel;
+import cat.calidos.morfeu.model.BasicCellModelReference;
 import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.CellModelWeakReference;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Type;
@@ -57,8 +57,6 @@ import cat.calidos.morfeu.utils.OrderedMap;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
-import dagger.producers.Producer;
-import dagger.producers.Produces;
 
 
 /**
@@ -74,19 +72,18 @@ protected final static Logger log = LoggerFactory.getLogger(CellModelModule.clas
 
 
 @Provides
-public static CellModel provideCellModel(Type t,
-										 @Named("Processed") Set<Type> processed,
+public static CellModel provideCellModel(@Named("name") String name,
+										 Type t,
+										 URI u,
 										 Provider<BasicCellModel> providerCell,
 										 Provider<ComplexCellModel> providerComplexCell,
-										 Provider<CellModelWeakReference> providerRefCell) {
+										 Map<String, CellModel> globals) {
 
 	CellModel cellModel;
-	if (processed.stream().anyMatch(pt -> pt.getName().equals(t.getName()))) {
-		cellModel = providerRefCell.get();
+	if (globals.containsKey(t.getName())) {
+		CellModel ref = globals.get(t.getName());
+		cellModel = new BasicCellModelReference(u, name, ref);	// we keep the URI and name for the moment
 	} else {
-		if (t.isGlobal()) {
-			processed.add(t);	// in essence, our recursive algorithm is post-processing, once we do the recursive
-		}						// calls to get cell model children, they will know this global type is done
 		if (t.isSimple()) {
 			cellModel = providerCell.get();
 		} else {
@@ -103,9 +100,12 @@ public static BasicCellModel buildCellModelFrom(@Named("name") String name,
 										   @Named("desc") String desc,
 										   Type t, 
 										   @Named("presentation") String presentation,
-										   URI u) {
+										   URI u,
+										   Map<String, CellModel> globals) {
 	// TODO: add cell description from metadata
-	return new BasicCellModel(u, name, desc, t, presentation);
+	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, presentation);
+	updateGlobalsWith(globals, t, newCellModel);
+	return newCellModel;
 
 }
 
@@ -115,23 +115,33 @@ public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String n
 														 @Named("desc") String desc, 
 														 Type t,
 														 @Named("presentation") String presentation,
-														 Attributes<CellModel> attributes, 
-														 Composite<CellModel> children,
-														 URI u) {
-		
-	return new ComplexCellModel(u, name, desc, t, presentation, attributes, children);
+														 Provider<Attributes<CellModel>> attributesProvider, 
+														 Provider<Composite<CellModel>> childrenProvider,
+														 URI u,
+														 Map<String, CellModel> globals) {
+	
+	// in this way, we create the cell model, find out if it's global, add it and then generate the
+	// attributes and children. This means that if a child references an already defined CellModel (which could
+	// include this very one, there will be no infinite loops 
+	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, name, desc, t, presentation, null, null);
+	updateGlobalsWith(globals, t, newComplexCellModel);
+	
+	newComplexCellModel.setAttributes(attributesProvider.get());
+	newComplexCellModel.setChildren(childrenProvider.get());
+	
+	return newComplexCellModel;
 	
 }
 
 
-@Provides
-public static CellModelWeakReference buildReferenceCellModelFrom(@Named("name") String name, 
-															     @Named("desc") String desc,
-															     Type t, 
-															     @Named("presentation") String presentation,
-															     URI u) {
-	return new CellModelWeakReference(u, name, desc, t, presentation);
-}
+//@Provides
+//public static CellModelWeakReference buildReferenceCellModelFrom(@Named("name") String name, 
+//															     @Named("desc") String desc,
+//															     Type t, 
+//															     @Named("presentation") String presentation,
+//															     URI u) {
+//	return new CellModelWeakReference(u, name, desc, t, presentation);
+//}
 
 
 @Provides @Named("desc")
@@ -161,43 +171,33 @@ public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String def
 
 @Provides
 public static Attributes<CellModel> attributesOf(XSElementDecl elem, 
-												  Type t,
-												  Lazy<Collection<? extends XSAttributeUse>> attributesProducer,
-												  URI u) {
+												 Type t,
+												 URI u,
+												 Map<String, CellModel> globals) {
 
 	if (t.isSimple()) {
 		return new OrderedMap<CellModel>(0);
 	}
-	Collection<? extends XSAttributeUse> rawAttributes = attributesProducer.get();
-	return attributesFrom(rawAttributes, u);
-
-}
-
-
-@Provides
-public static Collection<? extends XSAttributeUse> rawAttributes(XSElementDecl elem) {
-
+	
 	XSComplexType complexType = elem.getType().asComplexType();
-	
-	return complexType.getAttributeUses();
-	
+	Collection<? extends XSAttributeUse> rawAttributes = complexType.getAttributeUses();
+
+	Attributes<CellModel> attributes = new OrderedMap<CellModel>(rawAttributes.size());
+
+	rawAttributes.forEach(a -> {
+								XSAttributeDecl attributeDecl = a.getDecl();
+								CellModel cellModel = attributeCellModelFor(attributeDecl, u, globals);
+								attributes.addAttribute(attributeDecl.getName(), cellModel);
+	});
+
+	return attributes;
 }
 
-@Provides @Named("Processed")
-public static Set<Type> processed(@Nullable Set<Type> processed) {
-
-	if (processed==null) {
-		return new HashSet<Type>();
-	} else {
-		return processed;
-	} 
-
-}
 
 
 
 @Provides
-public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u, @Named("Processed") Set<Type> processed) {
+public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u, Map<String, CellModel> globals) {
 	
 	// Magic happens here: 
 	// BASE CASES:
@@ -234,7 +234,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u,
 			CellModel childCellModel = DaggerCellModelComponent.builder()
 												.withElement(child)
 												.withParentURI(u)
-												.havingProcessed(processed)
+												.andExistingGlobals(globals)
 												.build()
 												.cellModel();
 				children.addChild(childCellModel.getName(), childCellModel);
@@ -299,7 +299,9 @@ public static String presentation(XSElementDecl elem) {
 			.value();
 }
 
-private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl, URI nodeURI) {
+
+
+private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, URI nodeURI, Map<String, CellModel> globals) {
 
 	String name = xsAttributeDecl.getName();
 	URI attributeURI = getURIFrom(nodeURI.toString()+ATTRIBUTE_SEPARATOR+name, name);
@@ -309,35 +311,57 @@ private static CellModel cellModelFrom(XSAttributeDecl xsAttributeDecl, URI node
 									.withXSType(xsAttributeDecl.getType())
 									.build()
 									.type();
+	
+	CellModel cellModel;
+	if (globals.containsKey(type.getName())) {		// if it's an attribute we keep the local uri
+		cellModel = new BasicCellModelReference(attributeURI, name, globals.get(type.getName()));
+	} else {
 		
 	// attributes have the presentation of the corresponding type
-	return new BasicCellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED_VALUE);
-
+	cellModel = new BasicCellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED_VALUE);
+	}
+	
+	return cellModel;
+	
 }
 
 
-private static Attributes<CellModel> attributesFrom(Collection<? extends XSAttributeUse> rawAttributes, 
-													URI nodeURI) {
+/**
+* @param t
+* @param globals
+* @param newCellModel
+*////////////////////////////////////////////////////////////////////////////////
+private static void updateGlobalsWith(Map<String, CellModel> globals, Type t, BasicCellModel newCellModel) {
 
-	Attributes<CellModel> attributes = new OrderedMap<CellModel>(rawAttributes.size());
-
-	rawAttributes.forEach(a -> {
-								XSAttributeDecl attributeDecl = a.getDecl();
-								CellModel cellModel = cellModelFrom(attributeDecl, nodeURI);
-								attributes.addAttribute(attributeDecl.getName(), cellModel);
-	});
-
-	return attributes;
+	if (t.isGlobal()) {
+		globals.put(t.getName(), newCellModel);
+	}
 }
 
 
 
-//private static URI getDefaultURIFrom(Locator locator, @Nullable String uriPrefix, String name) throws RuntimeException {
+////for each weak reference, we look for the referenced cell model and turn it into a proper reference
+//@Provides
+//public static CellModel normaliseWeakReferences(CellModel cellModel, Map<String, CellModel> globalCellModels) {
 //
-//
-//
-//
+//	if (cellModel.isReference() && cellModel.asReference().isWeak()) {
+//		
+//		
+//		
+//	}
+//	
+//	// at this point, if it's a reference it means it has been normalised
+//	if (cellModel.isSimple() || cellModel.isReference()) {
+//		return cellModel;
+//	}
+//	
+//	ComplexCellModel complexCellModel = cellModel.asComplex();
+//	complexCellModel.attributes().asList().forEach(a -> normaliseWeakReferences(root, a));
+//	complexCellModel.children().asList().forEach(c -> normaliseWeakReferences(root, c));
+//	
+//	return cellModel;
 //}
+//
 
 
 }

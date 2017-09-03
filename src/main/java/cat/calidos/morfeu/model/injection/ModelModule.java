@@ -19,9 +19,13 @@ package cat.calidos.morfeu.model.injection;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Named;
@@ -35,6 +39,7 @@ import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -91,9 +96,14 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet, @Named("ModelURI") URI u) {
 
 	ArrayList<CellModel> rootTypes = new ArrayList<CellModel>();
+	Set<Type> processedTypes = new HashSet<Type>();
+	Map<String, CellModel> globals = new HashMap<String, CellModel>();
+	
 	Iterator<XSElementDecl> iterator = schemaSet.iterateElementDecls();
-	iterator.forEachRemaining(elem -> rootTypes.add(buildCellModel(elem, u)));
+	iterator.forEachRemaining(elem -> rootTypes.add(buildCellModel(elem, u, processedTypes, globals)));
 
+	
+	
 	return rootTypes;
 
 }
@@ -109,9 +119,15 @@ public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
 	
 }
 
-
-private static CellModel buildCellModel(XSElementDecl elem, URI u) {
-	return DaggerCellModelComponent.builder().withElement(elem).withParentURI(u).build().cellModel();
+// notice we keep the processed types as we build the root cell models as global types can appear in different
+// root cell models
+private static CellModel buildCellModel(XSElementDecl elem, URI u, Set<Type> types, Map<String, CellModel> globals) {
+	return DaggerCellModelComponent.builder()
+									.withElement(elem)
+									.withParentURI(u)
+									.andExistingGlobals(globals)
+									.build()
+									.cellModel();
 }
 
 }

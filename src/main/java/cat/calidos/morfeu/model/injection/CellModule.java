@@ -199,12 +199,15 @@ public static Attributes<Cell> attributesFrom(Node node, URI uri, CellModel cell
 
 private static CellModel findChildWithName(CellModel cellModel, String childName) {
 	
-	Optional<CellModel> matchedChild = ComplexCellModel.from(cellModel)
-														.children()
-														.asList()
-														.stream()
-														.filter(cm -> cm.getName().equals(childName))
-														.findFirst();
+	ComplexCellModel effectiveCellModel = (cellModel.isReference()) ? 
+											cellModel.asReference().reference().asComplex() 
+											: cellModel.asComplex();
+	
+	Optional<CellModel> matchedChild = effectiveCellModel.children()
+															.asList()
+															.stream()
+															.filter(cm -> cm.getName().equals(childName))
+															.findFirst();
 	if (!matchedChild.isPresent()) {
 		log.error("Elem '{}' could not match any children of '{}'", childName, cellModel.getName());
 		throw new RuntimeException("Node and model mismatch", new IllegalArgumentException());
@@ -229,12 +232,15 @@ private static URI cellURI(URI uri, CellModel cellModel, String childName) throw
 
 private static CellModel findAttributeWithName(CellModel cellModel, String attributeName) {
 
-	Optional<CellModel> matchedAttribute = ComplexCellModel.from(cellModel)
-															.attributes()
-															.asList()
-															.stream()
-															.filter(cm -> cm.getName().equals(attributeName))
-															.findFirst();
+	ComplexCellModel effectiveCellModel = (cellModel.isReference()) ? 
+			cellModel.asReference().reference().asComplex() 
+			: cellModel.asComplex();
+	
+	Optional<CellModel> matchedAttribute = effectiveCellModel.attributes()
+																.asList()
+																.stream()
+																.filter(cm -> cm.getName().equals(attributeName))
+																.findFirst();
 	if (!matchedAttribute.isPresent()) {
 		log.error("Elem '{}' could not match any attribute of '{}'", attributeName, cellModel.getName());
 		throw new RuntimeException("Node and model attribute mismatch", new IllegalArgumentException());

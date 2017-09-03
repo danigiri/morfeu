@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.model;
 
+import java.net.URI;
 
 /**
 * @author daniel giribet
@@ -24,11 +25,21 @@ public class BasicCellModelReference extends BasicCellModel implements CellModel
 
 private CellModel reference;
 
-public BasicCellModelReference(CellModel ref) {
-	super(ref.getURI(), ref.getName(), ref.getDesc(), ref.getType(), ref.getPresentation());
+public BasicCellModelReference(String name, CellModel ref) {
+	super(ref.getURI(), name, ref.getDesc(), ref.getType(), ref.getPresentation());
 
 	this.reference = ref;
 	this.isReference = true;
+
+}
+
+
+public BasicCellModelReference(URI u, String name, CellModel ref) {
+	super(u, name, ref.getDesc(), ref.getType(), ref.getPresentation());
+
+	this.reference = ref;
+	this.isReference = true;
+	
 }
 
 
@@ -64,6 +75,20 @@ public boolean isWeak() {
 public CellModel reference() {
 	return this.reference;
 }
+
+
+@Override
+public CellModelReference asReference() {
+	return this;
+}
+
+
+@Override
+public ComplexCellModel asComplex() {
+	throw new ClassCastException("Tried to access reference cell model as complex ("+getName()+")");
+}
+
+
 
 
 }
