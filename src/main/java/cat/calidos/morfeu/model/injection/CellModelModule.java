@@ -313,13 +313,14 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 									.type();
 	
 	CellModel cellModel;
-	if (globals.containsKey(type.getName())) {		// if it's an attribute we keep the local uri
-		cellModel = new BasicCellModelReference(attributeURI, name, globals.get(type.getName()));
-	} else {
+	// no references for attributes at the moment
+//	if (globals.containsKey(type.getName())) {		// if it's an attribute we keep the local uri
+//		cellModel = new BasicCellModelReference(attributeURI, name, globals.get(type.getName()));
+//	} else {
 		
 	// attributes have the presentation of the corresponding type
 	cellModel = new BasicCellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED_VALUE);
-	}
+//	}
 	
 	return cellModel;
 	

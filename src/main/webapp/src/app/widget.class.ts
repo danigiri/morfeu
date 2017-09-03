@@ -52,7 +52,7 @@ protected unsubscribe(s:Subscription) {
 
 
 ngOnDestroy() {
-    this.subscriptions.map(s => s.unsubscribe());
+    this.subscriptions.forEach(s => s.unsubscribe());
 }
 
 

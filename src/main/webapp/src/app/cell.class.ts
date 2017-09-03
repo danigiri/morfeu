@@ -34,10 +34,11 @@ constructor(public schema: number,
 
 associateWith(model: Model):Cell {
 
-    this.associateWith_(model.cellModels);
+    this.associateWith_(model.cellModels, model.cellModels);
     
     return this;
 }
+
 
 attribute(name:string):string {
 
@@ -67,13 +68,22 @@ columnFieldValue():string {
     return value;
 }
 
-private associateWith_(cellModels:CellModel[]):Cell {
+
+private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell {
 
     let cellModel:CellModel = undefined;
     if (cellModels) {
         
         cellModel = cellModels.find(cm => cm.URI===this.cellModelURI);  // current cell model level
-
+        if (cellModel.isReference) {
+            // we take the philosophy of completing the cellmodel reference with the missing data
+            // we keep rest of the cell model information (like the name, which can be different)
+            let reference:CellModel = this.findCellModelWithURI(rootCellmodels, cellModel.referenceURI);
+            cellModel.attributes = reference.attributes;
+            cellModel.children = reference.children;
+            
+        }
+        
         //TODO: handle inconsistent cell that cannot find cellmodule even though the content is valid        
 //        if (!cellModel) {                                               // cell model children maybe?
 //            cellModel = cellModels.map(cm => this.associateWith_(cm.children)).find(cm => cm!=undefined);
@@ -81,10 +91,10 @@ private associateWith_(cellModels:CellModel[]):Cell {
 
         if (cellModel) {                                                // now attributes and cell children
            if (this.attributes) {
-               this.attributes = this.attributes.map(a => a.associateWith_(cellModel.attributes));
+               this.attributes = this.attributes.map(a => a.associateWith_(rootCellmodels, cellModel.attributes));
            }
            if (this.children) {
-               this.children = this.children.map(c => c.associateWith_(cellModel.children));
+               this.children = this.children.map(c => c.associateWith_(rootCellmodels, cellModel.children));
            }
         }
        
@@ -96,6 +106,28 @@ private associateWith_(cellModels:CellModel[]):Cell {
     
 }
 
+
+private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
+
+    let cellModel:CellModel;
+    let pending:CellModel[] = [];
+    cellModels.forEach(cm => pending.push(cm));
+    
+    while (!cellModel && pending.length>0) {
+        
+        let currentCellModel:CellModel = pending.pop();
+        if (currentCellModel.URI==uri) {
+            cellModel = currentCellModel;
+        } else {
+            if (currentCellModel.children) { 
+                currentCellModel.children.forEach(cm => pending.push(cm));
+            }
+        }
+    }
+
+    return cellModel;
+
+}
 
 toJSON(): CellJSON {
 

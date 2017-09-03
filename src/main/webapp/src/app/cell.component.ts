@@ -42,8 +42,8 @@ import { EventService } from './events/event.service';
         height: auto;
     }
     .show-grid [class^=col-] {
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding-top: 0px;
+        padding-bottom: 0px;
         background-color: #ddd;
         background-color: rgba(86, 62, 128, .15);
         border: 1px solid #ccc;
@@ -69,13 +69,14 @@ ngOnInit() {
     console.log("CellComponent::ngOnInit()");
 }    
         
+//TODO: depending on the level go from -md- to -xs- col styling
 cellClass() {
     if (this.cell.cellModel.presentation=="WELL") {
         return "container-fluid";
     } else if (this.cell.cellModel.presentation=="ROW-WELL") {
         return "row show-grid";
    } else if (this.cell.cellModel.presentation=="COLUMN-WELL") {
-       return "col-md-"+this.cell.columnFieldValue();
+       return "col-sm-"+this.cell.columnFieldValue();
    } else {
         return "";
     }

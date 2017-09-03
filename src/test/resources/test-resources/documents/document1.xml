@@ -6,11 +6,18 @@
     <row>
     	<col size="4">
     		<data number="42" text="blahblah"/>
+    	</col>
+    	<col size="8">
     		<row>
-    		<col size="2"></col>
-    		<col size="2"></col>
+    			<col size="6">
+    		    		<data number="42" text="blahblah"/>
+    		    		<data number="42" text="blahblah"/>    		
+    		</col>
+    		<col size="6">
+	    		<data number="42" text="blahblah"/>
+        		<data number="42" text="blahblah"/>    		
+    		</col>
     		</row>
     	</col>
-    	<col size="8"></col>
     </row>
 </test>

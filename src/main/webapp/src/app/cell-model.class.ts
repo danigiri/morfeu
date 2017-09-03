@@ -24,6 +24,8 @@ isExpanded: boolean;
 
 attributes?: CellModel[];
 children: CellModel[];
+isReference: boolean;
+referenceURI?: string;
 
 constructor(public schema: number, 
             public URI: string, 
@@ -81,7 +83,7 @@ static fromJSON(json: CellModelJSON|string): CellModel {
             cellModel = Object.assign(cellModel, 
                                       {children: json.children.map(c => CellModel.fromJSON(c))});
         } else {
-            cellModel = Object.assign(cellModel, {attributes: []});  // empty as the Tree class requires it
+            cellModel = Object.assign(cellModel, {children: []});  // empty as the Tree class requires it
         }
     
         return cellModel;
@@ -104,9 +106,11 @@ name: string;
 desc: string;
 presentation: string;
 isSimple: boolean; 
+isReference: boolean;
 type_: Type_;
     
 attributes?: CellModelJSON[];
 children?: CellModelJSON[];
+referenceURI?: string;
 
 }

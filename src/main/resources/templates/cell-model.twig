@@ -9,12 +9,17 @@
 		,"isSimple": $[cm.Type.isSimple]$
 	}
 	,"isSimple": $[cm.isSimple]$
+	,"isReference": $[cm.isReference]$
 	$( if cm.isComplex )$
 		,"attributes": [$( for a in cm.asComplex.attributes.asList )$
 				$( include "cell-model.twig" with {'cm': a} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
 			$( endfor )$]
 		,"children": [$( for c in cm.asComplex.children.asList )$
-				$( include "cell-model.twig" with {'cm': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
+				$( if c.isReference )$
+					$( include "cell-model-reference.twig" with {'cm': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$				
+				$( else )$
+					$( include "cell-model.twig" with {'cm': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$				
+				$( endif )$
 			$( endfor )$]
 	$( endif )$
 }

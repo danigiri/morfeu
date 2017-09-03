@@ -31,6 +31,7 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.ComplexCell;
+import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
 
 
@@ -76,7 +77,7 @@ public void testChildrenFrom() throws Exception {
 
 
 	// we're expecting a fetchable relative path here
-	CellModel testCellModel = cellModelFrom(modelURI, "test");	
+	ComplexCellModel testCellModel = cellModelFrom(modelURI, "test").asComplex();	
 	
 	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 	assertNotNull(children);
@@ -104,8 +105,8 @@ public void testChildrenFrom() throws Exception {
 @Test
 public void testAttributesFrom() throws Exception {
 
-	CellModel testCellModel = cellModelFrom(modelURI, "test");	
-
+	ComplexCellModel testCellModel = cellModelFrom(modelURI, "test").asComplex();	
+	
 	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 
 	Cell cell = children.child("row[0]").asComplex().children().child("col[0]").asComplex().children().child("data[0]");

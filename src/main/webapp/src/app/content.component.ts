@@ -25,6 +25,7 @@ import { Widget } from './widget.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 import { EventService } from './events/event.service';
+import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { StatusEvent } from './events/status.event';
@@ -69,12 +70,18 @@ ngOnInit() {
             selected => this.clearContent()
     ));
 
+    // if we load a problematic document we don't display anything
+    this.subscribe(this.events.service.of(CellDocumentLoadedEvent)
+            .filter(loaded => loaded.document.problem!=null && loaded.document.problem.length>0 )
+            .subscribe(loadedProblematicDocument => this.clearContent())
+    );
     
     this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
             requested => this.fetchContent(requested.url, requested.model)
     ));
     
 }
+
 
 fetchContent(url:String, model:Model) {
 
@@ -104,7 +111,7 @@ displayContent(content: Content) {
 
 clearContent() {
     console.log("[UI] ContentComponent::clearContent()");
-    
+    this.content = null;
 }
 
 

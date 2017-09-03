@@ -18,11 +18,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -61,12 +57,12 @@ public static Cell provideCell(Node node,
 							   @Named("SimpleInstance") Provider<Cell> providerCell, 
 							   @Named("ComplexInstance") Provider<ComplexCell> providerComplexCell) {
 	if (node instanceof Element) {
-		System.err.println("Node:"+node.getNodeName()+"[complex]");
+		//System.err.println("Node:"+node.getNodeName()+"[complex]");
 
 		return providerComplexCell.get();
 	
 	} else { 
-		System.err.println("Node:"+node.getNodeName()+"[simple]");
+		//System.err.println("Node:"+node.getNodeName()+"[simple]");
 	
 		return providerCell.get();
 	
@@ -118,9 +114,15 @@ public static String valueFrom(Node node) {
 }
 
 
+@Provides
+protected static ComplexCellModel effectiveCellModel(CellModel cellModel) {
+	return (cellModel.isReference()) ? cellModel.asReference().reference().asComplex() : cellModel.asComplex();
+}
+
+
 // bear in mind we can do element() instead of node if we need it, as it holds type information
 @Provides
-public static Composite<Cell> childrenFrom(Node node, URI uri, CellModel cellModel) {
+public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel cellModel) {
 	
  	if (!node.hasChildNodes()) {	// base case, save some memory on the list
 	
@@ -160,7 +162,7 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, CellModel cellMod
 
 
 @Provides
-public static Attributes<Cell> attributesFrom(Node node, URI uri, CellModel cellModel) {
+public static Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellModel cellModel) {
 	
 	if (!node.hasAttributes()) {	// base case, save some memory on the list returning a zero-sized one
 		
@@ -197,17 +199,13 @@ public static Attributes<Cell> attributesFrom(Node node, URI uri, CellModel cell
 }
 
 
-private static CellModel findChildWithName(CellModel cellModel, String childName) {
+private static CellModel findChildWithName(ComplexCellModel cellModel, String childName) {
 	
-	ComplexCellModel effectiveCellModel = (cellModel.isReference()) ? 
-											cellModel.asReference().reference().asComplex() 
-											: cellModel.asComplex();
-	
-	Optional<CellModel> matchedChild = effectiveCellModel.children()
-															.asList()
-															.stream()
-															.filter(cm -> cm.getName().equals(childName))
-															.findFirst();
+	Optional<CellModel> matchedChild = cellModel.children()
+														.asList()
+														.stream()
+														.filter(cm -> cm.getName().equals(childName))
+														.findFirst();
 	if (!matchedChild.isPresent()) {
 		log.error("Elem '{}' could not match any children of '{}'", childName, cellModel.getName());
 		throw new RuntimeException("Node and model mismatch", new IllegalArgumentException());
@@ -230,17 +228,14 @@ private static URI cellURI(URI uri, CellModel cellModel, String childName) throw
 }
 
 
-private static CellModel findAttributeWithName(CellModel cellModel, String attributeName) {
+private static CellModel findAttributeWithName(ComplexCellModel cellModel, String attributeName) {
 
-	ComplexCellModel effectiveCellModel = (cellModel.isReference()) ? 
-			cellModel.asReference().reference().asComplex() 
-			: cellModel.asComplex();
-	
-	Optional<CellModel> matchedAttribute = effectiveCellModel.attributes()
-																.asList()
-																.stream()
-																.filter(cm -> cm.getName().equals(attributeName))
-																.findFirst();
+	Optional<CellModel> matchedAttribute = cellModel
+														.attributes()
+														.asList()
+														.stream()
+														.filter(cm -> cm.getName().equals(attributeName))
+														.findFirst();
 	if (!matchedAttribute.isPresent()) {
 		log.error("Elem '{}' could not match any attribute of '{}'", attributeName, cellModel.getName());
 		throw new RuntimeException("Node and model attribute mismatch", new IllegalArgumentException());

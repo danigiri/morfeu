@@ -1,0 +1,15 @@
+{
+	"schema": 0
+	,"URI": "$[cm.URI]$"
+	,"name": "$[cm.Name]$"
+	,"desc": "$[cm.Desc | trim]$"
+	,"presentation": "$[cm.Presentation]$"
+	,"type": {
+		"name": "$[cm.Type.Name]$"
+		,"isSimple": $[cm.Type.isSimple]$
+	}
+	,"isSimple": $[cm.isSimple]$
+	,"isReference": $[cm.isReference]$
+	,"referenceURI": "$[cm.asReference.reference.URI]$"
+	
+}

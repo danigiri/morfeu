@@ -3,7 +3,7 @@
 		   xmlns:mf="http://dani.calidos.com/morfeu/metadata"
 		   >
 
-	 <xs:include schemaLocation="test-types.xsd" />
+	<xs:include schemaLocation="test-types.xsd" />
 	
 	<xs:annotation>
 		<xs:documentation>
@@ -11,14 +11,13 @@
 		</xs:documentation>
 	</xs:annotation>
 	
+	
 	<xs:complexType name="testCell">
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:desc>testCell desc</mf:desc>			
 			</xs:appinfo>
 		</xs:annotation>
-		
-		
 		<xs:attribute name="text" type="textField" />
 		<xs:attribute name="number" type="numberField" />
 	</xs:complexType>
