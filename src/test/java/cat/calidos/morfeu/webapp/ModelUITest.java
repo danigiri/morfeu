@@ -53,8 +53,7 @@ public void modelTest() {
 	catalogue.shouldAppear();
 	UIModel.shouldNotBeVisible();
 	
-	UIModel model = catalogue.clickOnDocumentNamed("Document 1")
-								.getModel();
+	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
 	
 	assertEquals("Model: test-model.xsd", model.name());
@@ -69,7 +68,7 @@ public void modelDisappearsOnClickingOtherCatalogue() {
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue catalogue = catalogues.clickOn(0);
 
-	UIModel model = catalogue.clickOnDocumentNamed("Document 1").getModel();
+	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
 	
 	// click on a different catalogue model should disappear
@@ -88,11 +87,11 @@ public void documentWithNonValidModelIsSelected() {
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue catalogue = catalogues.clickOn(0).shouldAppear();
 
-	UIModel model = catalogue.clickOnDocumentNamed("Document 1").getModel();
+	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
 	
 	// click on a different document model should change (for instance an problematic doc)
-	catalogue.clickOnDocumentNamed("Document with non-valid model").getModel();
+	catalogue.clickOnDocumentNamed("Document with non-valid model").model();
 	model.shouldDisappear();
 	
 }
@@ -105,7 +104,7 @@ public void testCellModels() {
 				 					.shouldAppear()
 				 					.clickOn(0)
 				 					.clickOnDocumentNamed("Document 1")
-				 					.getModel()
+				 					.model()
 				 					.shouldAppear();
 
 	List<UICellModelEntry> rootCellModels = model.rootCellModels();
@@ -118,9 +117,9 @@ public void testCellModels() {
 	//TODO: add cell model children testing
 	
 	testModelEntry.check(cm -> cm.isExpanded(), "Model is not expanded by default")
-	.clickOnArrow()
-	.check(cm -> cm.isCollapsed(), "Model should collapse when clicked")
-	.clickOnArrow();	// let's expand again so we can find the children =)
+					.clickOnArrow()
+					.check(cm -> cm.isCollapsed(), "Model should collapse when clicked")
+					.clickOnArrow();	// let's expand again so we can find the children =)
 	
 	List<UICellModelEntry> testModelChildren = testModelEntry.children();
 	assertEquals(1, testModelChildren.size());
@@ -137,6 +136,10 @@ public void testCellModels() {
 	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
 	assertEquals(3, colChildren.size());
 
+	assertEquals("row", colChildren.get(0).name());
+	assertEquals("data2", colChildren.get(1).name());
+	assertEquals("data", colChildren.get(2).name());
+	
 }
 
 }

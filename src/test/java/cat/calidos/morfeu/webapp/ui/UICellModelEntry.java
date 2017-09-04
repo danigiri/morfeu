@@ -16,11 +16,7 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
-import static com.codeborne.selenide.Selenide.$$;
-import static org.junit.Assert.fail;
-
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.codeborne.selenide.SelenideElement;
@@ -28,15 +24,15 @@ import com.codeborne.selenide.SelenideElement;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UICellModelEntry {
+public class UICellModelEntry extends UIWidget<UICellModelEntry> {
 
-private SelenideElement element;
 private int level;
 
 
 public UICellModelEntry(SelenideElement e, int level) {
 
-	this.element = e;
+	super(e);
+	
 	this.level = level;
 
 }
@@ -52,7 +48,7 @@ public String desc() {
 }
 
 
-public UICellModelEntry click() {
+public UIWidget<UICellModelEntry> click() {
 	
 	element.click();
 	
@@ -60,7 +56,8 @@ public UICellModelEntry click() {
 	
 }
 
-public UICellModelEntry clickOnArrow() {
+
+public UIWidget<UICellModelEntry> clickOnArrow() {
 	
 	element.$(".toggle-children").click();
 	
@@ -78,17 +75,6 @@ public boolean isExpanded() {
 	element.$(".tree-node-expanded");	// wait for dom updates
 	return element.attr("class").contains("tree-node-expanded");
 }
-
-public UICellModelEntry check(Predicate<UICellModelEntry> check, String message) {
-
-	if (!check.test(this)) {
-		fail(message);
-	}
-
-	return this;
-	
-}
-
 
 public List<UICellModelEntry> children() {	
 	return element.$$(".tree-node-level-"+(level+1))

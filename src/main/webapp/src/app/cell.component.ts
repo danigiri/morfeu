@@ -31,37 +31,56 @@ import { EventService } from './events/event.service';
                 <img src="assets/images/cell.svg" class="cell img-fluid cell-img" alt="{{cell.name}}"/>
             </ng-container>
             <ng-template #well>
-        <div class="{{cellClass()}}">
-                <cell *ngFor="let c of cell.children" [cell]="c"></cell>
+        <div class="cell-level-{{level}} {{cellClass()}}">
+                <cell *ngFor="let c of cell.children" [cell]="c" [level]="level+1"></cell>
         </div>
             </ng-template>
     `,
     styles:[`
-    .cell {}
-    .well {}
-    .row-well {}
-    .column-well {}
-    .cell-img {
-        width: 100%;
-        height: auto;
-    }
-    .show-grid [class^=col-] {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        background-color: #ddd;
-        background-color: rgba(86, 62, 128, .15);
-        border: 1px solid #ccc;
-        border: 1px solid rgba(86, 62, 128, .2)
-    }
-
-    `],
+            .cell {}
+            .well {}
+            .row-well {}
+            .column-well {}
+            .cell-img {
+                width: 100%;
+                height: auto;
+            }
+            .show-grid [class^=col-], .show-grid [class^=row] {
+                padding-top: 0px;
+                padding-bottom: 0px;
+                background-color: #ddd;
+                background-color: rgba(86, 62, 128, .15);
+                border: 2px solid #ccc;
+                border: 2px solid rgba(86, 62, 128, .2)
+            }
+            .cell-level-1 {}
+            .cell-level-2 {}
+            .cell-level-3 {}
+            .cell-level-4 {}
+            .cell-level-5 {}
+            .cell-level-6 {}
+            .cell-level-7 {}
+            .cell-level-8 {}
+            .cell-level-9 {}
+            .cell-level-10 {}
+            .cell-level-11 {}
+            .cell-level-12 {}
+            .cell-level-13 {}
+            .cell-level-14 {}
+            .cell-level-15 {}
+            .cell-level-16 {}
+            .cell-level-17 {}
+            .cell-level-18 {}
+`],
     providers:[
     ]
 })
+// `
 
 export class CellComponent extends Widget implements OnInit {
 
 @Input() cell:Cell;
+@Input() level:Number;
     
 constructor(eventService: EventService) {
     super(eventService);
@@ -81,7 +100,7 @@ cellClass() {
     } else if (this.cell.cellModel.presentation=="ROW-WELL") {
         return "row-well row show-grid";
    } else if (this.cell.cellModel.presentation=="COLUMN-WELL") {
-       return "column-well col-sm-"+this.cell.columnFieldValue();
+       return "column-well show-grid col-sm-"+this.cell.columnFieldValue();
    } else {
         return "";
     }

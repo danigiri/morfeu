@@ -84,8 +84,7 @@ public void catalogueDetailErrorTest() {
 	
 	// notice here we are not using the helper method to open a catalogue given that they don't expect errors
 	open(appBaseURL);
-	UICatalogues catalogues = UICatalogues.openCatalogues()
-			  .shouldAppear();
+	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
 	

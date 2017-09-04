@@ -74,6 +74,8 @@ protected static String defineSystemVariable(String systemProperty, String defau
 	if (value==null) {
 		value = defaultValue;
 		System.setProperty(systemProperty, defaultValue);
+	} else {
+		System.err.println("Using "+systemProperty+"="+value+" [ENV]");
 	}
 	return value;
 }

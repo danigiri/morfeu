@@ -16,51 +16,33 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static org.junit.Assert.fail;
 
+import java.util.function.Predicate;
+
+import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIDocument {
+public class UIWidget<T extends UIWidget<T>> {
 
-public UIDocument() {}
+protected SelenideElement element;
 
-//public void shouldAppear() {
-//	$("#document-info").should(appear);
-//}
-
-public void shouldBeVisible() {
-	$("#document-info").shouldBe(visible);
+public UIWidget(SelenideElement element) {
+		// TODO Auto-generated constructor stub
 }
 
+@SuppressWarnings("unchecked")
+public T check(Predicate<T> check, String message) {
+	
+	if (!check.test((T) this)) {
+		fail(message);
+	}
 
-public static void shouldNotBeVisible() {
-	$("#document-info").shouldNotBe(visible);
-}
-
-
-public String title() {
-	return $("#document-name").getText();
+	return (T)this;
 	
 }
 
-
-public String desc() {
-	return $("#document-desc").getText();
-}
-
-public boolean isValid() {
-	return $("#document-valid").getText().equals("VALID");
-}
-
-public UIModel model() {
-	return new UIModel();
-}
-
-public UIContent content() {
-	return new UIContent();
-}
 
 }

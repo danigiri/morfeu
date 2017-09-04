@@ -20,8 +20,7 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 

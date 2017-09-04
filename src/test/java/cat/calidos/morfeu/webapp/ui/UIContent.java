@@ -16,51 +16,43 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIDocument {
-
-public UIDocument() {}
-
-//public void shouldAppear() {
-//	$("#document-info").should(appear);
-//}
-
-public void shouldBeVisible() {
-	$("#document-info").shouldBe(visible);
-}
+public class UIContent {
 
 
-public static void shouldNotBeVisible() {
-	$("#document-info").shouldNotBe(visible);
-}
+public UIContent() {}
 
 
-public String title() {
-	return $("#document-name").getText();
+public UIContent shouldBeVisible() {
+	
+	$("#content").shouldBe(visible);
+	
+	return this;
 	
 }
 
 
-public String desc() {
-	return $("#document-desc").getText();
+public static void shouldNotBeVisible() {
+	$("#content").shouldNotBe(visible);
 }
 
-public boolean isValid() {
-	return $("#document-valid").getText().equals("VALID");
+
+public void shouldDisappear() {
+	$("#content").should(disappear);
 }
 
-public UIModel model() {
-	return new UIModel();
-}
 
-public UIContent content() {
-	return new UIContent();
+public List<UICell> rootCells() {
+	return $$(".cell-level-1").stream().map(e -> new UICell(e, 1) ).collect(Collectors.toList());
 }
 
 }

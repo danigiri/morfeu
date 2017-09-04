@@ -36,9 +36,9 @@ import { StatusEvent } from './events/status.event';
     selector: 'content',
     template: `
     <div class="panel panel-default" *ngIf="content">
-        <div id="#content" class="panel-body">
+        <div id="content" class="panel-body">
             <ng-container *ngFor="let cell of content.cells">
-                <cell [cell]="cell"></cell>
+                <cell [cell]="cell" [level]="1"></cell>
             </ng-container>
         </div>
     </div>

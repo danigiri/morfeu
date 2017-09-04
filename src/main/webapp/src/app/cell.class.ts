@@ -129,6 +129,7 @@ private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
 
 }
 
+
 toJSON(): CellJSON {
 
     let serialisedCell:CellJSON = Object.assign({}, this);
@@ -146,6 +147,7 @@ toJSON(): CellJSON {
 
 
 static fromJSON(json: CellJSON|string):Cell {
+
     if (typeof json === 'string') {
         
         return JSON.parse(json, Cell.reviver);
@@ -166,6 +168,7 @@ static fromJSON(json: CellJSON|string):Cell {
         return cell;
         
     }
+    
 }
 
 

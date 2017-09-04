@@ -16,10 +16,67 @@
 
 package cat.calidos.morfeu.webapp;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
+
+import org.junit.Assert;
+
+import static com.codeborne.selenide.Selenide.open;
+
+import org.junit.Test;
+
+import cat.calidos.morfeu.webapp.ui.UICatalogue;
+import cat.calidos.morfeu.webapp.ui.UICatalogues;
+import cat.calidos.morfeu.webapp.ui.UICell;
+import cat.calidos.morfeu.webapp.ui.UIContent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUITest extends UITezt {
+
+
+@Test
+public void contentTestAppearingAndDisappearing() {
+	
+	open(appBaseURL);
+
+	UIContent.shouldNotBeVisible();
+	
+	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
+	
+	UIContent.shouldNotBeVisible();
+	
+	UICatalogue catalogue = catalogues.clickOn(0);
+	UIContent content = catalogue.clickOnDocumentNamed("Document 1").content();
+	
+	content.shouldBeVisible();
+	
+	catalogue.clickOnDocumentNamed("Document with non-valid content");
+	
+	content.shouldDisappear();
+	
+}
+
+
+@Test
+public void contentTest() {
+
+	open(appBaseURL);
+
+	UIContent content = UICatalogues.openCatalogues()
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1")
+										.content();
+	
+	content.shouldBeVisible();
+	
+	List<UICell> rootCells = content.rootCells();
+	assertNotNull(rootCells);
+	assertEquals(1, rootCells.size());
+	
+}
 
 }
