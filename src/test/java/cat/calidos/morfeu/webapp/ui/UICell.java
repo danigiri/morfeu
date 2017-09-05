@@ -16,6 +16,9 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.codeborne.selenide.SelenideElement;
 
 /**
@@ -23,8 +26,49 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICell extends UIWidget<UICell> {
 
+private static final String COLUMN_WELL = "column-well";
+private static final String WELL = "well";
+private static final String ROW_WELL = "row-well";
+private int level;
+
 public UICell(SelenideElement element, int level) {
+
 	super(element);
+
+	this.level = level;
+
+}
+
+
+public boolean isWell() {
+	
+	element.$(".well");	// wait for dom updates
+	String class_ = element.attr("class");
+	
+	return class_.contains(WELL) && !class_.contains(ROW_WELL);
+	
+}
+
+
+public boolean isRowWell() {
+	
+	element.$(".row-well");	// wait for dom updates
+
+	return element.attr("class").contains(ROW_WELL);
+	
+}
+
+public boolean isColumnWell() {
+	
+	element.$(".column-well");	// wait for dom updates
+
+	return element.attr("class").contains(COLUMN_WELL);
+	
+}
+
+
+public List<UICell> children() {
+	return element.$$(".cell-level-"+(level+1)).stream().map(e -> new UICell(e, level+1)).collect(Collectors.toList());
 }
 
 }

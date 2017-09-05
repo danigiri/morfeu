@@ -30,7 +30,7 @@ public class UIWidget<T extends UIWidget<T>> {
 protected SelenideElement element;
 
 public UIWidget(SelenideElement element) {
-		// TODO Auto-generated constructor stub
+	this.element = element;
 }
 
 @SuppressWarnings("unchecked")

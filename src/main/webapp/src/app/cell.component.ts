@@ -93,7 +93,7 @@ ngOnInit() {
 }    
         
 //TODO: depending on the level go from -md- to -xs- col styling
-//TODO: this function gets called and we should have an attribute or input to optimise the app
+//TODO: this function gets called and we should have an attribute or input to optimise the client stuff
 cellClass() {
     if (this.cell.cellModel.presentation=="WELL") {
         return "well container-fluid";

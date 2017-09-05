@@ -37,7 +37,7 @@ import cat.calidos.morfeu.webapp.ui.UIContent;
 public class ContentUITest extends UITezt {
 
 
-@Test
+//@Test
 public void contentTestAppearingAndDisappearing() {
 	
 	open(appBaseURL);
@@ -73,9 +73,31 @@ public void contentTest() {
 	
 	content.shouldBeVisible();
 	
-	List<UICell> rootCells = content.rootCells();
+	List<UICell> rootCells = content.rootCells();		// TEST
 	assertNotNull(rootCells);
 	assertEquals(1, rootCells.size());
+	
+	UICell test1 = rootCells.get(0);					// TEST/*
+	assertNotNull(test1);
+	assertTrue(test1.isWell());
+
+	UICell row2 = test1.children().get(0);				// TEST/ROW
+	assertNotNull(row2);
+	assertTrue(row2.isRowWell());
+
+	
+	List<UICell> cols3 = row2.children();				// TEST/ROW/*
+	assertNotNull(cols3);
+	assertEquals(2, cols3.size());
+	
+	UICell col3a = cols3.get(0);						// TEST/ROW/COL
+	assertNotNull(col3a);
+	assertTrue(col3a.isColumnWell());
+
+	UICell col3b = cols3.get(1);						// TEST/ROW/COL
+	assertNotNull(col3b);
+	assertTrue(col3b.isColumnWell());
+
 	
 }
 
