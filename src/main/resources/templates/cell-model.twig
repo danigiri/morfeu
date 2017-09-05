@@ -4,6 +4,9 @@
 	,"name": "$[cm.Name]$"
 	,"desc": "$[cm.Desc | trim]$"
 	,"presentation": "$[cm.Presentation]$"
+	$( if not cm.thumb is empty )$
+		,"thumb": "$[ cm.thumb ]$"
+	$( endif )$
 	,"type": {
 		"name": "$[cm.Type.Name]$"
 		,"isSimple": $[cm.Type.isSimple]$

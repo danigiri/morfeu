@@ -100,10 +100,11 @@ public static BasicCellModel buildCellModelFrom(@Named("name") String name,
 										   @Named("desc") String desc,
 										   Type t, 
 										   @Named("presentation") String presentation,
+										   @Named("thumb") String thumb,
 										   URI u,
 										   Map<String, CellModel> globals) {
 	// TODO: add cell description from metadata
-	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, presentation);
+	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, presentation, thumb);
 	updateGlobalsWith(globals, t, newCellModel);
 	return newCellModel;
 
@@ -115,6 +116,7 @@ public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String n
 														 @Named("desc") String desc, 
 														 Type t,
 														 @Named("presentation") String presentation,
+														 @Named("thumb") String thumb,
 														 Provider<Attributes<CellModel>> attributesProvider, 
 														 Provider<Composite<CellModel>> childrenProvider,
 														 URI u,
@@ -123,7 +125,7 @@ public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String n
 	// in this way, we create the cell model, find out if it's global, add it and then generate the
 	// attributes and children. This means that if a child references an already defined CellModel (which could
 	// include this very one, there will be no infinite loops 
-	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, name, desc, t, presentation, null, null);
+	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, name, desc, t, presentation, thumb, null, null);
 	updateGlobalsWith(globals, t, newComplexCellModel);
 	
 	newComplexCellModel.setAttributes(attributesProvider.get());
@@ -329,7 +331,12 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 //	} else {
 		
 	// attributes have the presentation of the corresponding type
-	cellModel = new BasicCellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED);
+	cellModel = new BasicCellModel(attributeURI, 
+								   name, 
+								   "DESC GOES HERE", 
+								   type, 
+								   ModelMetadataComponent.UNDEFINED, 
+								   ModelMetadataComponent.UNDEFINED);
 //	}
 	
 	return cellModel;
