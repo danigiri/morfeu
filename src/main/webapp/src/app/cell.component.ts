@@ -28,7 +28,8 @@ import { EventService } from './events/event.service';
     selector: 'cell',
     template: `
             <ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
-                <img src="assets/images/cell.svg" class="cell img-fluid cell-img" alt="{{cell.name}}"/>
+                <img src="assets/images/cell.svg" dnd-draggable [dragEnabled]="true"
+                     class="cell img-fluid cell-img" alt="{{cell.name}}"/>
             </ng-container>
             <ng-template #well>
         <div class="cell-level-{{level}} {{cellClass()}}">
@@ -45,9 +46,9 @@ import { EventService } from './events/event.service';
                 width: 100%;
                 height: auto;
             }
-            .show-grid [class^=col-], .show-grid [class^=row] {
-                padding-top: 0px;
-                padding-bottom: 0px;
+            .show-grid  {
+                padding-top: 10px;
+                padding-bottom: 10px;
                 background-color: #ddd;
                 background-color: rgba(86, 62, 128, .15);
                 border: 2px solid #ccc;
@@ -106,6 +107,10 @@ cellClass() {
     }
 }
 
+
+cellIsDroppable() {
+    return this.cell.cellModel.presentation=="COLUMN-WELL";
+}
 
 
 }

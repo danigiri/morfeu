@@ -17,4 +17,6 @@ Type getType();
 
 String getPresentation();
 
+String getThumb();
+
 }

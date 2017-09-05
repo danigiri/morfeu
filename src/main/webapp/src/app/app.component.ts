@@ -104,19 +104,19 @@ ngAfterViewInit() {
     console.log("AppComponent::ngAfterViewInit()");
  
     // THIS IS TO SPEED UP DEVELOPMENT, WE SPEED THE STATE INTO THE DESIRED ONE
-//    if (isDevMode()) {
-//        // we only want to do these once, hence the unsubscriptions
-//        this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
-//            this.unsubscribe(this.cataloguesLoadedEventSubscription);
-//            let catalogue = loaded.catalogues[0].uri;
-//            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
-//        }));
-//        this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
-//            this.unsubscribe(this.catalogueLoadedEventSubscription);
-//            let document = loaded.catalogue.documents[0].uri;
-//            this.events.service.publish(new CellDocumentSelectionEvent(document));
-//        })); 
-//    }
+    if (isDevMode()) {
+        // we only want to do these once, hence the unsubscriptions
+        this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
+            this.unsubscribe(this.cataloguesLoadedEventSubscription);
+            let catalogue = loaded.catalogues[0].uri;
+            this.events.service.publish(new CatalogueSelectionEvent(catalogue));
+        }));
+        this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
+            this.unsubscribe(this.catalogueLoadedEventSubscription);
+            let document = loaded.catalogue.documents[0].uri;
+            this.events.service.publish(new CellDocumentSelectionEvent(document));
+        })); 
+    }
     
     
     // this event loads the default catalogue and starts everything in motion

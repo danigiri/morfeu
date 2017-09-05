@@ -19,6 +19,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 
+import {DndModule} from 'ng2-dnd';
 import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent }   from './app.component';
@@ -37,6 +38,7 @@ import { StatusComponent } from './status.component';
                   ,BrowserAnimationsModule
                   ,HttpModule
                   ,TreeModule
+                  ,DndModule.forRoot()
                   ],
   declarations: [ AppComponent
                   ,CatalogueListComponent 

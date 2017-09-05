@@ -60,7 +60,7 @@ public String provideContentOfAnnotation(LinkedList<Node> annotationNodes, @Name
 	}
 	
 	// this will probably have lots of leading/trailing whitespace stuff, we'll leave that outside our scope
-	return (content==null) ? ModelMetadataComponent.UNDEFINED_VALUE: content;
+	return (content==null) ? ModelMetadataComponent.UNDEFINED : content;
 	
 }
 

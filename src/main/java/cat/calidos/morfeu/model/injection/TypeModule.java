@@ -46,7 +46,10 @@ public class TypeModule {
 protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 
 @Provides
-public static Type buildType(String defaultName, XSType xsType, @Named("presentation") String presentation) {
+public static Type buildType(String defaultName, 
+							 XSType xsType, 
+							 @Named("presentation") String presentation, 
+							 @Named("thumb") String thumb) {
 	
 	Locator locator = xsType.getLocator();
 	URI u = null;
@@ -60,11 +63,12 @@ public static Type buildType(String defaultName, XSType xsType, @Named("presenta
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
 	boolean global = xsType.isGlobal();
 	
-	return new Type(u, name, xsType, global, presentation);
+	return new Type(u, name, xsType, global, presentation, thumb);
 	
 }
 
 
+// TODO: do some kind of map instead of attribute by attribute which leads to a lot of repetition
 @Provides  @Named("presentation")
 public static String presentationFrom(XSType xsType) {
 	return  DaggerModelMetadataComponent.builder()
@@ -73,6 +77,17 @@ public static String presentationFrom(XSType xsType) {
 			.build()
 			.value();
 }
+
+
+@Provides @Named("thumb")
+public static String thumb(XSType xsType) {
+	return DaggerModelMetadataComponent.builder()
+		.from(xsType.getAnnotation())
+		.named(ModelMetadataComponent.THUMB_FIELD)
+		.build()
+		.value();
+}
+
 
 // STASHED REFERENCE
 // get the types from a complex type

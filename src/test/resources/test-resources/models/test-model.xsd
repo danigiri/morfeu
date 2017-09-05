@@ -17,6 +17,7 @@
 		<xs:appinfo>
 			<mf:desc>Root cell-model desc</mf:desc>
 			<mf:presentation>WELL</mf:presentation>
+			<mf:thumb>assets/images/test-thumb.svg</mf:thumb>
 		</xs:appinfo>
 		</xs:annotation>
 		<xs:complexType>

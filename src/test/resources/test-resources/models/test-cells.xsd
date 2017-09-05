@@ -15,7 +15,7 @@
 	<xs:complexType name="testCell">
 		<xs:annotation>
 			<xs:appinfo>
-				<mf:desc>testCell desc</mf:desc>			
+				<mf:desc>testCell desc</mf:desc>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:attribute name="text" type="textField" />
@@ -28,6 +28,7 @@
 			<xs:appinfo>
 				<mf:desc>colCell desc</mf:desc>
 				<mf:presentation>COLUMN-WELL</mf:presentation>
+				<mf:thumb>assets/images/column-thumb.svg</mf:thumb>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
@@ -44,6 +45,7 @@
 			<xs:appinfo>
 				<mf:desc>rowCell desc</mf:desc>
 				<mf:presentation>ROW-WELL</mf:presentation>
+				<mf:thumb>assets/images/row-thumb.svg</mf:thumb>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>

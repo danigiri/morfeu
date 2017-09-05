@@ -28,15 +28,18 @@ public class BasicCellModel extends RemoteResource implements CellModel {
 protected Type type;
 protected boolean isSimple = true;
 protected String presentation;
+protected String thumb;
 protected boolean isReference = false;
 
 
-public BasicCellModel(URI u, String name, String desc, Type type, String presentation) {
+public BasicCellModel(URI u, String name, String desc, Type type, String presentation, String thumb) {
 	//TODO: come up with a useful description or leave empty
 	super(u, name, desc);
 	
 	this.type = type;
 	this.presentation = presentation;
+	this.thumb = thumb;
+	
 }
 
 
@@ -87,7 +90,13 @@ public boolean isReference() {
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 public String getPresentation() {
-	return (presentation.equals(ModelMetadataComponent.UNDEFINED_VALUE)) ? type.getPresentation() : presentation;
+	return (presentation.equals(ModelMetadataComponent.UNDEFINED)) ? type.getPresentation() : presentation;
+}
+
+
+@Override
+public String getThumb() {
+	return (thumb.equals(ModelMetadataComponent.UNDEFINED)) ? type.getThumb() : thumb;
 }
 
 

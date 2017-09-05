@@ -30,12 +30,12 @@ public class ComplexCellModel extends BasicCellModel {
 private Attributes<CellModel> attributes;
 private Composite<CellModel> children;
 
-public ComplexCellModel(URI u, String name, String desc, Type type, String presentation, Attributes<CellModel> attributes2, Composite<CellModel> children2) {
+public ComplexCellModel(URI u, String name, String desc, Type type, String presentation, String thumb, Attributes<CellModel> attributes, Composite<CellModel> children) {
 	
-	super(u, name, desc, type, presentation);
+	super(u, name, desc, type, presentation, thumb);
 	
-	this.attributes = attributes2;
-	this.children = children2;
+	this.attributes = attributes;
+	this.children = children;
 	this.isSimple = false;
 }
 

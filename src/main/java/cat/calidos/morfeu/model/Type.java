@@ -27,15 +27,17 @@ public class Type extends RemoteResource {
 
 private XSType xsType;
 private String presentation;
+private String thumb;
 private boolean isGlobal;
 
-public Type(URI u, String name, XSType xsType, boolean isGlobal, String presentation) {
+public Type(URI u, String name, XSType xsType, boolean isGlobal, String presentation, String thumb) {
 	//TODO: extract description for types from annotation
 	super(u, name, "FILL DESC");
 	
 	this.xsType = xsType;
 	this.presentation = presentation;
 	this.isGlobal = isGlobal;
+	this.thumb = thumb;
 }
 
 
@@ -51,6 +53,11 @@ public boolean isGlobal() {
 
 public String getPresentation() {
 	return presentation;
+}
+
+
+public String getThumb() {
+	return thumb;
 }
 
 

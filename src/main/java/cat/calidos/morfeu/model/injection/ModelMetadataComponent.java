@@ -33,7 +33,9 @@ import dagger.Component;
 public interface ModelMetadataComponent {
 
 String PRESENTATION_FIELD = "mf:presentation";
-String UNDEFINED_VALUE = "CELL";
+String THUMB_FIELD = "mf:thumb";
+String DEFAULT_PRESENTATION = "CELL";
+String UNDEFINED = "";
 
 String value();
 

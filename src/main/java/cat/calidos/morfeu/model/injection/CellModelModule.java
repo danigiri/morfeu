@@ -292,13 +292,23 @@ public static XSType type(XSElementDecl elem) {
 
 @Provides @Named("presentation")
 public static String presentation(XSElementDecl elem) {
-		return  DaggerModelMetadataComponent.builder()
-			.from(elem.getAnnotation())
-			.named(ModelMetadataComponent.PRESENTATION_FIELD)
-			.build()
-			.value();
+	String presentation = DaggerModelMetadataComponent.builder()
+														.from(elem.getAnnotation())
+														.named(ModelMetadataComponent.PRESENTATION_FIELD)
+														.build()
+														.value();
+	return presentation;
 }
 
+
+@Provides @Named("thumb")
+public static String thumb(XSElementDecl elem) {
+	return DaggerModelMetadataComponent.builder()
+		.from(elem.getAnnotation())
+		.named(ModelMetadataComponent.THUMB_FIELD)
+		.build()
+		.value();
+}
 
 
 private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, URI nodeURI, Map<String, CellModel> globals) {
@@ -319,7 +329,7 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 //	} else {
 		
 	// attributes have the presentation of the corresponding type
-	cellModel = new BasicCellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED_VALUE);
+	cellModel = new BasicCellModel(attributeURI, name, "DESC GOES HERE", type, ModelMetadataComponent.UNDEFINED);
 //	}
 	
 	return cellModel;

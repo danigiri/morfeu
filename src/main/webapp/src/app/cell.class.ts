@@ -58,14 +58,15 @@ attribute(name:string):string {
 columnFieldValue():string {
 
     let value: string = "1";
-
     if (this.attributes) { 
         let attribute:Cell = this.attributes.find(a => a.cellModel.presentation=="COLUMN-FIELD");
         if (attribute) {
             value = attribute.value;
         }
     }
+    
     return value;
+    
 }
 
 
