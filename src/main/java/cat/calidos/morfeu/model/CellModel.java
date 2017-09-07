@@ -15,8 +15,6 @@ CellModelReference asReference();
 
 Type getType();
 
-String getPresentation();
-
-String getThumb();
+Metadata getMetadata();
 
 }

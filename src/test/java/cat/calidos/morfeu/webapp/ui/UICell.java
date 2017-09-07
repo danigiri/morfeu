@@ -26,7 +26,7 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICell extends UIWidget<UICell> {
 
-private static final String COLUMN_WELL = "column-well";
+private static final String COL_WELL = "col-well";
 private static final String WELL = "well";
 private static final String ROW_WELL = "row-well";
 private int level;
@@ -60,9 +60,9 @@ public boolean isRowWell() {
 
 public boolean isColumnWell() {
 	
-	element.$(".column-well");	// wait for dom updates
+	element.$(".col-well");	// wait for dom updates
 
-	return element.attr("class").contains(COLUMN_WELL);
+	return element.attr("class").contains(COL_WELL);
 	
 }
 

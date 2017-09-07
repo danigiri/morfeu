@@ -52,6 +52,7 @@ import cat.calidos.morfeu.model.BasicCellModelReference;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.utils.OrderedMap;
 import dagger.Lazy;
@@ -65,6 +66,7 @@ import dagger.Provides;
 @Module
 public class CellModelModule {
 
+private static final String DEFAULT_DESC = "";
 private static final String NODE_SEPARATOR = "/";
 private static final String ATTRIBUTE_SEPARATOR = "@";
 private static final String DEFAULT_TYPE_POSTFIX = "-type";
@@ -99,12 +101,11 @@ public static CellModel provideCellModel(@Named("name") String name,
 public static BasicCellModel buildCellModelFrom(@Named("name") String name, 
 										   @Named("desc") String desc,
 										   Type t, 
-										   @Named("presentation") String presentation,
-										   @Named("thumb") String thumb,
+										   Metadata metadata,
 										   URI u,
 										   Map<String, CellModel> globals) {
 	// TODO: add cell description from metadata
-	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, presentation, thumb);
+	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, metadata);
 	updateGlobalsWith(globals, t, newCellModel);
 	return newCellModel;
 
@@ -115,8 +116,7 @@ public static BasicCellModel buildCellModelFrom(@Named("name") String name,
 public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String name,
 														 @Named("desc") String desc, 
 														 Type t,
-														 @Named("presentation") String presentation,
-														 @Named("thumb") String thumb,
+														 Metadata metadata,
 														 Provider<Attributes<CellModel>> attributesProvider, 
 														 Provider<Composite<CellModel>> childrenProvider,
 														 URI u,
@@ -125,7 +125,7 @@ public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String n
 	// in this way, we create the cell model, find out if it's global, add it and then generate the
 	// attributes and children. This means that if a child references an already defined CellModel (which could
 	// include this very one, there will be no infinite loops 
-	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, name, desc, t, presentation, thumb, null, null);
+	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, name, desc, t, metadata, null, null);
 	updateGlobalsWith(globals, t, newComplexCellModel);
 	
 	newComplexCellModel.setAttributes(attributesProvider.get());
@@ -136,27 +136,11 @@ public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String n
 }
 
 
-//@Provides
-//public static CellModelWeakReference buildReferenceCellModelFrom(@Named("name") String name, 
-//															     @Named("desc") String desc,
-//															     Type t, 
-//															     @Named("presentation") String presentation,
-//															     URI u) {
-//	return new CellModelWeakReference(u, name, desc, t, presentation);
-//}
-
-
 @Provides @Named("desc")
-public static String descriptionFromSchemaAnnotation(XSElementDecl elem, XSType type) {
-
-	// note that we prioritise the element annotation if any, if not we default to the XSType one
-	// TODO: move to getter internal logic? (to keep coherence with presentation field)
-	String desc = "";
-	XSAnnotation annotation = (elem.getAnnotation()!=null) ? elem.getAnnotation() : type.getAnnotation();
-	desc = DaggerModelMetadataComponent.builder().from(annotation).named("mf:desc").build().value();
-	
-	return desc;
+public String desc(Metadata meta, Type t) {
+	return meta.getDesc();
 }
+
 
 
 @Provides
@@ -239,8 +223,9 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u,
 												.andExistingGlobals(globals)
 												.build()
 												.cellModel();
-				children.addChild(childCellModel.getName(), childCellModel);
-			}
+			children.addChild(childCellModel.getName(), childCellModel);
+			
+		}
 	}
 	
 	return children;
@@ -292,22 +277,11 @@ public static XSType type(XSElementDecl elem) {
 }
 
 
-@Provides @Named("presentation")
-public static String presentation(XSElementDecl elem) {
-	String presentation = DaggerModelMetadataComponent.builder()
-														.from(elem.getAnnotation())
-														.named(ModelMetadataComponent.PRESENTATION_FIELD)
-														.build()
-														.value();
-	return presentation;
-}
-
-
-@Provides @Named("thumb")
-public static String thumb(XSElementDecl elem) {
+@Provides
+public static Metadata metadata(XSElementDecl elem, Type t) {
 	return DaggerModelMetadataComponent.builder()
 		.from(elem.getAnnotation())
-		.named(ModelMetadataComponent.THUMB_FIELD)
+		.withFallback(t.getMetadata())
 		.build()
 		.value();
 }
@@ -324,6 +298,13 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 									.build()
 									.type();
 	
+	
+	Metadata meta = DaggerModelMetadataComponent.builder()
+													.from(xsAttributeDecl.getAnnotation())
+													.withFallback(type.getMetadata())
+													.build()
+													.value();
+	
 	CellModel cellModel;
 	// no references for attributes at the moment
 //	if (globals.containsKey(type.getName())) {		// if it's an attribute we keep the local uri
@@ -333,10 +314,9 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 	// attributes have the presentation of the corresponding type
 	cellModel = new BasicCellModel(attributeURI, 
 								   name, 
-								   "DESC GOES HERE", 
+								   meta.getDesc(), 
 								   type, 
-								   ModelMetadataComponent.UNDEFINED, 
-								   ModelMetadataComponent.UNDEFINED);
+								   meta);
 //	}
 	
 	return cellModel;

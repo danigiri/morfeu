@@ -41,7 +41,7 @@ import { EventService } from './events/event.service';
             .cell {}
             .well {}
             .row-well {}
-            .column-well {}
+            .col-well {}
             .cell-img {
                 width: 100%;
                 height: auto;
@@ -100,8 +100,8 @@ cellClass() {
         return "well container-fluid";
     } else if (this.cell.cellModel.presentation=="ROW-WELL") {
         return "row-well row show-grid";
-   } else if (this.cell.cellModel.presentation=="COLUMN-WELL") {
-       return "column-well show-grid col-sm-"+this.cell.columnFieldValue();
+   } else if (this.cell.cellModel.presentation=="COL-WELL") {
+       return "col-well show-grid col-sm-"+this.cell.columnFieldValue();
    } else {
         return "";
     }
@@ -109,7 +109,7 @@ cellClass() {
 
 
 cellIsDroppable() {
-    return this.cell.cellModel.presentation=="COLUMN-WELL";
+    return this.cell.cellModel.presentation=="COL-WELL";
 }
 
 

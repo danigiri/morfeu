@@ -24,7 +24,7 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:desc>colField desc</mf:desc>
-				<mf:presentation>COLUMN-FIELD</mf:presentation>
+				<mf:presentation>COL-FIELD</mf:presentation>
 			</xs:appinfo>
 		</xs:annotation>
 

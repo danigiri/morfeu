@@ -41,8 +41,10 @@ import com.sun.xml.xsom.parser.XSOMParser;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -111,13 +113,16 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet, @Named(
 
 @Produces @Named("desc")
 public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
-	
+
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
-	XSAnnotation annotation = schema.getAnnotation();
-	
-	return DaggerModelMetadataComponent.builder().from(annotation).named(METADATA_DESC_FIELD).build().value();
-	
+	Metadata meta = DaggerModelMetadataComponent.builder()
+										.from(schema.getAnnotation())
+										.build()
+										.value();
+	return meta.getDesc();
 }
+
+
 
 // notice we keep the processed types as we build the root cell models as global types can appear in different
 // root cell models

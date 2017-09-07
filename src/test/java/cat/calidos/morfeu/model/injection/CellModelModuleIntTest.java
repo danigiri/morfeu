@@ -73,7 +73,7 @@ public void testProvideCellModel() throws Exception {
 	CellModel test = cellModelFrom(modelURI, "test");							// TEST
 	// default name for anonymous types is <elem>-type
 	checkComplexCellModel(test, "test", "Root cell-model desc", "test-type", modelURI+"/test");
-	assertEquals("WELL", test.getPresentation());
+	assertEquals("WELL", test.getMetadata().getPresentation());
 	
 	ComplexCellModel testComplex = test.asComplex();
 	assertNotNull(testComplex);
@@ -84,7 +84,7 @@ public void testProvideCellModel() throws Exception {
 	checkAttribute(textAttribute, "text", "textField", modelURI+"/test@text");
 	
 	CellModel row = testComplex.children().child("row");						// TEST -> ROW
-	checkComplexCellModel(row, "row", "rowCell desc", "rowCell", modelURI+"/test/row");	// not anonymous type
+	checkComplexCellModel(row, "row", "rowCell desc", "rowCell", modelURI+"/test/row");	// getting desc from type
 	
 	ComplexCellModel rowComplex = row.asComplex();
 	assertNotNull(rowComplex);
@@ -96,12 +96,12 @@ public void testProvideCellModel() throws Exception {
 	
 	CellModel col = rowComplex.children().child("col");							// TEST -> ROW -> COL
 	checkComplexCellModel(col, "col", "colCell desc", "colCell", modelURI+"/test/row/col");
-	assertEquals("COLUMN-WELL", col.getPresentation());
+	assertEquals("COL-WELL", col.getMetadata().getPresentation());
 	
 	ComplexCellModel colComplex = col.asComplex();
 	assertNotNull(colComplex);
 	assertEquals(1, colComplex.attributes().size());
-	assertEquals("COLUMN-FIELD", colComplex.attributes().attribute("size").getPresentation());
+	assertEquals("COL-FIELD", colComplex.attributes().attribute("size").getMetadata().getPresentation());
 	assertEquals(3, colComplex.children().size());
 	
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
@@ -114,8 +114,11 @@ public void testProvideCellModel() throws Exception {
 	
 	CellModel testCell;
 	if (data.isReference()) {	// it's undetermined which one will be processed first, both are testCell so any will do
+		assertEquals("CELL", data.getMetadata().getPresentation());
 		testCell = data.asReference().reference();
+		
 	} else {
+		assertEquals("CELL", data2.getMetadata().getPresentation());
 		testCell = data2.asReference().reference();		
 	}	
 	assertNotNull(testCell);

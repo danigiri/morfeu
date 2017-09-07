@@ -25,20 +25,18 @@ import cat.calidos.morfeu.model.injection.ModelMetadataComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class BasicCellModel extends RemoteResource implements CellModel {
 
-protected Type type;
+private Type type;
+private Metadata metadata;
 protected boolean isSimple = true;
-protected String presentation;
-protected String thumb;
 protected boolean isReference = false;
 
 
-public BasicCellModel(URI u, String name, String desc, Type type, String presentation, String thumb) {
+public BasicCellModel(URI u, String name, String desc, Type type, Metadata m) {
 	//TODO: come up with a useful description or leave empty
 	super(u, name, desc);
 	
 	this.type = type;
-	this.presentation = presentation;
-	this.thumb = thumb;
+	this.metadata = m;
 	
 }
 
@@ -52,13 +50,12 @@ public boolean isSimple() {
 }
 
 
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.model.CellModelI#isComplex()
-*//////////////////////////////////////////////////////////////////////////////
 @Override
 public boolean isComplex() {
+	// this is implemented as jtwig is unable to use a default interface method
 	return !isSimple();
 }
+
 
 /* (non-Javadoc)
 * @see cat.calidos.morfeu.model.CellModelI#asComplex()
@@ -85,20 +82,6 @@ public boolean isReference() {
 	return isReference;
 }
 
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.model.CellModelI#getPresentation()
-*//////////////////////////////////////////////////////////////////////////////
-@Override
-public String getPresentation() {
-	return (presentation.equals(ModelMetadataComponent.UNDEFINED)) ? type.getPresentation() : presentation;
-}
-
-
-@Override
-public String getThumb() {
-	return (thumb.equals(ModelMetadataComponent.UNDEFINED)) ? type.getThumb() : thumb;
-}
-
 
 /* (non-Javadoc)
 * @see java.lang.Object#toString()
@@ -112,6 +95,12 @@ public String toString() {
 @Override
 public CellModelReference asReference() {
 	throw new ClassCastException("Tried to access cell model as a reference ("+getName()+")");
+}
+
+
+@Override
+public Metadata getMetadata() {
+	return metadata;
 }
 
 

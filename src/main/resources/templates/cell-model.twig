@@ -3,9 +3,9 @@
 	,"URI": "$[cm.URI]$"
 	,"name": "$[cm.Name]$"
 	,"desc": "$[cm.Desc | trim]$"
-	,"presentation": "$[cm.Presentation]$"
-	$( if not cm.thumb is empty )$
-		,"thumb": "$[ cm.thumb ]$"
+	,"presentation": "$[cm.metadata.Presentation]$"
+	$( if not cm.metadata.thumb is empty )$
+		,"thumb": "$[ cm.metadata.thumb ]$"
 	$( endif )$
 	,"type": {
 		"name": "$[cm.Type.Name]$"

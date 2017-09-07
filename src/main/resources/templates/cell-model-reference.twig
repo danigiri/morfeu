@@ -3,7 +3,10 @@
 	,"URI": "$[cm.URI]$"
 	,"name": "$[cm.Name]$"
 	,"desc": "$[cm.Desc | trim]$"
-	,"presentation": "$[cm.Presentation]$"
+	,"presentation": "$[cm.metadata.Presentation]$"
+	$( if not cm.metadata.thumb is empty )$
+		,"thumb": "$[ cm.metadata.thumb ]$"
+	$( endif )$
 	,"type": {
 		"name": "$[cm.Type.Name]$"
 		,"isSimple": $[cm.Type.isSimple]$

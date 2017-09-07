@@ -27,6 +27,7 @@ import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 
 /**
@@ -43,8 +44,8 @@ public void testValue() throws Exception {
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
 	
-	String desc = DaggerModelMetadataComponent.builder().from(annotation).named("mf:desc").build().value().trim();
-	assertEquals("Description of test model", desc);
+	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).build().value();
+	assertEquals("Description of test model", meta.getDesc());
 	
 }
 

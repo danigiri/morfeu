@@ -26,7 +26,7 @@ public class BasicCellModelReference extends BasicCellModel implements CellModel
 private CellModel reference;
 
 public BasicCellModelReference(String name, CellModel ref) {
-	super(ref.getURI(), name, ref.getDesc(), ref.getType(), ref.getPresentation(), ref.getThumb());
+	super(ref.getURI(), name, ref.getDesc(), ref.getType(), ref.getMetadata());
 
 	this.reference = ref;
 	this.isReference = true;
@@ -35,7 +35,7 @@ public BasicCellModelReference(String name, CellModel ref) {
 
 
 public BasicCellModelReference(URI u, String name, CellModel ref) {
-	super(u, name, ref.getDesc(), ref.getType(), ref.getPresentation(), ref.getThumb());
+	super(u, name, ref.getDesc(), ref.getType(), ref.getMetadata());
 
 	this.reference = ref;
 	this.isReference = true;
@@ -49,20 +49,10 @@ public boolean isSimple() {
 }
 
 
-@Override
-public boolean isComplex() {
-	return reference.isComplex();
-}
-
 // TODO: candidate to remove as it's not needed
 @Override
 public Type getType() {
 	return reference.getType();
-}
-
-@Override
-public String getPresentation() {
-	return reference.getPresentation();
 }
 
 

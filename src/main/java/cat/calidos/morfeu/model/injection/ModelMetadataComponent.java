@@ -23,6 +23,7 @@ import org.w3c.dom.Node;
 
 import com.sun.xml.xsom.XSAnnotation;
 
+import cat.calidos.morfeu.model.Metadata;
 import dagger.BindsInstance;
 import dagger.Component;
 
@@ -32,18 +33,13 @@ import dagger.Component;
 @Component(modules=ModelMetadataModule.class)
 public interface ModelMetadataComponent {
 
-String PRESENTATION_FIELD = "mf:presentation";
-String THUMB_FIELD = "mf:thumb";
-String DEFAULT_PRESENTATION = "CELL";
-String UNDEFINED = "";
-
-String value();
+Metadata value();
 
 @Component.Builder
 interface Builder {
 
 	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
-	@BindsInstance Builder named(@Named("tag") String tag);
+	@BindsInstance Builder withFallback(@Named("Fallback") @Nullable Metadata fallback);
 	
 	ModelMetadataComponent build();
 

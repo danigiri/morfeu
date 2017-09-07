@@ -31,7 +31,8 @@ constructor(public schema: number,
             public URI: string, 
             public name: string, 
             public desc: string, 
-            public presentation: string, 
+            public presentation: string,
+            public thumb: string,
             public isSimple: boolean, 
             public type_: Type_) {  
 
@@ -105,6 +106,7 @@ URI: string;
 name: string; 
 desc: string;
 presentation: string;
+thumb: string;
 isSimple: boolean; 
 isReference: boolean;
 type_: Type_;

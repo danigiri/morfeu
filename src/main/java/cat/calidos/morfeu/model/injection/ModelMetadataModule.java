@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -27,9 +28,10 @@ import org.w3c.dom.NodeList;
 
 import com.sun.xml.xsom.XSAnnotation;
 
+import cat.calidos.morfeu.model.Metadata;
 import dagger.Module;
 import dagger.Provides;
-import dagger.producers.ProducerModule;
+
 
 /** Model Metadata helper module to enrich the model definitions with useful information
 * @author daniel giribet
@@ -37,9 +39,46 @@ import dagger.producers.ProducerModule;
 @Module
 public class ModelMetadataModule {
 
-//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
+private static String DESC_FIELD = "mf:desc";
+private static String PRESENTATION_FIELD = "mf:presentation";
+private static String THUMB_FIELD = "mf:thumb";
+private static String UNDEFINED = "";
+
+
 @Provides
-public String provideContentOfAnnotation(LinkedList<Node> annotationNodes, @Named("tag") String tag) {
+Metadata provideMetadata(LinkedList<Node> annotationNodes, @Named("Fallback") @Nullable Metadata fallback) {
+	
+	Optional<String> desc = contentOf(annotationNodes, DESC_FIELD);
+	Optional<String> presentation = contentOf(annotationNodes, PRESENTATION_FIELD);
+	Optional<String> thumb = contentOf(annotationNodes, THUMB_FIELD);
+	
+	if (fallback==null) {
+
+		return new Metadata(desc, presentation, thumb);
+	
+	} else {
+
+		return new Metadata(desc, presentation, thumb, fallback);
+		
+	} 
+}
+
+@Provides
+LinkedList<Node> annotationNode(@Nullable XSAnnotation annotation) {
+	
+	LinkedList<Node> annotationNodes = new LinkedList<Node>();
+	if (annotation!=null) {
+		Node annotationRootNode = (Node)annotation.getAnnotation(); // as we are using the DomAnnotationParserFactory from XSOM
+		annotationNodes.add(annotationRootNode);
+	}
+	
+	return annotationNodes;
+	
+}
+
+
+//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
+private Optional<String> contentOf(LinkedList<Node> annotationNodes, @Named("tag") String tag) {
 	
 	String content = null;
 
@@ -59,22 +98,8 @@ public String provideContentOfAnnotation(LinkedList<Node> annotationNodes, @Name
 		
 	}
 	
-	// this will probably have lots of leading/trailing whitespace stuff, we'll leave that outside our scope
-	return (content==null) ? ModelMetadataComponent.UNDEFINED : content;
-	
-}
-
-
-@Provides
-LinkedList<Node> annotationNode(@Nullable XSAnnotation annotation) {
-	
-	LinkedList<Node> annotationNodes = new LinkedList<Node>();
-	if (annotation!=null) {
-		Node annotationRootNode = (Node)annotation.getAnnotation(); // as we are using the DomAnnotationParserFactory from XSOM
-		annotationNodes.add(annotationRootNode);
-	}
-	
-	return annotationNodes;
+	// content may have lots of leading/trailing whitespace stuff, we'll leave that outside our scope
+	return Optional.ofNullable(content);
 	
 }
 

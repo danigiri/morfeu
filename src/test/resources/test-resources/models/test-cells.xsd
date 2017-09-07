@@ -27,8 +27,8 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:desc>colCell desc</mf:desc>
-				<mf:presentation>COLUMN-WELL</mf:presentation>
-				<mf:thumb>assets/images/column-thumb.svg</mf:thumb>
+				<mf:presentation>COL-WELL</mf:presentation>
+				<mf:thumb>assets/images/col-thumb.svg</mf:thumb>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>

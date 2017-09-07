@@ -54,12 +54,12 @@ attribute(name:string):string {
 
 }
 
-// we look for a field that has representation of COLUMN-FIELD or 1 as default
+// we look for a field that has representation of COL-FIELD or 1 as default
 columnFieldValue():string {
 
     let value: string = "1";
     if (this.attributes) { 
-        let attribute:Cell = this.attributes.find(a => a.cellModel.presentation=="COLUMN-FIELD");
+        let attribute:Cell = this.attributes.find(a => a.cellModel.presentation=="COL-FIELD");
         if (attribute) {
             value = attribute.value;
         }

@@ -33,6 +33,7 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
 import dagger.Module;
 import dagger.Provides;
@@ -48,8 +49,7 @@ protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 @Provides
 public static Type buildType(String defaultName, 
 							 XSType xsType, 
-							 @Named("presentation") String presentation, 
-							 @Named("thumb") String thumb) {
+							 Metadata metadata) {
 	
 	Locator locator = xsType.getLocator();
 	URI u = null;
@@ -63,27 +63,16 @@ public static Type buildType(String defaultName,
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
 	boolean global = xsType.isGlobal();
 	
-	return new Type(u, name, xsType, global, presentation, thumb);
+	return new Type(u, name, xsType, global, metadata);
 	
 }
 
 
-// TODO: do some kind of map instead of attribute by attribute which leads to a lot of repetition
-@Provides  @Named("presentation")
-public static String presentationFrom(XSType xsType) {
-	return  DaggerModelMetadataComponent.builder()
-			.from(xsType.getAnnotation())
-			.named(ModelMetadataComponent.PRESENTATION_FIELD)
-			.build()
-			.value();
-}
-
-
-@Provides @Named("thumb")
-public static String thumb(XSType xsType) {
+@Provides
+public static Metadata metadata(XSType xsType) {
+	
 	return DaggerModelMetadataComponent.builder()
 		.from(xsType.getAnnotation())
-		.named(ModelMetadataComponent.THUMB_FIELD)
 		.build()
 		.value();
 }

@@ -46,6 +46,7 @@ import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 
@@ -73,10 +74,12 @@ public void testRootAnonymousType() throws Exception {
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.buildType("cell-model-name", xsType, "PRESENTATION");
+	Type type = TypeModule.buildType("cell-model-name", xsType, new Metadata("DESC", "PRESENTATION", "THUMB"));
 	assertEquals("cell-model-name", type.getName());
-	assertEquals("PRESENTATION", type.getPresentation());
+	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
+	assertEquals("THUMB", type.getMetadata().getThumb());
 	assertFalse(type.isSimple());
+	
 		
 	
 //	attributeUses.iterator().forEachRemaining(au -> System.err.println(au.getDecl().getName()));
@@ -121,7 +124,7 @@ public void testRootAnonymousType() throws Exception {
 public void testTextSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "textField");
-	Type type = TypeModule.buildType("not used default", xsType, "PRESENTATION");
+	Type type = TypeModule.buildType("not used default", xsType, new Metadata());
 	assertEquals("textField", type.getName());
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
@@ -137,7 +140,7 @@ public void testTextSimpleType() {
 public void testIntegerSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "numberField");
-	Type type = TypeModule.buildType("not used default", xsType, "PRESENTATION");
+	Type type = TypeModule.buildType("not used default", xsType, new Metadata());
 	assertEquals("numberField", type.getName());
 	assertTrue(type.isSimple());
 	
@@ -150,7 +153,7 @@ public void testIntegerSimpleType() {
 public void testColFieldSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colField");
-	Type type = TypeModule.buildType("not used", xsType, "PRESENTATION");
+	Type type = TypeModule.buildType("not used", xsType, new Metadata());
 	assertEquals("colField", type.getName());
 	assertTrue(type.isSimple());
 		
