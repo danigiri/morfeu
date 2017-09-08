@@ -25,9 +25,11 @@ import { TreeNode } from 'angular-tree-component';
     selector: 'cell-model',
     template: `
         <div id="{{node.data.id}}" class="cell-model-entry cell-model-level-{{node.level}}">
-            <img *ngIf="node.data.thumb=='DEFAULT'; else thumb" src="assets/images/cell-thumb.svg" />
+            <img *ngIf="node.data.thumb=='DEFAULT'; else thumb" 
+                src="assets/images/cell-thumb.svg" 
+                 class="cell-model-thumb" />
             <ng-template #thumb>
-            <img src="{{node.data.thumb}}" />
+            <img src="{{node.data.thumb}}" class="cell-model-thumb" />
             </ng-template>
             <span class="cell-model-name">{{ node.data.name }}</span>
         </div>
@@ -37,6 +39,7 @@ import { TreeNode } from 'angular-tree-component';
                 .cell-model-entry {}
                 .cell-model-name {}
                 .cell-model-desc {}
+                .cell-model-thumb {}
                 .cell-model-level-1 {}
                 .cell-model-level-2 {}
                 .cell-model-level-3 {}

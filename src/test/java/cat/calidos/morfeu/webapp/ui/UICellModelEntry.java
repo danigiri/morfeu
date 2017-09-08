@@ -26,6 +26,7 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICellModelEntry extends UIWidget<UICellModelEntry> {
 
+private static final String THUMB = "src";
 private int level;
 
 
@@ -45,6 +46,11 @@ public String name() {
 
 public String desc() {
 	return element.$(".cell-model-desc").getText();
+}
+
+
+public String thumb() {
+	return element.$(".cell-model-thumb").getAttribute(THUMB);
 }
 
 

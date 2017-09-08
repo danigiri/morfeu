@@ -112,7 +112,8 @@ public void testCellModels() {
 	
 	UICellModelEntry testModelEntry = rootCellModels.get(0);				// TEST
 	assertEquals("test", testModelEntry.name());
-	assertEquals("Root cell-model desc", testModelEntry.desc());
+	//assertEquals("Root cell-model desc", testModelEntry.desc());
+	assertTrue(testModelEntry.thumb().endsWith("assets/images/test-thumb.svg"));
 	
 	//TODO: add cell model children testing
 	
@@ -126,18 +127,23 @@ public void testCellModels() {
 	
 	UICellModelEntry rowModel = testModelChildren.get(0);					// TEST/ROW
 	assertEquals("row", rowModel.name());
+	assertTrue(rowModel.thumb().endsWith("assets/images/row-thumb.svg"));
 	
 	List<UICellModelEntry> rowChildren = rowModel.children();
 	assertEquals(1, rowChildren.size());
 
 	UICellModelEntry colModel = rowChildren.get(0);							// TEST/ROW/COL
 	assertEquals("col", colModel.name());
-	
+	assertTrue(colModel.thumb().endsWith("assets/images/col-thumb.svg"));
+
 	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
 	assertEquals(3, colChildren.size());
 
 	assertEquals("row", colChildren.get(0).name());
-	assertEquals("data2", colChildren.get(1).name());
+	UICellModelEntry data2 = colChildren.get(1);
+	assertEquals("data2", data2.name());
+	assertTrue(data2.thumb().endsWith("assets/images/cell-thumb.svg"));
+
 	assertEquals("data", colChildren.get(2).name());
 	
 }
