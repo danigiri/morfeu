@@ -45,6 +45,7 @@ protected subscribe(s: Subscription): Subscription {
 
 protected unsubscribe(s:Subscription) {
 
+   // unsusbscribe and then remove this subscription from the list
    s.unsubscribe();
    this.subscriptions = this.subscriptions.filter(sub => sub!==s);
 

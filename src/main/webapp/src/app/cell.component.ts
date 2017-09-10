@@ -15,11 +15,13 @@
  */
 
 
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { Cell } from './cell.class';
 import { Widget } from './widget.class';
 
+import { CellActivatedEvent } from './events/cell-activated.event';
+import { CellDeactivatedEvent } from './events/cell-deactivated.event';
 import { EventService } from './events/event.service';
 
 
@@ -28,13 +30,19 @@ import { EventService } from './events/event.service';
     selector: 'cell',
     template: `
             <ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
-                <img src="assets/images/cell.svg" dnd-draggable [dragEnabled]="true"
-                     class="cell img-fluid cell-img" alt="{{cell.name}}"/>
+                <img src="assets/images/cell.svg" 
+                     class="cell img-fluid cell-img"
+                     [class.cell-active]="active" 
+                     alt="{{cell.name}}" 
+                     (mousedown)="clickDown(cell)" 
+                     (mouseup)="clickUp(cell)" 
+                     dnd-draggable [dragEnabled]="dragEnabled"
+                     />
             </ng-container>
             <ng-template #well>
-        <div class="cell-level-{{level}} {{cellClass()}}">
-                <cell *ngFor="let c of cell.children" [cell]="c" [level]="level+1"></cell>
-        </div>
+                <div class="cell-level-{{level}} {{cellClass()}}">
+                        <cell *ngFor="let c of cell.children" [cell]="c" [level]="level+1"></cell>
+                </div>
             </ng-template>
     `,
     styles:[`
@@ -54,6 +62,12 @@ import { EventService } from './events/event.service';
                 border: 2px solid #ccc;
                 border: 2px solid rgba(86, 62, 128, .2)
             }
+            .cell-active {
+               border: 3px solid #f00;
+             }
+             .cell-dragged {
+                 opacity: .2;
+             }
             .cell-level-1 {}
             .cell-level-2 {}
             .cell-level-3 {}
@@ -82,17 +96,41 @@ export class CellComponent extends Widget implements OnInit {
 
 @Input() cell:Cell;
 @Input() level:Number;
-    
+
+active: boolean = false;
+dragEnabled:boolean = false;
+
+
 constructor(eventService: EventService) {
     super(eventService);
 }
 
 
 ngOnInit() {
-
-    console.log("CellComponent::ngOnInit()");
+    console.log("[UI] CellComponent::ngOnInit()");
 }    
-        
+       
+    
+clickDown(cell:Cell) {
+    
+    console.log("[UI] CellComponent::clickDown("+cell.URI+")");
+    this.active = true;
+    // TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
+    this.events.service.publish(new CellActivatedEvent(cell));
+    this.dragEnabled = true;
+
+}
+
+clickUp(cell:Cell) {
+    
+    console.log("[UI] CellComponent::clickUp("+cell.URI+")");
+    this.active = false;   
+    this.events.service.publish(new CellDeactivatedEvent(cell));
+    this.dragEnabled = false;
+
+}
+    
+
 //TODO: depending on the level go from -md- to -xs- col styling
 //TODO: this function gets called and we should have an attribute or input to optimise the client stuff
 cellClass() {

@@ -14,7 +14,7 @@
 	   		    		<data number="42" text="blahblah"/>    		
     			</col>
     			<col size="6">
-	    			<data number="42" text="blahblah"/>
+	    			<data2 number="42" text="blahblah"/>
 	    		</col>
     		</row>
     	</col>

@@ -25,6 +25,7 @@ children?: Cell[];
 cellModel?: CellModel;
     
 constructor(public schema: number,
+            public URI: string,
             public name: string,
             public desc: string,
             public value: string,
@@ -183,6 +184,7 @@ static reviver(key: string, value: any): any {
 export interface CellJSON {
     
 schema: number,
+URI: string,
 name: string,
 desc: string,
 value: string;

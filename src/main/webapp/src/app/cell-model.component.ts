@@ -16,9 +16,16 @@
 
 
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { TreeNode } from 'angular-tree-component';
 
+import { Cell } from './cell.class';
+import { Widget } from './widget.class';
+
+import { CellActivatedEvent } from './events/cell-activated.event';
+import { CellDeactivatedEvent } from './events/cell-deactivated.event';
+import { EventService } from './events/event.service';
 
 @Component({
     moduleId: module.id,
@@ -27,7 +34,9 @@ import { TreeNode } from 'angular-tree-component';
         <div id="{{node.data.id}}" class="cell-model-entry cell-model-level-{{node.level}}">
             <img *ngIf="node.data.thumb=='DEFAULT'; else thumb" 
                 src="assets/images/cell-thumb.svg" 
-                 class="cell-model-thumb" />
+                    [class.cell-model-active]="active" 
+                    class="cell-model-thumb" 
+                    />
             <ng-template #thumb>
             <img src="{{node.data.thumb}}" class="cell-model-thumb" />
             </ng-template>
@@ -40,6 +49,9 @@ import { TreeNode } from 'angular-tree-component';
                 .cell-model-name {}
                 .cell-model-desc {}
                 .cell-model-thumb {}
+                .cell-model-active {
+                    border: 1px solid #f00;
+                }
                 .cell-model-level-1 {}
                 .cell-model-level-2 {}
                 .cell-model-level-3 {}
@@ -52,9 +64,53 @@ import { TreeNode } from 'angular-tree-component';
     `]
 })
 
-export class CellModelComponent {
+export class CellModelComponent extends Widget {
 
 @Input() node: TreeNode;
 @Input() index: number;
     
+active:boolean = false;
+
+constructor(eventService: EventService) {
+    super(eventService);
+}
+
+
+ngOnInit() {
+
+    console.log("CellModelComponent::ngOnInit()");
+
+    this.subscribe(this.events.service.of( CellDeactivatedEvent )
+            .filter(deactivated => deactivated.cell.name==this.node.data.name 
+                    && deactivated.cell.cellModelURI==this.node.data.URI)
+            .subscribe( deactivated => {
+                console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
+                this.becomeInactive(deactivated.cell);
+    }));
+
+    this.subscribe(this.events.service.of( CellActivatedEvent )
+            .filter(activated => activated.cell.name==this.node.data.name 
+                    && activated.cell.cellModelURI==this.node.data.URI)
+            .subscribe( activated => {
+                console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
+                this.becomeActive(activated.cell);
+    }));
+}
+
+
+becomeActive(cell: Cell) {
+
+    console.log("[UI] CellModelComponent::becomeActive()");
+    this.active = true;
+    
+}
+
+
+becomeInactive(cell: Cell) {
+
+    console.log("[UI] CellModelComponent::becomeInactive()");
+    this.active = false;
+    
+}
+ 
 }
