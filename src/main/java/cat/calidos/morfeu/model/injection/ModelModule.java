@@ -36,6 +36,8 @@ import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.impl.util.SchemaTreeTraverser;
+import com.sun.xml.xsom.impl.util.SchemaTreeTraverser.SchemaTreeModel;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
@@ -97,6 +99,12 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 @Produces
 public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet, @Named("ModelURI") URI u) {
 
+	SchemaTreeTraverser traverser = new SchemaTreeTraverser();
+	traverser.visit(schemaSet);
+	SchemaTreeModel model = traverser.getModel();
+	
+	
+	
 	ArrayList<CellModel> rootTypes = new ArrayList<CellModel>();
 	Set<Type> processedTypes = new HashSet<Type>();
 	Map<String, CellModel> globals = new HashMap<String, CellModel>();

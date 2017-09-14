@@ -37,7 +37,10 @@ import { EventService } from './events/event.service';
 					 [class.cell-active]="active" 
 					 alt="{{cell.name}}" 
 					 (mousedown)="clickDown(cell)" 
-					 (mouseup)="clickUp(cell)" 
+					 (mouseup)="clickUp(cell)"
+                     (mouseenter)="clickDown(cell)" 
+                     (mouseleave)="clickUp(cell)"
+					 
 					 dnd-draggable [dragEnabled]="dragEnabled"
 					 />
 			</ng-container>

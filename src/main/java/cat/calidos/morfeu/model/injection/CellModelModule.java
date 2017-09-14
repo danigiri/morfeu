@@ -16,33 +16,28 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.OptionalInt;
 
-import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Node;
 import org.xml.sax.Locator;
 
-import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
+import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
@@ -142,6 +137,12 @@ public String desc(Metadata meta, Type t) {
 }
 
 
+@Provides @Named("MaxOccursValue")
+public OptionalInt maxOccurs(@Named("MaxOccurs") Integer maxOccurs) {
+	//TODO: see childrenOf code to get where we need to get this
+	return maxOccurs==null ? OptionalInt.empty() : OptionalInt.of(maxOccurs);
+}
+
 
 @Provides
 public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String defaultName) {
@@ -203,7 +204,14 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u,
 		return new OrderedMap<CellModel>(0);						// base case, no children, we return
 	}
 	
-	//System.err.println("TYPE:"+t);
+
+	BigInteger maxOccurs = contentType.asParticle().getMaxOccurs();
+	if (maxOccurs.equals(BigInteger.valueOf(XSParticle.UNBOUNDED))) {
+		
+	} else {
+		CONTINUE HERE
+	}
+	//contentType.asParticle().getMinOccurs();
 	XSTerm termType = contentType.asParticle().getTerm();			// recursive case, go through all children
 	LinkedList<XSTerm> termTypes = new LinkedList<XSTerm>();		// this is a list of all the terms left to process
 	termTypes.add(termType);
@@ -334,6 +342,7 @@ private static void updateGlobalsWith(Map<String, CellModel> globals, Type t, Ba
 	if (t.isGlobal()) {
 		globals.put(t.getName(), newCellModel);
 	}
+	
 }
 
 

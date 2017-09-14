@@ -19,6 +19,7 @@ package cat.calidos.morfeu.model.injection;
 import java.net.URI;
 import java.util.Map;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.sun.xml.xsom.XSElementDecl;
@@ -42,6 +43,7 @@ interface Builder {
 
 	@BindsInstance Builder withElement(XSElementDecl elem);
 	@BindsInstance Builder withParentURI(@Named("ParentURI") URI uri);
+	@BindsInstance Builder withMaxOccurs(@Nullable @Named("MaxOccurs") int maxOccurs);
 	@BindsInstance Builder andExistingGlobals(Map<String, CellModel> globals);
 	
 	CellModelComponent build();
