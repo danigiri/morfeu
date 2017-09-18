@@ -7,11 +7,15 @@
 	$( if not cm.metadata.thumb is empty )$
 		,"thumb": "$[ cm.metadata.thumb ]$"
 	$( endif )$
+	,"isSimple": $[cm.isSimple]$
 	,"type": {
 		"name": "$[cm.Type.Name]$"
 		,"isSimple": $[cm.Type.isSimple]$
 	}
-	,"isSimple": $[cm.isSimple]$
+	,"minOccurs": $[cm.minOccurs]$
+	$( if cm.maxOccurs.isPresent )$
+		,"maxOccurs": $[cm.maxOccurs.getAsInt]$
+	$( endif )$
 	,"isReference": $[cm.isReference]$
 	$( if cm.isComplex )$
 		,"attributes": [$( for a in cm.asComplex.attributes.asList )$

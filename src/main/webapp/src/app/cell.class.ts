@@ -75,7 +75,24 @@ columnFieldValue():string {
 
 
 canHaveAsChild(cell:Cell):boolean {
-   return this.children.find(c => c.name==cell.name && c.cellModelURI==cell.cellModelURI)!=undefined;   
+ 
+    let allowed:boolean = this.cellModel.canHaveAsChild(cell);
+    if (allowed) {
+        let matchingChildren:Cell[] = this.children.filter(c => c.name==cell.name 
+                                                                    && c.cellModelURI==cell.cellModelURI);
+        let childCount:number = matchingChildren.length;
+        if (childCount>0) {
+            // we are not considering the problem of the childcount being less than the minimum
+            //TODO: add are we able to remove this cell as child?
+            let matchingCellModel:CellModel = matchingChildren[0].cellModel;
+            if (matchingCellModel.maxOccurs) {
+                allowed = childCount < matchingCellModel.maxOccurs; // notice we use < as we'll be adding one
+            }
+        }
+    }
+    
+    return allowed;
+    
 }
 
 

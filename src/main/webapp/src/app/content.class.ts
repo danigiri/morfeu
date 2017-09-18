@@ -22,24 +22,24 @@ import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 export class Content implements CellHolder, SerialisableToJSON<Content, ContentJSON> {
 	
-cells:Cell[];
+children?:Cell[];
 
 constructor(public schema: number) {}
 
 
 // associate the content cells with the corresponding cell models
 associateWith(model: Model) {
-   this.cells = this.cells.map(c => c.associateWith(model));
+   this.children = this.children.map(c => c.associateWith(model));
 }
 
 // part of the drag and drop scaffolding, we return true if this cell can be one of the root cells
 canHaveAsChild(cell:Cell):boolean {
-    return this.cells.find(c => c.name==cell.name && c.cellModelURI==cell.cellModelURI)!=undefined;
+    return this.children.find(c => c.name==cell.name && c.cellModelURI==cell.cellModelURI)!=undefined;
 }
 
 
 toJSON(): ContentJSON {
-   return Object.assign({}, this, {cells: this.cells.map(c => c.toJSON())});
+   return Object.assign({}, this, {children: this.children.map(c => c.toJSON())});
 }	
 
 
@@ -53,7 +53,7 @@ fromJSON(json: ContentJSON|string): Content {
 		
 		let content = Object.create(Content.prototype);
 		content = Object.assign(content, json);
-		content = Object.assign(content, {cells: json.cells.map(c => Cell.fromJSON(c))});
+		content = Object.assign(content, {children: json.children.map(c => Cell.fromJSON(c))});
 		
 		return content;
 		
@@ -73,6 +73,6 @@ static reviver(key: string, value: any): any {
 export interface ContentJSON {
 	
 schema:number;
-cells:CellJSON[];
+children:CellJSON[];
 	
 }

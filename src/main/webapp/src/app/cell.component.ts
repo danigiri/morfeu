@@ -31,7 +31,7 @@ import { EventService } from './events/event.service';
 	template: `
 			<ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
 	            <!-- TODO: check the model and the content as well (counts, etc.) -->
-                <drop-area *ngIf="parent" [parent]="parent.cellModel"></drop-area>
+                <drop-area *ngIf="parent" [parent]="parent"></drop-area>
 				<img src="assets/images/cell.svg" 
 					 class="cell img-fluid cell-img"
 					 [class.cell-active]="active" 
@@ -46,12 +46,12 @@ import { EventService } from './events/event.service';
 			</ng-container>
 			<ng-template #well>
 				<div class="cell-level-{{level}} {{cellClass()}}">
-	                    <drop-area *ngIf="cell.children.length==0" [parent]="cell.cellModel"></drop-area>
+	                    <drop-area *ngIf="cell.children.length==0" [parent]="cell"></drop-area>
 						<cell *ngFor="let c of cell.children" 
 						[cell]="c" 
 						[parent]="cell" 
 						[level]="level+1"></cell>
-				</div>
+			</div>
 			</ng-template>
 	`,
 	styles:[`

@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.util.OptionalInt;
 
 import cat.calidos.morfeu.model.injection.ModelMetadataComponent;
 
@@ -27,7 +28,7 @@ public class BasicCellModel extends RemoteResource implements CellModel {
 
 private Type type;
 private int minOccurs;
-private int maxOccurs;
+private OptionalInt maxOccurs;
 private Metadata metadata;
 protected boolean isSimple = true;
 protected boolean isReference = false;
@@ -38,10 +39,10 @@ public BasicCellModel(URI u, String name, String desc, Type type,  int minOccurs
 	super(u, name, desc);
 	
 	this.minOccurs = minOccurs;
-	this.maxOccurs = maxOccurs;
+	this.maxOccurs = maxOccurs==CellModel.UNBOUNDED ? OptionalInt.empty() : OptionalInt.of(maxOccurs);
 	this.type = type;
 	this.metadata = m;
-	
+
 }
 
 
@@ -91,7 +92,7 @@ public int getMinOccurs() {
 * @see cat.calidos.morfeu.model.CellModel#getMaxOccurs()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
-public int getMaxOccurs() {
+public OptionalInt getMaxOccurs() {
 	return maxOccurs;
 }
 

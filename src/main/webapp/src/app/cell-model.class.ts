@@ -36,7 +36,10 @@ constructor(public schema: number,
 			public presentation: string,
 			public thumb: string,
 			public isSimple: boolean, 
-			public type_: Type_) {	
+			public type_: Type_,
+			public minOccurs: number,
+			public maxOccurs?: number
+			) {	
 
 	this.init();
 
@@ -48,9 +51,10 @@ init() {
    
 	this.id = this.URI;	 // this is guaranteed to be unique 
 	this.isExpanded = true;
+
 }
 
-
+// if we are semantically allowed
 canHaveAsChild(cell:Cell):boolean {
     return this.children.find(c => c.name==cell.name && c.URI==cell.cellModelURI)!=undefined;   
 }
@@ -117,6 +121,8 @@ thumb: string;
 isSimple: boolean; 
 isReference: boolean;
 type_: Type_;
+minOccurs: number;
+maxOccurs?: number;
 	
 attributes?: CellModelJSON[];
 children?: CellModelJSON[];

@@ -75,7 +75,7 @@ public void testProvideCellModel() throws Exception {
 	checkComplexCellModel(test, "test", "Root cell-model desc", "test-type", modelURI+"/test");
 	assertEquals("WELL", test.getMetadata().getPresentation());
 	assertEquals("test root cell model should be min 1", 1, test.getMinOccurs());
-	assertEquals("test root cell model should be max 1", 1, test.getMaxOccurs());
+	assertEquals("test root cell model should be max 1", 1, test.getMaxOccurs().getAsInt());
 	
 	ComplexCellModel testComplex = test.asComplex();
 	assertNotNull(testComplex);
@@ -88,7 +88,8 @@ public void testProvideCellModel() throws Exception {
 	CellModel row = testComplex.children().child("row");						// TEST -> ROW
 	checkComplexCellModel(row, "row", "rowCell desc", "rowCell", modelURI+"/test/row");	// getting desc from type
 	assertEquals("/test/row cell model should be min 0", 0, row.getMinOccurs());
-	assertEquals("/test/row cell model should be unbounded", CellModel.UNBOUNDED, row.getMaxOccurs());
+	assertFalse("/test/row cell model should be unbounded", row.getMaxOccurs().isPresent());
+
 	
 	ComplexCellModel rowComplex = row.asComplex();
 	assertNotNull(rowComplex);
@@ -111,12 +112,12 @@ public void testProvideCellModel() throws Exception {
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	checkComplexCellModel(data, "data", "testCell desc", "testCell", modelURI+"/test/row/col/data");
 	assertEquals("/test/row/col/data cell model should be min 0", 0, data.getMinOccurs());
-	assertEquals("/test/row/col/data cell model should be unbounded", CellModel.UNBOUNDED, data.getMaxOccurs());
+	assertFalse("/test/row/col/data cell model should be unbounded", data.getMaxOccurs().isPresent());
 
 	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
 	checkComplexCellModel(data2, "data2", "testCell desc", "testCell", modelURI+"/test/row/col/data2");
 	assertEquals("/test/row/col/data2 cell model should be min 0", 0, data2.getMinOccurs());
-	assertEquals("/test/row/col/data2 cell model should be 1", 1, data2.getMaxOccurs());	// refs keep local counts
+	assertEquals("/test/row/col/data2 cell model should be 1", 1, data2.getMaxOccurs().getAsInt());	// refs keep local counts
 
 	assertTrue(data.isReference() || data2.isReference());
 	

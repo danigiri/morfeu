@@ -17,7 +17,10 @@
 import { Cell } from './cell.class';
 
 export interface CellHolder {
-
+    
 canHaveAsChild(cell:Cell):boolean;
+
+//canRemoveAsChild(cell:Cell):boolean;
+
 
 }

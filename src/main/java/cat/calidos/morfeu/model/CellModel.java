@@ -1,5 +1,6 @@
 package cat.calidos.morfeu.model;
 
+import java.util.OptionalInt;
 
 public interface CellModel extends Locatable {
 
@@ -15,7 +16,7 @@ Type getType();
 
 int getMinOccurs();
 
-int getMaxOccurs();
+OptionalInt getMaxOccurs();
 
 Metadata getMetadata();
 
