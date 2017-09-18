@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.impl.util.SchemaTreeTraverser;
@@ -73,7 +74,8 @@ public static Model produceModel(@Named("ModelURI") URI u,
 
 // notice here we are using the fetchable uri to get the schema and parse it, as this one is guaranteed to be fetchable
 @Produces
-public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMParser parser) throws ParsingException, ExecutionException, FetchingException {
+public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMParser parser) 
+		throws ParsingException, ExecutionException, FetchingException {
 	
 	XSSchemaSet schemaSet = null;
 	String uri = u.toString();
@@ -101,18 +103,17 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet, @Named(
 
 	SchemaTreeTraverser traverser = new SchemaTreeTraverser();
 	traverser.visit(schemaSet);
-	SchemaTreeModel model = traverser.getModel();
-	
-	
+	//SchemaTreeModel model = traverser.getModel();
 	
 	ArrayList<CellModel> rootTypes = new ArrayList<CellModel>();
 	Set<Type> processedTypes = new HashSet<Type>();
 	Map<String, CellModel> globals = new HashMap<String, CellModel>();
 	
 	Iterator<XSElementDecl> iterator = schemaSet.iterateElementDecls();
-	iterator.forEachRemaining(elem -> rootTypes.add(buildCellModel(elem, u, processedTypes, globals)));
-
-	
+	iterator.forEachRemaining(elem -> {
+									   XSParticle part = elem.getType().asComplexType().getContentType().asParticle();
+									   rootTypes.add(buildCellModel(elem, part, u, processedTypes, globals));
+	});
 	
 	return rootTypes;
 
@@ -134,9 +135,14 @@ public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
 
 // notice we keep the processed types as we build the root cell models as global types can appear in different
 // root cell models
-private static CellModel buildCellModel(XSElementDecl elem, URI u, Set<Type> types, Map<String, CellModel> globals) {
+private static CellModel buildCellModel(XSElementDecl elem, 
+										XSParticle particle, 
+										URI u, 
+										Set<Type> types, 
+										Map<String, CellModel> globals) {
 	return DaggerCellModelComponent.builder()
-									.withElement(elem)
+									.fromElem(elem)
+									.fromParticle(particle)
 									.withParentURI(u)
 									.andExistingGlobals(globals)
 									.build()

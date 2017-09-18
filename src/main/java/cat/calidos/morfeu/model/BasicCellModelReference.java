@@ -26,7 +26,7 @@ public class BasicCellModelReference extends BasicCellModel implements CellModel
 private CellModel reference;
 
 public BasicCellModelReference(String name, CellModel ref) {
-	super(ref.getURI(), name, ref.getDesc(), ref.getType(), ref.getMetadata());
+	super(ref.getURI(), name, ref.getDesc(), ref.getType(), ref.getMinOccurs(), ref.getMaxOccurs(), ref.getMetadata());
 
 	this.reference = ref;
 	this.isReference = true;
@@ -34,8 +34,8 @@ public BasicCellModelReference(String name, CellModel ref) {
 }
 
 
-public BasicCellModelReference(URI u, String name, CellModel ref) {
-	super(u, name, ref.getDesc(), ref.getType(), ref.getMetadata());
+public BasicCellModelReference(URI u, String name,  int minOccurs, int maxOccurs, CellModel ref) {
+	super(u, name, ref.getDesc(), ref.getType(), minOccurs, maxOccurs, ref.getMetadata());
 
 	this.reference = ref;
 	this.isReference = true;

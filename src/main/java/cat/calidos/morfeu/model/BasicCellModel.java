@@ -26,15 +26,19 @@ import cat.calidos.morfeu.model.injection.ModelMetadataComponent;
 public class BasicCellModel extends RemoteResource implements CellModel {
 
 private Type type;
+private int minOccurs;
+private int maxOccurs;
 private Metadata metadata;
 protected boolean isSimple = true;
 protected boolean isReference = false;
 
 
-public BasicCellModel(URI u, String name, String desc, Type type, Metadata m) {
-	//TODO: come up with a useful description or leave empty
+public BasicCellModel(URI u, String name, String desc, Type type,  int minOccurs, int maxOccurs, Metadata m) {
+
 	super(u, name, desc);
 	
+	this.minOccurs = minOccurs;
+	this.maxOccurs = maxOccurs;
 	this.type = type;
 	this.metadata = m;
 	
@@ -75,20 +79,35 @@ public Type getType() {
 }
 
 /* (non-Javadoc)
+* @see cat.calidos.morfeu.model.CellModel#getMinOccurs()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public int getMinOccurs() {
+	return minOccurs;
+}
+
+
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.CellModel#getMaxOccurs()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public int getMaxOccurs() {
+	return maxOccurs;
+}
+
+
+@Override
+public Metadata getMetadata() {
+	return metadata;
+}
+
+
+/* (non-Javadoc)
 * @see cat.calidos.morfeu.model.CellModelI#isReference()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 public boolean isReference() {
 	return isReference;
-}
-
-
-/* (non-Javadoc)
-* @see java.lang.Object#toString()
-*//////////////////////////////////////////////////////////////////////////////
-@Override
-public String toString() {
-	return "["+name+", ("+type+")]";
 }
 
 
@@ -98,9 +117,12 @@ public CellModelReference asReference() {
 }
 
 
+/* (non-Javadoc)
+* @see java.lang.Object#toString()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
-public Metadata getMetadata() {
-	return metadata;
+public String toString() {
+	return "["+name+", ("+type+")]";
 }
 
 

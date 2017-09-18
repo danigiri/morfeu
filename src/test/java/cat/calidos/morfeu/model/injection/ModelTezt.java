@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
@@ -86,9 +87,11 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 	Map<String,CellModel> globals = new HashMap<String, CellModel>();
-
+	
+	//FIXME: this particle creation is probably wrong
 	return DaggerCellModelComponent.builder()
-									.withElement(elem)
+									.fromElem(elem)
+									.fromParticle(elem.getType().asComplexType().getContentType().asParticle())
 									.withParentURI(u)
 									.andExistingGlobals(globals)
 									.build()

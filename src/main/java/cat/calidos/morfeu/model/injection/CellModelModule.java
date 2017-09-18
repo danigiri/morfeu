@@ -63,15 +63,19 @@ public class CellModelModule {
 
 private static final String DEFAULT_DESC = "";
 private static final String NODE_SEPARATOR = "/";
+private static final int ATTRIBUTE_MIN = 0;
+private static final int ATTRIBUTE_MAX = 1;
 private static final String ATTRIBUTE_SEPARATOR = "@";
 private static final String DEFAULT_TYPE_POSTFIX = "-type";
 protected final static Logger log = LoggerFactory.getLogger(CellModelModule.class);
 
 
 @Provides
-public static CellModel provideCellModel(@Named("name") String name,
+public static CellModel provideCellModel(URI u,
+										 @Named("name") String name,
+										 @Named("MinOccurs") int minOccurs,
+										 @Named("MaxOccurs") int maxOccurs,
 										 Type t,
-										 URI u,
 										 Provider<BasicCellModel> providerCell,
 										 Provider<ComplexCellModel> providerComplexCell,
 										 Map<String, CellModel> globals) {
@@ -79,7 +83,7 @@ public static CellModel provideCellModel(@Named("name") String name,
 	CellModel cellModel;
 	if (globals.containsKey(t.getName())) {
 		CellModel ref = globals.get(t.getName());
-		cellModel = new BasicCellModelReference(u, name, ref);	// we keep the URI and name for the moment
+		cellModel = new BasicCellModelReference(u, name, minOccurs, maxOccurs, ref);	// keep the URI, name, counts
 	} else {
 		if (t.isSimple()) {
 			cellModel = providerCell.get();
@@ -93,14 +97,16 @@ public static CellModel provideCellModel(@Named("name") String name,
 
 
 @Provides
-public static BasicCellModel buildCellModelFrom(@Named("name") String name, 
-										   @Named("desc") String desc,
-										   Type t, 
-										   Metadata metadata,
-										   URI u,
-										   Map<String, CellModel> globals) {
+public static BasicCellModel buildCellModelFrom(URI u,
+												@Named("name") String name, 
+												@Named("desc") String desc,
+												@Named("MinOccurs") int minOccurs,
+												@Named("MaxOccurs") int maxOccurs,
+												Type t, 
+												Metadata metadata,
+												Map<String, CellModel> globals) {
 	// TODO: add cell description from metadata
-	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, metadata);
+	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, metadata);
 	updateGlobalsWith(globals, t, newCellModel);
 	return newCellModel;
 
@@ -108,19 +114,29 @@ public static BasicCellModel buildCellModelFrom(@Named("name") String name,
 
 
 @Provides
-public static ComplexCellModel buildComplexCellModelFrom(@Named("name") String name,
+public static ComplexCellModel buildComplexCellModelFrom(URI u,
+														 @Named("name") String name,
 														 @Named("desc") String desc, 
+														 @Named("MinOccurs") int minOccurs,
+														 @Named("MaxOccurs") int maxOccurs,
 														 Type t,
 														 Metadata metadata,
 														 Provider<Attributes<CellModel>> attributesProvider, 
-														 Provider<Composite<CellModel>> childrenProvider,
-														 URI u,
+														 Provider<Composite<CellModel>> childrenProvider,														 
 														 Map<String, CellModel> globals) {
 	
 	// in this way, we create the cell model, find out if it's global, add it and then generate the
 	// attributes and children. This means that if a child references an already defined CellModel (which could
-	// include this very one, there will be no infinite loops 
-	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, name, desc, t, metadata, null, null);
+	// include this very one, there will be no infinite loops and the child will be created as a reference to this one 
+	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, 
+																name, 
+																desc, 
+																t, 
+																minOccurs, 
+																maxOccurs, 
+																metadata, 
+																null, 
+																null);
 	updateGlobalsWith(globals, t, newComplexCellModel);
 	
 	newComplexCellModel.setAttributes(attributesProvider.get());
@@ -137,10 +153,19 @@ public String desc(Metadata meta, Type t) {
 }
 
 
-@Provides @Named("MaxOccursValue")
-public OptionalInt maxOccurs(@Named("MaxOccurs") Integer maxOccurs) {
-	//TODO: see childrenOf code to get where we need to get this
-	return maxOccurs==null ? OptionalInt.empty() : OptionalInt.of(maxOccurs);
+@Provides @Named("MaxOccurs")
+public int maxOccurs(XSParticle particle) {
+
+	BigInteger maxOccurs = particle.getMaxOccurs();
+	
+	return maxOccurs.equals(BigInteger.valueOf(XSParticle.UNBOUNDED)) ? CellModel.UNBOUNDED : maxOccurs.intValueExact();
+
+}
+
+
+@Provides @Named("MinOccurs")
+public int minOccurs(XSParticle particle) {
+	return particle.getMinOccurs().intValueExact();
 }
 
 
@@ -178,9 +203,8 @@ public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 	});
 
 	return attributes;
+	
 }
-
-
 
 
 @Provides
@@ -193,7 +217,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u,
 	// RECURSIVE CASE:
 	//	we go through all the children and we add them
 	if (t.isSimple()) {
-		return new OrderedMap<CellModel>(0);						// base case, simple type sanity check
+		return new OrderedMap<CellModel>(0);							// base case, simple type sanity check
 	}
 
 	Composite<CellModel> children = new OrderedMap<CellModel>();
@@ -201,32 +225,27 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u,
 	XSComplexType complexType = elem.getType().asComplexType();
 	XSContentType contentType = complexType.getContentType();
 	if (contentType.asEmpty()!=null) {
-		return new OrderedMap<CellModel>(0);						// base case, no children, we return
+		return new OrderedMap<CellModel>(0);							// base case, no children, we return
 	}
 	
-
-	BigInteger maxOccurs = contentType.asParticle().getMaxOccurs();
-	if (maxOccurs.equals(BigInteger.valueOf(XSParticle.UNBOUNDED))) {
-		
-	} else {
-		CONTINUE HERE
-	}
-	//contentType.asParticle().getMinOccurs();
-	XSTerm termType = contentType.asParticle().getTerm();			// recursive case, go through all children
-	LinkedList<XSTerm> termTypes = new LinkedList<XSTerm>();		// this is a list of all the terms left to process
-	termTypes.add(termType);
+	XSParticle particle = contentType.asParticle();						// recursive case, go through all children
+	LinkedList<XSParticle> termTypes = new LinkedList<XSParticle>();	// list of all the particles left to process
+	termTypes.add(particle);
 	while (!termTypes.isEmpty()) {
-		termType = termTypes.removeFirst();
+		particle = termTypes.removeFirst();
 		
-		if (termType.isModelGroup()) {
-			XSModelGroup typeModelGroup = termType.asModelGroup();
-			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.getTerm())); //FIXME: this is reversed!!!
-			//System.err.print("\t["+typeModelGroup.getSize()+"]");
+				
+		if (particle.getTerm().isModelGroup()) {
+			// FIXME: this is reverse order!!!
+			// FIXME: we need to see when we have more complex groups like unions and stuff 
+			XSModelGroup typeModelGroup = particle.getTerm().asModelGroup();
+			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.asParticle())); 
 		} else {
-			
-			XSElementDecl child = termType.asElementDecl();
+						
+			XSElementDecl childElem = particle.getTerm().asElementDecl();
 			CellModel childCellModel = DaggerCellModelComponent.builder()
-												.withElement(child)
+												.fromElem(childElem)
+												.fromParticle(particle)
 												.withParentURI(u)
 												.andExistingGlobals(globals)
 												.build()
@@ -324,6 +343,8 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 								   name, 
 								   meta.getDesc(), 
 								   type, 
+								   ATTRIBUTE_MIN,
+								   ATTRIBUTE_MAX,
 								   meta);
 //	}
 	

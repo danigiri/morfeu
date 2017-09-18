@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSParticle;
 
 import cat.calidos.morfeu.model.CellModel;
 import dagger.BindsInstance;
@@ -41,9 +42,9 @@ CellModel cellModel();
 @Component.Builder
 interface Builder {
 
-	@BindsInstance Builder withElement(XSElementDecl elem);
+	@BindsInstance Builder fromElem(XSElementDecl elem);
+	@BindsInstance Builder fromParticle(XSParticle particle);
 	@BindsInstance Builder withParentURI(@Named("ParentURI") URI uri);
-	@BindsInstance Builder withMaxOccurs(@Nullable @Named("MaxOccurs") int maxOccurs);
 	@BindsInstance Builder andExistingGlobals(Map<String, CellModel> globals);
 	
 	CellModelComponent build();
