@@ -104,7 +104,7 @@ public void testProduceContent() throws Exception {
 	assertNotNull(content);
 	assertEquals(1, content.size());
 	
-	Cell rootNode = content.child("test[0]");
+	Cell rootNode = content.child("test(0)");
 	assertNotNull(rootNode);
 	assertEquals("test", rootNode.getName());
 	assertTrue(rootNode.isComplex());
@@ -113,8 +113,6 @@ public void testProduceContent() throws Exception {
 	assertNotNull(rootComplexNode);
 	assertEquals(1, rootComplexNode.children().size());
 	assertEquals("row", rootComplexNode.children().child(0).getName());
-	
-	
 	
 }
 

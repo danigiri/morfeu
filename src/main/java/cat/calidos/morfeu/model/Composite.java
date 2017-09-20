@@ -36,6 +36,7 @@ public int size();
 public T child(int i);
 
 
+/** @return child named 'name' */
 public T child(String name);
 
 

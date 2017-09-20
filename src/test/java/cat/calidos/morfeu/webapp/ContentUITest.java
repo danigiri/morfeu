@@ -60,7 +60,7 @@ public void contentTestAppearingAndDisappearing() {
 }
 
 
-@Test
+//@Test
 public void contentTest() {
 
 	open(appBaseURL);
@@ -98,6 +98,18 @@ public void contentTest() {
 	assertNotNull(col3b);
 	assertTrue(col3b.isColumnWell());
 
+}
+
+
+public void relationShipFromContentToModelTest() {
+
+	open(appBaseURL);
+
+	UIContent content = UICatalogues.openCatalogues()
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1")
+										.content();
 	
 }
 

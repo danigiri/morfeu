@@ -35,7 +35,7 @@ import { EventService } from './events/event.service';
 				<img src="assets/images/cell.svg" 
 					 class="cell img-fluid cell-img"
 					 [class.cell-active]="active" 
-					 alt="{{cell.name}}" 
+					 alt="{{cell.URI}}" 
 					 (mousedown)="clickDown(cell)" 
 					 (mouseup)="clickUp(cell)"
                      (mouseenter)="clickDown(cell)" 

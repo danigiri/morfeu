@@ -9,6 +9,8 @@
   </appender>
 
 	<logger name="org.apache.http" level="WARN"/>
+	
+	<logger name="cat.calidos.morfeu.model.injection" level="WARN"/>
 
 	<root level="TRACE">
 		<appender-ref ref="STDOUT" />

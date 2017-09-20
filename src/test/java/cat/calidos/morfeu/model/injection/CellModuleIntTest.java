@@ -84,7 +84,7 @@ public void testChildrenFrom() throws Exception {
 	assertEquals(1, children.size());
 	Cell row = children.child(0);
 	assertEquals("row", row.getName());
-	assertEquals(contentURI+"/row", row.getURI().toString());
+	assertEquals(contentURI+"/row(0)", row.getURI().toString());
 	assertEquals("row", row.getCellModel().getName());
 	assertEquals("rowCell", row.getCellModel().getType().getName());
 	assertTrue(row.isComplex());
@@ -96,8 +96,8 @@ public void testChildrenFrom() throws Exception {
 	assertEquals("col", complexRow.children().child(0).getCellModel().getName());
 	assertEquals("colCell", complexRow.children().child(0).getCellModel().getType().getName());
 	assertEquals("col", complexRow.children().child(1).getName());
-	assertEquals("col", complexRow.children().child("col[0]").getName());
-	assertEquals("col", complexRow.children().child("col[1]").getName());
+	assertEquals("col", complexRow.children().child("col(0)").getName());
+	assertEquals("col", complexRow.children().child("col(1)").getName());
 
 }
 
@@ -109,7 +109,7 @@ public void testAttributesFrom() throws Exception {
 	
 	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 
-	Cell cell = children.child("row[0]").asComplex().children().child("col[0]").asComplex().children().child("data[0]");
+	Cell cell = children.child("row(0)").asComplex().children().child("col(0)").asComplex().children().child("data(0)");
 	assertNotNull(cell);
 	assertTrue(cell.isComplex());
 	ComplexCell complexCell = cell.asComplex();
@@ -117,13 +117,13 @@ public void testAttributesFrom() throws Exception {
 	// ensure order is also cool, to do that, we assume there are two column children, access the first and compare
 	
 	assertEquals("Accessing children by index and not name fails, order is not preserved", 
-				 children.child("row[0]").asComplex().children().child("col[0]"), 
-				 children.child("row[0]").asComplex().children().child(0));
+				 children.child("row(0)").asComplex().children().child("col(0)"), 
+				 children.child("row(0)").asComplex().children().child(0));
 	
 	// extra order check
-	List<Cell> cols = children.child("row[0]").asComplex().children().asList();
-	assertEquals("Order not preserved", children.child("row[0]").asComplex().children().child(0), cols.get(0));
-	assertEquals("Order not preserved", children.child("row[0]").asComplex().children().child(1), cols.get(1));
+	List<Cell> cols = children.child("row(0)").asComplex().children().asList();
+	assertEquals("Order not preserved", children.child("row(0)").asComplex().children().child(0), cols.get(0));
+	assertEquals("Order not preserved", children.child("row(0)").asComplex().children().child(1), cols.get(1));
 	
 	Attributes<Cell> attributes = complexCell.attributes();
 	assertNotNull(attributes);

@@ -86,7 +86,7 @@ canHaveAsChild(cell:Cell):boolean {
             //TODO: add are we able to remove this cell as child?
             let matchingCellModel:CellModel = matchingChildren[0].cellModel;
             if (matchingCellModel.maxOccurs) {
-                allowed = childCount < matchingCellModel.maxOccurs; // notice we use < as we'll be adding one
+                allowed = childCount < matchingCellModel.maxOccurs; // notice we use < 
             }
         }
     }

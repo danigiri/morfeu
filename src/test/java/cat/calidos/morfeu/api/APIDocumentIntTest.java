@@ -60,7 +60,7 @@ public void tearup() {
 @Test
 public void testDocument() throws Exception {
 	
-	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document1.json");
+	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document1.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -86,7 +86,7 @@ public void testDocument() throws Exception {
 @Test
 public void testNonValidContentDocument() throws Exception {
 	
-	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-content.json");
+	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-content.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -101,7 +101,7 @@ public void testNonValidContentDocument() throws Exception {
 @Test
 public void testNonValidModelDocument() throws Exception {
 	
-	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-model.json");
+	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-model.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -115,7 +115,7 @@ public void testNonValidModelDocument() throws Exception {
 @Test
 public void testNotFoundModelDocument() throws Exception {
 	
-	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/document-with-notfound-model.json");
+	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document-with-notfound-model.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -129,7 +129,7 @@ public void testNotFoundModelDocument() throws Exception {
 @Test
 public void testMalformedDocument() throws Exception {
 	
-	InputStream content = fetchInputStreamFrom("documents/test-resources/documents/malformed-document.json");
+	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/malformed-document.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -146,7 +146,7 @@ public void teardown() throws IOException {
 }
 
 
-private InputStream fetchInputStreamFrom(String location)
+private InputStream fetchRemoteInputStreamFrom(String location)
 		throws URISyntaxException, IOException, UnsupportedOperationException, ClientProtocolException {
 
 	String uri = webappPrefix+location;

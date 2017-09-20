@@ -47,6 +47,7 @@ import cat.calidos.morfeu.utils.OrderedMap;
 @Module
 public class CellModule {
 
+private static final String ATTRIBUTE_PREFIX = "@";
 private static final String DEFAULT_DESC = "";
 protected final static Logger log = LoggerFactory.getLogger(CellModule.class);
 private static final String DEFAULT_VALUE = "";
@@ -137,11 +138,12 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 	NodeList nodeList = ((Element)node).getElementsByTagName("*");	//TODO: use node and detect text as values as this gives you all descendants
 	for (int i=0; i<nodeList.getLength();i++) {						// or use normalise (SLOW CODE!)
 		
-		Element childElem = (Element) nodeList.item(i);	// we know it's element but this is not guaranteed not to change
-		if (childElem.getParentNode()==node) {			// only handle the current element children!!! (SLOW!)
-			String childName = childElem.getTagName();	
+		Element childElem = (Element) nodeList.item(i);	// We know it's element but this is not guaranteed not to change
+		if (childElem.getParentNode()==node) {			// Only handle the current element children!!! (SLOW!)
+			String childName = childElem.getTagName();
 			CellModel childCellModel = findChildWithName(cellModel, childName);
-			URI childURI = cellURI(uri, cellModel, childName);
+			String childIndexedName = childName+"("+nodeIndex+")";	// to name each children differently and for the URI
+			URI childURI = cellURI(uri, cellModel, childIndexedName);
 			Cell childCell = DaggerCellComponent.builder()
 													.withURI(childURI)
 													.fromNode(childElem)
@@ -149,7 +151,7 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 													.builder()
 													.createCell();
 			
-			children.addChild(childName+"["+nodeIndex+"]", childCell);
+			children.addChild(childIndexedName, childCell);
 			nodeIndex++;
 		
 		}
@@ -183,7 +185,7 @@ public static Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellMod
 		String attributeName = attribute.getNodeName();	// the root element may have xml namespace stuff
 		if (!(attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:") )) {
 			CellModel attributeCellModel = findAttributeWithName(cellModel, attributeName);
-			URI childURI = cellURI(uri, cellModel, attributeName);
+			URI childURI = cellURI(uri, cellModel, ATTRIBUTE_PREFIX+attributeName);
 	
 			Cell attributeCell = DaggerCellComponent.builder()
 														.withURI(childURI)

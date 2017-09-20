@@ -128,22 +128,23 @@ return contentCells(pendingNodes, u, rootCellModels);
 
 private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI uri, List<CellModel> cellModels) throws ParsingException {
 
-	//TODO: this is a bit repetitive from cellmodule, but let's leave it like this for the moment
+	//FIXME: this is a quite repetitive from cellmodule, not following DRY
 	
 	Composite<Cell> contentCells = new OrderedMap<Cell>();
 	int cellIndex = 0;
-	pendingNodes.stream().map(node -> {
+	for (Node node : pendingNodes) {
 		
 		String name = node.getNodeName();
 		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
 		if (!matchedCellModel.isPresent()) {
-			log.error("Could not match root ontent node '{}' with any cellmodel even tough content is valid", name);
+			log.error("Could not match root content node '{}' with any cellmodel even tough content is valid", name);
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 		CellModel cellModel = matchedCellModel.get();
 		
 		URI cellURI;
-		String proposedCellURI = uri+"/"+name;
+		String indexedName = name+"("+cellIndex+")";
+		String proposedCellURI = uri+"/"+indexedName;
 		try {
 			cellURI = new URI(proposedCellURI);
 		} catch (URISyntaxException e) {
@@ -151,14 +152,16 @@ private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI u
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 		
-		return DaggerCellComponent.builder()
-				.withURI(cellURI)
-				.fromNode(node)
-				.withCellModel(cellModel)
-				.builder()
-				.createCell();
-//		return name;
-	}).forEach(cell -> contentCells.addChild(cell.getName()+"["+cellIndex+"]", cell));
+		Cell cell = DaggerCellComponent.builder()
+										.withURI(cellURI)
+										.fromNode(node)
+										.withCellModel(cellModel)
+										.builder()
+										.createCell();
+		contentCells.addChild(indexedName, cell);
+		cellIndex++;
+		
+	};
 	
 	return contentCells;
 
