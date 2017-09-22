@@ -26,6 +26,7 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICellModelEntry extends UIWidget<UICellModelEntry> {
 
+private static final String ACTIVE = "cell-model-active";
 private static final String THUMB = "src";
 private int level;
 
@@ -36,21 +37,6 @@ public UICellModelEntry(SelenideElement e, int level) {
 	
 	this.level = level;
 
-}
-
-
-public String name() {
-	return element.$(".cell-model-name").getText();
-}
-
-
-public String desc() {
-	return element.$(".cell-model-desc").getText();
-}
-
-
-public String thumb() {
-	return element.$(".cell-model-thumb").getAttribute(THUMB);
 }
 
 
@@ -72,20 +58,47 @@ public UIWidget<UICellModelEntry> clickOnArrow() {
 }
 
 
+public String name() {
+	return element.$(".cell-model-name").getText();
+}
+
+
+public String desc() {
+	return element.$(".cell-model-desc").getText();
+}
+
+
+public String thumb() {
+	return element.$(".cell-model-thumb").getAttribute(THUMB);
+}
+
+
+public List<UICellModelEntry> children() {	
+	return element.$$(".tree-node-level-"+(level+1))
+					.stream()
+					.map(e -> new UICellModelEntry(e, level+1) ).collect(Collectors.toList());
+}
+
+
+public UICellModelEntry get(String name) {
+	return children().stream().filter((UICellModelEntry cme ) -> cme.name().equals(name)).findAny().get();
+}
+
+
 public boolean isCollapsed() {
 	element.$(".tree-node-collapsed");	// wait for dom updates
 	return element.attr("class").contains("tree-node-collapsed");
 }
+
 
 public boolean isExpanded() {
 	element.$(".tree-node-expanded");	// wait for dom updates
 	return element.attr("class").contains("tree-node-expanded");
 }
 
-public List<UICellModelEntry> children() {	
-	return element.$$(".tree-node-level-"+(level+1))
-					.stream()
-					.map(e -> new UICellModelEntry(e, level+1) ).collect(Collectors.toList());
+
+public boolean isHighlighted() {
+	return element.$(".cell-model-thumb").attr("class").contains(ACTIVE);
 }
 
 

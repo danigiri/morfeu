@@ -26,6 +26,8 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICell extends UIWidget<UICell> {
 
+private static final String ACTIVE = "cell-active";
+private static final String CLASS = "class";
 private static final String COL_WELL = "col-well";
 private static final String WELL = "well";
 private static final String ROW_WELL = "row-well";
@@ -39,11 +41,22 @@ public UICell(SelenideElement element, int level) {
 
 }
 
+public UICell hover() {
+
+	element.hover();
+	
+	return this;
+	
+}
+
+public boolean isCell() {
+	return element.attr(CLASS).contains("cell-img");
+}
 
 public boolean isWell() {
 	
 	element.$(".well");	// wait for dom updates
-	String class_ = element.attr("class");
+	String class_ = element.attr(CLASS);
 	
 	return class_.contains(WELL) && !class_.contains(ROW_WELL);
 	
@@ -54,7 +67,7 @@ public boolean isRowWell() {
 	
 	element.$(".row-well");	// wait for dom updates
 
-	return element.attr("class").contains(ROW_WELL);
+	return element.attr(CLASS).contains(ROW_WELL);
 	
 }
 
@@ -62,13 +75,28 @@ public boolean isColumnWell() {
 	
 	element.$(".col-well");	// wait for dom updates
 
-	return element.attr("class").contains(COL_WELL);
+	return element.attr(CLASS).contains(COL_WELL);
 	
 }
 
 
 public List<UICell> children() {
 	return element.$$(".cell-level-"+(level+1)).stream().map(e -> new UICell(e, level+1)).collect(Collectors.toList());
+}
+
+// clever hack: uris are doc/foo(0)/bar(0), to look for 'bar(0)' we go for "/bar(0)$"
+public UICell child(String name) {
+	return children().stream().filter(c -> c.alt().endsWith("/"+name)).findAny().get();
+}
+
+/** alt attribute that we store the cell URI*/
+public String alt() {
+	return element.attr("alt");
+}
+
+
+public boolean isHighlighted() {
+	return element.attr(CLASS).contains(ACTIVE);
 }
 
 }

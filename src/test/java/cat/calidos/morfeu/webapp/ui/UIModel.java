@@ -65,4 +65,9 @@ public List<UICellModelEntry> rootCellModels() {
 	return $$(".tree-node-level-1").stream().map( e -> new UICellModelEntry(e, 1) ).collect(Collectors.toList());
 }
 
+
+public UICellModelEntry rootCellModel(String name) {
+	return rootCellModels().stream().filter(rcm -> rcm.name().equals(name)).findAny().get();
+}
+
 }

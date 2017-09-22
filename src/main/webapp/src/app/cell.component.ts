@@ -33,7 +33,7 @@ import { EventService } from './events/event.service';
 	            <!-- TODO: check the model and the content as well (counts, etc.) -->
                 <drop-area *ngIf="parent" [parent]="parent"></drop-area>
 				<img src="assets/images/cell.svg" 
-					 class="cell img-fluid cell-img"
+					 class="cell img-fluid cell-img cell-level-{{level}}"
 					 [class.cell-active]="active" 
 					 alt="{{cell.URI}}" 
 					 (mousedown)="clickDown(cell)" 

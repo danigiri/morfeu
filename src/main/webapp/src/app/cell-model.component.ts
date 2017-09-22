@@ -31,14 +31,18 @@ import { EventService } from './events/event.service';
 	moduleId: module.id,
 	selector: 'cell-model',
 	template: `
-		<div id="{{node.data.id}}" class="cell-model-entry cell-model-level-{{node.level}}">
+		<div id="{{node.data.id}}" 
+		     class="cell-model-entry cell-model-level-{{node.level}}">
 			<img *ngIf="node.data.thumb=='DEFAULT'; else thumb" 
-				src="assets/images/cell-thumb.svg" 
-					[class.cell-model-active]="active" 
-					class="cell-model-thumb" 
+				 src="assets/images/cell-thumb.svg" 
+				 class="cell-model-thumb" 
+				 [class.cell-model-active]="active" 
 					/>
 			<ng-template #thumb>
-			<img src="{{node.data.thumb}}" class="cell-model-thumb" />
+			<img src="{{node.data.thumb}}" 
+			     class="cell-model-thumb" 
+			     [class.cell-model-active]="active" 
+			/>
 			</ng-template>
 			<span class="cell-model-name">{{ node.data.name }}</span>
 		</div>

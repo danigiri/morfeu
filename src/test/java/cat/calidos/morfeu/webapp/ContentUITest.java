@@ -29,7 +29,10 @@ import org.junit.Test;
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
+import cat.calidos.morfeu.webapp.ui.UICellModelEntry;
 import cat.calidos.morfeu.webapp.ui.UIContent;
+import cat.calidos.morfeu.webapp.ui.UIDocument;
+import cat.calidos.morfeu.webapp.ui.UIModel;
 
 /**
 * @author daniel giribet
@@ -70,7 +73,6 @@ public void contentTest() {
 										.clickOn(0)
 										.clickOnDocumentNamed("Document 1")
 										.content();
-	
 	content.shouldBeVisible();
 	
 	List<UICell> rootCells = content.rootCells();		// TEST
@@ -101,15 +103,36 @@ public void contentTest() {
 }
 
 
+@Test
 public void relationShipFromContentToModelTest() {
 
+	String document1URI = "target/test-classes/test-resources/documents/document1.xml";
+	
 	open(appBaseURL);
 
-	UIContent content = UICatalogues.openCatalogues()
+	UIDocument document = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)
-										.clickOnDocumentNamed("Document 1")
-										.content();
+										.clickOnDocumentNamed("Document 1");
+	UIContent content = document.content();
+	content.shouldBeVisible();
+	UICell test = content.rootCells().get(0);
+
+	// /test/row/col/data
+	UICell data = test.child("test(0)").child("col(0)").child("data(0)");
+	assertTrue(data.isCell());
+	assertEquals(document1URI+"/test(0)/row(0)/col(0)/data(0)", data.alt());
+	
+	data.hover();
+	assertTrue(data.isHighlighted());
+	
+	UIModel model = document.model();
+	//test/row/col/data
+	UICellModelEntry dataModel = model.rootCellModel("test").get("row").get("col").get("data");
+	assertTrue(dataModel.isHighlighted());
+	
+	UICellModelEntry data2Model =  model.rootCellModel("test").get("row").get("col").get("data2");
+	assertFalse(data2Model.isHighlighted());
 	
 }
 
