@@ -86,12 +86,12 @@ public List<UICell> children() {
 
 // clever hack: uris are doc/foo(0)/bar(0), to look for 'bar(0)' we go for "/bar(0)$"
 public UICell child(String name) {
-	return children().stream().filter(c -> c.alt().endsWith("/"+name)).findAny().get();
+	return children().stream().filter(c -> c.id().endsWith("/"+name)).findAny().get();
 }
 
-/** alt attribute that we store the cell URI*/
-public String alt() {
-	return element.attr("alt");
+/** id is where we store the cell URI*/
+public String id() {
+	return element.attr("id");
 }
 
 

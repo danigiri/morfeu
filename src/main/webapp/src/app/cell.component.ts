@@ -32,10 +32,10 @@ import { EventService } from './events/event.service';
 			<ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
 	            <!-- TODO: check the model and the content as well (counts, etc.) -->
                 <drop-area *ngIf="parent" [parent]="parent"></drop-area>
-				<img src="assets/images/cell.svg" 
+				<img id="{{cell.URI}}"
+				     src="assets/images/cell.svg" 
 					 class="cell img-fluid cell-img cell-level-{{level}}"
-					 [class.cell-active]="active" 
-					 alt="{{cell.URI}}" 
+					 [class.cell-active]="active"  
 					 (mousedown)="clickDown(cell)" 
 					 (mouseup)="clickUp(cell)"
                      (mouseenter)="clickDown(cell)" 
@@ -45,7 +45,9 @@ import { EventService } from './events/event.service';
 					 />
 			</ng-container>
 			<ng-template #well>
-				<div class="cell-level-{{level}} {{cellClass()}}">
+				<div id="{{cell.URI}}" 
+				     class="cell-level-{{level}} {{cellClass()}}"
+				     >
 	                    <drop-area *ngIf="cell.children.length==0" [parent]="cell"></drop-area>
 						<cell *ngFor="let c of cell.children" 
 						[cell]="c" 

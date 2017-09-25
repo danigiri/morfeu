@@ -119,9 +119,9 @@ public void relationShipFromContentToModelTest() {
 	UICell test = content.rootCells().get(0);
 
 	// /test/row/col/data
-	UICell data = test.child("test(0)").child("col(0)").child("data(0)");
+	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
 	assertTrue(data.isCell());
-	assertEquals(document1URI+"/test(0)/row(0)/col(0)/data(0)", data.alt());
+	assertEquals(document1URI+"/test(0)/row(0)/col(0)/data(0)", data.id());
 	
 	data.hover();
 	assertTrue(data.isHighlighted());
@@ -133,6 +133,14 @@ public void relationShipFromContentToModelTest() {
 	
 	UICellModelEntry data2Model =  model.rootCellModel("test").get("row").get("col").get("data2");
 	assertFalse(data2Model.isHighlighted());
+	
+	UICell data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").child("data2(0)");
+	assertFalse(data2.isHighlighted());
+
+	data2.hover();
+	assertTrue(data2.isHighlighted());
+	assertTrue(data2Model.isHighlighted());
+	assertFalse(dataModel.isHighlighted());
 	
 }
 
