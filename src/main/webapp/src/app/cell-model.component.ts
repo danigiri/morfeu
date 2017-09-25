@@ -20,11 +20,15 @@ import { Observable } from 'rxjs/Observable';
 
 import { TreeNode } from 'angular-tree-component';
 
+import { Adoptable } from './adoptable.interface';
 import { Cell } from './cell.class';
+import { CellModel } from './cell-model.class';
 import { Widget } from './widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
+import { CellModelActivatedEvent } from './events/cell-model-activated.event';
+import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
 import { EventService } from './events/event.service';
 
 @Component({
@@ -33,17 +37,15 @@ import { EventService } from './events/event.service';
 	template: `
 		<div id="{{node.data.id}}" 
 		     class="cell-model-entry cell-model-level-{{node.level}}">
-			<img *ngIf="node.data.thumb=='DEFAULT'; else thumb" 
-				 src="assets/images/cell-thumb.svg" 
+			<img 
+				 src={{getThumb()}} 
 				 class="cell-model-thumb" 
 				 [class.cell-model-active]="active" 
+                 (mousedown)="clickDown(node.data)" 
+                 (mouseup)="clickUp(node.data)"
+                 (mouseenter)="clickDown(node.data)" 
+                 (mouseleave)="clickUp(node.data)"
 					/>
-			<ng-template #thumb>
-			<img src="{{node.data.thumb}}" 
-			     class="cell-model-thumb" 
-			     [class.cell-model-active]="active" 
-			/>
-			</ng-template>
 			<span class="cell-model-name">{{ node.data.name }}</span>
 		</div>
 		`,
@@ -85,26 +87,18 @@ ngOnInit() {
 	console.log("CellModelComponent::ngOnInit()");
 
 	this.subscribe(this.events.service.of( CellDeactivatedEvent )
-			.filter(deactivated => this.matchesWith(deactivated.cell))
+			.filter(deactivated => this.isCompatibleWith(deactivated.cell))
 			.subscribe( deactivated => {
 				console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
 				this.becomeInactive(deactivated.cell);
 	}));
 
 	this.subscribe(this.events.service.of( CellActivatedEvent )
-			.filter(activated => this.matchesWith(activated.cell))
+			.filter(activated => this.isCompatibleWith(activated.cell))
 			.subscribe( activated => {
 				console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
 				this.becomeActive(activated.cell);
 	}));
-	
-}
-
-
-becomeInactive(cell: Cell) {
-
-	console.log("[UI] CellModelComponent::becomeInactive()");
-	this.active = false;
 	
 }
 
@@ -117,8 +111,33 @@ becomeActive(cell: Cell) {
 }
 
 
-matchesWith(cell:Cell): boolean {
-    return cell.name==this.node.data.name && cell.cellModelURI==this.node.data.URI
+becomeInactive(cell: Cell) {
+
+	console.log("[UI] CellModelComponent::becomeInactive()");
+	this.active = false;
+	
+}
+
+
+clickDown(cellModel:CellModel) {
+    this.becomeActive(null);
+    this.events.service.publish(new CellModelActivatedEvent(cellModel));
+}
+
+
+clickUp(cellModel:CellModel) {
+    this.becomeInactive(null);
+    this.events.service.publish(new CellModelDeactivatedEvent(cellModel));    
+}
+
+
+isCompatibleWith(element:Adoptable): boolean {
+    return this.node.data.matches(element);
+}
+
+
+getThumb():string {
+    return (this.node.data.thumb=='DEFAULT') ? "assets/images/cell-thumb.svg" : this.node.data.thumb;
 }
 
 }

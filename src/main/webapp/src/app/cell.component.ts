@@ -17,11 +17,15 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 
+import { Adoptable } from './adoptable.interface';
 import { Cell } from './cell.class';
+import { CellModel } from './cell-model.class';
 import { Widget } from './widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
+import { CellModelActivatedEvent } from './events/cell-model-activated.event';
+import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
 import { EventService } from './events/event.service';
 
 
@@ -31,7 +35,6 @@ import { EventService } from './events/event.service';
 	template: `
 			<ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
 	            <!-- TODO: check the model and the content as well (counts, etc.) -->
-                <drop-area *ngIf="parent" [parent]="parent"></drop-area>
 				<img id="{{cell.URI}}"
 				     src="assets/images/cell.svg" 
 					 class="cell img-fluid cell-img cell-level-{{level}}"
@@ -40,15 +43,15 @@ import { EventService } from './events/event.service';
 					 (mouseup)="clickUp(cell)"
                      (mouseenter)="clickDown(cell)" 
                      (mouseleave)="clickUp(cell)"
-					 
 					 dnd-draggable [dragEnabled]="dragEnabled"
 					 />
+                <drop-area *ngIf="parent" [parent]="parent"></drop-area>
 			</ng-container>
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
 				     class="cell-level-{{level}} {{cellClass()}}"
-				     >
-	                    <drop-area *ngIf="cell.children.length==0" [parent]="cell"></drop-area>
+				     >{{cell.name}}
+	                    <drop-area  *ngIf="parent" [parent]="cell"></drop-area>
 						<cell *ngFor="let c of cell.children" 
 						[cell]="c" 
 						[parent]="cell" 
@@ -121,29 +124,66 @@ constructor(eventService: EventService) {
 
 
 ngOnInit() {
-	console.log("[UI] CellComponent::ngOnInit()");
+	
+    console.log("[UI] CellComponent::ngOnInit()");
+    
+    this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
+            .filter(d => this.isCompatibleWith(d.cellModel))
+            .subscribe( d => {
+                console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
+                this.becomeInactive(this.cell);
+    }));
+    
+    this.subscribe(this.events.service.of( CellModelActivatedEvent )
+            .filter(a => this.isCompatibleWith(a.cellModel))
+            .subscribe( a => {
+                console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+                this.becomeActive(this.cell);
+    }));
 }	 
 	   
 	
 clickDown(cell:Cell) {
 	
-	console.log("[UI] CellComponent::clickDown("+cell.URI+")");
-	this.active = true;
-	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
 	this.events.service.publish(new CellActivatedEvent(cell));
+	this.becomeActive(cell);
+	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
+	// to make that happen we can associate the cell-model.class with the component (view) and just do it
+	// without events
+	
+}
+
+	
+clickUp(cell:Cell) {
+
+    this.becomeInactive(cell);
+    this.events.service.publish(new CellDeactivatedEvent(cell));
+
+}
+	
+
+becomeActive(cell:Cell) {
+
+    console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
+    this.active = true;
 	this.dragEnabled = true;
 
 }
 
-clickUp(cell:Cell) {
-	
-	console.log("[UI] CellComponent::clickUp("+cell.URI+")");
-	this.active = false;   
-	this.events.service.publish(new CellDeactivatedEvent(cell));
-	this.dragEnabled = false;
 
+becomeInactive(cell: Cell) {
+
+    console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
+    this.active = false;
+	this.dragEnabled = false;
+    
 }
-	
+
+
+isCompatibleWith(element:Adoptable): boolean {
+    return this.cell.matches(element);
+}
+
 
 //TODO: depending on the level go from -md- to -xs- col styling
 //TODO: this function gets called and we should have an attribute or input to optimise the client stuff
@@ -160,7 +200,7 @@ cellClass() {
 }
 
 
-cellIsDroppable() {
+celIsDroppable() {
 	return this.cell.cellModel.presentation=="COL-WELL";
 }
 

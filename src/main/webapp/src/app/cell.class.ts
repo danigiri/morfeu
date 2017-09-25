@@ -14,12 +14,12 @@
  *	 limitations under the License.
  */
 
-import { CellHolder } from './cell-holder.interface';
+import { Adoptable } from './adoptable.interface';
 import { CellModel } from './cell-model.class';
 import { Model } from './model.class';
 
 
-export class Cell implements CellHolder {
+export class Cell implements Adoptable {
 
 attributes?: Cell[];
 children?: Cell[];
@@ -74,26 +74,41 @@ columnFieldValue():string {
 }
 
 
-canHaveAsChild(cell:Cell):boolean {
+getAdoptionName():string {
+    return this.name;
+}
+
+getAdoptionURI():string {
+    return this.cellModelURI;
+}
+
+
+matches(e:Adoptable):boolean {
+   return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
+}
+
+
+canAdopt(element:Adoptable):boolean {
  
-    let allowed:boolean = this.cellModel.canHaveAsChild(cell);
+    let allowed:boolean = this.cellModel.canAdopt(element); // we check the model first
     if (allowed) {
-        let matchingChildren:Cell[] = this.children.filter(c => c.name==cell.name 
-                                                                    && c.cellModelURI==cell.cellModelURI);
+        let matchingChildren:Cell[] = this.children.filter(c => c.matches(element));
+        
         let childCount:number = matchingChildren.length;
         if (childCount>0) {
             // we are not considering the problem of the childcount being less than the minimum
             //TODO: add are we able to remove this cell as child?
             let matchingCellModel:CellModel = matchingChildren[0].cellModel;
             if (matchingCellModel.maxOccurs) {
-                allowed = childCount < matchingCellModel.maxOccurs; // notice we use < 
+                allowed = childCount < matchingCellModel.maxOccurs; // notice we use '<' 
             }
         }
     }
-    
+
     return allowed;
-    
+        
 }
+
 
 
 private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell {

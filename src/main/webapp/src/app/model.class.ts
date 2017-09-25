@@ -14,12 +14,12 @@
  *	 limitations under the License.
  */
 
+import { Adoptable } from './adoptable.interface';
 import { Cell } from './cell.class';
-import { CellHolder } from './cell-holder.interface';
 import { CellModel, CellModelJSON } from './cell-model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
-export class Model implements CellHolder, SerialisableToJSON<Model, ModelJSON> {
+export class Model implements Adoptable, SerialisableToJSON<Model, ModelJSON> {
 
 public cellModels: CellModel[];
 
@@ -33,8 +33,23 @@ constructor(public schema: number,
 }
 
 
-canHaveAsChild(cell:Cell):boolean {
-    return this.cellModels.find(c => c.name==cell.name && c.URI==cell.cellModelURI)!=undefined;   
+getAdoptionName():string {
+    return this.name;
+}
+
+
+getAdoptionURI():string {
+    return this.URI;
+}
+
+
+matches(element:Adoptable):boolean {
+    return false;
+}
+
+
+canAdopt(element:Adoptable):boolean {
+    return this.cellModels.some(c => c.matches(element));   
 }
 
 

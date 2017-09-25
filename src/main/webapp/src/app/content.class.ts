@@ -14,13 +14,13 @@
  *	 limitations under the License.
  */
 
-import { CellHolder } from './cell-holder.interface';
+import { Adoptable } from './adoptable.interface';
 import { Cell, CellJSON } from './cell.class';
 import { Model } from './model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 
-export class Content implements CellHolder, SerialisableToJSON<Content, ContentJSON> {
+export class Content implements Adoptable, SerialisableToJSON<Content, ContentJSON> {
 	
 children?:Cell[];
 
@@ -33,8 +33,21 @@ associateWith(model: Model) {
 }
 
 // part of the drag and drop scaffolding, we return true if this cell can be one of the root cells
-canHaveAsChild(cell:Cell):boolean {
-    return this.children.find(c => c.name==cell.name && c.cellModelURI==cell.cellModelURI)!=undefined;
+getAdoptionName():string {
+    return "";
+}
+getAdoptionURI():string {
+    return "/";
+}
+
+
+matches(element:Adoptable):boolean {
+    return false;
+}
+
+
+canAdopt(element:Adoptable):boolean {
+    return this.children.some(c => c.canAdopt(element));
 }
 
 

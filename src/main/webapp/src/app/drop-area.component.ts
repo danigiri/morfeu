@@ -17,12 +17,14 @@
 
 import { Component, Input, OnInit } from '@angular/core'; 
 
+import { Adoptable } from './adoptable.interface';
 import { Cell } from './cell.class';
-import { CellHolder } from './cell-holder.interface';
 import { Widget } from './widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
+import { CellModelActivatedEvent } from './events/cell-model-activated.event';
+import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
 import { EventService } from './events/event.service';
 
 
@@ -32,16 +34,16 @@ import { EventService } from './events/event.service';
 	template: `
 			<div class="drop-area" 
 				 [class.drop-area-active]="active" 
-				 [class.drop-area-inactive]="!active">&nbsp;</div>
+				 [class.drop-area-inactive]="!active"></div>
 		`,
 	styles:[`
 				.drop-area {
-	                padding-top: 1px;
-	                padding-bottom: 1px;
-                    border: 2px dotted #000;
-                    border-radius: 5px;
+	                padding-top: 10px;
+	                padding-bottom: 10px;
 				}
 				.drop-area-active {
+                    padding-top: 8px;
+                    padding-bottom: 8px;
 					border: 2px dotted #0f0;
 					opacity: 0.8;
 				}
@@ -56,7 +58,7 @@ import { EventService } from './events/event.service';
 
 export class DropAreaComponent extends Widget implements OnInit {
 
-@Input() parent: CellHolder;
+@Input() parent: Adoptable;
 
 active: boolean = false;;
 
@@ -67,28 +69,48 @@ constructor(eventService: EventService) {
 	
 
 ngOnInit() {
+    
     console.log("DropAreaComponent::ngOnInit()");
+    
+    // we check for null of parent as we're not getting the binding set at the beginning for some reason
     
     this.subscribe(this.events.service.of( CellDeactivatedEvent )
             .subscribe(deactivated => {
-                if (this.parent.canHaveAsChild(deactivated.cell)) {
+                if (this.parent && this.parent.canAdopt(deactivated.cell)) {
                     console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
-                    this.becomeInactive(deactivated.cell);
+                    this.becomeInactive();
                 }
     }));
  
     this.subscribe(this.events.service.of( CellActivatedEvent )
             .subscribe( activated => {
-                if (this.parent.canHaveAsChild(activated.cell)) {
-                    console.log("-> drop-area component gets cell activated event for '"+activated.cell.name+"'");
-                    this.becomeActive(activated.cell);
+                if (this.parent && this.parent.canAdopt(activated.cell)) {
+                    console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
+                    this.becomeActive();
                 }
     }));
+    
+    this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
+            .subscribe( d => {
+                if (this.parent && this.parent.canAdopt(d.cellModel)) {
+                    console.log("-> drop comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
+                    this.becomeInactive();
+                }
+    }));
+    
+    this.subscribe(this.events.service.of( CellModelActivatedEvent )
+            .subscribe( a => {
+                if (this.parent && this.parent.canAdopt(a.cellModel)) {
+                    console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+                    this.becomeActive();
+                }
+    }));
+    
     
 }
 
 
-becomeInactive(cell:Cell) {
+becomeInactive() {
 
     console.log("[UI] DropAreaComponent::becomeInactive()");
     this.active = false;
@@ -96,7 +118,7 @@ becomeInactive(cell:Cell) {
 }
 
 
-becomeActive(cell: Cell) {
+becomeActive() {
 
     console.log("[UI] DropAreaComponent::becomeActive()");
     this.active = true;

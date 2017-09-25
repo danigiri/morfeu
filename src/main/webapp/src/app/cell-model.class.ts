@@ -14,12 +14,12 @@
  *	 limitations under the License.
  */
 
+import { Adoptable } from './adoptable.interface';
 import { Cell } from './cell.class';
-import { CellHolder } from './cell-holder.interface';
 import { Type_ } from './type_.class';
 
 
-export class CellModel implements CellHolder {
+export class CellModel implements Adoptable {
 
 id: string;
 isExpanded: boolean;
@@ -40,9 +40,7 @@ constructor(public schema: number,
 			public minOccurs: number,
 			public maxOccurs?: number
 			) {	
-
 	this.init();
-
 }	 
 
 
@@ -54,9 +52,23 @@ init() {
 
 }
 
-// if we are semantically allowed
-canHaveAsChild(cell:Cell):boolean {
-    return this.children.find(c => c.name==cell.name && c.URI==cell.cellModelURI)!=undefined;   
+getAdoptionName():string {
+    return this.name;
+}
+
+
+getAdoptionURI():string {
+    return this.URI;
+}
+
+
+matches(e:Adoptable):boolean {
+    return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
+}
+    
+
+canAdopt(element:Adoptable):boolean {
+    return this.children.some(c => c.matches(element));
 }
 
 

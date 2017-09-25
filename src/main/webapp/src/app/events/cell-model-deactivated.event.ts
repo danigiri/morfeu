@@ -14,13 +14,16 @@
  *	 limitations under the License.
  */
 
-import { Cell } from './cell.class';
-
-export interface CellHolder {
-    
-canHaveAsChild(cell:Cell):boolean;
-
-//canRemoveAsChild(cell:Cell):boolean;
+import { CellModel } from '../cell-model.class';
 
 
+export class CellModelDeactivatedEvent {
+
+constructor(public cellModel: CellModel) {}
+
+
+public toString = () : string => {
+	return "CellModelDeactivatedEvent:{cellModel:'"+this.cellModel.URI+"'}";
+}
+	
 }

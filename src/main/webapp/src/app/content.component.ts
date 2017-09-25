@@ -40,7 +40,7 @@ import { EventService } from './events/event.service';
 	<div class="panel panel-default" *ngIf="content">
 		<div id="content" class="panel-body">
 			<drop-area [parent]="model"></drop-area> 
-			<cell *ngFor="let cell of content.children" [cell]="cell" [level]="1"></cell>
+			<cell *ngFor="let cell of content.children" [parent]="content" [cell]="cell" [level]="1"></cell>
 			<!-- TODO: static checks using the model and not what's already present (cells) -->
 		</div>
 	</div>
