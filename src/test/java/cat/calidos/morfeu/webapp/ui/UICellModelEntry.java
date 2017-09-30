@@ -51,7 +51,7 @@ public UIWidget<UICellModelEntry> click() {
 
 public UIWidget<UICellModelEntry> clickOnArrow() {
 	
-	element.$(".toggle-children").click();
+	element.$(".toggle-children").scrollTo().click();
 	
 	return this;
 	

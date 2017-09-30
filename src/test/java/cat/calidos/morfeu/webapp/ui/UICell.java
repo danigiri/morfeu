@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Condition.*;
 
 /**
 * @author daniel giribet
@@ -43,7 +44,13 @@ public UICell(SelenideElement element, int level) {
 
 public UICell hover() {
 
-	element.hover();
+	element.scrollTo().hover();
+//	try {
+//		Thread.sleep(10);
+//	} catch (InterruptedException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
 	
 	return this;
 	
@@ -84,10 +91,22 @@ public List<UICell> children() {
 	return element.$$(".cell-level-"+(level+1)).stream().map(e -> new UICell(e, level+1)).collect(Collectors.toList());
 }
 
-// clever hack: uris are doc/foo(0)/bar(0), to look for 'bar(0)' we go for "/bar(0)$"
+
+// clever-ish: uris are doc/foo(0)/bar(0), to look for 'bar(0)' we check for "/bar(0)$"
 public UICell child(String name) {
 	return children().stream().filter(c -> c.id().endsWith("/"+name)).findAny().get();
 }
+
+
+public List<UIDropArea> dropAreas() {
+	return element.$$(".drop-area").stream().map(e -> new UIDropArea(e)).collect(Collectors.toList());
+}
+
+
+public UIDropArea dropArea(int i) {
+	return dropAreas().get(i);
+}
+
 
 /** id is where we store the cell URI*/
 public String id() {
@@ -96,6 +115,8 @@ public String id() {
 
 
 public boolean isHighlighted() {
+	//element.waitUntil(cssClass(ACTIVE), 100);
+	//return element.shouldHave(cssClass(ACTIVE)).exists();
 	return element.attr(CLASS).contains(ACTIVE);
 }
 

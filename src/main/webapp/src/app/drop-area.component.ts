@@ -48,7 +48,7 @@ import { EventService } from './events/event.service';
 					opacity: 0.8;
 				}
 				.drop-area-inactive {
-					opacity: 0;
+					opacity: 0.01;
 				}
 			`],
 	providers:[

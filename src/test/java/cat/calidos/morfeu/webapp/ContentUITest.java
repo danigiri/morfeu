@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -32,6 +33,7 @@ import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UICellModelEntry;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 import cat.calidos.morfeu.webapp.ui.UIDocument;
+import cat.calidos.morfeu.webapp.ui.UIDropArea;
 import cat.calidos.morfeu.webapp.ui.UIModel;
 
 /**
@@ -39,11 +41,15 @@ import cat.calidos.morfeu.webapp.ui.UIModel;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUITest extends UITezt {
 
+@Before
+public void setup() {
+	
+	open(appBaseURL);
+	
+}
 
 //@Test
 public void contentTestAppearingAndDisappearing() {
-	
-	open(appBaseURL);
 
 	UIContent.shouldNotBeVisible();
 	
@@ -65,8 +71,6 @@ public void contentTestAppearingAndDisappearing() {
 
 //@Test
 public void contentTest() {
-
-	open(appBaseURL);
 
 	UIContent content = UICatalogues.openCatalogues()
 										.shouldAppear()
@@ -104,12 +108,10 @@ public void contentTest() {
 
 
 @Test
-public void relationShipFromContentToModelTest() {
+public void relationshipFromContentToModelTest() {
 
 	String document1URI = "target/test-classes/test-resources/documents/document1.xml";
 	
-	open(appBaseURL);
-
 	UIDocument document = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)
@@ -143,5 +145,51 @@ public void relationShipFromContentToModelTest() {
 	assertFalse(dataModel.isHighlighted());
 	
 }
+
+
+@Test
+public void relationshipFromModelToContentTest() {
+	// CONTINUE HERE
+}
+
+@Test
+public void dropAreasTest() {
+	UIDocument document = UICatalogues.openCatalogues()
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1");
+	UIContent content = document.content();
+	content.shouldBeVisible();
+	UICell test = content.rootCells().get(0);
+
+	// we check that we have two drop areas, first inactive
+	UICell col = test.child("row(0)").child("col(0)");
+	List<UIDropArea> dropAreas = col.dropAreas();
+	assertEquals(2, dropAreas.size());
+	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
+	
+	// we hover over the data cell and we activate both drop areas
+	UICell data = col.child("data(0)");
+	assertTrue(data.isCell());
+	data.hover();
+	assertTrue(data.isHighlighted());
+	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
+	
+	
+	// in this column we have a data2, which means that we can only have one of those on each col
+	col = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
+	dropAreas = col.dropAreas();
+	
+	data.hover();
+	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
+	
+	UICell data2 = col.child("data2(0)");
+	data2.hover();
+	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
+	
+}
+
+
+
 
 }
