@@ -149,11 +149,28 @@ public void relationshipFromContentToModelTest() {
 
 @Test
 public void relationshipFromModelToContentTest() {
-	// CONTINUE HERE
+	
+	UIDocument document = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1");
+	
+	UIContent content = document.content();
+	content.shouldBeVisible();
+	UICell test = content.rootCells().get(0);
+	UIModel model = document.model();
+	
+	UICellModelEntry rowModel = model.rootCellModel("test").get("row").hover();
+	assertTrue(rowModel.isHighlighted());
+	
+	assertTrue(test.dropArea(0).isActive());
+	
 }
+
 
 @Test
 public void dropAreasTest() {
+	
 	UIDocument document = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)

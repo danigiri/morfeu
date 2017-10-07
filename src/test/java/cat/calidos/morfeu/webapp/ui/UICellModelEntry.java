@@ -58,6 +58,15 @@ public UIWidget<UICellModelEntry> clickOnArrow() {
 }
 
 
+public UICellModelEntry hover() {
+
+	element.$(".cell-model-thumb").scrollTo().hover();
+	
+	return this;
+	
+}
+
+
 public String name() {
 	return element.$(".cell-model-name").getText();
 }
