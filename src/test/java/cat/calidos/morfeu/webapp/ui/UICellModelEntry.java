@@ -89,7 +89,7 @@ public List<UICellModelEntry> children() {
 }
 
 
-public UICellModelEntry get(String name) {
+public UICellModelEntry child(String name) {
 	return children().stream().filter((UICellModelEntry cme ) -> cme.name().equals(name)).findAny().get();
 }
 

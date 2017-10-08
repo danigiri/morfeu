@@ -130,10 +130,10 @@ public void relationshipFromContentToModelTest() {
 	
 	UIModel model = document.model();
 	//test/row/col/data
-	UICellModelEntry dataModel = model.rootCellModel("test").get("row").get("col").get("data");
+	UICellModelEntry dataModel = model.rootCellModel("test").child("row").child("col").child("data");
 	assertTrue(dataModel.isHighlighted());
 	
-	UICellModelEntry data2Model =  model.rootCellModel("test").get("row").get("col").get("data2");
+	UICellModelEntry data2Model =  model.rootCellModel("test").child("row").child("col").child("data2");
 	assertFalse(data2Model.isHighlighted());
 	
 	UICell data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").child("data2(0)");
@@ -160,10 +160,15 @@ public void relationshipFromModelToContentTest() {
 	UICell test = content.rootCells().get(0);
 	UIModel model = document.model();
 	
-	UICellModelEntry rowModel = model.rootCellModel("test").get("row").hover();
+	UICellModelEntry rowModel = model.rootCellModel("test").child("row").hover();
 	assertTrue(rowModel.isHighlighted());
-	
 	assertTrue(test.dropArea(0).isActive());
+
+	// data2 has count restrictions so we'll not activate a col where a data2 child is already present
+	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2").hover();
+	assertTrue(data2Model.isHighlighted());
+	assertTrue(test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").dropArea(0).isActive());
+	assertFalse(test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").dropArea(0).isActive());
 	
 }
 
