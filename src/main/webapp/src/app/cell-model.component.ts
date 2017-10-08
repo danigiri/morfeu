@@ -20,9 +20,10 @@ import { Observable } from 'rxjs/Observable';
 
 import { TreeNode } from 'angular-tree-component';
 
-import { Adoptable } from './adoptable.interface';
+
 import { Cell } from './cell.class';
 import { CellModel } from './cell-model.class';
+import { FamilyMember } from './family-member.interface';
 import { Widget } from './widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
@@ -89,14 +90,14 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellDeactivatedEvent )
 			.filter(deactivated => this.isCompatibleWith(deactivated.cell))
 			.subscribe( deactivated => {
-				console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
+				//console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
 				this.becomeInactive(deactivated.cell);
 	}));
 
 	this.subscribe(this.events.service.of( CellActivatedEvent )
 			.filter(activated => this.isCompatibleWith(activated.cell))
 			.subscribe( activated => {
-				console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
+				//console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
 				this.becomeActive(activated.cell);
 	}));
 	
@@ -105,7 +106,7 @@ ngOnInit() {
 
 becomeActive(cell: Cell) {
 
-	console.log("[UI] CellModelComponent::becomeActive()");
+	//console.log("[UI] CellModelComponent::becomeActive()");
 	this.active = true;
 	
 }
@@ -113,7 +114,7 @@ becomeActive(cell: Cell) {
 
 becomeInactive(cell: Cell) {
 
-	console.log("[UI] CellModelComponent::becomeInactive()");
+	//console.log("[UI] CellModelComponent::becomeInactive()");
 	this.active = false;
 	
 }
@@ -131,7 +132,7 @@ clickUp(cellModel:CellModel) {
 }
 
 
-isCompatibleWith(element:Adoptable): boolean {
+isCompatibleWith(element:FamilyMember): boolean {
     return this.node.data.matches(element);
 }
 

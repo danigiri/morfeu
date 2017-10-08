@@ -15,17 +15,17 @@
  */
 
 
-export interface Adoptable {
+export interface FamilyMember {
 
 getAdoptionName():string;
 
 getAdoptionURI():string;
 
 // are we the same?
-matches(e:Adoptable):boolean;
+matches(e:FamilyMember):boolean;
 
-// can we mutate to adopt this element?
-canAdopt(element:Adoptable):boolean;
+// can we mutate this 'family' to adopt this new family member?
+canAdopt(newMember:FamilyMember):boolean;
 
 //canRemoveAsChild(cell:Cell):boolean;
 

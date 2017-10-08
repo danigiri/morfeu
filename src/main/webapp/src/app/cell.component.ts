@@ -17,7 +17,7 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Adoptable } from './adoptable.interface';
+import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
 import { CellModel } from './cell-model.class';
 import { Widget } from './widget.class';
@@ -39,23 +39,28 @@ import { EventService } from './events/event.service';
 				     src="assets/images/cell.svg" 
 					 class="cell img-fluid cell-img cell-level-{{level}}"
 					 [class.cell-active]="active"  
-					 (mousedown)="clickDown(cell)" 
-					 (mouseup)="clickUp(cell)"
-                     (mouseenter)="clickDown(cell)" 
-                     (mouseleave)="clickUp(cell)"
-					 dnd-draggable [dragEnabled]="dragEnabled"
+                     (mouseenter)="focusOn(cell)" 
+                     (mouseleave)="focusOff(cell)"
+					 dnd-draggable 
+					 [dragEnabled]="dragEnabled"
+                     (onDragStart)="dragStart(cell)"
+					 (onDragEnd)="dragEnd(cell)"
+					 (onDragSuccess)="dragSuccess(cell)"
+					 [dragData]="cell"
 					 />
-                <drop-area *ngIf="parent" [parent]="parent"></drop-area>
+                <drop-area *ngIf="parent" [parent]="parent" [position]="position"></drop-area>
 			</ng-container>
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
 				     class="cell-level-{{level}} {{cellClass()}}"
 				     >{{cell.name}}
-	                    <drop-area  *ngIf="parent" [parent]="cell"></drop-area>
-						<cell *ngFor="let c of cell.children" 
-						[cell]="c" 
-						[parent]="cell" 
-						[level]="level+1"></cell>
+	                    <drop-area  *ngIf="parent" [parent]="cell" position="0"></drop-area>
+						<cell *ngFor="let c of cell.children; let i=index" 
+    						[cell]="c" 
+    						[parent]="cell" 
+    						[level]="level+1"
+    						[position]="i+1"
+    						></cell>
 			</div>
 			</ng-template>
 	`,
@@ -69,8 +74,8 @@ import { EventService } from './events/event.service';
 				height: auto;
 			}
 			.show-grid	{
-				padding-top: 10px;
-				padding-bottom: 10px;
+				padding-top: 5px;
+				padding-bottom: 5px;
 				background-color: #ddd;
 				background-color: rgba(86, 62, 128, .15);
 				border: 2px solid #ccc;
@@ -113,9 +118,11 @@ export class CellComponent extends Widget implements OnInit {
 @Input() parent?: Cell;
 @Input() cell: Cell;
 @Input() level: number;
+@Input() position: number;
 
 active: boolean = false;
 dragEnabled:boolean = false;
+//isBeingDragged:boolean = false;
 
 
 constructor(eventService: EventService) {
@@ -143,8 +150,9 @@ ngOnInit() {
 }	 
 	   
 	
-clickDown(cell:Cell) {
+focusOn(cell:Cell) {
 	
+	console.log("[UI] CellComponent::focusOn()");
 	this.events.service.publish(new CellActivatedEvent(cell));
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -154,17 +162,35 @@ clickDown(cell:Cell) {
 }
 
 	
-clickUp(cell:Cell) {
+focusOff(cell:Cell) {
 
+    console.log("[UI] CellComponent::focusOff()");
     this.becomeInactive(cell);
     this.events.service.publish(new CellDeactivatedEvent(cell));
 
 }
-	
+
+
+dragStart(cell:Cell) {
+    console.log("[UI] CellComponent::dragStart()");
+    //this.isBeingDragged = true;
+}
+
+
+dragEnd(cell:Cell) {
+    console.log("[UI] CellComponent::dragEnd()");
+   // this.isBeingDragged = false;
+    this.focusOff(cell);
+}
+
+
+dragSuccess(cell:Cell) {
+    console.log("[UI] CellComponent::dragSuccess()");
+}
 
 becomeActive(cell:Cell) {
 
-    console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
+    //console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
     this.active = true;
 	this.dragEnabled = true;
 
@@ -173,14 +199,14 @@ becomeActive(cell:Cell) {
 
 becomeInactive(cell: Cell) {
 
-    console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
+    //console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
     this.active = false;
 	this.dragEnabled = false;
     
 }
 
 
-isCompatibleWith(element:Adoptable): boolean {
+isCompatibleWith(element:FamilyMember): boolean {
     return this.cell.matches(element);
 }
 

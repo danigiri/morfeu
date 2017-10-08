@@ -17,7 +17,7 @@
 
 import { Component, Input, OnInit } from '@angular/core'; 
 
-import { Adoptable } from './adoptable.interface';
+import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
 import { Widget } from './widget.class';
 
@@ -33,8 +33,12 @@ import { EventService } from './events/event.service';
 	selector: 'drop-area',
 	template: `
 			<div class="drop-area" 
-				 [class.drop-area-active]="active" 
-				 [class.drop-area-inactive]="!active"></div>
+				 [class.drop-area-active]="active_" 
+				 [class.drop-area-inactive]="!active_"
+				 dnd-droppable
+				 [allowDrop]="isActive"
+				 (onDropSuccess)="dropSuccess($event)"				 
+				 >{{position}}</div>
 		`,
 	styles:[`
 				.drop-area {
@@ -58,13 +62,16 @@ import { EventService } from './events/event.service';
 
 export class DropAreaComponent extends Widget implements OnInit {
 
-@Input() parent: Adoptable;
+@Input() parent: FamilyMember;
+@Input() position: number;
 
-active: boolean = false;;
+active_: boolean = false;
 
 
 constructor(eventService: EventService) {
+
     super(eventService);   
+
 }
 	
 
@@ -111,18 +118,31 @@ ngOnInit() {
 
 
 becomeInactive() {
-
     console.log("[UI] DropAreaComponent::becomeInactive()");
-    this.active = false;
-
+    //this.active_ = false;
+    this.active_ = true;
 }
 
 
 becomeActive() {
+    this.active_ = true;
+}
 
-    console.log("[UI] DropAreaComponent::becomeActive()");
-    this.active = true;
-    
+
+isActive():boolean {
+    //console.log("[UI] DropAreaComponent::isActive("+this.active_+")");
+    if (this.active_===undefined) {
+        this.active_=false;
+    }
+    //   return true;
+    return this.active_;
+}
+
+
+dropSuccess($event: any) {
+
+    console.log("[UI] DropAreaComponent::dropSuccess("+$event.dragData.URI+")");
+
 }
 
 }

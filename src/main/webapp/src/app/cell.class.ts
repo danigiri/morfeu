@@ -14,17 +14,17 @@
  *	 limitations under the License.
  */
 
-import { Adoptable } from './adoptable.interface';
+import { FamilyMember } from './family-member.interface';
 import { CellModel } from './cell-model.class';
 import { Model } from './model.class';
 
 
-export class Cell implements Adoptable {
+export class Cell implements FamilyMember {
 
 attributes?: Cell[];
 children?: Cell[];
 cellModel?: CellModel;
-	
+parent?: Cell;
 
 constructor(public schema: number,
 			public URI: string,
@@ -57,6 +57,10 @@ attribute(name:string):string {
 
 }
 
+position(): number {
+    return 0;
+}
+
 
 // we look for a field that has representation of COL-FIELD or 1 as default
 columnFieldValue():string {
@@ -83,16 +87,16 @@ getAdoptionURI():string {
 }
 
 
-matches(e:Adoptable):boolean {
+matches(e:FamilyMember):boolean {
    return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
 
 
-canAdopt(element:Adoptable):boolean {
+canAdopt(newMember:FamilyMember):boolean {
  
-    let allowed:boolean = this.cellModel.canAdopt(element); // we check the model first
+    let allowed:boolean = this.cellModel.canAdopt(newMember); // we check the model first
     if (allowed) {
-        let matchingChildren:Cell[] = this.children.filter(c => c.matches(element));
+        let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
         
         let childCount:number = matchingChildren.length;
         if (childCount>0) {
