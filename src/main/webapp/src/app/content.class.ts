@@ -14,14 +14,14 @@
  *	 limitations under the License.
  */
 
-
+import { Adopter } from './adopter.interface';
 import { Cell, CellJSON } from './cell.class';
 import { FamilyMember } from './family-member.interface';
 import { Model } from './model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 
-export class Content implements FamilyMember, SerialisableToJSON<Content, ContentJSON> {
+export class Content implements FamilyMember, Adopter, SerialisableToJSON<Content, ContentJSON> {
 	
 children?:Cell[];
 
@@ -49,6 +49,15 @@ matches(element:FamilyMember):boolean {
 
 canAdopt(newMember:FamilyMember):boolean {
     return this.children.some(c => c.canAdopt(newMember));
+}
+
+
+adopt(newCell:Cell, position:number) {
+    //TODO: to be implemented
+}
+
+removeChild(child:Cell) {
+    //TODO: to be implemented
 }
 
 

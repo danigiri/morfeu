@@ -14,12 +14,13 @@
  *	 limitations under the License.
  */
 
+import { Adopter } from './adopter.interface';
 import { FamilyMember } from './family-member.interface';
 import { CellModel } from './cell-model.class';
 import { Model } from './model.class';
 
 
-export class Cell implements FamilyMember {
+export class Cell implements FamilyMember, Adopter {
 
 attributes?: Cell[];
 children?: Cell[];
@@ -79,6 +80,7 @@ getAdoptionName():string {
     return this.name;
 }
 
+
 getAdoptionURI():string {
     return this.cellModelURI;
 }
@@ -111,6 +113,77 @@ canAdopt(newMember:FamilyMember):boolean {
 }
 
 
+adopt(newMember:Cell, position:number) {
+    
+    if (newMember.parent) {
+        newMember.parent.removeChild(newMember);
+    }
+    
+    newMember.parent = this;
+    newMember.setPosition(position);
+    
+    if (!this.children) {
+        this.children = [newMember];
+    } else if (this.children.length<=position) { //> //> // works for empty list and also append at the end
+        this.children.push(newMember);
+    } else {
+    
+        let newChildren:Cell[] = [];
+        let i:number = 0;
+        this.children.forEach(c => {
+            if (i<position) { //>
+                newChildren.push(c);
+            } else if (i==position) {
+                newChildren.push(newMember);
+                i++;
+                newChildren.push(c.setPosition(i));    // the immediately following has a new position of +1
+            } else {
+                newChildren.push(c.setPosition(i));    // we set the rest of children to the new position
+            }
+            i++;
+        });
+        this.children = newChildren;
+
+    }
+
+}
+
+
+removeChild(child:Cell) {
+
+    let position:number = child.position;
+    let newChildren:Cell[] = [];
+    let i:number = 0;
+    this.children.forEach(c => {
+        if (i<position) { //>
+            newChildren.push(c);
+        } else if (i>position) {
+            newChildren.push(c.setPosition(i-1));    // we set the following children to the new position
+        }
+        i++;
+    });       
+    this.children = newChildren;
+ 
+}
+     
+setPosition(position:number):Cell {
+
+    this.position = position;
+    this.URI = this.parent.URI+"/"+this.name+"("+position+")";
+    if (this.attributes) {
+        this.attributes = this.attributes.map(c => {
+            c.URI = c.URI+"@"+c.name;
+            return c;
+        });
+    }
+    if (this.children) {
+        this.children = this.children.map(c => c.setPosition(position));
+    }
+      
+    return this;
+
+}
+                    
 
 private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell {
 

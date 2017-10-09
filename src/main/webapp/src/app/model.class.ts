@@ -14,12 +14,12 @@
  *	 limitations under the License.
  */
 
-import { Adoptable } from './adoptable.interface';
+import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
 import { CellModel, CellModelJSON } from './cell-model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
-export class Model implements Adoptable, SerialisableToJSON<Model, ModelJSON> {
+export class Model implements FamilyMember, SerialisableToJSON<Model, ModelJSON> {
 
 public cellModels: CellModel[];
 
@@ -43,14 +43,17 @@ getAdoptionURI():string {
 }
 
 
-matches(element:Adoptable):boolean {
+matches(element:FamilyMember):boolean {
     return false;
 }
 
 
-canAdopt(element:Adoptable):boolean {
+canAdopt(element:FamilyMember):boolean {
     return this.cellModels.some(c => c.matches(element));   
 }
+
+
+adopt(newMember:Cell, position:number) {}
 
 
 // check out this excellent post http://choly.ca/post/typescript-json/ to find out how to deserialize objects

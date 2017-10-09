@@ -44,9 +44,7 @@ import { EventService } from './events/event.service';
                      (mouseleave)="focusOff(cell)"
 					 dnd-draggable 
 					 [dragEnabled]="dragEnabled"
-                     (onDragStart)="dragStart(cell)"
 					 (onDragEnd)="dragEnd(cell)"
-					 (onDragSuccess)="dragSuccess(cell)"
 					 [dragData]="cell"
 					 />
                 <drop-area *ngIf="parent" [parent]="parent" [position]="position"></drop-area>
@@ -138,10 +136,10 @@ ngOnInit() {
     this.subscribe(this.events.service.of( DropCellEvent )
             .filter(dc => dc.newParent==this.cell)
             .subscribe( dc => {
-                console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to "
-                            +dc.newParent.getAdoptionURI()+"("
+                console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to  "
+                            +this.cell.URI+"("
                             +dc.newPosition+")'");
-                
+                this.adoptCellAtPosition(dc.cell, dc.newPosition)
     }));
     
     this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
@@ -181,21 +179,15 @@ focusOff(cell:Cell) {
 }
 
 
-dragStart(cell:Cell) {
-    //console.log("[UI] CellComponent::dragStart()");
-    //this.isBeingDragged = true;
-}
-
-
 dragEnd(cell:Cell) {
     //console.log("[UI] CellComponent::dragEnd()");
    // this.isBeingDragged = false;
     this.focusOff(cell);
 }
 
-
-dragSuccess(cell:Cell) {
-    //console.log("[UI] CellComponent::dragSuccess()");
+adoptCellAtPosition(newCell:Cell, position:number) {
+    console.log("[UI] CellComponent::adoptCellAtPosition()");
+    this.cell.adopt(newCell, position);
 }
 
 becomeActive(cell:Cell) {

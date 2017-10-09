@@ -142,8 +142,8 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 		if (childElem.getParentNode()==node) {			// Only handle the current element children!!! (SLOW!)
 			String childName = childElem.getTagName();
 			CellModel childCellModel = findChildWithName(cellModel, childName);
-			String childIndexedName = childName+"("+nodeIndex+")";	// to name each children differently and for the URI
-			URI childURI = cellURI(uri, cellModel, childIndexedName);
+			String childIndexedName = childName+"("+nodeIndex+")";	// to name children differently and for the URI
+			URI childURI = cellURI(uri, cellModel, "/"+childIndexedName);	// foo(1)/bar(0)
 			Cell childCell = DaggerCellComponent.builder()
 													.withURI(childURI)
 													.fromNode(childElem)
@@ -221,7 +221,7 @@ private static CellModel findChildWithName(ComplexCellModel cellModel, String ch
 private static URI cellURI(URI uri, CellModel cellModel, String childName) throws RuntimeException {
 
 	try {
-		return new URI(uri+"/"+childName);
+		return new URI(uri+childName);
 	} catch (URISyntaxException e) {
 		log.error("Child '{}' could not build uri of '{}'", childName, cellModel.getName());
 		throw new RuntimeException("Wrong uri for cell", e);

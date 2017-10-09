@@ -14,6 +14,7 @@
  *	 limitations under the License.
  */
 
+import { Cell } from './cell.class';
 
 export interface FamilyMember {
 
@@ -21,13 +22,14 @@ getAdoptionName():string;
 
 getAdoptionURI():string;
 
-// are we the same?
+// are we the same? (used to highlight siblings)
 matches(e:FamilyMember):boolean;
 
-// can we mutate this 'family' to adopt this new family member?
+// can we adopt this new family member?
 canAdopt(newMember:FamilyMember):boolean;
 
 //canRemoveAsChild(cell:Cell):boolean;
 
+// TODO: this can probably be moved to an interface implemented by mutable objects only
 
 }

@@ -14,12 +14,13 @@
  *	 limitations under the License.
  */
 
-import { Adoptable } from './adoptable.interface';
+
 import { Cell } from './cell.class';
+import { FamilyMember } from './family-member.interface';
 import { Type_ } from './type_.class';
 
 
-export class CellModel implements Adoptable {
+export class CellModel implements FamilyMember {
 
 id: string;
 isExpanded: boolean;
@@ -62,12 +63,12 @@ getAdoptionURI():string {
 }
 
 
-matches(e:Adoptable):boolean {
+matches(e:FamilyMember):boolean {
     return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
     
 
-canAdopt(element:Adoptable):boolean {
+canAdopt(element:FamilyMember):boolean {
     return this.children.some(c => c.matches(element));
 }
 
