@@ -25,6 +25,7 @@ import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
+import { DropCellEvent } from './events/drop-cell.event';
 import { EventService } from './events/event.service';
 
 
@@ -33,21 +34,21 @@ import { EventService } from './events/event.service';
 	selector: 'drop-area',
 	template: `
 			<div class="drop-area" 
-				 [class.drop-area-active]="active_" 
-				 [class.drop-area-inactive]="!active_"
+				 [class.drop-area-active]="active" 
+				 [class.drop-area-inactive]="!active"
 				 dnd-droppable
-				 [allowDrop]="isActive"
+				 [dropEnabled]="active"
 				 (onDropSuccess)="dropSuccess($event)"				 
-				 >{{position}}</div>
+				 ><small>{{position}}</small></div>
 		`,
 	styles:[`
 				.drop-area {
-	                padding-top: 10px;
-	                padding-bottom: 10px;
+	                padding-top: 2px;
+	                padding-bottom: 2px;
 				}
 				.drop-area-active {
-                    padding-top: 8px;
-                    padding-bottom: 8px;
+                    padding-top: 0px;
+                    padding-bottom: 0px;
 					border: 2px dotted #0f0;
 					opacity: 0.8;
 				}
@@ -65,7 +66,7 @@ export class DropAreaComponent extends Widget implements OnInit {
 @Input() parent: FamilyMember;
 @Input() position: number;
 
-active_: boolean = false;
+active: boolean = false;
 
 
 constructor(eventService: EventService) {
@@ -80,11 +81,11 @@ ngOnInit() {
     console.log("DropAreaComponent::ngOnInit()");
     
     // we check for null of parent as we're not getting the binding set at the beginning for some reason
-    
+    // IDEA: we could use the function of the drop enabled (gets cell as input) though it's less interactive
     this.subscribe(this.events.service.of( CellDeactivatedEvent )
             .subscribe(deactivated => {
                 if (this.parent && this.parent.canAdopt(deactivated.cell)) {
-                    console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
+                    //console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
                     this.becomeInactive();
                 }
     }));
@@ -92,7 +93,7 @@ ngOnInit() {
     this.subscribe(this.events.service.of( CellActivatedEvent )
             .subscribe( activated => {
                 if (this.parent && this.parent.canAdopt(activated.cell)) {
-                    console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
+                    //console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
                     this.becomeActive();
                 }
     }));
@@ -100,7 +101,7 @@ ngOnInit() {
     this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
             .subscribe( d => {
                 if (this.parent && this.parent.canAdopt(d.cellModel)) {
-                    console.log("-> drop comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
+                    //console.log("-> drop comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
                     this.becomeInactive();
                 }
     }));
@@ -108,7 +109,7 @@ ngOnInit() {
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .subscribe( a => {
                 if (this.parent && this.parent.canAdopt(a.cellModel)) {
-                    console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+                    //console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
                     this.becomeActive();
                 }
     }));
@@ -118,24 +119,12 @@ ngOnInit() {
 
 
 becomeInactive() {
-    console.log("[UI] DropAreaComponent::becomeInactive()");
-    //this.active_ = false;
-    this.active_ = true;
+    this.active = false;
 }
 
 
 becomeActive() {
-    this.active_ = true;
-}
-
-
-isActive():boolean {
-    //console.log("[UI] DropAreaComponent::isActive("+this.active_+")");
-    if (this.active_===undefined) {
-        this.active_=false;
-    }
-    //   return true;
-    return this.active_;
+    this.active = true;
 }
 
 
@@ -143,6 +132,10 @@ dropSuccess($event: any) {
 
     console.log("[UI] DropAreaComponent::dropSuccess("+$event.dragData.URI+")");
 
+    // we need to create an event with the appropriate data
+    
+    this.events.service.publish(new DropCellEvent($event.dragData, this.parent, this.position));
+    
 }
 
 }

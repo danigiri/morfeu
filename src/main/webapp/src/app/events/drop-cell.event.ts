@@ -16,26 +16,18 @@
 
 import { Cell } from '../cell.class';
 //import { CellModel } from '../cell-model.class';
-import { Adoptable } from '../adoptable.interface';
+import { FamilyMember } from '../family-member.interface';
 
 export class DropCellEvent {
     
-constructor(public cell:Cell, 
-            public newParent: Adoptable, 
-            public newPosition: number,
-            public oldParent: Cell = undefined, 
-            public oldPosition:number = undefined) {}
+constructor(public cell:Cell, public newParent: FamilyMember, public newPosition: number) {}
 
 public toString = () : string => {
     
-    let s:string = "DropCellEvent:{cell:'"+this.cell.URI
+    return "DropCellEvent:{cell:'"+this.cell.URI
             +"', newParent:"+this.newParent.getAdoptionURI()
-            +"', newPosition:"+this.newPosition;
-    s = (this.oldParent) ? ", oldParent:"+this.oldParent.URI : "[new]";
-    s = (this.oldPosition) ? ", oldPosition:"+this.oldPosition : "";    
-    s = s+"}";
-    
-    return s;
+            +"', newPosition:"+this.newPosition +"}";
+
 }
 
 }

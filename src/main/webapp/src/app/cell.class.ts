@@ -25,6 +25,7 @@ attributes?: Cell[];
 children?: Cell[];
 cellModel?: CellModel;
 parent?: Cell;
+position?: number;
 
 constructor(public schema: number,
 			public URI: string,
@@ -55,10 +56,6 @@ attribute(name:string):string {
 	
 	return value;
 
-}
-
-position(): number {
-    return 0;
 }
 
 
@@ -207,8 +204,15 @@ static fromJSON(json: CellJSON|string):Cell {
 			cell = Object.assign(cell, {attributes: json.attributes.map(a => Cell.fromJSON(a))});
 		}
 
+		// we complete the children runtime information so we have the parent reference as well as position
 		if (json.children) {
-			cell = Object.assign(cell, {children: json.children.map(c => Cell.fromJSON(c))});
+		    let i:number = 0;
+		    cell = Object.assign(cell, {children: json.children.map(c => {
+			    let fullCell:Cell = Cell.fromJSON(c);
+			    fullCell.position = i++;
+			    fullCell.parent = cell;
+			    return fullCell;
+			})});
 		}
 		
 		return cell;

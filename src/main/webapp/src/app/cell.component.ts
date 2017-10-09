@@ -26,6 +26,7 @@ import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
+import { DropCellEvent } from './events/drop-cell.event';
 import { EventService } from './events/event.service';
 
 
@@ -53,7 +54,7 @@ import { EventService } from './events/event.service';
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
 				     class="cell-level-{{level}} {{cellClass()}}"
-				     >{{cell.name}}
+				     ><small>{{cell.name}}</small>
 	                    <drop-area  *ngIf="parent" [parent]="cell" position="0"></drop-area>
 						<cell *ngFor="let c of cell.children; let i=index" 
     						[cell]="c" 
@@ -134,6 +135,15 @@ ngOnInit() {
 	
     console.log("[UI] CellComponent::ngOnInit()");
     
+    this.subscribe(this.events.service.of( DropCellEvent )
+            .filter(dc => dc.newParent==this.cell)
+            .subscribe( dc => {
+                console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to "
+                            +dc.newParent.getAdoptionURI()+"("
+                            +dc.newPosition+")'");
+                
+    }));
+    
     this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
             .filter(d => this.isCompatibleWith(d.cellModel))
             .subscribe( d => {
@@ -152,7 +162,7 @@ ngOnInit() {
 	
 focusOn(cell:Cell) {
 	
-	console.log("[UI] CellComponent::focusOn()");
+    //console.log("[UI] CellComponent::focusOn()");
 	this.events.service.publish(new CellActivatedEvent(cell));
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -164,7 +174,7 @@ focusOn(cell:Cell) {
 	
 focusOff(cell:Cell) {
 
-    console.log("[UI] CellComponent::focusOff()");
+    //console.log("[UI] CellComponent::focusOff()");
     this.becomeInactive(cell);
     this.events.service.publish(new CellDeactivatedEvent(cell));
 
@@ -172,20 +182,20 @@ focusOff(cell:Cell) {
 
 
 dragStart(cell:Cell) {
-    console.log("[UI] CellComponent::dragStart()");
+    //console.log("[UI] CellComponent::dragStart()");
     //this.isBeingDragged = true;
 }
 
 
 dragEnd(cell:Cell) {
-    console.log("[UI] CellComponent::dragEnd()");
+    //console.log("[UI] CellComponent::dragEnd()");
    // this.isBeingDragged = false;
     this.focusOff(cell);
 }
 
 
 dragSuccess(cell:Cell) {
-    console.log("[UI] CellComponent::dragSuccess()");
+    //console.log("[UI] CellComponent::dragSuccess()");
 }
 
 becomeActive(cell:Cell) {
