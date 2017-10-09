@@ -186,8 +186,17 @@ dragEnd(cell:Cell) {
 }
 
 adoptCellAtPosition(newCell:Cell, position:number) {
+
     console.log("[UI] CellComponent::adoptCellAtPosition()");
     this.cell.adopt(newCell, position);
+    // FIXME: these events do not really update drop areas correctly, we probably need a clear all here
+    // until we rollover a different cell, the previous cell drop areas are wrongly active
+    //
+
+//    this.events.service.publish(new CellDeactivatedEvent(this.cell));   // drop areas may have changed
+    this.events.service.publish(new CellDeactivatedEvent(newCell));   // drop areas may have changed
+    //this.events.service.publish(new CellActivatedEvent(newCell));       // so we fire some events
+
 }
 
 becomeActive(cell:Cell) {

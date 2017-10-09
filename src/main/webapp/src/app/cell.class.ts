@@ -91,6 +91,7 @@ matches(e:FamilyMember):boolean {
 }
 
 
+// FIXME: need to check that we are not moving the same cell around in the same col (for instance change order)
 canAdopt(newMember:FamilyMember):boolean {
  
     let allowed:boolean = this.cellModel.canAdopt(newMember); // we check the model first
@@ -136,9 +137,9 @@ adopt(newMember:Cell, position:number) {
             } else if (i==position) {
                 newChildren.push(newMember);
                 i++;
-                newChildren.push(c.setPosition(i));    // the immediately following has a new position of +1
+                newChildren.push(c.setPosition(i));    // set next to a a shifted position of +1
             } else {
-                newChildren.push(c.setPosition(i));    // we set the rest of children to the new position
+                newChildren.push(c.setPosition(i));    // set the rest of children
             }
             i++;
         });
@@ -158,7 +159,7 @@ removeChild(child:Cell) {
         if (i<position) { //>
             newChildren.push(c);
         } else if (i>position) {
-            newChildren.push(c.setPosition(i-1));    // we set the following children to the new position
+            newChildren.push(c.setPosition(i-1));    // set the following children to a shifted -1 position
         }
         i++;
     });       
