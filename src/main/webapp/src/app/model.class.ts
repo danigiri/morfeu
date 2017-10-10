@@ -33,6 +33,11 @@ constructor(public schema: number,
 }
 
 
+getURI():string {
+    return this.URI;
+}
+
+
 getAdoptionName():string {
     return this.name;
 }
@@ -50,6 +55,19 @@ matches(element:FamilyMember):boolean {
 
 canAdopt(element:FamilyMember):boolean {
     return this.cellModels.some(c => c.matches(element));   
+}
+
+
+childrenCount():number {
+    return this.cellModels.length;
+}
+
+getParent():FamilyMember {
+    return undefined;
+}
+
+equals(m:FamilyMember) {
+    return this.getURI()==m.getURI();
 }
 
 

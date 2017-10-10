@@ -16,20 +16,36 @@
 
 import { Cell } from './cell.class';
 
+/**  we can have /test(0)/foo(1)
+*    which accepts children named 'bar' of type /model/bar
+*    AdoptionName is 'bar', and model (adoption uri) is '/model/bar'
+*    Elements named 'fubar' of model '/model/bar' are not accepted into the family
+*    So would be elements named 'bar' but with model '/model/whatever'
+*/
 export interface FamilyMember {
 
+/** unique location */
+getURI():string;
+    
+/** name of element in respect to creating new family members or adopting ones, in the example 'bar' */
 getAdoptionName():string;
 
+/** URI in respect of creating new family members ar adopting ones, in the example '/model/bar' */
 getAdoptionURI():string;
 
-// are we the same? (used to highlight siblings)
+/** are we the same? (used to highlight siblings), to cells of equal name and model, match */
 matches(e:FamilyMember):boolean;
 
-// can we adopt this new family member?
+/** can we adopt this new family member? (usually means can have children with given name and adoption uri) */
 canAdopt(newMember:FamilyMember):boolean;
 
 //canRemoveAsChild(cell:Cell):boolean;
 
-// TODO: this can probably be moved to an interface implemented by mutable objects only
+childrenCount():number;
+
+getParent():FamilyMember;
+
+/** exactly the same? */
+equals(m:FamilyMember):boolean;
 
 }

@@ -117,7 +117,8 @@ public void testProvideCellModel() throws Exception {
 	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
 	checkComplexCellModel(data2, "data2", "testCell desc", "testCell", modelURI+"/test/row/col/data2");
 	assertEquals("/test/row/col/data2 cell model should be min 0", 0, data2.getMinOccurs());
-	assertEquals("/test/row/col/data2 cell model should be 1", 1, data2.getMaxOccurs().getAsInt());	// refs keep local counts
+	// model references keep local max counts
+	assertEquals("/test/row/col/data2 cell model should be max 2", 2, data2.getMaxOccurs().getAsInt());
 
 	assertTrue(data.isReference() || data2.isReference());
 	

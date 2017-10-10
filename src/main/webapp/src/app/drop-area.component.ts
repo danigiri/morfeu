@@ -19,6 +19,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
+import { CellModel } from './cell-model.class';
 import { Widget } from './widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
@@ -84,7 +85,7 @@ ngOnInit() {
     // IDEA: we could use the function of the drop enabled (gets cell as input) though it's less interactive
     this.subscribe(this.events.service.of( CellDeactivatedEvent )
             .subscribe(deactivated => {
-                if (this.parent && this.parent.canAdopt(deactivated.cell)) {
+                if (this.matchesCell(deactivated.cell)) {
                     //console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
                     this.becomeInactive();
                 }
@@ -100,7 +101,7 @@ ngOnInit() {
     
     this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
             .subscribe( d => {
-                if (this.parent && this.parent.canAdopt(d.cellModel)) {
+                if (this.matchesCellmodel(d.cellModel)) {
                     //console.log("-> drop comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
                     this.becomeInactive();
                 }
@@ -108,8 +109,8 @@ ngOnInit() {
     
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .subscribe( a => {
-                if (this.parent && this.parent.canAdopt(a.cellModel)) {
-                    //console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+                if (this.matchesCellmodel(a.cellModel)) {
+                    console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
                     this.becomeActive();
                 }
     }));
@@ -125,6 +126,16 @@ becomeInactive() {
 
 becomeActive() {
     this.active = true;
+}
+
+
+matchesCell(cell:Cell): boolean {
+    return this.parent && this.parent.canAdopt(cell);
+}
+
+
+matchesCellmodel(cellModel:CellModel):boolean {
+    return this.parent && this.parent.canAdopt(cellModel);
 }
 
 

@@ -16,7 +16,7 @@
 
 import { Cell } from '../cell.class';
 
-
+/** We were focusing on a cell and we notify that we are not focusing on it anymore */
 export class CellDeactivatedEvent {
 
 constructor(public cell: Cell) {}

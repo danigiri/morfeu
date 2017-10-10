@@ -145,19 +145,20 @@ ngOnInit() {
     this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
             .filter(d => this.isCompatibleWith(d.cellModel))
             .subscribe( d => {
-                console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
+                //console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
                 this.becomeInactive(this.cell);
     }));
     
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .filter(a => this.isCompatibleWith(a.cellModel))
             .subscribe( a => {
-                console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+                //console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'");
                 this.becomeActive(this.cell);
     }));
 }	 
 	   
-	
+
+// we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell:Cell) {
 	
     //console.log("[UI] CellComponent::focusOn()");
@@ -169,7 +170,8 @@ focusOn(cell:Cell) {
 	
 }
 
-	
+
+// notify all interested in this type of cell that we do not have the focus any longer, remove highlight
 focusOff(cell:Cell) {
 
     //console.log("[UI] CellComponent::focusOff()");
@@ -179,25 +181,26 @@ focusOff(cell:Cell) {
 }
 
 
+// we drag outside any interesting area, we remove focus
 dragEnd(cell:Cell) {
     console.log("[UI] CellComponent::dragEnd()");
    // this.isBeingDragged = false;
     this.focusOff(cell);
 }
 
+
+// the drop-area is sending us a cell to adopt
 adoptCellAtPosition(newCell:Cell, position:number) {
 
-    console.log("[UI] CellComponent::adoptCellAtPosition()");
-    this.events.service.publish(new CellDeactivatedEvent(newCell));   // deactivate based on old location
+    console.log("[UI] CellComponent::adoptCellAtPosition("+position+")");
+    // deactivate based on old location
+    this.events.service.publish(new CellDeactivatedEvent(newCell));
     this.cell.adopt(newCell, position);
-    // FIXME: these events do not really update drop areas correctly, we probably need a clear all here
-    // until we rollover a different cell, the previous cell drop areas are wrongly active
-
-    this.events.service.publish(new CellDeactivatedEvent(this.cell));   // drop areas may have changed
-    //this.events.service.publish(new CellActivatedEvent(newCell));       // so we fire some events
 
 }
 
+
+// UI method to highlight the cell
 becomeActive(cell:Cell) {
 
     //console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
@@ -207,6 +210,7 @@ becomeActive(cell:Cell) {
 }
 
 
+// UI method to no longer be highlighted
 becomeInactive(cell: Cell) {
 
     //console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
@@ -216,6 +220,7 @@ becomeInactive(cell: Cell) {
 }
 
 
+// are we compatible with this element?
 isCompatibleWith(element:FamilyMember): boolean {
     return this.cell.matches(element);
 }
@@ -233,11 +238,6 @@ cellClass() {
    } else {
 		return "";
 	}
-}
-
-
-celIsDroppable() {
-	return this.cell.cellModel.presentation=="COL-WELL";
 }
 
 

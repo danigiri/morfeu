@@ -53,6 +53,12 @@ init() {
 
 }
 
+
+getURI():string {
+    return this.URI;
+}
+
+
 getAdoptionName():string {
     return this.name;
 }
@@ -70,6 +76,21 @@ matches(e:FamilyMember):boolean {
 
 canAdopt(element:FamilyMember):boolean {
     return this.children.some(c => c.matches(element));
+}
+
+
+childrenCount():number {
+    return this.children ? this.children.length : 0;   
+}
+
+
+equals(m:FamilyMember) {
+    return this.getURI()==m.getURI();
+}
+
+
+getParent():FamilyMember {
+    return undefined;   //TODO: we do not need to setup the parent yet
 }
 
 

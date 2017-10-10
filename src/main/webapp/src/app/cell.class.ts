@@ -76,6 +76,11 @@ columnFieldValue():string {
 }
 
 
+getURI():string {
+    return this.URI;
+}
+
+
 getAdoptionName():string {
     return this.name;
 }
@@ -93,24 +98,74 @@ matches(e:FamilyMember):boolean {
 
 // FIXME: need to check that we are not moving the same cell around in the same col (for instance change order)
 canAdopt(newMember:FamilyMember):boolean {
- 
-    let allowed:boolean = this.cellModel.canAdopt(newMember); // we check the model first
-    if (allowed) {
-        let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
+
+    // we will do all checks one by one and return to optimise speed
+    
+    // we check the model compatibility first
+    if (!this.cellModel.canAdopt(newMember)) {
+        console.log("1");
+        return false;
         
-        let childCount:number = matchingChildren.length;
-        if (childCount>0) {
-            // we are not considering the problem of the childcount being less than the minimum
-            //TODO: add are we able to remove this cell as child?
-            let matchingCellModel:CellModel = matchingChildren[0].cellModel;
-            if (matchingCellModel.maxOccurs) {
-                allowed = childCount < matchingCellModel.maxOccurs; // notice we use '<' 
-            }
+    }
+    
+    // next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
+    // place, example:
+    //  <col>
+    //      [drop area 0]
+    //      <thingie/>
+    //      [drop area 1]
+    //  </col>
+    // in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
+
+    if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
+        console.log("2");
+        return false;
+    }
+    
+    // next, we check if we have more than one element but we are in the same droppable parent which means
+    // that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
+    //  <col>
+    //      [drop area 0]
+    //      <thingie/>
+    //      [drop area 1]
+    //      <thingie/>
+    //      [drop area 2]
+    //  </col>
+    if (this.children && this.parent && this.equals(newMember.getParent())) {
+        console.log("3");
+        return true;
+    }
+    
+    // next, we check the allowed count
+    let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
+    let childCount:number = matchingChildren.length;
+    if (childCount>0) {
+        // we are not considering the problem of the childcount being less than the minimum
+        //TODO: add are we able to remove this cell as child?
+        let matchingCellModel:CellModel = matchingChildren[0].cellModel;
+        if (matchingCellModel.maxOccurs && childCount >= matchingCellModel.maxOccurs) { // notice we use '>=' as we are adding one more
+            console.log("4");
+            return false;
         }
     }
-
-    return allowed;
         
+    console.log("true");
+    return true;    // apologies for the long method
+
+}
+
+
+childrenCount():number {
+    return this.children ? this.children.length : 0;   
+}
+
+
+getParent():FamilyMember {
+    return this.parent;
+}
+
+equals(m:FamilyMember) {
+    return m && this.getURI()==m.getURI();  // FIXME: at the beginning, if m is a model, it is undefined
 }
 
 
@@ -167,13 +222,14 @@ removeChild(child:Cell) {
  
 }
      
+
 setPosition(position:number):Cell {
 
     this.position = position;
     this.URI = this.parent.URI+"/"+this.name+"("+position+")";
     if (this.attributes) {
         this.attributes = this.attributes.map(c => {
-            c.URI = c.URI.substr(0, c.URI.lastIndexOf("@"));
+            c.URI = c.URI.substr(0,  c.URI.lastIndexOf("@"));
             c.URI = c.URI+"@"+c.name;
             return c;
         });

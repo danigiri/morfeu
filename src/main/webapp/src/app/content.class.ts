@@ -33,10 +33,16 @@ associateWith(model: Model) {
    this.children = this.children.map(c => c.associateWith(model));
 }
 
+getURI():string {
+    return this.getAdoptionURI();
+}
+
 // part of the drag and drop scaffolding, we return true if this cell can be one of the root cells
 getAdoptionName():string {
     return "";
 }
+
+
 getAdoptionURI():string {
     return "/";
 }
@@ -51,6 +57,19 @@ canAdopt(newMember:FamilyMember):boolean {
     return this.children.some(c => c.canAdopt(newMember));
 }
 
+childrenCount():number {
+    return this.children ? this.children.length : 0;
+}
+
+
+equals(m:FamilyMember) {
+    return this.getURI()==m.getURI();
+}
+
+
+getParent():FamilyMember {
+    return undefined;
+}
 
 adopt(newCell:Cell, position:number) {
     //TODO: to be implemented

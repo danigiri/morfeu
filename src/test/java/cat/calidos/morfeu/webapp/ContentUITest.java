@@ -160,15 +160,21 @@ public void relationshipFromModelToContentTest() {
 	UICell test = content.rootCells().get(0);
 	UIModel model = document.model();
 	
+
+	// let's check for model drop area activations, we highlight row so test can allow them
 	UICellModelEntry rowModel = model.rootCellModel("test").child("row").hover();
 	assertTrue(rowModel.isHighlighted());
 	assertTrue(test.dropArea(0).isActive());
 
-	// data2 has count restrictions so we'll not activate a col where a data2 child is already present
+	// we highlight data2, on this column there are two of them so no drop areas are active
 	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2").hover();
 	assertTrue(data2Model.isHighlighted());
-	assertTrue(test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").dropArea(0).isActive());
-	assertFalse(test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").dropArea(0).isActive());
+	List<UIDropArea> dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").dropAreas();
+	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
+
+	// on the other one, there is only one data2, so there is room for 1 more, all drop areas active on that column
+	dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").dropAreas();
+	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
 	
 }
 
@@ -190,24 +196,30 @@ public void dropAreasTest() {
 	assertEquals(2, dropAreas.size());
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 	
-	// we hover over the data cell and we activate both drop areas
+	// we hover over the data cell and we do not activate both drop areas, as it's an only child
 	UICell data = col.child("data(0)");
 	assertTrue(data.isCell());
 	data.hover();
 	assertTrue(data.isHighlighted());
-	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
-	
-	
-	// in this column we have a data2, which means that we can only have one of those on each col
-	col = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
-	dropAreas = col.dropAreas();
-	
-	data.hover();
-	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
-	
-	UICell data2 = col.child("data2(0)");
-	data2.hover();
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
+	
+	// we hover over another data, we should activate both drop areas from the original first column
+	test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data(0)").hover();
+	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
+	
+	
+	// here we have 2 data2 children, we can reorder them around so all drop areas are active in this col
+	// this is irrespective of child count and expected
+	UICell colWith2data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
+	dropAreas = colWith2data2.dropAreas();
+	colWith2data2.child("data2(0)").hover();
+	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
+	
+	// however, if we hover on another data2 somewhere else, we hit over the count limit of 2 data2 so we have no
+	// active cols
+	test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data2(1)").hover();
+	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
+
 	
 }
 
