@@ -137,7 +137,7 @@ ngOnInit() {
             .filter(dc => dc.newParent==this.cell)
             .subscribe( dc => {
                 console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to  "
-                            +this.cell.URI+"("
+                            +this.cell.URI+" at position ("
                             +dc.newPosition+")'");
                 this.adoptCellAtPosition(dc.cell, dc.newPosition)
     }));
@@ -180,7 +180,7 @@ focusOff(cell:Cell) {
 
 
 dragEnd(cell:Cell) {
-    //console.log("[UI] CellComponent::dragEnd()");
+    console.log("[UI] CellComponent::dragEnd()");
    // this.isBeingDragged = false;
     this.focusOff(cell);
 }
@@ -188,13 +188,12 @@ dragEnd(cell:Cell) {
 adoptCellAtPosition(newCell:Cell, position:number) {
 
     console.log("[UI] CellComponent::adoptCellAtPosition()");
+    this.events.service.publish(new CellDeactivatedEvent(newCell));   // deactivate based on old location
     this.cell.adopt(newCell, position);
     // FIXME: these events do not really update drop areas correctly, we probably need a clear all here
     // until we rollover a different cell, the previous cell drop areas are wrongly active
-    //
 
-//    this.events.service.publish(new CellDeactivatedEvent(this.cell));   // drop areas may have changed
-    this.events.service.publish(new CellDeactivatedEvent(newCell));   // drop areas may have changed
+    this.events.service.publish(new CellDeactivatedEvent(this.cell));   // drop areas may have changed
     //this.events.service.publish(new CellActivatedEvent(newCell));       // so we fire some events
 
 }

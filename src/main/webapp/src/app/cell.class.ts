@@ -173,6 +173,7 @@ setPosition(position:number):Cell {
     this.URI = this.parent.URI+"/"+this.name+"("+position+")";
     if (this.attributes) {
         this.attributes = this.attributes.map(c => {
+            c.URI = c.URI.substr(0, c.URI.lastIndexOf("@"));
             c.URI = c.URI+"@"+c.name;
             return c;
         });

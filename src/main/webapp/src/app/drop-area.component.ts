@@ -131,9 +131,6 @@ becomeActive() {
 dropSuccess($event: any) {
 
     console.log("[UI] DropAreaComponent::dropSuccess("+$event.dragData.URI+")");
-
-    // we need to create an event with the appropriate data
-    
     this.events.service.publish(new DropCellEvent($event.dragData, this.parent, this.position));
     
 }
