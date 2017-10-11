@@ -37,4 +37,10 @@ public boolean isActive() {
 	return element.attr(CLASS).contains(ACTIVE);
 }
 
+public UICell dropHere(SelenideElement element2) {
+
+	// TODO Auto-generated method stub
+	return null;
+}
+
 }

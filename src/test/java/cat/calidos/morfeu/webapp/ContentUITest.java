@@ -36,7 +36,7 @@ import cat.calidos.morfeu.webapp.ui.UIDocument;
 import cat.calidos.morfeu.webapp.ui.UIDropArea;
 import cat.calidos.morfeu.webapp.ui.UIModel;
 
-/**
+/** Testing content display without manipulation
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUITest extends UITezt {

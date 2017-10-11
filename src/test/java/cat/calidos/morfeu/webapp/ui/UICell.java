@@ -56,6 +56,12 @@ public UICell hover() {
 	
 }
 
+public UICell dragTo(UIDropArea target) {
+
+	return target.dropHere(element);
+
+}
+
 public boolean isCell() {
 	return element.attr(CLASS).contains("cell-img");
 }
