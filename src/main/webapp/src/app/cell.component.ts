@@ -24,8 +24,10 @@ import { Widget } from './widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
-import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
+import { CellSelectionEvent } from './events/cell-selection.event';
+import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { DropCellEvent } from './events/drop-cell.event';
 import { EventService } from './events/event.service';
 
@@ -39,7 +41,8 @@ import { EventService } from './events/event.service';
 				<img id="{{cell.URI}}"
 				     src="assets/images/cell.svg" 
 					 class="cell img-fluid cell-img cell-level-{{level}}"
-					 [class.cell-active]="active"  
+                     [class.cell-active]="active"
+	                 [class.cell-selected]="selected"
                      (mouseenter)="focusOn(cell)" 
                      (mouseleave)="focusOff(cell)"
 					 dnd-draggable 
@@ -52,13 +55,15 @@ import { EventService } from './events/event.service';
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
 				     class="cell-level-{{level}} {{cellClass()}}"
-				     ><small>{{cell.name}}</small>
+				     ><small>{{cell.name}}({{position}})[{{childrenSelected}}]</small>
 	                    <drop-area  *ngIf="parent" [parent]="cell" position="0"></drop-area>
 						<cell *ngFor="let c of cell.children; let i=index" 
     						[cell]="c" 
+	                        [class.cell-selected]="selected"
     						[parent]="cell" 
+    						[parentComponent]="this"
     						[level]="level+1"
-    						[position]="i+1"
+    						[position]="i"
     						></cell>
 			</div>
 			</ng-template>
@@ -85,6 +90,10 @@ import { EventService } from './events/event.service';
 			    border: 3px solid #f00;
 			    border-radius: 5px;
 			 }
+            .cell-selected {
+                border: 3px dashed #00f;
+                border-radius: 5px;
+             }			 
 			 .cell-dragged {
 				 opacity: .2;
 			 }
@@ -114,12 +123,15 @@ import { EventService } from './events/event.service';
 
 export class CellComponent extends Widget implements OnInit {
 
-@Input() parent?: Cell;
+@Input() parent: FamilyMember;
+@Input() parentComponent?: CellComponent;
 @Input() cell: Cell;
 @Input() level: number;
 @Input() position: number;
 
 active: boolean = false;
+selected: boolean = false;          // are we selected?
+childrenSelected: boolean = false;  // is any of our children selected?
 dragEnabled:boolean = false;
 //isBeingDragged:boolean = false;
 
@@ -150,11 +162,31 @@ ngOnInit() {
     }));
     
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
-            .filter(a => this.isCompatibleWith(a.cellModel))
+            .filter(a => this.isCompatibleWith(a.cellModel))    // //
             .subscribe( a => {
                 //console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'");
                 this.becomeActive(this.cell);
     }));
+    
+   // soft selection subscriptions, used mainly with keyboard shortcuts
+   this.subscribe(this.events.service.of( CellSelectionClearEvent )
+            .subscribe( c => this.clearSelection()        
+            
+   ));
+            
+   // CONTINUE HERE, THE SELECTION LOGIC IS NOT WORKING WELL, WE GET DOUBLE SELECTION
+   // THE PROBLEM IS THAT WE SEND THE EVENT TO CHILDREN ON ALL BRANCHES AND WE SHOULD ONLY GO THROUGH
+   // THE BRANCH THAT HAS CHILDREN SELECTED,
+   // OPTION A: WE PROBABLY WANT TO BUILD A TREE OF CONTROLLERS AND NOT (ONLY?) A TREE OF MODELS (cells)
+   // OPTION B: WE CALL CHILDREN EXPLICITLY AND NOT THROUGH EVENTS
+   // OPTION C: WE HAVE A LIST OF CELL NODES, LIKE A PATH, THIS IS MORE COHERENT WITH EVENTS NOT HAVING COMPONENT REFERENCES
+   this.subscribe(this.events.service.of( CellSelectionEvent )  // //
+           // FIXME: more complex filter function
+           .filter( s => s.parents.getURI() == this.parent.getURI())
+           .subscribe( s => this.checkSelection(s)           
+               
+   ));
+    
 }	 
 	   
 
@@ -225,6 +257,56 @@ isCompatibleWith(element:FamilyMember): boolean {
     return this.cell.matches(element);
 }
 
+
+clearSelection() {
+    
+    if (this.childrenSelected) {
+        console.log("[UI] CellComponent::clearSelection()");
+        this.childrenSelected = false;        
+    } else if (this.selected) { 
+        console.log("[UI] CellComponent::clearSelection()");
+        this.selected = false;
+        this.childrenSelected = false;
+    } 
+}
+
+
+checkSelection(event:CellSelectionEvent) {  // //
+    
+    // if we are selected, we unselect and propagate to our children
+    // if we have children selected, we propagate the event
+    // otherwise we become selected if it's the relevant cell
+    // If we try to select beyond our level and there are no children, we clear the selection
+     if (this.selected) {
+         
+         // we propagate the event to the lower level (if we have children) and unselect ourselves
+         this.clearSelection();
+         if (this.cell.children) {
+             this.childrenSelected = true;
+             this.events.service.publish(new CellSelectionEvent(event.position, this.cell));
+         } else {
+             this.events.service.publish(new CellSelectionClearEvent());    // DOES NOT WORK WELL, NOT CLEARING
+         }
+     } else if (this.childrenSelected) {
+         if (this.cell.children) {
+             this.events.service.publish(new CellSelectionEvent(event.position, this.cell));
+         } else {
+             this.events.service.publish(new CellSelectionClearEvent());
+         }
+     } else if (event.position==this.position) {
+         console.log("[UI] CellComponent::checkSelection(): position match");
+         this.becomeSelected();
+     }
+ 
+}
+
+
+becomeSelected() {
+
+    console.log("[UI] CellComponent::becomeSelected()");
+    this.selected = true; 
+
+}
 
 //TODO: depending on the level go from -md- to -xs- col styling
 //TODO: this function gets called and we should have an attribute or input to optimise the client stuff

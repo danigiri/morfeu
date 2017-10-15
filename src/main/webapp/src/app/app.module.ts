@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 
 import { DndModule } from 'ng2-dnd';
+import { HotkeyModule } from 'angular2-hotkeys';
 import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent }	  from './app.component';
@@ -40,6 +41,7 @@ import { StatusComponent } from './status.component';
 				  ,HttpModule
 				  ,TreeModule
 				  ,DndModule.forRoot()
+				  ,HotkeyModule.forRoot()
 				  ],
   declarations: [ AppComponent
 				  ,CatalogueListComponent 

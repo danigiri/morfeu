@@ -57,9 +57,17 @@ public UICell hover() {
 }
 
 public UICell dragTo(UIDropArea target) {
+	hover();
+	return target.dropHere(this);
 
-	return target.dropHere(element);
+}
 
+public UICell clik() {
+
+	element.click();
+	
+	return this;
+	
 }
 
 public boolean isCell() {
@@ -104,8 +112,13 @@ public UICell child(String name) {
 }
 
 
+public UICell child(int pos) {
+	return children().get(pos);
+}
+
+
 public List<UIDropArea> dropAreas() {
-	return element.$$(".drop-area").stream().map(e -> new UIDropArea(e)).collect(Collectors.toList());
+	return element.$$(".drop-area").stream().map(e -> new UIDropArea(e, this)).collect(Collectors.toList());
 }
 
 

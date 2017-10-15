@@ -16,6 +16,11 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+
 import com.codeborne.selenide.SelenideElement;
 
 /**
@@ -24,23 +29,66 @@ import com.codeborne.selenide.SelenideElement;
 public class UIDropArea {
 
 private static final String CLASS = "class";
-
 private static final String ACTIVE = "drop-area-active";
 
 private SelenideElement element;
+private UICell parent;
 
-public UIDropArea(SelenideElement e) {
+public UIDropArea(SelenideElement e, UICell parent) {
+
 	this.element = e;
+	this.parent = parent;
+	
 }
 
 public boolean isActive() {
 	return element.attr(CLASS).contains(ACTIVE);
 }
 
-public UICell dropHere(SelenideElement element2) {
+public int position() {
+	return Integer.parseInt(element.parent().attr("position"));
+}
 
-	// TODO Auto-generated method stub
-	return null;
+
+public UICell dropHere(UICell uiCell) {
+
+	int pos = position();
+	//uiCell.element.dragAndDropTo(element);
+	
+	WebElement cellWebElement = uiCell.element.toWebElement();
+	WebElement dropWebElement = element.getWrappedElement();
+	WebDriver driver = element.getWrappedDriver();
+	Actions builder = new Actions(driver);
+    uiCell.hover();
+    
+    uiCell.element.dragAndDropTo(element.parent());
+//	WebElement ngDropArea = element.parent().getWrappedElement();
+//	builder
+//    	.moveToElement(cellWebElement, 2, 2)
+//    	.pause(1000)
+//    	.clickAndHold()
+//    	.pause(1000)
+////    	.dragAndDrop(cellWebElement, element.getWrappedElement())
+////    	.moveByOffset(100, 100)
+////    	.moveToElement(ngDropArea, 2, 2)
+////    	.pause(1000)
+//    	
+////    	.moveByOffset(5, 5)
+////    	.moveByOffset(-2, -2)
+////    	.moveByOffset(2, 2)
+////    	.moveByOffset(-2, -2)
+////    	.moveByOffset(2, 2)
+////    	.moveByOffset(-2, -2)
+////    	.moveByOffset(2, 2)
+////    	.moveByOffset(-2, -2)
+////    	.moveByOffset(2, 2)
+//        .release()
+//        .build().perform();
+	
+	//parent.hover();	// give time to the UI to refresh
+	
+	return parent.child(pos);
+
 }
 
 }

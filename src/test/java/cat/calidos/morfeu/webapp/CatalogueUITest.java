@@ -17,10 +17,9 @@
 package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.List;
-
-import org.junit.Test;
 
 import com.codeborne.selenide.ElementsCollection;
 

@@ -16,11 +16,11 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static com.codeborne.selenide.Selenide.open;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import static com.codeborne.selenide.Selenide.open;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
@@ -56,9 +56,12 @@ public void testDragCell() {
 	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
 	assertTrue(data.isCell());
 	
-	UICell targetCol = test.child("row(0)").child("col(1)");
+	UICell targetCol = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)");
+	assertEquals(2, targetCol.children().size());
 	
 	data = data.dragTo(targetCol.dropArea(0));
+	
+	assertEquals(3, targetCol.children().size());
 	
 }
 
