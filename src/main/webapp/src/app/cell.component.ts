@@ -124,7 +124,6 @@ import { EventService } from './events/event.service';
 export class CellComponent extends Widget implements OnInit {
 
 @Input() parent: FamilyMember;
-@Input() parentComponent?: CellComponent;
 @Input() cell: Cell;
 @Input() level: number;
 @Input() position: number;
