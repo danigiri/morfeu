@@ -22,6 +22,7 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { CellDocument } from './cell-document.class';
 import { Cell } from './cell.class';
 import { Content, ContentJSON } from './content.class';
+import { FamilyMember } from './family-member.interface';
 import { Model } from './model.class';
 import { RemoteObjectService } from './services/remote-object.service';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
@@ -66,6 +67,7 @@ export class ContentComponent extends Widget implements OnInit {
 	
 content: Content;
 model: Model;
+selectedCells: FamilyMember[];
 
 private commandHotkey: Hotkey | Hotkey[];
 private numberHotkey: Hotkey | Hotkey[];
@@ -94,6 +96,12 @@ ngOnInit() {
 	
 	this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
 			requested => this.fetchContent(requested.url, requested.model)
+	));
+
+	// TODO: explain this
+	this.subscribe(this.events.service.of( CellSelectEDEvent )
+	           .subscribe( cs => this.selectedCells.push(cs.cell)        
+	               
 	));
 	
 }
@@ -139,6 +147,7 @@ clearContent() {
 clearCellSelection() {
 
     console.log("[UI] ContentComponent::clearSelection()");
+    this.selectedCells = [];
     this.events.service.publish(new CellSelectionClearEvent());
 
 }
@@ -148,7 +157,11 @@ numberPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::numberPressed("+event.key+")");
     
-    this.events.service.publish(new CellSelectionEvent(parseInt(event.key, 10), [this.content]));
+    // TODO: explain this
+    if (this.selectedCells.length==0) {
+        this.selectedCells = [this.content];
+    }
+    this.events.service.publish(new CellSelectionEvent(parseInt(event.key, 10), this.selectedCells));
 
     return false; // Prevent keyboard event from bubbling
 
@@ -159,7 +172,7 @@ keyPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::keyPressed("+event.key+")");
     if (event.key=="c") {
-        this.events.service.publish(new CellSelectionClearEvent());
+        this.clearCellSelection();
     }
 
     return false; // Prevent keyboard event from bubbling

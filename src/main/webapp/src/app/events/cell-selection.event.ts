@@ -17,8 +17,10 @@
 import { FamilyMember } from "../family-member.interface";
 
 export class CellSelectionEvent {
+
+public 
     
-constructor(public position:number, public parents:FamilyMember[]) {}
+constructor(public position:number, public parents:FamilyMember[], public completed:boolean = false) {}
 
 
 public toString = () : string => {

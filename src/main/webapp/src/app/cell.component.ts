@@ -60,8 +60,7 @@ import { EventService } from './events/event.service';
 						<cell *ngFor="let c of cell.children; let i=index" 
     						[cell]="c" 
 	                        [class.cell-selected]="selected"
-    						[parent]="cell" 
-    						[parentComponent]="this"
+    						[parent]="cell"
     						[level]="level+1"
     						[position]="i"
     						></cell>
@@ -154,7 +153,7 @@ ngOnInit() {
     }));
     
     this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-            .filter(d => this.isCompatibleWith(d.cellModel))
+            .filter(d => this.isCompatibleWith(d.cellModel))    // //
             .subscribe( d => {
                 //console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
                 this.becomeInactive(this.cell);
@@ -163,7 +162,7 @@ ngOnInit() {
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .filter(a => this.isCompatibleWith(a.cellModel))    // //
             .subscribe( a => {
-                //console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+                //console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
                 this.becomeActive(this.cell);
     }));
     
@@ -171,18 +170,9 @@ ngOnInit() {
    this.subscribe(this.events.service.of( CellSelectionClearEvent )
             .subscribe( c => this.clearSelection()        
             
-   ));
-            
-   // CONTINUE HERE, THE SELECTION LOGIC IS NOT WORKING WELL, WE GET DOUBLE SELECTION
-   // THE PROBLEM IS THAT WE SEND THE EVENT TO CHILDREN ON ALL BRANCHES AND WE SHOULD ONLY GO THROUGH
-   // THE BRANCH THAT HAS CHILDREN SELECTED,
-   // OPTION A: WE PROBABLY WANT TO BUILD A TREE OF CONTROLLERS AND NOT (ONLY?) A TREE OF MODELS (cells)
-   // OPTION B: WE CALL CHILDREN EXPLICITLY AND NOT THROUGH EVENTS
-   // OPTION C: WE HAVE A LIST OF CELL NODES, LIKE A PATH, THIS IS MORE COHERENT WITH EVENTS NOT HAVING COMPONENT REFERENCES
+   ));            
    this.subscribe(this.events.service.of( CellSelectionEvent )  // //
-           // FIXME: more complex filter function
-           .filter( s => s.parents.getURI() == this.parent.getURI())
-           .subscribe( s => this.checkSelection(s)           
+           .subscribe( s => this.handleSelection(s)           
                
    ));
     
@@ -259,50 +249,67 @@ isCompatibleWith(element:FamilyMember): boolean {
 
 clearSelection() {
     
-    if (this.childrenSelected) {
-        console.log("[UI] CellComponent::clearSelection()");
-        this.childrenSelected = false;        
-    } else if (this.selected) { 
-        console.log("[UI] CellComponent::clearSelection()");
-        this.selected = false;
-        this.childrenSelected = false;
-    } 
+    console.log("[UI] CellComponent::clearSelection()");
+    this.selected = false;
+    this.childrenSelected = false;
+
 }
 
 
-checkSelection(event:CellSelectionEvent) {  // //
+// TODO: explain this, we check that we are at the level
+handleSelection(event:CellSelectionEvent) {
+
     
-    // if we are selected, we unselect and propagate to our children
-    // if we have children selected, we propagate the event
-    // otherwise we become selected if it's the relevant cell
-    // If we try to select beyond our level and there are no children, we clear the selection
-     if (this.selected) {
-         
-         // we propagate the event to the lower level (if we have children) and unselect ourselves
-         this.clearSelection();
-         if (this.cell.children) {
-             this.childrenSelected = true;
-             this.events.service.publish(new CellSelectionEvent(event.position, this.cell));
-         } else {
-             this.events.service.publish(new CellSelectionClearEvent());    // DOES NOT WORK WELL, NOT CLEARING
-         }
-     } else if (this.childrenSelected) {
-         if (this.cell.children) {
-             this.events.service.publish(new CellSelectionEvent(event.position, this.cell));
-         } else {
-             this.events.service.publish(new CellSelectionClearEvent());
-         }
-     } else if (event.position==this.position) {
-         console.log("[UI] CellComponent::checkSelection(): position match");
-         this.becomeSelected();
-     }
- 
+    EASY:
+        START WITH CONTENT, SET YOURSELF AS LISTENER OF SELECT AND CLEAR
+        WHEN CLEAR, RESET ALL AND GOTO 1
+        WHEN GET A SELECT, SELECT THE CHILD, REGISTER IT AND UNREGISTER YOURSELF FROM SELECT
+        CHILD:
+        IF REGISTERED CHILD RECEIVES SELECT, SELECT yourself, SET CHILD AS SELECTED, REGISTER IT AND REGISTER FOR CLEAR
+        
+    
+    let level:number = this.level;
+    let selectionParentsLength:number = event.parents.length;
+
+    if (selectionParentsLength==level) { 
+        
+        if (this.selected) {
+        
+            // if we are selected and receive an selection event, we become selection parent and propagate
+            this.clearSelection();
+            this.childrenSelected = true;
+            let parents:FamilyMember[] = event.parents.concat([this.cell]);
+            this.events.service.publish(new CellSelectionEvent(event.position, parents));      
+        
+        } else if (event.position==this.position) {
+        
+            // if we are at the length and if we match the position, we check the hierarchy to ensure
+            // we are not in an unrelated (but symmetrical) branch of the cell tree
+            let match:boolean = true;
+            let i:number = selectionParentsLength-1;
+            let parent:FamilyMember = this.parent;
+            while (match && i>=0) {
+                match = parent.getURI()==event.parents[i].getURI();
+                if (i>0) {
+                    parent = parent.getParent();
+                }
+                i--;
+            }
+            if (match) {
+                this.becomeSelected();
+                WE NEED TO NOTIFY 'CONTENT' OF THE NEW SELECTION WITH A NEW EVENT LIKE CELL SELECTED EVENT
+            }
+            
+        }
+        
+    }   // selectionParentsLength==level
+    
 }
 
 
 becomeSelected() {
 
-    console.log("[UI] CellComponent::becomeSelected()");
+    console.log("[UI] CellComponent::becomeSelected("+this.cell.name+")");
     this.selected = true; 
 
 }

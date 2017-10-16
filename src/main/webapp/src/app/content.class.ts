@@ -21,7 +21,7 @@ import { Model } from './model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 
-export class Content implements FamilyMember, Adopter, SerialisableToJSON<Content, ContentJSON> {
+export class Content implements Adopter, SerialisableToJSON<Content, ContentJSON> {
 	
 children?:Cell[];
 
@@ -92,10 +92,15 @@ fromJSON(json: ContentJSON|string): Content {
 		return JSON.parse(json, Content.reviver);
 		
 	} else {
-		
+	    let i:number = 0;
 		let content = Object.create(Content.prototype);
 		content = Object.assign(content, json);
-		content = Object.assign(content, {children: json.children.map(c => Cell.fromJSON(c))});
+		content = Object.assign(content, {children: json.children.map(c => {
+		    let fullCell:Cell = Cell.fromJSON(c);
+		        fullCell.position = i++;
+		        fullCell.parent = content;
+		        return fullCell;
+		    })});
 		
 		return content;
 		

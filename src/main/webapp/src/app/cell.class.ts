@@ -20,12 +20,12 @@ import { CellModel } from './cell-model.class';
 import { Model } from './model.class';
 
 
-export class Cell implements FamilyMember, Adopter {
+export class Cell implements Adopter {
 
 attributes?: Cell[];
 children?: Cell[];
 cellModel?: CellModel;
-parent?: Cell;
+parent?: Adopter;
 position?: number;
 
 constructor(public schema: number,
@@ -226,7 +226,7 @@ removeChild(child:Cell) {
 setPosition(position:number):Cell {
 
     this.position = position;
-    this.URI = this.parent.URI+"/"+this.name+"("+position+")";
+    this.URI = this.parent.getURI()+"/"+this.name+"("+position+")";
     if (this.attributes) {
         this.attributes = this.attributes.map(c => {
             c.URI = c.URI.substr(0,  c.URI.lastIndexOf("@"));

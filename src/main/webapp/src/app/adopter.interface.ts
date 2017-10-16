@@ -15,9 +15,10 @@
  */
 
 import { Cell } from './cell.class';
+import { FamilyMember } from './family-member.interface';
 
 
-export interface Adopter {
+export interface Adopter extends FamilyMember {
     
 adopt(newCell:Cell, position:number);
 
