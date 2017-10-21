@@ -101,17 +101,18 @@ ngOnInit() {
 	this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
 			requested => this.fetchContent(requested.url, requested.model)
 	));
-
+	
 }
 
 // we make sure we subscribe to new elements if we are waiting for selections at root level
 ngAfterViewInit() {
-//    console.log("ContentComponent::ngAfterViewInit()")
-//    this.children.changes.subscribe(c => {
-//        if (!this.hasSelectedChildren) {
-//            this.subscribeChildrenToCellSelection();
-//        }
-//    });
+
+    console.log("ContentComponent::ngAfterViewInit()")
+    this.children.changes.subscribe(c => {
+        this.subscribeChildrenToCellSelection();
+     
+    });
+
 }
 
 fetchContent(url:String, model:Model) {
@@ -122,7 +123,7 @@ fetchContent(url:String, model:Model) {
 		console.log("ContentComponent::fetchContent() Got content from Morfeu service ("+url+")");
 		content.associateWith(model);
 		this.displayContent(content);
-	    this.subscribeChildrenToCellSelection(); 
+	    //this.subscribeChildrenToCellSelection(); 
 	    this.registerContentKeyShortcuts();
 		this.events.ok();
 	},
@@ -162,12 +163,11 @@ numberPressed = (event: KeyboardEvent): boolean => {
 
 keyPressed = (event: KeyboardEvent): boolean => {
     
-    // we first send a clear so all children will clear, and then resubscribe our immediate children
-    // as they are now readty to go
+    // we first send a clear so all children will clear, if they are level one they will
+    // subscribe themselves again
     console.log("[UI] ContentComponent::keyPressed("+event.key+")");
     if (event.key=="c") {
         this.events.service.publish(new CellSelectionClearEvent());
-        this.subscribeChildrenToCellSelection();
     }
 
     return false; // Prevent keyboard event from bubbling
@@ -203,6 +203,8 @@ private subscribeChildrenToCellSelection () {
     //FIXME: detect changes: https://angular.io/api/core/ViewChildren
     // the list of children views is only available ngAfterViewInit but we assume that
     // fetching the content will have been much slower
+    // we ensure there were no previous selections, avoiding double or triple selects
+    this.children.forEach(c => c.unsubscribeFromCellSelection());
     this.children.forEach(c => c.subscribeToCellSelection());
 }
 

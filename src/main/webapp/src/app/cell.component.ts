@@ -56,17 +56,17 @@ import { EventService } from './events/event.service';
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
 				     class="cell-level-{{level}} {{cellClass()}}"
-				     ><small>
+	                 [class.cell-selected]="selected"
+				     ><!--small>
 				     {{cell.name}}({{position}}), subs: {{subscriptionCount()}},
 				     </small>
 				     
                      <small *ngIf="selected">[selected],</small>
                      <small *ngIf="cellSelectionSubscription">subscribed-selection,</small>
-                     <small *ngIf="cellSelectionClearSubscription">subscribed-clear</small>
+                     <small *ngIf="cellSelectionClearSubscription">subscribed-clear</small-->
 				     <drop-area  *ngIf="parent" [parent]="cell" position="0"></drop-area>
 						<cell *ngFor="let c of cell.children; let i=index" 
     						[cell]="c" 
-	                        [class.cell-selected]="selected"
     						[parent]="cell"
     						[level]="level+1"
     						[position]="i"
@@ -250,18 +250,26 @@ isCompatibleWith(element:FamilyMember): boolean {
 
 select(position:number) {
 
-    if (this.selected) {        // we were selected, now our child will be selected, unselect and unregister
-        this.selected = false;
-        this.unsubscribeFromCellSelection();
+    if (this.selected) {        
+    
+     // we are selected so now our child will be selected and not us, this will bubble the selection down
+        if (this.children && this.children.length>0) {
+            this.selected = false;
+            this.unsubscribeFromCellSelection();            
+        } else {
+            this.events.service.publish(new CellSelectionClearEvent()); // we are a leaf, cannot bubble, clear
+        }
     } else if (position==this.position) {
-            // we were waiting for a selection and are selected, so we select ourselves
-            // we make children eligible to be selected but do not unregister from
-            // selection, at the next selection event we will clear ourselves while our child selects
-            console.log("[UI] CellComponent::becomeSelected("+this.cell.name+")");
-            this.selected = true; 
-            this.children.forEach(c => c.subscribeToCellSelection());
+        
+        // we were waiting for a selection and are selected, so we select ourselves
+        // we make children eligible to be selected but do not unregister from
+        // selection, at the next selection event we will clear ourselves while our child selects
+        console.log("[UI] CellComponent::becomeSelected("+this.cell.name+"("+this.position+"))");
+        this.selected = true; 
+        this.children.forEach(c => c.subscribeToCellSelection());
+        
      } else {
-            this.clearSelection();  // out of bounds, sorry, clear all
+         this.clearSelection();  // out of bounds, sorry, clear
     }
     
 }
@@ -272,6 +280,11 @@ clearSelection() {
     this.unsubscribeFromCellSelection();
     this.unsubscribeFromCellSelectionClear();
     this.selected = false;
+    
+    // if we are root we are back to subscription state
+    if (this.level==1) {
+        this.subscribeToCellSelection();
+    }
 
 }
 
@@ -291,7 +304,7 @@ protected subscribeToCellSelectionClear() {
 }
 
 
-protected unsubscribeFromCellSelection() {
+unsubscribeFromCellSelection() {
 
     if (this.cellSelectionSubscription){
         this.unsubscribe(this.cellSelectionSubscription);
