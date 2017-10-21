@@ -14,8 +14,8 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Subscription }	  from 'rxjs/Subscription';
+import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
@@ -27,6 +27,7 @@ import { Model } from './model.class';
 import { RemoteObjectService } from './services/remote-object.service';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
+import { CellComponent } from './cell.component';
 import { DropAreaComponent } from './drop-area.component';
 import { Widget } from './widget.class';
 
@@ -63,15 +64,18 @@ import { EventService } from './events/event.service';
 })
 
 
-export class ContentComponent extends Widget implements OnInit {
+export class ContentComponent extends Widget implements OnInit, AfterViewInit, OnDestroy {
 	
 content: Content;
 model: Model;
-selectedCells: FamilyMember[];
+
+@ViewChildren(CellComponent) children: QueryList<CellComponent>;
+
+private cellSelectionClearSubscription: Subscription;
 
 private commandHotkey: Hotkey | Hotkey[];
 private numberHotkey: Hotkey | Hotkey[];
-
+private hasSelectedChildren: boolean = false;
 
 constructor(eventService: EventService,
            private hotkeysService: HotkeysService,
@@ -98,14 +102,17 @@ ngOnInit() {
 			requested => this.fetchContent(requested.url, requested.model)
 	));
 
-	// TODO: explain this
-	this.subscribe(this.events.service.of( CellSelectEDEvent )
-	           .subscribe( cs => this.selectedCells.push(cs.cell)        
-	               
-	));
-	
 }
 
+// we make sure we subscribe to new elements if we are waiting for selections at root level
+ngAfterViewInit() {
+//    console.log("ContentComponent::ngAfterViewInit()")
+//    this.children.changes.subscribe(c => {
+//        if (!this.hasSelectedChildren) {
+//            this.subscribeChildrenToCellSelection();
+//        }
+//    });
+}
 
 fetchContent(url:String, model:Model) {
 
@@ -115,7 +122,7 @@ fetchContent(url:String, model:Model) {
 		console.log("ContentComponent::fetchContent() Got content from Morfeu service ("+url+")");
 		content.associateWith(model);
 		this.displayContent(content);
-	    this.clearCellSelection();     
+	    this.subscribeChildrenToCellSelection(); 
 	    this.registerContentKeyShortcuts();
 		this.events.ok();
 	},
@@ -126,7 +133,6 @@ fetchContent(url:String, model:Model) {
 	);
 	
 }
-
 
 
 displayContent(content: Content) {
@@ -144,24 +150,10 @@ clearContent() {
 }
 
 
-clearCellSelection() {
-
-    console.log("[UI] ContentComponent::clearSelection()");
-    this.selectedCells = [];
-    this.events.service.publish(new CellSelectionClearEvent());
-
-}
-
-
 numberPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::numberPressed("+event.key+")");
-    
-    // TODO: explain this
-    if (this.selectedCells.length==0) {
-        this.selectedCells = [this.content];
-    }
-    this.events.service.publish(new CellSelectionEvent(parseInt(event.key, 10), this.selectedCells));
+    this.events.service.publish(new CellSelectionEvent(parseInt(event.key, 10)));
 
     return false; // Prevent keyboard event from bubbling
 
@@ -170,15 +162,17 @@ numberPressed = (event: KeyboardEvent): boolean => {
 
 keyPressed = (event: KeyboardEvent): boolean => {
     
+    // we first send a clear so all children will clear, and then resubscribe our immediate children
+    // as they are now readty to go
     console.log("[UI] ContentComponent::keyPressed("+event.key+")");
     if (event.key=="c") {
-        this.clearCellSelection();
+        this.events.service.publish(new CellSelectionClearEvent());
+        this.subscribeChildrenToCellSelection();
     }
 
     return false; // Prevent keyboard event from bubbling
 
 }
-
 
 
 ngOnDestroy() {
@@ -193,8 +187,7 @@ private registerContentKeyShortcuts() {
     
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed));
-    this.numberHotkey = this.hotkeysService.add(new Hotkey("c", this.keyPressed));
-    
+    this.numberHotkey = this.hotkeysService.add(new Hotkey("c", this.keyPressed)); 
 
 }
 
@@ -202,6 +195,17 @@ private registerContentKeyShortcuts() {
 private unregisterContentKeyShortcuts() {
     this.hotkeysService.remove(this.numberHotkey);   
 }
+
+
+
+private subscribeChildrenToCellSelection () {
+    console.log("Content::subscribeChildrenToCellSelection()");
+    //FIXME: detect changes: https://angular.io/api/core/ViewChildren
+    // the list of children views is only available ngAfterViewInit but we assume that
+    // fetching the content will have been much slower
+    this.children.forEach(c => c.subscribeToCellSelection());
+}
+
 
 }
 

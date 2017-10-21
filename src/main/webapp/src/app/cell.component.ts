@@ -15,7 +15,8 @@
  */
 
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
@@ -55,8 +56,14 @@ import { EventService } from './events/event.service';
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
 				     class="cell-level-{{level}} {{cellClass()}}"
-				     ><small>{{cell.name}}({{position}})[{{childrenSelected}}]</small>
-	                    <drop-area  *ngIf="parent" [parent]="cell" position="0"></drop-area>
+				     ><small>
+				     {{cell.name}}({{position}}), subs: {{subscriptionCount()}},
+				     </small>
+				     
+                     <small *ngIf="selected">[selected],</small>
+                     <small *ngIf="cellSelectionSubscription">subscribed-selection,</small>
+                     <small *ngIf="cellSelectionClearSubscription">subscribed-clear</small>
+				     <drop-area  *ngIf="parent" [parent]="cell" position="0"></drop-area>
 						<cell *ngFor="let c of cell.children; let i=index" 
     						[cell]="c" 
 	                        [class.cell-selected]="selected"
@@ -128,10 +135,14 @@ export class CellComponent extends Widget implements OnInit {
 @Input() position: number;
 
 active: boolean = false;
-selected: boolean = false;          // are we selected?
-childrenSelected: boolean = false;  // is any of our children selected?
 dragEnabled:boolean = false;
 //isBeingDragged:boolean = false;
+
+selected: boolean = false;          // are we selected?
+@ViewChildren(CellComponent) children: QueryList<CellComponent>;
+
+private cellSelectionSubscription: Subscription;
+private cellSelectionClearSubscription: Subscription;
 
 
 constructor(eventService: EventService) {
@@ -165,16 +176,6 @@ ngOnInit() {
                 //console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
                 this.becomeActive(this.cell);
     }));
-    
-   // soft selection subscriptions, used mainly with keyboard shortcuts
-   this.subscribe(this.events.service.of( CellSelectionClearEvent )
-            .subscribe( c => this.clearSelection()        
-            
-   ));            
-   this.subscribe(this.events.service.of( CellSelectionEvent )  // //
-           .subscribe( s => this.handleSelection(s)           
-               
-   ));
     
 }	 
 	   
@@ -247,72 +248,68 @@ isCompatibleWith(element:FamilyMember): boolean {
 }
 
 
+select(position:number) {
+
+    if (this.selected) {        // we were selected, now our child will be selected, unselect and unregister
+        this.selected = false;
+        this.unsubscribeFromCellSelection();
+    } else if (position==this.position) {
+            // we were waiting for a selection and are selected, so we select ourselves
+            // we make children eligible to be selected but do not unregister from
+            // selection, at the next selection event we will clear ourselves while our child selects
+            console.log("[UI] CellComponent::becomeSelected("+this.cell.name+")");
+            this.selected = true; 
+            this.children.forEach(c => c.subscribeToCellSelection());
+     } else {
+            this.clearSelection();  // out of bounds, sorry, clear all
+    }
+    
+}
+
 clearSelection() {
-    
-    console.log("[UI] CellComponent::clearSelection()");
+
+    console.log("[UI] SelectableCellWidget::clearSelection()");
+    this.unsubscribeFromCellSelection();
+    this.unsubscribeFromCellSelectionClear();
     this.selected = false;
-    this.childrenSelected = false;
 
 }
 
 
-// TODO: explain this, we check that we are at the level
-handleSelection(event:CellSelectionEvent) {
+subscribeToCellSelection() {  
+        this.cellSelectionSubscription = this.subscribe(this.events.service.of( CellSelectionEvent )
+                .subscribe( cs => this.select(cs.position) )
+        );
+        this.subscribeToCellSelectionClear();  // if we are selectable we are also clearable
+}
 
-    
-    EASY:
-        START WITH CONTENT, SET YOURSELF AS LISTENER OF SELECT AND CLEAR
-        WHEN CLEAR, RESET ALL AND GOTO 1
-        WHEN GET A SELECT, SELECT THE CHILD, REGISTER IT AND UNREGISTER YOURSELF FROM SELECT
-        CHILD:
-        IF REGISTERED CHILD RECEIVES SELECT, SELECT yourself, SET CHILD AS SELECTED, REGISTER IT AND REGISTER FOR CLEAR
-        
-    
-    let level:number = this.level;
-    let selectionParentsLength:number = event.parents.length;
 
-    if (selectionParentsLength==level) { 
-        
-        if (this.selected) {
-        
-            // if we are selected and receive an selection event, we become selection parent and propagate
-            this.clearSelection();
-            this.childrenSelected = true;
-            let parents:FamilyMember[] = event.parents.concat([this.cell]);
-            this.events.service.publish(new CellSelectionEvent(event.position, parents));      
-        
-        } else if (event.position==this.position) {
-        
-            // if we are at the length and if we match the position, we check the hierarchy to ensure
-            // we are not in an unrelated (but symmetrical) branch of the cell tree
-            let match:boolean = true;
-            let i:number = selectionParentsLength-1;
-            let parent:FamilyMember = this.parent;
-            while (match && i>=0) {
-                match = parent.getURI()==event.parents[i].getURI();
-                if (i>0) {
-                    parent = parent.getParent();
-                }
-                i--;
-            }
-            if (match) {
-                this.becomeSelected();
-                WE NEED TO NOTIFY 'CONTENT' OF THE NEW SELECTION WITH A NEW EVENT LIKE CELL SELECTED EVENT
-            }
-            
-        }
-        
-    }   // selectionParentsLength==level
+protected subscribeToCellSelectionClear() {
+        this.cellSelectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
+                .subscribe( cs => this.clearSelection() )
+        );
+}
+
+
+protected unsubscribeFromCellSelection() {
+
+    if (this.cellSelectionSubscription){
+        this.unsubscribe(this.cellSelectionSubscription);
+        this.cellSelectionSubscription = undefined;
+    }
     
 }
 
 
-becomeSelected() {
-
-    console.log("[UI] CellComponent::becomeSelected("+this.cell.name+")");
-    this.selected = true; 
-
+protected unsubscribeFromCellSelectionClear() {
+   
+    if (this.cellSelectionClearSubscription){
+        this.unsubscribe(this.cellSelectionClearSubscription);
+        this.cellSelectionClearSubscription = undefined;
+    }
+    
 }
+
 
 //TODO: depending on the level go from -md- to -xs- col styling
 //TODO: this function gets called and we should have an attribute or input to optimise the client stuff

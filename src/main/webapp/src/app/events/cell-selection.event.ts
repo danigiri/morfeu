@@ -14,18 +14,15 @@
  *   limitations under the License.
  */
 
-import { FamilyMember } from "../family-member.interface";
+//import { FamilyMember } from "../family-member.interface";
 
 export class CellSelectionEvent {
-
-public 
     
-constructor(public position:number, public parents:FamilyMember[], public completed:boolean = false) {}
+constructor(public position:number) {}
 
 
 public toString = () : string => {
-    return "CellSelectionEvent:{position:"+this.position
-    +", parents:["+this.parents.map(p => p.getAdoptionName()+",")+"]}";
+    return "CellSelectionEvent:{position:"+this.position+"}";
 }
 
 }

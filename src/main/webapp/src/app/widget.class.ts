@@ -51,6 +51,9 @@ protected unsubscribe(s:Subscription) {
 
 }
 
+protected subscriptionCount():number {
+    return this.subscriptions.length;
+}
 
 ngOnDestroy() {
 	this.subscriptions.forEach(s => s.unsubscribe());
