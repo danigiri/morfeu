@@ -14,20 +14,15 @@
  *   limitations under the License.
  */
 
-import { Cell } from '../cell.class';
-//import { CellModel } from '../cell-model.class';
-import { FamilyMember } from '../family-member.interface';
+//import { FamilyMember } from "../family-member.interface";
 
-export class DropCellEvent {
+export class CellActivateEvent {
     
-constructor(public cell:Cell, public newParent: FamilyMember, public newPosition: number) {}
+constructor() {}
+
 
 public toString = () : string => {
-    
-    return "DropCellEvent:{cell:'"+this.cell.URI
-            +"', newParent:"+this.newParent.getAdoptionURI()
-            +"', newPosition:"+this.newPosition +"}";
-
+    return "CellActivateEvent:{currently selected}";
 }
 
 }

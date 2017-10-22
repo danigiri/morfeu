@@ -16,13 +16,13 @@
 
 //import { FamilyMember } from "../family-member.interface";
 
-export class CellSelectionEvent {
+export class CellSelectEvent {
     
 constructor(public position:number) {}
 
 
 public toString = () : string => {
-    return "CellSelectionEvent:{position:"+this.position+"}";
+    return "CellSelectEvent:{position:"+this.position+"}";
 }
 
 }

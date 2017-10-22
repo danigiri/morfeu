@@ -24,9 +24,9 @@ import { Widget } from './widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
+import { CellDropEvent } from './events/cell-drop.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
-import { DropCellEvent } from './events/drop-cell.event';
 import { EventService } from './events/event.service';
 
 
@@ -138,11 +138,11 @@ matchesCellmodel(cellModel:CellModel):boolean {
     return this.parent && this.parent.canAdopt(cellModel);
 }
 
-
+/** we drop here as we are only droppeable if we are active, and that's model validated */
 dropSuccess($event: any) {
 
     console.log("[UI] DropAreaComponent::dropSuccess("+$event.dragData.URI+")");
-    this.events.service.publish(new DropCellEvent($event.dragData, this.parent, this.position));
+    this.events.service.publish(new CellDropEvent($event.dragData, this.parent, this.position));
     
 }
 

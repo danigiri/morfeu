@@ -31,9 +31,11 @@ import { CellComponent } from './cell.component';
 import { DropAreaComponent } from './drop-area.component';
 import { Widget } from './widget.class';
 
+import { CellActivateEvent } from './events/cell-activate.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
-import { CellSelectionEvent } from './events/cell-selection.event';
+import { CellDragEvent } from './events/cell-drag.event';
+import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { StatusEvent } from './events/status.event';
@@ -154,7 +156,7 @@ clearContent() {
 numberPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::numberPressed("+event.key+")");
-    this.events.service.publish(new CellSelectionEvent(parseInt(event.key, 10)));
+    this.events.service.publish(new CellSelectEvent(parseInt(event.key, 10)));
 
     return false; // Prevent keyboard event from bubbling
 
@@ -168,6 +170,10 @@ keyPressed = (event: KeyboardEvent): boolean => {
     console.log("[UI] ContentComponent::keyPressed("+event.key+")");
     if (event.key=="c") {
         this.events.service.publish(new CellSelectionClearEvent());
+    } else if (event.key=="a") {
+        this.events.service.publish(new CellActivateEvent());        
+    } else if (event.key=="d") {
+        this.events.service.publish(new CellDragEvent());        
     }
 
     return false; // Prevent keyboard event from bubbling
@@ -187,7 +193,8 @@ private registerContentKeyShortcuts() {
     
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed));
-    this.numberHotkey = this.hotkeysService.add(new Hotkey("c", this.keyPressed)); 
+    let commands:string[] = ["c", "a", "d"]; 
+    this.commandHotkey = this.hotkeysService.add(new Hotkey(commands, this.keyPressed)); 
 
 }
 
@@ -195,7 +202,6 @@ private registerContentKeyShortcuts() {
 private unregisterContentKeyShortcuts() {
     this.hotkeysService.remove(this.numberHotkey);   
 }
-
 
 
 private subscribeChildrenToCellSelection () {

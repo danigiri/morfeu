@@ -23,6 +23,8 @@ import static com.codeborne.selenide.Selenide.$$;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.codec.binary.CharSequenceUtils;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,6 +48,11 @@ public static void shouldNotBeVisible() {
 }
 
 
+public void shouldAppear() {
+	$("#content").should(appear);
+}
+
+
 public void shouldDisappear() {
 	$("#content").should(disappear);
 }
@@ -53,6 +60,34 @@ public void shouldDisappear() {
 
 public List<UICell> rootCells() {
 	return $$(".cell-level-1").stream().map(e -> new UICell(e, 1) ).collect(Collectors.toList());
+}
+
+public UIContent pressKey(String k) {
+	
+	//$("#content").pressTab();
+	$("#content").sendKeys(
+			new CharSequence() {
+	
+	@Override
+	public CharSequence subSequence(int start, int end) {
+		return null;
+	}
+	
+	
+	@Override
+	public int length() {
+		return k.length();
+	}
+	
+	
+	@Override
+	public char charAt(int index) {
+		
+		return k.charAt(index);
+	}
+	});
+	
+	return this;
 }
 
 }

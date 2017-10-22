@@ -23,13 +23,15 @@ import { Cell } from './cell.class';
 import { CellModel } from './cell-model.class';
 import { Widget } from './widget.class';
 
+import { CellActivateEvent } from './events/cell-activate.event';
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
+import { CellDragEvent } from './events/cell-drag.event';
+import { CellDropEvent } from './events/cell-drop.event';
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
-import { CellSelectionEvent } from './events/cell-selection.event';
+import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
-import { DropCellEvent } from './events/drop-cell.event';
 import { EventService } from './events/event.service';
 
 
@@ -154,7 +156,8 @@ ngOnInit() {
 	
     console.log("[UI] CellComponent::ngOnInit()");
     
-    this.subscribe(this.events.service.of( DropCellEvent )
+    // Drop a cell to a position under this cell
+    this.subscribe(this.events.service.of( CellDropEvent )
             .filter(dc => dc.newParent==this.cell)
             .subscribe( dc => {
                 console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to  "
@@ -163,6 +166,7 @@ ngOnInit() {
                 this.adoptCellAtPosition(dc.cell, dc.newPosition)
     }));
     
+    // A cell model was deactivated that is compatible with this cell
     this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
             .filter(d => this.isCompatibleWith(d.cellModel))    // //
             .subscribe( d => {
@@ -170,11 +174,38 @@ ngOnInit() {
                 this.becomeInactive(this.cell);
     }));
     
+    // a cell model activated that is compatible with this cell
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .filter(a => this.isCompatibleWith(a.cellModel))    // //
             .subscribe( a => {
                 //console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
                 this.becomeActive(this.cell);
+    }));
+    
+    // an outsider component (like a keyboard shortcut) wants to activate this selected cell
+    this.subscribe(this.events.service.of( CellActivateEvent )
+            .filter(a => this.selected && this.canBeActivated())
+            .subscribe( a => {
+                console.log("-> cell comp gets cell activate event and proceeds to focus :)");
+                // FIXMWE: this allows for multiple activations when conflicting with rollover
+                this.focusOn(this.cell);
+    }));
+
+    // A cell different cell was activated and we were active
+    this.subscribe(this.events.service.of( CellActivatedEvent )
+            .filter(a => this.active && a.cell!=this.cell)
+            .subscribe( a => {
+                console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
+                // FIXMWE: this allows for multiple activations when conflicting with rollover
+                this.becomeInactive(this.cell);
+    }));
+   
+    // External component (like a keyboard shortcut) wants to drag this cell somewhere
+    this.subscribe(this.events.service.of( CellDragEvent )
+            .filter(a => this.active)
+            .subscribe( a => {
+                console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
+                //this.events.service.publish(new CellDropEvent(this.cell));
     }));
     
 }	 
@@ -189,7 +220,7 @@ focusOn(cell:Cell) {
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
 	// to make that happen we can associate the cell-model.class with the component (view) and just do it
 	// without events
-	
+
 }
 
 
@@ -203,8 +234,13 @@ focusOff(cell:Cell) {
 }
 
 
+dragStart(cell:Cell) {
+    console.log("[UI] CellComponent::dragStart()");
+}
+
 // we drag outside any interesting area, we remove focus
 dragEnd(cell:Cell) {
+
     console.log("[UI] CellComponent::dragEnd()");
    // this.isBeingDragged = false;
     this.focusOff(cell);
@@ -228,6 +264,8 @@ becomeActive(cell:Cell) {
     //console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
     this.active = true;
 	this.dragEnabled = true;
+	// once we become active, selections are cleared, for instance to select the drag and drop destination
+    this.events.service.publish(new CellSelectionClearEvent());
 
 }
 
@@ -248,17 +286,23 @@ isCompatibleWith(element:FamilyMember): boolean {
 }
 
 
+canBeActivated():boolean {
+    return !this.cell.cellModel.presentation.startsWith("WELL");
+}
+
+
 select(position:number) {
 
     if (this.selected) {        
     
-     // we are selected so now our child will be selected and not us, this will bubble the selection down
+        // we are selected so now our child will be selected and not us, this will bubble the selection down
         if (this.children && this.children.length>0) {
             this.selected = false;
             this.unsubscribeFromCellSelection();            
         } else {
             this.events.service.publish(new CellSelectionClearEvent()); // we are a leaf, cannot bubble, clear
         }
+        
     } else if (position==this.position) {
         
         // we were waiting for a selection and are selected, so we select ourselves
@@ -273,6 +317,7 @@ select(position:number) {
     }
     
 }
+
 
 clearSelection() {
 
@@ -289,21 +334,16 @@ clearSelection() {
 }
 
 
+/** This cell now can be selected or can bubble down selections, and can also be cleared */
 subscribeToCellSelection() {  
-        this.cellSelectionSubscription = this.subscribe(this.events.service.of( CellSelectionEvent )
+        this.cellSelectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
                 .subscribe( cs => this.select(cs.position) )
         );
         this.subscribeToCellSelectionClear();  // if we are selectable we are also clearable
 }
 
 
-protected subscribeToCellSelectionClear() {
-        this.cellSelectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
-                .subscribe( cs => this.clearSelection() )
-        );
-}
-
-
+/** This cell is no longer eligible to be selected */
 unsubscribeFromCellSelection() {
 
     if (this.cellSelectionSubscription){
@@ -311,6 +351,13 @@ unsubscribeFromCellSelection() {
         this.cellSelectionSubscription = undefined;
     }
     
+}
+
+
+protected subscribeToCellSelectionClear() {
+    this.cellSelectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
+            .subscribe( cs => this.clearSelection() )
+    );
 }
 
 

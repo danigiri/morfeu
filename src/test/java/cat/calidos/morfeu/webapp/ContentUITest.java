@@ -17,14 +17,11 @@
 package cat.calidos.morfeu.webapp;
 
 import static org.junit.Assert.*;
+import static com.codeborne.selenide.Selenide.open;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
-
-import static com.codeborne.selenide.Selenide.open;
-
 import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
@@ -36,10 +33,12 @@ import cat.calidos.morfeu.webapp.ui.UIDocument;
 import cat.calidos.morfeu.webapp.ui.UIDropArea;
 import cat.calidos.morfeu.webapp.ui.UIModel;
 
+
 /** Testing content display without manipulation
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUITest extends UITezt {
+
 
 @Before
 public void setup() {
@@ -48,7 +47,8 @@ public void setup() {
 	
 }
 
-//@Test
+
+@Test
 public void contentTestAppearingAndDisappearing() {
 
 	UIContent.shouldNotBeVisible();
@@ -69,7 +69,7 @@ public void contentTestAppearingAndDisappearing() {
 }
 
 
-//@Test
+@Test
 public void contentTest() {
 
 	UIContent content = UICatalogues.openCatalogues()
