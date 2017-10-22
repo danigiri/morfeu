@@ -75,9 +75,10 @@ model: Model;
 
 private cellSelectionClearSubscription: Subscription;
 
-private commandHotkey: Hotkey | Hotkey[];
 private numberHotkey: Hotkey | Hotkey[];
-private hasSelectedChildren: boolean = false;
+private ctrlNumberHotkey: Hotkey | Hotkey[];
+private commandHotkey: Hotkey | Hotkey[];
+
 
 constructor(eventService: EventService,
            private hotkeysService: HotkeysService,
@@ -163,6 +164,17 @@ numberPressed = (event: KeyboardEvent): boolean => {
 }
 
 
+ctrlNumberPressed = (event: KeyboardEvent): boolean => {
+    
+    console.log("[UI] ContentComponent::ctrlNumberPressed("+event.key+")");
+//    this.events.service.publish(new CellSelectEvent(parseInt(event.key, 10)));
+
+    return false; // Prevent keyboard event from bubbling
+
+}
+
+
+
 keyPressed = (event: KeyboardEvent): boolean => {
     
     // we first send a clear so all children will clear, if they are level one they will
@@ -193,6 +205,9 @@ private registerContentKeyShortcuts() {
     
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed));
+    let ctrlNumbers:string[] 
+        = ["alt+0", "alt+1", "alt+2", "alt+3", "alt+4", "alt+5", "alt+6", "alt+7", "alt+8", "alt+9"];
+    this.ctrlNumberHotkey = this.hotkeysService.add(new Hotkey(ctrlNumbers, this.ctrlNumberPressed));    
     let commands:string[] = ["c", "a", "d"]; 
     this.commandHotkey = this.hotkeysService.add(new Hotkey(commands, this.keyPressed)); 
 
@@ -200,7 +215,12 @@ private registerContentKeyShortcuts() {
 
 
 private unregisterContentKeyShortcuts() {
+    
+    
     this.hotkeysService.remove(this.numberHotkey);   
+    this.hotkeysService.remove(this.ctrlNumberHotkey);   
+    this.hotkeysService.remove(this.commandHotkey);   
+
 }
 
 

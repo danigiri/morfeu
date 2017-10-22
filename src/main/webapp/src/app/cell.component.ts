@@ -326,7 +326,7 @@ clearSelection() {
     this.unsubscribeFromCellSelectionClear();
     this.selected = false;
     
-    // if we are root we are back to subscription state
+    // if we are root we are back to selection subscription state
     if (this.level==1) {
         this.subscribeToCellSelection();
     }
@@ -335,11 +335,13 @@ clearSelection() {
 
 
 /** This cell now can be selected or can bubble down selections, and can also be cleared */
-subscribeToCellSelection() {  
-        this.cellSelectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
+subscribeToCellSelection() {
+    
+    this.cellSelectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
                 .subscribe( cs => this.select(cs.position) )
-        );
-        this.subscribeToCellSelectionClear();  // if we are selectable we are also clearable
+    );
+    this.subscribeToCellSelectionClear();  // if we are selectable we are also clearable
+    
 }
 
 

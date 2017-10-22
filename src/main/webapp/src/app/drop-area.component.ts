@@ -27,6 +27,8 @@ import { CellDeactivatedEvent } from './events/cell-deactivated.event';
 import { CellDropEvent } from './events/cell-drop.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
+import { CellSelectEvent } from './events/cell-select.event';
+import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { EventService } from './events/event.service';
 
 
