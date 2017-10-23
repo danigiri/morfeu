@@ -230,8 +230,8 @@ private subscribeChildrenToCellSelection () {
     // the list of children views is only available ngAfterViewInit but we assume that
     // fetching the content will have been much slower
     // we ensure there were no previous selections, avoiding double or triple selects
-    this.children.forEach(c => c.unsubscribeFromCellSelection());
-    this.children.forEach(c => c.subscribeToCellSelection());
+    this.children.forEach(c => c.unsubscribeFromSelection());
+    this.children.forEach(c => c.subscribeToSelection());
 }
 
 

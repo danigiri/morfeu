@@ -39,6 +39,7 @@ import { EventService } from './events/event.service';
 			<div class="drop-area" 
 				 [class.drop-area-active]="active" 
 				 [class.drop-area-inactive]="!active"
+                 [class.cell-selected]="selected"
 				 dnd-droppable
 				 [dropEnabled]="active"
 				 (onDropSuccess)="dropSuccess($event)"				 
@@ -52,12 +53,17 @@ import { EventService } from './events/event.service';
 				.drop-area-active {
                     padding-top: 0px;
                     padding-bottom: 0px;
-					border: 2px dotted #0f0;
+					border: 2px dotted #080;
+                    border-radius: 5px;
 					opacity: 0.8;
 				}
 				.drop-area-inactive {
 					opacity: 0.01;
 				}
+                .cell-selected {
+                    border: 3px dashed #00f;
+                    border-radius: 5px;
+                }
 			`],
 	providers:[
 	]
@@ -70,6 +76,7 @@ export class DropAreaComponent extends Widget implements OnInit {
 @Input() position: number;
 
 active: boolean = false;
+selected: boolean = false;          // are we selected?
 
 
 constructor(eventService: EventService) {

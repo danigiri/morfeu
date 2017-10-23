@@ -53,7 +53,8 @@ import { EventService } from './events/event.service';
 					 (onDragEnd)="dragEnd(cell)"
 					 [dragData]="cell"
 					 />
-                <drop-area *ngIf="parent" [parent]="parent" [position]="position"></drop-area>
+				<!-- the position of the drop area is always where droped cells will go -->
+                <drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 			</ng-container>
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
@@ -101,7 +102,7 @@ import { EventService } from './events/event.service';
             .cell-selected {
                 border: 3px dashed #00f;
                 border-radius: 5px;
-             }			 
+             }
 			 .cell-dragged {
 				 opacity: .2;
 			 }
@@ -143,8 +144,8 @@ dragEnabled:boolean = false;
 selected: boolean = false;          // are we selected?
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 
-private cellSelectionSubscription: Subscription;
-private cellSelectionClearSubscription: Subscription;
+private selectionSubscription: Subscription;
+private selectionClearSubscription: Subscription;
 
 
 constructor(eventService: EventService) {
@@ -208,6 +209,7 @@ ngOnInit() {
                 //this.events.service.publish(new CellDropEvent(this.cell));
     }));
     
+   
 }	 
 	   
 
@@ -298,7 +300,7 @@ select(position:number) {
         // we are selected so now our child will be selected and not us, this will bubble the selection down
         if (this.children && this.children.length>0) {
             this.selected = false;
-            this.unsubscribeFromCellSelection();            
+            this.unsubscribeFromSelection();            
         } else {
             this.events.service.publish(new CellSelectionClearEvent()); // we are a leaf, cannot bubble, clear
         }
@@ -310,7 +312,7 @@ select(position:number) {
         // selection, at the next selection event we will clear ourselves while our child selects
         console.log("[UI] CellComponent::becomeSelected("+this.cell.name+"("+this.position+"))");
         this.selected = true; 
-        this.children.forEach(c => c.subscribeToCellSelection());
+        this.children.forEach(c => c.subscribeToSelection());
         
      } else {
          this.clearSelection();  // out of bounds, sorry, clear
@@ -322,52 +324,52 @@ select(position:number) {
 clearSelection() {
 
     console.log("[UI] SelectableCellWidget::clearSelection()");
-    this.unsubscribeFromCellSelection();
-    this.unsubscribeFromCellSelectionClear();
+    this.unsubscribeFromSelection();
+    this.unsubscribeFromSelectionClear();
     this.selected = false;
     
     // if we are root we are back to selection subscription state
     if (this.level==1) {
-        this.subscribeToCellSelection();
+        this.subscribeToSelection();
     }
 
 }
 
 
 /** This cell now can be selected or can bubble down selections, and can also be cleared */
-subscribeToCellSelection() {
+subscribeToSelection() {
     
-    this.cellSelectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
+    this.selectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
                 .subscribe( cs => this.select(cs.position) )
     );
-    this.subscribeToCellSelectionClear();  // if we are selectable we are also clearable
+    this.subscribeToSelectionClear();  // if we are selectable we are also clearable
     
 }
 
 
 /** This cell is no longer eligible to be selected */
-unsubscribeFromCellSelection() {
+unsubscribeFromSelection() {
 
-    if (this.cellSelectionSubscription){
-        this.unsubscribe(this.cellSelectionSubscription);
-        this.cellSelectionSubscription = undefined;
+    if (this.selectionSubscription) {
+        this.unsubscribe(this.selectionSubscription);
+        this.selectionSubscription = undefined;
     }
     
 }
 
 
-protected subscribeToCellSelectionClear() {
-    this.cellSelectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
+subscribeToSelectionClear() {
+    this.selectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
             .subscribe( cs => this.clearSelection() )
     );
 }
 
 
-protected unsubscribeFromCellSelectionClear() {
+unsubscribeFromSelectionClear() {
    
-    if (this.cellSelectionClearSubscription){
-        this.unsubscribe(this.cellSelectionClearSubscription);
-        this.cellSelectionClearSubscription = undefined;
+    if (this.selectionClearSubscription){
+        this.unsubscribe(this.selectionClearSubscription);
+        this.selectionClearSubscription = undefined;
     }
     
 }
