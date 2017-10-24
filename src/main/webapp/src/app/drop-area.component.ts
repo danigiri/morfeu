@@ -20,7 +20,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
 import { CellModel } from './cell-model.class';
-import { Widget } from './widget.class';
+import { SelectableWidget } from './selectable-widget.class';
 
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
@@ -70,7 +70,7 @@ import { EventService } from './events/event.service';
 })
 
 
-export class DropAreaComponent extends Widget implements OnInit {
+export class DropAreaComponent extends SelectableWidget implements OnInit {
 
 @Input() parent: FamilyMember;
 @Input() position: number;

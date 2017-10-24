@@ -14,3 +14,52 @@
  *   limitations under the License.
  */
 
+import { Subscription } from 'rxjs/Subscription';
+
+import { Widget } from './widget.class';
+
+
+export abstract class SelectableWidget extends Widget {
+    
+selected: boolean = false;          // are we selected?
+ 
+protected selectionSubscription: Subscription;
+protected selectionClearSubscription: Subscription;
+
+
+abstract select(position:number);
+
+
+clearSelection() {
+
+    this.unsubscribeFromSelection();
+    this.unsubscribeFromSelectionClear();
+    this.selected = false;
+
+}
+
+abstract subscribeToSelection();
+
+/** This cell is no longer eligible to be selected */
+unsubscribeFromSelection() {
+
+    if (this.selectionSubscription) {
+        this.unsubscribe(this.selectionSubscription);
+        this.selectionSubscription = undefined;
+    }
+    
+}
+
+abstract subscribeToSelectionClear();
+
+unsubscribeFromSelectionClear() {
+    
+    if (this.selectionClearSubscription){
+        this.unsubscribe(this.selectionClearSubscription);
+        this.selectionClearSubscription = undefined;
+    }
+    
+}
+
+
+}

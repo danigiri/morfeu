@@ -38,6 +38,7 @@ import { CellDragEvent } from './events/cell-drag.event';
 import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { ContentRequestEvent } from './events/content-request.event';
+import { DropAreaSelectEvent } from './events/drop-area-select.event';
 import { StatusEvent } from './events/status.event';
 import { EventService } from './events/event.service';
 
@@ -167,7 +168,7 @@ numberPressed = (event: KeyboardEvent): boolean => {
 ctrlNumberPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::ctrlNumberPressed("+event.key+")");
-//    this.events.service.publish(new CellSelectEvent(parseInt(event.key, 10)));
+    this.events.service.publish(new DropAreaSelectEvent(parseInt(event.key, 10)));
 
     return false; // Prevent keyboard event from bubbling
 

@@ -16,12 +16,11 @@
 
 
 import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
 
 import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
 import { CellModel } from './cell-model.class';
-import { Widget } from './widget.class';
+import { SelectableWidget } from './selectable-widget.class';
 
 import { CellActivateEvent } from './events/cell-activate.event';
 import { CellActivatedEvent } from './events/cell-activated.event';
@@ -130,7 +129,7 @@ import { EventService } from './events/event.service';
 })
 // `
 
-export class CellComponent extends Widget implements OnInit {
+export class CellComponent extends SelectableWidget implements OnInit {
 
 @Input() parent: FamilyMember;
 @Input() cell: Cell;
@@ -141,11 +140,7 @@ active: boolean = false;
 dragEnabled:boolean = false;
 //isBeingDragged:boolean = false;
 
-selected: boolean = false;          // are we selected?
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
-
-private selectionSubscription: Subscription;
-private selectionClearSubscription: Subscription;
 
 
 constructor(eventService: EventService) {
@@ -324,9 +319,7 @@ select(position:number) {
 clearSelection() {
 
     console.log("[UI] SelectableCellWidget::clearSelection()");
-    this.unsubscribeFromSelection();
-    this.unsubscribeFromSelectionClear();
-    this.selected = false;
+    super.clearSelection();
     
     // if we are root we are back to selection subscription state
     if (this.level==1) {
@@ -342,18 +335,14 @@ subscribeToSelection() {
     this.selectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
                 .subscribe( cs => this.select(cs.position) )
     );
-    this.subscribeToSelectionClear();  // if we are selectable we are also clearable
     
-}
-
-
-/** This cell is no longer eligible to be selected */
-unsubscribeFromSelection() {
-
-    if (this.selectionSubscription) {
-        this.unsubscribe(this.selectionSubscription);
-        this.selectionSubscription = undefined;
+    if (we have drop areas as children) {
+        this.selectionSubscription = this.subscribe(this.events.service.of( DropAreaSelectEvent )
+            .subscribe( das => this.select(das.position) )
+        );
     }
+    
+    this.subscribeToSelectionClear();  // if we are selectable we are also clearable
     
 }
 
@@ -364,15 +353,6 @@ subscribeToSelectionClear() {
     );
 }
 
-
-unsubscribeFromSelectionClear() {
-   
-    if (this.selectionClearSubscription){
-        this.unsubscribe(this.selectionClearSubscription);
-        this.selectionClearSubscription = undefined;
-    }
-    
-}
 
 
 //TODO: depending on the level go from -md- to -xs- col styling
