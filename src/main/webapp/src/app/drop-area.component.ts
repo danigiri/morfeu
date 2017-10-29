@@ -27,8 +27,8 @@ import { CellDeactivatedEvent } from './events/cell-deactivated.event';
 import { CellDropEvent } from './events/cell-drop.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
-import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+import { DropAreaSelectEvent } from './events/drop-area-select.event';
 import { EventService } from './events/event.service';
 
 
@@ -37,9 +37,9 @@ import { EventService } from './events/event.service';
 	selector: 'drop-area',
 	template: `
 			<div class="drop-area" 
-				 [class.drop-area-active]="active" 
+				 [class.drop-area-active]="active && !selected" 
 				 [class.drop-area-inactive]="!active"
-                 [class.cell-selected]="selected"
+                 [class.drop-area-selected]="selected"
 				 dnd-droppable
 				 [dropEnabled]="active"
 				 (onDropSuccess)="dropSuccess($event)"				 
@@ -60,7 +60,7 @@ import { EventService } from './events/event.service';
 				.drop-area-inactive {
 					opacity: 0.01;
 				}
-                .cell-selected {
+                .drop-area-selected {
                     border: 3px dashed #00f;
                     border-radius: 5px;
                 }
@@ -127,11 +127,24 @@ ngOnInit() {
     
 }
 
+
 select(position:number) {
     
-    if (position==this.position) {
+    if (this.active && position==this.position) {
+        
+        console.log("[UI] DropAreaComponent::select("+this.parent.getURI()+"["+this.position+"])");
+        this.selected = true;
+        this.unsubscribeFromSelection();
+
+        // We unsubscribe from clear, send a clear event and re-subscribe
+        // This means we are the only ones selected now (previous parent will be unselected, for instance)
+        this.unsubscribeFromSelectionClear();
+        this.events.service.publish(new CellSelectionClearEvent());
+        this.subscribeToSelectionClear();
         
     } else {
+        
+        this.clearSelection();  // out of bounds, sorry, clear
         
     }
     
@@ -140,11 +153,13 @@ select(position:number) {
 
 subscribeToSelection() {
     
+    this.selectionSubscription = this.subscribe(this.events.service.of( DropAreaSelectEvent )
+            .subscribe( das => this.select(das.position) )
+    );
+    this.subscribeToSelectionClear();  // if we are selectable we are also clearable
+
 }
 
-subscribeToSelectionClear() {
-    
-}
 
 
 becomeInactive() {

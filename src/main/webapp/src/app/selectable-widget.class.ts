@@ -18,6 +18,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Widget } from './widget.class';
 
+import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+
 
 export abstract class SelectableWidget extends Widget {
     
@@ -30,6 +32,9 @@ protected selectionClearSubscription: Subscription;
 abstract select(position:number);
 
 
+abstract subscribeToSelection();
+
+
 clearSelection() {
 
     this.unsubscribeFromSelection();
@@ -37,9 +42,6 @@ clearSelection() {
     this.selected = false;
 
 }
-
-
-abstract subscribeToSelection();
 
 
 /** This cell is no longer eligible to be selected */
@@ -52,7 +54,13 @@ unsubscribeFromSelection() {
     
 }
 
-abstract subscribeToSelectionClear();
+
+subscribeToSelectionClear() {
+    this.selectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
+            .subscribe( cs => this.clearSelection() )
+    );
+}
+
 
 unsubscribeFromSelectionClear() {
     

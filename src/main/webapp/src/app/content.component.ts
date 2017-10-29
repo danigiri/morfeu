@@ -77,7 +77,7 @@ model: Model;
 private cellSelectionClearSubscription: Subscription;
 
 private numberHotkey: Hotkey | Hotkey[];
-private ctrlNumberHotkey: Hotkey | Hotkey[];
+private dropAreaSelectingMode: boolean = false;
 private commandHotkey: Hotkey | Hotkey[];
 
 
@@ -158,8 +158,11 @@ clearContent() {
 numberPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::numberPressed("+event.key+")");
-    this.events.service.publish(new CellSelectEvent(parseInt(event.key, 10)));
-
+    if (!this.dropAreaSelectingMode) {
+        this.events.service.publish(new CellSelectEvent(parseInt(event.key, 10)));
+    } else {
+        this.events.service.publish(new DropAreaSelectEvent(parseInt(event.key, 10)));
+    }
     return false; // Prevent keyboard event from bubbling
 
 }
@@ -167,8 +170,6 @@ numberPressed = (event: KeyboardEvent): boolean => {
 
 ctrlNumberPressed = (event: KeyboardEvent): boolean => {
     
-    console.log("[UI] ContentComponent::ctrlNumberPressed("+event.key+")");
-    this.events.service.publish(new DropAreaSelectEvent(parseInt(event.key, 10)));
 
     return false; // Prevent keyboard event from bubbling
 
@@ -179,12 +180,16 @@ ctrlNumberPressed = (event: KeyboardEvent): boolean => {
 keyPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::keyPressed("+event.key+")");
+    this.dropAreaSelectingMode = false; // just in case we forget
     if (event.key=="c") {
         // we first send a clear so all children will clear, then back to registered in first level
         this.events.service.publish(new CellSelectionClearEvent());
         this.subscribeChildrenToCellSelection();
     } else if (event.key=="a") {
         this.events.service.publish(new CellActivateEvent());        
+    } else if (event.key=="'") {
+        console.log("[UI] ContentComponent::selection mode active for next key");
+        this.dropAreaSelectingMode = true;
     } else if (event.key=="d") {
         this.events.service.publish(new CellDragEvent());        
     }
@@ -206,10 +211,7 @@ private registerContentKeyShortcuts() {
     
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed));
-    let ctrlNumbers:string[] 
-        = ["alt+0", "alt+1", "alt+2", "alt+3", "alt+4", "alt+5", "alt+6", "alt+7", "alt+8", "alt+9"];
-    this.ctrlNumberHotkey = this.hotkeysService.add(new Hotkey(ctrlNumbers, this.ctrlNumberPressed));    
-    let commands:string[] = ["c", "a", "d"]; 
+    let commands:string[] = ["c", "a", "'", "d"]; 
     this.commandHotkey = this.hotkeysService.add(new Hotkey(commands, this.keyPressed)); 
 
 }
@@ -219,7 +221,6 @@ private unregisterContentKeyShortcuts() {
     
     
     this.hotkeysService.remove(this.numberHotkey);   
-    this.hotkeysService.remove(this.ctrlNumberHotkey);   
     this.hotkeysService.remove(this.commandHotkey);   
 
 }

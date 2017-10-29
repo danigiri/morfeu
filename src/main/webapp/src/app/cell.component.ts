@@ -24,7 +24,6 @@ import { CellModel } from './cell-model.class';
 import { DropAreaComponent } from './drop-area.component';
 import { SelectableWidget } from './selectable-widget.class';
 
-
 import { CellActivateEvent } from './events/cell-activate.event';
 import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
@@ -34,7 +33,6 @@ import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event
 import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
-import { DropAreaSelectEvent } from './events/drop-area-select.event';
 import { EventService } from './events/event.service';
 
 
@@ -200,15 +198,6 @@ ngOnInit() {
                 this.becomeInactive(this.cell);
     }));
    
-    // A cell different cell was activated and we are active at this moment
-    this.subscribe(this.events.service.of( DropAreaSelectEvent )
-            .filter(a => this.active)
-            .subscribe( a => {
-                console.log("-> cell comp gets drop-area select event and we were active, clear");
-                // we clear the selection (without the re-activation of the root cells, for empty docs)
-                super.clearSelection();
-    }));
-    
     // External component (like a keyboard shortcut) wants to drag this cell somewhere
     this.subscribe(this.events.service.of( CellDragEvent )
             .filter(a => this.active)
@@ -307,7 +296,7 @@ select(position:number) {
         
         // we were waiting for a selection we match the position, so we select ourselves
         // and unsubscribe from selection as we are not eligible anymore
-        console.log("[UI] CellComponent::becomeSelected("+this.cell.name+"("+this.position+"))");
+        console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");
         this.selected = true; 
         this.unsubscribeFromSelection();
         
@@ -339,14 +328,6 @@ subscribeToSelection() {
     this.subscribeToSelectionClear();  // if we are selectable we are also clearable
     
 }
-
-
-subscribeToSelectionClear() {
-    this.selectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
-            .subscribe( cs => this.clearSelection() )
-    );
-}
-
 
 
 //TODO: depending on the level go from -md- to -xs- col styling

@@ -103,7 +103,6 @@ canAdopt(newMember:FamilyMember):boolean {
     
     // we check the model compatibility first
     if (!this.cellModel.canAdopt(newMember)) {
-        console.log("1");
         return false;
         
     }
@@ -118,7 +117,6 @@ canAdopt(newMember:FamilyMember):boolean {
     // in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
 
     if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
-        console.log("2");
         return false;
     }
     
@@ -132,7 +130,6 @@ canAdopt(newMember:FamilyMember):boolean {
     //      [drop area 2]
     //  </col>
     if (this.children && this.parent && this.equals(newMember.getParent())) {
-        console.log("3");
         return true;
     }
     
@@ -144,7 +141,6 @@ canAdopt(newMember:FamilyMember):boolean {
         //TODO: add are we able to remove this cell as child?
         let matchingCellModel:CellModel = matchingChildren[0].cellModel;
         if (matchingCellModel.maxOccurs && childCount >= matchingCellModel.maxOccurs) { // notice we use '>=' as we are adding one more
-            console.log("4");
             return false;
         }
     }
