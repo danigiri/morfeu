@@ -180,7 +180,10 @@ ctrlNumberPressed = (event: KeyboardEvent): boolean => {
 keyPressed = (event: KeyboardEvent): boolean => {
     
     console.log("[UI] ContentComponent::keyPressed("+event.key+")");
-    this.dropAreaSelectingMode = false; // just in case we forget
+    if (this.dropAreaSelectingMode) {
+        console.log("[UI] ContentComponent::selection mode deactivated");        
+        this.dropAreaSelectingMode = false;
+    }
     if (event.key=="c") {
         // we first send a clear so all children will clear, then back to registered in first level
         this.events.service.publish(new CellSelectionClearEvent());
@@ -188,7 +191,7 @@ keyPressed = (event: KeyboardEvent): boolean => {
     } else if (event.key=="a") {
         this.events.service.publish(new CellActivateEvent());        
     } else if (event.key=="'") {
-        console.log("[UI] ContentComponent::selection mode active for next key");
+        console.log("[UI] ContentComponent::selection mode active for next numeric key");
         this.dropAreaSelectingMode = true;
     } else if (event.key=="d") {
         this.events.service.publish(new CellDragEvent());        

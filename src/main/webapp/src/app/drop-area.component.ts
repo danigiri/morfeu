@@ -124,7 +124,12 @@ ngOnInit() {
                 }
     }));
     
-    
+    this.subscribe(this.events.service.of( CellDropEvent )
+            .filter(cd => this.selected && cd.newParent==undefined)
+            .subscribe( cd => {
+                console.log("-> drop comp gets cell drop event from '"+cd.cell.name+"'");
+                this.performDropHere(cd.cell, this.parent, this.position);
+    }));
 }
 
 
@@ -186,8 +191,14 @@ matchesCellmodel(cellModel:CellModel):boolean {
 /** we drop here as we are only droppeable if we are active, and that's model validated */
 dropSuccess($event: any) {
 
-    console.log("[UI] DropAreaComponent::dropSuccess("+$event.dragData.URI+")");
-    this.events.service.publish(new CellDropEvent($event.dragData, this.parent, this.position));
+    this.performDropHere($event.dragData, this.parent, this.position);
+}
+
+
+performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
+    
+    console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
+    this.events.service.publish(new CellDropEvent(cell, this.parent, this.position));
     
 }
 

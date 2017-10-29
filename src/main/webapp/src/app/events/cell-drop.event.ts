@@ -20,13 +20,16 @@ import { FamilyMember } from '../family-member.interface';
 
 export class CellDropEvent {
     
-constructor(public cell:Cell, public newParent: FamilyMember, public newPosition: number) {}
+constructor(public cell:Cell, 
+            public newParent: FamilyMember = undefined, 
+            public newPosition: number = undefined) {}
 
 public toString = () : string => {
     
     return "DropCellEvent:{cell:'"+this.cell.URI
-            +"', newParent:"+this.newParent.getAdoptionURI()
-            +"', newPosition:"+this.newPosition +"}";
+            + (this.newParent ? "', newParent:"+this.newParent.getAdoptionURI() : "")
+            + (this.newPosition ? "', newPosition:"+this.newPosition : "")
+            +"}";
 
 }
 

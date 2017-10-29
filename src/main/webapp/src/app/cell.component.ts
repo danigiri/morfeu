@@ -157,7 +157,7 @@ ngOnInit() {
     
     // Drop a cell to a position under this cell
     this.subscribe(this.events.service.of( CellDropEvent )
-            .filter(dc => dc.newParent==this.cell)
+            .filter(dc => dc.newParent && dc.newParent==this.cell)
             .subscribe( dc => {
                 console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to  "
                             +this.cell.URI+" at position ("
@@ -203,7 +203,7 @@ ngOnInit() {
             .filter(a => this.active)
             .subscribe( a => {
                 console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
-                //this.events.service.publish(new CellDropEvent(this.cell));
+                this.events.service.publish(new CellDropEvent(this.cell));
     }));
     
    
