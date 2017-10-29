@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-//import { FamilyMember } from "../family-member.interface";
+//import { SelectableWidget } from "../selectable-widget.class";
 
 export class CellSelectEvent {
     

@@ -149,7 +149,7 @@ displayContent(content: Content) {
 clearContent() {
 
     console.log("[UI] ContentComponent::clearContent()");
-	this.registerContentKeyShortcuts();
+	this.unregisterContentKeyShortcuts();
 	this.content = null;
 
 }
@@ -178,11 +178,11 @@ ctrlNumberPressed = (event: KeyboardEvent): boolean => {
 
 keyPressed = (event: KeyboardEvent): boolean => {
     
-    // we first send a clear so all children will clear, if they are level one they will
-    // subscribe themselves again
     console.log("[UI] ContentComponent::keyPressed("+event.key+")");
     if (event.key=="c") {
+        // we first send a clear so all children will clear, then back to registered in first level
         this.events.service.publish(new CellSelectionClearEvent());
+        this.subscribeChildrenToCellSelection();
     } else if (event.key=="a") {
         this.events.service.publish(new CellActivateEvent());        
     } else if (event.key=="d") {

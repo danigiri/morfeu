@@ -127,6 +127,25 @@ ngOnInit() {
     
 }
 
+select(position:number) {
+    
+    if (position==this.position) {
+        
+    } else {
+        
+    }
+    
+}
+
+
+subscribeToSelection() {
+    
+}
+
+subscribeToSelectionClear() {
+    
+}
+
 
 becomeInactive() {
     this.active = false;
@@ -146,6 +165,8 @@ matchesCell(cell:Cell): boolean {
 matchesCellmodel(cellModel:CellModel):boolean {
     return this.parent && this.parent.canAdopt(cellModel);
 }
+
+
 
 /** we drop here as we are only droppeable if we are active, and that's model validated */
 dropSuccess($event: any) {

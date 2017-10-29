@@ -38,7 +38,9 @@ clearSelection() {
 
 }
 
+
 abstract subscribeToSelection();
+
 
 /** This cell is no longer eligible to be selected */
 unsubscribeFromSelection() {
