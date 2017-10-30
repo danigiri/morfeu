@@ -147,7 +147,8 @@ select(position:number) {
         this.unsubscribeFromSelectionClear();
         this.events.service.publish(new CellSelectionClearEvent());
         this.subscribeToSelectionClear();
-        
+    } else if (this.parent && position>=this.parent.childrenCount()) {
+        console.log("[UI] DropAreaComponent::select(out of bounds)");
     } else {
         
         this.clearSelection();  // out of bounds, sorry, clear

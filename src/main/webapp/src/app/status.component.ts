@@ -43,8 +43,8 @@ import { StatusEvent } from './events/status.event';
 		trigger('visibilityChanged', [
 			state('shown' , style({ opacity: 1 })), 
 			state('hidden', style({ opacity: 0 })),
-			transition('shown => hidden', animate('2s')),
-			transition('hidden => shown', animate('.1s'))
+			transition('shown => hidden', animate('1s')),
+			transition('hidden => shown', animate('1s'))
 		])
 	
 	]

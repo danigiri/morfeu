@@ -32,6 +32,7 @@ private static final String CLASS = "class";
 private static final String COL_WELL = "col-well";
 private static final String WELL = "well";
 private static final String ROW_WELL = "row-well";
+private static final String SELECTED = "cell-selected";
 private int level;
 
 public UICell(SelenideElement element, int level) {
@@ -137,6 +138,10 @@ public boolean isHighlighted() {
 	//element.waitUntil(cssClass(ACTIVE), 100);
 	//return element.shouldHave(cssClass(ACTIVE)).exists();
 	return element.attr(CLASS).contains(ACTIVE);
+}
+
+public boolean isSelected() {
+	return element.attr(CLASS).contains(SELECTED);
 }
 
 }

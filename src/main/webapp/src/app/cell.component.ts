@@ -311,7 +311,8 @@ select(position:number) {
 
         // if we have drop areas, they are also selectable now with the appropriate key shortcut
         this.dropAreas.forEach(da => da.subscribeToSelection());
-        
+    } else if (this.cell.parent && position>=this.cell.parent.childrenCount()) {
+        console.log("[UI] CellComponent::select(out of bounds)");
      } else {
          this.clearSelection();  // out of bounds, sorry, clear
     }

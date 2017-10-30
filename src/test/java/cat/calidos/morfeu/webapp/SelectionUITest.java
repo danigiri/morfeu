@@ -48,14 +48,29 @@ public void setup() {
 	
 }
 
+
 @Test
 public void testClearSelection() {
 	
 	content.pressKey("c");
-	content.pressKey("0");
-	content.pressKey("0");
-	content.pressKey("0");
+	assertFalse(content.rootCells().get(0).isSelected());
 	
+	content.pressKey("0");
+	assertTrue(content.rootCells().get(0).isSelected());
+
+	content.pressKey("0");
+	assertFalse(content.rootCells().get(0).isSelected());
+	assertTrue(content.rootCells().get(0).child(0).isSelected());
+	
+	content.pressKey("c");
+	assertFalse(content.rootCells().get(0).isSelected());
+	assertFalse(content.rootCells().get(0).child(0).isSelected());
+	
+}
+
+
+@Test
+public void testSelectionActivate() {
 }
 
 }

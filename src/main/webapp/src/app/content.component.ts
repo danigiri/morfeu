@@ -164,6 +164,7 @@ numberPressed = (event: KeyboardEvent): boolean => {
         this.events.service.publish(new CellSelectEvent(num));
     } else {
         this.events.service.publish(new DropAreaSelectEvent(num));
+        this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
     }
     return false; // Prevent keyboard event from bubbling
 
@@ -176,6 +177,7 @@ keyPressed = (event: KeyboardEvent): boolean => {
     console.log("[UI] ContentComponent::keyPressed(key:"+event.key+", charCode:"+event.charCode+")");
     if (this.dropAreaSelectingMode) {
         console.log("[UI] ContentComponent::selection mode deactivated");        
+        this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
         this.dropAreaSelectingMode = false;
     }
     if ((event.key && event.key=="c") || (event.charCode && event.charCode==99)) {
@@ -186,6 +188,7 @@ keyPressed = (event: KeyboardEvent): boolean => {
         this.events.service.publish(new CellActivateEvent());        
     } else if ((event.key && event.key=="'") || (event.charCode && event.charCode==39)) {
         console.log("[UI] ContentComponent::selection mode active for next numeric key");
+        this.events.service.publish(new StatusEvent("Drop area selection mode"));
         this.dropAreaSelectingMode = true;
     } else if ((event.key && event.key=="d") || (event.charCode && event.charCode==100)) {
         this.events.service.publish(new CellDragEvent());        
