@@ -51,6 +51,8 @@ public void setup() {
 @Test
 public void testClearSelection() {
 	
+	content.pressKey("c");
+	content.pressKey("0");
 	content.pressKey("0");
 	content.pressKey("0");
 	

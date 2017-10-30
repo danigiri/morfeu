@@ -155,45 +155,39 @@ clearContent() {
 }
 
 
+/** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
 numberPressed = (event: KeyboardEvent): boolean => {
     
-    console.log("[UI] ContentComponent::numberPressed("+event.key+")");
+    console.log("[UI] ContentComponent::numberPressed(key:"+event.key+", charCode:"+event.charCode+")");
+    let num:number = (event.key) ? parseInt(event.key, 10) : event.charCode-48;
     if (!this.dropAreaSelectingMode) {
-        this.events.service.publish(new CellSelectEvent(parseInt(event.key, 10)));
+        this.events.service.publish(new CellSelectEvent(num));
     } else {
-        this.events.service.publish(new DropAreaSelectEvent(parseInt(event.key, 10)));
+        this.events.service.publish(new DropAreaSelectEvent(num));
     }
     return false; // Prevent keyboard event from bubbling
 
 }
 
 
-ctrlNumberPressed = (event: KeyboardEvent): boolean => {
-    
-
-    return false; // Prevent keyboard event from bubbling
-
-}
-
-
-
+/** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
 keyPressed = (event: KeyboardEvent): boolean => {
     
-    console.log("[UI] ContentComponent::keyPressed("+event.key+")");
+    console.log("[UI] ContentComponent::keyPressed(key:"+event.key+", charCode:"+event.charCode+")");
     if (this.dropAreaSelectingMode) {
         console.log("[UI] ContentComponent::selection mode deactivated");        
         this.dropAreaSelectingMode = false;
     }
-    if (event.key=="c") {
+    if ((event.key && event.key=="c") || (event.charCode && event.charCode==99)) {
         // we first send a clear so all children will clear, then back to registered in first level
         this.events.service.publish(new CellSelectionClearEvent());
         this.subscribeChildrenToCellSelection();
-    } else if (event.key=="a") {
+    } else if ((event.key && event.key=="a") || (event.charCode && event.charCode==97)) {
         this.events.service.publish(new CellActivateEvent());        
-    } else if (event.key=="'") {
+    } else if ((event.key && event.key=="'") || (event.charCode && event.charCode==39)) {
         console.log("[UI] ContentComponent::selection mode active for next numeric key");
         this.dropAreaSelectingMode = true;
-    } else if (event.key=="d") {
+    } else if ((event.key && event.key=="d") || (event.charCode && event.charCode==100)) {
         this.events.service.publish(new CellDragEvent());        
     }
 

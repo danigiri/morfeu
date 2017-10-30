@@ -24,6 +24,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.CharSequenceUtils;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
+
+import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
@@ -35,7 +41,6 @@ public UIContent() {}
 
 
 public UIContent shouldBeVisible() {
-	
 	$("#content").shouldBe(visible);
 	
 	return this;
@@ -64,29 +69,14 @@ public List<UICell> rootCells() {
 
 public UIContent pressKey(String k) {
 	
-	//$("#content").pressTab();
-	$("#content").sendKeys(
-			new CharSequence() {
-	
-	@Override
-	public CharSequence subSequence(int start, int end) {
-		return null;
-	}
-	
-	
-	@Override
-	public int length() {
-		return k.length();
-	}
-	
-	
-	@Override
-	public char charAt(int index) {
-		
-		return k.charAt(index);
-	}
-	});
-	
+	// we are sending the keys this way as it seems to work as it should, selenide or selenium has a lot of trouble here
+	WebDriver driver = $("#content").getWrappedDriver();
+	Actions actions = new Actions(driver);
+	actions.moveToElement($("#content").getWrappedElement());
+	actions.click();
+	actions.sendKeys(Keys.chord((CharSequence)k));
+	actions.build().perform();
+
 	return this;
 }
 

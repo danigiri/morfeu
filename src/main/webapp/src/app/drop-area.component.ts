@@ -130,6 +130,7 @@ ngOnInit() {
                 console.log("-> drop comp gets cell drop event from '"+cd.cell.name+"'");
                 this.performDropHere(cd.cell, this.parent, this.position);
     }));
+    
 }
 
 
