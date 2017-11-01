@@ -54,11 +54,11 @@ public void setup() {
 public void testClearSelection() {
 	
 	content.pressKey(UIContent.SELECTION_MODE);
-	assertFalse(content.rootCells().get(0).isSelected());
+	assertFalse("After selection mode, root cell should not be selected", content.rootCells().get(0).isSelected());
 	
 	content.pressKey("0");
-	assertTrue(content.rootCells().get(0).isSelected());
-	assertFalse(content.rootCells().get(0).child(0).isSelected());
+	assertTrue("After selecting root cell it should be selected", content.rootCells().get(0).isSelected());
+	assertFalse("First row should not be selected yet", content.rootCells().get(0).child(0).isSelected());
 
 	content.pressKey("0");
 	assertFalse(content.rootCells().get(0).isSelected());
@@ -106,8 +106,8 @@ public void testSelectionClearsActivation() {
 	content.pressKey("0");
 	content.pressKey("a");
 	UICell data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)");
-	assertFalse(data.isSelected());
-	assertTrue(data.isActive());
+	assertFalse("After activating data cell, it should not be selected anymore", data.isSelected());
+	assertTrue("After activating data cell, it should be activated now", data.isActive());
 	
 	content.pressKey(UIContent.SELECTION_MODE);
 	content.pressKey("0");
@@ -145,7 +145,7 @@ public void testSelectionChangesActivation() {
 				.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data2(1)");
 	assertFalse(data.isSelected());
 	assertTrue(data.isActive());
-	assertFalse(data2.isSelected());
+	assertTrue(data2.isSelected());
 	assertFalse(data2.isActive());
 	
 	content.pressKey("a");

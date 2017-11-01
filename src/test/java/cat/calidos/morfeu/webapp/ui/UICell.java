@@ -185,6 +185,12 @@ public boolean isColumnWell() {
 public boolean isActive() {
 	//element.waitUntil(cssClass(ACTIVE), 100);
 	//return element.shouldHave(cssClass(ACTIVE)).exists();
+
+	// this keeps failing randomly
+	try {
+		Thread.sleep(50);
+	} catch (InterruptedException e) {}
+	
 	return element.attr(CLASS).contains(ACTIVE);
 }
 

@@ -80,6 +80,11 @@ public UIContent pressKey(String k) {
 	actions.sendKeys(Keys.chord((CharSequence)k));
 	actions.build().perform();
 
+	// this keeps failing randomly
+	try {
+		Thread.sleep(50);
+	} catch (InterruptedException e) {}
+
 	return this;
 }
 
