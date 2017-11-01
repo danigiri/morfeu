@@ -17,24 +17,27 @@
 package cat.calidos.morfeu.webapp.ui;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.binary.CharSequenceUtils;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
-import com.codeborne.selenide.SelenideElement;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIContent {
+
+
+public static final String SELECTION_MODE = "c";
+public static final String DROPAREA_MODE = "'";
+public static final String ACTIVATE = "a";
+public static final String DRAGNDROP = "d";
 
 
 public UIContent() {}
@@ -64,7 +67,7 @@ public void shouldDisappear() {
 
 
 public List<UICell> rootCells() {
-	return $$(".cell-level-1").stream().map(e -> new UICell(e, 1) ).collect(Collectors.toList());
+	return $$(".cell-level-1").stream().map(e -> new UICell(e, this, Optional.empty(), 1) ).collect(Collectors.toList());
 }
 
 public UIContent pressKey(String k) {

@@ -53,15 +53,27 @@ public void setup() {
 public void testDragCell() {
 	
 	UICell test = content.rootCells().get(0);
-	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
-	assertTrue(data.isCell());
+
+	// source col has one data child
+	UICell sourceCol = test.child("row(0)").child("col(0)");
+	assertEquals(1, sourceCol.children().size());
+	UICell data = sourceCol.child("data(0)");
+	assertTrue(data.isCell());												
 	
-	UICell targetCol = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)");
+	// col(1) here has two data2 children, we'll drop the data into the middle
+	UICell targetCol = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	assertEquals(2, targetCol.children().size());
 	
-	data = data.dragTo(targetCol.dropArea(0));
-	
+	data.dragTo(targetCol.dropArea(1));				// drop in the middle
 	assertEquals(3, targetCol.children().size());
+
+	// we check that we effectively put it in the middle
+	assertNotNull(targetCol.child("data2(0)"));
+	assertNotNull(targetCol.child("data(1)"));
+	assertNotNull(targetCol.child("data2(2)"));
+
+	// we also check that the source col has no children anymore
+	assertTrue(sourceCol.children().isEmpty());
 	
 }
 

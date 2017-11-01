@@ -16,12 +16,8 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-
 import com.codeborne.selenide.SelenideElement;
+
 
 /**
 * @author daniel giribet
@@ -33,61 +29,47 @@ private static final String ACTIVE = "drop-area-active";
 
 private SelenideElement element;
 private UICell parent;
+private UIContent content;
+private int position;
 
-public UIDropArea(SelenideElement e, UICell parent) {
+public UIDropArea(SelenideElement e, UIContent content, UICell parent) {
 
 	this.element = e;
+	this.content = content;
 	this.parent = parent;
 	
 }
+
 
 public boolean isActive() {
 	return element.attr(CLASS).contains(ACTIVE);
 }
 
-public int position() {
-	return Integer.parseInt(element.parent().attr("position"));
+
+public void setPosition(int position) {
+	this.position = position;
 }
 
 
-public UICell dropHere(UICell uiCell) {
+public int position() {
+	return this.position;
+}
 
-	int pos = position();
-	//uiCell.element.dragAndDropTo(element);
+
+/** @return cell just dropped at new position */
+public UICell dropHere(UICell cell) {
+
+	// we will use keyboard shorcuts to select the target destination
+	cell.select();
+	content.pressKey(UIContent.ACTIVATE);
 	
-	WebElement cellWebElement = uiCell.element.toWebElement();
-	WebElement dropWebElement = element.getWrappedElement();
-	WebDriver driver = element.getWrappedDriver();
-	Actions builder = new Actions(driver);
-    uiCell.hover();
-    
-    uiCell.element.dragAndDropTo(element.parent());
-//	WebElement ngDropArea = element.parent().getWrappedElement();
-//	builder
-//    	.moveToElement(cellWebElement, 2, 2)
-//    	.pause(1000)
-//    	.clickAndHold()
-//    	.pause(1000)
-////    	.dragAndDrop(cellWebElement, element.getWrappedElement())
-////    	.moveByOffset(100, 100)
-////    	.moveToElement(ngDropArea, 2, 2)
-////    	.pause(1000)
-//    	
-////    	.moveByOffset(5, 5)
-////    	.moveByOffset(-2, -2)
-////    	.moveByOffset(2, 2)
-////    	.moveByOffset(-2, -2)
-////    	.moveByOffset(2, 2)
-////    	.moveByOffset(-2, -2)
-////    	.moveByOffset(2, 2)
-////    	.moveByOffset(-2, -2)
-////    	.moveByOffset(2, 2)
-//        .release()
-//        .build().perform();
-	
-	//parent.hover();	// give time to the UI to refresh
-	
-	return parent.child(pos);
+	// select until the parent, setup drop area selection mode, select this drop area and drag-n-drop!!!
+	parent.select();
+	content.pressKey(UIContent.DROPAREA_MODE);
+	content.pressKey(position+"");
+	content.pressKey(UIContent.DRAGNDROP);
+		
+	return parent.child(position);
 
 }
 

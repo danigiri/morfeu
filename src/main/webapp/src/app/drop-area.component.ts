@@ -150,16 +150,14 @@ select(position:number) {
     } else if (this.parent && position>=this.parent.childrenCount()) {
         console.log("[UI] DropAreaComponent::select(out of bounds)");
     } else {
-        
         this.clearSelection();  // out of bounds, sorry, clear
-        
     }
     
 }
 
 
 subscribeToSelection() {
-    
+
     this.selectionSubscription = this.subscribe(this.events.service.of( DropAreaSelectEvent )
             .subscribe( das => this.select(das.position) )
     );

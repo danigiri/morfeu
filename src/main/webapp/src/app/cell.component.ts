@@ -15,7 +15,7 @@
  */
 
 
-import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 
 import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
@@ -143,7 +143,7 @@ dragEnabled:boolean = false;
 //isBeingDragged:boolean = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
-@ViewChildren(DropAreaComponent) dropAreas: QueryList<DropAreaComponent>;
+@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;      // we only have one of those!!! 
 
 
 constructor(eventService: EventService) {
@@ -315,7 +315,22 @@ select(position:number) {
         this.children.forEach(c => c.subscribeToSelection());
 
         // if we have drop areas, they are also selectable now with the appropriate key shortcut
-        this.dropAreas.forEach(da => da.subscribeToSelection());
+        // it's non trivial to get a list of dropAreas, in the case of wells, we have one drop area and the
+        // rest are from our children cells, so we subscribe our explicit first and then the rest, if we have
+        // children cells, that is.
+        // Diagram:
+        // if cell then
+        //    <img>
+        //    <drop-area>  (explicit in the template)
+        // else (well)
+        //  <cell>
+        //  <drop-area> (explicit in the template)
+        //      <foreach cell></cell>   (deep in each one there is the drop-area)
+        //  </cell>
+        // endif
+        this.dropArea.subscribeToSelection();
+        this.children.forEach(c => c.dropArea.subscribeToSelection());
+
     } else if (this.cell.parent && position>=this.cell.parent.childrenCount()) {
         console.log("[UI] CellComponent::select(out of bounds)");
      } else {

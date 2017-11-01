@@ -53,7 +53,7 @@ public void setup() {
 @Test
 public void testClearSelection() {
 	
-	content.pressKey("c");
+	content.pressKey(UIContent.SELECTION_MODE);
 	assertFalse(content.rootCells().get(0).isSelected());
 	
 	content.pressKey("0");
@@ -64,7 +64,7 @@ public void testClearSelection() {
 	assertFalse(content.rootCells().get(0).isSelected());
 	assertTrue(content.rootCells().get(0).child(0).isSelected());
 	
-	content.pressKey("c");
+	content.pressKey(UIContent.SELECTION_MODE);
 	assertFalse(content.rootCells().get(0).isSelected());
 	assertFalse(content.rootCells().get(0).child(0).isSelected());
 	
@@ -74,7 +74,7 @@ public void testClearSelection() {
 @Test
 public void testSelectionActivate() {
 
-	content.pressKey("c");
+	content.pressKey(UIContent.SELECTION_MODE);
 	content.pressKey("0");
 	content.pressKey("0");
 	content.pressKey("0");
@@ -87,7 +87,7 @@ public void testSelectionActivate() {
 	assertTrue(data.isSelected());
 	assertFalse(data.isActive());
 
-	content.pressKey("a");
+	content.pressKey(UIContent.ACTIVATE);
 	assertFalse(data.isSelected());
 	assertTrue(data.isActive());
 
@@ -99,7 +99,7 @@ public void testSelectionClearsActivation() {
 	
 	// we select and activate, then we select the same cell again, which means that it gets deactivated
 	// (no double state is allowed)
-	content.pressKey("c");
+	content.pressKey(UIContent.SELECTION_MODE);
 	content.pressKey("0");
 	content.pressKey("0");
 	content.pressKey("0");
@@ -109,7 +109,7 @@ public void testSelectionClearsActivation() {
 	assertFalse(data.isSelected());
 	assertTrue(data.isActive());
 	
-	content.pressKey("c");
+	content.pressKey(UIContent.SELECTION_MODE);
 	content.pressKey("0");
 	content.pressKey("0");
 	content.pressKey("0");

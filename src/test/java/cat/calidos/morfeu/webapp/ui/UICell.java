@@ -16,8 +16,12 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
 
 import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Condition.*;
@@ -33,40 +37,116 @@ private static final String COL_WELL = "col-well";
 private static final String WELL = "well";
 private static final String ROW_WELL = "row-well";
 private static final String SELECTED = "cell-selected";
+
+private UIContent content;
+private Optional<UICell> parent;
 private int level;
 
-public UICell(SelenideElement element, int level) {
+public UICell(SelenideElement element, UIContent content, Optional<UICell> parent, int level) {
 
 	super(element);
 
+	this.content = content;
+	this.parent = parent;
 	this.level = level;
+	
+}
+
+/** id is where we store the cell URI*/
+public String id() {
+	return element.attr("id");
+}
+
+public int level() {
+	return this.level;
+}
+
+public Optional<UICell> parent() {
+	return this.parent;
+}
+
+
+public int position() {
+
+	String URI = id();	// we reuse the fact that at the end of the uri we have the position like 'foo(0)'
+	return Integer.parseInt(URI.substring(URI.lastIndexOf("(")+1, URI.length()-1));
 
 }
+
+
+public List<UIDropArea> dropAreas() {
+	
+	List<UIDropArea> dropAreas = element.$$(".drop-area").stream()
+									.map(e -> new UIDropArea(e, this.content, this))
+									.collect(Collectors.toList());
+	int i = 0;
+	for (UIDropArea da: dropAreas) {
+		da.setPosition(i++);
+	}
+	
+	return dropAreas;
+
+}
+
+
+public UIDropArea dropArea(int i) {
+	return dropAreas().get(i);
+}
+
+
+public List<UICell> children() {
+	return element.$$(".cell-level-"+(level+1)).stream()
+			.map(e -> new UICell(e, content, Optional.of(this), level+1))
+			.collect(Collectors.toList());
+}
+
+
+// clever-ish: uris are doc/foo(0)/bar(0), to look for 'bar(0)' we check for "/bar(0)$"
+public UICell child(String name) {
+	return children().stream().filter(c -> c.id().endsWith("/"+name)).findAny().get();
+}
+
+
+public UICell child(int pos) {
+	return children().get(pos);
+}
+
 
 public UICell hover() {
 
 	element.scrollTo().hover();
-//	try {
-//		Thread.sleep(10);
-//	} catch (InterruptedException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
 	
 	return this;
 	
 }
 
 public UICell dragTo(UIDropArea target) {
-	hover();
 	return target.dropHere(this);
-
 }
 
 public UICell clik() {
 
 	element.click();
 	
+	return this;
+	
+}
+
+public UICell select() {
+	
+	// first we build a list of the tree nodes we use to reach this destination and we will be selecting them in turn
+	content.pressKey(UIContent.SELECTION_MODE);
+	LinkedList<UICell> path = new LinkedList<UICell>();
+	UICell parentVisitor = this;
+	while (parentVisitor!=null) {
+		path.push(parentVisitor);	// notice we are inserting, so it has the right order (and not reverse)
+		parentVisitor = parentVisitor.parent().orElse(null);
+	}
+	
+	// activate selection mode and then select each in turn
+	content.pressKey(UIContent.SELECTION_MODE);
+	path.stream().forEachOrdered(c -> content.pressKey(c.position()+""));
+
 	return this;
 	
 }
@@ -99,38 +179,6 @@ public boolean isColumnWell() {
 
 	return element.attr(CLASS).contains(COL_WELL);
 	
-}
-
-
-public List<UICell> children() {
-	return element.$$(".cell-level-"+(level+1)).stream().map(e -> new UICell(e, level+1)).collect(Collectors.toList());
-}
-
-
-// clever-ish: uris are doc/foo(0)/bar(0), to look for 'bar(0)' we check for "/bar(0)$"
-public UICell child(String name) {
-	return children().stream().filter(c -> c.id().endsWith("/"+name)).findAny().get();
-}
-
-
-public UICell child(int pos) {
-	return children().get(pos);
-}
-
-
-public List<UIDropArea> dropAreas() {
-	return element.$$(".drop-area").stream().map(e -> new UIDropArea(e, this)).collect(Collectors.toList());
-}
-
-
-public UIDropArea dropArea(int i) {
-	return dropAreas().get(i);
-}
-
-
-/** id is where we store the cell URI*/
-public String id() {
-	return element.attr("id");
 }
 
 
