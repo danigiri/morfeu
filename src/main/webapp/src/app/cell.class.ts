@@ -160,6 +160,7 @@ getParent():FamilyMember {
     return this.parent;
 }
 
+
 equals(m:FamilyMember) {
     return m && this.getURI()==m.getURI();  // FIXME: at the beginning, if m is a model, it is undefined
 }

@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
+import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
 
@@ -57,6 +58,7 @@ public void testClearSelection() {
 	
 	content.pressKey("0");
 	assertTrue(content.rootCells().get(0).isSelected());
+	assertFalse(content.rootCells().get(0).child(0).isSelected());
 
 	content.pressKey("0");
 	assertFalse(content.rootCells().get(0).isSelected());
@@ -71,6 +73,87 @@ public void testClearSelection() {
 
 @Test
 public void testSelectionActivate() {
+
+	content.pressKey("c");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("0");
+	UICell root = content.rootCells().get(0);
+	UICell data = root.child("row(0)").child("col(0)").child("data(0)");
+	assertFalse(data.isSelected());
+	assertFalse(data.isActive());
+
+	content.pressKey("0");
+	assertTrue(data.isSelected());
+	assertFalse(data.isActive());
+
+	content.pressKey("a");
+	assertFalse(data.isSelected());
+	assertTrue(data.isActive());
+
+}
+
+
+@Test
+public void testSelectionClearsActivation() {
+	
+	// we select and activate, then we select the same cell again, which means that it gets deactivated
+	// (no double state is allowed)
+	content.pressKey("c");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("a");
+	UICell data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)");
+	assertFalse(data.isSelected());
+	assertTrue(data.isActive());
+	
+	content.pressKey("c");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("0");
+	assertTrue(data.isSelected());
+	assertFalse(data.isActive());
+	
+}
+
+
+@Test
+public void testSelectionChangesActivation() {
+	
+	content.pressKey("c");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("a");
+	UICell data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)");
+	assertFalse(data.isSelected());
+	assertTrue(data.isActive());
+	
+	// select and activate another cell, and check activation is moved to the second cell
+	content.pressKey("c");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("1");
+	content.pressKey("0");
+	content.pressKey("0");
+	content.pressKey("1");
+	UICell data2 = content
+				.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data2(1)");
+	assertFalse(data.isSelected());
+	assertTrue(data.isActive());
+	assertFalse(data2.isSelected());
+	assertFalse(data2.isActive());
+	
+	content.pressKey("a");
+	assertFalse(data.isSelected());
+	assertFalse(data.isActive());
+	assertFalse(data2.isSelected());
+	assertTrue(data2.isActive());
+	
 }
 
 }

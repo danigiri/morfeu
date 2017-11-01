@@ -126,7 +126,7 @@ public void relationshipFromContentToModelTest() {
 	assertEquals(document1URI+"/test(0)/row(0)/col(0)/data(0)", data.id());
 	
 	data.hover();
-	assertTrue(data.isHighlighted());
+	assertTrue(data.isActive());
 	
 	UIModel model = document.model();
 	//test/row/col/data
@@ -137,10 +137,10 @@ public void relationshipFromContentToModelTest() {
 	assertFalse(data2Model.isHighlighted());
 	
 	UICell data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").child("data2(0)");
-	assertFalse(data2.isHighlighted());
+	assertFalse(data2.isActive());
 
 	data2.hover();
-	assertTrue(data2.isHighlighted());
+	assertTrue(data2.isActive());
 	assertTrue(data2Model.isHighlighted());
 	assertFalse(dataModel.isHighlighted());
 	
@@ -200,7 +200,7 @@ public void dropAreasTest() {
 	UICell data = col.child("data(0)");
 	assertTrue(data.isCell());
 	data.hover();
-	assertTrue(data.isHighlighted());
+	assertTrue(data.isActive());
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 	
 	// we hover over another data, we should activate both drop areas from the original first column

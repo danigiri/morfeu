@@ -294,6 +294,11 @@ select(position:number) {
 
     if (position==this.position) {
         
+        // if we were activated we deactivate ourselves and become selectable again
+        if (this.active) {
+            this.becomeInactive(this.cell);
+        }
+        
         // we were waiting for a selection we match the position, so we select ourselves
         // and unsubscribe from selection as we are not eligible anymore
         console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");

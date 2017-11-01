@@ -134,11 +134,12 @@ public String id() {
 }
 
 
-public boolean isHighlighted() {
+public boolean isActive() {
 	//element.waitUntil(cssClass(ACTIVE), 100);
 	//return element.shouldHave(cssClass(ACTIVE)).exists();
 	return element.attr(CLASS).contains(ACTIVE);
 }
+
 
 public boolean isSelected() {
 	return element.attr(CLASS).contains(SELECTED);
