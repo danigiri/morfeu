@@ -16,15 +16,12 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.sun.xml.xsom.XSAnnotation;
 
@@ -42,15 +39,15 @@ public class ModelMetadataModule {
 private static String DESC_FIELD = "mf:desc";
 private static String PRESENTATION_FIELD = "mf:presentation";
 private static String THUMB_FIELD = "mf:thumb";
-private static String UNDEFINED = "";
+//private static String UNDEFINED = "";
 
 
 @Provides
-Metadata provideMetadata(LinkedList<Node> annotationNodes, @Named("Fallback") @Nullable Metadata fallback) {
+Metadata provideMetadata(@Named("desc") Optional<String> desc,
+						 @Named("presentation") Optional<String> presentation,
+						 @Named("thumb") Optional<String> thumb,
+						 @Named("Fallback") @Nullable Metadata fallback) {
 	
-	Optional<String> desc = contentOf(annotationNodes, DESC_FIELD);
-	Optional<String> presentation = contentOf(annotationNodes, PRESENTATION_FIELD);
-	Optional<String> thumb = contentOf(annotationNodes, THUMB_FIELD);
 	
 	if (fallback==null) {
 
@@ -63,44 +60,36 @@ Metadata provideMetadata(LinkedList<Node> annotationNodes, @Named("Fallback") @N
 	} 
 }
 
-@Provides
-LinkedList<Node> annotationNode(@Nullable XSAnnotation annotation) {
-	
-	LinkedList<Node> annotationNodes = new LinkedList<Node>();
-	if (annotation!=null) {
-		Node annotationRootNode = (Node)annotation.getAnnotation(); // as we are using the DomAnnotationParserFactory from XSOM
-		annotationNodes.add(annotationRootNode);
-	}
-	
-	return annotationNodes;
-	
+
+@Provides @Named("desc")
+Optional<String> desc(@Nullable XSAnnotation annotation) {
+	return contentOf(annotation, DESC_FIELD);
+}
+
+
+@Provides @Named("presentation")
+Optional<String> presentation(@Nullable XSAnnotation annotation) {
+	return contentOf(annotation, PRESENTATION_FIELD);
+}
+
+
+@Provides @Named("thumb")
+Optional<String> thumb(@Nullable XSAnnotation annotation) {
+	return contentOf(annotation, THUMB_FIELD);
 }
 
 
 //reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
-private Optional<String> contentOf(LinkedList<Node> annotationNodes, @Named("tag") String tag) {
-	
-	String content = null;
+private static Optional<String> contentOf(@Nullable XSAnnotation annotation, String tag) {
 
-	while (annotationNodes.size()>0 && content==null) {
-		
-		Node currentNode = annotationNodes.pop();
-		if (currentNode.getNodeName().equals(tag)) {
-			content = currentNode.getTextContent();
-		} else {
-			if (currentNode.hasChildNodes()) {
-				NodeList childNodes = currentNode.getChildNodes();
-				for (int i=0;i<childNodes.getLength();i++) {
-					annotationNodes.add(childNodes.item(i));
-				}
-			}
-		}
-		
-	}
-	
-	// content may have lots of leading/trailing whitespace stuff, we'll leave that outside our scope
-	return Optional.ofNullable(content);
-	
+	Optional<Node> nodeValue = DaggerMetadataAnnotationComponent.builder()
+																	.from(annotation)
+																	.andTag(tag)
+																	.build()
+																	.value();
+
+	return nodeValue.isPresent() ? Optional.of(nodeValue.get().getTextContent()) : Optional.empty();
+
 }
 
 

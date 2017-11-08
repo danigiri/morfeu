@@ -16,32 +16,31 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import javax.annotation.Nullable;
-import javax.inject.Named;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
-import dagger.BindsInstance;
-import dagger.Component;
-
-import com.sun.xml.xsom.XSAnnotation;
+import org.w3c.dom.Node;
 
 import cat.calidos.morfeu.model.Metadata;
+import dagger.Module;
+import dagger.Provides;
 
-/**
-* @author daniel giribet
+/** Extra metadata that cannot be embedded in the cell model definitions due to being a reference or other
+* 	problems
+*	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules={ModelMetadataModule.class})
-public interface ModelMetadataComponent {
+@Module
+public class ExtraModelMetadata {
 
-Metadata value();
+@Provides
+Map<String, Metadata> provideExtraModelMetadata(LinkedList<Node> annotationNodes) {
 
-@Component.Builder
-interface Builder {
-
-	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
-	@BindsInstance Builder withFallback(@Named("Fallback") @Nullable Metadata fallback);
+	HashMap<String, Metadata> metadata = new HashMap<String, Metadata>();
 	
-	ModelMetadataComponent build();
-
+	
+	return metadata;
+	
 }
 
 }

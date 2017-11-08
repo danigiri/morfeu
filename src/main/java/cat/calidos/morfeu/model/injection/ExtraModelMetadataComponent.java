@@ -16,31 +16,32 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import javax.annotation.Nullable;
-import javax.inject.Named;
-
 import dagger.BindsInstance;
 import dagger.Component;
+
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
+import cat.calidos.morfeu.model.injection.ModelMetadataComponent.Builder;
 
-/**
+/** FIXME: THIS IS PROBABLY NOT NEEDED AND CAN JUST BE AS AN INCLUDED MODULE!!!!!!!
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules={ModelMetadataModule.class})
-public interface ModelMetadataComponent {
+@Component(modules=ExtraModelMetadata.class)
+public interface ExtraModelMetadataComponent {
 
-Metadata value();
+Map<String, Metadata> values();
 
 @Component.Builder
 interface Builder {
 
 	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
-	@BindsInstance Builder withFallback(@Named("Fallback") @Nullable Metadata fallback);
-	
-	ModelMetadataComponent build();
+
+	ExtraModelMetadataComponent build();
 
 }
 

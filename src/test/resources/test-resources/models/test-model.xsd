@@ -6,6 +6,11 @@
 	<xs:annotation>
 		<xs:appinfo>
 			<mf:desc>Description of test model</mf:desc>
+			<mf:extra-metadata>
+				<mf:metadata uri="/test/row/col/data2">
+					<mf:thumb>assets/images/data-thumb.svg</mf:thumb>
+				</mf:metadata>
+			</mf:extra-metadata>
 		</xs:appinfo>
 	</xs:annotation>
 

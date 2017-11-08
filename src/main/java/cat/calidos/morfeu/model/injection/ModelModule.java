@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,13 +31,11 @@ import javax.inject.Named;
 
 import org.xml.sax.SAXException;
 
-import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.impl.util.SchemaTreeTraverser;
-import com.sun.xml.xsom.impl.util.SchemaTreeTraverser.SchemaTreeModel;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
@@ -129,8 +126,8 @@ public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
 										.build()
 										.value();
 	return meta.getDesc();
+	
 }
-
 
 
 // notice we keep the processed types as we build the root cell models as global types can appear in different

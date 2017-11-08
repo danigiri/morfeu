@@ -21,12 +21,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
 import com.codeborne.selenide.SelenideElement;
-import static com.codeborne.selenide.Condition.*;
 
-/**
+
+/** 
+* http://localhost:8080/morfeu/models/target/test-classes/test-resources/models/test-model.xsd
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICell extends UIWidget<UICell> {
