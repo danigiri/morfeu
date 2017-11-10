@@ -38,7 +38,13 @@ import dagger.Provides;
 public class MetadataAnnotationModule {
 
 @Provides
-List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tag) {
+List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) {
+	
+	// the expression can be of two types (<nodename> or <nodename>@<attributename>)
+	// in the case of node it's straightforward, in the case of looking for an attribute, we look for the node name
+	// but add the attribute value as output node
+	int attributeIndex = tagExpr.lastIndexOf("@");
+	String tag = attributeIndex!=-1 ?  tagExpr.substring(0, attributeIndex-1): tagExpr;
 	
 	//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
 	List<Node> content = new ArrayList<Node>();
@@ -47,7 +53,14 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tag) {
 		
 		Node currentNode = annotationNodes.pop();
 		if (currentNode.getNodeName().equals(tag)) {
-			content.add(currentNode);
+			if (attributeIndex==-1) {
+				content.add(currentNode);
+			} else {
+				Node value = currentNode.getAttributes().getNamedItem(tagExpr.substring(attributeIndex+1));
+				if (value!=null) {	// if attribute does not actually exist in the metadata we don't add
+					content.add(value);
+				}
+			}
 		} else {
 			if (currentNode.hasChildNodes()) {
 				NodeList childNodes = currentNode.getChildNodes();

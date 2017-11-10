@@ -16,13 +16,17 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.w3c.dom.Node;
+import org.xml.sax.Locator;
 
+import com.google.common.base.Functions;
 import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
@@ -37,17 +41,34 @@ import dagger.Provides;
 public class ExtraModelMetadataModule {
 
 @Provides
-Map<String, Metadata> provideExtraModelMetadata(XSAnnotation annotation) {
+Map<URI, Metadata> provideExtraModelMetadata(XSAnnotation annotation) {
 
-	HashMap<String, Metadata> metadata = new HashMap<String, Metadata>();
-	
 	List<Node> extraMetadataNodes = DaggerMetadataAnnotationComponent.builder()
 																		.from(annotation)
 																		.andTag("mf:metadata")
 																		.build()
 																		.values();
 	
-	return metadata;
+	// an XSAnnotation is just a wrapper for any kind of object, in this case a Node, so we give it that
+	return extraMetadataNodes.stream().map(m -> DaggerModelMetadataComponent.builder().from(new XSAnnotation() {	
+		@Override
+		public Object setAnnotation(Object o) {
+			return null;
+		}
+		
+		
+		@Override
+		public Locator getLocator() {
+			return null;
+		}
+		
+		
+		@Override
+		public Object getAnnotation() {
+			return m;
+		}
+	}).build().value()).collect(Collectors.toMap(Metadata::getURI, Functions.identity()));
+
 	
 }
 

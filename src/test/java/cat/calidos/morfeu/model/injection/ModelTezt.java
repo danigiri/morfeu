@@ -101,6 +101,7 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 	
 }
 
+
 protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Exception {
 	
 	CellModel cellModel = cellModelFrom(u, name);
@@ -108,6 +109,7 @@ protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Excep
 	return ComplexCellModel.from(cellModel);	// from simple to complex
 	
 }
+
 
 protected XSSchemaSet parseSchemaFrom(URI uri)
 		throws InterruptedException, ExecutionException, ConfigurationException, ParsingException, FetchingException {

@@ -19,15 +19,19 @@ package cat.calidos.morfeu.model.injection;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
+import cat.calidos.morfeu.problems.FetchingException;
 import dagger.Module;
 import dagger.Provides;
 
@@ -38,6 +42,10 @@ import dagger.Provides;
 @Module
 public class ModelMetadataModule {
 
+protected final static Logger log = LoggerFactory.getLogger(ModelMetadataModule.class);
+		
+		
+private static final String URI_FIELD = "mf:metadata@uri";
 private static String DESC_FIELD = "mf:desc";
 private static String PRESENTATION_FIELD = "mf:presentation";
 private static String THUMB_FIELD = "mf:thumb";
@@ -64,9 +72,26 @@ Metadata provideMetadata(Optional<URI> uri,
 
 
 @Provides
-Optional<URI> uri() {
-	return Optional.empty();	// model metadata does not need an URI at the moment
+Optional<URI> uri(@Nullable XSAnnotation annotation) {
+	
+	Optional<String> uriValue = contentOf(annotation, URI_FIELD);
+	Optional<URI> optionalURI = Optional.empty();
+	
+	if (uriValue.isPresent()) {
+		try {
+			URI uri = DaggerURIComponent.builder().from(uriValue.get()).builder().uri().get();
+			optionalURI = Optional.of(uri);
+		} catch (Exception e) {
+			// log the error and return empty for the moment
+			// TODO: invalid URIs in metadata fail silently and should propagate an error
+			log.error("Invalid uri in metadata '{}'",uriValue);
+		}
+	}
+	
+	return optionalURI;
+	
 }
+
 
 @Provides @Named("desc")
 Optional<String> desc(@Nullable XSAnnotation annotation) {
@@ -95,6 +120,8 @@ private static Optional<String> contentOf(@Nullable XSAnnotation annotation, Str
 																.build()
 																.values();
 
+	//TODO: we assume the first value of the tag is the one we want, careful with nested stuff
+	
 	return !nodeValues.isEmpty() ? Optional.of(nodeValues.get(0).getTextContent()) : Optional.empty();
 
 }
