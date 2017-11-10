@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -34,7 +35,7 @@ import dagger.Component;
 @Component(modules=MetadataAnnotationModule.class)
 public interface MetadataAnnotationComponent {
 
-Optional<Node> value();
+List<Node> values();
 
 @Component.Builder
 interface Builder {

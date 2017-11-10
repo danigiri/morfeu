@@ -16,7 +16,9 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -36,30 +38,16 @@ import dagger.Provides;
 public class MetadataAnnotationModule {
 
 @Provides
-LinkedList<Node> annotationNode(@Nullable XSAnnotation annotation) {
-	
-	LinkedList<Node> annotationNodes = new LinkedList<Node>();
-	if (annotation!=null) {
-		Node annotationRootNode = (Node)annotation.getAnnotation(); // as we are using the DomAnnotationParserFactory from XSOM
-		annotationNodes.add(annotationRootNode);
-	}
-	
-	return annotationNodes;
-	
-}
-
-
-@Provides
-Optional<Node> nodeOf(LinkedList<Node> annotationNodes, String tag) {
+List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tag) {
 	
 	//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
-	Node content = null;
+	List<Node> content = new ArrayList<Node>();
 
-	while (annotationNodes.size()>0 && content==null) {
+	while (annotationNodes.size()>0) {
 		
 		Node currentNode = annotationNodes.pop();
 		if (currentNode.getNodeName().equals(tag)) {
-			content = currentNode;
+			content.add(currentNode);
 		} else {
 			if (currentNode.hasChildNodes()) {
 				NodeList childNodes = currentNode.getChildNodes();
@@ -71,9 +59,22 @@ Optional<Node> nodeOf(LinkedList<Node> annotationNodes, String tag) {
 		
 	}
 	
-	// content may have lots of leading/trailing whitespace stuff, we'll leave that outside our scope
-	return Optional.ofNullable(content);
+	return content;
 
+}
+
+
+@Provides
+LinkedList<Node> annotationNode(@Nullable XSAnnotation annotation) {
+	
+	LinkedList<Node> annotationNodes = new LinkedList<Node>();
+	if (annotation!=null) {
+		Node annotationRootNode = (Node)annotation.getAnnotation(); // as we are using the DomAnnotationParserFactory from XSOM
+		annotationNodes.add(annotationRootNode);
+	}
+	
+	return annotationNodes;
+	
 }
 
 

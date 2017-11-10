@@ -16,66 +16,105 @@
 
 package cat.calidos.morfeu.model;
 
+import java.net.URI;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cat.calidos.morfeu.model.injection.DaggerURIComponent;
+import cat.calidos.morfeu.problems.FetchingException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Metadata {
+public class Metadata implements Locatable {
 
+protected final static Logger log = LoggerFactory.getLogger(Metadata.class);
+		
+private static final String DEFAULT_URI = ".";
 private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_THUMB = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
 
-private Optional<String> desc;
-private Optional<String> presentation;
-private Optional<String> thumb;
+private URI uri;	// pre-calculated default
+private String desc;
+private String presentation;
+private String thumb;
 
 
 
 public Metadata() {
-	this(Optional.empty(), Optional.empty(), Optional.empty());
+	this(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
 }
 
 
-public Metadata(String desc, String presentation, String thumb) {
-	this(Optional.ofNullable(desc), Optional.ofNullable(presentation), Optional.ofNullable(thumb));
+public Metadata(URI uri, String desc, String presentation, String thumb) {
+	this(Optional.ofNullable(uri), 
+		 Optional.ofNullable(desc), 
+		 Optional.ofNullable(presentation), 
+		 Optional.ofNullable(thumb));
 }
 
 
-public Metadata(Optional<String> desc, Optional<String> presentation, Optional<String> thumb) {
+public Metadata(Optional<URI> uri, Optional<String> desc, Optional<String> presentation, Optional<String> thumb) {
 
-	this.desc = desc;
-	this.presentation = presentation;
-	this.thumb = thumb;
+	URI defaultURI = null;
+	try {
+		defaultURI = DaggerURIComponent.builder().from(DEFAULT_URI).builder().uri().get();
+	} catch (Exception e) {
+		// DEFAULT URI SHOULD NOT FAIL
+		log.error("Really? Default URI for metadata fails");
+		
+	}
+	this.uri = uri.orElse(defaultURI);
+	this.desc = desc.orElse(DEFAULT_DESC);
+	this.presentation = presentation.orElse(DEFAULT_PRESENTATION);
+	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	
 }
 
-public Metadata(Optional<String> desc, Optional<String> pres, Optional<String> thumb, Metadata fallback) {
-	this(desc.orElse(fallback.getDesc()),pres.orElse(fallback.getPresentation()), thumb.orElse(fallback.getThumb()));
+
+public Metadata(Optional<URI> uri, 
+				Optional<String> desc, 
+				Optional<String> pres, 
+				Optional<String> thumb, 
+				Metadata fallback) {
+	this(uri.orElse(fallback.getURI()),
+		desc.orElse(fallback.getDesc()),pres.orElse(fallback.getPresentation()), thumb.orElse(fallback.getThumb()));
 }
 
+
 public String getDesc() {
-	return desc.orElse(DEFAULT_DESC);
+	return desc;
 }
 
 
 public String getPresentation() {
-	return presentation.orElse(DEFAULT_PRESENTATION);
+	return presentation;
 }
 
 
 public String getThumb() {
-	return thumb.orElse(DEFAULT_THUMB);
+	return thumb;
 }
 
-private static Optional<String> combine(Optional<String> a, Optional<String> b) {
-	return Stream.of(a, b)
-			.filter(Optional::isPresent)
-			.map(Optional::get)
-			.findFirst();
+
+@Override
+public URI getURI() {
+	return uri;
 }
+
+
+@Override
+public String getName() {
+
+	// TODO Auto-generated method stub
+	return null;
+}
+
 
 }

@@ -33,7 +33,6 @@ public class URIModule {
 
 @Produces
 public static URI uri(String uri) throws FetchingException {
-	System.err.println("[module] Producer for URI called");
 	try {
 		return new URI(uri);
 	} catch (URISyntaxException e) {

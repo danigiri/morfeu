@@ -74,7 +74,7 @@ public void testRootAnonymousType() throws Exception {
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.buildType("cell-model-name", xsType, new Metadata("DESC", "PRESENTATION", "THUMB"));
+	Type type = TypeModule.buildType("cell-model-name", xsType, new Metadata(null, "DESC", "PRESENTATION", "THUMB"));
 	assertEquals("cell-model-name", type.getName());
 	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
 	assertEquals("THUMB", type.getMetadata().getThumb());

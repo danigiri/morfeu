@@ -31,6 +31,7 @@ import javax.inject.Named;
 
 import org.xml.sax.SAXException;
 
+import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSSchema;
@@ -51,10 +52,8 @@ import dagger.producers.Produces;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(includes=ModelParserModule.class)
+@ProducerModule(includes={ModelParserModule.class, ExtraModelMetadataModule.class})
 public class ModelModule extends RemoteModule {
-
-private static final String METADATA_DESC_FIELD = "mf:desc";
 
 
 // here we're using the model uri as it will be used to populate internal uri of cell models and it's a neat 
@@ -118,15 +117,18 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet, @Named(
 
 
 @Produces @Named("desc")
-public static String descriptionFromSchemaAnnotation(XSSchemaSet schemaSet) {
-
-	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
-	Metadata meta = DaggerModelMetadataComponent.builder()
-										.from(schema.getAnnotation())
+public static String descriptionFromSchemaAnnotation(XSAnnotation annotation) {
+	return DaggerModelMetadataComponent.builder()
+										.from(annotation)
 										.build()
-										.value();
-	return meta.getDesc();
-	
+										.value()
+										.getDesc();	
+}
+
+
+@Produces
+XSAnnotation annotationFrom(XSSchemaSet schemaSet) {
+	return schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
 }
 
 

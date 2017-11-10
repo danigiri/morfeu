@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -43,23 +45,28 @@ private static String THUMB_FIELD = "mf:thumb";
 
 
 @Provides
-Metadata provideMetadata(@Named("desc") Optional<String> desc,
+Metadata provideMetadata(Optional<URI> uri,
+						 @Named("desc") Optional<String> desc,
 						 @Named("presentation") Optional<String> presentation,
 						 @Named("thumb") Optional<String> thumb,
 						 @Named("Fallback") @Nullable Metadata fallback) {
 	
-	
 	if (fallback==null) {
 
-		return new Metadata(desc, presentation, thumb);
+		return new Metadata(uri, desc, presentation, thumb);
 	
 	} else {
 
-		return new Metadata(desc, presentation, thumb, fallback);
+		return new Metadata(uri, desc, presentation, thumb, fallback);
 		
 	} 
 }
 
+
+@Provides
+Optional<URI> uri() {
+	return Optional.empty();	// model metadata does not need an URI at the moment
+}
 
 @Provides @Named("desc")
 Optional<String> desc(@Nullable XSAnnotation annotation) {
@@ -82,13 +89,13 @@ Optional<String> thumb(@Nullable XSAnnotation annotation) {
 //reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
 private static Optional<String> contentOf(@Nullable XSAnnotation annotation, String tag) {
 
-	Optional<Node> nodeValue = DaggerMetadataAnnotationComponent.builder()
-																	.from(annotation)
-																	.andTag(tag)
-																	.build()
-																	.value();
+	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
+																.from(annotation)
+																.andTag(tag)
+																.build()
+																.values();
 
-	return nodeValue.isPresent() ? Optional.of(nodeValue.get().getTextContent()) : Optional.empty();
+	return !nodeValues.isEmpty() ? Optional.of(nodeValues.get(0).getTextContent()) : Optional.empty();
 
 }
 

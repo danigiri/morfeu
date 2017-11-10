@@ -22,6 +22,8 @@ import java.util.Map;
 
 import org.w3c.dom.Node;
 
+import com.sun.xml.xsom.XSAnnotation;
+
 import cat.calidos.morfeu.model.Metadata;
 import dagger.Module;
 import dagger.Provides;
@@ -30,14 +32,15 @@ import dagger.Provides;
 * 	problems
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class ExtraModelMetadata {
+@Module(includes=MetadataAnnotationModule.class)
+public class ExtraModelMetadataModule {
 
 @Provides
-Map<String, Metadata> provideExtraModelMetadata(LinkedList<Node> annotationNodes) {
+Map<String, Metadata> provideExtraModelMetadata(XSAnnotation annotation) {
 
 	HashMap<String, Metadata> metadata = new HashMap<String, Metadata>();
 	
+	DaggerMetadataAnnotationComponent.builder().from(annotation).andTag("mf:metadata");
 	
 	return metadata;
 	

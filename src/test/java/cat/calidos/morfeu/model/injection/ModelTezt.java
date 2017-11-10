@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
@@ -76,7 +77,8 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 		
 	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u);
-	String desc = ModelModule.descriptionFromSchemaAnnotation(schemaSet);
+	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
+	String desc = ModelModule.descriptionFromSchemaAnnotation(annotation);
 	
 	return ModelModule.produceModel(u, desc, u, schemaSet, rootCellModels);
 		
