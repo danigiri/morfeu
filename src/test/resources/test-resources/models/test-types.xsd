@@ -23,8 +23,10 @@
 	<xs:simpleType name="colField">
 		<xs:annotation>
 			<xs:appinfo>
-				<mf:desc>colField desc</mf:desc>
-				<mf:presentation>COL-FIELD</mf:presentation>
+				<mf:metadata>
+					<mf:desc>colField desc</mf:desc>
+					<mf:presentation>COL-FIELD</mf:presentation>
+				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
 

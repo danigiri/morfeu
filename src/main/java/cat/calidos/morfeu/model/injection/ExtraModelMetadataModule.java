@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Node;
@@ -40,7 +41,11 @@ Map<String, Metadata> provideExtraModelMetadata(XSAnnotation annotation) {
 
 	HashMap<String, Metadata> metadata = new HashMap<String, Metadata>();
 	
-	DaggerMetadataAnnotationComponent.builder().from(annotation).andTag("mf:metadata");
+	List<Node> extraMetadataNodes = DaggerMetadataAnnotationComponent.builder()
+																		.from(annotation)
+																		.andTag("mf:metadata")
+																		.build()
+																		.values();
 	
 	return metadata;
 	
