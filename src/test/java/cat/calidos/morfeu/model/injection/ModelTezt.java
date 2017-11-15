@@ -90,7 +90,7 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 	Map<String,CellModel> globals = new HashMap<String, CellModel>();
 	
-	//FIXME: this particle creation is probably wrong
+	//FIXME: this particle creation is probably wrong but it seems to work, at least for complex types
 	return DaggerCellModelComponent.builder()
 									.fromElem(elem)
 									.fromParticle(elem.getType().asComplexType().getContentType().asParticle())

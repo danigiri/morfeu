@@ -52,7 +52,7 @@ import dagger.producers.Produces;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(includes={ModelParserModule.class, ExtraModelMetadataModule.class})
+@ProducerModule(includes={ModelParserModule.class, GlobalModelMetadataModule.class})
 public class ModelModule extends RemoteModule {
 
 

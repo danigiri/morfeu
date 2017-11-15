@@ -38,7 +38,7 @@ import dagger.Provides;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module(includes=MetadataAnnotationModule.class)
-public class ExtraModelMetadataModule {
+public class GlobalModelMetadataModule {
 
 @Provides
 Map<URI, Metadata> provideExtraModelMetadata(XSAnnotation annotation) {

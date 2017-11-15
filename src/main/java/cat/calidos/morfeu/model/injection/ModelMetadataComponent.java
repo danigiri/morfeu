@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
@@ -38,7 +40,8 @@ Metadata value();
 interface Builder {
 
 	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
-	@BindsInstance Builder withFallback(@Named("Fallback") @Nullable Metadata fallback);
+	@BindsInstance Builder withParentURI(URI parentURI);	
+	@BindsInstance Builder andFallback(@Named("Fallback") @Nullable Metadata fallback);
 	
 	ModelMetadataComponent build();
 

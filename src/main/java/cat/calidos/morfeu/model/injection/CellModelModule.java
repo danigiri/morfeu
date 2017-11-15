@@ -305,16 +305,19 @@ public static XSType type(XSElementDecl elem) {
 
 
 @Provides
-public static Metadata metadata(XSElementDecl elem, Type t) {
+public static Metadata metadata(XSElementDecl elem, URI uri, Type t) {
 	return DaggerModelMetadataComponent.builder()
 		.from(elem.getAnnotation())
-		.withFallback(t.getMetadata())
+		.withParentURI(uri)
+		.andFallback(t.getMetadata())
 		.build()
 		.value();
 }
 
 
-private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, URI nodeURI, Map<String, CellModel> globals) {
+private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
+											   URI nodeURI, 
+											   Map<String, CellModel> globals) {
 
 	String name = xsAttributeDecl.getName();
 	URI attributeURI = getURIFrom(nodeURI.toString()+ATTRIBUTE_SEPARATOR+name, name);
@@ -328,7 +331,8 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 	
 	Metadata meta = DaggerModelMetadataComponent.builder()
 													.from(xsAttributeDecl.getAnnotation())
-													.withFallback(type.getMetadata())
+													.withParentURI(attributeURI)
+													.andFallback(type.getMetadata())
 													.build()
 													.value();
 	

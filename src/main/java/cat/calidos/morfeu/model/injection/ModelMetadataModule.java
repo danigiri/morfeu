@@ -31,7 +31,6 @@ import org.w3c.dom.Node;
 import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
-import cat.calidos.morfeu.problems.FetchingException;
 import dagger.Module;
 import dagger.Provides;
 
