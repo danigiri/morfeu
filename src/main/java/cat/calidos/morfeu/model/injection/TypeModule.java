@@ -47,32 +47,43 @@ public class TypeModule {
 protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 
 @Provides
-public static Type buildType(String defaultName, 
+public static Type buildType(URI uri,
+							 String defaultName, 
 							 XSType xsType, 
 							 Metadata metadata) {
 	
-	Locator locator = xsType.getLocator();
-	URI u = null;
-	try {
-		//TODO: build a real URI that can be accessed in the future
-		u = new URI(locator.getSystemId());
-	} catch (URISyntaxException e) {
-		log.error("What the heck, URI '{}' of element '{}' is not valid ", locator.getSystemId(), xsType.getName());
-	}
 	// if it's a local type we use the cell model name
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
 	boolean global = xsType.isGlobal();
 	
-	return new Type(u, name, xsType, global, metadata);
+	return new Type(uri, name, xsType, global, metadata);
 	
 }
 
 
 @Provides
-public static Metadata metadata(XSType xsType) {
+URI uri(XSType xsType) {
+	
+	URI u = null;
+	try {
+		//TODO: build a real URI that can be accessed in the future
+		Locator locator = xsType.getLocator();
+		u = new URI(locator.getSystemId());
+	} catch (URISyntaxException e) {
+		log.error("What the heck, locator-based URI of element '{}' is not valid ", xsType.getName());
+	}
+	
+	return u;
+
+}
+
+
+@Provides
+public static Metadata metadata(XSType xsType, URI uri) {
 	
 	return DaggerModelMetadataComponent.builder()
 		.from(xsType.getAnnotation())
+		.withParentURI(uri)
 		.build()
 		.value();
 }

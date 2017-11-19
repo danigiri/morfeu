@@ -31,6 +31,7 @@ import org.w3c.dom.Node;
 import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
+import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 
@@ -45,6 +46,8 @@ protected final static Logger log = LoggerFactory.getLogger(ModelMetadataModule.
 		
 		
 private static final String URI_FIELD = "mf:metadata@uri";
+private static final String DEFAULT_URI = ".";
+private static final String METADATA = "#metadata";
 private static String DESC_FIELD = "mf:desc";
 private static String PRESENTATION_FIELD = "mf:presentation";
 private static String THUMB_FIELD = "mf:thumb";
@@ -52,7 +55,7 @@ private static String THUMB_FIELD = "mf:thumb";
 
 
 @Provides
-Metadata provideMetadata(Optional<URI> uri,
+Metadata provideMetadata(URI uri,
 						 @Named("desc") Optional<String> desc,
 						 @Named("presentation") Optional<String> presentation,
 						 @Named("thumb") Optional<String> thumb,
@@ -71,26 +74,51 @@ Metadata provideMetadata(Optional<URI> uri,
 
 
 @Provides
-Optional<URI> uri(@Nullable XSAnnotation annotation) {
+URI uri(@Nullable XSAnnotation annotation, @Named("DefaultURI") Lazy<URI> defaultURI) {
 	
 	Optional<String> uriValue = contentOf(annotation, URI_FIELD);
-	Optional<URI> optionalURI = Optional.empty();
+	URI uri = null;
 	
 	if (uriValue.isPresent()) {
+		// in the metadata we have explicitly the URI
 		try {
-			URI uri = DaggerURIComponent.builder().from(uriValue.get()).builder().uri().get();
-			optionalURI = Optional.of(uri);
+			uri = DaggerURIComponent.builder().from(uriValue.get()).builder().uri().get();
 		} catch (Exception e) {
 			// log the error and return empty for the moment
-			// TODO: invalid URIs in metadata fail silently and should propagate an error
-			log.error("Invalid uri in metadata '{}'",uriValue);
+			// TODO: invalid URIs in metadata fail silently and should probably propagate an error
+			log.error("Invalid uri in metadata '{}', using default uri",uriValue);
+			uri = defaultURI.get();
 		}
+		
+	} else {
+		uri = defaultURI.get();
 	}
 	
-	return optionalURI;
+	return uri;
 	
 }
 
+
+// we derive the URI from the parent
+@Provides @Named("DefaultURI")
+URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
+	
+	URI uri = null;
+	try {
+		String uriVal = parentURI!=null ? parentURI.toString()+DEFAULT_URI+METADATA : DEFAULT_URI+METADATA;
+		uri = DaggerURIComponent.builder()
+				.from(uriVal)
+				.builder()
+				.uri()
+				.get();
+	} catch (Exception e) {
+		// DEFAULT URI SHOULD NOT FAIL
+		log.error("Really? Default URI for metadata fails - epic fail");		
+	}
+	
+	return uri;
+	
+}
 
 @Provides @Named("desc")
 Optional<String> desc(@Nullable XSAnnotation annotation) {

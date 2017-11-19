@@ -98,7 +98,7 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 									.andExistingGlobals(globals)
 									.build()
 									.cellModel();
-	
+
 }
 
 

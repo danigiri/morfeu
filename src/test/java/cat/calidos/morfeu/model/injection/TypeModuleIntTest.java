@@ -58,14 +58,16 @@ import cat.calidos.morfeu.model.Type;
 public class TypeModuleIntTest extends ModelTezt {
 
 private XSSchemaSet schemaSet;
+private Metadata emptyMedatada;
+private URI modelURI;
 
 
 @Before
 public void setup() throws Exception {
 
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	schemaSet = parseSchemaFrom(modelURI);
-	
+	emptyMedatada = new Metadata(null, "desc", "presentation", "thumb");
 }
 
 @Test
@@ -74,7 +76,7 @@ public void testRootAnonymousType() throws Exception {
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.buildType("cell-model-name", xsType, new Metadata(null, "DESC", "PRESENTATION", "THUMB"));
+	Type type = TypeModule.buildType(modelURI, "cell-model-name", xsType, new Metadata(null, "DESC", "PRESENTATION", "THUMB"));
 	assertEquals("cell-model-name", type.getName());
 	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
 	assertEquals("THUMB", type.getMetadata().getThumb());
@@ -124,7 +126,7 @@ public void testRootAnonymousType() throws Exception {
 public void testTextSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "textField");
-	Type type = TypeModule.buildType("not used default", xsType, new Metadata());
+	Type type = TypeModule.buildType(modelURI, "not used default", xsType, emptyMedatada);
 	assertEquals("textField", type.getName());
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
@@ -140,7 +142,7 @@ public void testTextSimpleType() {
 public void testIntegerSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "numberField");
-	Type type = TypeModule.buildType("not used default", xsType, new Metadata());
+	Type type = TypeModule.buildType(modelURI, "not used default", xsType, emptyMedatada);
 	assertEquals("numberField", type.getName());
 	assertTrue(type.isSimple());
 	
@@ -153,7 +155,7 @@ public void testIntegerSimpleType() {
 public void testColFieldSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colField");
-	Type type = TypeModule.buildType("not used", xsType, new Metadata());
+	Type type = TypeModule.buildType(modelURI, "not used default", xsType, emptyMedatada);
 	assertEquals("colField", type.getName());
 	assertTrue(type.isSimple());
 		

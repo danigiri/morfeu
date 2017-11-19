@@ -40,7 +40,7 @@ Metadata value();
 interface Builder {
 
 	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
-	@BindsInstance Builder withParentURI(URI parentURI);	
+	@BindsInstance Builder withParentURI(@Nullable @Named("ParentURI") URI parentURI);	
 	@BindsInstance Builder andFallback(@Named("Fallback") @Nullable Metadata fallback);
 	
 	ModelMetadataComponent build();

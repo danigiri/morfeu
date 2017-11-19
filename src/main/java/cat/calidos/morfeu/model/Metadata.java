@@ -35,7 +35,6 @@ public class Metadata implements Locatable {
 
 protected final static Logger log = LoggerFactory.getLogger(Metadata.class);
 		
-private static final String DEFAULT_URI = ".";
 private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_THUMB = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
@@ -46,31 +45,17 @@ private String presentation;
 private String thumb;
 
 
-
-public Metadata() {
-	this(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
-}
-
-
 public Metadata(URI uri, String desc, String presentation, String thumb) {
-	this(Optional.ofNullable(uri), 
+	this(uri, 
 		 Optional.ofNullable(desc), 
 		 Optional.ofNullable(presentation), 
 		 Optional.ofNullable(thumb));
 }
 
 
-public Metadata(Optional<URI> uri, Optional<String> desc, Optional<String> presentation, Optional<String> thumb) {
+public Metadata(URI uri, Optional<String> desc, Optional<String> presentation, Optional<String> thumb) {
 
-	URI defaultURI = null;
-	try {
-		defaultURI = DaggerURIComponent.builder().from(DEFAULT_URI).builder().uri().get();
-	} catch (Exception e) {
-		// DEFAULT URI SHOULD NOT FAIL
-		log.error("Really? Default URI for metadata fails");
-		
-	}
-	this.uri = uri.orElse(defaultURI);
+	this.uri = uri;
 	this.desc = desc.orElse(DEFAULT_DESC);
 	this.presentation = presentation.orElse(DEFAULT_PRESENTATION);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
@@ -78,12 +63,12 @@ public Metadata(Optional<URI> uri, Optional<String> desc, Optional<String> prese
 }
 
 
-public Metadata(Optional<URI> uri, 
+public Metadata(URI uri, 
 				Optional<String> desc, 
 				Optional<String> pres, 
 				Optional<String> thumb, 
 				Metadata fallback) {
-	this(uri.orElse(fallback.getURI()),
+	this(uri,
 		desc.orElse(fallback.getDesc()),pres.orElse(fallback.getPresentation()), thumb.orElse(fallback.getThumb()));
 }
 
@@ -115,6 +100,5 @@ public String getName() {
 	// TODO Auto-generated method stub
 	return null;
 }
-
 
 }

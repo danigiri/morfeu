@@ -27,6 +27,7 @@ import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 
@@ -46,6 +47,10 @@ public void testValue() throws Exception {
 	
 	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).build().value();
 	assertEquals("Description of test model", meta.getDesc());
+	assertEquals(".#metadata", meta.getURI().toString());
+	
+	// Non-trivial to find the element
+	//CellModel rowCell = cellModelFrom(modelURI, "rowCell");
 	
 }
 
