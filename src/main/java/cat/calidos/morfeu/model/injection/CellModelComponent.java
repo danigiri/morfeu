@@ -26,6 +26,7 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSParticle;
 
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.Metadata;
 import dagger.BindsInstance;
 import dagger.Component;
 
@@ -45,8 +46,9 @@ interface Builder {
 	@BindsInstance Builder fromElem(XSElementDecl elem);
 	@BindsInstance Builder fromParticle(XSParticle particle);
 	@BindsInstance Builder withParentURI(@Named("ParentURI") URI uri);
-	@BindsInstance Builder andExistingGlobals(Map<String, CellModel> globals);
-	
+	@BindsInstance Builder withGlobalMetadata(@Nullable Map<URI, Metadata> globalMetadata);
+	@BindsInstance Builder andExistingGlobals(@Nullable Map<String, CellModel> globals);
+
 	CellModelComponent build();
 	
 }

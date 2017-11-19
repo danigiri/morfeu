@@ -7,11 +7,11 @@
 		<xs:appinfo>
 			<mf:desc>Description of test model</mf:desc>
 			<mf:extra-metadata>
-				<mf:metadata uri="/test/row/col/data">
+				<mf:metadata uri="test/row/col/data">
 					<mf:desc>Globally provided description of 'data'</mf:desc>
 					<mf:thumb>assets/images/data-thumb.svg</mf:thumb>
 				</mf:metadata>
-				<mf:metadata uri="/test/row/col/data2">
+				<mf:metadata uri="test/row/col/data2">
 					<mf:thumb>assets/images/data2-thumb.svg</mf:thumb>
 				</mf:metadata>
 			</mf:extra-metadata>

@@ -128,7 +128,7 @@ public static Document normaliseDocumentURIs(@Named("ParsedDocument") Document d
 }
 
 
-@Produces  @Named("PrefixURI")
+@Produces @Named("PrefixURI")
 public static URI documentPrefix(@Named("ParsedDocument") Document doc, 
 								 @Named("Prefix") String prefix) throws ParsingException {
 	URI prefixURI = null;

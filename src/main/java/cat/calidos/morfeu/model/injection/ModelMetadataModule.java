@@ -65,32 +65,34 @@ Metadata provideMetadata(URI uri,
 	if (fallback==null) {
 
 		return new Metadata(uri, desc, presentation, thumb);
-	
+
 	} else {
 
 		return new Metadata(uri, desc, presentation, thumb, fallback);
-		
+
 	} 
 }
 
 
 @Provides
-URI uri(@Nullable XSAnnotation annotation, @Named("DefaultURI") Lazy<URI> defaultURI) {
+URI uri(@Nullable XSAnnotation annotation,
+	    @Nullable @Named("ParentURI") URI parentURI,
+	    @Named("DefaultURI") Lazy<URI> defaultURI) {
 	
 	Optional<String> uriValue = contentOf(annotation, URI_FIELD);
 	URI uri = null;
-	
+
 	if (uriValue.isPresent()) {
 		// in the metadata we have explicitly the URI
 		try {
-			uri = DaggerURIComponent.builder().from(uriValue.get()+METADATA).builder().uri().get();
+			uri = DaggerURIComponent.builder().from(parentURI+"/"+uriValue.get()+METADATA).builder().uri().get();
 		} catch (Exception e) {
 			// log the error and return empty for the moment
 			// TODO: invalid URIs in metadata fail silently and should probably propagate an error
 			log.error("Invalid uri in metadata '{}', using default uri",uriValue);
 			uri = defaultURI.get();
 		}
-		
+
 	} else {
 		uri = defaultURI.get();
 	}
@@ -106,7 +108,7 @@ URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
 	
 	URI uri = null;
 	try {
-		String uriVal = parentURI!=null ? parentURI.toString()+DEFAULT_URI+METADATA : DEFAULT_URI+METADATA;
+		String uriVal = parentURI!=null ? parentURI.toString()+"/"+DEFAULT_URI+METADATA : DEFAULT_URI+METADATA;
 		uri = DaggerURIComponent.builder()
 				.from(uriVal)
 				.builder()

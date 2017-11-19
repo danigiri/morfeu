@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.inject.Named;
+
 import org.w3c.dom.Node;
 import org.xml.sax.Locator;
 
@@ -32,16 +34,18 @@ import com.sun.xml.xsom.XSAnnotation;
 import cat.calidos.morfeu.model.Metadata;
 import dagger.Module;
 import dagger.Provides;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /** Extra metadata that cannot be embedded in the cell model definitions due to being a reference or other
 * 	problems
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module(includes=MetadataAnnotationModule.class)
+@ProducerModule(includes=MetadataAnnotationModule.class)
 public class GlobalModelMetadataModule {
 
-@Provides
-public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotation) {
+@Produces
+public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotation, @Named("ModelURI") URI uri) {
 
 	List<Node> extraMetadataNodes = DaggerMetadataAnnotationComponent.builder()
 																		.from(annotation)
@@ -50,24 +54,29 @@ public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotat
 																		.values();
 	
 	// an XSAnnotation is just a wrapper for any kind of object, in this case a Node, so we give it that
-	return extraMetadataNodes.stream().map(m -> DaggerModelMetadataComponent.builder().from(new XSAnnotation() {	
-		@Override
-		public Object setAnnotation(Object o) {
-			return null;
-		}
-		
-		
-		@Override
-		public Locator getLocator() {
-			return null;
-		}
-		
-		
-		@Override
-		public Object getAnnotation() {
-			return m;
-		}
-	}).build().value()).collect(Collectors.toMap(Metadata::getURI, Functions.identity()));
+	return extraMetadataNodes.stream()
+			.map(m -> DaggerModelMetadataComponent.builder().from(new XSAnnotation() {
+
+													@Override
+													public Object setAnnotation(Object o) {
+														return null;
+													}
+
+
+													@Override
+													public Locator getLocator() {
+														return null;
+													}
+
+
+													@Override
+													public Object getAnnotation() {
+														return m;
+													}})
+													.withParentURI(uri)
+													.build()
+													.value()
+			).collect(Collectors.toMap(Metadata::getURI, Functions.identity()));
 
 	
 }

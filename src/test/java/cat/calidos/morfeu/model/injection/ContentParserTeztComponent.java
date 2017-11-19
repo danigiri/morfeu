@@ -39,14 +39,17 @@ ListenableFuture<org.w3c.dom.Document> parsedXMLDocument();
 // a) adding a dom public method to the content parser component, exposing internals
 // b) heavily use internals of the content parser to build the dom in the cell module test
 // c) have an interface extend contentparsercomponent (not supported by dagger 2)
-// d) duplicate the builder interface here (* chosen option as it duplicates interface, not implementation *) 
+// d) duplicate the builder interface here - chosen option as it duplicates interface, not implementation *) 
 @ProductionComponent.Builder
 interface Builder {
+
 	@BindsInstance Builder content(@Named("ContentURI") URI u);
 	@BindsInstance Builder fetchedContentFrom(@Named("FetchableContentURI") URI u);
 	@BindsInstance Builder model(@Named("ModelURI") URI u);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
+
 	ContentParserTeztComponent build();
+
 }
 
 }

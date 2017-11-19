@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.xml.sax.SAXException;
@@ -59,11 +60,11 @@ public class ModelModule extends RemoteModule {
 // here we're using the model uri as it will be used to populate internal uri of cell models and it's a neat 
 // representation
 @Produces
-public static Model produceModel(@Named("ModelURI") URI u, 
-								 @Named("desc") String desc, 
-								 @Named("FetchableModelURI") URI fetchableURI,
-								 XSSchemaSet schemaSet, 
-								 List<CellModel> rootTypes) {
+public static Model produceModel(@Named("ModelURI") URI u,
+								@Named("desc") String desc,
+								@Named("FetchableModelURI") URI fetchableURI,
+								XSSchemaSet schemaSet, 
+								List<CellModel> rootTypes) {
 	return new Model(u, desc, fetchableURI, schemaSet, rootTypes);
 }
 
@@ -95,23 +96,32 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 
 
 @Produces
-public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet, @Named("ModelURI") URI u) {
+public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
+												@Named("ModelURI") URI u,
+												@Nullable Map<URI, Metadata> globalMetadata) {
 
 	SchemaTreeTraverser traverser = new SchemaTreeTraverser();
 	traverser.visit(schemaSet);
 	//SchemaTreeModel model = traverser.getModel();
 	
-	ArrayList<CellModel> rootTypes = new ArrayList<CellModel>();
+	ArrayList<CellModel> rootCellModels = new ArrayList<CellModel>();
 	Set<Type> processedTypes = new HashSet<Type>();
 	Map<String, CellModel> globals = new HashMap<String, CellModel>();
 	
 	Iterator<XSElementDecl> iterator = schemaSet.iterateElementDecls();
 	iterator.forEachRemaining(elem -> {
-									   XSParticle part = elem.getType().asComplexType().getContentType().asParticle();
-									   rootTypes.add(buildCellModel(elem, part, u, processedTypes, globals));
-	});
+										XSParticle part = elem.getType().asComplexType().getContentType().asParticle();
+										CellModel cellModel = buildCellModel(elem, 
+																			part,
+																			u,
+																			processedTypes,
+																			globals,
+																			globalMetadata);
+										rootCellModels.add(cellModel);
+									}
+	);
 	
-	return rootTypes;
+	return rootCellModels;
 
 }
 
@@ -134,11 +144,12 @@ XSAnnotation annotationFrom(XSSchemaSet schemaSet) {
 
 // notice we keep the processed types as we build the root cell models as global types can appear in different
 // root cell models
-private static CellModel buildCellModel(XSElementDecl elem, 
-										XSParticle particle, 
-										URI u, 
-										Set<Type> types, 
-										Map<String, CellModel> globals) {
+private static CellModel buildCellModel(XSElementDecl elem,
+										XSParticle particle,
+										URI u,
+										Set<Type> types,
+										Map<String, CellModel> globals,
+										Map<URI, Metadata> globalMetadata) {
 	return DaggerCellModelComponent.builder()
 									.fromElem(elem)
 									.fromParticle(particle)

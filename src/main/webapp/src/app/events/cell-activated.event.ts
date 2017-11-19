@@ -14,7 +14,7 @@
  *	 limitations under the License.
  */
 
-import { Cell } from '../cell.class';
+import { Cell } from "../cell.class";
 
 
 export class CellActivatedEvent {
@@ -22,8 +22,8 @@ export class CellActivatedEvent {
 constructor(public cell: Cell) {}
 
 
-public toString = () : string => {
+public toString = (): string => {
 	return "CellActivatedEvent:{cell:'"+this.cell.URI+"'}";
 }
-	
+
 }

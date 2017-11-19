@@ -76,7 +76,7 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 		
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 		
-	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u);
+	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u, null);
 	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
 	String desc = ModelModule.descriptionFromSchemaAnnotation(annotation);
 	

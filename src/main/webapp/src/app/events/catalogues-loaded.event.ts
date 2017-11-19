@@ -14,12 +14,11 @@
  *	 limitations under the License.
  */
 
-import { Catalogue } from '../catalogue.class';
+import { Catalogue } from "../catalogue.class";
 
 export class CataloguesLoadedEvent {
-	
-   
-constructor(public catalogues: Catalogue[]) {}
 
+
+constructor(public catalogues: Catalogue[]) {}
 
 }

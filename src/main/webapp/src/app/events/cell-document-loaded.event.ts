@@ -14,8 +14,10 @@
  *	 limitations under the License.
  */
 
-import { CellDocument } from '../cell-document.class';
+import { CellDocument } from "../cell-document.class";
 
 export class CellDocumentLoadedEvent {
-	constructor(public document: CellDocument) {}
+
+constructor(public document: CellDocument) {}
+
 }

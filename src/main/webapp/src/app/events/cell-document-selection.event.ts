@@ -14,13 +14,13 @@
  *	 limitations under the License.
  */
 
-import { CellDocument } from '../cell-document.class';
+import { CellDocument } from "../cell-document.class";
 
 export class CellDocumentSelectionEvent {
 
 constructor(public url: string) {}
 
-public toString = () : string => {
+public toString = (): string => {
 	return "CellDocumentSelectionEvent:{url:'"+this.url+"'}";
 }
 

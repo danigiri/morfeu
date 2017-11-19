@@ -39,28 +39,30 @@ public class GlobalMetadataModuleIntTest extends ModelTezt {
 @Test
 public void testGlobalMetadataFromModel() throws Exception {
 	
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	String uri = "target/test-classes/test-resources/models/test-model.xsd";
+	URI modelURI = new URI(uri);
 	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
 	
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
 	
-	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation);
+	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, modelURI);
 	assertNotNull("global metadata parser should not return null", globalMetadata);
 	assertEquals("global metadata should have two entries", 2, globalMetadata.size());
 
-	URI dataURI = new URI("/test/row/col/data");
+	URI dataURI = new URI(uri+"/test/row/col/data");
 	Metadata dataMetadata = globalMetadata.get(dataURI);	
-	assertNotNull("global metadata parser should not return data cell metadata", dataMetadata);
+	assertNotNull("global metadata parser should return data cell metadata", dataMetadata);
+	assertEquals(dataURI.toString(), dataMetadata.getURI().toString());
 	assertEquals("Globally provided description of 'data'", dataMetadata.getDesc());
 	assertEquals("assets/images/data-thumb.svg", dataMetadata.getThumb());
 
-	URI data2URI = new URI("/test/row/col/data2");
+	URI data2URI = new URI(uri+"/test/row/col/data2");
 	Metadata data2Metadata = globalMetadata.get(data2URI);	
-	assertNotNull("global metadata parser should not return data2 cell metadata", data2Metadata);
+	assertEquals(data2URI.toString(), data2Metadata.getURI().toString());
+	assertNotNull("global metadata parser should return data2 cell metadata", data2Metadata);
 	assertEquals("assets/images/data2-thumb.svg", data2Metadata.getThumb());
 
-	
 }
 
 }

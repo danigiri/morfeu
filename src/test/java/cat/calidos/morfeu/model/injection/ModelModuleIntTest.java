@@ -50,7 +50,13 @@ public void testParseModel() throws Exception {
 	CellModel test = rootCellModels.get(0);
 	assertEquals("test", test.getName());
 	assertEquals("test-type", test.getType().getName());
-	
+
+}
+
+
+@Test
+public void testGlobalMetadata( ) {
+		//HERE HERE HEREH HERHERHE 
 }
 
 

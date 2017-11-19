@@ -53,7 +53,7 @@ public void setup() throws Exception {
 	contentURI = new URI(contentPath);
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd";
 	modelURI = new URI(modelPath);
-		
+
 	document = DaggerContentParserTeztComponent.builder()
 												.content(contentURI)
 												.fetchedContentFrom(contentURI)

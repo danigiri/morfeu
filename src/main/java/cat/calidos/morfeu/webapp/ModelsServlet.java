@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.ModelControl;
 
-/**
+/** http://localhost:8080/morfeu/models/target/test-classes/test-resources/models/test-model.xsd
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelsServlet extends MorfeuServlet {

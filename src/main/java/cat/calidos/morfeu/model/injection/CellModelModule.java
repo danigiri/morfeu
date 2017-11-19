@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.OptionalInt;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Provider;
 
@@ -78,10 +79,10 @@ public static CellModel provideCellModel(URI u,
 										 Type t,
 										 Provider<BasicCellModel> providerCell,
 										 Provider<ComplexCellModel> providerComplexCell,
-										 Map<String, CellModel> globals) {
+										 @Nullable Map<String, CellModel> globals) {
 
 	CellModel cellModel;
-	if (globals.containsKey(t.getName())) {
+	if (globals!=null && globals.containsKey(t.getName())) {
 		CellModel ref = globals.get(t.getName());
 		cellModel = new BasicCellModelReference(u, name, minOccurs, maxOccurs, ref);	// keep the URI, name, counts
 	} else {
@@ -91,23 +92,26 @@ public static CellModel provideCellModel(URI u,
 			cellModel = providerComplexCell.get();
 		}
 	}
-	
+
 	return cellModel;
+
 }
 
 
 @Provides
 public static BasicCellModel buildCellModelFrom(URI u,
-												@Named("name") String name, 
-												@Named("desc") String desc,
-												@Named("MinOccurs") int minOccurs,
-												@Named("MaxOccurs") int maxOccurs,
-												Type t, 
-												Metadata metadata,
-												Map<String, CellModel> globals) {
+											  @Named("name") String name, 
+											  @Named("desc") String desc,
+											  @Named("MinOccurs") int minOccurs,
+											  @Named("MaxOccurs") int maxOccurs,
+											  Type t, 
+											  Metadata metadata,
+											  @Nullable Map<String, CellModel> globals) {
+
 	// TODO: add cell description from metadata
 	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, metadata);
 	updateGlobalsWith(globals, t, newCellModel);
+	
 	return newCellModel;
 
 }
@@ -115,15 +119,15 @@ public static BasicCellModel buildCellModelFrom(URI u,
 
 @Provides
 public static ComplexCellModel buildComplexCellModelFrom(URI u,
-														 @Named("name") String name,
-														 @Named("desc") String desc, 
-														 @Named("MinOccurs") int minOccurs,
-														 @Named("MaxOccurs") int maxOccurs,
-														 Type t,
-														 Metadata metadata,
-														 Provider<Attributes<CellModel>> attributesProvider, 
-														 Provider<Composite<CellModel>> childrenProvider,														 
-														 Map<String, CellModel> globals) {
+													   @Named("name") String name,
+													   @Named("desc") String desc, 
+													   @Named("MinOccurs") int minOccurs,
+													   @Named("MaxOccurs") int maxOccurs,
+													   Type t,
+													   Metadata metadata,
+													   Provider<Attributes<CellModel>> attributesProvider, 
+													   Provider<Composite<CellModel>> childrenProvider,														 
+													   @Nullable Map<String, CellModel> globals) {
 	
 	// in this way, we create the cell model, find out if it's global, add it and then generate the
 	// attributes and children. This means that if a child references an already defined CellModel (which could
@@ -183,9 +187,9 @@ public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String def
 
 @Provides
 public static Attributes<CellModel> attributesOf(XSElementDecl elem, 
-												 Type t,
-												 URI u,
-												 Map<String, CellModel> globals) {
+											   Type t,
+											   URI u,
+											   @Nullable Map<String, CellModel> globals) {
 
 	if (t.isSimple()) {
 		return new OrderedMap<CellModel>(0);
@@ -208,7 +212,10 @@ public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 
 
 @Provides
-public static Composite<CellModel> childrenOf(XSElementDecl elem, Type t, URI u, Map<String, CellModel> globals) {
+public static Composite<CellModel> childrenOf(XSElementDecl elem,
+											Type t,
+											URI u,
+											@Nullable Map<String, CellModel> globals) {
 	
 	// Magic happens here: 
 	// BASE CASES:
@@ -279,16 +286,16 @@ public String getURIString(@Named("ParentURI") URI parentURI, @Named("name") Str
 
 @Provides
 public static URI getURIFrom(@Named("URIString") String uri, @Named("name") String name) throws RuntimeException {
-	
+
 	try {
-		
+
 		return new URI(uri);
-		
+
 	} catch (URISyntaxException e) {
 		log.error("What the heck, URI '{}' of element '{}' is not valid ", uri, name);
 		throw new RuntimeException("Somehow we failed to create URI of element "+name, e);
 	}
-	
+
 }
 
 
@@ -305,19 +312,26 @@ public static XSType type(XSElementDecl elem) {
 
 
 @Provides
-public static Metadata metadata(XSElementDecl elem, URI uri, Type t) {
+public static Metadata metadata(XSElementDecl elem, URI uri, Type t, @Nullable Map<URI, Metadata> globalMetadata) {
+
+	// we get the metadata from the current cell model, with fallback from global or from the type
+
+	Metadata fallback = globalMetadata!=null && globalMetadata.containsKey(uri) ? 
+						globalMetadata.get(uri) : t.getMetadata();
+
 	return DaggerModelMetadataComponent.builder()
-		.from(elem.getAnnotation())
-		.withParentURI(uri)
-		.andFallback(t.getMetadata())
-		.build()
-		.value();
+										.from(elem.getAnnotation())
+										.withParentURI(uri)
+										.andFallback(fallback)
+										.build()
+										.value();
+
 }
 
 
 private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
-											   URI nodeURI, 
-											   Map<String, CellModel> globals) {
+											 URI nodeURI, 
+											 @Nullable Map<String, CellModel> globals) {
 
 	String name = xsAttributeDecl.getName();
 	URI attributeURI = getURIFrom(nodeURI.toString()+ATTRIBUTE_SEPARATOR+name, name);
@@ -330,11 +344,11 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 	
 	
 	Metadata meta = DaggerModelMetadataComponent.builder()
-													.from(xsAttributeDecl.getAnnotation())
-													.withParentURI(attributeURI)
-													.andFallback(type.getMetadata())
-													.build()
-													.value();
+												.from(xsAttributeDecl.getAnnotation())
+												.withParentURI(attributeURI)
+												.andFallback(type.getMetadata())
+												.build()
+												.value();
 	
 	CellModel cellModel;
 	// no references for attributes at the moment
@@ -362,9 +376,9 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 * @param globals
 * @param newCellModel
 *////////////////////////////////////////////////////////////////////////////////
-private static void updateGlobalsWith(Map<String, CellModel> globals, Type t, BasicCellModel newCellModel) {
+private static void updateGlobalsWith(@Nullable Map<String, CellModel> globals, Type t, BasicCellModel newCellModel) {
 
-	if (t.isGlobal()) {
+	if (t.isGlobal() && globals!=null) {
 		globals.put(t.getName(), newCellModel);
 	}
 	

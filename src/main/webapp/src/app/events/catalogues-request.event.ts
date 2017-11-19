@@ -15,9 +15,8 @@
  */
 
 export class CataloguesRequestEvent {
-	
-   
-constructor(public url: string) {}
 
+
+constructor(public url: string) {}
 
 }

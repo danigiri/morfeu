@@ -14,7 +14,7 @@
  *	 limitations under the License.
  */
 
-import { Cell } from '../cell.class';
+import { Cell } from "../cell.class";
 
 /** We were focusing on a cell and we notify that we are not focusing on it anymore */
 export class CellDeactivatedEvent {
@@ -22,8 +22,8 @@ export class CellDeactivatedEvent {
 constructor(public cell: Cell) {}
 
 
-public toString = () : string => {
+public toString = (): string => {
 	return "CellDeactivatedEvent:{cell:'"+this.cell.URI+"'}";
 }
-	
+
 }
