@@ -44,7 +44,7 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) 
 	// in the case of node it's straightforward, in the case of looking for an attribute, we look for the node name
 	// but add the attribute value as output node
 	int attributeIndex = tagExpr.lastIndexOf("@");
-	String tag = attributeIndex!=-1 ?  tagExpr.substring(0, attributeIndex-1): tagExpr;
+	String tag = attributeIndex!=-1 ?  tagExpr.substring(0, attributeIndex): tagExpr;
 	
 	//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
 	List<Node> content = new ArrayList<Node>();

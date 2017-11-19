@@ -41,7 +41,7 @@ import dagger.Provides;
 public class GlobalModelMetadataModule {
 
 @Provides
-Map<URI, Metadata> provideExtraModelMetadata(XSAnnotation annotation) {
+public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotation) {
 
 	List<Node> extraMetadataNodes = DaggerMetadataAnnotationComponent.builder()
 																		.from(annotation)

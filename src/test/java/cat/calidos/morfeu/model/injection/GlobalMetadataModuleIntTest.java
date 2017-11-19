@@ -19,6 +19,8 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -32,10 +34,10 @@ import cat.calidos.morfeu.model.Model;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelMetadataComponentIntTest extends ModelTezt {
+public class GlobalMetadataModuleIntTest extends ModelTezt {
 
 @Test
-public void testValue() throws Exception {
+public void testGlobalMetadataFromModel() throws Exception {
 	
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
@@ -43,14 +45,22 @@ public void testValue() throws Exception {
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
 	
-	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).build().value();
-	assertEquals("Description of test model", meta.getDesc());
-	assertEquals(".#metadata", meta.getURI().toString());
-	
-	// Non-trivial to find the element
-	//CellModel rowCell = cellModelFrom(modelURI, "rowCell");
+	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation);
+	assertNotNull("global metadata parser should not return null", globalMetadata);
+	assertEquals("global metadata should have two entries", 2, globalMetadata.size());
+
+	URI dataURI = new URI("/test/row/col/data");
+	Metadata dataMetadata = globalMetadata.get(dataURI);	
+	assertNotNull("global metadata parser should not return data cell metadata", dataMetadata);
+	assertEquals("Globally provided description of 'data'", dataMetadata.getDesc());
+	assertEquals("assets/images/data-thumb.svg", dataMetadata.getThumb());
+
+	URI data2URI = new URI("/test/row/col/data2");
+	Metadata data2Metadata = globalMetadata.get(data2URI);	
+	assertNotNull("global metadata parser should not return data2 cell metadata", data2Metadata);
+	assertEquals("assets/images/data2-thumb.svg", data2Metadata.getThumb());
+
 	
 }
-
 
 }

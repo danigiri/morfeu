@@ -47,7 +47,8 @@ protected final static Logger log = LoggerFactory.getLogger(ModelMetadataModule.
 		
 private static final String URI_FIELD = "mf:metadata@uri";
 private static final String DEFAULT_URI = ".";
-private static final String METADATA = "#metadata";
+private static final String METADATA = "";	// empty at the moment
+//private static final String METADATA = "#metadata";
 private static String DESC_FIELD = "mf:desc";
 private static String PRESENTATION_FIELD = "mf:presentation";
 private static String THUMB_FIELD = "mf:thumb";
@@ -82,7 +83,7 @@ URI uri(@Nullable XSAnnotation annotation, @Named("DefaultURI") Lazy<URI> defaul
 	if (uriValue.isPresent()) {
 		// in the metadata we have explicitly the URI
 		try {
-			uri = DaggerURIComponent.builder().from(uriValue.get()).builder().uri().get();
+			uri = DaggerURIComponent.builder().from(uriValue.get()+METADATA).builder().uri().get();
 		} catch (Exception e) {
 			// log the error and return empty for the moment
 			// TODO: invalid URIs in metadata fail silently and should probably propagate an error
