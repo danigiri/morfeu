@@ -39,6 +39,7 @@ import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.problems.ConfigurationException;
@@ -75,26 +76,30 @@ protected Model parseModelFrom(URI u) throws ConfigurationException,
 											 ExecutionException, ParsingException, FetchingException {
 		
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
-		
-	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u, null);
 	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
+	Map<URI, Metadata> globalModelMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, u);
+	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u, globalModelMetadata);
 	String desc = ModelModule.descriptionFromSchemaAnnotation(annotation);
 	
 	return ModelModule.produceModel(u, desc, u, schemaSet, rootCellModels);
-		
+
 }
+
 
 protected CellModel cellModelFrom(URI u, String name) throws Exception {
 
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 	Map<String,CellModel> globals = new HashMap<String, CellModel>();
-	
+	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
+	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, u);
+
 	//FIXME: this particle creation is probably wrong but it seems to work, at least for complex types
 	return DaggerCellModelComponent.builder()
 									.fromElem(elem)
 									.fromParticle(elem.getType().asComplexType().getContentType().asParticle())
 									.withParentURI(u)
+									.withGlobalMetadata(globalMetadata)
 									.andExistingGlobals(globals)
 									.build()
 									.cellModel();

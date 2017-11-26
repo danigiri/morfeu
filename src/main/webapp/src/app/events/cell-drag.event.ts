@@ -14,14 +14,14 @@
  *	 limitations under the License.
  */
 
-//import { FamilyMember } from "../family-member.interface";
+// import { FamilyMember } from "../family-member.interface";
 
 export class CellDragEvent {
-	
+
 constructor() {}
 
 
-public toString = () : string => {
+public toString = (): string => {
 	return "CellDragEvent:{currently active}";
 }
 

@@ -14,14 +14,14 @@
  *	 limitations under the License.
  */
 
-//import { SelectableWidget } from "../selectable-widget.class";
+// import { SelectableWidget } from "../selectable-widget.class";
 
 export class CellSelectEvent {
-	
-constructor(public position:number) {}
+
+constructor(public position: number) {}
 
 
-public toString = () : string => {
+public toString = (): string => {
 	return "CellSelectEvent:{position:"+this.position+"}";
 }
 

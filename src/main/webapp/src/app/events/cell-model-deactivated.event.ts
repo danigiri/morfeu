@@ -14,7 +14,7 @@
  *	 limitations under the License.
  */
 
-import { CellModel } from '../cell-model.class';
+import { CellModel } from "../cell-model.class";
 
 
 export class CellModelDeactivatedEvent {
@@ -22,8 +22,9 @@ export class CellModelDeactivatedEvent {
 constructor(public cellModel: CellModel) {}
 
 
-public toString = () : string => {
+public toString = (): string => {
 	return "CellModelDeactivatedEvent:{cellModel:'"+this.cellModel.URI+"'}";
 }
-	
+
+
 }

@@ -98,7 +98,7 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 @Produces
 public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
 												@Named("ModelURI") URI u,
-												@Nullable Map<URI, Metadata> globalMetadata) {
+												Map<URI, Metadata> globalMetadata) {
 
 	SchemaTreeTraverser traverser = new SchemaTreeTraverser();
 	traverser.visit(schemaSet);
@@ -154,6 +154,7 @@ private static CellModel buildCellModel(XSElementDecl elem,
 									.fromElem(elem)
 									.fromParticle(particle)
 									.withParentURI(u)
+									.withGlobalMetadata(globalMetadata)
 									.andExistingGlobals(globals)
 									.build()
 									.cellModel();

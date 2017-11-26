@@ -29,7 +29,7 @@ public class HttpClientModuleTest {
 
 @Test
 public void testProduceHttpClient() throws Exception {
-	
+
 	CloseableHttpClient client = HttpClientModule.produceHttpClient();
 	assertNotNull(client);
 	client.close();

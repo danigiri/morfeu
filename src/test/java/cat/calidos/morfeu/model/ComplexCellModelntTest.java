@@ -43,7 +43,7 @@ public void testSimpleToComplex() throws Exception {
 	assertNotNull(extractedCellModel);
 	assertEquals("test", extractedCellModel.getName());
 	assertEquals(path+"/test", extractedCellModel.getURI().toString());
-		
+
 }
 
 

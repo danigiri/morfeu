@@ -20,14 +20,17 @@ import static org.junit.Assert.*;
 
 import java.net.URI;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
+
 
 /**
 * @author daniel giribet
@@ -37,20 +40,19 @@ public class ModelMetadataComponentIntTest extends ModelTezt {
 @Test
 public void testValue() throws Exception {
 	
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	String uri = "target/test-classes/test-resources/models/test-model.xsd";
+	URI modelURI = new URI(uri);
 	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
 	
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
 	
-	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).build().value();
+	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).withParentURI(modelURI).build().value();
 	assertEquals("Description of test model", meta.getDesc());
-	assertEquals(".#metadata", meta.getURI().toString());
-	
-	// Non-trivial to find the element
-	//CellModel rowCell = cellModelFrom(modelURI, "rowCell");
-	
+	assertEquals(uri+"/test/row/col/data", meta.getURI().toString());
+
 }
+
 
 
 }

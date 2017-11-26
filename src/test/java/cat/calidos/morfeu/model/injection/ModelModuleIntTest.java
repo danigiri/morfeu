@@ -19,12 +19,15 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ParsingException;
 
@@ -34,13 +37,22 @@ import cat.calidos.morfeu.problems.ParsingException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelModuleIntTest extends ModelTezt {
 
+private URI modelURI;
+private Model model;
+
+
+@Before
+public void setup () throws Exception {
+
+	// TODO: see what we can do about these ugly maven specific paths
+	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	model = parseModelFrom(modelURI);
+}
+
+
 @Test
 public void testParseModel() throws Exception {
 	
-	// TODO: see what we can do about these ugly maven specific paths
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
-
-	Model model = parseModelFrom(modelURI);
 	assertEquals(modelURI, model.getURI());
 	assertEquals("Description of test model", model.getDesc());
 	
@@ -56,7 +68,25 @@ public void testParseModel() throws Exception {
 
 @Test
 public void testGlobalMetadata( ) {
-		//HERE HERE HEREH HERHERHE 
+
+	ComplexCellModel col = model.getRootCellModels()
+								.get(0)
+								.asComplex()
+								.children()
+								.child("row")
+								.asComplex()
+								.children()
+								.child("col")
+								.asComplex();
+
+	CellModel data2 = col.children().child("data2");
+	assertEquals("Globally provided description of 'data2'", data2.getMetadata().getDesc());
+	assertEquals("assets/images/data2-thumb.svg", data2.getMetadata().getThumb());
+
+	CellModel data = col.children().child("data");
+	assertEquals("Globally provided description of 'data'", data.getMetadata().getDesc());
+	assertEquals("assets/images/data-thumb.svg", data.getMetadata().getThumb());
+
 }
 
 

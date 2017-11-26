@@ -19,15 +19,19 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
+import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 
@@ -36,11 +40,24 @@ import cat.calidos.morfeu.model.Model;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class GlobalMetadataModuleIntTest extends ModelTezt {
 
+
+private URI modelURI;
+private String uri;
+
+
+@Before
+public void setup() throws Exception {
+
+	uri = "target/test-classes/test-resources/models/test-model.xsd";
+	modelURI = new URI(uri);
+
+}
+
+
 @Test
 public void testGlobalMetadataFromModel() throws Exception {
 	
-	String uri = "target/test-classes/test-resources/models/test-model.xsd";
-	URI modelURI = new URI(uri);
+
 	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
 	
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);

@@ -15,11 +15,11 @@
  */
 
 export class DropAreaSelectEvent {
-	
-constructor(public position:number) {}
+
+constructor(public position: number) {}
 
 
-public toString = () : string => {
+public toString = (): string => {
 	return "DropAreaSelectEvent:{position:"+this.position+"}";
 }
 

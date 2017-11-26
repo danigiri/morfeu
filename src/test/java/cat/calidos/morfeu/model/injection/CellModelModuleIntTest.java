@@ -42,6 +42,7 @@ import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import dagger.Lazy;
@@ -69,7 +70,7 @@ public void setup() throws Exception {
 
 @Test
 public void testProvideCellModel() throws Exception {
-	
+
 	CellModel test = cellModelFrom(modelURI, "test");							// TEST
 	// default name for anonymous types is <elem>-type
 	checkComplexCellModel(test, "test", "Root cell-model desc", "test-type", modelURI+"/test");
@@ -110,12 +111,14 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(3, colComplex.children().size());
 	
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
-	checkComplexCellModel(data, "data", "testCell desc", "testCell", modelURI+"/test/row/col/data");
+	String dataDesc = "Globally provided description of 'data'";
+	checkComplexCellModel(data, "data", dataDesc, "testCell", modelURI+"/test/row/col/data");
 	assertEquals("/test/row/col/data cell model should be min 0", 0, data.getMinOccurs());
 	assertFalse("/test/row/col/data cell model should be unbounded", data.getMaxOccurs().isPresent());
 
 	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
-	checkComplexCellModel(data2, "data2", "testCell desc", "testCell", modelURI+"/test/row/col/data2");
+	String data2Desc = "Globally provided description of 'data2'";
+	checkComplexCellModel(data2, "data2", data2Desc, "testCell", modelURI+"/test/row/col/data2");
 	assertEquals("/test/row/col/data2 cell model should be min 0", 0, data2.getMinOccurs());
 	// model references keep local max counts
 	assertEquals("/test/row/col/data2 cell model should be max 2", 2, data2.getMaxOccurs().getAsInt());
@@ -174,9 +177,10 @@ public void testChildrenOf() {
 
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	Type type = provideElementType(elem);
-	Map<String,CellModel> globals = new HashMap<String, CellModel>();
+	Map<String,CellModel> globals = new HashMap<String, CellModel>(0);
+	Map<URI, Metadata> globalMetadata = new HashMap<URI, Metadata>(0);
 	
-	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI, globals);
+	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI, globals, globalMetadata);
 	CellModel row = children.child("row");
 	assertEquals("row", row.getName());
 	assertEquals(row, children.child(0));

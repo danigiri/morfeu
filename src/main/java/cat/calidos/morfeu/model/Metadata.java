@@ -101,4 +101,16 @@ public String getName() {
 	return null;
 }
 
+
+/* (non-Javadoc)
+* @see java.lang.Object#toString()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public String toString() {
+
+	return "Metadata:{uri:"+uri+", desc:'"+desc+"', thumb:'"+thumb+"', presentation:'"+presentation+"'}";
+}
+
+
+
 }

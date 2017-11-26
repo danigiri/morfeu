@@ -72,25 +72,25 @@ protected final static Logger log = LoggerFactory.getLogger(CellModelModule.clas
 
 
 @Provides
-public static CellModel provideCellModel(URI u,
-										 @Named("name") String name,
-										 @Named("MinOccurs") int minOccurs,
-										 @Named("MaxOccurs") int maxOccurs,
-										 Type t,
-										 Provider<BasicCellModel> providerCell,
-										 Provider<ComplexCellModel> providerComplexCell,
-										 @Nullable Map<String, CellModel> globals) {
+public static CellModel provideCellModel(Type t,
+									    Provider<BasicCellModel> providerCell,
+									    Provider<ComplexCellModel> providerComplexCell,
+									    Provider<BasicCellModelReference> providerReference,
+									    Map<String, CellModel> globals) {
 
 	CellModel cellModel;
 	if (globals!=null && globals.containsKey(t.getName())) {
-		CellModel ref = globals.get(t.getName());
-		cellModel = new BasicCellModelReference(u, name, minOccurs, maxOccurs, ref);	// keep the URI, name, counts
+
+		cellModel = providerReference.get();
+
 	} else {
+
 		if (t.isSimple()) {
 			cellModel = providerCell.get();
 		} else {
 			cellModel = providerComplexCell.get();
 		}
+
 	}
 
 	return cellModel;
@@ -106,7 +106,7 @@ public static BasicCellModel buildCellModelFrom(URI u,
 											  @Named("MaxOccurs") int maxOccurs,
 											  Type t, 
 											  Metadata metadata,
-											  @Nullable Map<String, CellModel> globals) {
+											  Map<String, CellModel> globals) {
 
 	// TODO: add cell description from metadata
 	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, metadata);
@@ -127,20 +127,20 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 													   Metadata metadata,
 													   Provider<Attributes<CellModel>> attributesProvider, 
 													   Provider<Composite<CellModel>> childrenProvider,														 
-													   @Nullable Map<String, CellModel> globals) {
+													   Map<String, CellModel> globals) {
 	
 	// in this way, we create the cell model, find out if it's global, add it and then generate the
 	// attributes and children. This means that if a child references an already defined CellModel (which could
 	// include this very one, there will be no infinite loops and the child will be created as a reference to this one 
 	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, 
-																name, 
-																desc, 
-																t, 
-																minOccurs, 
-																maxOccurs, 
-																metadata, 
-																null, 
-																null);
+															  name, 
+															  desc, 
+															  t, 
+															  minOccurs, 
+															  maxOccurs, 
+															  metadata, 
+															  null, 
+															  null);
 	updateGlobalsWith(globals, t, newComplexCellModel);
 	
 	newComplexCellModel.setAttributes(attributesProvider.get());
@@ -148,6 +148,27 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 	
 	return newComplexCellModel;
 	
+}
+
+
+@Provides
+public BasicCellModelReference buildCellModelFromReference(URI u,
+														 @Named("name") String name,
+														 @Named("MinOccurs") int minOccurs,
+														 @Named("MaxOccurs") int maxOccurs,
+														 Type t,
+														 Metadata metadata,
+														 Map<String, CellModel> globals) {
+	
+	CellModel ref = globals.get(t.getName());
+	// if we are a refence but we have not defined custom metadata (through globals, basically) it means
+	// that metadata==type.metadata, then we use the reference
+	//  otherwise we have defined custom metadata (through globals), then we use that custom
+	// TODO: merge reference metadata and global metadata given a priority
+	Metadata effectiveMetadata = metadata.equals(t.getMetadata()) ? ref.getMetadata() : metadata;
+
+	return new BasicCellModelReference(u, name, minOccurs, maxOccurs, effectiveMetadata, ref);
+
 }
 
 
@@ -215,7 +236,8 @@ public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 public static Composite<CellModel> childrenOf(XSElementDecl elem,
 											Type t,
 											URI u,
-											@Nullable Map<String, CellModel> globals) {
+											Map<String, CellModel> globals,
+											Map<URI, Metadata> globalMetadata) {
 	
 	// Magic happens here: 
 	// BASE CASES:
@@ -240,7 +262,6 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	termTypes.add(particle);
 	while (!termTypes.isEmpty()) {
 		particle = termTypes.removeFirst();
-		
 				
 		if (particle.getTerm().isModelGroup()) {
 			// FIXME: this is reverse order!!!
@@ -254,6 +275,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 												.fromElem(childElem)
 												.fromParticle(particle)
 												.withParentURI(u)
+												.withGlobalMetadata(globalMetadata)
 												.andExistingGlobals(globals)
 												.build()
 												.cellModel();
@@ -312,7 +334,7 @@ public static XSType type(XSElementDecl elem) {
 
 
 @Provides
-public static Metadata metadata(XSElementDecl elem, URI uri, Type t, @Nullable Map<URI, Metadata> globalMetadata) {
+public static Metadata metadata(XSElementDecl elem, URI uri, Type t, Map<URI, Metadata> globalMetadata) {
 
 	// we get the metadata from the current cell model, with fallback from global or from the type
 

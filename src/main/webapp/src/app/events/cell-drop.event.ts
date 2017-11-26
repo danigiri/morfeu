@@ -14,18 +14,20 @@
  *	 limitations under the License.
  */
 
-import { Cell } from '../cell.class';
-//import { CellModel } from '../cell-model.class';
-import { FamilyMember } from '../family-member.interface';
+import { Cell } from "../cell.class";
+// import { CellModel } from '../cell-model.class';
+import { FamilyMember } from "../family-member.interface";
 
 export class CellDropEvent {
-	
-constructor(public cell:Cell, 
+
+
+constructor(public cell:Cell,
 			public newParent: FamilyMember = undefined, 
 			public newPosition: number = undefined) {}
 
+
 public toString = () : string => {
-	
+
 	return "DropCellEvent:{cell:'"+this.cell.URI
 			+ (this.newParent ? "', newParent:"+this.newParent.getAdoptionURI() : "")
 			+ (this.newPosition ? "', newPosition:"+this.newPosition : "")

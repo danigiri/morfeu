@@ -15,11 +15,11 @@
  */
 
 export class CellSelectionClearEvent {
-	
+
 constructor() {}
 
 
-public toString = () : string => {
+public toString = (): string => {
 	return "CellSelectionClearEvent:{}";
 }
 

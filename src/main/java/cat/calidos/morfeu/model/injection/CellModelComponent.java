@@ -46,8 +46,8 @@ interface Builder {
 	@BindsInstance Builder fromElem(XSElementDecl elem);
 	@BindsInstance Builder fromParticle(XSParticle particle);
 	@BindsInstance Builder withParentURI(@Named("ParentURI") URI uri);
-	@BindsInstance Builder withGlobalMetadata(@Nullable Map<URI, Metadata> globalMetadata);
-	@BindsInstance Builder andExistingGlobals(@Nullable Map<String, CellModel> globals);
+	@BindsInstance Builder withGlobalMetadata(Map<URI, Metadata> globalMetadata);
+	@BindsInstance Builder andExistingGlobals(Map<String, CellModel> globals);
 
 	CellModelComponent build();
 	
