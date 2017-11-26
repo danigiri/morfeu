@@ -37,27 +37,35 @@ protected final static Logger log = LoggerFactory.getLogger(Metadata.class);
 		
 private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_THUMB = "DEFAULT";
+private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
 
 private URI uri;	// pre-calculated default
 private String desc;
 private String presentation;
+private String cellPresentation;
 private String thumb;
 
 
-public Metadata(URI uri, String desc, String presentation, String thumb) {
+public Metadata(URI uri, String desc, String presentation, String cellPresentation, String thumb) {
 	this(uri, 
 		 Optional.ofNullable(desc), 
 		 Optional.ofNullable(presentation), 
+		 Optional.ofNullable(cellPresentation), 
 		 Optional.ofNullable(thumb));
 }
 
 
-public Metadata(URI uri, Optional<String> desc, Optional<String> presentation, Optional<String> thumb) {
+public Metadata(URI uri, 
+			    Optional<String> desc, 
+			    Optional<String> presentation, 
+			    Optional<String> cellPresentation,
+			    Optional<String> thumb) {
 
 	this.uri = uri;
 	this.desc = desc.orElse(DEFAULT_DESC);
 	this.presentation = presentation.orElse(DEFAULT_PRESENTATION);
+	this.cellPresentation = cellPresentation.orElse(DEFAULT_CELL_PRESENTATION);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	
 }
@@ -66,10 +74,14 @@ public Metadata(URI uri, Optional<String> desc, Optional<String> presentation, O
 public Metadata(URI uri, 
 				Optional<String> desc, 
 				Optional<String> pres, 
+			    Optional<String> cellPresentation,
 				Optional<String> thumb, 
 				Metadata fallback) {
 	this(uri,
-		desc.orElse(fallback.getDesc()),pres.orElse(fallback.getPresentation()), thumb.orElse(fallback.getThumb()));
+		 desc.orElse(fallback.getDesc()),
+		 pres.orElse(fallback.getPresentation()),
+		 cellPresentation.orElse(fallback.getCellPresentation()),
+		 thumb.orElse(fallback.getThumb()));
 }
 
 
@@ -82,6 +94,10 @@ public String getPresentation() {
 	return presentation;
 }
 
+
+public String getCellPresentation() {
+	return cellPresentation;
+}
 
 public String getThumb() {
 	return thumb;

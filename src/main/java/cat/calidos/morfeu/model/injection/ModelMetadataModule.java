@@ -48,10 +48,13 @@ protected final static Logger log = LoggerFactory.getLogger(ModelMetadataModule.
 private static final String URI_FIELD = "mf:metadata@uri";
 private static final String DEFAULT_URI = ".";
 private static final String METADATA = "";	// empty at the moment
+
+
 //private static final String METADATA = "#metadata";
-private static String DESC_FIELD = "mf:desc";
-private static String PRESENTATION_FIELD = "mf:presentation";
-private static String THUMB_FIELD = "mf:thumb";
+private static final String DESC_FIELD = "mf:desc";
+private static final String PRESENTATION_FIELD = "mf:presentation";
+private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
+private static final String THUMB_FIELD = "mf:thumb";
 //private static String UNDEFINED = "";
 
 
@@ -59,16 +62,17 @@ private static String THUMB_FIELD = "mf:thumb";
 Metadata provideMetadata(URI uri,
 						 @Named("desc") Optional<String> desc,
 						 @Named("presentation") Optional<String> presentation,
+						 @Named("cellPresentation") Optional<String> cellPresentation,
 						 @Named("thumb") Optional<String> thumb,
 						 @Named("Fallback") @Nullable Metadata fallback) {
 	
 	if (fallback==null) {
 
-		return new Metadata(uri, desc, presentation, thumb);
+		return new Metadata(uri, desc, presentation, cellPresentation, thumb);
 
 	} else {
 
-		return new Metadata(uri, desc, presentation, thumb, fallback);
+		return new Metadata(uri, desc, presentation, cellPresentation, thumb, fallback);
 
 	} 
 }
@@ -132,6 +136,12 @@ Optional<String> desc(@Nullable XSAnnotation annotation) {
 @Provides @Named("presentation")
 Optional<String> presentation(@Nullable XSAnnotation annotation) {
 	return contentOf(annotation, PRESENTATION_FIELD);
+}
+
+
+@Provides @Named("cellPresentation")
+Optional<String> cellPresentation(@Nullable XSAnnotation annotation) {
+	return contentOf(annotation, CELL_PRESENTATION_FIELD);
 }
 
 

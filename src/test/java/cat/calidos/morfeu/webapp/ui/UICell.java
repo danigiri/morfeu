@@ -73,6 +73,11 @@ public int position() {
 }
 
 
+public String img() {
+	return element.attr("src");
+}
+
+
 public List<UIDropArea> dropAreas() {
 	
 	List<UIDropArea> dropAreas = element.$$(".drop-area").stream()
@@ -123,7 +128,7 @@ public UICell dragTo(UIDropArea target) {
 	return target.dropHere(this);
 }
 
-public UICell clik() {
+public UICell click() {
 
 	element.click();
 	

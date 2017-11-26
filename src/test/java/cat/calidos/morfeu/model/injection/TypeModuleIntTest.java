@@ -67,7 +67,7 @@ public void setup() throws Exception {
 
 	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	schemaSet = parseSchemaFrom(modelURI);
-	emptyMedatada = new Metadata(null, "desc", "presentation", "thumb");
+	emptyMedatada = new Metadata(null, "desc", "PRESENTATION", "CELL-PRESENTATION", "THUMB");
 }
 
 @Test
@@ -76,9 +76,10 @@ public void testRootAnonymousType() throws Exception {
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.buildType(modelURI, "cell-model-name", xsType, new Metadata(null, "DESC", "PRESENTATION", "THUMB"));
+	Type type = TypeModule.buildType(modelURI, "cell-model-name", xsType,emptyMedatada);
 	assertEquals("cell-model-name", type.getName());
 	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
+	assertEquals("CELL-PRESENTATION", type.getMetadata().getCellPresentation());
 	assertEquals("THUMB", type.getMetadata().getThumb());
 	assertFalse(type.isSimple());
 	

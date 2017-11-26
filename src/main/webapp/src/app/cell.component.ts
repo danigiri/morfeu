@@ -41,40 +41,40 @@ import { EventService } from './events/event.service';
 	selector: 'cell',
 	template: `
 			<ng-container *ngIf="cell.cellModel.presentation=='CELL'; else well">
-	            <!-- TODO: check the model and the content as well (counts, etc.) -->
+				<!-- TODO: check the model and the content as well (counts, etc.) -->
 				<img id="{{cell.URI}}"
-				     src="assets/images/cell.svg" 
+					 src="{{getCellPresentation()}}" 
 					 class="cell img-fluid cell-img cell-level-{{level}}"
-                     [class.cell-active]="active"
-	                 [class.cell-selected]="selected"
-                     (mouseenter)="focusOn(cell)" 
-                     (mouseleave)="focusOff(cell)"
+					 [class.cell-active]="active"
+					 [class.cell-selected]="selected"
+					 (mouseenter)="focusOn(cell)" 
+					 (mouseleave)="focusOff(cell)"
 					 dnd-draggable 
 					 [dragEnabled]="dragEnabled"
 					 (onDragEnd)="dragEnd(cell)"
 					 [dragData]="cell"
 					 />
 				<!-- the position of the drop area is always where droped cells will go -->
-                <drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
+				<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 			</ng-container>
 			<ng-template #well>
 				<div id="{{cell.URI}}" 
-				     class="cell-level-{{level}} {{cellClass()}}"
-	                 [class.cell-selected]="selected"
-				     ><!--small>
-				     {{cell.name}}({{position}}), subs: {{subscriptionCount()}},
-				     </small>
-				     
-                     <small *ngIf="selected">[selected],</small>
-                     <small *ngIf="cellSelectionSubscription">subscribed-selection,</small>
-                     <small *ngIf="cellSelectionClearSubscription">subscribed-clear</small-->
-				     <drop-area  *ngIf="parent" [parent]="cell" position="0"></drop-area>
+					 class="cell-level-{{level}} {{cellClass()}}"
+					 [class.cell-selected]="selected"
+					 ><!--small>
+					 {{cell.name}}({{position}}), subs: {{subscriptionCount()}},
+					 </small>
+					 
+					 <small *ngIf="selected">[selected],</small>
+					 <small *ngIf="cellSelectionSubscription">subscribed-selection,</small>
+					 <small *ngIf="cellSelectionClearSubscription">subscribed-clear</small-->
+					 <drop-area	 *ngIf="parent" [parent]="cell" position="0"></drop-area>
 						<cell *ngFor="let c of cell.children; let i=index" 
-    						[cell]="c" 
-    						[parent]="cell"
-    						[level]="level+1"
-    						[position]="i"
-    						></cell>
+							[cell]="c" 
+							[parent]="cell"
+							[level]="level+1"
+							[position]="i"
+							></cell>
 			</div>
 			</ng-template>
 	`,
@@ -93,17 +93,17 @@ import { EventService } from './events/event.service';
 				background-color: #ddd;
 				background-color: rgba(86, 62, 128, .15);
 				border: 2px solid #ccc;
-			    border-radius: 5px;
-			    border: 2px solid rgba(86, 62, 128, .2)
+				border-radius: 5px;
+				border: 2px solid rgba(86, 62, 128, .2)
 			}
 			.cell-active {
-			    border: 3px solid #f00;
-			    border-radius: 5px;
+				border: 3px solid #f00;
+				border-radius: 5px;
 			 }
-            .cell-selected {
-                border: 3px dashed #00f;
-                border-radius: 5px;
-             }
+			.cell-selected {
+				border: 3px dashed #00f;
+				border-radius: 5px;
+			 }
 			 .cell-dragged {
 				 opacity: .2;
 			 }
@@ -143,7 +143,7 @@ dragEnabled:boolean = false;
 //isBeingDragged:boolean = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
-@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;      // we only have one of those!!! 
+@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;		// we only have one of those!!! 
 
 
 constructor(eventService: EventService) {
@@ -153,59 +153,59 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 	
-    console.log("[UI] CellComponent::ngOnInit()");
-    
-    // Drop a cell to a position under this cell
-    this.subscribe(this.events.service.of( CellDropEvent )
-            .filter(dc => dc.newParent && dc.newParent==this.cell)
-            .subscribe( dc => {
-                console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to  "
-                            +this.cell.URI+" at position ("
-                            +dc.newPosition+")'");
-                this.adoptCellAtPosition(dc.cell, dc.newPosition)
-    }));
-    
-    // A cell model was deactivated that is compatible with this cell
-    this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-            .filter(d => this.isCompatibleWith(d.cellModel))    // //
-            .subscribe( d => {
-                //console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
-                this.becomeInactive(this.cell);
-    }));
-    
-    // a cell model activated that is compatible with this cell
-    this.subscribe(this.events.service.of( CellModelActivatedEvent )
-            .filter(a => this.isCompatibleWith(a.cellModel))    // //
-            .subscribe( a => {
-                //console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
-                this.becomeActive(this.cell);
-    }));
-    
-    // an outsider component (like a keyboard shortcut) wants to activate this selected cell
-    this.subscribe(this.events.service.of( CellActivateEvent )
-            .filter(a => this.selected && this.canBeActivated())
-            .subscribe( a => {
-                console.log("-> cell comp gets cell activate event and proceeds to focus :)");
-                // FIXMWE: this allows for multiple activations when conflicting with rollover
-                this.focusOn(this.cell);
-    }));
+	console.log("[UI] CellComponent::ngOnInit()");
+	
+	// Drop a cell to a position under this cell
+	this.subscribe(this.events.service.of( CellDropEvent )
+			.filter(dc => dc.newParent && dc.newParent==this.cell)
+			.subscribe( dc => {
+				console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to	"
+							+this.cell.URI+" at position ("
+							+dc.newPosition+")'");
+				this.adoptCellAtPosition(dc.cell, dc.newPosition)
+	}));
+	
+	// A cell model was deactivated that is compatible with this cell
+	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
+			.filter(d => this.isCompatibleWith(d.cellModel))	// //
+			.subscribe( d => {
+				//console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
+				this.becomeInactive(this.cell);
+	}));
+	
+	// a cell model activated that is compatible with this cell
+	this.subscribe(this.events.service.of( CellModelActivatedEvent )
+			.filter(a => this.isCompatibleWith(a.cellModel))	// //
+			.subscribe( a => {
+				//console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
+				this.becomeActive(this.cell);
+	}));
+	
+	// an outsider component (like a keyboard shortcut) wants to activate this selected cell
+	this.subscribe(this.events.service.of( CellActivateEvent )
+			.filter(a => this.selected && this.canBeActivated())
+			.subscribe( a => {
+				console.log("-> cell comp gets cell activate event and proceeds to focus :)");
+				// FIXMWE: this allows for multiple activations when conflicting with rollover
+				this.focusOn(this.cell);
+	}));
 
-    // A cell different cell was activated and we are active at this moment
-    this.subscribe(this.events.service.of( CellActivatedEvent )
-            .filter(a => this.active && a.cell!=this.cell)
-            .subscribe( a => {
-                console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
-                this.becomeInactive(this.cell);
-    }));
+	// A cell different cell was activated and we are active at this moment
+	this.subscribe(this.events.service.of( CellActivatedEvent )
+			.filter(a => this.active && a.cell!=this.cell)
+			.subscribe( a => {
+				console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
+				this.becomeInactive(this.cell);
+	}));
    
-    // External component (like a keyboard shortcut) wants to drag this cell somewhere
-    this.subscribe(this.events.service.of( CellDragEvent )
-            .filter(a => this.active)
-            .subscribe( a => {
-                console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
-                this.events.service.publish(new CellDropEvent(this.cell));
-    }));
-    
+	// External component (like a keyboard shortcut) wants to drag this cell somewhere
+	this.subscribe(this.events.service.of( CellDragEvent )
+			.filter(a => this.active)
+			.subscribe( a => {
+				console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
+				this.events.service.publish(new CellDropEvent(this.cell));
+	}));
+	
    
 }	 
 	   
@@ -213,7 +213,7 @@ ngOnInit() {
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell:Cell) {
 	
-    //console.log("[UI] CellComponent::focusOn()");
+	//console.log("[UI] CellComponent::focusOn()");
 	this.events.service.publish(new CellActivatedEvent(cell));
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -226,33 +226,33 @@ focusOn(cell:Cell) {
 // notify all interested in this type of cell that we do not have the focus any longer, remove highlight
 focusOff(cell:Cell) {
 
-    //console.log("[UI] CellComponent::focusOff()");
-    this.becomeInactive(cell);
-    this.events.service.publish(new CellDeactivatedEvent(cell));
+	//console.log("[UI] CellComponent::focusOff()");
+	this.becomeInactive(cell);
+	this.events.service.publish(new CellDeactivatedEvent(cell));
 
 }
 
 
 dragStart(cell:Cell) {
-    console.log("[UI] CellComponent::dragStart()");
+	console.log("[UI] CellComponent::dragStart()");
 }
 
 // we drag outside any interesting area, we remove focus
 dragEnd(cell:Cell) {
 
-    console.log("[UI] CellComponent::dragEnd()");
+	console.log("[UI] CellComponent::dragEnd()");
    // this.isBeingDragged = false;
-    this.focusOff(cell);
+	this.focusOff(cell);
 }
 
 
 // the drop-area is sending us a cell to adopt
 adoptCellAtPosition(newCell:Cell, position:number) {
 
-    console.log("[UI] CellComponent::adoptCellAtPosition("+position+")");
-    // deactivate based on old location
-    this.events.service.publish(new CellDeactivatedEvent(newCell));
-    this.cell.adopt(newCell, position);
+	console.log("[UI] CellComponent::adoptCellAtPosition("+position+")");
+	// deactivate based on old location
+	this.events.service.publish(new CellDeactivatedEvent(newCell));
+	this.cell.adopt(newCell, position);
 
 }
 
@@ -260,11 +260,11 @@ adoptCellAtPosition(newCell:Cell, position:number) {
 // UI method to highlight the cell
 becomeActive(cell:Cell) {
 
-    //console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
-    this.active = true;
+	//console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
+	this.active = true;
 	this.dragEnabled = true;
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
-    this.events.service.publish(new CellSelectionClearEvent());
+	this.events.service.publish(new CellSelectionClearEvent());
 
 }
 
@@ -272,98 +272,103 @@ becomeActive(cell:Cell) {
 // UI method to no longer be highlighted
 becomeInactive(cell: Cell) {
 
-    //console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
-    this.active = false;
+	//console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
+	this.active = false;
 	this.dragEnabled = false;
-    
+	
 }
 
 
 // are we compatible with this element?
 isCompatibleWith(element:FamilyMember): boolean {
-    return this.cell.matches(element);
+	return this.cell.matches(element);
 }
 
 
 canBeActivated():boolean {
-    return !this.cell.cellModel.presentation.startsWith("WELL");
+	return !this.cell.cellModel.presentation.startsWith("WELL");
 }
 
 
 select(position:number) {
 
-    if (position==this.position) {
-        
-        // if we were activated we deactivate ourselves and become selectable again
-        if (this.active) {
-            this.becomeInactive(this.cell);
-        }
-        
-        // we were waiting for a selection we match the position, so we select ourselves
-        // and unsubscribe from selection as we are not eligible anymore
-        console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");
-        this.selected = true; 
-        this.unsubscribeFromSelection();
-        
-        // We unsubscribe from clear, send a clear event and re-subscribe
-        // This means we are the only ones selected now (previous parent will be unselected, for instance)
-        this.unsubscribeFromSelectionClear();
-        this.events.service.publish(new CellSelectionClearEvent());
-        this.subscribeToSelectionClear();
-        
-        // we make children eligible to be selected 
-        this.children.forEach(c => c.subscribeToSelection());
+	if (position==this.position) {
+		
+		// if we were activated we deactivate ourselves and become selectable again
+		if (this.active) {
+			this.becomeInactive(this.cell);
+		}
+		
+		// we were waiting for a selection we match the position, so we select ourselves
+		// and unsubscribe from selection as we are not eligible anymore
+		console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");
+		this.selected = true; 
+		this.unsubscribeFromSelection();
+		
+		// We unsubscribe from clear, send a clear event and re-subscribe
+		// This means we are the only ones selected now (previous parent will be unselected, for instance)
+		this.unsubscribeFromSelectionClear();
+		this.events.service.publish(new CellSelectionClearEvent());
+		this.subscribeToSelectionClear();
+		
+		// we make children eligible to be selected 
+		this.children.forEach(c => c.subscribeToSelection());
 
-        // if we have drop areas, they are also selectable now with the appropriate key shortcut
-        // it's non trivial to get a list of dropAreas, in the case of wells, we have one drop area and the
-        // rest are from our children cells, so we subscribe our explicit first and then the rest, if we have
-        // children cells, that is.
-        // Diagram:
-        // if cell then
-        //    <img>
-        //    <drop-area>  (explicit in the template)
-        // else (well)
-        //  <cell>
-        //  <drop-area> (explicit in the template)
-        //      <foreach cell></cell>   (deep in each one there is the drop-area)
-        //  </cell>
-        // endif
-        this.dropArea.subscribeToSelection();
-        this.children.forEach(c => c.dropArea.subscribeToSelection());
+		// if we have drop areas, they are also selectable now with the appropriate key shortcut
+		// it's non trivial to get a list of dropAreas, in the case of wells, we have one drop area and the
+		// rest are from our children cells, so we subscribe our explicit first and then the rest, if we have
+		// children cells, that is.
+		// Diagram:
+		// if cell then
+		//	  <img>
+		//	  <drop-area>  (explicit in the template)
+		// else (well)
+		//	<cell>
+		//	<drop-area> (explicit in the template)
+		//		<foreach cell></cell>	(deep in each one there is the drop-area)
+		//	</cell>
+		// endif
+		this.dropArea.subscribeToSelection();
+		this.children.forEach(c => c.dropArea.subscribeToSelection());
 
-    } else if (this.cell.parent && position>=this.cell.parent.childrenCount()) {
-        console.log("[UI] CellComponent::select(out of bounds)");
-     } else {
-         this.clearSelection();  // out of bounds, sorry, clear
-    }
-    
+	} else if (this.cell.parent && position>=this.cell.parent.childrenCount()) {
+		console.log("[UI] CellComponent::select(out of bounds)");
+	 } else {
+		 this.clearSelection();	 // out of bounds, sorry, clear
+	}
+	
 }
 
 
 /** This cell now can be selected or can bubble down selections, and can also be cleared */
 subscribeToSelection() {
-    
-    this.selectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
-                .subscribe( cs => this.select(cs.position) )
-    );
-    this.subscribeToSelectionClear();  // if we are selectable we are also clearable
-    
+
+	this.selectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
+				.subscribe( cs => this.select(cs.position) )
+	);
+	this.subscribeToSelectionClear();  // if we are selectable we are also clearable
+
 }
 
 
+//TODO: this functions get called and we should have an attribute or input to optimise the client stuff
 //TODO: depending on the level go from -md- to -xs- col styling
-//TODO: this function gets called and we should have an attribute or input to optimise the client stuff
 cellClass() {
 	if (this.cell.cellModel.presentation=="WELL") {
 		return "well container-fluid";
 	} else if (this.cell.cellModel.presentation=="ROW-WELL") {
 		return "row-well row show-grid";
-   } else if (this.cell.cellModel.presentation=="COL-WELL") {
-	   return "col-well show-grid col-sm-"+this.cell.columnFieldValue();
-   } else {
+	} else if (this.cell.cellModel.presentation=="COL-WELL") {
+		return "col-well show-grid col-sm-"+this.cell.columnFieldValue();
+	} else {
 		return "";
 	}
 }
 
+
+getCellPresentation() {
+	return (this.cell.cellModel.cellPresentation=='DEFAULT') ? 
+			"assets/images/cell.svg" : this.cell.cellModel.cellPresentation;
+}
 
 }

@@ -73,12 +73,14 @@ public void testGlobalMetadataFromModel() throws Exception {
 	assertEquals(dataURI.toString(), dataMetadata.getURI().toString());
 	assertEquals("Globally provided description of 'data'", dataMetadata.getDesc());
 	assertEquals("assets/images/data-thumb.svg", dataMetadata.getThumb());
+	assertEquals("assets/images/data-cell.svg", dataMetadata.getCellPresentation());
 
 	URI data2URI = new URI(uri+"/test/row/col/data2");
 	Metadata data2Metadata = globalMetadata.get(data2URI);	
 	assertEquals(data2URI.toString(), data2Metadata.getURI().toString());
 	assertNotNull("global metadata parser should return data2 cell metadata", data2Metadata);
 	assertEquals("assets/images/data2-thumb.svg", data2Metadata.getThumb());
+	assertEquals("assets/images/data2-cell.svg", data2Metadata.getCellPresentation());
 
 }
 

@@ -7,6 +7,9 @@
 	$( if not cm.metadata.thumb is empty )$
 		,"thumb": "$[ cm.metadata.thumb ]$"
 	$( endif )$
+	$( if not cm.metadata.cellPresentation is empty )$
+		,"cellPresentation": "$[ cm.metadata.cellPresentation ]$"
+	$( endif )$
 	,"isSimple": $[cm.isSimple]$
 	,"type": {
 		"name": "$[cm.Type.Name]$"

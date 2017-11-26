@@ -142,7 +142,7 @@ public void testCellModels() {
 	assertEquals("row", colChildren.get(0).name());
 	UICellModelEntry data2 = colChildren.get(1);
 	assertEquals("data2", data2.name());
-	assertTrue(data2.thumb().endsWith("assets/images/cell-thumb.svg"));
+	assertTrue(data2.thumb().endsWith("assets/images/data2-thumb.svg"));
 
 	assertEquals("data", colChildren.get(2).name());
 	

@@ -96,13 +96,19 @@ public void contentTest() {
 	assertNotNull(cols3);
 	assertEquals(2, cols3.size());
 	
-	UICell col3a = cols3.get(0);						// TEST/ROW/COL
+	UICell col3a = cols3.get(0);						// TEST/ROW/COL0
 	assertNotNull(col3a);
 	assertTrue(col3a.isColumnWell());
+	
+	UICell data = col3a.child("data(0)");
+	assertTrue("'data' cell representation img is wrong", data.img().endsWith("assets/images/data-cell.svg"));
 
-	UICell col3b = cols3.get(1);						// TEST/ROW/COL
+	UICell col3b = cols3.get(1);						// TEST/ROW/COL1
 	assertNotNull(col3b);
 	assertTrue(col3b.isColumnWell());
+
+	UICell data2 = col3b.child("row(0)").child("col(0)").child("data2(1)");
+	assertTrue("'data2' cell representation img is wrong", data2.img().endsWith("assets/images/data2-cell.svg"));
 
 }
 
