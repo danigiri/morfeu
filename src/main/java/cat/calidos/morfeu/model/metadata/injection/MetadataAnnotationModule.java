@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.model.metadata.injection;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

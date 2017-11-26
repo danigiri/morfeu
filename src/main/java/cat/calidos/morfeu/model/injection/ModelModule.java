@@ -42,10 +42,13 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
+import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
+import cat.calidos.morfeu.model.metadata.injection.GlobalModelMetadataModule;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.injection.RemoteModule;
 import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;

@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 

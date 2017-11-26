@@ -14,12 +14,11 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.model.metadata.injection;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -31,10 +30,11 @@ import org.w3c.dom.Node;
 import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
+import cat.calidos.morfeu.model.metadata.injection.DaggerMetadataAnnotationComponent;
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
-
 
 /** Model Metadata helper module to enrich the model definitions with useful information
 * @author daniel giribet

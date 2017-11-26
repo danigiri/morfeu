@@ -19,7 +19,7 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.util.OptionalInt;
 
-import cat.calidos.morfeu.model.injection.ModelMetadataComponent;
+import cat.calidos.morfeu.model.metadata.injection.ModelMetadataComponent;
 
 /**
 * @author daniel giribet

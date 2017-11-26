@@ -19,6 +19,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.utils.injection.DataFetcherModule;
 import dagger.Lazy;
 
 

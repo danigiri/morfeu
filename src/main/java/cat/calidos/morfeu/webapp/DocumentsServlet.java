@@ -17,7 +17,6 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -44,17 +43,12 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 
 	String path = normalisedPathFrom(req);
 	log.trace("DocumentsServlet::doGet '[{}]{}'", resourcesPrefix, path);
-	
-	resp.setContentType("application/json");
-	
+
 	String doc = new DocumentControl(resourcesPrefix, path).processRequest();
-	PrintWriter out = resp.getWriter();
-	out.print(doc);
-	out.close();
+
+	resp.setContentType("application/json");
+	writeTo(doc, resp);
 	
 }
-
-
-
 
 }

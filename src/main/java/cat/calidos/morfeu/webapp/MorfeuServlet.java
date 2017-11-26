@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Properties;
 
@@ -87,9 +88,17 @@ protected String normalisedPathFrom(HttpServletRequest req) {
 	if (path.startsWith("/")) {
 		path = path.substring(1);
 	}
-	
+
 	return path;
 }
 
+
+protected void writeTo(String content, HttpServletResponse resp) throws IOException {
+
+	PrintWriter out = resp.getWriter();
+	out.print(content);
+	out.close();
+
+}
 
 }

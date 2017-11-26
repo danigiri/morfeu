@@ -35,6 +35,7 @@ import com.sun.xml.xsom.XSType;
 
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
+import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 import dagger.Module;
 import dagger.Provides;
 

@@ -20,22 +20,21 @@ import static org.junit.Assert.*;
 
 import java.net.URI;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
-import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
-
+import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelMetadataComponentIntTest extends ModelTezt {
+
 
 @Test
 public void testValue() throws Exception {
@@ -52,7 +51,5 @@ public void testValue() throws Exception {
 	assertEquals(uri+"/test/row/col/data", meta.getURI().toString());
 
 }
-
-
 
 }

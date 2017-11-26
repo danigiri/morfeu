@@ -50,6 +50,7 @@ import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
+import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 import cat.calidos.morfeu.utils.OrderedMap;
 import dagger.Lazy;
 import dagger.Module;

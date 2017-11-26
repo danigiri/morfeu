@@ -17,14 +17,13 @@
 package cat.calidos.morfeu.control;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.model.injection.DaggerModelComponent;
-import cat.calidos.morfeu.model.injection.DaggerURIComponent;
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ValidationException;
 

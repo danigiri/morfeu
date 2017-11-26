@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2016 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,38 +14,26 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.utils.injection;
 
-import java.util.List;
-import java.util.Optional;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
-import javax.annotation.Nullable;
-
-import org.w3c.dom.Node;
-
-import com.sun.xml.xsom.XSAnnotation;
-
-import dagger.BindsInstance;
-import dagger.Component;
-
+import dagger.Module;
+import dagger.Provides;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=MetadataAnnotationModule.class)
-public interface MetadataAnnotationComponent {
+@Module
+public class HttpClientModule {
 
-List<Node> values();
-
-@Component.Builder
-interface Builder {
-
-	@BindsInstance Builder from(@Nullable XSAnnotation annotation); 
-	@BindsInstance Builder andTag(String tag);
-	
-	MetadataAnnotationComponent build();
-
+//TODO: this is stateful and non-reentrant and probably fairly expensive to allocate, break into two components or something
+@Provides
+public static CloseableHttpClient produceHttpClient() {
+	return HttpClients.createDefault();	
 }
-
 
 }

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
-import cat.calidos.morfeu.model.injection.DaggerURIComponent;
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
@@ -35,22 +35,22 @@ import cat.calidos.morfeu.problems.ValidationException;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ContentControl extends Control {
+public class ContentGETControl extends Control {
 
-protected final static Logger log = LoggerFactory.getLogger(ContentControl.class);
+private final static Logger log = LoggerFactory.getLogger(ContentGETControl.class);
 private String prefix;
 private String path;
 private String modelPath;
 		
 
-public ContentControl(String prefix, String path, @Nullable String modelPath) {
-	
-	super("content:"+path, "templates/content.twig", "templates/content-problem.twig");
-	
+public ContentGETControl(String prefix, String path, @Nullable String modelPath) {
+
+	super("GET content:"+path, "templates/content.twig", "templates/content-problem.twig");
+
 	this.prefix = prefix;
 	this.path = path;
 	this.modelPath = modelPath;
-	
+
 }
 
 
@@ -71,7 +71,7 @@ protected Object process()
 															.build()
 															.content()
 															.get();
-	
+
 	return content.asList();
 	
 }
@@ -86,7 +86,6 @@ protected void beforeProcess() {
 @Override
 protected void afterProblem(String problem) {
 	log.trace("Problem loading content('{}', '{}', '{}'): '{}'", prefix, path, modelPath, problem);
-	
 }
 
 

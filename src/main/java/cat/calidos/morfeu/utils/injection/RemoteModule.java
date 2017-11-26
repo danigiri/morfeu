@@ -1,14 +1,13 @@
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.utils.injection;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import cat.calidos.morfeu.utils.injection.DaggerDataFetcherComponent;
 import cat.calidos.morfeu.problems.FetchingException;
 
 public class RemoteModule {
@@ -24,7 +23,7 @@ protected static ListenableFuture<InputStream> fetchRemoteStream(URI u, Closeabl
 			.withClient(c)
 			.build()
 			.fetchData();
-	
+
 }
 
 }

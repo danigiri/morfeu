@@ -34,6 +34,7 @@ import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.model.metadata.injection.GlobalModelMetadataModule;
 
 /**
 * @author daniel giribet

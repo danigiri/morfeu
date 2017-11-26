@@ -21,6 +21,8 @@ import static org.junit.Assert.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Test;
 
+import cat.calidos.morfeu.utils.injection.HttpClientModule;
+
 /**
 * @author daniel giribet
 *////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -18,15 +18,10 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.model.injection.DaggerURIComponent;
-import cat.calidos.morfeu.problems.FetchingException;
 
 /**
 * @author daniel giribet

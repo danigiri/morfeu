@@ -14,11 +14,10 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.model.metadata.injection;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,8 +31,6 @@ import com.google.common.base.Functions;
 import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
-import dagger.Module;
-import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 

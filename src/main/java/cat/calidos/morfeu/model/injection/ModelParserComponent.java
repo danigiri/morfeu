@@ -20,6 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.problems.ConfigurationException;
+import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.producers.ProductionComponent;
 
 /** This is at the moment only used for testing, as SchemaParserModule is included directly as a dependency

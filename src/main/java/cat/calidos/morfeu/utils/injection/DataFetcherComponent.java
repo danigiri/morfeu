@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.utils.injection;
 
 import java.io.InputStream;
 import java.net.URI;

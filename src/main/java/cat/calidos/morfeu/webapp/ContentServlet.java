@@ -23,10 +23,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.server.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.ContentControl;
+import cat.calidos.morfeu.control.ContentGETControl;
 
 /**
 * @author daniel giribet
@@ -44,16 +46,33 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 
 	//http://localhost:8080/morfeu/content/target/test-classes/test-resources/documents/document1.xml?model=target/test-classes/test-resources/models/test-model.xsd
 	String path = normalisedPathFrom(req);
-	log.trace("ContentServlet::doGet '[{}]{}'", resourcesPrefix, path);
+	String modelPath = req.getParameter("model");
+	log.trace("ContentServlet::doGet '[{}]{}' model:'{}'", resourcesPrefix, path, modelPath);
+
+	String content = new ContentGETControl(resourcesPrefix, path, modelPath).processRequest(); 
+
+	resp.setContentType("application/json");
+	writeTo(content, resp);
+
+}
+
+
+/* (non-Javadoc)
+* @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+	String path = normalisedPathFrom(req);
+	String modelPath = req.getParameter("model");
+	log.trace("ContentServlet::doPost '[{}]{}' model:'{}'", resourcesPrefix, path, modelPath);
+	
+	String content = IOUtils.toString(req.getInputStream());
+	String result = new ContentPOSTControl(resourcesPrefix, path, content, modelPath).processRequest();
 	
 	resp.setContentType("application/json");
+	writeTo(result, resp);
 
-	String modelPath = req.getParameter("model");
-	String content = new ContentControl(resourcesPrefix, path, modelPath).processRequest(); 
-					
-	PrintWriter out = resp.getWriter();
-	out.print(content);
-	out.close();
 }
 
 }

@@ -16,8 +16,6 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.mockito.Mockito.when;
-
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -25,28 +23,26 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Rule;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import com.sun.xml.xsom.XSAnnotation;
-import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
-import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
+import cat.calidos.morfeu.model.metadata.injection.GlobalModelMetadataModule;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
-
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
 /**
 * @author daniel giribet
@@ -70,6 +66,7 @@ throws InterruptedException, ExecutionException, ParsingException, FetchingExcep
 	return docComponent.produceDocument().get();
 
 }
+
 
 protected Model parseModelFrom(URI u) throws ConfigurationException, 
 											 InterruptedException, 
@@ -133,7 +130,7 @@ protected Type provideElementType(XSElementDecl elem) {
 			.withXSType(elem.getType())
 			.build()
 			.type();
-	
+
 }
 
 

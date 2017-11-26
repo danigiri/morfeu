@@ -16,8 +16,6 @@
 
 package cat.calidos.morfeu.control;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import cat.calidos.morfeu.problems.FetchingException;

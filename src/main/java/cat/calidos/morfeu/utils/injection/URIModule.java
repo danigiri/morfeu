@@ -14,37 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.utils.injection;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
-import javax.annotation.Nullable;
-import javax.inject.Named;
-
-import dagger.BindsInstance;
-import dagger.Component;
-
-import com.sun.xml.xsom.XSAnnotation;
-
-import cat.calidos.morfeu.model.Metadata;
+import cat.calidos.morfeu.problems.FetchingException;
+import dagger.Module;
+import dagger.Provides;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules={ModelMetadataModule.class})
-public interface ModelMetadataComponent {
+@ProducerModule
+public class URIModule {
 
-Metadata value();
-
-@Component.Builder
-interface Builder {
-
-	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
-	@BindsInstance Builder withParentURI(@Nullable @Named("ParentURI") URI parentURI);	
-	@BindsInstance Builder andFallback(@Named("Fallback") @Nullable Metadata fallback);
-	
-	ModelMetadataComponent build();
-
+@Produces
+public static URI uri(String uri) throws FetchingException {
+	try {
+		return new URI(uri);
+	} catch (URISyntaxException e) {
+		throw new FetchingException("Problem due to invalid URI '"+uri+"'", e);
+	}
 }
 
 }

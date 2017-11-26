@@ -14,71 +14,72 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.control;
+package cat.calidos.morfeu.webapp;
 
-import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.Nullable;
 
-import cat.calidos.morfeu.model.injection.DaggerDocumentComponent;
-import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
+import cat.calidos.morfeu.control.Control;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentControl extends Control {
+public class ContentPOSTControl extends Control {
 
-protected final static Logger log = LoggerFactory.getLogger(DocumentControl.class);
-private String prefix;
-private String path;
+public ContentPOSTControl(String prefix, String path, String content, @Nullable String modelPath) {
 
-
-public DocumentControl(String prefix, String path) {
-
-	super("document", "templates/document.twig", "templates/document-problem.twig");
-
-	this.prefix = prefix;
-	this.path = path;
+	super("POST content:"+path, "templates/xx.twig", "templates/xxx-problem.twig");
 
 }
 
 
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.control.Control#process()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
-protected Object process() 
+protected Object process()
 		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
 
-	URI uri = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
-	return DaggerDocumentComponent.builder()
-										.from(uri)
-										.withPrefix(prefix)
-										.build()
-										.produceDocument()
-										.get();
-
+	// TODO Auto-generated method stub
+	return null;
 }
 
 
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.control.Control#beforeProcess()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
 protected void beforeProcess() {
-	log.trace("DocumentControl::loadDocument('{}', '{}')", prefix, path);
+
+	// TODO Auto-generated method stub
+
 }
 
 
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.control.Control#afterProblem(java.lang.String)
+*//////////////////////////////////////////////////////////////////////////////
 @Override
 protected void afterProblem(String problem) {
-	log.trace("Problem loading document('{}', '{}'): {}", prefix, path, problem);
+
+	// TODO Auto-generated method stub
+
 }
 
 
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.control.Control#problemInformation()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
 protected Object problemInformation() {
-	return path;	// we show the problematic path on the template
-}
 
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

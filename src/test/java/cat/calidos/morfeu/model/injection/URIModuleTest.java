@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.utils.injection.URIModule;
 
 /**
 * @author daniel giribet
