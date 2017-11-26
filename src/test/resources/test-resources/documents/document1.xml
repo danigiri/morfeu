@@ -3,21 +3,21 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
 >
-    <row>
-    	<col size="4">
-    		<data number="42" text="blahblah"/>
+	<row>
+		<col size="4">
+		<data number="42" text="blahblah"/>
     	</col>
     	<col size="8">
     		<row>
     			<col size="6">
     		    		<data number="42" text="blahblah"/>
 	   		    	<data2 number="42" text="blahblah"/>    		
-    			</col>
+			</col>
     			<col size="6">
 	    			<data2 number="42" text="blahblah"/>
 	    			<data2 number="42" text="blahblah"/>
 	    		</col>
     		</row>
-    	</col>
-    </row>
+	</col>
+	</row>
 </test>

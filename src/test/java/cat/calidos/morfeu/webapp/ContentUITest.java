@@ -165,7 +165,6 @@ public void relationshipFromModelToContentTest() {
 	content.shouldBeVisible();
 	UICell test = content.rootCells().get(0);
 	UIModel model = document.model();
-	
 
 	// let's check for model drop area activations, we highlight row so test can allow them
 	UICellModelEntry rowModel = model.rootCellModel("test").child("row").hover();
