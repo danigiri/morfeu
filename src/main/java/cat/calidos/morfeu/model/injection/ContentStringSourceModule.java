@@ -16,38 +16,10 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
-
-import java.net.URISyntaxException;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.utils.injection.URIModule;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class URIModuleTest {
-
-private String uri;
-
-
-@Before
-public void setup() {
-	uri = "http://foo.com";
-}
-
-@Test
-public void testURI() throws FetchingException {
-	assertEquals(uri, URIModule.uri(uri).toString());
-}
-
-
-@Test(expected = FetchingException.class)
-public void testURIException() throws FetchingException {
-	URIModule.uri(":/foo.com");
-}
+public class ContentStringSourceModule {
 
 }

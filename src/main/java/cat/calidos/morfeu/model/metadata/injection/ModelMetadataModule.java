@@ -43,12 +43,10 @@ import dagger.Provides;
 public class ModelMetadataModule {
 
 protected final static Logger log = LoggerFactory.getLogger(ModelMetadataModule.class);
-		
-		
+
 private static final String URI_FIELD = "mf:metadata@uri";
 private static final String DEFAULT_URI = ".";
 private static final String METADATA = "";	// empty at the moment
-
 
 //private static final String METADATA = "#metadata";
 private static final String DESC_FIELD = "mf:desc";
@@ -60,11 +58,11 @@ private static final String THUMB_FIELD = "mf:thumb";
 
 @Provides
 Metadata provideMetadata(URI uri,
-						 @Named("desc") Optional<String> desc,
-						 @Named("presentation") Optional<String> presentation,
-						 @Named("cellPresentation") Optional<String> cellPresentation,
-						 @Named("thumb") Optional<String> thumb,
-						 @Named("Fallback") @Nullable Metadata fallback) {
+						@Named("desc") Optional<String> desc,
+						@Named("presentation") Optional<String> presentation,
+						@Named("cellPresentation") Optional<String> cellPresentation,
+						@Named("thumb") Optional<String> thumb,
+						@Named("Fallback") @Nullable Metadata fallback) {
 	
 	if (fallback==null) {
 

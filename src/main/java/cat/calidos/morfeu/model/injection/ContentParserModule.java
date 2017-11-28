@@ -77,7 +77,7 @@ public static Validator produceValidator(Schema s) {
 		
 		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
 		throw exception;
-		
+
 	}
 	
 	
@@ -117,19 +117,17 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI u, org.w3c
 		pendingNodes.add(rootNode);
 		rootNode = rootNode.getNextSibling();
 	}
-		
-	List<CellModel> rootCellModels = m.getRootCellModels();
-return contentCells(pendingNodes, u, rootCellModels);
-
 	
+	List<CellModel> rootCellModels = m.getRootCellModels();
+
+	return contentCells(pendingNodes, u, rootCellModels);
 	
 }
 
 
 private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI uri, List<CellModel> cellModels) throws ParsingException {
 
-	//FIXME: this is a quite repetitive from cellmodule, not following DRY
-	
+	//FIXME: this is a quite repetitive from cellmodule, not following DRY	
 	Composite<Cell> contentCells = new OrderedMap<Cell>();
 	int cellIndex = 0;
 	for (Node node : pendingNodes) {
@@ -203,12 +201,6 @@ public static SchemaFactory produceSchemaFactory() {
 	
 	return sf;
 
-}
-
-
-@Produces
-public static StreamSource produceStreamSource(@Named("FetchableModelURI") URI u) {
-	return new StreamSource(u.toString());
 }
 
 

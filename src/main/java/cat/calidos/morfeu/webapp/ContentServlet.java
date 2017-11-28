@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.ContentGETControl;
+import cat.calidos.morfeu.control.ContentPOSTControl;
 
 /**
 * @author daniel giribet

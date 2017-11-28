@@ -14,16 +14,17 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.control;
 
+import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
 
-import cat.calidos.morfeu.control.Control;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
 
 /**
@@ -31,10 +32,21 @@ import cat.calidos.morfeu.problems.ValidationException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentPOSTControl extends Control {
 
+private String prefix;
+private String path;
+private String modelPath;
+private String content;
+
+
 public ContentPOSTControl(String prefix, String path, String content, @Nullable String modelPath) {
 
 	super("POST content:"+path, "templates/xx.twig", "templates/xxx-problem.twig");
 
+	this.prefix = prefix;
+	this.path = path;
+	this.modelPath = modelPath;
+	this.content = content;
+	
 }
 
 
@@ -45,6 +57,11 @@ public ContentPOSTControl(String prefix, String path, String content, @Nullable 
 protected Object process()
 		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
 
+	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
+	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
+	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
+	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
+	
 	// TODO Auto-generated method stub
 	return null;
 }

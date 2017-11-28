@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.utils;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
