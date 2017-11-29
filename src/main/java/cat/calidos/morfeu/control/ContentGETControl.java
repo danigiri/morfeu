@@ -26,8 +26,10 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.injection.ContentParserComponent;
 import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
+import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
@@ -55,25 +57,26 @@ public ContentGETControl(String prefix, String path, @Nullable String modelPath)
 
 
 @Override
-protected Object process()
-		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
+protected Object process() throws InterruptedException, ExecutionException, ValidationException, 
+									ParsingException, FetchingException, ConfigurationException {
 
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
 	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
+
+	ContentParserComponent contentComponent = DaggerContentParserComponent.builder()
+																		.content(uri)
+																		.fetchedContentFrom(fetchableURI)
+																		.model(modelURI)
+																		.withModelFetchedFrom(fetchableModelPath)
+																		.build();
+	contentComponent.validator().get().validate();
 	
-	Composite<Cell> content = DaggerContentParserComponent.builder()
-															.content(uri)
-															.fetchedContentFrom(fetchableURI)
-															.model(modelURI)
-															.withModelFetchedFrom(fetchableModelPath)
-															.build()
-															.content()
-															.get();
+	Composite<Cell> content = contentComponent.content().get();
 
 	return content.asList();
-	
+
 }
 
 

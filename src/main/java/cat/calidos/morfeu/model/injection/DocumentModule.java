@@ -83,7 +83,7 @@ public static InputStream fetchDocumentJSON(URI uri, CloseableHttpClient client)
 	try {
 		
 		return fetchRemoteStream(uri, client).get();
-		
+
 	} catch (InterruptedException | ExecutionException e) {
 		throw new FetchingException("Problem while fetching '"+uri+"'", e);
 	}

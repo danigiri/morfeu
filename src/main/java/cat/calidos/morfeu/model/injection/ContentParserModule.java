@@ -205,6 +205,13 @@ public static SchemaFactory produceSchemaFactory() {
 
 
 @Produces
+public static StreamSource produceStreamSource(@Named("FetchableModelURI") URI u) {
+	return new StreamSource(u.toString());
+}
+
+
+
+@Produces
 public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) throws ParsingException {
 	
 	Schema schema;
@@ -215,27 +222,6 @@ public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) 
 	}
 
 	return schema;
-
-}
-
-
-// notice this is a DOM Document and not a morfeu document
-@Produces
-public static org.w3c.dom.Document produceParsedContent(DocumentBuilder db, @Named("FetchableContentURI") URI u) 
-		throws ParsingException, FetchingException {
-	
-	// TODO: we can probably parse with something faster than building into dom
-	Document dom;
-	String uri = u.toString();
-	try {
-		dom = db.parse(uri);
-	} catch (SAXException e) {
-		throw new ParsingException("Problem when parsing '"+uri+"'", e);
-	} catch (IOException e) {
-		throw new FetchingException("Problem when fetching '"+uri+"'", e);
-	}
-
-	return dom;
 
 }
 

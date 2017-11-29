@@ -16,31 +16,46 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import java.io.IOException;
+import java.net.URI;
 
-import dagger.producers.ProductionSubcomponent;
+import javax.inject.Named;
+import javax.xml.parsers.DocumentBuilder;
 
-import cat.calidos.morfeu.model.Cell;
-import cat.calidos.morfeu.model.Composite;
-import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.problems.ConfigurationException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ContentParserModule.class,ParseURIModule.class, ModelModule.class, 
-								ListeningExecutorServiceModule.class})
-public interface ContentParserSubcomponent {
+@ProducerModule
+public class ParseURIModule {
 
-ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
-ListenableFuture<Composite<Cell>> content() throws ParsingException;
 
-@ProductionSubcomponent.Builder
-interface Builder {
-	ContentParserSubcomponent builder();
+//notice this is a DOM Document and not a morfeu document
+@Produces
+public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db, @Named("FetchableContentURI") URI u) 
+		throws ParsingException, FetchingException {
+	
+	// TODO: we can probably parse with something faster than building into dom
+	Document dom;
+	String uri = u.toString();
+	try {
+		dom = db.parse(uri);
+	} catch (SAXException e) {
+		throw new ParsingException("Problem when parsing '"+uri+"'", e);
+	} catch (IOException e) {
+		throw new FetchingException("Problem when fetching '"+uri+"'", e);
+	}
+
+	return dom;
+
 }
+
 
 }

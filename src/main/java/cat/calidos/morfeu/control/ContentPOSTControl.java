@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
 
+import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
@@ -54,8 +55,8 @@ public ContentPOSTControl(String prefix, String path, String content, @Nullable 
 * @see cat.calidos.morfeu.control.Control#process()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
-protected Object process()
-		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
+protected Object process() throws InterruptedException, ExecutionException, ValidationException, 
+									ParsingException, FetchingException, ConfigurationException {
 
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();

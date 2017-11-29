@@ -20,27 +20,41 @@ import java.net.URI;
 
 import javax.inject.Named;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Validable;
+import cat.calidos.morfeu.problems.ConfigurationException;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
 /**
-* 	@author daniel giribet
+* @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ListeningExecutorServiceModule.class})
-public interface ContentSaverModule {
+@ProductionComponent(modules={ContentParserModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
+public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
+
+
+//ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
+//ListenableFuture<Composite<Cell>> content() throws ParsingException;
 
 
 @ProductionComponent.Builder
 interface Builder {
 
-	@BindsInstance Builder content(String content);
+/*
+ * 	@BindsInstance Builder content(String content);
 	@BindsInstance Builder to(@Named("ContentURI") URI u);
 	@BindsInstance Builder withPath(@Named("FetchableContentURI") URI u);
 	@BindsInstance Builder model(@Named("ModelURI") URI u);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
+ */
 
-	ContentSaverModule build();
+	ContentSaverParserComponent build();
 
 }
 

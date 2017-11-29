@@ -18,6 +18,7 @@ package cat.calidos.morfeu.control;
 
 import java.util.concurrent.ExecutionException;
 
+import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
@@ -76,6 +77,8 @@ public String processRequest() {
 		problem = "Problem fetching data for '"+operation+"' ("+e.getMessage()+")";
 	} catch (ParsingException e) {
 		problem = "Problem parsing for '"+operation+"' ("+e.getMessage()+")";
+	} catch (ConfigurationException e) {
+		problem = "Problem configuring for '"+operation+"' ("+e.getMessage()+")";
 	}
 		
 	if (problem.length()==0) {
@@ -92,7 +95,7 @@ public String processRequest() {
 
 
 protected abstract Object process() 
-		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException;
+		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException, ConfigurationException;
 
 protected abstract void beforeProcess();
 

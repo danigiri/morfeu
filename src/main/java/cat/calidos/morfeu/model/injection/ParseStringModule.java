@@ -16,11 +16,18 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.io.IOException;
 import java.net.URI;
 
 import javax.inject.Named;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.DocumentBuilder;
 
+import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -28,12 +35,24 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class ContentURISourceModule {
+public class ParseStringModule {
 
 
+//notice this is a DOM Document and not a morfeu document
 @Produces
-public static StreamSource produceStreamSource(@Named("FetchableModelURI") URI u) {
-	return new StreamSource(u.toString());
+public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db, @Named("ContentString") String content) 
+		throws ParsingException, FetchingException {
+	
+	// TODO: we can probably parse with something faster than building into dom
+	try {
+		return db.parse(IOUtils.toInputStream(content));
+	} catch (SAXException e) {
+		throw new ParsingException("Problem when parsing '"+content.substring(0, 20)+"'", e);
+	} catch (IOException e) {
+		throw new FetchingException("IO problem when parsing '"+content.substring(0, 20)+"'", e);
+	}
+
+
 }
 
 
