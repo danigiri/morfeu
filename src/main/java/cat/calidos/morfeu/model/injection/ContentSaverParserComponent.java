@@ -35,24 +35,26 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ContentParserModule.class, ParseStringModule.class, ModelModule.class, 
+								ListeningExecutorServiceModule.class})
 public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
 
 
-//ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
-//ListenableFuture<Composite<Cell>> content() throws ParsingException;
+ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
+ListenableFuture<Composite<Cell>> content() throws ParsingException;
 
 
 @ProductionComponent.Builder
 interface Builder {
 
-/*
- * 	@BindsInstance Builder content(String content);
-	@BindsInstance Builder to(@Named("ContentURI") URI u);
+	@BindsInstance Builder from(@Named("ContentString") String content);
+
+	/*
 	@BindsInstance Builder withPath(@Named("FetchableContentURI") URI u);
+	 */
+	@BindsInstance Builder having(@Named("ContentURI") URI u);
 	@BindsInstance Builder model(@Named("ModelURI") URI u);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
- */
 
 	ContentSaverParserComponent build();
 

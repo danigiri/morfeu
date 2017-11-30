@@ -23,7 +23,6 @@ import javax.inject.Named;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.apache.commons.io.IOUtils;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import cat.calidos.morfeu.problems.FetchingException;

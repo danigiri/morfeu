@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
-import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
@@ -32,9 +31,10 @@ public void testProduceCompleteDocument() throws Exception {
 	assertNotNull(doc);
 
 	DocumentModuleTest.testDocument1(doc);
-	
+
 	Composite<Cell> content = doc.getContent();
 	assertNotNull(content);
+	
 }
 
 
