@@ -66,7 +66,7 @@ public void save() throws SavingException {
 		throw new SavingException("Could not save to '"+destination+"' as we cannot write to it");		
 	}
 	if (destinationFile.exists()) {
-		log.error("Removing old '{}' to replace it with new content", destination);
+		log.info("Removing old '{}' to replace it with new content", destination);
 		destinationFile.delete();
 	}
 

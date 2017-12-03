@@ -18,10 +18,12 @@ package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,12 +31,9 @@ import org.junit.Test;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.problems.ConfigurationException;
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.utils.Tezt;
+import cat.calidos.morfeu.utils.FileSaver;
 
 /**
 * @author daniel giribet
@@ -46,6 +45,8 @@ private URI modelURI;
 private URI modelFetchableURI;
 private String content;
 private URI contentURI;
+private URI outputURI;
+private String outputPath;
 
 
 @Before
@@ -61,6 +62,11 @@ public void setup() throws Exception {
 	URI fullContentURI = new URI(fullContentPath);
 	content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 
+	String tmp = setupTempDirectory();
+	System.err.println("ContentSaverParserComponentIntTest::Using '"+tmp+"' as temporary test folder");
+	outputPath = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
+	outputURI = new URI("file://"+outputPath);
+
 }
 
 
@@ -70,6 +76,7 @@ public void testValidateString() throws Exception {
 	ContentSaverParserComponent contentComponent = DaggerContentSaverParserComponent
 													.builder()
 													.from(content)
+													.to(outputURI)
 													.having(contentURI)
 													.model(modelURI)
 													.withModelFetchedFrom(modelFetchableURI)
@@ -82,11 +89,11 @@ public void testValidateString() throws Exception {
 
 	Composite<Cell> rootCells = contentComponent.content().get();
 	assertNotNull(rootCells);
-	
+
 	assertEquals("Wrong size of content root from 'content saver parser' parsed XML string", 1, rootCells.size());
 	Cell test = rootCells.child("test(0)");
 	assertEquals("Wrong root node name from 'content saver parser' parsed XML string", "test", test.getName());
-	
+
 }
 
 
@@ -101,6 +108,7 @@ public void testNonValidString() throws Exception {
 	Validable validator = DaggerContentSaverParserComponent
 							.builder()
 							.from(content)
+							.to(outputURI)
 							.having(new URI(contentPath))
 							.model(modelURI)
 							.withModelFetchedFrom(modelFetchableURI)
@@ -114,6 +122,29 @@ public void testNonValidString() throws Exception {
 	} catch (ValidationException e) {
 		assertTrue("Wrong exception message parsing of 'content saver parser'", e.getMessage().contains("notvalid"));
 	}
+
+}
+
+
+@Test
+public void testSaveString() throws Exception {
+
+	FileSaver saver = DaggerContentSaverParserComponent.builder()
+														.from(content)
+														.to(outputURI)
+														.having(contentURI)
+														.model(modelURI)
+														.withModelFetchedFrom(modelFetchableURI)
+														.build()
+														.saver()
+														.get();
+	saver.save();
+	File savedFile = new File(outputPath);
+	assertTrue("Saver component did not create a file", savedFile.exists());
+	savedFile.deleteOnExit();
+
+	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
+	assertEquals("Content saved to file is not the same as input", content, writtenContent);
 
 }
 

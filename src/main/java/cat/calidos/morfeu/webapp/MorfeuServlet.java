@@ -60,6 +60,7 @@ public void init(ServletConfig config) throws ServletException {
 		.servletConfig(this.getServletConfig())
 		.build()
 		.getProperties();
+	System.err.println("Servlet config:"+p);
 	log.info("Configured RESOURCES_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
 	Map<String, String> env = System.getenv();
 	System.err.println("ENV:"+env);

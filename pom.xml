@@ -1,4 +1,4 @@
-\<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
@@ -44,7 +44,7 @@
 			<plugin>
 			    <groupId>org.eclipse.jetty</groupId>
 			    <artifactId>jetty-maven-plugin</artifactId>
-			    <version>9.4.3.v20170317</version>
+			    <version>9.4.8.v20171121</version>
 				<configuration>
 					<dumpOnStart>false</dumpOnStart> <!-- set to true for debugging -->
 					<scanIntervalSeconds>1</scanIntervalSeconds>
@@ -69,7 +69,7 @@
 							<value>60000</value>
 						</systemProperty>
 						<systemProperty>
-							<name>RESOURCES_PREFIX</name>
+							<name>RESOURCES_PREFIX</name>	<!--  this is woefully ignored, env vars work though -->
 							<value>${webapp-prefix}</value>
 						</systemProperty>
 					</systemProperties>

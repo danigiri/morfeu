@@ -31,29 +31,27 @@ import org.junit.Test;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class FileSaverTest extends Tezt {
 
-private String path;
-
-
-@Before
-public void setup() throws Exception {
-
-	String tmp = setupTempDirectory();
-	System.err.println("Using '"+tmp+"' as temporary test folder");
-	path = tmp+"/filesaver-test.txt";
-	File file = new File(path);
-	if (file.exists() && !file.isDirectory()) {
-		file.delete();
-	}
-
-}
-
 
 @Test
 public void testSave() throws Exception {
 
-	FileSaver saver = new FileSaver(path, "foo");
+	String tmp = setupTempDirectory();
+	System.err.println("FileSaverTest::Using '"+tmp+"' as temporary test folder");
+	String path = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
+	File file = new File(path);
+	if (file.exists() && !file.isDirectory()) {
+		file.delete();
+	}
+	file.deleteOnExit();
+	String contentWritten = "foo";
+	FileSaver saver = new FileSaver(path, contentWritten);
 	saver.save();
-	
+	File file2 = new File(path);
+	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);
+
+	assertEquals("Content written to the output file was not as expected", contentWritten, contentRead);
+
 }
+
 
 }

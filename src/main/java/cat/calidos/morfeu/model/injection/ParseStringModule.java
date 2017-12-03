@@ -27,6 +27,7 @@ import org.xml.sax.SAXException;
 
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.Config;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -39,18 +40,17 @@ public class ParseStringModule {
 
 //notice this is a DOM Document and not a morfeu document
 @Produces
-public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db, @Named("ContentString") String content) 
+public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db, @Named("Content") String content) 
 		throws ParsingException, FetchingException {
-	
+
 	// TODO: we can probably parse with something faster than building into dom
 	try {
-		return db.parse(IOUtils.toInputStream(content));
+		return db.parse(IOUtils.toInputStream(content, Config.DEFAULT_CHARSET));
 	} catch (SAXException e) {
 		throw new ParsingException("Problem when parsing '"+content.substring(0, 20)+"'", e);
 	} catch (IOException e) {
 		throw new FetchingException("IO problem when parsing '"+content.substring(0, 20)+"'", e);
 	}
-
 
 }
 

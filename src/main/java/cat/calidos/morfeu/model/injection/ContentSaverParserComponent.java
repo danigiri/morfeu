@@ -28,7 +28,9 @@ import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.utils.FileSaver;
+import cat.calidos.morfeu.utils.injection.FileSaverModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
@@ -36,23 +38,20 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, ParseStringModule.class, ModelModule.class, 
-								ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ContentParserModule.class, ParseStringModule.class, FileSaverModule.class, 
+								ModelModule.class, ListeningExecutorServiceModule.class})
 public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
 
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
 ListenableFuture<Composite<Cell>> content() throws ParsingException;
-ListenableFuture<FileSaver> saver();
+ListenableFuture<FileSaver> saver() throws SavingException;
 
 @ProductionComponent.Builder
 interface Builder {
 
-	@BindsInstance Builder from(@Named("ContentString") String content);
-
-	/*
-	@BindsInstance Builder withPath(@Named("FetchableContentURI") URI u);
-	 */
+	@BindsInstance Builder from(@Named("Content") String content);
+	@BindsInstance Builder to(@Named("DestinationContentURI") URI u);
 	@BindsInstance Builder having(@Named("ContentURI") URI u);
 	@BindsInstance Builder model(@Named("ModelURI") URI u);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
