@@ -31,6 +31,7 @@ import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.Tezt;
 
 
 /**
@@ -87,12 +88,11 @@ public void testNonValidDocument() throws Exception {
 @Test
 public void testProduceContent() throws Exception {
 
-	
 	String contentPath = "test-resources/documents/document1.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "test-resources/models/test-model.xsd";
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
-	
+
 	Composite<Cell> content = DaggerContentParserComponent.builder()
 															.content(new URI(contentPath))
 															.fetchedContentFrom(new URI(fullContentPath))

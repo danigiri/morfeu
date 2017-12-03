@@ -14,16 +14,46 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.problems;
+package cat.calidos.morfeu.utils;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.net.URI;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Test;
+
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ValidationException extends Exception {
+public class FileSaverTest extends Tezt {
 
-public ValidationException(String message, Throwable e) {
-	super(message+"("+e.getMessage()+")", e);
+private String path;
+
+
+@Before
+public void setup() throws Exception {
+
+	String tmp = setupTempDirectory();
+	System.err.println("Using '"+tmp+"' as temporary test folder");
+	path = tmp+"/filesaver-test.txt";
+	File file = new File(path);
+	if (file.exists() && !file.isDirectory()) {
+		file.delete();
+	}
+
 }
 
+
+@Test
+public void testSave() throws Exception {
+
+	FileSaver saver = new FileSaver(path, "foo");
+	saver.save();
+	
+}
 
 }

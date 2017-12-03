@@ -22,6 +22,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import cat.calidos.morfeu.utils.Tezt;
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UIProblem;
@@ -29,7 +30,7 @@ import cat.calidos.morfeu.webapp.ui.UIProblem;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UITezt {
+public class UITezt extends Tezt {
 
 protected static final String URL_PROPERTY = "app-url";
 protected static final String DEFAULT_URL = "http://localhost:8080/morfeu";
@@ -64,20 +65,7 @@ public static void tearDownClass() {
 	if (driver!=null) {
 		driver.quit();
 	}
-	
-}
 
-
-protected static String defineSystemVariable(String systemProperty, String defaultValue) {
-
-	String value = System.getProperty(systemProperty);
-	if (value==null) {
-		value = defaultValue;
-		System.setProperty(systemProperty, defaultValue);
-	} else {
-		System.err.println("Using "+systemProperty+"="+value+" [ENV]");
-	}
-	return value;
 }
 
 

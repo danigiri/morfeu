@@ -19,9 +19,15 @@ package cat.calidos.morfeu.problems;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ValidationException extends Exception {
+public class SavingException extends Exception{
 
-public ValidationException(String message, Throwable e) {
+
+public SavingException(String message) {
+	super(message);
+}
+
+
+public SavingException(String message, Exception e) {
 	super(message+"("+e.getMessage()+")", e);
 }
 

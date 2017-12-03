@@ -64,7 +64,7 @@ public void setup() throws Exception {
 
 	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	schemaSet = parseSchemaFrom(modelURI);
-	
+
 }
 
 
@@ -109,7 +109,7 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(1, colComplex.attributes().size());
 	assertEquals("COL-FIELD", colComplex.attributes().attribute("size").getMetadata().getPresentation());
 	assertEquals(3, colComplex.children().size());
-	
+
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	String dataDesc = "Globally provided description of 'data'";
 	checkComplexCellModel(data, "data", dataDesc, "testCell", modelURI+"/test/row/col/data");
@@ -124,12 +124,12 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("/test/row/col/data2 cell model should be max 2", 2, data2.getMaxOccurs().getAsInt());
 
 	assertTrue(data.isReference() || data2.isReference());
-	
+
 	CellModel testCell;
 	if (data.isReference()) {	// it's undetermined which one will be processed first, both are testCell so any will do
 		assertEquals("CELL", data.getMetadata().getPresentation());
 		testCell = data.asReference().reference();
-		
+
 	} else {
 		assertEquals("CELL", data2.getMetadata().getPresentation());
 		testCell = data2.asReference().reference();		
@@ -141,11 +141,10 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(2, testComplexCell.attributes().size());
 	assertEquals(0, testComplexCell.children().size());
 	
-	
 	CellModel rowRef = colComplex.children().child("row");						// TEST -> ROW -> COL -> @ROW
 	assertTrue(rowRef.isReference());
 	assertEquals("Row reference in col does not reference original", row, rowRef.asReference().reference());
-	
+
 }
 
 
@@ -154,7 +153,7 @@ public void testAttributesOf() {
 	
 	String name = "test";
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
-//	Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
+	// Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
 	Type type = provideElementType(elem);
 
 	URI uri = CellModelModule.getURIFrom(modelURI+"/"+name, name);

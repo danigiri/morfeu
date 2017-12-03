@@ -42,19 +42,20 @@ import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.Tezt;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelTezt {
+public class ModelTezt extends Tezt {
 
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 
 protected Document produceDocumentFromPath(String path)
 throws InterruptedException, ExecutionException, ParsingException, FetchingException, ValidationException {
-	
+
 	String doc1Path = testAwareFullPathFrom(path);
 	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
 
@@ -62,7 +63,7 @@ throws InterruptedException, ExecutionException, ParsingException, FetchingExcep
 										.from(uri)
 										.withPrefix("")
 										.build();
-	
+
 	return docComponent.produceDocument().get();
 
 }
@@ -105,11 +106,11 @@ protected CellModel cellModelFrom(URI u, String name) throws Exception {
 
 
 protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Exception {
-	
+
 	CellModel cellModel = cellModelFrom(u, name);
-	
+
 	return ComplexCellModel.from(cellModel);	// from simple to complex
-	
+
 }
 
 
@@ -132,11 +133,5 @@ protected Type provideElementType(XSElementDecl elem) {
 			.type();
 
 }
-
-
-protected String testAwareFullPathFrom(String path) {
-	return this.getClass().getClassLoader().getResource(path).toString();
-}
-
 
 }

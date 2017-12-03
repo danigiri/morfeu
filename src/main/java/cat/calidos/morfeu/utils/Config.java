@@ -14,16 +14,14 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.problems;
+package cat.calidos.morfeu.utils;
+
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ValidationException extends Exception {
+public class Config {
 
-public ValidationException(String message, Throwable e) {
-	super(message+"("+e.getMessage()+")", e);
-}
-
+public static final String DEFAULT_CHARSET = "UTF-8";
 
 }

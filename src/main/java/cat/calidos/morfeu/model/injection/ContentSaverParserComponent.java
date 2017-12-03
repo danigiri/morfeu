@@ -28,6 +28,7 @@ import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.FileSaver;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
@@ -42,7 +43,7 @@ public interface ContentSaverParserComponent { //FIXME: this is probably a subco
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
 ListenableFuture<Composite<Cell>> content() throws ParsingException;
-
+ListenableFuture<FileSaver> saver();
 
 @ProductionComponent.Builder
 interface Builder {

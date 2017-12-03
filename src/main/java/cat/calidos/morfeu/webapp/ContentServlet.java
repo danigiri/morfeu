@@ -17,19 +17,18 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.ContentGETControl;
 import cat.calidos.morfeu.control.ContentPOSTControl;
+import cat.calidos.morfeu.utils.Config;
 
 /**
 * @author daniel giribet
@@ -68,7 +67,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 	String modelPath = req.getParameter("model");
 	log.trace("ContentServlet::doPost '[{}]{}' model:'{}'", resourcesPrefix, path, modelPath);
 	
-	String content = IOUtils.toString(req.getInputStream());
+	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
 	String result = new ContentPOSTControl(resourcesPrefix, path, content, modelPath).processRequest();
 	
 	resp.setContentType("application/json");

@@ -33,6 +33,8 @@ import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.utils.Tezt;
 
 /**
 * @author daniel giribet
@@ -42,6 +44,8 @@ public class ContentSaverParserComponentIntTest extends ModelTezt {
 
 private URI modelURI;
 private URI modelFetchableURI;
+private String content;
+private URI contentURI;
 
 
 @Before
@@ -50,20 +54,23 @@ public void setup() throws Exception {
 	String modelPath = "test-resources/models/test-model.xsd";
 	modelURI = new URI(modelPath);
 	modelFetchableURI = new URI("target/test-classes/"+modelPath);
-	
+
+	String contentPath = "test-resources/documents/document1.xml";
+	contentURI = new URI(contentPath);
+	String fullContentPath = testAwareFullPathFrom(contentPath);
+	URI fullContentURI = new URI(fullContentPath);
+	content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
+
 }
+
 
 @Test
 public void testValidateString() throws Exception {
 
-	String contentPath = "test-resources/documents/document1.xml";
-	String fullContentPath = testAwareFullPathFrom(contentPath);
-	String content = IOUtils.toString(new URI(fullContentPath));
-	
 	ContentSaverParserComponent contentComponent = DaggerContentSaverParserComponent
 													.builder()
 													.from(content)
-													.having(new URI(contentPath))
+													.having(contentURI)
 													.model(modelURI)
 													.withModelFetchedFrom(modelFetchableURI)
 													.build();
@@ -88,7 +95,8 @@ public void testNonValidString() throws Exception {
 	
 	String contentPath = "test-resources/documents/nonvalid-document.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
-	String content = IOUtils.toString(new URI(fullContentPath));
+	URI fullContentURI = new URI(fullContentPath);
+	String content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 	
 	Validable validator = DaggerContentSaverParserComponent
 							.builder()
