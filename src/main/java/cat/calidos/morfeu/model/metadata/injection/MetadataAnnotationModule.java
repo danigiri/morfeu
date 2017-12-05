@@ -19,10 +19,11 @@ package cat.calidos.morfeu.model.metadata.injection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -37,12 +38,16 @@ import dagger.Provides;
 @Module
 public class MetadataAnnotationModule {
 
+protected final static Logger log = LoggerFactory.getLogger(MetadataAnnotationModule.class);
+
+		
 @Provides
 List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) {
 	
 	// the expression can be of two types (<nodename> or <nodename>@<attributename>)
 	// in the case of node it's straightforward, in the case of looking for an attribute, we look for the node name
 	// but add the attribute value as output node
+	log.trace("MetadataAnnotationModule::provideNodesTagged(tagExpr:'{}'", tagExpr);
 	int attributeIndex = tagExpr.lastIndexOf("@");
 	String tag = attributeIndex!=-1 ?  tagExpr.substring(0, attributeIndex): tagExpr;
 	
@@ -63,9 +68,14 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) 
 			}
 		} else {
 			if (currentNode.hasChildNodes()) {
-				NodeList childNodes = currentNode.getChildNodes();
-				for (int i=0;i<childNodes.getLength();i++) {
-					annotationNodes.add(childNodes.item(i));
+				try {
+					NodeList childNodes = currentNode.getChildNodes();
+					for (int i=0;i<childNodes.getLength();i++) {
+						annotationNodes.add(childNodes.item(i));
+					}
+				} catch (NullPointerException e) {
+					// FIXME: this seems to happen randomly at application startup, and then it goes away
+					log.error("getChildNodes kicks out a nullpointer when retrieving metadata for '{}'", tagExpr);
 				}
 			}
 		}

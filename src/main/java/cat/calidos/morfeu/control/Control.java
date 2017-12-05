@@ -68,7 +68,6 @@ public String processRequest() {
 	} catch (InterruptedException e) {
 		problem = "Interrupted processing '"+operation+"' ("+e.getMessage()+")";	
 	} catch (ExecutionException e) {
-		e.printStackTrace();
 		Throwable root = MorfeuUtils.findRootCauseFrom(e);
 		problem = "Problem processing '"+operation+"' ("+root.getMessage()+")";
 	} catch (ValidationException e) {

@@ -150,6 +150,7 @@ private InputStream fetchRemoteInputStreamFrom(String location)
 		throws URISyntaxException, IOException, UnsupportedOperationException, ClientProtocolException {
 
 	String uri = webappPrefix+location;
+	System.err.println("Fetching remote input stream from '"+uri+"'");
 	URI u = new URI(uri);
 	HttpGet request = new HttpGet(u);
 	InputStream content = client.execute(request)
