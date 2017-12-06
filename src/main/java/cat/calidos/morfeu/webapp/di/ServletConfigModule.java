@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.webapp.di;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletConfig;
@@ -36,6 +37,9 @@ public static Properties getProperties(ServletConfig c) {
 	Properties p = new Properties();
 	Collections.list(c.getInitParameterNames())
 		.forEach(name -> p.setProperty(name, c.getInitParameter(name)));
+	
+	p.putAll(System.getProperties());
+	p.putAll(System.getenv());
 	
 	return p;
 

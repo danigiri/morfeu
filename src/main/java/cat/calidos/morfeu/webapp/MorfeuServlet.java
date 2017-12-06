@@ -41,7 +41,7 @@ public class MorfeuServlet extends HttpServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
 protected final static String RESOURCES_PREFIX = "RESOURCES_PREFIX";
-protected static final String DEFAULT_RESOURCE_PREFIX = "";
+protected static final String DEFAULT_RESOURCES_PREFIX = "http://localhost:8080/morfeu/";
 
 protected Properties configuration;
 protected String resourcesPrefix;
@@ -60,25 +60,25 @@ public void init(ServletConfig config) throws ServletException {
 		.servletConfig(this.getServletConfig())
 		.build()
 		.getProperties();
-	System.err.println("Servlet config:"+p);
-	log.info("Configured RESOURCES_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
-	Map<String, String> env = System.getenv();
-	System.err.println("ENV:"+env);
-	log.info("Environment RESOURCES_PREFIX='{}'", env.get(RESOURCES_PREFIX));		
-	p.putAll(env);
-	log.info("After override RESOURCES_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
-	// FIXME: this is being ignored so we hardcode
-	p.put(RESOURCES_PREFIX, "http://localhost:8080/morfeu/");
-	log.info("Final RESOURCES_PREFIX='{}'", p.getProperty(RESOURCES_PREFIX));
-	configuration = p;
 	
-	resourcesPrefix = configuration.getProperty(RESOURCES_PREFIX);
-	resourcesPrefix = (resourcesPrefix!=null) ? resourcesPrefix : DEFAULT_RESOURCE_PREFIX; 
-
+	// the hierarchy is as follows:
+	// 1) Read servlet configuration
+	// 2) Add and override with java system properties
+	// 3) Finally add an override with environment variables 
+	log.trace("Servlet config:"+p);
+	resourcesPrefix = p.getProperty(RESOURCES_PREFIX);
+	// FIXME: this is being ignored so we hardcode
+	if (resourcesPrefix==null) {
+		log.info("Not getting anything on RESOURCES_PREFIX, setting default '"+DEFAULT_RESOURCES_PREFIX+"'");
+		p.put(RESOURCES_PREFIX, DEFAULT_RESOURCES_PREFIX);
+		resourcesPrefix = p.getProperty(RESOURCES_PREFIX);
+	}
+	log.info("Final RESOURCES_PREFIX='{}'", resourcesPrefix);
 	if (!resourcesPrefix.endsWith("/")) {
-		log.warn("Used resources prefix does not end with '/', may have issues fetching content");
+		log.warn("*** Used resources prefix does not end with '/', may have issues fetching content ***");
 	}
 	
+	configuration = p;
 }
 
 

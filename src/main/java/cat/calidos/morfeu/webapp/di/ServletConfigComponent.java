@@ -28,6 +28,8 @@ import dagger.Component;
 @Component(modules = ServletConfigModule.class, dependencies = ServletConfig.class)
 public interface ServletConfigComponent {
 
+/** @return merge of configuration properties, from servlet to java system, and env vars (from less to more priority)
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Properties getProperties();
 
 }

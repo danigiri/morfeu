@@ -15,7 +15,7 @@
 		<jetty-http-port>8080</jetty-http-port>
 		<jetty-stop-port>8180</jetty-stop-port>
 		<jetty-context-path>/morfeu</jetty-context-path>
-		<webapp-prefix>http://localhost:${jetty-http-port}/${jetty-context-path}</webapp-prefix>
+		<webapp-prefix>http://localhost:${jetty-http-port}${jetty-context-path}/</webapp-prefix>
 		<jackson-2-version>2.8.5</jackson-2-version>
 		<dagger-2-version>2.11</dagger-2-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,7 +69,7 @@
 							<value>60000</value>
 						</systemProperty>
 						<systemProperty>
-							<name>RESOURCES_PREFIX</name>	<!--  this is woefully ignored, env vars work though -->
+							<name>RESOURCES_PREFIX</name>	<!--  this is woefully ignored, while env vars work -->
 							<value>${webapp-prefix}</value>
 						</systemProperty>
 					</systemProperties>
