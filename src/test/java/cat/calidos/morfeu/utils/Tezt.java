@@ -19,8 +19,14 @@ package cat.calidos.morfeu.utils;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
 * @author daniel giribet
@@ -51,6 +57,14 @@ public String testAwareFullPathFrom(String path) {
 }
 
 
+protected JsonNode parseJson(InputStream content) throws IOException, JsonProcessingException {
+
+	ObjectMapper mapper = new ObjectMapper();
+	JsonNode doc = mapper.readTree(content);
+	return doc;
+}
+
+
 protected static String defineSystemVariable(String systemProperty, String defaultValue) {
 
 	String value = System.getProperty(systemProperty);
@@ -60,7 +74,24 @@ protected static String defineSystemVariable(String systemProperty, String defau
 	} else {
 		System.err.println("Using "+systemProperty+"="+value+" [ENV]");
 	}
+
 	return value;
+
+}
+
+
+/** First look at java system properties, then into env vars (env overrides java system props), if no value is found
+*	then use the default value 
+* 	@return final value
+*////////////////////////////////////////////////////////////////////////////////
+protected String getConfigurationVariable(String name, String defaultValue) {
+	
+	String value = System.getProperty(name);
+	value = (value==null || System.getenv(name)!=null) ? System.getenv(name) : value;
+	value = value==null ? defaultValue : value; 
+	
+	return value;
+	
 }
 
 }

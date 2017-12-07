@@ -36,7 +36,7 @@ public class FileSaverTest extends Tezt {
 public void testSave() throws Exception {
 
 	String tmp = setupTempDirectory();
-	System.err.println("FileSaverTest::Using '"+tmp+"' as temporary test folder");
+	//System.err.println("FileSaverTest::Using '"+tmp+"' as temporary test folder");
 	String path = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
 	File file = new File(path);
 	if (file.exists() && !file.isDirectory()) {
@@ -53,5 +53,26 @@ public void testSave() throws Exception {
 
 }
 
+
+@Test
+public void testBackup() throws Exception {
+
+	String tmp = setupTempDirectory();
+	//System.err.println("FileSaverTest::Using '"+tmp+"' as temporary test folder");
+	String path = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
+
+	String contentWritten = "foo";
+	FileSaver saver = new FileSaver(path, contentWritten);
+	saver.save();
+	
+	saver = new FileSaver(path, "foo2");
+	saver.save();									 // this creates a backup with content 'foo'
+	File file2 = new File(path+FileSaver.BACKUP_EXTENSION);
+	assertTrue("File saver did not create a backup file", file2.exists());
+	
+	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);
+	assertEquals("Backup file did not have original content", contentWritten, contentRead);
+	
+}
 
 }

@@ -53,9 +53,9 @@ public static String destinationPathFrom(@Named("DestinationContentURI") URI u) 
 	String uriString = u.toString();
 	String path = uriString.substring("file://".length(), uriString.length());
 	log.info("Saving content to destination path '{}'", path);
-	
+
 	return path;
-	
+
 }
 
 }

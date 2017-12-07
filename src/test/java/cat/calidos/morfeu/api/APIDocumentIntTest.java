@@ -18,49 +18,28 @@ package cat.calidos.morfeu.api;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import cat.calidos.morfeu.utils.Tezt;
  
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class APIDocumentIntTest {
-
-private CloseableHttpClient client;
-private String webappPrefix;
-
-
-@Before
-public void tearup() {
-
-	client = HttpClients.createDefault();
-
-	webappPrefix = System.getenv("webapp-prefix");
-	if (webappPrefix==null) {		
-		webappPrefix = "http://localhost:8080/morfeu/";
-	}
-	
-}
+public class APIDocumentIntTest extends APITezt {
 
 
 @Test
 public void testDocument() throws Exception {
 	
-	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document1.json");
+	InputStream content = fetchRemoteInputStreamFrom("documents/"+pathPrefix+"documents/document1.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -68,15 +47,13 @@ public void testDocument() throws Exception {
 	assertEquals("First document", doc.get("desc").asText());
 	assertEquals("xml", doc.get("kind").asText());
 	
-	String modelURI = "target/test-classes/test-resources/models/test-model.xsd";
+	String modelURI = pathPrefix+"models/test-model.xsd";
 	assertEquals(modelURI, doc.get("modelURI").asText());
-	String expected = webappPrefix+modelURI;
-	assertEquals(expected, doc.get("fetchableModelURI").asText());
+	assertEquals(modelURI, doc.get("fetchableModelURI").asText());
 	
-	String contentURI = "target/test-classes/test-resources/documents/document1.xml";
+	String contentURI = pathPrefix+"documents/document1.xml";
 	assertEquals(contentURI, doc.get("contentURI").asText());
-	expected = webappPrefix+contentURI;
-	assertEquals(expected, doc.get("fetchableContentURI").asText());
+	assertEquals(contentURI, doc.get("fetchableContentURI").asText());
 	
 	assertTrue(doc.get("valid").asBoolean());
 	
@@ -86,7 +63,8 @@ public void testDocument() throws Exception {
 @Test
 public void testNonValidContentDocument() throws Exception {
 	
-	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-content.json");
+	InputStream content = fetchRemoteInputStreamFrom(
+							"documents/"+pathPrefix+"documents/document-with-nonvalid-content.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -101,7 +79,8 @@ public void testNonValidContentDocument() throws Exception {
 @Test
 public void testNonValidModelDocument() throws Exception {
 	
-	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document-with-nonvalid-model.json");
+	InputStream content = fetchRemoteInputStreamFrom(
+							"documents/"+pathPrefix+"documents/document-with-nonvalid-model.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -115,7 +94,8 @@ public void testNonValidModelDocument() throws Exception {
 @Test
 public void testNotFoundModelDocument() throws Exception {
 	
-	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/document-with-notfound-model.json");
+	InputStream content = fetchRemoteInputStreamFrom(
+							"documents/"+pathPrefix+"documents/document-with-notfound-model.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -129,7 +109,7 @@ public void testNotFoundModelDocument() throws Exception {
 @Test
 public void testMalformedDocument() throws Exception {
 	
-	InputStream content = fetchRemoteInputStreamFrom("documents/test-resources/documents/malformed-document.json");
+	InputStream content = fetchRemoteInputStreamFrom("documents/"+pathPrefix+"documents/malformed-document.json");
 	assertNotNull(content);
 	
 	JsonNode doc = parseJson(content);
@@ -137,36 +117,6 @@ public void testMalformedDocument() throws Exception {
 	assertFalse(doc.get("valid").asBoolean());
 	assertTrue(doc.get("problem").asText().contains("Problem with the json format"));
 	
-}
-
-
-@After
-public void teardown() throws IOException {
-	client.close();
-}
-
-
-private InputStream fetchRemoteInputStreamFrom(String location)
-		throws URISyntaxException, IOException, UnsupportedOperationException, ClientProtocolException {
-
-	String uri = webappPrefix+location;
-	System.err.println("Fetching remote input stream from '"+uri+"'");
-	URI u = new URI(uri);
-	HttpGet request = new HttpGet(u);
-	InputStream content = client.execute(request)
-							 .getEntity()
-							 .getContent();
-	
-	return content;
-	
-}
-
-
-private JsonNode parseJson(InputStream content) throws IOException, JsonProcessingException {
-
-	ObjectMapper mapper = new ObjectMapper();
-	JsonNode doc = mapper.readTree(content);
-	return doc;
 }
 
 }

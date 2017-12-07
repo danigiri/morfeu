@@ -32,6 +32,8 @@ import cat.calidos.morfeu.problems.SavingException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class FileSaver {
 
+public static final String BACKUP_EXTENSION = ".back";
+
 protected final static Logger log = LoggerFactory.getLogger(FileSaver.class);
 
 private String destination;
@@ -66,8 +68,13 @@ public void save() throws SavingException {
 		throw new SavingException("Could not save to '"+destination+"' as we cannot write to it");		
 	}
 	if (destinationFile.exists()) {
-		log.info("Removing old '{}' to replace it with new content", destination);
-		destinationFile.delete();
+		String backupPath = destinationFile.getAbsolutePath()+BACKUP_EXTENSION;
+		log.info("Renaming old '{}' to '{}'", destination, backupPath);
+		File backupFile = new File(backupPath);
+		if (backupFile.exists()) {
+			backupFile.delete();
+		}
+		destinationFile.renameTo(backupFile);
 	}
 
 	try {
