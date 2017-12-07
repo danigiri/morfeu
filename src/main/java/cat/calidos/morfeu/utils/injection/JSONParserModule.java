@@ -14,32 +14,40 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.utils.injection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cat.calidos.morfeu.problems.ParsingException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule
-public class DocumentParserModule {
+@ProducerModule(includes=JSONMapperModule.class)
+public class JSONParserModule {
 
-protected final static Logger log = LoggerFactory.getLogger(DocumentParserModule.class);
-		
-		
+protected final static Logger log = LoggerFactory.getLogger(JSONParserModule.class);
+
+
 @Produces
-public static ObjectMapper produceJSONObjectMapper() {
-	
-	log.trace("[Producing ObjectMapper]");
-	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects in Dagger2
-	
-}
+public static JsonNode produceJSONNode(String content, ObjectMapper mapper) throws ParsingException {
 
+	try {
+
+		return mapper.readTree(content);
+
+	} catch (Exception e) {
+		String snippet = content.substring(0,Math.min(10, content.length()));
+		log.error("Cound not process input '{}', as valid JSON", snippet);
+		throw new ParsingException("Cound not process input '"+snippet+"', as valid JSON", e);
+	}
+
+}
 
 }

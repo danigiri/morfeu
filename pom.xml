@@ -249,7 +249,7 @@
 		</dependency>
 
 		<!-- INTEGRATION TESTING -->
-				<dependency>
+		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>2.53.0</version>
@@ -299,6 +299,12 @@
 		    <artifactId>selenide</artifactId>
 		    <version>4.1</version>
 		    <scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.xmlunit</groupId>
+			<artifactId>xmlunit-core</artifactId>
+			<version>2.5.1</version>
 		</dependency>
 
 	</dependencies>

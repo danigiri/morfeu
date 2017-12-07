@@ -18,17 +18,11 @@ package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
 
-import static org.mockito.Mockito.doReturn;
-
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.xalan.xsltc.compiler.util.AttributeSetMethodGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -38,7 +32,6 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 
 import cat.calidos.morfeu.model.Attributes;
-import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;

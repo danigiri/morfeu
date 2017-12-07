@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -46,9 +47,9 @@ public Control(String operation, String template, String problemTemplate) {
 
 protected String render(String template, Object value, String problem) {
 	return DaggerViewComponent.builder()
-								.withTemplate(template)
 								.withValue(value)
-								.withProblem(problem)
+								.withTemplate(template)
+								.andProblem(problem)
 								.build()
 								.render();
 }
@@ -78,6 +79,8 @@ public String processRequest() {
 		problem = "Problem parsing for '"+operation+"' ("+e.getMessage()+")";
 	} catch (ConfigurationException e) {
 		problem = "Problem configuring for '"+operation+"' ("+e.getMessage()+")";
+	} catch (SavingException e) {
+		problem = "Problem saving in '"+operation+"' ("+e.getMessage()+")";
 	}
 		
 	if (problem.length()==0) {
@@ -93,8 +96,8 @@ public String processRequest() {
 }
 
 
-protected abstract Object process() 
-		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException, ConfigurationException;
+protected abstract Object process() throws InterruptedException, ExecutionException, ValidationException, 
+									ParsingException, FetchingException,	ConfigurationException, SavingException;
 
 protected abstract void beforeProcess();
 

@@ -44,6 +44,8 @@ public class CellModuleIntTest extends ModelTezt {
 private Document document;
 private URI modelURI;
 private URI contentURI;
+private Composite<Cell> children;
+private ComplexCellModel testCellModel;
 
 
 @Before
@@ -62,6 +64,9 @@ public void setup() throws Exception {
 												.build()
 												.parsedXMLDocument()
 												.get();
+	// we're expecting a fetchable relative path here
+	testCellModel = cellModelFrom(modelURI, "test").asComplex();	
+	children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 
 }
 
@@ -75,11 +80,6 @@ public void testBuildCell() throws Exception {
 @Test
 public void testChildrenFrom() throws Exception {
 
-
-	// we're expecting a fetchable relative path here
-	ComplexCellModel testCellModel = cellModelFrom(modelURI, "test").asComplex();	
-	
-	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 	assertNotNull(children);
 	assertEquals(1, children.size());
 	Cell row = children.child(0);
@@ -104,10 +104,6 @@ public void testChildrenFrom() throws Exception {
 
 @Test
 public void testAttributesFrom() throws Exception {
-
-	ComplexCellModel testCellModel = cellModelFrom(modelURI, "test").asComplex();	
-	
-	Composite<Cell> children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 
 	Cell cell = children.child("row(0)").asComplex().children().child("col(0)").asComplex().children().child("data(0)");
 	assertNotNull(cell);
@@ -140,6 +136,20 @@ public void testAttributesFrom() throws Exception {
 	assertEquals("blahblah", text.getValue());
 	assertEquals("text", text.getCellModel().getName());
 	assertEquals("textField", text.getCellModel().getType().getName());
+
+}
+
+
+@Test
+public void testInternalAttributes() throws Exception {
+	
+	Attributes<Cell> attributes = CellModule.internalAttributesFrom(document.getDocumentElement(), 
+																	contentURI,
+																	testCellModel);
+	assertNotNull(attributes);
+	assertEquals("More internal attributes than expected", 2, attributes.size());
+	assertEquals("http://www.w3.org/2001/XMLSchema-instance", attributes.attribute("xmlns:xsi").getValue());
+	assertEquals("../models/test-model.xsd", attributes.attribute("xsi:noNamespaceSchemaLocation").getValue());
 
 }
 

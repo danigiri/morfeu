@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+$( for rootnode in v.root.children )$$( set name = rootnode.name.asText )$<$[ name ]$
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
+>
+$( for node in rootnode.children )$
+	$( include "cell-json-to-xml.twig" with {'node': node} only )$$( endfor )$
+</$[ name ]$>
+$( endfor )$

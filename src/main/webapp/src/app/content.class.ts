@@ -118,7 +118,7 @@ static reviver(key: string, value: any): any {
 
 // serialisable interface
 export interface ContentJSON {
-	
+
 schema:number;
 children:CellJSON[];
 	

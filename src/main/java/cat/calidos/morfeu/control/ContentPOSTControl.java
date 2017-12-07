@@ -17,15 +17,26 @@
 package cat.calidos.morfeu.control;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import cat.calidos.morfeu.model.injection.ContentSaverParserComponent;
+import cat.calidos.morfeu.model.injection.DaggerContentSaverParserComponent;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 
 /**
@@ -33,21 +44,36 @@ import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentPOSTControl extends Control {
 
+private final static Logger log = LoggerFactory.getLogger(ContentPOSTControl.class);
+
 private String prefix;
 private String path;
+private String destination;
 private String modelPath;
 private String content;
+
+private String contentSnippet;
+
+private HashMap<String, String> resultMetadata;
 
 
 public ContentPOSTControl(String prefix, String path, String content, @Nullable String modelPath) {
 
-	super("POST content:"+path, "templates/xx.twig", "templates/xxx-problem.twig");
+	super("POST content:"+path, "templates/content-save.twig", "templates/content-save-problem.twig");
 
 	this.prefix = prefix;
 	this.path = path;
+	this.destination = prefix+path;
 	this.modelPath = modelPath;
 	this.content = content;
-	
+	this.contentSnippet = content.substring(0, Math.min(10, content.length()));
+	this.resultMetadata = new HashMap<String, String>(4);
+
+	resultMetadata.put("destination", destination);
+	resultMetadata.put("uri", path);
+	resultMetadata.put("saver", "FileSaver");
+	resultMetadata.put("parsingTime", "-1");
+
 }
 
 
@@ -55,16 +81,41 @@ public ContentPOSTControl(String prefix, String path, String content, @Nullable 
 * @see cat.calidos.morfeu.control.Control#process()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
-protected Object process() throws InterruptedException, ExecutionException, ValidationException, 
-									ParsingException, FetchingException, ConfigurationException {
+protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException, 
+									FetchingException, ConfigurationException, SavingException {
 
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
-	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
+	URI outputURI = DaggerURIComponent.builder().from(destination).builder().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
-	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
+	URI fullModelURI = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
 	
-	// TODO Auto-generated method stub
-	return null;
+	JsonNode JsonNode = DaggerJSONParserComponent.builder().from(content).build().json().get();
+	
+
+	// TODO: add extra metadata, model, etc
+	String transformedContent = DaggerViewComponent.builder()
+													.withTemplate("templates/transform/json-to-xml.twig")
+													.withValue(JsonNode)
+													.build()
+													.render();
+ 
+	ContentSaverParserComponent component = DaggerContentSaverParserComponent.builder()
+																			.from(transformedContent)
+																			.to(outputURI)
+																			.having(uri)
+																			.model(modelURI)
+																			.withModelFetchedFrom(fullModelURI)
+																			.build();
+	
+	long before = System.currentTimeMillis();
+	component.validator().get().validate();
+	long now = System.currentTimeMillis();
+	resultMetadata.put("parsingTime", Long.toString(now-before));
+
+	component.saver().get().save();
+
+	return resultMetadata;
+	
 }
 
 
@@ -73,9 +124,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 protected void beforeProcess() {
-
-	// TODO Auto-generated method stub
-
+	log.trace("Saving content '{}' to '[{}]{}' given model '{}'", contentSnippet, prefix, path, modelPath);
 }
 
 
@@ -84,9 +133,7 @@ protected void beforeProcess() {
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 protected void afterProblem(String problem) {
-
-	// TODO Auto-generated method stub
-
+	log.trace("Problem saving content '{}' to '[{}]{}' given model '{}'", contentSnippet, prefix, path, modelPath);
 }
 
 
@@ -95,9 +142,7 @@ protected void afterProblem(String problem) {
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 protected Object problemInformation() {
-
-	// TODO Auto-generated method stub
-	return null;
+	return resultMetadata;
 }
 
 }

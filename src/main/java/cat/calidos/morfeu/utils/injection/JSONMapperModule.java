@@ -1,5 +1,4 @@
 /*
-
  *    Copyright 2017 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,30 +14,31 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.view.injection;
+package cat.calidos.morfeu.utils.injection;
 
-import javax.annotation.Nullable;
-import javax.inject.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import dagger.BindsInstance;
-import dagger.Component;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = ViewModule.class)
-public interface ViewComponent {
+@ProducerModule
+public class JSONMapperModule {
 
-String render();
+protected final static Logger log = LoggerFactory.getLogger(JSONMapperModule.class);
 
 
-@Component.Builder
-interface Builder {
-	@BindsInstance Builder withValue(@Named("value") Object v);
-	@BindsInstance Builder withTemplate(@Named("templatePath") String p);
-	@BindsInstance Builder andProblem(@Nullable @Named("problem") String p);
-	ViewComponent build();
+@Produces
+public static ObjectMapper produceJSONObjectMapper() {
+
+	log.trace("[Producing ObjectMapper]");
+	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects in Dagger2
+
 }
 
 }

@@ -67,6 +67,10 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 	String modelPath = req.getParameter("model");
 	log.trace("ContentServlet::doPost '[{}]{}' model:'{}'", resourcesPrefix, path, modelPath);
 	
+	if(!req.getContentType().equals("application/json")) {
+		
+	}
+	
 	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
 	String result = new ContentPOSTControl(resourcesPrefix, path, content, modelPath).processRequest();
 	

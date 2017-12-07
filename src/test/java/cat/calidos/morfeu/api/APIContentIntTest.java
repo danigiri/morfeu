@@ -32,7 +32,7 @@ public class APIContentIntTest extends APITezt {
 
 @Test
 public void testContent() throws Exception {
-	
+
 	// http://localhost:8080/morfeu/content/target/test-classes/test-resources/documents/document1.xml?model=
 	String model = pathPrefix+"models/test-model.xsd";
 	InputStream content = fetchRemoteInputStreamFrom("content/"+pathPrefix+"documents/document1.xml?model="+model);
@@ -42,7 +42,7 @@ public void testContent() throws Exception {
 	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
 	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
 	assertEquals("/children/test(0) has a wrong name", "test", doc.get("children").get(0).get("name").asText());
-	
+
 }
 
 }

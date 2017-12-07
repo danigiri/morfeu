@@ -28,14 +28,23 @@ public class ComplexCell extends Cell {
 
 protected Composite<Cell> children;
 protected Attributes<Cell> attributes;
+private Attributes<Cell> internalAttributes;
 
 
-public ComplexCell(URI u, String name, String desc, String value, CellModel cm, Composite<Cell> children, Attributes<Cell> attributes) {
+public ComplexCell(URI u, 
+					String name, 
+					String desc, 
+					String value, 
+					CellModel cm, 
+					Composite<Cell> children, 
+					Attributes<Cell> attributes,
+					Attributes<Cell> internalAttributes) {
 	
 	super(u, name, value, desc, cm);
 	
 	this.children = children;
 	this.attributes = attributes;
+	this.internalAttributes = internalAttributes;
 	isSimple = false;
 
 }
@@ -45,9 +54,16 @@ public Composite<Cell> children() {
 	return children;
 }
 
+
 public Attributes<Cell> attributes() {
 	return attributes;
 }
+
+
+public Attributes<Cell> internalAttributes() {
+	return internalAttributes;
+}
+
 
 /* (non-Javadoc)
 * @see cat.calidos.morfeu.model.Cell#asComplex()

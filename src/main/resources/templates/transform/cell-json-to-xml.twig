@@ -1,0 +1,4 @@
+$( set name = node.name.asText )$$( set value = node.value.asText )$$( if node.children.size==0 and value.length==0 )$
+<$[ name ]$ $(for a in node.attributes )$ $[a.name.textValue]$="$[a.value.textValue]$" $( endfor )$ />$( else )$<$[ name ]$ $(for a in node.attributes )$ $[a.name.textValue]$="$[a.value.textValue]$" $( endfor )$ >$[value]$
+	$( for childnode in node.children )$$( include "cell-json-to-xml.twig" with {'node': childnode} only )$$( endfor )$
+</$[ name ]$>$( endif )$

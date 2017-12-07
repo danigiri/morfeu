@@ -126,8 +126,8 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 													   @Named("MaxOccurs") int maxOccurs,
 													   Type t,
 													   Metadata metadata,
-													   Provider<Attributes<CellModel>> attributesProvider, 
-													   Provider<Composite<CellModel>> childrenProvider,														 
+													   Provider<Attributes<CellModel>> attributesProvider,
+													   Provider<Composite<CellModel>> childrenProvider,
 													   Map<String, CellModel> globals) {
 	
 	// in this way, we create the cell model, find out if it's global, add it and then generate the
@@ -140,10 +140,10 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 															  minOccurs, 
 															  maxOccurs, 
 															  metadata, 
-															  null, 
-															  null);
+															  null,		// attributes
+															  null);		// children
 	updateGlobalsWith(globals, t, newComplexCellModel);
-	
+
 	newComplexCellModel.setAttributes(attributesProvider.get());
 	newComplexCellModel.setChildren(childrenProvider.get());
 	
@@ -263,14 +263,14 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	termTypes.add(particle);
 	while (!termTypes.isEmpty()) {
 		particle = termTypes.removeFirst();
-				
+
 		if (particle.getTerm().isModelGroup()) {
 			// FIXME: this is reverse order!!!
 			// FIXME: we need to see when we have more complex groups like unions and stuff 
 			XSModelGroup typeModelGroup = particle.getTerm().asModelGroup();
 			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.asParticle())); 
 		} else {
-						
+
 			XSElementDecl childElem = particle.getTerm().asElementDecl();
 			CellModel childCellModel = DaggerCellModelComponent.builder()
 												.fromElem(childElem)

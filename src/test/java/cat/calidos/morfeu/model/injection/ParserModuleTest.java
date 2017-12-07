@@ -26,6 +26,8 @@ import org.xml.sax.ErrorHandler;
 import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import com.sun.xml.xsom.parser.XSOMParser;
 
+import cat.calidos.morfeu.utils.injection.JSONMapperModule;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +54,7 @@ public void testProduceSchemaParser() throws Exception {
 
 @Test
 public void testProduceJSONObjectMapper() throws Exception {
-	assertNotNull(DocumentParserModule.produceJSONObjectMapper());
+	assertNotNull(JSONMapperModule.produceJSONObjectMapper());
 }
 
 

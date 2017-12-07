@@ -19,6 +19,7 @@ package cat.calidos.morfeu.model.injection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -88,8 +89,10 @@ public static ComplexCell buildComplexCellFrom(URI u,
 											   @Named("value") String value, 
 											   CellModel cm,
 											   Composite<Cell> children,
-											   Attributes<Cell> attributes) {
-	return new ComplexCell(u, name, desc, value, cm, children, attributes);
+											   Attributes<Cell> attributes,
+											   @Named("InternalAttributes") Attributes<Cell> internalAttributes
+											   ) {
+	return new ComplexCell(u, name, desc, value, cm, children, attributes, internalAttributes);
 }
 
 
@@ -150,12 +153,12 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 													.withCellModel(childCellModel)
 													.builder()
 													.createCell();
-			
+
 			children.addChild(childIndexedName, childCell);
 			nodeIndex++;
-		
+
 		}
-		
+
 	}
 
 	return children;
@@ -163,10 +166,25 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 }
 
 
+
 @Provides
-public static Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellModel cellModel) {
+public static Attributes<Cell> publicAttributesFrom(Node node, URI uri, ComplexCellModel cellModel) {
+	// a bit slow as we go through the attributes twice, in the future we can do streams and group by to optimise
+	return attributesFrom(node, uri, cellModel, attributeName->!(attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:")));
+}
+
+
+@Provides @Named("InternalAttributes")
+public static Attributes<Cell> internalAttributesFrom(Node node, URI uri, ComplexCellModel cellModel) {
+	// a bit slow as we go through the attributes twice, in the future we can do streams and group by to optimise
+	return attributesFrom(node, uri, cellModel,  attributeName->attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:"));
+}
+
+
+
+private static  Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellModel cellModel, Predicate<String> attributeFilter) {
 	
-	if (!node.hasAttributes()) {	// base case, save some memory on the list returning a zero-sized one
+	if (!node.hasAttributes()) {	//	** base case **
 		
 		return new OrderedMap<Cell>(0);
 	}
@@ -176,16 +194,18 @@ public static Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellMod
 		throw new RuntimeException("Element and model attribute mismatch", new IllegalArgumentException());
 	}
 	
-	// recursive case
+	// 								** recursive case **
 	OrderedMap<Cell> attributes = new OrderedMap<Cell>(node.getAttributes().getLength());
 	NamedNodeMap elemAttributes = node.getAttributes();
 	for (int i=0; i<elemAttributes.getLength(); i++) {
 		
 		Node attribute = elemAttributes.item(i);
-		String attributeName = attribute.getNodeName();	// the root element may have xml namespace stuff
-		if (!(attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:") )) {
-			CellModel attributeCellModel = findAttributeWithName(cellModel, attributeName);
-			URI childURI = cellURI(uri, cellModel, ATTRIBUTE_PREFIX+attributeName);
+		String attributeName = attribute.getNodeName();
+		URI childURI = cellURI(uri, cellModel, ATTRIBUTE_PREFIX+attributeName);
+		// if we are looking for public attributes, they need to match with the attributes model, otherwise we just
+		// point to the node cell model (IDEA: maybe in the future point to the internal model)
+		CellModel attributeCellModel = findAttributeWithName(cellModel, attributeName);
+		if (attributeFilter.test(attributeName)) {
 	
 			Cell attributeCell = DaggerCellComponent.builder()
 														.withURI(childURI)
@@ -194,27 +214,31 @@ public static Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellMod
 														.builder()
 														.createCell();
 			attributes.addChild(attributeName, attributeCell);
+			
+		} else  {
+
 		}
 	}
-	
+
 	return attributes;
+
 }
 
 
 private static CellModel findChildWithName(ComplexCellModel cellModel, String childName) {
-	
+
 	Optional<CellModel> matchedChild = cellModel.children()
-														.asList()
-														.stream()
-														.filter(cm -> cm.getName().equals(childName))
-														.findFirst();
+												.asList()
+												.stream()
+												.filter(cm -> cm.getName().equals(childName))
+												.findFirst();
 	if (!matchedChild.isPresent()) {
-		log.error("Elem '{}' could not match any children of '{}'", childName, cellModel.getName());
+		log.warn("Elem '{}' could not match any children of '{}'", childName, cellModel.getName());
 		throw new RuntimeException("Node and model mismatch", new IllegalArgumentException());
 	}
-	
+
 	return matchedChild.get();
-	
+
 }
 
 
@@ -232,19 +256,22 @@ private static URI cellURI(URI uri, CellModel cellModel, String childName) throw
 
 private static CellModel findAttributeWithName(ComplexCellModel cellModel, String attributeName) {
 
-	Optional<CellModel> matchedAttribute = cellModel
-														.attributes()
-														.asList()
-														.stream()
-														.filter(cm -> cm.getName().equals(attributeName))
-														.findFirst();
+	Optional<CellModel> matchedAttribute = cellModel.attributes()
+													.asList()
+													.stream()
+													.filter(cm -> cm.getName().equals(attributeName))
+													.findFirst();
 	if (!matchedAttribute.isPresent()) {
-		log.error("Elem '{}' could not match any attribute of '{}'", attributeName, cellModel.getName());
-		throw new RuntimeException("Node and model attribute mismatch", new IllegalArgumentException());
-	}
-	
-	return matchedAttribute.get();
+		// FIXME: this is a hack, we should handle this more gracefully
+		if (!(attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:"))) {
 
+			log.error("Elem '{}' could not match any attribute of '{}'", attributeName, cellModel.getName());
+			throw new RuntimeException("Node and model attribute mismatch", new IllegalArgumentException());
+		}
+	}
+
+	return matchedAttribute.orElse(cellModel);
+	
 }
 
 

@@ -31,14 +31,14 @@ import cat.calidos.morfeu.problems.ValidationException;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentControl extends Control {
+public class DocumentGETControl extends Control {
 
-protected final static Logger log = LoggerFactory.getLogger(DocumentControl.class);
+protected final static Logger log = LoggerFactory.getLogger(DocumentGETControl.class);
 private String prefix;
 private String path;
 
 
-public DocumentControl(String prefix, String path) {
+public DocumentGETControl(String prefix, String path) {
 
 	super("document", "templates/document.twig", "templates/document-problem.twig");
 

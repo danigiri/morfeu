@@ -14,21 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.utils.injection;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.sun.xml.xsom.parser.XSOMParser;
 
-import cat.calidos.morfeu.problems.ConfigurationException;
-import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
+import cat.calidos.morfeu.problems.ParsingException;
+import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
-/** This is at the moment only used for testing, as SchemaParserModule is included directly as a dependency
+/**
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ModelParserModule.class, ListeningExecutorServiceModule.class})
-public interface ModelParserComponent {
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionComponent(modules={JSONParserModule.class, ListeningExecutorServiceModule.class})
+public interface JSONParserComponent {
 
-ListenableFuture<XSOMParser> produceXSOMParser() throws ConfigurationException;
+ListenableFuture<JsonNode> json() throws ParsingException;
+
+
+@ProductionComponent.Builder
+interface Builder {
+
+	@BindsInstance Builder from(String content);
+	JSONParserComponent build();
+
+}
 
 }

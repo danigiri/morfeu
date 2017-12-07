@@ -9,6 +9,9 @@
 		,"attributes": [$( for a in cell.asComplex.attributes.asList )$
 				$( include "cell.twig" with {'cell': a} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
 			$( endfor )$]
+		,"internalAttributes": [$( for a in cell.asComplex.internalAttributes.asList )$
+				$( include "cell.twig" with {'cell': a} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
+			$( endfor )$]
 		,"children": [$( for c in cell.asComplex.children.asList )$
 				$( include "cell.twig" with {'cell': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$			
 			$( endfor )$]

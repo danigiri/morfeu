@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.DocumentControl;
+import cat.calidos.morfeu.control.DocumentGETControl;
 
 /**
 * @author daniel giribet
@@ -44,7 +44,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	String path = normalisedPathFrom(req);
 	log.trace("DocumentsServlet::doGet '[{}]{}'", resourcesPrefix, path);
 
-	String doc = new DocumentControl(resourcesPrefix, path).processRequest();
+	String doc = new DocumentGETControl(resourcesPrefix, path).processRequest();
 
 	resp.setContentType("application/json");
 	writeTo(doc, resp);

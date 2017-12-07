@@ -40,6 +40,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 public class ContentGETControl extends Control {
 
 private final static Logger log = LoggerFactory.getLogger(ContentGETControl.class);
+
 private String prefix;
 private String path;
 private String modelPath;
@@ -82,7 +83,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 
 @Override
 protected void beforeProcess() {
-	log.trace("ContentControl::loadContent('{}', '{}', '{}')", prefix, path, modelPath);
+	log.trace("About to load content '[{}]{}' given model '{}'", prefix, path, modelPath);
 }
 
 

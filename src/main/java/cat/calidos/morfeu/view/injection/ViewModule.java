@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Provider;
 
@@ -50,10 +51,11 @@ public static String renderTemplate(JtwigTemplate template, JtwigModel model) {
 
 
 @Provides
-public Map<String, Object> values(@Named("problem") String problem, @Named("value") Object v) {
+public Map<String, Object> values(@Named("value") Object v, @Nullable @Named("problem") String problem) {
 	
 	Map<String, Object> value = new HashMap<String, Object>(1);
-	if (problem!="") {
+	if (problem!=null && problem!="") {
+		
 		problem = problem.replaceAll("\t|\n", " ");	// error messages may contain illegal JSON text
 		problem = problem.replaceAll("\"", "'");	// 
 		value.put("problem", problem);

@@ -22,12 +22,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.After;
 import org.junit.Before;
 
+import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Tezt;
 
 
@@ -58,20 +62,30 @@ public void teardown() throws IOException {
 }
 
 
-protected InputStream fetchRemoteInputStreamFrom(String location)
-		throws URISyntaxException, IOException, UnsupportedOperationException, ClientProtocolException {
-		
-			String uri = webappPrefix+location;
-			System.err.println("Fetching remote input stream from '"+uri+"'");
-			URI u = new URI(uri);
-			HttpGet request = new HttpGet(u);
-			InputStream content = client.execute(request)
-									 .getEntity()
-									 .getContent();
+protected InputStream fetchRemoteInputStreamFrom(String location)	throws Exception {
 
-			return content;
-			
-		}
+	String uri = webappPrefix+location;
+	System.err.println("Fetching remote input stream from '"+uri+"'");
+	URI u = new URI(uri);
+	HttpGet request = new HttpGet(u);
 
+	return client.execute(request).getEntity().getContent();
+
+}
+
+
+protected InputStream postToRemote(String location, String content) throws Exception {
+
+	String uri = webappPrefix+location;
+	System.err.println("Posting to remote '"+uri+"'");
+	URI u = new URI(uri);
+	HttpPost request = new HttpPost(u);
+	StringEntity params = new StringEntity(content, Config.DEFAULT_CHARSET);
+	params.setContentType("application/json");
+	request.setEntity(params);
+
+	return client.execute(request).getEntity().getContent();
+
+}
 
 }

@@ -196,11 +196,7 @@ public static DocumentBuilder produceDocumentBuilder(DocumentBuilderFactory dbf,
 
 @Produces
 public static SchemaFactory produceSchemaFactory() {
-	
-	SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	
-	return sf;
-
+	return SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 }
 
 

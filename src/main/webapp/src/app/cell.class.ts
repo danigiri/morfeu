@@ -23,6 +23,7 @@ import { Model } from './model.class';
 export class Cell implements Adopter {
 
 attributes?: Cell[];
+internalAttributes?: Cell[];
 children?: Cell[];
 cellModel?: CellModel;
 parent?: Adopter;
@@ -262,8 +263,9 @@ private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell 
 
 		if (cellModel) {												// now attributes and cell children
 		   if (this.attributes) {
-			   this.attributes = this.attributes.map(a => a.associateWith_(rootCellmodels, cellModel.attributes));
-		   }
+	               this.attributes = this.attributes.map(a => a.associateWith_(rootCellmodels, cellModel.attributes));
+	       }
+		   // notice we do not associate the internal attributes as there is no model for them
 		   if (this.children) {
 			   this.children = this.children.map(c => c.associateWith_(rootCellmodels, cellModel.children));
 		   }
@@ -331,6 +333,9 @@ static fromJSON(json: CellJSON|string):Cell {
 		if (json.attributes) {
 			cell = Object.assign(cell, {attributes: json.attributes.map(a => Cell.fromJSON(a))});
 		}
+        if (json.internalAttributes) {
+            cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => Cell.fromJSON(a))});
+        }
 
 		// we complete the children runtime information so we have the parent reference as well as position
 		if (json.children) {
@@ -368,5 +373,6 @@ cellModelURI: string,
 isSimple: boolean,
 	
 attributes?: CellJSON[];
+internalAttributes?: CellJSON[];
 children?: CellJSON[];
 }
