@@ -23,8 +23,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.transform.Source;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.Diff;
+import org.xmlunit.input.WhitespaceStrippedSource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -47,16 +53,25 @@ public void testTransformUsingTemplate() throws Exception {
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	assertNotNull(json);
 
-	Map<String, Object> data = new HashMap<String, Object>(2);
-	data.put("root", json);
-	
 	String transformed = DaggerViewComponent.builder()
 											.withTemplate("templates/transform/content-json-to-xml.twig")
-											.withValue(data)
+											.withValue(json)
 											.build()
 											.render();
 	
 	System.err.println(transformed);
+	Source transformedSource = Input.fromString(transformed).build();
+	
+	File originalFile = new File("target/test-classes/test-resources/documents/document1.xml");
+	Source originalSource = Input.fromFile(originalFile).build();
+
+	Diff diff = DiffBuilder.compare(originalSource)
+							.withTest(transformedSource)
+							.ignoreComments()
+							.ignoreWhitespace()
+							.build();
+	
+	assertFalse("Transformed JSON to XML should be the same as original", diff.hasDifferences());
 	
 }
 

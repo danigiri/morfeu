@@ -89,13 +89,11 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
 	URI fullModelURI = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
 	
-	JsonNode JsonNode = DaggerJSONParserComponent.builder().from(content).build().json().get();
+	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	
-
-	// TODO: add extra metadata, model, etc
 	String transformedContent = DaggerViewComponent.builder()
-													.withTemplate("templates/transform/json-to-xml.twig")
-													.withValue(JsonNode)
+													.withTemplate("templates/transform/content-json-to-xml.twig")
+													.withValue(json)
 													.build()
 													.render();
  
