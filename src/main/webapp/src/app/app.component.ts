@@ -56,7 +56,7 @@ import { EventService } from './events/event.service';
 			  <catalogue-list></catalogue-list>
 			  <document></document>
 			</div>
-			<div class="col-sm-7">
+			<div class="col-sm">
 				<content></content>
 			</div>
 			<div class="col-sm-2">

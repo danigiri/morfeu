@@ -17,6 +17,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
 import { DndModule } from 'ng2-dnd';
@@ -38,6 +39,7 @@ import { StatusComponent } from './status.component';
 @NgModule({
   imports:		[ BrowserModule
 				  ,BrowserAnimationsModule
+				  ,CommonModule
 				  ,HttpModule
 				  ,TreeModule
 				  ,DndModule.forRoot()

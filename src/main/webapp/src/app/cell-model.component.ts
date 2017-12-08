@@ -40,7 +40,7 @@ import { EventService } from './events/event.service';
 		     class="cell-model-entry cell-model-level-{{node.level}}">
 			<img 
 				 src={{getThumb()}} 
-				 class="cell-model-thumb" 
+				 class="cell-model-thumb img-fluid" 
 				 [class.cell-model-active]="active" 
                  (mousedown)="clickDown(node.data)" 
                  (mouseup)="clickUp(node.data)"

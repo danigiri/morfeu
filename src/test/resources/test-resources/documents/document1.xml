@@ -5,10 +5,10 @@
 >
 	<row>
 		<col size="4">
-		<data number="42" text="blahblah"/>
-    	</col>
-    	<col size="8">
-    		<row>
+			<data number="42" text="blahblah"/>
+    		</col>
+    		<col size="8">
+    			<row>
     			<col size="6">
     		    		<data number="42" text="blahblah"/>
 	   		    	<data2 number="42" text="blahblah"/>    		
@@ -17,7 +17,7 @@
 	    			<data2 number="42" text="blahblah"/>
 	    			<data2 number="42" text="blahblah"/>
 	    		</col>
-    		</row>
-	</col>
+    			</row>
+		</col>
 	</row>
 </test>

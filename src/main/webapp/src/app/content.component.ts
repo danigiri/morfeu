@@ -47,16 +47,16 @@ import { EventService } from './events/event.service';
 	moduleId: module.id,
 	selector: 'content',
 	template: `
-	<div class="panel panel-default" *ngIf="content">
-		<div id="content" class="panel-body">
-			<drop-area [parent]="model" position="0"></drop-area> 
+	<div id="content" class="panel panel-default" *ngIf="content">
+		<!--div id="content" class="panel-body"-->
+			<drop-area [parent]="model" position="0"></drop-area> <!-- FIXME: this should activate and it doesn't -->
 			<cell *ngFor="let cell of content.children; let i=index" 
 			    [parent]="content" 
 			    [cell]="cell" [level]="1" 
 			    [position]="i"
 			    ></cell>
 			<!-- TODO: static checks using the model and not what's already present (cells) -->
-		</div>
+		<!--/div-->
 	</div>
 	`,
 	styles:[`
