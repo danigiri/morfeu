@@ -67,29 +67,39 @@ import { EventService } from './events/event.service';
 					 
 					 <small *ngIf="selected">[selected],</small>
 					 <small *ngIf="cellSelectionSubscription">subscribed-selection,</small>
-					 <small *ngIf="cellSelectionClearSubscription">subscribed-clear</small-->
-					 <drop-area	 *ngIf="parent" [parent]="cell" position="0"></drop-area>
+					 <small *ngIf="cellSelectionClearSubscription">subscribed-clear</small>
+					 <small>{{cellClass()}}</small-->
+					 <div class="col-12"><drop-area	 *ngIf="parent" [parent]="cell" position="0"></drop-area></div>
+						 <div class="col-12">
 						<cell *ngFor="let c of cell.children; let i=index" 
 							[cell]="c" 
 							[parent]="cell"
 							[level]="level+1"
 							[position]="i"
 							></cell>
+							</div>
 			</div>
 			</ng-template>
 	`,
 	styles:[`
 			.cell {}
 			.well {}
-			.row-well {}
-			.col-well {}
+			.row-well {
+			    margin: 0px;
+			    
+			}
+			.col-well {
+                margin: 0px;
+			}
 			.cell-img {
 				width: 100%;
 				height: auto;
 			}
 			.show-grid	{
-				padding-top: 5px;
+/*
+			    padding-top: 5px;
 				padding-bottom: 5px;
+*/s
 				background-color: #ddd;
 				background-color: rgba(86, 62, 128, .15);
 				border: 2px solid #ccc;
@@ -357,9 +367,9 @@ cellClass() {
 	if (this.cell.cellModel.presentation=="WELL") {
 		return "well container-fluid";
 	} else if (this.cell.cellModel.presentation=="ROW-WELL") {
-		return "row-well row show-grid";
+		return "row-well row show-grid no-gutters";
 	} else if (this.cell.cellModel.presentation=="COL-WELL") {
-		return "col-well show-grid col-sm-"+this.cell.columnFieldValue();
+		return "col-well show-grid col-md-"+this.cell.columnFieldValue();
 	} else {
 		return "";
 	}

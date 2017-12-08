@@ -52,23 +52,21 @@ import { EventService } from './events/event.service';
 	  <hotkeys-cheatsheet></hotkeys-cheatsheet>
 	  <div class="container-fluid">
 		  <div class="row">
-			<div class="col-md-2">
+			<div class="col-sm-2">
 			  <catalogue-list></catalogue-list>
 			  <document></document>
 			</div>
-			<div class="col-md-8">
+			<div class="col-sm-7">
 				<content></content>
 			</div>
-			<div class="col-md-2">
+			<div class="col-sm-2">
 				<model></model>
 			</div>
 		  </div>
-		  <div class="row">
-			  <div class="col-md-12">
-				  <status></status>
-				  <problem></problem>
-			  </div>
-		  </div>
+		 </div>
+      <div class="container-fluid">
+	    <status></status>
+		<problem></problem>
 	  </div>
 
 
