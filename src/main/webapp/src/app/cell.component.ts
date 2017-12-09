@@ -42,117 +42,117 @@ import { EventService } from './events/event.service';
 	selector: 'cell',
 	template: `
 			<ng-container [ngSwitch]="cell.cellModel.presentation">
-	            <ng-container *ngSwitchCase="'WELL'">
-                    <div id="{{cell.URI}}" 
-                        class="well container-fluid cell-level-{{level}} show-grid" 
-                        [class.cell-active]="active"
-                        [class.cell-selected]="selected"
-                     >WELL
-                         <!-- drop area to be able to add new row to this well -->
-                         <div class="row">
-                             <div class="col">
-                                 <drop-area *ngIf="parent" [parent]="cell" position="0"></drop-area>
-                             </div>
-                         </div>
-	                     <cell *ngFor="let c of cell.children; let i=index" 
-                                [cell]="c" 
-                                [parent]="cell"
-                                [level]="level+1"
-                                [position]="i"
-                          ></cell>
-                     </div>
-                     <!-- TODO: we probable want a drop area here to be able to add new wells -->
-                </ng-container>
-                
-                <ng-container *ngSwitchCase="'ROW-WELL'">
-	                <div id="{{cell.URI}}" 
-                        class="row-well row show-grid cell-level-{{level}}" 
-                        [class.cell-active]="active"
-                        [class.cell-selected]="selected"
-                     ><!--ROW-->
-                         <!-- add a drop area here if we ever want to dynamically add new columns -->
-                         <cell *ngFor="let c of cell.children; let i=index" 
-                                [cell]="c" 
-                                [parent]="cell"
-                                [level]="level+1"
-                                [position]="i"
-                          ></cell>
-                     </div>
-                     <!-- drop area to be able to add new row after this one -->
-                     <div class="row">
-	                    <div class="col">
-                            <drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
-                        </div>
-                     </div>
-                </ng-container>
-                
-                <ng-container *ngSwitchCase="'COL-WELL'">
-                    <div id="{{cell.URI}}" 
-                        class="col-well show-grid col-lg -{{this.cell.columnFieldValue()}} cell-level-{{level}}" 
-                        [class.cell-active]="active"
-                        [class.cell-selected]="selected"
-                     >COL-{{this.cell.columnFieldValue()}}
-                         <!-- drop area here to add anything at the beginning of the column -->
-                         <drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
-                         <cell *ngFor="let c of cell.children; let i=index" 
-                                [cell]="c" 
-                                [parent]="cell"
-                                [level]="level+1"
-                                [position]="i"
-                          ></cell>
-                     </div>
-                </ng-container>
-                <ng-container *ngSwitchCase="'CELL'">
-                		<!-- TODO: check the model and the content as well (counts, etc.) -->
-                		<img id="{{cell.URI}}"
-                			 src="{{getCellPresentation()}}" 
-                			 class="cell img-fluid cell-img cell-level-{{level}}"
-                			 [class.cell-active]="active"
-                			 [class.cell-selected]="selected"
-                			 (mouseenter)="focusOn(cell)" 
-                			 (mouseleave)="focusOff(cell)"
-                			 dnd-draggable 
-                			 [dragEnabled]="dragEnabled"
-                			 (onDragEnd)="dragEnd(cell)"
-                			 [dragData]="cell"
-                			 />
-                		<!-- the position of the drop area is always where droped cells will go -->
-                		<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
-                </ng-container>
+			
+				<ng-container *ngSwitchCase="'WELL'">
+					<div id="{{cell.URI}}" 
+						class="well container-fluid cell-level-{{level}}"
+						[class.cell-active]="active"
+						[class.cell-selected]="selected"
+					 >
+						 <!-- drop area to be able to add new rows to this well -->
+						 <div class="row">
+							 <div class="col">
+								 <drop-area *ngIf="parent" [parent]="cell" position="0"></drop-area>
+							 </div>
+						 </div>
+						 <cell *ngFor="let c of cell.children; let i=index" 
+								[cell]="c" 
+								[parent]="cell"
+								[level]="level+1"
+								[position]="i"
+						  ></cell>
+					 </div>
+					 <!-- TODO: we probable want a drop area here to be able to add new wells -->
+				</ng-container>
+				
+				<ng-container *ngSwitchCase="'ROW-WELL'">
+					<div id="{{cell.URI}}" 
+						class="row-well row show-grid cell-level-{{level}}"
+						[class.cell-active]="active"
+						[class.cell-selected]="selected"
+					 >
+						 <!-- add a drop area here if we ever want to dynamically add new columns -->
+						 <cell *ngFor="let c of cell.children; let i=index" 
+								[cell]="c" 
+								[parent]="cell"
+								[level]="level+1"
+								[position]="i"
+						  ></cell>
+					 </div>
+					 <!-- drop area to be able to add new row after this one -->
+					 <div class="row">
+						<div class="col">
+							<drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
+						</div>
+					 </div>
+				</ng-container>
+				
+				<ng-container *ngSwitchCase="'COL-WELL'">
+					<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
+					<div id="{{cell.URI}}-{{this.cell.columnFieldValue()}}" 
+						class="col-well col show-grid cell-level-{{level}}"
+						[class.cell-active]="active"
+						[class.cell-selected]="selected"
+					 ><!--COL-{{this.cell.columnFieldValue()}}-->
+						 <!-- drop area here to add anything at the beginning of the column -->
+						 <drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
+						 <cell *ngFor="let c of cell.children; let i=index" 
+								[cell]="c" 
+								[parent]="cell"
+								[level]="level+1"
+								[position]="i"
+						  ></cell>
+					 </div>
+				</ng-container>
 
-            </ng-container>
-    <!--<ng-container *ngTemplateOutlet="loading"></ng-container>-->
+				<ng-container *ngSwitchCase="'CELL'">
+						<!-- TODO: check the model and the content as well (counts, etc.) -->
+						<img id="{{cell.URI}}"
+						    class="cell cel-img cell-level-{{level}}"
+							 src="{{getCellPresentation()}}" 
+							 [class.cell-active]="active"
+							 [class.cell-selected]="selected"
+							 (mouseenter)="focusOn(cell)" 
+							 (mouseleave)="focusOff(cell)"
+							 dnd-draggable 
+							 [dragEnabled]="dragEnabled"
+							 (onDragEnd)="dragEnd(cell)"
+							 [dragData]="cell"
+							 />
+						<!-- the position of the drop area is always where droped cells will go -->
+						<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
+				</ng-container>
+
+			</ng-container>
+	<!--<ng-container *ngTemplateOutlet="loading"></ng-container>-->
 	`,
 	styles:[`
 			.cell {}
 			.well {
-/*	             
-                 padding: 0;
+/*
+				 padding: 0;
+				align-content: stretch;
  */
-			    }
+				}
 			.row-well {}
 			.col-well {
-			    /*               
-
-			    padding-right: 0;
-                padding-left: 0;
+				/*
+				padding-right: 0;
+				padding-left: 0;
+				max-width: 100%;
+				width: 100%;
 			 */
-			    
 			}
 			.cell-img {
+			    /*
 				width: 100%;
 				height: auto;
+				*/
 			}
 			.show-grid	{
-/*
-			    padding-top: 5px;
-				padding-bottom: 5px;
-*/
-				background-color: #ddd;
-				background-color: rgba(86, 62, 128, .15);
-				border: 2px solid #ccc;
+				background-color: rgba(200, 200, 200, .05);
+				border: 3px solid #c8c8c8;
 				border-radius: 5px;
-				border: 2px solid rgba(86, 62, 128, .2)
 			}
 			.cell-active {
 				border: 3px solid #f00;
@@ -164,6 +164,46 @@ import { EventService } from './events/event.service';
 			 }
 			 .cell-dragged {
 				 opacity: .2;
+			 }
+			 .cell-col-1 {
+				 max-width: 8.3%;
+				 width: 8.3%;
+			 }
+			 .cell-col-2 {
+				 max-width: 16.6%;
+			 width: 16.6%;
+			 }
+			 .cell-col-3 {
+				 max-width: 25%;
+			 width: 25%;
+			 }
+			 .cell-col-4 {
+			 max-width: 33%;
+			 width: 33%;
+			 }
+			 .cell-col-6 {
+				 max-width: 41.6%;
+			 width: 41.6%;
+			 }
+			 .cell-col-7 {
+				 max-width: 58.3%;
+			 width: 58.3%;
+			 }
+			 .cell-col-8 {
+				/* max-width: 66%;*/
+				 width: 66%;
+			 }
+			 .cell-col-9 {
+				 max-width: 75%;
+			 }
+			 .cell-col-10 {
+				 max-width: 75%;
+			 }
+			 .cell-col-11 {
+				 max-width: 91.6%;
+			 }
+			 .cell-col-12 {
+				 max-width: 100%;
 			 }
 			.cell-level-1 {}
 			.cell-level-2 {}

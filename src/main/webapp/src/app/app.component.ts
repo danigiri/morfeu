@@ -52,14 +52,14 @@ import { EventService } from './events/event.service';
 	  <hotkeys-cheatsheet></hotkeys-cheatsheet>
 	  <div class="container-fluid">
 		  <div class="row">
-			<div class="col-sm-2">
+			<div class="col-3">
 			  <catalogue-list></catalogue-list>
 			  <document></document>
 			</div>
-			<div class="col-sm">
+			<div class="col">
 				<content></content>
 			</div>
-			<div class="col-sm-2">
+			<div class="col-3">
 				<model></model>
 			</div>
 		  </div>

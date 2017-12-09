@@ -36,6 +36,7 @@ import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { CellDragEvent } from './events/cell-drag.event';
 import { CellSelectEvent } from './events/cell-select.event';
+
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { DropAreaSelectEvent } from './events/drop-area-select.event';
@@ -57,6 +58,28 @@ import { EventService } from './events/event.service';
 			    ></cell>
 			<!-- TODO: static checks using the model and not what's already present (cells) -->
 		<!--/div-->
+
+<!-- THIS DISPLAYS AS IT SHOULD -->
+<!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">
+  <div class="row" style="border: 2px solid rgba(86, 62, 128, .2)">
+    <div class="col-4" style="border: 2px solid rgba(86, 62, 128, .2)">
+      <img class="img-fluid" src="http://localhost:3000/assets/images/data-cell.svg" />
+    </div>
+    <div class="col-8" style="border: 2px solid rgba(86, 62, 128, .2)">
+      <div class="row">
+    <div class="col-6" style="border: 2px solid rgba(86, 62, 128, .2)">
+      <img src="http://localhost:3000/assets/images/data-cell.svg" />
+      <img src="http://localhost:3000/assets/images/data-cell.svg" />
+    </div>
+    <div class="col-6" style="border: 2px solid rgba(86, 62, 128, .2)">
+      <img src="http://localhost:3000/assets/images/data-cell.svg" />
+      <img src="http://localhost:3000/assets/images/data-cell.svg" />
+    </div>
+
+    </div>
+  </div>
+</div-->
+
 	</div>
 	`,
 	styles:[`
