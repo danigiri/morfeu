@@ -36,7 +36,7 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue-list',
 	template: `
-    <div class="card">
+    <div class="card mb-2">
 		<h4 class="card-header">Catalogues</h4>
         	<div id="catalogue-list" class="list-group">
     			<a *ngFor="let c of catalogues"

@@ -56,7 +56,7 @@ import { EventService } from './events/event.service';
 			    [cell]="cell" [level]="1" 
 			    [position]="i"
 			    ></cell>
-			<!-- TODO: static checks using the model and not what's already present (cells) -->
+			<!-- TODO: static checks using the moel and not what's already present (cells) -->
 		</div>
     </div>
 <!-- THIS DISPLAYS AS IT SHOULD -->

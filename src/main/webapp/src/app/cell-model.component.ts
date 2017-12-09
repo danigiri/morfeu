@@ -51,23 +51,25 @@ import { EventService } from './events/event.service';
 		</div>
 		`,
 
-		styles:[`
-				.cell-model-entry {}
-				.cell-model-name {}
-				.cell-model-desc {}
-				.cell-model-thumb {}
-				.cell-model-active {
-					border: 1px solid #f00;
-				}
-				.cell-model-level-1 {}
-				.cell-model-level-2 {}
-				.cell-model-level-3 {}
-				.cell-model-level-4 {}
-				.cell-model-level-5 {}
-				.cell-model-level-6 {}
-				.cell-model-level-7 {}
-				.cell-model-level-8 {}
-				.cell-model-level-9 {}
+	styles:[`
+			.cell-model-entry {}
+			.cell-model-name {}
+			.cell-model-desc {}
+			.cell-model-thumb {
+			    border: 1px solid transparent;  /* So when changed to highlighted, active, it doesn't move */
+			}
+			.cell-model-active {
+				border: 1px solid #f00;
+			}
+			.cell-model-level-1 {}
+			.cell-model-level-2 {}
+			.cell-model-level-3 {}
+			.cell-model-level-4 {}
+			.cell-model-level-5 {}
+			.cell-model-level-6 {}
+			.cell-model-level-7 {}
+			.cell-model-level-8 {}
+			.cell-model-level-9 {}
 	`]
 })
 
