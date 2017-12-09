@@ -41,11 +41,12 @@ import { EventService } from './events/event.service';
 	moduleId: module.id,
 	selector: 'cell',
 	template: `
+
 			<ng-container [ngSwitch]="cell.cellModel.presentation">
 			
 				<ng-container *ngSwitchCase="'WELL'">
 					<div id="{{cell.URI}}" 
-						class="well container-fluid cell-level-{{level}}"
+						class="well container-fluid show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
 					 >
@@ -67,7 +68,7 @@ import { EventService } from './events/event.service';
 				
 				<ng-container *ngSwitchCase="'ROW-WELL'">
 					<div id="{{cell.URI}}" 
-						class="row-well row show-grid cell-level-{{level}}"
+						class="row-well row show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
 					 >
@@ -90,7 +91,7 @@ import { EventService } from './events/event.service';
 				<ng-container *ngSwitchCase="'COL-WELL'">
 					<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
 					<div id="{{cell.URI}}-{{this.cell.columnFieldValue()}}" 
-						class="col-well col show-grid cell-level-{{level}}"
+						class="col-well col show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
 					 ><!--COL-{{this.cell.columnFieldValue()}}-->
@@ -124,7 +125,6 @@ import { EventService } from './events/event.service';
 				</ng-container>
 
 			</ng-container>
-	<!--<ng-container *ngTemplateOutlet="loading"></ng-container>-->
 	`,
 	styles:[`
 			.cell {}
@@ -152,7 +152,6 @@ import { EventService } from './events/event.service';
 			.show-grid	{
 				background-color: rgba(200, 200, 200, .05);
 				border: 3px solid #c8c8c8;
-				border-radius: 5px;
 			}
 			.cell-active {
 				border: 3px solid #f00;
@@ -190,7 +189,6 @@ import { EventService } from './events/event.service';
 			 width: 58.3%;
 			 }
 			 .cell-col-8 {
-				/* max-width: 66%;*/
 				 width: 66%;
 			 }
 			 .cell-col-9 {

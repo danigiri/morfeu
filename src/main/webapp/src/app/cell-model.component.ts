@@ -47,7 +47,7 @@ import { EventService } from './events/event.service';
                  (mouseenter)="clickDown(node.data)" 
                  (mouseleave)="clickUp(node.data)"
 					/>
-			<span class="cell-model-name">{{ node.data.name }}</span>
+			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
 		</div>
 		`,
 

@@ -36,19 +36,13 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'model',
 	template: `
-	<div id="model-info" class="panel panel-info" *ngIf="model">
-		<div class="panel-heading">
-			<h4 id="model-name" class="panel-title">Model: {{model.name}}</h4>
-		</div>
-		<div class="panel-body">
-			<div class="panel panel-info">
-			  <div id="model-desc" class="panel-body">
-				{{model.desc}}
-			  </div>
-			</div>
+	<div id="model-info" class="card" *ngIf="model">
+	    <h5 id="model-name" class="card-header">Model: {{model.name}}</h5>
+		<div class="card-body">
+			  <div id="model-desc" class="card-title">{{model.desc}}</div>
 			<!-- non-intuitively, the nodes binding expects an array and not a root node-->
 			<!-- we use direct binding as opposed to events for the moment -->
-			<div id="model-cell-models" class="panel panel-info">
+			<div id="model-cell-models" class="">
 				<tree-root
 					[nodes]="model.cellModels">
 					<ng-template #treeNodeTemplate let-node let-index="index">

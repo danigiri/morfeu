@@ -46,30 +46,29 @@ import { EventService } from './events/event.service';
 @Component({
 	selector: 'app-root',
 	template: `
-	  <div class="page-header">
-		  <h1>Morfeu application</h1>
-	  </div>
-	  <hotkeys-cheatsheet></hotkeys-cheatsheet>
-	  <div class="container-fluid">
-		  <div class="row">
-			<div class="col-3">
-			  <catalogue-list></catalogue-list>
-			  <document></document>
-			</div>
-			<div class="col">
-				<content></content>
-			</div>
-			<div class="col-3">
-				<model></model>
-			</div>
-		  </div>
+	    <div class="card">
+	        <div class="card-body">
+		      <h1 class="card-title">Morfeu application</h1>
+	          <hotkeys-cheatsheet></hotkeys-cheatsheet>
+	          <div class="container-fluid">
+            	      <div class="row">
+            		    <div class="col-3">
+        		          <catalogue-list></catalogue-list>
+            		      <document></document>
+            		    </div>
+            		    <div class="col">
+            			    <content></content>
+                     </div>
+            		    <div class="col-3">
+            			    <model></model>
+            		    </div>
+	              </div>
+            	  </div>
+              <div class="container-fluid">
+        	        <status></status>
+        		    <problem></problem>
 		 </div>
-      <div class="container-fluid">
-	    <status></status>
-		<problem></problem>
 	  </div>
-
-
 	  `,
 	providers:	  [
 				   // note that Http is injected by the HttpModule imported in the application module

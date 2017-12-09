@@ -36,22 +36,20 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue-list',
 	template: `
-	 <div class="panel panel-primary">
-	  <div class="panel-heading">
-		<h4 class="panel-title">Catalogues</h4>
-	  </div>
-	  <div class="panel-body">
-		<div id="catalogue-list" class="list-group">
-			<a *ngFor="let c of catalogues"
-				 href="#" 
-				class="catalogue-list-entry list-group-item" 
-				[class.active]="c.uri === selectedCatalogueURI"
-				(click)="clickOnCatalogue(c)">
-			{{c.name}}</a>
-		</div>
-	  </div>
+    <div class="card">
+		<h4 class="card-header">Catalogues</h4>
+        	<div id="catalogue-list" class="list-group">
+    			<a *ngFor="let c of catalogues"
+    				 href="#" 
+    				class="catalogue-list-entry list-group-item list-group-item-action"
+    				[class.active]="c.uri === selectedCatalogueURI"
+    				(click)="clickOnCatalogue(c)">
+    			{{c.name}}</a>
+        	</div>
+        	<div class="card-body">
+	        <catalogue></catalogue>
+        	</div>
 	</div>
-	<catalogue></catalogue>
 	`,
 	styles:[`
 		#catalogue-list {}

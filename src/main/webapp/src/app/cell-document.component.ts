@@ -33,16 +33,14 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'document',
 	template: `
-	<div id="document-info" class="panel panel-default" *ngIf="document">
-		<div class="panel-heading">
-		  <h4 id="document-name" class="panel-title">{{document.name}} <span class="badge">{{document.kind}}</span></h4>
-		</div>
-		<div class="panel-body">
-			<span id="document-desc">{{document.desc}}</span>
-			<span id="document-valid" *ngIf="document.valid" class="label label-success">VALID</span>
-			<span id="document-valid" *ngIf="!document.valid" class="label label-danger">NON VALID</span>
-		
-		</div>
+	<div id="document-info" class="card" *ngIf="document">
+        <h5 id="document-name" class="card-header">{{document.name}} <span class="badge badge-primary">{{document.kind}}</span></h5>
+    		<div class="card-text">
+    			<span id="document-desc">{{document.desc}}</span>
+    			<span id="document-valid" *ngIf="document.valid" class="badge badge-success">VALID</span>
+    			<span id="document-valid" *ngIf="!document.valid" class="badge badge-danger">NON VALID</span>
+    		
+    		</div>
 	</div>
 	`,
 	styles:[`

@@ -48,8 +48,8 @@ import { EventService } from './events/event.service';
 	moduleId: module.id,
 	selector: 'content',
 	template: `
-	<div id="content" class="panel panel-default" *ngIf="content">
-		<!--div id="content" class="panel-body"-->
+	<div id="content" class="card" *ngIf="content">
+		<div id="content" class="card-body">
 			<drop-area [parent]="model" position="0"></drop-area> <!-- FIXME: this should activate and it doesn't -->
 			<cell *ngFor="let cell of content.children; let i=index" 
 			    [parent]="content" 
@@ -57,8 +57,8 @@ import { EventService } from './events/event.service';
 			    [position]="i"
 			    ></cell>
 			<!-- TODO: static checks using the model and not what's already present (cells) -->
-		<!--/div-->
-
+		</div>
+    </div>
 <!-- THIS DISPLAYS AS IT SHOULD -->
 <!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">
   <div class="row" style="border: 2px solid rgba(86, 62, 128, .2)">
@@ -79,8 +79,6 @@ import { EventService } from './events/event.service';
     </div>
   </div>
 </div-->
-
-	</div>
 	`,
 	styles:[`
 		#content {}

@@ -33,24 +33,20 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue',
 	template: `
-	<div id="catalogue" class="panel panel-primary" *ngIf="catalogue">
-		<div class="panel-heading">
-		  <h4 id="catalogue-name" class="panel-title">{{catalogue.name}}</h4>
-		</div>
-		<div id="catalogue-desc" class="panel-body">
-			{{catalogue.desc}}
-		</div>
-		<div class="panel-body">
-			<div id="document-list" class="list-group">
-				<a *ngFor="let d of catalogue.documents"
-					href="#" 
-					class="document-list-entry list-group-item" 
-					[class.active]="d.uri === selectedDocumentURI"
-					(click)="clickOnDocument(d)">
-					{{d.name}}
-				</a>
-		</div>
-		</div>
+	<div id="catalogue" class="card bg-light" *ngIf="catalogue">
+		    <h5 id="catalogue-name" class="card-header">{{catalogue.name}}</h5>
+	        <div class="card-body">
+	            <div id="catalogue-desc" class="card-title">{{catalogue.desc}}</div>
+			    <div id="document-list" class="list-group">
+			        <a *ngFor="let d of catalogue.documents"
+				        href="#" 
+                        class="document-list-entry list-group-item list-group-item-action" 
+                        [class.active]="d.uri === selectedDocumentURI"
+                        (click)="clickOnDocument(d)">
+                            {{d.name}}
+                    </a>	                
+	            </div>
+		    </div>
 	  </div>
 	`,
 	styles:[`
@@ -86,8 +82,8 @@ ngOnInit() {
 	this.subscribe(this.events.service.of(CatalogueSelectionEvent).subscribe(
 			selected => this.loadCatalogueAt(selected.url)
 	));
-	
-			
+
+
 }
 
 
