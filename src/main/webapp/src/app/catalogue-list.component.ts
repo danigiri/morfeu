@@ -66,7 +66,7 @@ selectedCatalogueURI: string;
 
 
 constructor(eventService: EventService, 
-			@Inject("CatalogueService") private catalogueService: RemoteDataService<Catalogue> ) {
+			@Inject("RemoteJSONDataService") private catalogueService: RemoteDataService ) {
 	super(eventService);
 }
 
@@ -94,9 +94,9 @@ fetchCatalogues(url: string) {
 	this.selectedCatalogueURI = null;
 	this.events.service.publish(new StatusEvent("Fetching catalogues"));
 	// TODO: make this configurable and into an event
-	this.catalogueService.getAll(url)
+	this.catalogueService.getAll<Catalogue>(url)
 	.subscribe(c => { 
-					 
+
 					 this.catalogues = c;
 					 this.events.service.publish(new CataloguesLoadedEvent(c));
 					 this.events.ok();

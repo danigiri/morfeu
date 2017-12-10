@@ -19,6 +19,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';  // new angular 5 http client module
 
 import { DndModule } from 'ng2-dnd';
 import { HotkeyModule } from 'angular2-hotkeys';
@@ -40,7 +41,8 @@ import { StatusComponent } from './status.component';
   imports:		[ BrowserModule
 				  ,BrowserAnimationsModule
 				  ,CommonModule
-				  ,HttpModule
+                  ,HttpModule
+                  ,HttpClientModule
 				  ,TreeModule
 				  ,DndModule.forRoot()
 				  ,HotkeyModule.forRoot()

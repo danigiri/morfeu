@@ -66,7 +66,7 @@ document: CellDocument;
 saveDisabled: boolean = true;
 
 constructor(eventService: EventService,
-			@Inject("CatalogueService") private documentService: RemoteDataService<CellDocument> ) {
+			@Inject("RemoteJSONDataService") private documentService: RemoteDataService ) {
 	super(eventService);
 }
 
@@ -116,8 +116,8 @@ loadDocument(url: string) {
 	//this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
 	this.events.service.publish(new StatusEvent("Fetching document"));
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
-	this.documentService.get("/morfeu/documents/"+url).subscribe(d => {
-				console.log("DocumentComponent::loadDocument() Got document from Morfeu service ("+d.name+")");
+	this.documentService.get<CellDocument>("/morfeu/documents/"+url).subscribe(d => {
+				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
 				this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
 			},
 			error => {
@@ -126,7 +126,7 @@ loadDocument(url: string) {
 				this.document = null;
 			},
 			() =>	  this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
-		);
+	);
 
 }
 
@@ -158,5 +158,12 @@ enableSave() {
     this.saveDisabled = false;
 }
 
+
+saveDocument() {
+    
+    this.events.service.publish(new StatusEvent("Fetching content"));
+    let contentURI = "/morfeu/content/"+this.document.uri+"?model="+this.document.modelURI;
+    
+}
 
 }

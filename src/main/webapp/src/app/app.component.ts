@@ -17,8 +17,9 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { Subscription }	  from 'rxjs/Subscription';
 import { isDevMode } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';  // new angular 5 http client
+
 
 import { CatalogueListComponent } from './catalogue-list.component';
 import { ContentComponent } from './content.component';
@@ -72,10 +73,12 @@ import { EventService } from './events/event.service';
 	  `,
 	providers:	  [
 				   // note that Http is injected by the HttpModule imported in the application module
-				   {provide: 'CatalogueService', useFactory: (http:Http) => (new RemoteDataService<Catalogue>(http)), deps: [Http]}
+				   {provide: 'RemoteJSONDataService', 
+				    useFactory: (http:HttpClient) => (new RemoteDataService(http)), 
+				    deps: [HttpClient]
+				    }
 				   ,EventService
 				   ,{provide: 'ContentService', useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)), deps: [Http]}
-				   ,{provide: 'CellDocumentService', useFactory: (http:Http) => (new RemoteDataService<CellDocument>(http)), deps: [Http]}
 				   ,{provide: 'ModelService', useFactory: (http:Http) => (new RemoteObjectService<Model, ModelJSON>(http)), deps: [Http]}
 				   ]
 })

@@ -15,7 +15,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+//import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';  // new angular 5 http client
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
@@ -23,27 +24,29 @@ import 'rxjs/add/operator/map';
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead 
 */
 @Injectable()
-export class RemoteDataService<T> {
+export class RemoteDataService {
 
 
-constructor(private http:Http) {}
+constructor(private http:HttpClient) {}
 
-
-getAll(uri: string): Observable<T[]> {
+getAll<T>(uri: string): Observable<T[]> {
 	
 	console.log("[SERVICE] RemoteDataService::getAll("+uri+")"); 
 	//TODO: handle errors with .catch here
-	return this.http.get(uri).map(response => <T[]>response.json());
+    return this.http.get<T[]>(uri);
 
 }
 
 
-get(uri: string): Observable<T> {
+get<T>(uri: string): Observable<T> {
 
 	console.log("[SERVICE] RemoteDataService::get("+uri+")"); 
 	//TODO: handle errors with .catch here
-	return this.http.get(uri).map(response => <T>response.json());
+	return this.http.get<T>(uri);
 
 }
+
+//post(uri: string): Observable<T>
+//
 
 }

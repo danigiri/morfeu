@@ -67,7 +67,7 @@ catalogue: Catalogue;
 selectedDocumentURI: string;
 
 constructor(eventService: EventService,
-			@Inject("CatalogueService") private catalogueService: RemoteDataService<Catalogue> ) {
+			@Inject("RemoteJSONDataService") private catalogueService: RemoteDataService ) {
 	super(eventService);
 }
 
@@ -93,7 +93,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 	this.events.service.publish(new CellDocumentSelectionEvent(null));	// reset document selection and related
 
 	this.events.service.publish(new StatusEvent("Fetching catalogue"));
-	this.catalogueService.get(selectedCatalogueUri)
+	this.catalogueService.get<Catalogue>(selectedCatalogueUri)
 			.subscribe(c => { 
 				this.catalogue = c;
 				this.events.service.publish(new CatalogueLoadedEvent(c));
