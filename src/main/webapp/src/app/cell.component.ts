@@ -43,7 +43,7 @@ import { EventService } from './events/event.service';
 	template: `
 
 			<ng-container [ngSwitch]="cell.cellModel.presentation">
-			
+
 				<ng-container *ngSwitchCase="'WELL'">
 					<div id="{{cell.URI}}" 
 						class="well container-fluid show-grid cell-level-{{level}} rounded"
@@ -65,7 +65,7 @@ import { EventService } from './events/event.service';
 					 </div>
 					 <!-- TODO: we probable want a drop area here to be able to add new wells -->
 				</ng-container>
-				
+
 				<ng-container *ngSwitchCase="'ROW-WELL'">
 					<div id="{{cell.URI}}" 
 						class="row-well row show-grid cell-level-{{level}} rounded"
@@ -277,7 +277,7 @@ ngOnInit() {
 				//console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
 				this.becomeActive(this.cell);
 	}));
-	
+
 	// an outsider component (like a keyboard shortcut) wants to activate this selected cell
 	this.subscribe(this.events.service.of( CellActivateEvent )
 			.filter(a => this.selected && this.canBeActivated())
@@ -396,19 +396,19 @@ select(position:number) {
 			this.becomeInactive(this.cell);
 		}
 		
-		// we were waiting for a selection we match the position, so we select ourselves
+		// we were waiting for a selection and we've matched the position, so we select ourselves
 		// and unsubscribe from selection as we are not eligible anymore
 		console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");
 		this.selected = true; 
 		this.unsubscribeFromSelection();
 		
-		// We unsubscribe from clear, send a clear event and re-subscribe
+		// We temporarly unsubscribe from clear, send a clear event and re-subscribe
 		// This means we are the only ones selected now (previous parent will be unselected, for instance)
 		this.unsubscribeFromSelectionClear();
 		this.events.service.publish(new CellSelectionClearEvent());
 		this.subscribeToSelectionClear();
 		
-		// we make children eligible to be selected 
+		// now our children are eligible to be selected 
 		this.children.forEach(c => c.subscribeToSelection());
 
 		// if we have drop areas, they are also selectable now with the appropriate key shortcut

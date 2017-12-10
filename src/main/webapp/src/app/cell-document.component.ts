@@ -27,28 +27,34 @@ import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
-
+import { UXEvent } from './events/ux.event';
 
 @Component({
 	moduleId: module.id,
 	selector: 'document',
 	template: `
 	<div id="document-info" class="card" *ngIf="document">
-        <h5 id="document-name" class="card-header">{{document.name}} <span class="badge badge-primary">{{document.kind}}</span></h5>
-    		<div class="card-text">
-    			<span id="document-desc">{{document.desc}}</span>
-    			<span id="document-valid" *ngIf="document.valid" class="badge badge-success">VALID</span>
-    			<span id="document-valid" *ngIf="!document.valid" class="badge badge-danger">NON VALID</span>
-    		
-    		</div>
-	</div>
+        <h5 id="document-name" class="card-header">{{document.name}} <span class="badge badge-primary float-right">{{document.kind}}</span></h5>
+        <div class="card-body">
+        		<div class="card-text">
+        			<span id="document-desc">{{document.desc}}</span>
+        			<span id="document-valid" *ngIf="document.valid" class="badge badge-pill badge-success float-right">VALID</span>
+        			<span id="document-valid" *ngIf="!document.valid" class="badge badge-pill badge-danger float-right">NON VALID</span>
+        		</div>
+             <button type="button" *ngIf="document.valid"
+                 class="btn btn-success btn-lg btn-block btn-sm mt-2"
+                 [class.disabled]="saveDisabled" 
+                 >SAVE</button>
+             <button type="button" *ngIf="document.valid"
+                 class="btn btn-warning btn-lg btn-block btn-sm mt-2">Restore</button>
+	    </div>
+    </div>
 	`,
 	styles:[`
 			#document-info {}
 			#document-name {}
 			#document-desc {}
 			#document-valid {}
-
 	`] 
    
 })
@@ -57,6 +63,7 @@ import { StatusEvent } from './events/status.event';
 export class CellDocumentComponent extends Widget implements OnInit {
 
 document: CellDocument;
+saveDisabled: boolean = true;
 
 constructor(eventService: EventService,
 			@Inject("CatalogueService") private documentService: RemoteDataService<CellDocument> ) {
@@ -70,13 +77,12 @@ ngOnInit() {
 	
 	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
 			selected => {
-				
 				if (selected.url!=null) {
 					this.loadDocument(selected.url);
 				} else {
 					this.clear();
 				}
-				
+
 			}
 	));
 	
@@ -84,23 +90,24 @@ ngOnInit() {
 			loaded => { 
 	
 				this.display(loaded.document);
-			
 				if (loaded.document.problem==null || loaded.document.problem.length==0) {
 					this.events.ok();
 					this.events.service.publish(new ModelRequestEvent(loaded.document));
-					
 				} else {
 					// even though there is a case where we could display the model of a problematic document,
 					// for instance, when the model is ok but the content is not found, we're conservative
 					// and not fetch the model, just display the problem
 					this.events.problem(loaded.document.problem);
 				}
-				
 
-			
 			}
 	));
 	
+	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
+	this.subscribe(this.events.service.of( UXEvent ) 
+	        .filter( e => e.type==UXEvent.DOCUMENT_DIRTY)
+	        .subscribe( e => this.enableSave() ));
+
 }
 
 
@@ -128,7 +135,8 @@ display(d: CellDocument) {
 
 	console.log("[UI] document component gets Document ("+d.name+")");
 	this.document = d;
-
+	this.disableSave();
+	
 }
 
 
@@ -136,7 +144,19 @@ clear() {
 
 	console.log("[UI] document component gets null document (no document selected)");
 	this.document = null;
-
+	this.disableSave();
+	
 }
+
+
+disableSave() {
+    this.saveDisabled = true;
+}
+
+
+enableSave() {
+    this.saveDisabled = false;
+}
+
 
 }

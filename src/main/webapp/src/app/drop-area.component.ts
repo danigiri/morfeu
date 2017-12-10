@@ -30,7 +30,7 @@ import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { DropAreaSelectEvent } from './events/drop-area-select.event';
 import { EventService } from './events/event.service';
-
+import { UXEvent } from './events/ux.event';
 
 @Component({
 	moduleId: module.id,
@@ -142,11 +142,12 @@ select(position:number) {
         this.selected = true;
         this.unsubscribeFromSelection();
 
-        // We unsubscribe from clear, send a clear event and re-subscribe
+        // We temporarily unsubscribe from clear, send a clear event and re-subscribe
         // This means we are the only ones selected now (previous parent will be unselected, for instance)
         this.unsubscribeFromSelectionClear();
         this.events.service.publish(new CellSelectionClearEvent());
         this.subscribeToSelectionClear();
+        
     } else if (this.parent && position>=this.parent.childrenCount()) {
         console.log("[UI] DropAreaComponent::select(out of bounds)");
     } else {
@@ -199,6 +200,8 @@ performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
     
     console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
     this.events.service.publish(new CellDropEvent(cell, this.parent, this.position));
+    // the document is now dirty
+    this.events.service.publish(new UXEvent(UXEvent.DOCUMENT_DIRTY));
     
 }
 
