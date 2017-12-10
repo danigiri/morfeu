@@ -329,7 +329,7 @@ static fromJSON(json: CellJSON|string):Cell {
 	if (typeof json === 'string') {
 
 		return JSON.parse(json, Cell.reviver);
-		
+
 	} else {
 		
 		let cell:Cell = Object.create(Cell.prototype);

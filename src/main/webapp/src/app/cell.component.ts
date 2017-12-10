@@ -90,7 +90,7 @@ import { EventService } from './events/event.service';
 				
 				<ng-container *ngSwitchCase="'COL-WELL'">
 					<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
-					<div id="{{cell.URI}}-{{this.cell.columnFieldValue()}}" 
+					<div id="{{cell.URI}}" 
 						class="col-well col show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"

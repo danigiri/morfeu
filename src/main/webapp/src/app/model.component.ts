@@ -106,9 +106,7 @@ loadModel(document:CellDocument) {
 			this.events.service.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
-	error => {
-		this.events.problem(error);
-	},
+	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
 	);
 	

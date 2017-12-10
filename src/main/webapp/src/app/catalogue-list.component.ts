@@ -99,7 +99,7 @@ fetchCatalogues(url: string) {
         		this.events.service.publish(new CataloguesLoadedEvent(c));
         		this.events.ok();
         },
-        error => this.events.problem(error),
+        error => this.events.problem(error.message), // error is of the type HttpErrorResponse
         () => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
 	);
 	

@@ -125,7 +125,7 @@ loadDocument(url: string) {
 				this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
 			},
 			error => {
-				this.events.problem(error);
+				this.events.problem(error.message);  // error is of the type HttpErrorResponse
 				this.events.service.publish(new CellDocumentSelectionEvent(null));
 				this.document = null;
 			},

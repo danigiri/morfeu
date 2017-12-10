@@ -100,7 +100,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 				this.events.ok();
 			},
 			error => {
-				this.events.problem(error);
+				this.events.problem(error.message); // error is of the type HttpErrorResponse
 				this.events.service.publish(new CellDocumentSelectionEvent(null));	// also clear selection
 				this.catalogue = null;
 			},

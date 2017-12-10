@@ -165,9 +165,7 @@ fetchContentFor(document_: CellDocument, model:Model) {
 	    this.registerContentKeyShortcuts();
 		this.events.ok();
 	},
-	error => {
-		this.events.problem(error);
-	},
+	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
 	);
 	
@@ -201,7 +199,7 @@ saveContent(document_:CellDocument) {
                 // reloading
                 //this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
             },
-            error => this.events.problem(error),
+            error => this.events.problem(error.message),     // error is of the type HttpErrorResponse
             () => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
     );
 }
