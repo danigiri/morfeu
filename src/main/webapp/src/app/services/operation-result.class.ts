@@ -14,12 +14,13 @@
  *   limitations under the License.
  */
 
-import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
 
+export class OperationResult {
 
-export class ContentSaveEvent {
-
-constructor(public document: CellDocument) {}
+result: string;
+target: string;
+operation: string;
+operationTime: number;
+problem?: string;
 
 }

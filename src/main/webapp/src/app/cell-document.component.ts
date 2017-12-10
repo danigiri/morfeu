@@ -41,9 +41,12 @@ import { UXEvent } from './events/ux.event';
         			<span id="document-valid" *ngIf="document.valid" class="badge badge-pill badge-success float-right">VALID</span>
         			<span id="document-valid" *ngIf="!document.valid" class="badge badge-pill badge-danger float-right">NON VALID</span>
         		</div>
+        		<!-- we have the buttons here as it makes sense from a UI perspective, but the event itself 
+        		     will be handled by the content component -->
              <button type="button" *ngIf="document.valid"
                  class="btn btn-success btn-lg btn-block btn-sm mt-2"
                  [class.disabled]="saveDisabled" 
+                 (click)="saveDocument()"
                  >SAVE</button>
              <button type="button" *ngIf="document.valid"
                  class="btn btn-warning btn-lg btn-block btn-sm mt-2">Restore</button>
@@ -163,12 +166,10 @@ enableSave() {
 saveDocument() {
 
     console.log("[UI] User clicked on save document, let's go!!!");
-    this.events.service.publish(new ContentSaveEvent(this.document.content, this.document.model));
-    
-//    this.events.service.publish(new StatusEvent("Fetching content"));
-//    let contentURI = "/morfeu/content/"+this.document.uri+"?model="+this.document.modelURI;
-//    
-//    this.documentService.post(contentURI, this.document.content);   // YAY!
+    this.events.service.publish(
+            new ContentSaveEvent(this.document)
+    );
+
 }
 
 }

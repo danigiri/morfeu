@@ -65,7 +65,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 
 	String path = normalisedPathFrom(req);
 	String modelPath = req.getParameter("model");
-	log.trace("ContentServlet::doPost '[{}]{}' model:'{}'", resourcesPrefix, path, modelPath);
+	log.info("ContentServlet::doPost '[{}]{}' model:'{}'", resourcesPrefix, path, modelPath);
 	
 	if(!req.getContentType().equals("application/json")) {
 		

@@ -24,8 +24,12 @@ import { Cell } from './cell.class';
 import { Content, ContentJSON } from './content.class';
 import { FamilyMember } from './family-member.interface';
 import { Model } from './model.class';
-import { RemoteObjectService } from './services/remote-object.service';
-import { SerialisableToJSON } from './serialisable-to-json.interface';
+
+OperationResult
+import { RemoteDataService } from "./services/remote-data.service";
+import { RemoteObjectService } from "./services/remote-object.service";
+import { OperationResult } from "./services/operation-result.class";
+import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 import { CellComponent } from './cell.component';
 import { DropAreaComponent } from './drop-area.component';
@@ -39,6 +43,7 @@ import { CellSelectEvent } from './events/cell-select.event';
 
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { ContentRequestEvent } from './events/content-request.event';
+import { ContentSaveEvent } from './events/content-save.event';
 import { DropAreaSelectEvent } from './events/drop-area-select.event';
 import { StatusEvent } from './events/status.event';
 import { EventService } from './events/event.service';
@@ -104,7 +109,9 @@ private commandHotkey: Hotkey | Hotkey[];
 
 constructor(eventService: EventService,
            private hotkeysService: HotkeysService,
-			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON> ) {
+			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
+			@Inject("RemoteJSONDataService") private contentSaverService: RemoteDataService
+            ) {
 	super(eventService);
 }
 
@@ -127,6 +134,9 @@ ngOnInit() {
 			requested => this.fetchContentFor(requested.document, requested.model)
 	));
 	
+	this.subscribe(this.events.service.of(ContentSaveEvent).subscribe(
+	       save => this.saveContent(save.document)
+	));
 }
 
 // we make sure we subscribe to new elements if we are waiting for selections at root level
@@ -178,6 +188,23 @@ clearContent() {
 
 }
 
+
+saveContent(document_:CellDocument) {
+    
+    this.events.service.publish(new StatusEvent("Saving content"));
+    let postURI = "/morfeu/content/"+document_.contentURI+"?model="+document_.model.getURI();
+    let content = document_.content.toJSON();
+    console.log("ContentComponent::saveContent('%s')", postURI);
+  
+    this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {  // YAY!
+                console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
+                // reloading
+                //this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
+            },
+            error => this.events.problem(error),
+            () => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
+    );
+}
 
 /** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
 numberPressed = (event: KeyboardEvent): boolean => {

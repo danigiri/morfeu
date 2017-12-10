@@ -306,12 +306,18 @@ toJSON(): CellJSON {
 
 	let serialisedCell:CellJSON = Object.assign({}, this);
 
+    // we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
+    // belong to the serialised object
+    delete serialisedCell['cellModel'];
+    delete serialisedCell['parent'];
+
 	if (this.attributes) {
 		serialisedCell.attributes = this.attributes.map(a => a.toJSON());
 	}
 	if (this.children) {
 		serialisedCell.children = this.children.map(c => c.toJSON());
 	}
+
 
 	return serialisedCell;
 	
@@ -321,7 +327,7 @@ toJSON(): CellJSON {
 static fromJSON(json: CellJSON|string):Cell {
 
 	if (typeof json === 'string') {
-		
+
 		return JSON.parse(json, Cell.reviver);
 		
 	} else {

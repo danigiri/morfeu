@@ -31,7 +31,7 @@ constructor(public name: string,
             public contentURI: string,
             public valid:boolean,
             public problem: string) {}
-        
+
 
 hasProblem(): boolean {
     return this.problem!=null && this.problem.length>0;

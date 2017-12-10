@@ -59,7 +59,7 @@ private HashMap<String, String> resultMetadata;
 
 public ContentPOSTControl(String prefix, String path, String content, @Nullable String modelPath) {
 
-	super("POST content:"+path, "templates/content-save.twig", "templates/content-save-problem.twig");
+	super("POST content:"+path, "templates/operation-ok.twig", "templates/operation-problem.twig");
 
 	this.prefix = prefix;
 	this.path = path;
@@ -69,10 +69,9 @@ public ContentPOSTControl(String prefix, String path, String content, @Nullable 
 	this.contentSnippet = content.substring(0, Math.min(10, content.length()));
 	this.resultMetadata = new HashMap<String, String>(4);
 
-	resultMetadata.put("destination", destination);
-	resultMetadata.put("uri", path);
-	resultMetadata.put("saver", "FileSaver");
-	resultMetadata.put("parsingTime", "-1");
+	resultMetadata.put("target", path);
+	resultMetadata.put("operation", "FileSaver");
+	resultMetadata.put("operationTime", "-1");
 
 }
 
@@ -108,9 +107,10 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	long before = System.currentTimeMillis();
 	component.validator().get().validate();
 	long now = System.currentTimeMillis();
-	resultMetadata.put("parsingTime", Long.toString(now-before));
+	resultMetadata.put("operationTime", Long.toString(now-before));
 
 	component.saver().get().save();
+	resultMetadata.put("result", "Content saved successfully");
 
 	return resultMetadata;
 	

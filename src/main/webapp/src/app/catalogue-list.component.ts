@@ -94,16 +94,14 @@ fetchCatalogues(url: string) {
 	this.selectedCatalogueURI = null;
 	this.events.service.publish(new StatusEvent("Fetching catalogues"));
 	// TODO: make this configurable and into an event
-	this.catalogueService.getAll<Catalogue>(url)
-	.subscribe(c => { 
-
-					 this.catalogues = c;
-					 this.events.service.publish(new CataloguesLoadedEvent(c));
-					 this.events.ok();
-					},
-			   error => this.events.problem(error),
-			   () => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
-			   );
+	this.catalogueService.getAll<Catalogue>(url).subscribe(c => { 
+	        this.catalogues = c;
+        		this.events.service.publish(new CataloguesLoadedEvent(c));
+        		this.events.ok();
+        },
+        error => this.events.problem(error),
+        () => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
+	);
 	
 }
 
