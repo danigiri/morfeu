@@ -14,16 +14,69 @@
  *	 limitations under the License.
  */
 
-export class CellDocument {
-	
-	name: string;
-	uri: string;
-	kind: string;
-	modelURI: string;
-	contentURI: string;
-	valid:boolean;
-	problem: string;
+import { Content } from "./content.class";
+import { Model } from "./model.class";
+
+import { SerialisableToJSON } from './serialisable-to-json.interface';
+
+export class CellDocument implements SerialisableToJSON<CellDocument, CellDocumentJSON> {
+
+model?: Model;
+content?: Content;
+
+constructor(public name: string,
+            public uri: string,
+            public kind: string,
+            public modelURI: string,
+            public contentURI: string,
+            public valid:boolean,
+            public problem: string) {}
+        
+
+hasProblem(): boolean {
+    return this.problem!=null && this.problem.length>0;
+}
+
+toJSON(): CellDocumentJSON {
+    return Object.assign({}, this);
+}
+
+fromJSON(json: CellDocumentJSON|string): CellDocument {
+    
+    if (typeof json === 'string') {
+        
+        return JSON.parse(json, CellDocument.reviver);
+        
+    } else {
+    
+        let document_ = Object.create(CellDocument.prototype);
+
+        return Object.assign(document_, json);
+
+    }
+
+}
+ 
+
+static reviver(key: string, value: any): any {
+    return key === "" ? Object.create(CellDocument.prototype).fromJSON(value) : value;
+}
 
 }
 
+// TODO: this is implementation leaky, turn into an object so we can:
 // TODO: replace all the problem!=null && problem.length>0 with proper method as we're leaking implementation
+
+
+//serialisable interface
+export interface CellDocumentJSON {
+    
+name: string;
+uri: string;
+kind: string;
+modelURI: string;
+contentURI: string;
+valid:boolean;
+problem: string;
+
+}

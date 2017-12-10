@@ -83,7 +83,7 @@ ngOnInit() {
 
 	// if we load a problematic document we don't display anything (enjoying event-based coding right now)
 	this.subscribe(this.events.service.of(CellDocumentLoadedEvent)
-			.filter(loaded => loaded.document.problem!=null && loaded.document.problem.length>0 )
+			.filter(loaded => loaded.document.hasProblem() )
 			.subscribe(loadedProblematicDocument => this.clearModel())
 	);
 	
@@ -101,9 +101,9 @@ loadModel(document:CellDocument) {
 	this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
 			console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
 			this.diplayModel(model);	// not firing a load event yet if not needed
-			
+			document.model = model;  // associating the document with the recently loaded model
 			// now that we have loaded the model we can safely load the content (as both are related
-			this.events.service.publish(new ContentRequestEvent(document.contentURI, model));
+			this.events.service.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
 	error => {

@@ -119,12 +119,12 @@ ngOnInit() {
 
 	// if we load a problematic document we don't display anything
 	this.subscribe(this.events.service.of(CellDocumentLoadedEvent)
-			.filter(loaded => loaded.document.problem!=null && loaded.document.problem.length>0 )
+			.filter(loaded => loaded.document.hasProblem() )
 			.subscribe(loadedProblematicDocument => this.clearContent()
 	));
 	
 	this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
-			requested => this.fetchContent(requested.url, requested.model)
+			requested => this.fetchContentFor(requested.document, requested.model)
 	));
 	
 }
@@ -140,12 +140,15 @@ ngAfterViewInit() {
 
 }
 
-fetchContent(url:String, model:Model) {
+fetchContentFor(document_: CellDocument, model:Model) {
 
 	this.events.service.publish(new StatusEvent("Fetching content"));
-	let contentURI = "/morfeu/content/"+url+"?model="+model.URI;
+	let uri = document_.contentURI;
+	let contentURI = "/morfeu/content/"+uri+"?model="+model.URI;
 	this.contentService.get(contentURI, Content).subscribe( (content:Content) => {
-		console.log("ContentComponent::fetchContent() Got content from Morfeu service ("+url+")");
+		console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
+		// we associate the content with the document and the model so it al fits together
+		document_.content = content;
 		content.associateWith(model);
 		this.displayContent(content);
 	    //this.subscribeChildrenToCellSelection(); 

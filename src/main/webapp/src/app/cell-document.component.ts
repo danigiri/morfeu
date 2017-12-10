@@ -17,14 +17,14 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }	  from 'rxjs/Subscription';
 
-import { CellDocument } from './cell-document.class';
+import { CellDocument, CellDocumentJSON } from './cell-document.class';
 import { Widget } from './widget.class';
-import { RemoteDataService } from './services/remote-data.service';
+import { RemoteObjectService } from './services/remote-object.service';
 
 import { EventService } from './events/event.service';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
-import { ContentRequestEvent } from './events/content-request.event';
+import { ContentSaveEvent } from './events/content-save.event';
 import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
 import { UXEvent } from './events/ux.event';
@@ -66,7 +66,8 @@ document: CellDocument;
 saveDisabled: boolean = true;
 
 constructor(eventService: EventService,
-			@Inject("RemoteJSONDataService") private documentService: RemoteDataService ) {
+            @Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON> 
+			) {
 	super(eventService);
 }
 
@@ -90,7 +91,7 @@ ngOnInit() {
 			loaded => { 
 	
 				this.display(loaded.document);
-				if (loaded.document.problem==null || loaded.document.problem.length==0) {
+				if (!loaded.document.hasProblem()) {
 					this.events.ok();
 					this.events.service.publish(new ModelRequestEvent(loaded.document));
 				} else {
@@ -116,7 +117,7 @@ loadDocument(url: string) {
 	//this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
 	this.events.service.publish(new StatusEvent("Fetching document"));
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
-	this.documentService.get<CellDocument>("/morfeu/documents/"+url).subscribe(d => {
+	this.documentService.get("/morfeu/documents/"+url, CellDocument).subscribe(d => {
 				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
 				this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
 			},
@@ -136,7 +137,7 @@ display(d: CellDocument) {
 	console.log("[UI] document component gets Document ("+d.name+")");
 	this.document = d;
 	this.disableSave();
-	
+
 }
 
 
@@ -160,10 +161,14 @@ enableSave() {
 
 
 saveDocument() {
+
+    console.log("[UI] User clicked on save document, let's go!!!");
+    this.events.service.publish(new ContentSaveEvent(this.document.content, this.document.model));
     
-    this.events.service.publish(new StatusEvent("Fetching content"));
-    let contentURI = "/morfeu/content/"+this.document.uri+"?model="+this.document.modelURI;
-    
+//    this.events.service.publish(new StatusEvent("Fetching content"));
+//    let contentURI = "/morfeu/content/"+this.document.uri+"?model="+this.document.modelURI;
+//    
+//    this.documentService.post(contentURI, this.document.content);   // YAY!
 }
 
 }

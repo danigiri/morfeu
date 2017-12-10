@@ -31,7 +31,7 @@ import { RemoteObjectService } from './services/remote-object.service';
 
 import { Model, ModelJSON } from './model.class';
 import { Catalogue } from './catalogue.class';
-import { CellDocument } from './cell-document.class';
+import { CellDocument, CellDocumentJSON } from './cell-document.class';
 import { Content, ContentJSON } from './content.class';
 
 import { Widget } from './widget.class';
@@ -74,12 +74,22 @@ import { EventService } from './events/event.service';
 	providers:	  [
 				   // note that Http is injected by the HttpModule imported in the application module
 				   {provide: 'RemoteJSONDataService', 
-				    useFactory: (http:HttpClient) => (new RemoteDataService(http)), 
-				    deps: [HttpClient]
+				       useFactory: (http:HttpClient) => (new RemoteDataService(http)), 
+				       deps: [HttpClient]
 				    }
 				   ,EventService
-				   ,{provide: 'ContentService', useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)), deps: [Http]}
-				   ,{provide: 'ModelService', useFactory: (http:Http) => (new RemoteObjectService<Model, ModelJSON>(http)), deps: [Http]}
+                   ,{provide: 'CellDocumentService', 
+				       useFactory: (http:Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)), 
+				       deps: [Http]
+				    }
+				   ,{provide: 'ContentService', 
+				       useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)), 
+				       deps: [Http]
+				    }
+				   ,{provide: 'ModelService', 
+				       useFactory: (http:Http) => (new RemoteObjectService<Model, ModelJSON>(http)), 
+				       deps: [Http]
+				    }
 				   ]
 })
 

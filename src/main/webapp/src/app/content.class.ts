@@ -15,9 +15,11 @@
  */
 
 import { Adopter } from './adopter.interface';
+
 import { Cell, CellJSON } from './cell.class';
 import { FamilyMember } from './family-member.interface';
 import { Model } from './model.class';
+
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 

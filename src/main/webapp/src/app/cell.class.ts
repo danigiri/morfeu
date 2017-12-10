@@ -78,17 +78,17 @@ columnFieldValue():string {
 
 
 getURI():string {
-    return this.URI;
+	return this.URI;
 }
 
 
 getAdoptionName():string {
-    return this.name;
+	return this.name;
 }
 
 
 getAdoptionURI():string {
-    return this.cellModelURI;
+	return this.cellModelURI;
 }
 
 
@@ -100,146 +100,145 @@ matches(e:FamilyMember):boolean {
 // FIXME: need to check that we are not moving the same cell around in the same col (for instance change order)
 canAdopt(newMember:FamilyMember):boolean {
 
-    // we will do all checks one by one and return to optimise speed
-    
-    // we check the model compatibility first
-    if (!this.cellModel.canAdopt(newMember)) {
-        return false;
-        
-    }
-    
-    // next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
-    // place, example:
-    //  <col>
-    //      [drop area 0]
-    //      <thingie/>
-    //      [drop area 1]
-    //  </col>
-    // in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
+	// we will do all checks one by one and return to optimise speed
+	
+	// we check the model compatibility first
+	if (!this.cellModel.canAdopt(newMember)) {
+		return false;
+		
+	}
+	
+	// next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
+	// place, example:
+	//	<col>
+	//		[drop area 0]
+	//		<thingie/>
+	//		[drop area 1]
+	//	</col>
+	// in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
 
-    if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
-        return false;
-    }
-    
-    // next, we check if we have more than one element but we are in the same droppable parent which means
-    // that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
-    //  <col>
-    //      [drop area 0]
-    //      <thingie/>
-    //      [drop area 1]
-    //      <thingie/>
-    //      [drop area 2]
-    //  </col>
-    if (this.children && this.parent && this.equals(newMember.getParent())) {
-        return true;
-    }
-    
-    // next, we check the allowed count
-    let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
-    let childCount:number = matchingChildren.length;
-    if (childCount>0) {
-        // we are not considering the problem of the childcount being less than the minimum
-        //TODO: add are we able to remove this cell as child?
-        let matchingCellModel:CellModel = matchingChildren[0].cellModel;
-        if (matchingCellModel.maxOccurs && childCount >= matchingCellModel.maxOccurs) { // notice we use '>=' as we are adding one more
-            return false;
-        }
-    }
-        
-    console.log("true");
-    return true;    // apologies for the long method
+	if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
+		return false;
+	}
+	
+	// next, we check if we have more than one element but we are in the same droppable parent which means
+	// that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
+	//	<col>
+	//		[drop area 0]
+	//		<thingie/>
+	//		[drop area 1]
+	//		<thingie/>
+	//		[drop area 2]
+	//	</col>
+	if (this.children && this.parent && this.equals(newMember.getParent())) {
+		return true;
+	}
+	
+	// next, we check the allowed count
+	let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
+	let childCount:number = matchingChildren.length;
+	if (childCount>0) {
+		// we are not considering the problem of the childcount being less than the minimum
+		//TODO: add check: are we able to remove this cell as child?
+		let matchingCellModel:CellModel = matchingChildren[0].cellModel;
+		if (matchingCellModel.maxOccurs && childCount >= matchingCellModel.maxOccurs) { // notice we use '>=' as we are adding one more
+			return false;
+		}
+	}
+		
+	return true;	// apologies for the long method (mostly comments ^^')
 
 }
 
 
 childrenCount():number {
-    return this.children ? this.children.length : 0;   
+	return this.children ? this.children.length : 0;   
 }
 
 
 getParent():FamilyMember {
-    return this.parent;
+	return this.parent;
 }
 
 
 equals(m:FamilyMember) {
-    return m && this.getURI()==m.getURI();  // FIXME: at the beginning, if m is a model, it is undefined
+	return m && this.getURI()==m.getURI();	// FIXME: at the beginning, if m is a model, it is undefined
 }
 
 
 adopt(newMember:Cell, position:number) {
-    
-    if (newMember.parent) {
-        newMember.parent.removeChild(newMember);
-    }
-    
-    newMember.parent = this;
-    newMember.setPosition(position);
-    
-    if (!this.children) {
-        this.children = [newMember];
-    } else if (this.children.length<=position) { //> //> // works for empty list and also append at the end
-        this.children.push(newMember);
-    } else {
-    
-        let newChildren:Cell[] = [];
-        let i:number = 0;
-        this.children.forEach(c => {
-            if (i<position) { //>
-                newChildren.push(c);
-            } else if (i==position) {
-                newChildren.push(newMember);
-                i++;
-                newChildren.push(c.setPosition(i));    // set next to a a shifted position of +1
-            } else {
-                newChildren.push(c.setPosition(i));    // set the rest of children
-            }
-            i++;
-        });
-        this.children = newChildren;
+	
+	if (newMember.parent) {
+		newMember.parent.removeChild(newMember);
+	}
+	
+	newMember.parent = this;
+	newMember.setPosition(position);
+	
+	if (!this.children) {
+		this.children = [newMember];
+	} else if (this.children.length<=position) { //> //> // works for empty list and also append at the end
+		this.children.push(newMember);
+	} else {
+	
+		let newChildren:Cell[] = [];
+		let i:number = 0;
+		this.children.forEach(c => {
+			if (i<position) { //>
+				newChildren.push(c);
+			} else if (i==position) {
+				newChildren.push(newMember);
+				i++;
+				newChildren.push(c.setPosition(i));	   // set next to a a shifted position of +1
+			} else {
+				newChildren.push(c.setPosition(i));	   // set the rest of children
+			}
+			i++;
+		});
+		this.children = newChildren;
 
-    }
+	}
 
 }
 
 
 removeChild(child:Cell) {
 
-    let position:number = child.position;
-    let newChildren:Cell[] = [];
-    let i:number = 0;
-    this.children.forEach(c => {
-        if (i<position) { //>
-            newChildren.push(c);
-        } else if (i>position) {
-            newChildren.push(c.setPosition(i-1));    // set the following children to a shifted -1 position
-        }
-        i++;
-    });       
-    this.children = newChildren;
+	let position:number = child.position;
+	let newChildren:Cell[] = [];
+	let i:number = 0;
+	this.children.forEach(c => {
+		if (i<position) { //>
+			newChildren.push(c);
+		} else if (i>position) {
+			newChildren.push(c.setPosition(i-1));	 // set the following children to a shifted -1 position
+		}
+		i++;
+	});		  
+	this.children = newChildren;
  
 }
-     
+	 
 
 setPosition(position:number):Cell {
 
-    this.position = position;
-    this.URI = this.parent.getURI()+"/"+this.name+"("+position+")";
-    if (this.attributes) {
-        this.attributes = this.attributes.map(c => {
-            c.URI = c.URI.substr(0,  c.URI.lastIndexOf("@"));
-            c.URI = c.URI+"@"+c.name;
-            return c;
-        });
-    }
-    if (this.children) {
-        this.children = this.children.map(c => c.setPosition(position));
-    }
-      
-    return this;
+	this.position = position;
+	this.URI = this.parent.getURI()+"/"+this.name+"("+position+")";
+	if (this.attributes) {
+		this.attributes = this.attributes.map(c => {
+			c.URI = c.URI.substr(0,	 c.URI.lastIndexOf("@"));
+			c.URI = c.URI+"@"+c.name;
+			return c;
+		});
+	}
+	if (this.children) {
+		this.children = this.children.map(c => c.setPosition(position));
+	}
+	  
+	return this;
 
 }
-                    
+					
 
 private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell {
 
@@ -253,7 +252,7 @@ private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell 
 			let reference:CellModel = this.findCellModelWithURI(rootCellmodels, cellModel.referenceURI);
 			cellModel.attributes = reference.attributes;
 			cellModel.children = reference.children;
-			
+
 		}
 		
 		//TODO: handle inconsistent cell that cannot find cellmodule even though the content is valid		 
@@ -263,8 +262,8 @@ private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell 
 
 		if (cellModel) {												// now attributes and cell children
 		   if (this.attributes) {
-	               this.attributes = this.attributes.map(a => a.associateWith_(rootCellmodels, cellModel.attributes));
-	       }
+				   this.attributes = this.attributes.map(a => a.associateWith_(rootCellmodels, cellModel.attributes));
+		   }
 		   // notice we do not associate the internal attributes as there is no model for them
 		   if (this.children) {
 			   this.children = this.children.map(c => c.associateWith_(rootCellmodels, cellModel.children));
@@ -329,27 +328,27 @@ static fromJSON(json: CellJSON|string):Cell {
 		
 		let cell:Cell = Object.create(Cell.prototype);
 		cell = Object.assign(cell, json);
-		
+
 		if (json.attributes) {
 			cell = Object.assign(cell, {attributes: json.attributes.map(a => Cell.fromJSON(a))});
 		}
-        if (json.internalAttributes) {
-            cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => Cell.fromJSON(a))});
-        }
+		if (json.internalAttributes) {
+			cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => Cell.fromJSON(a))});
+		}
 
 		// we complete the children runtime information so we have the parent reference as well as position
 		if (json.children) {
-		    let i:number = 0;
-		    cell = Object.assign(cell, {children: json.children.map(c => {
-			    let fullCell:Cell = Cell.fromJSON(c);
-			    fullCell.position = i++;
-			    fullCell.parent = cell;
-			    return fullCell;
+			let i:number = 0;
+			cell = Object.assign(cell, {children: json.children.map(c => {
+				let fullCell:Cell = Cell.fromJSON(c);
+				fullCell.position = i++;
+				fullCell.parent = cell;
+				return fullCell;
 			})});
 		}
-		
+
 		return cell;
-		
+
 	}
 	
 }

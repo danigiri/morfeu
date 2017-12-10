@@ -31,8 +31,9 @@ constructor(private http:HttpClient) {}
 
 getAll<T>(uri: string): Observable<T[]> {
 	
-	console.log("[SERVICE] RemoteDataService::getAll("+uri+")"); 
-	//TODO: handle errors with .catch here
+	console.log("[SERVICE] RemoteDataService::getAll('%s')", uri); 
+	//TODO: handle errors here
+	
     return this.http.get<T[]>(uri);
 
 }
@@ -40,13 +41,21 @@ getAll<T>(uri: string): Observable<T[]> {
 
 get<T>(uri: string): Observable<T> {
 
-	console.log("[SERVICE] RemoteDataService::get("+uri+")"); 
+	console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
 	//TODO: handle errors with .catch here
+	
 	return this.http.get<T>(uri);
 
 }
 
-//post(uri: string): Observable<T>
-//
+post<T>(uri: string, content: any): Observable<T> {
+    
+    console.log("[SERVICE] RemoteDataService::post('%s')", uri);
+    //TODO: handle errors here
+    
+    return this.http.post<T>(uri, content);
+    
+}
+
 
 }
