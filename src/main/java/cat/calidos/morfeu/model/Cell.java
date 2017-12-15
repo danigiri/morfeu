@@ -29,7 +29,6 @@ protected CellModel cellModel;
 protected String value;
 protected boolean isSimple = true;
 
-
 public Cell(URI u) {
 	super(u);
 }

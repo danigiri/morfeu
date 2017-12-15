@@ -18,6 +18,7 @@ import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Widget } from './widget.class';
+import { CollapsableComponent } from "./components/collapsable.component";
 
 import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue.class';
@@ -36,20 +37,17 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue-list',
 	template: `
-    <div class="card mb-2">
-		<h4 class="card-header">Catalogues</h4>
-        	<div id="catalogue-list" class="list-group">
-    			<a *ngFor="let c of catalogues"
-    				 href="#" 
-    				class="catalogue-list-entry list-group-item list-group-item-action"
-    				[class.active]="c.uri === selectedCatalogueURI"
-    				(click)="clickOnCatalogue(c)">
-    			{{c.name}}</a>
-        	</div>
-        	<div class="card-body">
+	<collapsable header="Catalogues" class="mb-2">
+            	<div id="catalogue-list" class="list-group2">
+        			<a *ngFor="let c of catalogues"
+        				 href="#" 
+        				class="catalogue-list-entry list-group-item list-group-item-action"
+        				[class.active]="c.uri === selectedCatalogueURI"
+        				(click)="clickOnCatalogue(c)">
+        			{{c.name}}</a>
+            	</div>
 	        <catalogue></catalogue>
-        	</div>
-	</div>
+	    </collapsable>
 	`,
 	styles:[`
 		#catalogue-list {}

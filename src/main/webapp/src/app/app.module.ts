@@ -28,6 +28,7 @@ import { TreeModule } from 'angular-tree-component';
 import { AppComponent }	  from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from './catalogue.component';
+import { CollapsableComponent } from "./components/collapsable.component";
 import { ContentComponent } from './content.component';
 import { CellComponent } from './cell.component';
 import { CellDocumentComponent } from './cell-document.component';
@@ -50,6 +51,7 @@ import { StatusComponent } from './status.component';
   declarations: [ AppComponent
 				  ,CatalogueListComponent 
 				  ,CatalogueComponent
+				  ,CollapsableComponent
 				  ,ContentComponent 
 				  ,CellComponent
 				  ,CellDocumentComponent

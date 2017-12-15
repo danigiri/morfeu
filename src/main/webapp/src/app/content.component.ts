@@ -58,7 +58,7 @@ import { EventService } from './events/event.service';
 			<drop-area [parent]="model" position="0"></drop-area> <!-- FIXME: this should activate and it doesn't -->
 			<cell *ngFor="let cell of content.children; let i=index" 
 			    [parent]="content" 
-			    [cell]="cell" [level]="1" 
+			    [cell]="cell" [level]="0" 
 			    [position]="i"
 			    ></cell>
 			<!-- TODO: static checks using the moel and not what's already present (cells) -->

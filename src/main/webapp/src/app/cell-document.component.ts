@@ -100,7 +100,7 @@ ngOnInit() {
 				} else {
 					// even though there is a case where we could display the model of a problematic document,
 					// for instance, when the model is ok but the content is not found, we're conservative
-					// and not fetch the model, just display the problem
+					// and not fetch the model, just display the original problem
 					this.events.problem(loaded.document.problem);
 				}
 

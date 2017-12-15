@@ -58,7 +58,7 @@ public void testDragCell() {
 	UICell sourceCol = test.child("row(0)").child("col(0)");
 	assertEquals(1, sourceCol.children().size());
 	UICell data = sourceCol.child("data(0)");
-	assertTrue(data.isCell());												
+	assertTrue(data.isCell());
 	
 	// col(1) here has two data2 children, we'll drop the data into the middle
 	UICell targetCol = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");

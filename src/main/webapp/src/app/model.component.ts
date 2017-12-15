@@ -1,4 +1,4 @@
-/*
+ /*
  *	  Copyright 2017 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,6 +106,7 @@ loadModel(document:CellDocument) {
 			this.events.service.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
+	//TODO: check for network errors (see https://angular.io/guide/http)
 	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
 	);

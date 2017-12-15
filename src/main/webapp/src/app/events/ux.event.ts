@@ -17,9 +17,10 @@
 export class UXEvent {
 
 public static DOCUMENT_DIRTY: number = 100;
+public static TOGGLE_COLLAPSABLE: number = 200;
 
 
-constructor(public type: number) {}
+constructor(public type: number, public payload?: any) {}
 
 
 public toString = () : string => {

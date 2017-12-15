@@ -33,7 +33,7 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue',
 	template: `
-	<div id="catalogue" class="card bg-light" *ngIf="catalogue">
+	<div id="catalogue" class="card bg-light mt-2" *ngIf="catalogue">
 		    <h5 id="catalogue-name" class="card-header">{{catalogue.name}}</h5>
 	        <div class="card-body">
 	            <div id="catalogue-desc" class="card-title">{{catalogue.desc}}</div>

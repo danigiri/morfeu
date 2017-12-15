@@ -15,7 +15,7 @@
  */
 
 
-import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
 import { NgSwitchCase } from '@angular/common';
 
 import { FamilyMember } from './family-member.interface';
@@ -204,7 +204,8 @@ import { EventService } from './events/event.service';
 			 .cell-col-12 {
 				 max-width: 100%;
 			 }
-			.cell-level-1 {}
+            .cell-level-0 {}
+            .cell-level-1 {}
 			.cell-level-2 {}
 			.cell-level-3 {}
 			.cell-level-4 {}
@@ -223,6 +224,8 @@ import { EventService } from './events/event.service';
 			.cell-level-17 {}
 			.cell-level-18 {}
 `],
+	//
+encapsulation: ViewEncapsulation.Emulated,
 	providers:[
 	]
 })

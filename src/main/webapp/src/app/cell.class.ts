@@ -220,25 +220,51 @@ removeChild(child:Cell) {
 }
 	 
 
+// This is tricky, imagine this cases
+// /foo(0)/bar(0), bar(0) position:1 --> /foo(0)/bar(1), easy peasy
+// But what about:
+// /foo(0)/bar(0), bar(0) position:1
+// /foo(0)/bar(0)/geez(0)
+// /foo(0)/bar(0)/geez(1)
+// -->
+// /foo(0)/bar(1)
+// /foo(0)/bar(1)/geez(0)
+// /foo(0)/bar(1)/geez(1)
+// Neat, uh?
 setPosition(position:number):Cell {
 
+    let oldPrefix = this.parent.getURI()+"/"+this.name+"("+this.position;
+    let newPrefix = this.parent.getURI()+"/"+this.name+"("+position;
+    
+	this.URI = newPrefix+")";
 	this.position = position;
-	this.URI = this.parent.getURI()+"/"+this.name+"("+position+")";
 	if (this.attributes) {
 		this.attributes = this.attributes.map(c => {
-			c.URI = c.URI.substr(0,	 c.URI.lastIndexOf("@"));
-			c.URI = c.URI+"@"+c.name;
+			//c.URI = c.URI.substr(0,	 c.URI.lastIndexOf("@"));
+			c.URI = this.URI+"@"+c.name;
 			return c;
 		});
 	}
+	// now what we need to do, is replace the old prefix of the URI with the new one
 	if (this.children) {
-		this.children = this.children.map(c => c.setPosition(position));
+		this.children = this.children.map(c => c.replaceURIPrefix_(oldPrefix, newPrefix));
 	}
-	  
+
 	return this;
 
 }
-					
+
+// replaces the prefix of the URI with a new one, recursively
+private replaceURIPrefix_(old:string, newPrefix:string): Cell {
+
+    this.URI = this.URI.replace(old, newPrefix);
+    if (this.children) {
+        this.children = this.children.map(c => c.replaceURIPrefix_(old, newPrefix));
+    }
+
+    return this;
+
+}
 
 private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell {
 
