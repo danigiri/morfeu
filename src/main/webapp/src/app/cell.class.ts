@@ -223,10 +223,10 @@ removeChild(child:Cell) {
 // This is tricky, imagine this cases
 // /foo(0)/bar(0), bar(0) position:1 --> /foo(0)/bar(1), easy peasy
 // But what about:
-// /foo(0)/bar(0), bar(0) position:1
+// /foo(0)/bar(0), now we get bar(0) to position:1
 // /foo(0)/bar(0)/geez(0)
 // /foo(0)/bar(0)/geez(1)
-// -->
+// This means we end up with
 // /foo(0)/bar(1)
 // /foo(0)/bar(1)/geez(0)
 // /foo(0)/bar(1)/geez(1)

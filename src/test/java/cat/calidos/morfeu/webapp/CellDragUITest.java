@@ -31,26 +31,23 @@ import cat.calidos.morfeu.webapp.ui.UIContent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellDragUITest extends UITezt {
 
-private UIContent content;
-
 
 @Before
 public void setup() {
-	
 	open(appBaseURL);
-	
-	content = UICatalogues.openCatalogues()
-			.shouldAppear()
-			.clickOn(0)
-			.clickOnDocumentNamed("Document 1")
-			.content();
-	content.shouldBeVisible();
-
 }
 
 
 @Test
 public void testDragCell() {
+	
+	
+	UIContent content = UICatalogues.openCatalogues()
+									.shouldAppear()
+									.clickOn(0)
+									.clickOnDocumentNamed("Document 1")
+									.content();
+	content.shouldBeVisible();
 	
 	UICell test = content.rootCells().get(0);
 
@@ -76,5 +73,30 @@ public void testDragCell() {
 	assertTrue(sourceCol.children().isEmpty());
 	
 }
+
+
+@Test
+public void testDragCellSoOtherCellsChangeTheirURIs( ) {
+	
+	
+	UIContent content = UICatalogues.openCatalogues()
+									.shouldAppear()
+									.clickOn(0)
+									.clickOnDocumentNamed("Document 2")
+									.content();
+	content.shouldBeVisible();
+	
+	// we drag the first cell to the parent row, to trigger quite a different set of URI changes
+	// /test/row
+	//			/col(0)
+	//				/row(0)
+	//										<-- (here) -----------------------------------------------\
+	//					/col(0)			(this will become it's col(1) as 'data' will come first)		|
+	//						/data(0) * this goes ------------------------------------------------------/
+	//						/data2(1)	(this one will end up with a different uri too, as parent and order changed)
+	
+	WRITE TEST HERE NOW
+}
+
 
 }

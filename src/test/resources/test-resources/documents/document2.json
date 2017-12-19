@@ -1,0 +1,8 @@
+{
+	"name": "Document 2"
+	,"desc": "Second document"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/documents/document2.xml"
+	
+}
