@@ -67,7 +67,7 @@ public void shouldDisappear() {
 
 
 public List<UICell> rootCells() {
-	return $$(".cell-level-1").stream().map(e -> new UICell(e, this, Optional.empty(), 1) ).collect(Collectors.toList());
+	return $$(".cell-level-0").stream().map(e -> new UICell(e, this, Optional.empty(), 0) ).collect(Collectors.toList());
 }
 
 public UIContent pressKey(String k) {

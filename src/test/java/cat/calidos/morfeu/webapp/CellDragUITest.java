@@ -38,7 +38,7 @@ public void setup() {
 }
 
 
-@Test
+//@Test
 public void testDragCell() {
 	
 	
@@ -87,15 +87,49 @@ public void testDragCellSoOtherCellsChangeTheirURIs( ) {
 	content.shouldBeVisible();
 	
 	// we drag the first cell to the parent row, to trigger quite a different set of URI changes
-	// /test/row
-	//			/col(0)
-	//				/row(0)
+	// /test(0)/row(0)
+	//			/col(0)	[targetCol]
 	//										<-- (here) -----------------------------------------------\
-	//					/col(0)			(this will become it's col(1) as 'data' will come first)		|
+	//				/row(0)	(this will become row(1) as 'data' will come first)						|	
+	//					/col(0)	[sourceCol]															|
 	//						/data(0) * this goes ------------------------------------------------------/
 	//						/data2(1)	(this one will end up with a different uri too, as parent and order changed)
+	//
+	// Outcome:
+	// /test(0)/row(0)
+	//			/col(0)	[targetCol]
+	//						/data(0) * this goes
+	//						/row(1)	[displacedRow]	
+	//							/col(0)	[sourceCol]
+	//								/data2(0)	
 	
-	WRITE TEST HERE NOW
+	
+	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
+	assertNotNull(targetCol);
+	assertEquals("Target column should only have one child (row) at the start", 1, targetCol.children().size());
+	
+	UICell sourceCol = targetCol.child("row(0)").child("col(0)");
+	assertNotNull(sourceCol);
+	assertEquals("Source column should have two child (data and data2) at the start", 2, sourceCol.children().size());
+	
+	UICell data = sourceCol.child("data(0)");
+	assertNotNull(data);
+	UICell data2 = sourceCol.child("data2(1)");
+	assertNotNull(data2);
+	
+	data.dragTo(targetCol.dropArea(0));
+	assertEquals("Target column should have two children after drag", 2, targetCol.children().size());
+
+	data = targetCol.child("data(0)");	// newly dropped data cell
+	assertNotNull(data);
+	
+	UICell displacedRow = targetCol.child("row(1)");
+	assertNotNull("Displaced row is now at position (1)", displacedRow);
+
+	assertEquals("Source column should have 1 child after drag", 1, sourceCol.children().size());
+	data2 = sourceCol.child("data2(0)");
+	assertNotNull(data2);
+
 }
 
 
