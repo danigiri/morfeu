@@ -18,7 +18,7 @@ import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Widget } from './widget.class';
-import { CollapsableComponent } from "./components/collapsable.component";
+import { CollapsibleComponent } from "./components/collapsible.component";
 
 import { CatalogueComponent } from './catalogue.component';
 import { Catalogue } from './catalogue.class';
@@ -37,7 +37,7 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue-list',
 	template: `
-	<collapsable header="Catalogues" class="mb-2">
+	<collapsible header="Catalogues" class="mb-2">
             	<div id="catalogue-list" class="list-group2">
         			<a *ngFor="let c of catalogues"
         				 href="#" 
@@ -47,7 +47,7 @@ import { StatusEvent } from './events/status.event';
         			{{c.name}}</a>
             	</div>
 	        <catalogue></catalogue>
-	    </collapsable>
+	    </collapsible>
 	`,
 	styles:[`
 		#catalogue-list {}

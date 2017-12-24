@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2016 Daniel Giribet
+ *	  Copyright 2017 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -27,12 +27,13 @@ import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent }	  from './app.component';
 import { CatalogueListComponent } from './catalogue-list.component';
-import { CatalogueComponent } from './catalogue.component';
-import { CollapsableComponent } from "./components/collapsable.component";
+import { CatalogueComponent } from "./catalogue.component";
+import { CollapsibleComponent } from "./components/collapsible.component";
 import { ContentComponent } from './content.component';
 import { CellComponent } from './cell.component';
 import { CellDocumentComponent } from './cell-document.component';
-import { CellModelComponent } from './cell-model.component';
+import { CellModelComponent } from "./cell-model.component";
+import { CellModelInfoComponent } from "./components/cell-model-info.component";
 import { DropAreaComponent } from './drop-area.component';
 import { ModelComponent } from './model.component';
 import { ProblemComponent } from './problem.component';
@@ -51,18 +52,18 @@ import { StatusComponent } from './status.component';
   declarations: [ AppComponent
 				  ,CatalogueListComponent 
 				  ,CatalogueComponent
-				  ,CollapsableComponent
+				  ,CollapsibleComponent
 				  ,ContentComponent 
 				  ,CellComponent
 				  ,CellDocumentComponent
                   ,CellModelComponent
+                  ,CellModelInfoComponent
                   ,DropAreaComponent
 				  ,ModelComponent
 				  ,ProblemComponent 
 				  ,StatusComponent 
 				],
-  providers:	[
-				 ],
+  providers:	[],
   bootstrap:	[ AppComponent ]
 })
 

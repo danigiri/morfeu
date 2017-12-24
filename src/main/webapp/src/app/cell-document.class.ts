@@ -25,41 +25,41 @@ model?: Model;
 content?: Content;
 
 constructor(public name: string,
-            public uri: string,
-            public kind: string,
-            public modelURI: string,
-            public contentURI: string,
-            public valid:boolean,
-            public problem: string) {}
+			public uri: string,
+			public kind: string,
+			public modelURI: string,
+			public contentURI: string,
+			public valid:boolean,
+			public problem: string) {}
 
 
 hasProblem(): boolean {
-    return this.problem!=null && this.problem.length>0;
+	return this.problem!=null && this.problem.length>0;
 }
 
 toJSON(): CellDocumentJSON {
-    return Object.assign({}, this);
+	return Object.assign({}, this);
 }
 
 fromJSON(json: CellDocumentJSON|string): CellDocument {
-    
-    if (typeof json === 'string') {
-        
-        return JSON.parse(json, CellDocument.reviver);
-        
-    } else {
-    
-        let document_ = Object.create(CellDocument.prototype);
+	
+	if (typeof json === 'string') {
+		
+		return JSON.parse(json, CellDocument.reviver);
+		
+	} else {
+	
+		let document_ = Object.create(CellDocument.prototype);
 
-        return Object.assign(document_, json);
+		return Object.assign(document_, json);
 
-    }
+	}
 
 }
  
 
 static reviver(key: string, value: any): any {
-    return key === "" ? Object.create(CellDocument.prototype).fromJSON(value) : value;
+	return key === "" ? Object.create(CellDocument.prototype).fromJSON(value) : value;
 }
 
 }
@@ -70,7 +70,7 @@ static reviver(key: string, value: any): any {
 
 //serialisable interface
 export interface CellDocumentJSON {
-    
+	
 name: string;
 uri: string;
 kind: string;

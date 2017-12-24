@@ -36,22 +36,25 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'model',
 	template: `
-	<div id="model-info" class="card" *ngIf="model">
-	    <h5 id="model-name" class="card-header">Model: {{model.name}}</h5>
-		<div class="card-body">
-			  <div id="model-desc" class="card-title">{{model.desc}}</div>
-			<!-- non-intuitively, the nodes binding expects an array and not a root node-->
-			<!-- we use direct binding as opposed to events for the moment -->
-			<div id="model-cell-models" class="">
-				<tree-root
-					[nodes]="model.cellModels">
-					<ng-template #treeNodeTemplate let-node let-index="index">
-					   <cell-model [node]="node" [index]="index"></cell-model>
-					</ng-template>
-				</tree-root>
+	<ng-container *ngIf="model">
+			<div id="model-info" class="card">
+				<h5 id="model-name" class="card-header">Model: {{model.name}}</h5>
+				<div class="card-body">
+					  <div id="model-desc" class="card-title">{{model.desc}}</div>
+					<!-- non-intuitively, the nodes binding expects an array and not a root node-->
+					<!-- we use direct binding as opposed to events for the moment -->
+					<div id="model-cell-models" class="">
+						<tree-root
+							[nodes]="model.cellModels">
+							<ng-template #treeNodeTemplate let-node let-index="index">
+							   <cell-model [node]="node" [index]="index"></cell-model>
+							</ng-template>
+						</tree-root>
+					</div>
+				</div>
 			</div>
-		</div>
-	</div>
+			<cell-model-info></cell-model-info>
+	</ng-container>
 	`,
 
 	styles:[`
@@ -71,7 +74,7 @@ constructor(eventService: EventService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
 	super(eventService);
 }
-	
+
 
 ngOnInit() {
 	
@@ -101,13 +104,13 @@ loadModel(document:CellDocument) {
 	this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
 			console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
 			this.diplayModel(model);	// not firing a load event yet if not needed
-			document.model = model;  // associating the document with the recently loaded model
+			document.model = model;	 // associating the document with the recently loaded model
 			// now that we have loaded the model we can safely load the content (as both are related
 			this.events.service.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
 	//TODO: check for network errors (see https://angular.io/guide/http)
-	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
+	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
 	);
 	
@@ -115,10 +118,10 @@ loadModel(document:CellDocument) {
 
 
 diplayModel(m: Model) {
-	
+
 	console.log("[UI] ModelComponent::diplayModel("+m.name+")");
 	this.model = m;
-	
+
 }
 
 

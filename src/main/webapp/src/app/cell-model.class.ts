@@ -15,9 +15,9 @@
  */
 
 
-import { Cell } from './cell.class';
-import { FamilyMember } from './family-member.interface';
-import { Type_ } from './type_.class';
+import { Cell } from "./cell.class";
+import { FamilyMember } from "./family-member.interface";
+import { Type_ } from "./type_.class";
 
 
 export class CellModel implements FamilyMember {
@@ -34,21 +34,21 @@ constructor(public schema: number,
 			public URI: string, 
 			public name: string, 
 			public desc: string, 
-            public presentation: string,
-            public cellPresentation: string,
+			public presentation: string,
+			public cellPresentation: string,
 			public thumb: string,
 			public isSimple: boolean, 
 			public type_: Type_,
 			public minOccurs: number,
 			public maxOccurs?: number
-			) {	
+			) {
 	this.init();
 }	 
 
 
 // there are values specific to comply wit the treemodel model, we set them explicitly here 
 init() {
-   
+
 	this.id = this.URI;	 // this is guaranteed to be unique 
 	this.isExpanded = true;
 
@@ -56,42 +56,42 @@ init() {
 
 
 getURI():string {
-    return this.URI;
+	return this.URI;
 }
 
 
 getAdoptionName():string {
-    return this.name;
+	return this.name;
 }
 
 
 getAdoptionURI():string {
-    return this.URI;
+	return this.URI;
 }
 
 
 matches(e:FamilyMember):boolean {
-    return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
+	return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
-    
+	
 
 canAdopt(element:FamilyMember):boolean {
-    return this.children.some(c => c.matches(element));
+	return this.children.some(c => c.matches(element));
 }
 
 
 childrenCount():number {
-    return this.children ? this.children.length : 0;   
+	return this.children ? this.children.length : 0;   
 }
 
 
 equals(m:FamilyMember) {
-    return this.getURI()==m.getURI();
+	return this.getURI()==m.getURI();
 }
 
 
 getParent():FamilyMember {
-    return undefined;   //TODO: we do not need to setup the parent yet
+	return undefined;	//TODO: we do not need to setup the parent yet
 }
 
 

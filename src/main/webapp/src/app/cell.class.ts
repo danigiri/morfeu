@@ -233,9 +233,9 @@ removeChild(child:Cell) {
 // Neat, uh?
 setPosition(position:number):Cell {
 
-    let oldPrefix = this.parent.getURI()+"/"+this.name+"("+this.position;
-    let newPrefix = this.parent.getURI()+"/"+this.name+"("+position;
-    
+	let oldPrefix = this.parent.getURI()+"/"+this.name+"("+this.position;
+	let newPrefix = this.parent.getURI()+"/"+this.name+"("+position;
+	
 	this.URI = newPrefix+")";
 	this.position = position;
 	if (this.attributes) {
@@ -257,12 +257,12 @@ setPosition(position:number):Cell {
 // replaces the prefix of the URI with a new one, recursively
 private replaceURIPrefix_(old:string, newPrefix:string): Cell {
 
-    this.URI = this.URI.replace(old, newPrefix);
-    if (this.children) {
-        this.children = this.children.map(c => c.replaceURIPrefix_(old, newPrefix));
-    }
+	this.URI = this.URI.replace(old, newPrefix);
+	if (this.children) {
+		this.children = this.children.map(c => c.replaceURIPrefix_(old, newPrefix));
+	}
 
-    return this;
+	return this;
 
 }
 
@@ -332,10 +332,10 @@ toJSON(): CellJSON {
 
 	let serialisedCell:CellJSON = Object.assign({}, this);
 
-    // we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
-    // belong to the serialised object
-    delete serialisedCell['cellModel'];
-    delete serialisedCell['parent'];
+	// we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
+	// belong to the serialised object
+	delete serialisedCell['cellModel'];
+	delete serialisedCell['parent'];
 
 	if (this.attributes) {
 		serialisedCell.attributes = this.attributes.map(a => a.toJSON());

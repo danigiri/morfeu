@@ -37,15 +37,15 @@ import { EventService } from './events/event.service';
 	selector: 'cell-model',
 	template: `
 		<div id="{{node.data.id}}" 
-		     class="cell-model-entry cell-model-level-{{node.level}}">
+			 class="cell-model-entry cell-model-level-{{node.level}}">
 			<img 
 				 src={{getThumb()}} 
 				 class="cell-model-thumb img-fluid" 
 				 [class.cell-model-active]="active" 
-                 (mousedown)="clickDown(node.data)" 
-                 (mouseup)="clickUp(node.data)"
-                 (mouseenter)="clickDown(node.data)" 
-                 (mouseleave)="clickUp(node.data)"
+				 (mousedown)="clickDown(node.data)" 
+				 (mouseup)="clickUp(node.data)"
+				 (mouseenter)="clickDown(node.data)" 
+				 (mouseleave)="clickUp(node.data)"
 					/>
 			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
 		</div>
@@ -56,7 +56,7 @@ import { EventService } from './events/event.service';
 			.cell-model-name {}
 			.cell-model-desc {}
 			.cell-model-thumb {
-			    border: 1px solid transparent;  /* So when changed to highlighted, active, it doesn't move */
+				border: 1px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
 			}
 			.cell-model-active {
 				border: 1px solid #f00;
@@ -73,7 +73,7 @@ import { EventService } from './events/event.service';
 	`]
 })
 
-export class CellModelComponent extends Widget {
+export class CellModelComponent extends Widget implements OnInit {
 
 @Input() node: TreeNode;
 @Input() index: number;
@@ -123,24 +123,28 @@ becomeInactive(cell: Cell) {
 
 
 clickDown(cellModel:CellModel) {
-    this.becomeActive(null);
-    this.events.service.publish(new CellModelActivatedEvent(cellModel));
+
+	this.becomeActive(null);
+	this.events.service.publish(new CellModelActivatedEvent(cellModel));
+
 }
 
 
 clickUp(cellModel:CellModel) {
-    this.becomeInactive(null);
-    this.events.service.publish(new CellModelDeactivatedEvent(cellModel));    
+	
+	this.becomeInactive(null);
+	this.events.service.publish(new CellModelDeactivatedEvent(cellModel));	  
+
 }
 
 
 isCompatibleWith(element:FamilyMember): boolean {
-    return this.node.data.matches(element);
+	return this.node.data.matches(element);
 }
 
 
 getThumb():string {
-    return (this.node.data.thumb=='DEFAULT') ? "assets/images/cell-thumb.svg" : this.node.data.thumb;
+	return (this.node.data.thumb=='DEFAULT') ? "assets/images/cell-thumb.svg" : this.node.data.thumb;
 }
 
 }

@@ -33,25 +33,25 @@ import { UXEvent } from './events/ux.event';
 	moduleId: module.id,
 	selector: 'document',
 	template: `
-	<div id="document-info" class="card" *ngIf="document">
-        <h5 id="document-name" class="card-header">{{document.name}} <span class="badge badge-primary float-right">{{document.kind}}</span></h5>
-        <div class="card-body">
-        		<div class="card-text">
-        			<span id="document-desc">{{document.desc}}</span>
-        			<span id="document-valid" *ngIf="document.valid" class="badge badge-pill badge-success float-right">VALID</span>
-        			<span id="document-valid" *ngIf="!document.valid" class="badge badge-pill badge-danger float-right">NON VALID</span>
-        		</div>
-        		<!-- we have the buttons here as it makes sense from a UI perspective, but the event itself 
-        		     will be handled by the content component -->
-             <button type="button" *ngIf="document.valid"
-                 class="btn btn-success btn-lg btn-block btn-sm mt-2"
-                 [class.disabled]="saveDisabled" 
-                 (click)="saveDocument()"
-                 >SAVE</button>
-             <button type="button" *ngIf="document.valid"
-                 class="btn btn-warning btn-lg btn-block btn-sm mt-2">Restore</button>
-	    </div>
-    </div>
+	<div id="document-info" class="card mt-2" *ngIf="document">
+		<h5 id="document-name" class="card-header">{{document.name}} <span class="badge badge-primary float-right">{{document.kind}}</span></h5>
+		<div class="card-body">
+				<div class="card-text">
+					<span id="document-desc">{{document.desc}}</span>
+					<span id="document-valid" *ngIf="document.valid" class="badge badge-pill badge-success float-right">VALID</span>
+					<span id="document-valid" *ngIf="!document.valid" class="badge badge-pill badge-danger float-right">NON VALID</span>
+				</div>
+				<!-- we have the buttons here as it makes sense from a UI perspective, but the event itself 
+					 will be handled by the content component -->
+			 <button type="button" *ngIf="document.valid"
+				 class="btn btn-success btn-lg btn-block btn-sm mt-2"
+				 [class.disabled]="saveDisabled" 
+				 (click)="saveDocument()"
+				 >SAVE</button>
+			 <button type="button" *ngIf="document.valid"
+				 class="btn btn-warning btn-lg btn-block btn-sm mt-2">Restore</button>
+		</div>
+	</div>
 	`,
 	styles:[`
 			#document-info {}
@@ -69,7 +69,7 @@ document: CellDocument;
 saveDisabled: boolean = true;
 
 constructor(eventService: EventService,
-            @Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON> 
+			@Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON> 
 			) {
 	super(eventService);
 }
@@ -109,8 +109,8 @@ ngOnInit() {
 	
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
 	this.subscribe(this.events.service.of( UXEvent ) 
-	        .filter( e => e.type==UXEvent.DOCUMENT_DIRTY)
-	        .subscribe( e => this.enableSave() ));
+			.filter( e => e.type==UXEvent.DOCUMENT_DIRTY)
+			.subscribe( e => this.enableSave() ));
 
 }
 
@@ -125,7 +125,7 @@ loadDocument(url: string) {
 				this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
 			},
 			error => {
-				this.events.problem(error.message);  // error is of the type HttpErrorResponse
+				this.events.problem(error.message);	 // error is of the type HttpErrorResponse
 				this.events.service.publish(new CellDocumentSelectionEvent(null));
 				this.document = null;
 			},
@@ -154,21 +154,21 @@ clear() {
 
 
 disableSave() {
-    this.saveDisabled = true;
+	this.saveDisabled = true;
 }
 
 
 enableSave() {
-    this.saveDisabled = false;
+	this.saveDisabled = false;
 }
 
 
 saveDocument() {
 
-    console.log("[UI] User clicked on save document, let's go!!!");
-    this.events.service.publish(
-            new ContentSaveEvent(this.document)
-    );
+	console.log("[UI] User clicked on save document, let's go!!!");
+	this.events.service.publish(
+			new ContentSaveEvent(this.document)
+	);
 
 }
 

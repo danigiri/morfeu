@@ -109,7 +109,7 @@ import { EventService } from './events/event.service';
 				<ng-container *ngSwitchCase="'CELL'">
 						<!-- TODO: check the model and the content as well (counts, etc.) -->
 						<img id="{{cell.URI}}"
-						    class="cell cell-img cell-level-{{level}}"
+							class="cell cell-img cell-level-{{level}}"
 							 src="{{getCellPresentation()}}" 
 							 [class.cell-active]="active"
 							 [class.cell-selected]="selected"
@@ -144,11 +144,11 @@ import { EventService } from './events/event.service';
 			 */
 			}
 			.cell-img {
-			    /*
+				/*
 				width: 100%;
 				height: auto;
 				*/
-				border: 3px solid transparent;  /* So when changed to highlighted, active, it doesn't move */
+				border: 3px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
 			}
 			.show-grid	{
 				background-color: rgba(200, 200, 200, .05);
@@ -204,8 +204,8 @@ import { EventService } from './events/event.service';
 			 .cell-col-12 {
 				 max-width: 100%;
 			 }
-            .cell-level-0 {}
-            .cell-level-1 {}
+			.cell-level-0 {}
+			.cell-level-1 {}
 			.cell-level-2 {}
 			.cell-level-3 {}
 			.cell-level-4 {}
