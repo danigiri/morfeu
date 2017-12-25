@@ -62,6 +62,7 @@ import { EventService } from './events/event.service';
                      </div>
             		    <div class="col-3">
             			    <model></model>
+            			    <cell-info></cell-info>
             		    </div>
 	              </div>
             	  </div>

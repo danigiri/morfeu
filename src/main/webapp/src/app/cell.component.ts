@@ -14,9 +14,7 @@
  *	 limitations under the License.
  */
 
-
 import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
-import { NgSwitchCase } from '@angular/common';
 
 import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
@@ -225,9 +223,7 @@ import { EventService } from './events/event.service';
 			.cell-level-18 {}
 `],
 	//
-encapsulation: ViewEncapsulation.Emulated,
-	providers:[
-	]
+//encapsulation: ViewEncapsulation.Emulated,
 })
 // `
 
@@ -452,8 +448,7 @@ subscribeToSelection() {
 
 
 getCellPresentation() {
-	return (this.cell.cellModel.cellPresentation=='DEFAULT') ? 
-			"assets/images/cell.svg" : this.cell.cellModel.cellPresentation;
+	return this.cell.cellModel.getPresentation();
 }
 
 }

@@ -95,6 +95,10 @@ getParent():FamilyMember {
 }
 
 
+getPresentation() {
+    return (this.cellPresentation=='DEFAULT') ? "assets/images/cell.svg" : this.cellPresentation;
+}
+
 toJSON(): CellModelJSON {
 
 	let serialisedCellModel:CellModelJSON = Object.assign({}, this);

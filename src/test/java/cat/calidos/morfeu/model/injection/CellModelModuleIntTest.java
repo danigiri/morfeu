@@ -94,13 +94,15 @@ public void testProvideCellModel() throws Exception {
 	checkAttribute(numberAttribute, "number","numberField", modelURI+"/test/row@number");
 	
 	CellModel col = rowComplex.children().child("col");							// TEST -> ROW -> COL
-	checkComplexCellModel(col, "col", "colCell desc", "colCell", modelURI+"/test/row/col");
+	checkComplexCellModel(col, "col", "Column, can accept content", "colCell", modelURI+"/test/row/col");
 	assertEquals("COL-WELL", col.getMetadata().getPresentation());
 	
 	ComplexCellModel colComplex = col.asComplex();
 	assertNotNull(colComplex);
 	assertEquals(1, colComplex.attributes().size());
-	assertEquals("COL-FIELD", colComplex.attributes().attribute("size").getMetadata().getPresentation());
+	CellModel sizeAttribute = colComplex.attributes().attribute("size");
+	assertEquals("Size attribute of columns should be compulsory", 1, sizeAttribute.getMinOccurs());
+	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
 	assertEquals(3, colComplex.children().size());
 
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA

@@ -88,7 +88,7 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
     
-    console.log("DropAreaComponent::ngOnInit()");
+    //console.log("DropAreaComponent::ngOnInit()");
     
     // we check for null of parent as we're not getting the binding set at the beginning for some reason
     // IDEA: we could use the function of the drop enabled (gets cell as input) though it's less interactive
@@ -119,7 +119,7 @@ ngOnInit() {
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .subscribe( a => {
                 if (this.matchesCellmodel(a.cellModel)) {
-                    console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+                    //console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
                     this.becomeActive();
                 }
     }));

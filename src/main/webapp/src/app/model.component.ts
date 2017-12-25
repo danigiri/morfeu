@@ -53,7 +53,6 @@ import { StatusEvent } from './events/status.event';
 					</div>
 				</div>
 			</div>
-			<cell-model-info></cell-model-info>
 	</ng-container>
 	`,
 

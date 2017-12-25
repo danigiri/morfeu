@@ -39,15 +39,15 @@ import { UXEvent } from "../events/ux.event";
 					<h3 class="card-header {{headerClass}}">{{header}}</h3>
 				</ng-container>
 				<ng-container *ngSwitchCase="4">
-					<h4 class="card-header {{headerClass}}">
-						<a href="#" 
-							attr.aria-controls="{{id_}}-region" 
-							attr.aria-expanded="!folded"
-							class="{{toggleClass()}}" 
-							(click)="toggle()"
-							>
-							&gt; {{header}}
-						 </a>
+					<h4 class="card-header {{headerClass}} {{toggleClass()}} btn-block collapsible-header"
+	                    attr.aria-controls="{{id_}}-region" 
+						attr.aria-expanded="!folded"
+						role="button"
+						(click)="toggle()"
+						>
+                         <ng-container *ngIf="folded">&gt;</ng-container>
+                         <ng-container *ngIf="!folded">v</ng-container> 
+                         {{header}}
 					</h4>
 				</ng-container>
 				<ng-container *ngSwitchCase="5">
@@ -62,6 +62,9 @@ import { UXEvent } from "../events/ux.event";
 		styles:[`
 				.folded {}
 				.unfolded {}
+				.collapsible-header {
+				    cursor: pointer;
+				}
 		`],
 		providers: [
 					]
@@ -74,7 +77,7 @@ export class CollapsibleComponent extends Widget {
 @Input() headerClass: string = "";
 @Input() headerSize: number = 4;
 @Input() bodyClass: string = "";
-@Input() folded: boolean = false;
+@Input() folded: boolean;
 
 
 constructor(eventService: EventService) {
@@ -103,6 +106,7 @@ unfold() {
 
 toggle() {
 	
+    console.log("[UI] toggling collapsible '%s'", this.folded);
 	this.folded = !this.folded;
 }
 

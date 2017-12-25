@@ -26,6 +26,7 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent }	  from './app.component';
+import { AttributeInfoComponent } from "./components/attribute-info.component";
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from "./catalogue.component";
 import { CollapsibleComponent } from "./components/collapsible.component";
@@ -33,7 +34,7 @@ import { ContentComponent } from './content.component';
 import { CellComponent } from './cell.component';
 import { CellDocumentComponent } from './cell-document.component';
 import { CellModelComponent } from "./cell-model.component";
-import { CellModelInfoComponent } from "./components/cell-model-info.component";
+import { CellInfoComponent } from "./components/cell-info.component";
 import { DropAreaComponent } from './drop-area.component';
 import { ModelComponent } from './model.component';
 import { ProblemComponent } from './problem.component';
@@ -50,14 +51,15 @@ import { StatusComponent } from './status.component';
 				  ,HotkeyModule.forRoot()
 				  ],
   declarations: [ AppComponent
+                  ,AttributeInfoComponent
 				  ,CatalogueListComponent 
 				  ,CatalogueComponent
 				  ,CollapsibleComponent
 				  ,ContentComponent 
 				  ,CellComponent
 				  ,CellDocumentComponent
+                  ,CellInfoComponent
                   ,CellModelComponent
-                  ,CellModelInfoComponent
                   ,DropAreaComponent
 				  ,ModelComponent
 				  ,ProblemComponent 

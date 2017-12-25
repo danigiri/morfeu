@@ -66,6 +66,7 @@ public class CellModelModule {
 private static final String DEFAULT_DESC = "";
 private static final String NODE_SEPARATOR = "/";
 private static final int ATTRIBUTE_MIN = 0;
+private static final int ATTRIBUTE_REQUIRED = 1;
 private static final int ATTRIBUTE_MAX = 1;
 private static final String ATTRIBUTE_SEPARATOR = "@";
 private static final String DEFAULT_TYPE_POSTFIX = "-type";
@@ -224,7 +225,8 @@ public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 
 	rawAttributes.forEach(a -> {
 								XSAttributeDecl attributeDecl = a.getDecl();
-								CellModel cellModel = attributeCellModelFor(attributeDecl, u, globals);
+								boolean isRequired = a.isRequired();
+								CellModel cellModel = attributeCellModelFor(attributeDecl, isRequired, u, globals);
 								attributes.addAttribute(attributeDecl.getName(), cellModel);
 	});
 
@@ -353,6 +355,7 @@ public static Metadata metadata(XSElementDecl elem, URI uri, Type t, Map<URI, Me
 
 
 private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
+											 boolean required,
 											 URI nodeURI, 
 											 @Nullable Map<String, CellModel> globals) {
 
@@ -380,11 +383,12 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 //	} else {
 		
 	// attributes have the presentation of the corresponding type
+	int minOccurs = required ? ATTRIBUTE_REQUIRED : ATTRIBUTE_MIN;
 	cellModel = new BasicCellModel(attributeURI, 
 								   name, 
 								   meta.getDesc(), 
 								   type, 
-								   ATTRIBUTE_MIN,
+								   minOccurs,
 								   ATTRIBUTE_MAX,
 								   meta);
 //	}

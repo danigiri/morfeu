@@ -37,7 +37,7 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue-list',
 	template: `
-	<collapsible header="Catalogues" class="mb-2">
+	<collapsible header="Catalogues" class="mb-2"  [folded]="false">
             	<div id="catalogue-list" class="list-group2">
         			<a *ngFor="let c of catalogues"
         				 href="#" 
