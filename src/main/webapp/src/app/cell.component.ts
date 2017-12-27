@@ -304,7 +304,7 @@ ngOnInit() {
 	
    
 }	 
-	   
+
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell:Cell) {

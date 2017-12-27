@@ -24,37 +24,49 @@ import { CellModel } from "../cell-model.class";
 	selector: 'attribute-info',
 	template: `
 		<li class="list-group-item attribute-info" [class.list-group-item-secondary]="!hasValue">
-			<span class="font-weight-bold">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
-			<span *ngIf="cellModel.desc" class="attribute-info-desc text-muted">{{cellModel.desc}}</span>
-	        <span *ngIf="hasValue">{{getAttributeValue()}}</span>
-			<span class="text-muted attribute-info-type-name float-right">({{cellModel.type.name}})</span>
+			<span class="font-weight-bold attribute-info-name">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+	        <span *ngIf="hasValue">{{getValue()}}</span>
+			<span class="text-muted attribute-info-type-name float-right">({{cellModel.type_.name}})</span>
 		</li>
 		`,
 		styles:[`
                 .attribute-info {}
-                .attribute-info-desc {}
+                .attribute-info-name {}
 		        .attribute-info-type-name {}
 		`]
 })
 
 export class AttributeInfoComponent {
 
-ngOnInit() {
-    this.hasValue = this.hasAttributeValue();
-}
-    
 hasValue: boolean = false;
 @Input() cell?: Cell;    // optional, only when showing information of cell (and not just a cell model)
 @Input() cellModel: CellModel;
 
+
+ngOnInit() {
+    this.hasValue = this.hasValue_();
+}
+
+
 // do we have a value to show?
-hasAttributeValue(): boolean {
+private hasValue_(): boolean {
     return this.cell 
             && this.cell.attributes && this.cell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
 }
 
-getAttributeValue() {
+
+getValue(): string {
     return this.cell.attributes.find(a => a.name==this.cellModel.name).value;
+}
+
+hasDesc(): boolean {
+    return this.cellModel.desc!=undefined || this.cellModel.type_.desc!=undefined;
+}
+
+
+getDesc(): string {
+    return (this.cellModel.desc && this.cellModel.desc.length!=0) 
+            ? this.cellModel.desc : this.cellModel.type_.desc;
 }
 
 }

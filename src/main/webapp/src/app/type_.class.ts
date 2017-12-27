@@ -18,6 +18,7 @@ export class Type_ {
 
 name: string;
 isSimple: boolean;
+desc: string;
 
 }
 

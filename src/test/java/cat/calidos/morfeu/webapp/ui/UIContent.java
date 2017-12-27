@@ -44,6 +44,7 @@ public UIContent() {}
 
 
 public UIContent shouldBeVisible() {
+	
 	$("#content").shouldBe(visible);
 	
 	return this;

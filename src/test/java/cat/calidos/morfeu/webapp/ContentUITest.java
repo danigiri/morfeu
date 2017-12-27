@@ -16,8 +16,8 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.Assert.*;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -39,12 +39,9 @@ import cat.calidos.morfeu.webapp.ui.UIModel;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUITest extends UITezt {
 
-
 @Before
 public void setup() {
-	
 	open(appBaseURL);
-	
 }
 
 

@@ -2,7 +2,7 @@
 	"schema": 0
 	,"URI": "$[cm.URI]$"
 	,"name": "$[cm.Name]$"
-	,"desc": "$[cm.Desc | trim]$"
+	,"desc": "$[cm.desc | trim]$"
 	,"presentation": "$[cm.metadata.Presentation]$"
 	$( if not cm.metadata.thumb is empty )$
 		,"thumb": "$[ cm.metadata.thumb ]$"
@@ -12,8 +12,9 @@
 	$( endif )$
 	,"isSimple": $[cm.isSimple]$
 	,"type": {
-		"name": "$[cm.Type.Name]$"
-		,"isSimple": $[cm.Type.isSimple]$
+		"name": "$[cm.type.Name]$"
+		,"isSimple": $[cm.type.isSimple]$
+		,"desc": "$[cm.type.metadata.desc | trim]$"
 	}
 	,"minOccurs": $[cm.minOccurs]$
 	$( if cm.maxOccurs.isPresent )$

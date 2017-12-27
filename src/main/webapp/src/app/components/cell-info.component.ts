@@ -37,12 +37,11 @@ import { EventService } from "../events/event.service";
 				<h4 id="cell-info-header" class="card-title card-header">
 					{{cellModel.name}}
 					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}
-						</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞
-                        </ng-container>]
+						</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
 				</h4>
 			<div class="card-body">
-				<p class="card-subtitle">{{cellModel.desc}}<p>
-				<p class="card-text">URI: <span id="cell-info-uri" class="text-muted">{{uri}}</span><p>
+				<p class="card-subtitle cell-info-model-desc">{{cellModel.desc}}<p>
+				<p class="card-text cell-info-model-uri">URI: <span id="cell-info-uri" class="text-muted">{{uri}}</span></p>
 			</div>
 			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">
 	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
@@ -56,6 +55,7 @@ import { EventService } from "../events/event.service";
 	styles:[`
 			#cell-info {}
 	        #cell-info-header {}
+	        #cell-info-model-desc {}
 	        #cell-info-uri {}
 	`]
 })

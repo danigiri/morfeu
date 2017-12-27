@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.openqa.selenium.NoSuchElementException;
+
 import com.codeborne.selenide.SelenideElement;
 
 
@@ -201,6 +203,13 @@ public boolean isActive() {
 
 public boolean isSelected() {
 	return element.attr(CLASS).contains(SELECTED);
+}
+
+public UICellInfo cellInfo() {
+	if (!isActive()) {
+		throw new NoSuchElementException("Trying the to get the info of a not active cell");
+	}
+	return new UICellInfo();	// at the moment there is only one info
 }
 
 }
