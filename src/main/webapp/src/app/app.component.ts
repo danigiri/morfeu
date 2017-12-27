@@ -36,11 +36,17 @@ import { Content, ContentJSON } from './content.class';
 
 import { Widget } from './widget.class';
 
+import { CellActivateEvent } from './events/cell-activate.event';
 import { CataloguesRequestEvent } from './events/catalogues-request.event';
 import { CataloguesLoadedEvent } from './events/catalogues-loaded.event';
 import { CatalogueLoadedEvent } from './events/catalogue-loaded.event';
 import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
+import { CellSelectEvent } from './events/cell-select.event';
+import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+import { ContentRefreshedEvent } from './events/content-refreshed.event';
+import { ModelLoadedEvent } from './events/model-loaded.event';
 import { EventService } from './events/event.service';
 
 
@@ -115,20 +121,35 @@ ngAfterViewInit() {
 	console.log("AppComponent::ngAfterViewInit()");
  
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	if (isDevMode()) {
+	let foo = true;
+	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
-		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of( CataloguesLoadedEvent ).subscribe( loaded => {
-			this.unsubscribe(this.cataloguesLoadedEventSubscription);
-			let catalogue = loaded.catalogues[0].uri;
-			this.events.service.publish(new CatalogueSelectionEvent(catalogue));
-		}));
-		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of( CatalogueLoadedEvent ).subscribe( loaded => {
-			this.unsubscribe(this.catalogueLoadedEventSubscription);
-			let document = loaded.catalogue.documents[0].uri;
-			this.events.service.publish(new CellDocumentSelectionEvent(document));
-		}));
+		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent)
+		        .subscribe( loaded => {
+            			this.unsubscribe(this.cataloguesLoadedEventSubscription);
+            			let catalogue = loaded.catalogues[0].uri;
+            			this.events.service.publish(new CatalogueSelectionEvent(catalogue));
+		        }
+		));
+		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of(CatalogueLoadedEvent )
+		        .subscribe( loaded => {
+            			this.unsubscribe(this.catalogueLoadedEventSubscription);
+            			let document = loaded.catalogue.documents[0].uri;
+            			this.events.service.publish(new CellDocumentSelectionEvent(document));
+		    }
+		));
+		this.subscribe(this.events.service.of(ContentRefreshedEvent).subscribe(
+		        _ => {
+		            //this.events.service.publish(new CellSelectionClearEvent());
+		            this.events.service.publish(new CellSelectEvent(0));
+		            this.events.service.publish(new CellSelectEvent(0));
+		            this.events.service.publish(new CellSelectEvent(0));
+		            this.events.service.publish(new CellSelectEvent(0));
+		            this.events.service.publish(new CellActivateEvent());
+		        } 
+		));
+
 	}
-	
 	
 	// this event loads the default catalogue and starts everything in motion
 	//
@@ -146,7 +167,8 @@ ngAfterViewInit() {
 	
 	let allCatalogues = "/morfeu/test-resources/catalogues.json";
 	Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(allCatalogues)));
-	
+	   
+
 }
 
 }

@@ -11,9 +11,10 @@
 		,"cellPresentation": "$[ cm.metadata.cellPresentation ]$"
 	$( endif )$
 	,"isSimple": $[cm.isSimple]$
-	,"type": {
-		"name": "$[cm.Type.Name]$"
-		,"isSimple": $[cm.Type.isSimple]$
+	,"type_": {
+		"name": "$[cm.type.name]$"
+		,"isSimple": $[cm.type.isSimple]$
+		,"desc": "$[cm.type.metadata.desc | trim]$"
 	}
 	,"minOccurs": $[cm.minOccurs]$
 	$( if cm.maxOccurs.isPresent )$

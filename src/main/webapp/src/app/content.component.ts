@@ -40,8 +40,8 @@ import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { CellDragEvent } from './events/cell-drag.event';
 import { CellSelectEvent } from './events/cell-select.event';
-
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+import { ContentRefreshedEvent } from './events/content-refreshed.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { ContentSaveEvent } from './events/content-save.event';
 import { DropAreaSelectEvent } from './events/drop-area-select.event';
@@ -139,16 +139,20 @@ ngOnInit() {
 	));
 }
 
+
 // we make sure we subscribe to new elements if we are waiting for selections at root level
 ngAfterViewInit() {
 
     console.log("ContentComponent::ngAfterViewInit()")
     this.children.changes.subscribe(c => {
         this.subscribeChildrenToCellSelection();
-     
+        // if we send the vent immediately in the binding changing callback we'll probably be affecting the
+        // component binding values after they have been read, we trigger it outside the callback then:
+        Promise.resolve(null).then(()=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
     });
 
 }
+
 
 fetchContentFor(document_: CellDocument, model:Model) {
 
@@ -161,7 +165,6 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		document_.content = content;
 		content.associateWith(model);
 		this.displayContent(content);
-	    //this.subscribeChildrenToCellSelection(); 
 	    this.registerContentKeyShortcuts();
 		this.events.ok();
 	},
