@@ -34,34 +34,35 @@ import { EventService } from "../events/event.service";
 	selector: 'cell-info',
 	template: `
 		<div id="cell-info" class="card mt-2" *ngIf="cellModel">
-	            <h4 class="card-title card-header">
-	                {{cellModel.name}}
-	                <ng-container *ngIf="cellModel.minOccurs!=0 || (cellModel.maxOccurs && cellModel.maxOccurs!=-1)">
-	                [
-	                    <ng-container *ngIf="cellModel.minOccurs!=01">{{cellModel.minOccurs}}</ng-container>..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}
-	                    </ng-container>
-	                ]
-	                </ng-container>
-	            </h4>
-	        <div class="card-body">
-	            <p class="card-subtitle text-muted">{{cellModel.desc}}<p>
-	            
-		    </div>
-		    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">
-	        <ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-	            <attribute-info *ngFor="let a of cellModel.attributes" [cellModel]="a">
-	            </attribute-info>
-	        </ul>
-	    </div>
+				<h4 id="cell-info-header" class="card-title card-header">
+					{{cellModel.name}}
+					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}
+						</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞
+                        </ng-container>]
+				</h4>
+			<div class="card-body">
+				<p class="card-subtitle">{{cellModel.desc}}<p>
+				<p class="card-text">URI: <span id="cell-info-uri" class="text-muted">{{uri}}</span><p>
+			</div>
+			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">
+	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
+			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
+				<attribute-info *ngFor="let a of cellModel.attributes" [cell]="cell" [cellModel]="a"></attribute-info>
+			</ul>
+
+		</div>
 		
 			   `,
 	styles:[`
 			#cell-info {}
+	        #cell-info-header {}
+	        #cell-info-uri {}
 	`]
 })
 
 export class CellInfoComponent extends Widget implements OnInit {
 
+uri: string;
 cell: Cell;
 cellModel: CellModel;
 	
@@ -73,32 +74,44 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
 	this.subscribe(this.events.service.of( CellActivatedEvent )
-	    .subscribe( activated => this.showCellModelInformation(activated.cell.cellModel)
+		.subscribe( activated => this.showCellInformation(activated.cell)
 	));
 	this.subscribe(this.events.service.of( CellDeactivatedEvent )
-	    .subscribe( deactivated => this.hideCellModelInformation()
+		.subscribe( deactivated => this.hideCellInformation()
 	));
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
 		.subscribe( activated => this.showCellModelInformation(activated.cellModel)
 	));
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-		.subscribe( activated => this.hideCellModelInformation()
+		.subscribe( activated => this.hideCellInformation()
 	));
 
 }
 
-showCellModelInformation(cellModel: CellModel) {
 
-    this.cellModel = cellModel;
+showCellInformation(cell: Cell) {
+
+	this.uri = cell.URI;
+	this.cell = cell;
+	this.cellModel = cell.cellModel;
 
 }
 
-hideCellModelInformation() {
+
+showCellModelInformation(cellModel: CellModel) {
+
+	this.uri = cellModel.URI;
+	this.cell = undefined;
+	this.cellModel = cellModel;
+
+}
+
+hideCellInformation() {
 	this.cellModel = undefined;
 }
 
 showPresentation() {
-    return this.cellModel.presentation=="CELL";
+	return this.cellModel.presentation=="CELL";
 }
 
 }

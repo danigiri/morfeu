@@ -40,14 +40,14 @@ import { UXEvent } from "../events/ux.event";
 				</ng-container>
 				<ng-container *ngSwitchCase="4">
 					<h4 class="card-header {{headerClass}} {{toggleClass()}} btn-block collapsible-header"
-	                    attr.aria-controls="{{id_}}-region" 
+						attr.aria-controls="{{id_}}-region" 
 						attr.aria-expanded="!folded"
 						role="button"
 						(click)="toggle()"
 						>
-                         <ng-container *ngIf="folded">&gt;</ng-container>
-                         <ng-container *ngIf="!folded">v</ng-container> 
-                         {{header}}
+						 <ng-container *ngIf="folded"><img src="assets/images/open-iconic/caret-right.svg" alt="expand"/></ng-container>
+						 <ng-container *ngIf="!folded"><img src="assets/images/open-iconic/caret-bottom.svg" alt="collapse"/></ng-container> 
+						 {{header}}
 					</h4>
 				</ng-container>
 				<ng-container *ngSwitchCase="5">
@@ -63,7 +63,7 @@ import { UXEvent } from "../events/ux.event";
 				.folded {}
 				.unfolded {}
 				.collapsible-header {
-				    cursor: pointer;
+					cursor: pointer;
 				}
 		`],
 		providers: [
@@ -106,7 +106,7 @@ unfold() {
 
 toggle() {
 	
-    console.log("[UI] toggling collapsible '%s'", this.folded);
+	console.log("[UI] toggling collapsible '%s'", this.folded);
 	this.folded = !this.folded;
 }
 

@@ -1,39 +1,60 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *	  Copyright 2017 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *		 http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
  */
 
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
+import { Cell } from "../cell.class";
 import { CellModel } from "../cell-model.class";
 
 @Component({
-    moduleId: module.id,
-    selector: 'attribute-info',
-    template: `
-        <li class="list-group-item"
-            >
-            {{cellModel.name}} <ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>
-        </li>
-        `,
-        styles:[`
-        `]
+	moduleId: module.id,
+	selector: 'attribute-info',
+	template: `
+		<li class="list-group-item attribute-info" [class.list-group-item-secondary]="!hasValue">
+			<span class="font-weight-bold">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+			<span *ngIf="cellModel.desc" class="attribute-info-desc text-muted">{{cellModel.desc}}</span>
+	        <span *ngIf="hasValue">{{getAttributeValue()}}</span>
+			<span class="text-muted attribute-info-type-name float-right">({{cellModel.type.name}})</span>
+		</li>
+		`,
+		styles:[`
+                .attribute-info {}
+                .attribute-info-desc {}
+		        .attribute-info-type-name {}
+		`]
 })
 
 export class AttributeInfoComponent {
 
-//@Input() name: string;
+ngOnInit() {
+    this.hasValue = this.hasAttributeValue();
+}
+    
+hasValue: boolean = false;
+@Input() cell?: Cell;    // optional, only when showing information of cell (and not just a cell model)
 @Input() cellModel: CellModel;
+
+// do we have a value to show?
+hasAttributeValue(): boolean {
+    return this.cell 
+            && this.cell.attributes && this.cell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
+}
+
+getAttributeValue() {
+    return this.cell.attributes.find(a => a.name==this.cellModel.name).value;
+}
 
 }

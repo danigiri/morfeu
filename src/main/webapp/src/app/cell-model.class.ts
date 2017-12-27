@@ -38,7 +38,7 @@ constructor(public schema: number,
 			public cellPresentation: string,
 			public thumb: string,
 			public isSimple: boolean, 
-			public type_: Type_,
+			public type: Type_,
 			public minOccurs: number,
 			public maxOccurs?: number
 			) {
@@ -160,7 +160,7 @@ cellPresentation: string,
 thumb: string;
 isSimple: boolean; 
 isReference: boolean;
-type_: Type_;
+type: Type_;
 minOccurs: number;
 maxOccurs?: number;
 	
