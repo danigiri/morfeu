@@ -44,7 +44,7 @@ import { StatusEvent } from './events/status.event';
         				class="catalogue-list-entry list-group-item list-group-item-action"
         				[class.active]="c.uri === selectedCatalogueURI"
         				(click)="clickOnCatalogue(c)">
-        			{{c.name}}</a>
+        			<img src="assets/images/open-iconic/folder.svg" alt="catalogue"/> {{c.name}}</a>
             	</div>
 	        <catalogue></catalogue>
 	    </collapsible>

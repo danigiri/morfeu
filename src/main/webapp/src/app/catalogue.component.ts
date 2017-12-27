@@ -43,7 +43,7 @@ import { StatusEvent } from './events/status.event';
                         class="document-list-entry list-group-item list-group-item-action" 
                         [class.active]="d.uri === selectedDocumentURI"
                         (click)="clickOnDocument(d)">
-                            {{d.name}}
+                        <img src="assets/images/open-iconic/file.svg" alt="document"/> {{d.name}}
                     </a>	                
 	            </div>
 		    </div>
