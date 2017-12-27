@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.utils.injection;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
@@ -32,13 +33,14 @@ import dagger.producers.Production;
 public final class ListeningExecutorServiceModule {
 
 protected final static Logger log = LoggerFactory.getLogger(ListeningExecutorServiceModule.class);
+protected final static ExecutorService executor = Executors.newCachedThreadPool();
 
-
-	@Provides
-	@Production
-	public static Executor executor() {
-		log.info("[Executor producer called]");
-		return Executors.newCachedThreadPool();
-	}
+@Provides
+@Production
+public static Executor executor() {
+	// this has been used to prove that the 'protected final static' means that we reuse the thread pool, yay!
+	//log.trace("[Executor producer called] ({})", executor.hashCode());
+	return executor;
+}
 	
 }

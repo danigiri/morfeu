@@ -64,6 +64,14 @@
 						</resourceBases>
 						<webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
 					</webApp>
+					<!--scanTargetPatterns> this is a terrible idea, it seems that it opens all the files
+          				<scanTargetPattern> in the exclude, which leads to thousands of fds being used
+          					< directory>src/main/webapp</directory>
+          					<excludes>
+					              <exclude>node_modules</exclude>
+				              </excludes>
+          				</scanTargetPattern>
+    					</scanTargetPatterns-->
 					<systemProperties>
 						<systemProperty>
 							<name>org.eclipse.jetty.annotations.maxWait</name>
@@ -87,7 +95,7 @@
 					    </goals>
 					    <configuration>
 					        <scanIntervalSeconds>0</scanIntervalSeconds>
-					    	<daemon>true</daemon>
+						    	<daemon>true</daemon>
 						</configuration>
 					</execution>
 					<execution>	<!-- stop jetty when completed integration testing -->
