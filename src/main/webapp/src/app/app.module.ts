@@ -23,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';  // new angular 5 http 
 
 import { DndModule } from 'ng2-dnd';
 import { HotkeyModule } from 'angular2-hotkeys';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent }	  from './app.component';
@@ -41,7 +42,9 @@ import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
 
 @NgModule({
-  imports:		[ BrowserModule
+  imports:		[ 
+          		  NgbModule.forRoot()
+          		  ,BrowserModule
 				  ,BrowserAnimationsModule
 				  ,CommonModule
                   ,HttpModule

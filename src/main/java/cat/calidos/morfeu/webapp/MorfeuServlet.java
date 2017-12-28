@@ -96,6 +96,13 @@ protected String normalisedPathFrom(HttpServletRequest req) {
 
 protected void writeTo(String content, HttpServletResponse resp) throws IOException {
 
+	// to simulate slowness
+//	try {
+//		Thread.sleep(20000);
+//	} catch (InterruptedException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
 	PrintWriter out = resp.getWriter();
 	out.print(content);
 	out.close();

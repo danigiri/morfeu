@@ -249,7 +249,7 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 	
-	console.log("[UI] CellComponent::ngOnInit()");
+	//console.log("[UI] CellComponent::ngOnInit()");
 	
 	// Drop a cell to a position under this cell
 	this.subscribe(this.events.service.of( CellDropEvent )

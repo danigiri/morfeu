@@ -66,7 +66,7 @@ public void catalogueDetailTest() throws Exception {
 
 	assertEquals("Wrong catalogue selected", "Catalogue 1", catalogue.getName());
 	assertEquals("Wrong catalogue selected", "First Catalogue", catalogue.getDesc());
-	
+
 	// test listing of documents
 	ElementsCollection documentEntries = catalogue.getDocuments();
 	documentEntries.shouldHaveSize(EXPECTED_DOCUMENTS_SIZE);
@@ -75,7 +75,7 @@ public void catalogueDetailTest() throws Exception {
 	assertEquals("Wrong catalogue content", "Document with non-valid content", documentEntries.get(2).getText());
 	assertEquals("Wrong catalogue content", "Document with non-valid model", documentEntries.get(3).getText());
 	assertEquals("Wrong catalogue content", "Document with not-found content", documentEntries.get(4).getText());
-	
+
 }
 
 
