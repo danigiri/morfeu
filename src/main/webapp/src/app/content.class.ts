@@ -35,6 +35,7 @@ associateWith(model: Model) {
    this.children = this.children.map(c => c.associateWith(model));
 }
 
+
 getURI():string {
     return this.getAdoptionURI();
 }

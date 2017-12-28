@@ -36,19 +36,24 @@ import { EventService } from "../events/event.service";
 		<div id="cell-info" class="card mt-2" *ngIf="cellModel">
 				<h4 id="cell-info-header" class="card-title card-header">
 					{{cellModel.name}}
-					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}
-						</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
+					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
+						<span id="cell-info-source" *ngIf="cell!=undefined" class="badge badge-pill badge-secondary float-secondary float-right">CELL</span>
+                         <span id="cell-info-source" *ngIf="cell==undefined" class="badge badge-pill badge-dark float-dark float-right">MODEL</span>
 				</h4>
 			<div class="card-body">
-				<p class="card-subtitle cell-info-model-desc">{{cellModel.desc}}<p>
-				<p class="card-text cell-info-model-uri">URI: <span id="cell-info-uri" class="text-muted">{{uri}}</span></p>
+				<p id="cell-info-model-desc" class="card-subtitle">{{cellModel.desc}}<p>
+				<p id="cell-info-model-uri" class="card-text">URI: <span id="cell-info-uri" class="text-muted">{{uri}}</span></p>
 			</div>
 			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">
 	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
 			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-				<attribute-info *ngFor="let a of cellModel.attributes" [cell]="cell" [cellModel]="a"></attribute-info>
+				<attribute-info *ngFor="let a of cellModel.attributes" 
+                    [isFromCell]="cell!=undefined"				    
+				    [cell]="cell" 
+				    [cellModel]="a"
+				    [isFromModel]="cell==undefined"
+				    ></attribute-info>
 			</ul>
-
 		</div>
 		
 			   `,
@@ -57,6 +62,7 @@ import { EventService } from "../events/event.service";
 	        #cell-info-header {}
 	        #cell-info-model-desc {}
 	        #cell-info-uri {}
+	        #cell-info-source {}
 	`]
 })
 
@@ -106,9 +112,13 @@ showCellModelInformation(cellModel: CellModel) {
 
 }
 
+
 hideCellInformation() {
-	this.cellModel = undefined;
+
+    this.cellModel = undefined;
+	this.cell = undefined; // not strictly needed, but for completeness and to avoid any future side-effects
 }
+
 
 showPresentation() {
 	return this.cellModel.presentation=="CELL";

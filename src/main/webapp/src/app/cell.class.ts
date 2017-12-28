@@ -43,6 +43,7 @@ associateWith(model: Model):Cell {
 	this.associateWith_(model.cellModels, model.cellModels);
 	
 	return this;
+
 }
 
 
@@ -55,7 +56,7 @@ attribute(name:string):string {
 			value = attribute.value;
 		}
 	}
-	
+
 	return value;
 
 }

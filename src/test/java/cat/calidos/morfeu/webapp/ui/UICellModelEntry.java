@@ -19,6 +19,8 @@ package cat.calidos.morfeu.webapp.ui;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.openqa.selenium.NoSuchElementException;
+
 import com.codeborne.selenide.SelenideElement;
 
 /**
@@ -108,6 +110,17 @@ public boolean isExpanded() {
 
 public boolean isHighlighted() {
 	return element.$(".cell-model-thumb").attr("class").contains(ACTIVE);
+}
+
+
+public UICellInfo cellInfo() {
+	
+	if (!isHighlighted()) {
+		throw new NoSuchElementException("Trying the to get the info of an inactive cell model");
+	}
+
+	return new UICellInfo();	// at the moment there is only one info :)
+
 }
 
 

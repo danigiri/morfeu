@@ -23,25 +23,31 @@ import { CellModel } from "../cell-model.class";
 	moduleId: module.id,
 	selector: 'attribute-info',
 	template: `
-		<li class="list-group-item attribute-info" [class.list-group-item-secondary]="!hasValue">
+		<li *ngIf="isFromModel || (isFromCell && hasValue)" 
+		    class="list-group-item attribute-info"
+		    [class.list-group-item-secondary]="isFromModel"
+	        >
 			<span class="font-weight-bold attribute-info-name">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
-	        <span *ngIf="hasValue">{{getValue()}}</span>
+	        <span *ngIf="hasValue" class="attribute-info-value">{{getValue()}}</span>
 			<span class="text-muted attribute-info-type-name float-right">({{cellModel.type_.name}})</span>
 		</li>
 		`,
 		styles:[`
                 .attribute-info {}
                 .attribute-info-name {}
+                .attribute-info-value {}
 		        .attribute-info-type-name {}
+		        .attribute-info-from-model {}
 		`]
 })
 
 export class AttributeInfoComponent {
 
-hasValue: boolean = false;
+@Input() isFromCell: boolean;    // if it's form a cell and we have no value we skip this attribute
+@Input() isFromModel: boolean;
 @Input() cell?: Cell;    // optional, only when showing information of cell (and not just a cell model)
 @Input() cellModel: CellModel;
-
+hasValue: boolean;
 
 ngOnInit() {
     this.hasValue = this.hasValue_();
@@ -56,7 +62,7 @@ private hasValue_(): boolean {
 
 
 getValue(): string {
-    return this.cell.attributes.find(a => a.name==this.cellModel.name).value;
+    return this.cell.attributes.find(a=> a.name==this.cellModel.name).value;
 }
 
 hasDesc(): boolean {

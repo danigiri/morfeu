@@ -121,6 +121,7 @@ public UICell child(int pos) {
 public UICell hover() {
 
 	element.scrollTo().hover();
+	element.hover();
 	
 	return this;
 	
