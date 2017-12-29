@@ -17,6 +17,7 @@
 			<xs:appinfo>
 			<mf:metadata>
 				<mf:desc>testCell desc</mf:desc>
+				<mf:default-value name="@number">11</mf:default-value>
 			</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>

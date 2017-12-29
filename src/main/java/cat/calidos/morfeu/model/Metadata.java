@@ -17,6 +17,8 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -40,28 +42,39 @@ private String desc;
 private String presentation;
 private String cellPresentation;
 private String thumb;
+private Map<String, String> defaultValues;
 
+public static final String DEFAULT_VALUE_PREFIX = "@";
+//private static String UNDEFINED = "";
 
-public Metadata(URI uri, String desc, String presentation, String cellPresentation, String thumb) {
+public Metadata(URI uri, 
+				String desc, 
+				String presentation, 
+				String cellPresentation, 
+				String thumb, 
+				Map<String, String> defaultValues) {
 	this(uri, 
-		 Optional.ofNullable(desc), 
-		 Optional.ofNullable(presentation), 
-		 Optional.ofNullable(cellPresentation), 
-		 Optional.ofNullable(thumb));
+			Optional.ofNullable(desc), 
+			Optional.ofNullable(presentation), 
+			Optional.ofNullable(cellPresentation), 
+			Optional.ofNullable(thumb),
+			defaultValues);
 }
 
 
 public Metadata(URI uri, 
-			    Optional<String> desc, 
-			    Optional<String> presentation, 
-			    Optional<String> cellPresentation,
-			    Optional<String> thumb) {
+				Optional<String> desc, 
+				Optional<String> presentation, 
+				Optional<String> cellPresentation,
+				Optional<String> thumb,
+				Map<String, String> defaultValues) {
 
 	this.uri = uri;
 	this.desc = desc.orElse(DEFAULT_DESC);
 	this.presentation = presentation.orElse(DEFAULT_PRESENTATION);
 	this.cellPresentation = cellPresentation.orElse(DEFAULT_CELL_PRESENTATION);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
+	this.defaultValues = defaultValues;
 	
 }
 
@@ -70,13 +83,15 @@ public Metadata(URI uri,
 				Optional<String> desc, 
 				Optional<String> pres, 
 			    Optional<String> cellPresentation,
-				Optional<String> thumb, 
+				Optional<String> thumb,
+				Map<String, String> defaultValues,
 				Metadata fallback) {
 	this(uri,
 		 desc.orElse(fallback.getDesc()),
 		 pres.orElse(fallback.getPresentation()),
 		 cellPresentation.orElse(fallback.getCellPresentation()),
-		 thumb.orElse(fallback.getThumb()));
+		 thumb.orElse(fallback.getThumb()),
+		 defaultValues);
 }
 
 
@@ -94,8 +109,14 @@ public String getCellPresentation() {
 	return cellPresentation;
 }
 
+
 public String getThumb() {
 	return thumb;
+}
+
+
+public Map<String, String> getDefaultValues() {
+	return defaultValues;
 }
 
 

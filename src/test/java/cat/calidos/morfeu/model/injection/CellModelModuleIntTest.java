@@ -17,11 +17,13 @@
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +40,7 @@ import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
+import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 import dagger.Lazy;
 
 
@@ -47,6 +50,7 @@ import dagger.Lazy;
 public class CellModelModuleIntTest extends ModelTezt {
 
 @Mock Lazy<Collection<? extends XSAttributeUse>> mockAttributesProducer;
+@Mock Metadata mockCellMetadata;
 
 private URI modelURI;
 private XSSchemaSet schemaSet;
@@ -153,17 +157,47 @@ public void testAttributesOf() {
 
 	URI uri = CellModelModule.getURIFrom(modelURI+"/"+name, name);
 	HashMap<String, CellModel> globals = new HashMap<String, CellModel>();
-	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, globals);
+	Metadata meta = DaggerModelMetadataComponent.builder().from(elem.getAnnotation()).withParentURI(modelURI).build().value();
+	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, meta, globals);
 	
 	assertNotNull(attributes);
 	assertEquals(1, attributes.size());
 	CellModel attribute = attributes.attribute(0);
 	checkAttribute(attribute, "text", "textField", modelURI+"/test@text");
+	assertFalse(attribute.getDefaultValue().isPresent());
 
 	attribute = attributes.attribute("text");
 	checkAttribute(attribute, "text", "textField", modelURI+"/test@text");
 
 }
+
+
+@Test
+public void testAttributesDefaultValues() {
+	
+	String name = "test";
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
+	// Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
+	Type type = provideElementType(elem);
+
+	URI uri = CellModelModule.getURIFrom(modelURI+"/"+name, name);
+	HashMap<String, CellModel> globals = new HashMap<String, CellModel>();
+	
+	HashMap<String, String> defaultValues = new HashMap<String, String>(1);
+	defaultValues.put("@text", "foo");
+	when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
+	
+	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, mockCellMetadata, globals);
+	assertNotNull(attributes);
+	
+	CellModel textAttribute = attributes.attribute("text");
+	assertNotNull(textAttribute);
+	Optional<String> defaultValue = textAttribute.getDefaultValue();
+	assertTrue("We should have a default value in this test", defaultValue.isPresent());
+	assertEquals("Wrong default value in this test", "foo", defaultValue.get());
+	
+}
+
 
 
 @Test

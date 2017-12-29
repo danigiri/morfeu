@@ -40,7 +40,8 @@ constructor(public schema: number,
 			public isSimple: boolean, 
 			public type_: Type_,
 			public minOccurs: number,
-			public maxOccurs?: number
+            public maxOccurs?: number,
+            public defaultValue?: string
 			) {
 	this.init();
 }	 
@@ -163,7 +164,8 @@ isReference: boolean;
 type_: Type_;
 minOccurs: number;
 maxOccurs?: number;
-	
+defaultValue?: string;
+
 attributes?: CellModelJSON[];
 children?: CellModelJSON[];
 referenceURI?: string;

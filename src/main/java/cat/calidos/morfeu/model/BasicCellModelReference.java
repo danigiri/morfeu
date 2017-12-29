@@ -36,7 +36,7 @@ private CellModel reference;
 
 public BasicCellModelReference(URI u, String name,  int minOccurs, int maxOccurs, Metadata metadata, CellModel ref) {
 
-	super(u, name, metadata.getDesc(), ref.getType(), minOccurs, maxOccurs, metadata);
+	super(u, name, metadata.getDesc(), ref.getType(), minOccurs, maxOccurs, ref.getDefaultValue(), metadata);
 
 	this.reference = ref;
 	this.isReference = true;

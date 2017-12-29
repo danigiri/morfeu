@@ -432,7 +432,7 @@ select(position:number) {
 	 } else {
 		 this.clearSelection();	 // out of bounds, sorry, clear
 	}
-	
+
 }
 
 

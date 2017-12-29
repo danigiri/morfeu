@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 import javax.annotation.Nullable;
@@ -41,6 +42,7 @@ import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
+import com.sun.xml.xsom.XmlString;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.BasicCellModel;
@@ -102,16 +104,17 @@ public static CellModel provideCellModel(Type t,
 
 @Provides
 public static BasicCellModel buildCellModelFrom(URI u,
-											  @Named("name") String name, 
-											  @Named("desc") String desc,
-											  @Named("MinOccurs") int minOccurs,
-											  @Named("MaxOccurs") int maxOccurs,
-											  Type t, 
-											  Metadata metadata,
-											  Map<String, CellModel> globals) {
+												@Named("name") String name, 
+												@Named("desc") String desc,
+												@Named("MinOccurs") int minOccurs,
+												@Named("MaxOccurs") int maxOccurs,
+												Optional<String> defaultValue,
+												Type t, 
+												Metadata metadata,
+												Map<String, CellModel> globals) {
 
 	// TODO: add cell description from metadata
-	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, metadata);
+	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, defaultValue, metadata);
 	updateGlobalsWith(globals, t, newCellModel);
 	
 	return newCellModel;
@@ -125,6 +128,7 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 													   @Named("desc") String desc, 
 													   @Named("MinOccurs") int minOccurs,
 													   @Named("MaxOccurs") int maxOccurs,
+													   Optional<String> defaultValue,
 													   Type t,
 													   Metadata metadata,
 													   Provider<Attributes<CellModel>> attributesProvider,
@@ -140,7 +144,8 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 															  t, 
 															  minOccurs, 
 															  maxOccurs, 
-															  metadata, 
+															  metadata,
+															  defaultValue,
 															  null,		// attributes
 															  null);		// children
 	updateGlobalsWith(globals, t, newComplexCellModel);
@@ -180,6 +185,12 @@ public String desc(Metadata meta, Type t) {
 }
 
 
+@Provides @Named("MinOccurs")
+public int minOccurs(XSParticle particle) {
+	return particle.getMinOccurs().intValueExact();
+}
+
+
 @Provides @Named("MaxOccurs")
 public int maxOccurs(XSParticle particle) {
 
@@ -190,9 +201,9 @@ public int maxOccurs(XSParticle particle) {
 }
 
 
-@Provides @Named("MinOccurs")
-public int minOccurs(XSParticle particle) {
-	return particle.getMinOccurs().intValueExact();
+@Provides
+public Optional<String> defaultValue(Metadata metadata) {
+	return Optional.ofNullable(metadata.getDefaultValues().get(null)); // null is the key for the cell default value
 }
 
 
@@ -212,6 +223,7 @@ public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String def
 public static Attributes<CellModel> attributesOf(XSElementDecl elem, 
 											   Type t,
 											   URI u,
+											   Metadata metadata,
 											   @Nullable Map<String, CellModel> globals) {
 
 	if (t.isSimple()) {
@@ -226,7 +238,11 @@ public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 	rawAttributes.forEach(a -> {
 								XSAttributeDecl attributeDecl = a.getDecl();
 								boolean isRequired = a.isRequired();
-								CellModel cellModel = attributeCellModelFor(attributeDecl, isRequired, u, globals);
+								CellModel cellModel = attributeCellModelFor(attributeDecl, 
+																			isRequired, 
+																			u, 
+																			metadata, 
+																			globals);
 								attributes.addAttribute(attributeDecl.getName(), cellModel);
 	});
 
@@ -283,7 +299,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 												.build()
 												.cellModel();
 			children.addChild(childCellModel.getName(), childCellModel);
-			
+
 		}
 	}
 	
@@ -357,43 +373,56 @@ public static Metadata metadata(XSElementDecl elem, URI uri, Type t, Map<URI, Me
 private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 											 boolean required,
 											 URI nodeURI, 
+											 Metadata metadata,	// remember this is the cell metadata
 											 @Nullable Map<String, CellModel> globals) {
 
 	String name = xsAttributeDecl.getName();
 	URI attributeURI = getURIFrom(nodeURI.toString()+ATTRIBUTE_SEPARATOR+name, name);
-	
 	Type type = DaggerTypeComponent.builder()
 									.withDefaultName(name)
 									.withXSType(xsAttributeDecl.getType())
 									.build()
 									.type();
+	int minOccurs = required ? ATTRIBUTE_REQUIRED : ATTRIBUTE_MIN;
+
 	
+			
+	Metadata attributeMetadata = DaggerModelMetadataComponent.builder()
+			.from(xsAttributeDecl.getAnnotation())
+			.withParentURI(attributeURI)
+			.andFallback(type.getMetadata())
+			.build()
+			.value();
 	
-	Metadata meta = DaggerModelMetadataComponent.builder()
-												.from(xsAttributeDecl.getAnnotation())
-												.withParentURI(attributeURI)
-												.andFallback(type.getMetadata())
-												.build()
-												.value();
+	// default value priorities
+	// 1) the Cell metadata, with '<mf:default-value name="@attributename">foo</mf:default-value>'
+	// 2) XML schema default="foo" (on optional attributes)
+	// 3) the type default value
+	Optional<String> defaultValue = Optional.ofNullable(
+			metadata.getDefaultValues().get(Metadata.DEFAULT_VALUE_PREFIX+name));
+	if (!defaultValue.isPresent()) {
+		XmlString defaultValueXMLString = xsAttributeDecl.getDefaultValue();
+		defaultValue = (defaultValueXMLString!=null) ? Optional.of(defaultValueXMLString.value) : defaultValue;
+	}
+	String defaultValueFromType = attributeMetadata.getDefaultValues().get(name);
+	defaultValue = (!defaultValue.isPresent()) ? Optional.ofNullable(defaultValueFromType) : defaultValue;
 	
-	CellModel cellModel;
 	// no references for attributes at the moment
 //	if (globals.containsKey(type.getName())) {		// if it's an attribute we keep the local uri
 //		cellModel = new BasicCellModelReference(attributeURI, name, globals.get(type.getName()));
 //	} else {
 		
 	// attributes have the presentation of the corresponding type
-	int minOccurs = required ? ATTRIBUTE_REQUIRED : ATTRIBUTE_MIN;
-	cellModel = new BasicCellModel(attributeURI, 
+	return new BasicCellModel(attributeURI, 
 								   name, 
-								   meta.getDesc(), 
+								   attributeMetadata.getDesc(), 
 								   type, 
 								   minOccurs,
 								   ATTRIBUTE_MAX,
-								   meta);
+								   defaultValue,
+								   attributeMetadata);
 //	}
-	
-	return cellModel;
+
 	
 }
 

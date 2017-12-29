@@ -27,9 +27,9 @@ import { StatusEvent } from './events/status.event';
 	selector: 'status',
 	template: `
 			  <div id="status" 
-			          [@visibilityChanged]="visibility"
-			          class="progress" 
-			          (@visibilityChanged.done)="animationComplete($event)">
+					  [@visibilityChanged]="visibility"
+					  class="progress" 
+					  (@visibilityChanged.done)="animationComplete($event)">
 				  <!-- FIXME: for some reason if using a variable percentage we crash -->
 				  <div *ngFor="let s of statuses" 
 					  class="progress-bar progress-bar-info" 
@@ -63,8 +63,8 @@ private readonly ANIMATING_OUT = 3;
 
 visibility = "hidden";
 state = this.HIDDEN;
-statuses: StatusEvent[];            // what is shown
-pendingStatuses : StatusEvent[];    // what is pending to be shown given that statuses is full
+statuses: StatusEvent[];			// what is shown
+pendingStatuses : StatusEvent[];	// what is pending to be shown given that statuses is full
 eventSubscription: Subscription;
 
 constructor(private eventService: EventService) {}
@@ -84,40 +84,40 @@ ngOnInit() {
 }
 
 protected newStatusReceived(s: StatusEvent) {
-    
-    switch (this.state) {
-        case this.HIDDEN:       // initial state, so we add the status and start show animation
-            this.addStatus(s);
-            this.showAnimation();
-            break;
-        case this.ANIMATING_IN: // we're animating to show state, add new and cleanup, this means that we may
-            this.addStatus(s);  // be clearing status events that are faster than the 'in animation though
-            this.statuses = this.newStatusesAfterCleanup();
-            break;
-        case this.SHOWN:        // we're in full visible state, we add new status and cleanup, and then we
-            this.addStatus(s);  // stay in this state if there are statuses not done, or go hiding otherwise
-            let newStatuses = this.newStatusesAfterCleanup();
-            if (newStatuses.length==0) {
-                // we leave status as is so completed statuses are shown during animating out
-                this.hideAnimation();
-            } else {
-                //console.log("\t StatusComponent::newStatusReceived() --> keep SHOWN");
-                this.statuses = newStatuses;    // keep showing up-to-date-statuses
-            }
-            break;
-        case this.ANIMATING_OUT: // we got new statuses, restart animation and go back to animating in state
-            //console.log("\t StatusComponent::newStatusReceived() --> ANIMATING_OUT");
-            this.addStatus(s);
-            this.statuses = this.newStatusesAfterCleanup();
-            this.showAnimation();
-            break;
-    }
+	
+	switch (this.state) {
+		case this.HIDDEN:		// initial state, so we add the status and start show animation
+			this.addStatus(s);
+			this.showAnimation();
+			break;
+		case this.ANIMATING_IN: // we're animating to show state, add new and cleanup, this means that we may
+			this.addStatus(s);	// be clearing status events that are faster than the 'in animation though
+			this.statuses = this.newStatusesAfterCleanup();
+			break;
+		case this.SHOWN:		// we're in full visible state, we add new status and cleanup, and then we
+			this.addStatus(s);	// stay in this state if there are statuses not done, or go hiding otherwise
+			let newStatuses = this.newStatusesAfterCleanup();
+			if (newStatuses.length==0) {
+				// we leave status as is so completed statuses are shown during animating out
+				this.hideAnimation();
+			} else {
+				//console.log("\t StatusComponent::newStatusReceived() --> keep SHOWN");
+				this.statuses = newStatuses;	// keep showing up-to-date-statuses
+			}
+			break;
+		case this.ANIMATING_OUT: // we got new statuses, restart animation and go back to animating in state
+			//console.log("\t StatusComponent::newStatusReceived() --> ANIMATING_OUT");
+			this.addStatus(s);
+			this.statuses = this.newStatusesAfterCleanup();
+			this.showAnimation();
+			break;
+	}
 }
 
 protected addStatus(newStatus: StatusEvent) {
 
 	let status = this.normaliseStatus(newStatus);
-	console.log("\t StatusComponent::addStatus('"+status.message+"', "+status.percentage+")");
+	//console.log("\t StatusComponent::addStatus('"+status.message+"', "+status.percentage+")");
 
 	// The extra check is to avoid merging states that are the same but unrelated, to handle the following
 	// event sequence: a(10), a(5), a(100), a(100)
@@ -126,7 +126,7 @@ protected addStatus(newStatus: StatusEvent) {
 	let i = this.statuses.findIndex(s => s.message===status.message && s.percentage<status.percentage);
 	if (i==-1) {	// this is a new status
 
-        // console.log("\t StatusComponent::addStatus(%s, %i) new[%i]" ,status.message, status.percentage, i);
+		// console.log("\t StatusComponent::addStatus(%s, %i) new[%i]" ,status.message, status.percentage, i);
 		status = this.adaptToBarSize(status);
 		if (this.statuses.length==this.MAX_BARS) {
 			this.addToPendingStatuses(status);
@@ -136,41 +136,42 @@ protected addStatus(newStatus: StatusEvent) {
 
 	} else {		// this is an update to an existing status
 	
-	    //console.log("\t StatusComponent::addStatus(%s, %i) update[%i]", status.message,status.percentage,i);
+		//console.log("\t StatusComponent::addStatus(%s, %i) update[%i]", status.message,status.percentage,i);
 		status = this.adaptToBarSize(status);
 		this.statuses[i] = status;		
 
 	}
-    console.log("\t StatusComponent::addStatus(%s, %i) n=%i" ,status.message, status.percentage, this.statuses.length);
-        
+	//console.log("\t StatusComponent::addStatus(%s, %i)" ,status.message, status.percentage);
+		
 	
 }
 
 
-// to make sure the cleaning is not out of synch with the bindings we use a promise here, as we do not know
-// if the animation callback
+// To make sure the cleaning is not out of synch with the bindings we use a promise here, as we do not know
+// if the animation callback is called in a spot where this is affected, errors in the console confirm it
+// is indeed the case, so we delay changing the bindings in a promise
 protected animationComplete($event) {
 
 	Promise.resolve(null).then(() => {
-    console.log("\t StatusComponent::animationComplete(%s, %s)", $event.fromState, $event.toState);
-    if (this.state==this.ANIMATING_IN) {
-        let newStatuses = this.newStatusesAfterCleanup();
-        if (newStatuses.length==0) {
-            // we leave status as is so completed statuses are shown during animating out
-	        //console.log("\t StatusComponent::animationComplete() --> ANIMATING_OUT");
-            this.hideAnimation();
-        } else {
-	        console.log("\t StatusComponent::animationComplete() --> SHOWN");
-            this.state = this.SHOWN;
-            this.statuses = newStatuses;
-        }
-    } else if (this.state==this.ANIMATING_OUT) {
-	    //console.log("\t StatusComponent::animationComplete() --> HIDDEN");
-        this.statuses = Array();    // clear statuses for good and we're back to initial state
-        this.state = this.HIDDEN;
-    } else {
-       // we apparently receive the callback more than once, so we will get it in shown state, we ignore it
-       //console.log("\t StatusComponent::animationComplete() IN UNEXPECTED STATE (%s)", this.state);
+	//console.log("\t StatusComponent::animationComplete(%s, %s)", $event.fromState, $event.toState);
+	if (this.state==this.ANIMATING_IN) {
+		let newStatuses = this.newStatusesAfterCleanup();
+		if (newStatuses.length==0) {
+			// we leave status as is so completed statuses are shown during animating out
+			//console.log("\t StatusComponent::animationComplete() --> ANIMATING_OUT");
+			this.hideAnimation();
+		} else {
+			console.log("\t StatusComponent::animationComplete() --> SHOWN");
+			this.state = this.SHOWN;
+			this.statuses = newStatuses;
+		}
+	} else if (this.state==this.ANIMATING_OUT) {
+		//console.log("\t StatusComponent::animationComplete() --> HIDDEN");
+		this.statuses = Array();	// clear statuses for good and we're back to initial state
+		this.state = this.HIDDEN;
+	} else {
+	   // we apparently receive the callback more than once, so we will get it in shown state, we ignore it
+	   //console.log("\t StatusComponent::animationComplete() IN UNEXPECTED STATE (%s)", this.state);
 	   
 	}
 	});
@@ -180,35 +181,35 @@ protected animationComplete($event) {
 
 protected newStatusesAfterCleanup():StatusEvent[] {
    
-    let newStatuses = this.statuses.filter( s => s.percentage<100 ); //>>
-    let spaceForNewStatuses = this.MAX_BARS-this.statuses.length;
-    if (spaceForNewStatuses>0) {
-        while (spaceForNewStatuses-->0 && this.pendingStatuses.length>0) {
-            newStatuses.push(this.pendingStatuses.splice(0,1)[0]);
-        }
-    }
+	let newStatuses = this.statuses.filter( s => s.percentage<100 ); //>>
+	let spaceForNewStatuses = this.MAX_BARS-this.statuses.length;
+	if (spaceForNewStatuses>0) {
+		while (spaceForNewStatuses-->0 && this.pendingStatuses.length>0) {
+			newStatuses.push(this.pendingStatuses.splice(0,1)[0]);
+		}
+	}
 
-    return newStatuses;
-    
+	return newStatuses;
+	
 }
 
 
 private showAnimation() {
-    
-    //console.log("\t StatusComponent::showAnimation() starts --> ANIMATING_IN");
-    this.visibility = "shown";
-    this.state = this.ANIMATING_IN;
-    
+	
+	//console.log("\t StatusComponent::showAnimation() starts --> ANIMATING_IN");
+	this.visibility = "shown";
+	this.state = this.ANIMATING_IN;
+	
 }
 
 
 
 private hideAnimation() {
-    
-    //console.log("\t StatusComponent::hideAnimation() starts --> ANIMATING_OUT");
-    this.visibility = "hidden";
-    this.state = this.ANIMATING_OUT;
-    
+	
+	//console.log("\t StatusComponent::hideAnimation() starts --> ANIMATING_OUT");
+	this.visibility = "hidden";
+	this.state = this.ANIMATING_OUT;
+	
 }
 
 
@@ -227,14 +228,14 @@ private adaptToBarSize(s: StatusEvent) {
 	// normalise in respect to the bar
 	//let percentage = Math.floor(s.percentage/this.MAX_BARS);
 	// TODO: make the size a bit smaller depending on the percentage, in proportion to MAX / BAR SIZE
-    
+	
 	return new StatusEvent(s.message, s.percentage);
 }
 
 
 private addToPendingStatuses(status: StatusEvent) {
 
-    // see explanation for add above
+	// see explanation for add above
 	let i = this.pendingStatuses.findIndex(s => s.message===status.message && s.percentage>status.percentage);
 	if (i==-1) {
 		this.pendingStatuses[i] = status;

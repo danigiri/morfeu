@@ -76,14 +76,21 @@ public void testGlobalMetadataFromModel() throws Exception {
 	assertEquals("Globally provided description of 'data'", dataMetadata.getDesc());
 	assertEquals("assets/images/data-thumb.svg", dataMetadata.getThumb());
 	assertEquals("assets/images/data-cell.svg", dataMetadata.getCellPresentation());
+	Map<String, String> defaultValues = dataMetadata.getDefaultValues();
+	assertEquals("We should have 1 default attribute value in global data meta", 1, defaultValues.size());
+	String expectedDefaultValue = "Default value for text (from global)";
+	String actualDefaultValue = defaultValues.get(Metadata.DEFAULT_VALUE_PREFIX+"text");
+	assertEquals("Incorrec text attribute default value from global metadata", expectedDefaultValue, actualDefaultValue);
 
+	
 	URI data2URI = new URI(uri+"/test/row/col/data2");
 	Metadata data2Metadata = globalMetadata.get(data2URI);	
 	assertEquals(data2URI.toString(), data2Metadata.getURI().toString());
 	assertNotNull("global metadata parser should return data2 cell metadata", data2Metadata);
 	assertEquals("assets/images/data2-thumb.svg", data2Metadata.getThumb());
 	assertEquals("assets/images/data2-cell.svg", data2Metadata.getCellPresentation());
-
+	assertTrue("data2 global metadata has no defaults defined", data2Metadata.getDefaultValues().isEmpty());
+	
 }
 
 }

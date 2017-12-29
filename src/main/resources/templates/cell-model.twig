@@ -8,7 +8,7 @@
 		,"thumb": "$[ cm.metadata.thumb ]$"
 	$( endif )$
 	$( if not cm.metadata.cellPresentation is empty )$
-		,"cellPresentation": "$[ cm.metadata.cellPresentation ]$"
+		,"cellPresentation": "$[cm.metadata.cellPresentation]$"
 	$( endif )$
 	,"isSimple": $[cm.isSimple]$
 	,"type_": {
@@ -19,6 +19,9 @@
 	,"minOccurs": $[cm.minOccurs]$
 	$( if cm.maxOccurs.isPresent )$
 		,"maxOccurs": $[cm.maxOccurs.getAsInt]$
+	$( endif )$
+	$( if cm.defaultValue.isPresent )$
+		,"defaultValue": $[cm.defaultValue.get]$
 	$( endif )$
 	,"isReference": $[cm.isReference]$
 	$( if cm.isComplex )$

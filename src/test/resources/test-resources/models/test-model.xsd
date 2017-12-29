@@ -11,6 +11,7 @@
 					<mf:desc>Globally provided description of 'data'</mf:desc>
 					<mf:thumb>assets/images/data-thumb.svg</mf:thumb>
 					<mf:cell-presentation>assets/images/data-cell.svg</mf:cell-presentation>
+					<mf:default-value name="@text">Default value for text (from global)</mf:default-value>
 				</mf:metadata>
 				<mf:metadata uri="test/row/col/data2">
 					<mf:desc>Globally provided description of 'data2'</mf:desc>

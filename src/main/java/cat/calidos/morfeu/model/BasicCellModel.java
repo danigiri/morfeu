@@ -17,9 +17,8 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.OptionalInt;
-
-import cat.calidos.morfeu.model.metadata.injection.ModelMetadataComponent;
 
 /**
 * @author daniel giribet
@@ -29,18 +28,27 @@ public class BasicCellModel extends RemoteResource implements CellModel {
 private Type type;
 private int minOccurs;
 private OptionalInt maxOccurs;
+private Optional<String> defaultValue;
 private Metadata metadata;
 protected boolean isSimple = true;
 protected boolean isReference = false;
 
 
-public BasicCellModel(URI u, String name, String desc, Type type,  int minOccurs, int maxOccurs, Metadata m) {
+public BasicCellModel(URI u, 
+						String name, 
+						String desc, 
+						Type type,  
+						int minOccurs, 
+						int maxOccurs, 
+						Optional<String> defaultValue, 
+						Metadata m) {
 
 	super(u, name, desc);
-	
+
 	this.minOccurs = minOccurs;
 	this.maxOccurs = maxOccurs==CellModel.UNBOUNDED ? OptionalInt.empty() : OptionalInt.of(maxOccurs);
 	this.type = type;
+	this.defaultValue = defaultValue;
 	this.metadata = m;
 
 }
@@ -104,6 +112,15 @@ public Metadata getMetadata() {
 
 
 /* (non-Javadoc)
+* @see cat.calidos.morfeu.model.CellModel#getDefaultValue()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public Optional<String> getDefaultValue() {
+	return defaultValue;
+}
+
+
+/* (non-Javadoc)
 * @see cat.calidos.morfeu.model.CellModelI#isReference()
 *//////////////////////////////////////////////////////////////////////////////
 @Override
@@ -123,10 +140,8 @@ public CellModelReference asReference() {
 *//////////////////////////////////////////////////////////////////////////////
 @Override
 public String toString() {
-	return "["+name+", ("+type+")]";
+	return "["+name+", ("+type+")"+(defaultValue.isPresent() ? ", default:"+defaultValue.get() : "")+"]";
 }
-
-
 
 
 }

@@ -17,7 +17,9 @@
 package cat.calidos.morfeu.model.metadata.injection;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -53,8 +55,7 @@ private static final String DESC_FIELD = "mf:desc";
 private static final String PRESENTATION_FIELD = "mf:presentation";
 private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
 private static final String THUMB_FIELD = "mf:thumb";
-//private static String UNDEFINED = "";
-
+private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
 
 @Provides
 Metadata provideMetadata(URI uri,
@@ -62,15 +63,16 @@ Metadata provideMetadata(URI uri,
 						@Named("presentation") Optional<String> presentation,
 						@Named("cellPresentation") Optional<String> cellPresentation,
 						@Named("thumb") Optional<String> thumb,
+						Map<String, String> defaultValues,
 						@Named("Fallback") @Nullable Metadata fallback) {
 	
 	if (fallback==null) {
 
-		return new Metadata(uri, desc, presentation, cellPresentation, thumb);
+		return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues);
 
 	} else {
 
-		return new Metadata(uri, desc, presentation, cellPresentation, thumb, fallback);
+		return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues, fallback);
 
 	} 
 }
@@ -148,6 +150,37 @@ Optional<String> thumb(@Nullable XSAnnotation annotation) {
 	return contentOf(annotation, THUMB_FIELD);
 }
 
+
+@Provides
+Map<String, String> defaultValues(@Nullable XSAnnotation annotation) {
+	
+	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
+							.from(annotation)
+							.andTag(DEFAULT_VALUE_FIELD)
+							.build()
+							.values();
+	
+	HashMap<String, String> defaultValues = new HashMap<String, String>(nodeValues.size());
+	for (Node n : nodeValues) {
+
+		String defaultValue = n.getTextContent();
+		Node nameItem = n.getAttributes().getNamedItem("name");
+		if (nameItem!=null) {
+			String name = nameItem.getNodeValue();
+			if (name.startsWith(Metadata.DEFAULT_VALUE_PREFIX)) {
+				defaultValues.put(name, defaultValue)	;	// default value for attribute
+			} else {
+				log.warn("Ignoring a metadata default that doesn't have a name starting with '@' ({})", n);
+			}
+		} else {
+			defaultValues.put(null, defaultValue); 		// this is the default value for the cell
+		}
+		
+	}
+	
+	return defaultValues;
+	
+}
 
 //reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
 private static Optional<String> contentOf(@Nullable XSAnnotation annotation, String tag) {

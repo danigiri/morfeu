@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import cat.calidos.morfeu.problems.InternalException;
 
@@ -37,10 +38,11 @@ public ComplexCellModel(URI u,
 						int minOccurs, 
 						int maxOccurs, 
 						Metadata meta, 
+						Optional<String> defaultValue,
 						Attributes<CellModel> attributes, 
 						Composite<CellModel> children) {
 	
-	super(u, name, desc, type, minOccurs, maxOccurs, meta);
+	super(u, name, desc, type, minOccurs, maxOccurs, defaultValue, meta);
 	
 	this.attributes = attributes;
 	this.children = children;
