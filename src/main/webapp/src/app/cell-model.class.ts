@@ -82,7 +82,7 @@ canAdopt(element:FamilyMember):boolean {
 
 
 childrenCount():number {
-	return this.children ? this.children.length : 0;   
+	return this.children ? this.children.length : 0;
 }
 
 
@@ -99,6 +99,37 @@ getParent():FamilyMember {
 getPresentation() {
     return (this.cellPresentation=='DEFAULT') ? "assets/images/cell.svg" : this.cellPresentation;
 }
+
+canGenerateNewCell(): boolean {
+    // not dragging WELL-type cell models for the moment, as it is quite a complex use case, so we only allow
+    // cell models that do not have any children
+    return this.childrenCount()==0;
+}
+
+/** Generate a new cell from this model, using defaults if available */
+generateCell():Cell {
+    
+    let cellURI = "/"+this.getAdoptionName()+"(0)"; // this is will be changed on adoption
+    let desc = "";                                  // empty description for the moment
+    let value = (this.defaultValue) ? this.defaultValue : "";
+    let newCell:Cell = new Cell(this.schema, 
+                                cellURI, 
+                                this.getAdoptionName(), 
+                                desc,
+                                value, 
+                                this.getAdoptionURI(), 
+                                this.isSimple);
+    
+    newCell.cellModel = this;                       // we associate the cell model straightaway, easy peasy =)
+ 
+    if (this.attributes) {                          // now we set the attributes when we have defaults
+        newCell.attributes = this.attributes.filter(a => a.defaultValue)
+                                                .map(a => this.generateAttributeFrom(a));
+    }
+    
+    return newCell;
+}
+
 
 toJSON(): CellModelJSON {
 
@@ -147,6 +178,28 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 static reviver(key: string, value: any): any {
 	return key === "" ? CellModel.fromJSON(value) : value;
 }
+
+
+private generateAttributeFrom(attribute: CellModel): Cell {
+    
+    let attrURI = "/"+this.getAdoptionName()+"(0)@"+attribute.getAdoptionName(); //  be changed on adoption
+    let desc = "";                                  // empty description for the moment
+    let value = (attribute.defaultValue) ? attribute.defaultValue : ""; // sanity check, as we only generate
+                                                                        // attributes for defaults for now
+    let newCell:Cell = new Cell(attribute.schema, 
+                                attrURI, 
+                                attribute.getAdoptionName(), 
+                                desc,
+                                value, 
+                                attribute.getAdoptionURI(), 
+                                attribute.isSimple);    // should always be true
+    
+    newCell.cellModel = attribute;                      // associate the cell model straightaway, yo! =)
+ 
+    return newCell;
+    
+}
+
 
 }
 

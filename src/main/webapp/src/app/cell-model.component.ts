@@ -48,10 +48,10 @@ import { EventService } from './events/event.service';
 				(mouseleave)="clickUp(node.data)"
 				dnd-draggable 
 	            [dragEnabled]="dragEnabled"
-                             
+	            (onDragEnd)="dragEnd(node.data)"
+                [dragData]="node.data.generateCell()"                             
 					/>
-                <!--(onDragEnd)="dragEnd(cell)"
-                [dragData]="cell"-->
+                <!-- -->
 			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
 		</div>
 		`,
@@ -116,7 +116,8 @@ becomeActive(cell: Cell) {
 
 	//console.log("[UI] CellModelComponent::becomeActive()");
 	this.active = true;
-	
+	this.dragEnabled = this.node.data.canGenerateNewCell();
+	console.log("[UI] CellModelComponent::becomeActive(dragEnabled:%s)", this.dragEnabled);
 }
 
 
@@ -124,6 +125,7 @@ becomeInactive(cell: Cell) {
 
 	//console.log("[UI] CellModelComponent::becomeInactive()");
 	this.active = false;
+	this.dragEnabled = false;
 	
 }
 
@@ -143,6 +145,13 @@ clickUp(cellModel:CellModel) {
 
 }
 
+
+dragEnd(cellModel:CellModel) {
+    
+    console.log("[UI] CellModelComponent::dragEnd()");
+    this.becomeInactive(null);
+    
+}
 
 isCompatibleWith(element:FamilyMember): boolean {
 	return this.node.data.matches(element);

@@ -127,7 +127,7 @@ canAdopt(newMember:FamilyMember):boolean {
 	//	<col>
 	//		[drop area 0]
 	//		<thingie/>
-	//		[drop area 1]
+	//		[drop area 1]  // TODO: if we want to move the first thingie, areas 0 and 1 are not needed :)
 	//		<thingie/>
 	//		[drop area 2]
 	//	</col>
@@ -174,7 +174,7 @@ adopt(newMember:Cell, position:number) {
 	}
 	
 	newMember.parent = this;
-	newMember.setPosition(position);
+	newMember.setPosition(position);   // this actually changes the URI fo the new member to the correct one
 	
 	if (!this.children) {
 		this.children = [newMember];

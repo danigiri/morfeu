@@ -329,10 +329,6 @@ focusOff(cell:Cell) {
 }
 
 
-dragStart(cell:Cell) {
-	console.log("[UI] CellComponent::dragStart()");
-}
-
 // we drag outside any interesting area, we remove focus
 dragEnd(cell:Cell) {
 
