@@ -114,7 +114,10 @@ public void testProvideCellModel() throws Exception {
 	checkComplexCellModel(data, "data", dataDesc, "testCell", modelURI+"/test/row/col/data");
 	assertEquals("/test/row/col/data cell model should be min 0", 0, data.getMinOccurs());
 	assertFalse("/test/row/col/data cell model should be unbounded", data.getMaxOccurs().isPresent());
-	//assertEquals("Default value for text (from global)", data.asComplex().attributes().attribute("text").getDefaultValue().get());
+	ComplexCellModel dataComplex = data.asComplex();
+	String defaultTextAttributeFromGlobal = "Default value for text (from global)";
+	assertEquals(defaultTextAttributeFromGlobal, dataComplex.attributes().attribute("text").getDefaultValue().get());
+	assertEquals("11", dataComplex.attributes().attribute("number").getDefaultValue().get());	// type default
 
 	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
 	String data2Desc = "Globally provided description of 'data2'";
@@ -122,17 +125,22 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("/test/row/col/data2 cell model should be min 0", 0, data2.getMinOccurs());
 	// model references keep local max counts
 	assertEquals("/test/row/col/data2 cell model should be max 2", 2, data2.getMaxOccurs().getAsInt());
+	// we only have the type default and nothing from global
+	ComplexCellModel data2Complex = data2.asComplex();
+	assertEquals("11", data2Complex.attributes().attribute("number").getDefaultValue().get());	// type default
+	assertFalse("Should not have default", data2Complex.attributes().attribute("text").getDefaultValue().isPresent());
 
+	
 	assertTrue(data.isReference() || data2.isReference());
 
 	CellModel testCell;
 	if (data.isReference()) {	// it's undetermined which one will be processed first, both are testCell so any will do
 		assertEquals("CELL", data.getMetadata().getPresentation());
-		testCell = data.asReference().reference();
+		testCell = data.getReference().get();
 
 	} else {
 		assertEquals("CELL", data2.getMetadata().getPresentation());
-		testCell = data2.asReference().reference();		
+		testCell = data2.getReference().get();		
 	}	
 	assertNotNull(testCell);
 	
@@ -145,10 +153,27 @@ public void testProvideCellModel() throws Exception {
 	assertNotNull(attribute);
 	assertEquals("11", attribute.getDefaultValue().get());
 	
-	CellModel rowRef = colComplex.children().child("row");						// TEST -> ROW -> COL -> @ROW
-	assertTrue(rowRef.isReference());
-	assertEquals("Row reference in col does not reference original", row, rowRef.asReference().reference());
 
+}
+
+
+@Test
+public void testColAndRowReference() throws Exception {
+
+	CellModel test = cellModelFrom(modelURI, "test");							// TEST
+	CellModel row = test.asComplex().children().child("row");					// TEST -> ROW
+	CellModel col = row.asComplex().children().child("col");					// TEST -> ROW -> COL
+	
+	// we check the reference from row to col and so forth
+	CellModel rowRef = col.asComplex().children().child("row");				// TEST -> ROW -> COL -> ref(ROW)
+	assertTrue(rowRef.isReference());
+	assertEquals("Row reference in col does not reference original", row, rowRef.getReference().get());
+
+	// the row reference should have the same children as the original row
+	assertTrue(rowRef.isComplex());
+	assertEquals(1, rowRef.asComplex().children().size());
+	assertNotNull(rowRef.asComplex().children().child("col"));
+	
 }
 
 

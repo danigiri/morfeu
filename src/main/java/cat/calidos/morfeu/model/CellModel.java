@@ -13,6 +13,8 @@ boolean isComplex();
 
 boolean isReference();
 
+Optional<CellModel> getReference();
+
 Type getType();
 
 int getMinOccurs();
@@ -25,6 +27,5 @@ Metadata getMetadata();
 
 ComplexCellModel asComplex();
 
-CellModelReference asReference();
 
 }

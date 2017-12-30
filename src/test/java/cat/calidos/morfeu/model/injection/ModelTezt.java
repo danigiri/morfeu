@@ -117,7 +117,7 @@ protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Excep
 protected XSSchemaSet parseSchemaFrom(URI uri)
 		throws InterruptedException, ExecutionException, ConfigurationException, ParsingException, FetchingException {
  
-	XSOMParser parser = DaggerModelParserTeztComponent.builder().build().produceXSOMParser().get();
+	XSOMParser parser = DaggerModelParserComponent.builder().build().produceXSOMParser().get();
 
 	return ModelModule.parseModel(uri, parser);
 

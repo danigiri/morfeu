@@ -120,7 +120,7 @@ public static String valueFrom(Node node) {
 
 @Provides
 protected static ComplexCellModel effectiveCellModel(CellModel cellModel) {
-	return (cellModel.isReference()) ? cellModel.asReference().reference().asComplex() : cellModel.asComplex();
+	return cellModel.asComplex();
 }
 
 
@@ -234,7 +234,7 @@ private static CellModel findChildWithName(ComplexCellModel cellModel, String ch
 												.findFirst();
 	if (!matchedChild.isPresent()) {
 		log.warn("Elem '{}' could not match any children of '{}'", childName, cellModel.getName());
-		throw new RuntimeException("Node and model mismatch", new IllegalArgumentException());
+		throw new RuntimeException("Node and model mismatch ("+childName+")", new IllegalArgumentException());
 	}
 
 	return matchedChild.get();

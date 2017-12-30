@@ -21,19 +21,20 @@
 		,"maxOccurs": $[cm.maxOccurs.getAsInt]$
 	$( endif )$
 	$( if cm.defaultValue.isPresent )$
-		,"defaultValue": $[cm.defaultValue.get]$
+		,"defaultValue": "$[cm.defaultValue.get]$"
 	$( endif )$
 	,"isReference": $[cm.isReference]$
+	$( if cm.isReference )$
+		,"referenceURI": "$[cm.reference.get.getURI]$"
+	$( endif )$	
 	$( if cm.isComplex )$
 		,"attributes": [$( for a in cm.asComplex.attributes.asList )$
 				$( include "cell-model.twig" with {'cm': a} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
 			$( endfor )$]
-		,"children": [$( for c in cm.asComplex.children.asList )$
-				$( if c.isReference )$
-					$( include "cell-model-reference.twig" with {'cm': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$				
-				$( else )$
-					$( include "cell-model.twig" with {'cm': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$				
-				$( endif )$
-			$( endfor )$]
+		$( if not (cm.isReference) )$
+			,"children": [$( for c in cm.asComplex.children.asList )$
+							$( include "cell-model.twig" with {'cm': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
+						$( endfor )$]
+		$( endif )$
 	$( endif )$
 }

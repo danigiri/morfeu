@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -40,13 +39,11 @@ import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSParticle;
-import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.XmlString;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.BasicCellModel;
-import cat.calidos.morfeu.model.BasicCellModelReference;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
@@ -54,7 +51,6 @@ import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 import cat.calidos.morfeu.utils.OrderedMap;
-import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 
@@ -78,29 +74,20 @@ protected final static Logger log = LoggerFactory.getLogger(CellModelModule.clas
 @Provides
 public static CellModel provideCellModel(Type t,
 									    Provider<BasicCellModel> providerCell,
-									    Provider<ComplexCellModel> providerComplexCell,
-									    Provider<BasicCellModelReference> providerReference,
-									    Map<String, CellModel> globals) {
-
-	CellModel cellModel;
-	if (globals!=null && globals.containsKey(t.getName())) {
-
-		cellModel = providerReference.get();
-
-	} else {
-
-		if (t.isSimple()) {
-			cellModel = providerCell.get();
-		} else {
-			cellModel = providerComplexCell.get();
-		}
-
-	}
-
-	return cellModel;
-
+									    Provider<ComplexCellModel> providerComplexCell) {
+	return (t.isSimple()) ? providerCell.get() : providerComplexCell.get();
 }
 
+
+@Provides @Named("isReference")
+public static boolean isReference(Type t, Map<String, CellModel> globals) {
+	return globals!=null && globals.containsKey(t.getName());
+}
+
+@Provides @Named("reference")
+public static CellModel reference(Type t, Map<String, CellModel> globals) {
+	return globals.get(t.getName());
+}
 
 @Provides
 public static BasicCellModel buildCellModelFrom(URI u,
@@ -111,12 +98,22 @@ public static BasicCellModel buildCellModelFrom(URI u,
 												Optional<String> defaultValue,
 												Type t, 
 												Metadata metadata,
+												@Named("isReference") boolean isReference,
+												@Named("reference") Provider<CellModel> referenceProvider,
 												Map<String, CellModel> globals) {
 
 	// TODO: add cell description from metadata
-	BasicCellModel newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, defaultValue, metadata);
-	updateGlobalsWith(globals, t, newCellModel);
-	
+	BasicCellModel newCellModel;
+	if (isReference) {
+		// we are a cell model reference, so we get the reference cell model and use it to build ourselves
+		CellModel reference = referenceProvider.get();
+		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, defaultValue, metadata, reference);
+	} else {
+		// we are a new cell model, we create a new instance and add it to globals so future cells can reference it
+		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, defaultValue, metadata);
+		updateGlobalsWith(globals, t, newCellModel);
+	}
+
 	return newCellModel;
 
 }
@@ -124,55 +121,69 @@ public static BasicCellModel buildCellModelFrom(URI u,
 
 @Provides
 public static ComplexCellModel buildComplexCellModelFrom(URI u,
-													   @Named("name") String name,
-													   @Named("desc") String desc, 
-													   @Named("MinOccurs") int minOccurs,
-													   @Named("MaxOccurs") int maxOccurs,
-													   Optional<String> defaultValue,
-													   Type t,
-													   Metadata metadata,
-													   Provider<Attributes<CellModel>> attributesProvider,
-													   Provider<Composite<CellModel>> childrenProvider,
-													   Map<String, CellModel> globals) {
-	
-	// in this way, we create the cell model, find out if it's global, add it and then generate the
-	// attributes and children. This means that if a child references an already defined CellModel (which could
-	// include this very one, there will be no infinite loops and the child will be created as a reference to this one 
-	ComplexCellModel newComplexCellModel = new ComplexCellModel(u, 
-															  name, 
-															  desc, 
-															  t, 
-															  minOccurs, 
-															  maxOccurs, 
-															  metadata,
-															  defaultValue,
-															  null,		// attributes
-															  null);		// children
-	updateGlobalsWith(globals, t, newComplexCellModel);
+														@Named("name") String name,
+														@Named("desc") String desc, 
+														@Named("MinOccurs") int minOccurs,
+														@Named("MaxOccurs") int maxOccurs,
+														Optional<String> defaultValue,
+														Type t,
+														Metadata metadata,
+														Provider<Attributes<CellModel>> attributesProvider,
+														Provider<Composite<CellModel>> childrenProvider,
+														@Named("isReference") boolean isReference,
+														@Named("reference")Provider<CellModel> referenceProvider,
+														Map<String, CellModel> globals) {
 
-	newComplexCellModel.setAttributes(attributesProvider.get());
-	newComplexCellModel.setChildren(childrenProvider.get());
-	
+	ComplexCellModel newComplexCellModel;
+
+	String typeName = t.getName();
+	if (isReference) {
+
+		// we are a cell model reference, so we get the reference cell model and use it to build ourselves
+		CellModel reference = referenceProvider.get();
+		if (reference.isSimple()) {
+			// this should not happen, the model is inconsistent =/
+			throw new RuntimeException("Found a complex refence to a simple type ("+typeName+")");
+		}
+
+		// Attributes are the same as the reference but may have different metatata, so we use our own provided attribs
+		newComplexCellModel = new ComplexCellModel(u, 
+													name, 
+													desc, 
+													t, 
+													minOccurs, 
+													maxOccurs, 
+													metadata,
+													defaultValue,
+													attributesProvider.get(),	
+													reference.asComplex());
+
+	} else {
+
+		// New cell model:
+		// We create the cell model first, find out if it's global, add it globals if so and then generate the
+		// attributes and children. This means that if a child references an already defined CellModel (which could
+		// include this very one), there will be no infinite loops and the child will be created as a reference to this one 
+
+		newComplexCellModel = new ComplexCellModel(u, 
+				name, 
+				desc, 
+				t, 
+				minOccurs, 
+				maxOccurs, 
+				metadata,
+				defaultValue,
+				new OrderedMap<CellModel>(0),	// empty attribs
+				new OrderedMap<CellModel>(0));	// empty children
+
+		updateGlobalsWith(globals, t, newComplexCellModel);
+
+		newComplexCellModel.setAttributes(attributesProvider.get());
+		newComplexCellModel.setChildren(childrenProvider.get());
+
+	}
+
 	return newComplexCellModel;
-	
-}
-
-
-@Provides
-public BasicCellModelReference buildCellModelFromReference(URI u,
-														 @Named("name") String name,
-														 @Named("MinOccurs") int minOccurs,
-														 @Named("MaxOccurs") int maxOccurs,
-														 Type t,
-														 Metadata metadata,
-														 Map<String, CellModel> globals) {
-	
-	CellModel ref = globals.get(t.getName());
-	// we use the given metadata (probably from global) and we merge it with the reference meta to cover any gaps
-	// the given metadata has more priority
-	Metadata effectiveMetadata = Metadata.merge(u, metadata, ref.getMetadata());
-	
-	return new BasicCellModelReference(u, name, minOccurs, maxOccurs, effectiveMetadata, ref);
 
 }
 
@@ -351,7 +362,12 @@ public static XSType type(XSElementDecl elem) {
 
 
 @Provides
-public static Metadata metadata(XSElementDecl elem, URI uri, Type t, Map<URI, Metadata> globalMetadata) {
+public static Metadata metadata(XSElementDecl elem, 
+								URI uri, 
+								Type t, 
+								Map<URI, Metadata> globalMetadata,
+								@Named("isReference") boolean isReference,
+								@Named("reference") Provider<CellModel> referenceProvider) {
 
 	// we get the metadata from the current cell model, with fallback from merging global(if available) and type
 	Metadata typeMetadata = t.getMetadata();
@@ -359,13 +375,21 @@ public static Metadata metadata(XSElementDecl elem, URI uri, Type t, Map<URI, Me
 							Metadata.merge(uri, globalMetadata.get(uri), typeMetadata) : typeMetadata;
 	
 	
-	return DaggerModelMetadataComponent.builder()
+	Metadata meta = DaggerModelMetadataComponent.builder()
 										.from(elem.getAnnotation())
 										.withParentURI(uri)
 										.andFallback(fallback)
 										.build()
 										.value();
 
+	if (isReference) {
+		// We use the given metadata (probably from global) and we merge it with the reference meta to cover any gaps
+		// Notice our own metadata has more priority
+		meta = Metadata.merge(uri, meta, referenceProvider.get().getMetadata());
+	}
+	
+	return meta;
+	
 }
 
 

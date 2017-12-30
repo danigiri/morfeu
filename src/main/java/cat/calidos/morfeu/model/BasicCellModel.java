@@ -30,8 +30,9 @@ private int minOccurs;
 private OptionalInt maxOccurs;
 private Optional<String> defaultValue;
 private Metadata metadata;
+private boolean isReference;
+private Optional<CellModel> reference;
 protected boolean isSimple = true;
-protected boolean isReference = false;
 
 
 public BasicCellModel(URI u, 
@@ -41,7 +42,7 @@ public BasicCellModel(URI u,
 						int minOccurs, 
 						int maxOccurs, 
 						Optional<String> defaultValue, 
-						Metadata m) {
+						Metadata meta) {
 
 	super(u, name, desc);
 
@@ -49,8 +50,27 @@ public BasicCellModel(URI u,
 	this.maxOccurs = maxOccurs==CellModel.UNBOUNDED ? OptionalInt.empty() : OptionalInt.of(maxOccurs);
 	this.type = type;
 	this.defaultValue = defaultValue;
-	this.metadata = m;
+	this.metadata = meta;
+	this.isReference = false;
+	this.reference = Optional.empty();
+	
+}
 
+public BasicCellModel(URI u, 
+		String name, 
+		String desc, 
+		Type type,  
+		int minOccurs, 
+		int maxOccurs, 
+		Optional<String> defaultValue, 
+		Metadata meta,
+		CellModel ref) {
+	
+	this(u, name, desc, type, minOccurs, maxOccurs, defaultValue, meta);
+
+	this.isReference = true;
+	this.reference = Optional.of(ref);
+	
 }
 
 
@@ -129,11 +149,15 @@ public boolean isReference() {
 }
 
 
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.CellModel#getReference()
+*//////////////////////////////////////////////////////////////////////////////
 @Override
-public CellModelReference asReference() {
-	throw new ClassCastException("Tried to access cell model as a reference ("+getName()+")");
-}
+public Optional<CellModel> getReference() {
 
+	return reference;
+
+}
 
 /* (non-Javadoc)
 * @see java.lang.Object#toString()

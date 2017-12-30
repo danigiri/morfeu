@@ -274,10 +274,12 @@ private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell 
 		
 		cellModel = cellModels.find(cm => cm.URI===this.cellModelURI);	// current cell model level
 		if (cellModel.isReference) {
-			// we take the philosophy of completing the cellmodel reference with the missing data
+			// we take the philosophy of completing the cellmodel reference with the missing data (children)
 			// we keep rest of the cell model information (like the name, which can be different)
 			let reference:CellModel = this.findCellModelWithURI(rootCellmodels, cellModel.referenceURI);
-			cellModel.attributes = reference.attributes;
+		    if (!reference) {
+		        console.error("Could not find cellModel of reference cellModel:{}",cellModel.name);
+		    }
 			cellModel.children = reference.children;
 
 		}
@@ -338,6 +340,7 @@ toJSON(): CellJSON {
 	delete serialisedCell['cellModel'];
 	delete serialisedCell['parent'];
 
+	// TODO: add sanity checks for reference to avoid future infinite loops 
 	if (this.attributes) {
 		serialisedCell.attributes = this.attributes.map(a => a.toJSON());
 	}
@@ -407,4 +410,5 @@ isSimple: boolean,
 attributes?: CellJSON[];
 internalAttributes?: CellJSON[];
 children?: CellJSON[];
+
 }

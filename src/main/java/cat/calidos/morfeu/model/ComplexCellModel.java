@@ -41,15 +41,34 @@ public ComplexCellModel(URI u,
 						Optional<String> defaultValue,
 						Attributes<CellModel> attributes, 
 						Composite<CellModel> children) {
-	
+
 	super(u, name, desc, type, minOccurs, maxOccurs, defaultValue, meta);
-	
+
 	this.attributes = attributes;
 	this.children = children;
 	this.isSimple = false;
-	
+
 }
 
+
+public ComplexCellModel(URI u, 
+						String name, 
+						String desc, 
+						Type type, 
+						int minOccurs, 
+						int maxOccurs, 
+						Metadata meta, 
+						Optional<String> defaultValue,
+						Attributes<CellModel> attributes, 
+						ComplexCellModel ref) {
+
+	super(u, name, desc, type, minOccurs, maxOccurs, defaultValue, meta, ref);
+
+	this.attributes = attributes;		// attributes are the same as the reference, but may have different metadata
+	this.children = null;			// we will use the ones from the reference to ensure they are the same
+	this.isSimple = false;
+
+}
 
 public Attributes<CellModel> attributes() {
 	return attributes;
@@ -62,7 +81,7 @@ public void setAttributes(Attributes<CellModel> attributes) {
 
 
 public Composite<CellModel> children() {
-	return children;
+	return isReference() ? getReference().get().asComplex().children() : children;
 }
 
 
@@ -86,9 +105,9 @@ public String toString() {
 		sb.append("\n\tattributes:\n");
 		sb.append(attributes.toString());
 	}
-	if (children!=null && children.size()>0) {
+	if (children!=null && !isReference() && children.size()>0) {
 		// TODO: replace \ns with \n\t's here for correct indendation
-		sb.append("\nchildren:\n");
+		sb.append("\nchildren("+children.size()+"):\n");
 		sb.append(children.toString());
 	}
 
