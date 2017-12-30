@@ -39,14 +39,19 @@ import { EventService } from './events/event.service';
 		<div id="{{node.data.id}}" 
 			 class="cell-model-entry cell-model-level-{{node.level}}">
 			<img 
-				 src={{getThumb()}} 
-				 class="cell-model-thumb img-fluid" 
-				 [class.cell-model-active]="active" 
-				 (mousedown)="clickDown(node.data)" 
-				 (mouseup)="clickUp(node.data)"
-				 (mouseenter)="clickDown(node.data)" 
-				 (mouseleave)="clickUp(node.data)"
+				src={{getThumb()}} 
+				class="cell-model-thumb img-fluid" 
+				[class.cell-model-active]="active" 
+				(mousedown)="clickDown(node.data)" 
+				(mouseup)="clickUp(node.data)"
+				(mouseenter)="clickDown(node.data)" 
+				(mouseleave)="clickUp(node.data)"
+				dnd-draggable 
+	            [dragEnabled]="dragEnabled"
+                             
 					/>
+                <!--(onDragEnd)="dragEnd(cell)"
+                [dragData]="cell"-->
 			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
 		</div>
 		`,
@@ -79,6 +84,7 @@ export class CellModelComponent extends Widget implements OnInit {
 @Input() index: number;
 	
 active:boolean = false;
+dragEnabled:boolean = false;
 
 constructor(eventService: EventService) {
 	super(eventService);

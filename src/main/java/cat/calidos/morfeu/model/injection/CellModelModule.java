@@ -168,12 +168,10 @@ public BasicCellModelReference buildCellModelFromReference(URI u,
 														 Map<String, CellModel> globals) {
 	
 	CellModel ref = globals.get(t.getName());
-	// if we are a refence but we have not defined custom metadata (through globals, basically) it means
-	// that metadata==type.metadata, then we use the reference
-	//  otherwise we have defined custom metadata (through globals), then we use that custom
-	// TODO: merge reference metadata and global metadata given a priority
-	Metadata effectiveMetadata = metadata.equals(t.getMetadata()) ? ref.getMetadata() : metadata;
-
+	// we use the given metadata (probably from global) and we merge it with the reference meta to cover any gaps
+	// the given metadata has more priority
+	Metadata effectiveMetadata = Metadata.merge(u, metadata, ref.getMetadata());
+	
 	return new BasicCellModelReference(u, name, minOccurs, maxOccurs, effectiveMetadata, ref);
 
 }
@@ -355,11 +353,12 @@ public static XSType type(XSElementDecl elem) {
 @Provides
 public static Metadata metadata(XSElementDecl elem, URI uri, Type t, Map<URI, Metadata> globalMetadata) {
 
-	// we get the metadata from the current cell model, with fallback from global or from the type
-
-	Metadata fallback = globalMetadata!=null && globalMetadata.containsKey(uri) ? 
-						globalMetadata.get(uri) : t.getMetadata();
-
+	// we get the metadata from the current cell model, with fallback from merging global(if available) and type
+	Metadata typeMetadata = t.getMetadata();
+	Metadata fallback = (globalMetadata!=null  && globalMetadata.containsKey(uri)) ?
+							Metadata.merge(uri, globalMetadata.get(uri), typeMetadata) : typeMetadata;
+	
+	
 	return DaggerModelMetadataComponent.builder()
 										.from(elem.getAnnotation())
 										.withParentURI(uri)

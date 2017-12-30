@@ -34,8 +34,8 @@ protected final static Logger log = LoggerFactory.getLogger(Metadata.class);
 		
 private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_THUMB = "DEFAULT";
-private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
+private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
 
 private URI uri;	// pre-calculated default
 private String desc;
@@ -95,6 +95,27 @@ public Metadata(URI uri,
 }
 
 
+public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority) {
+	
+	String desc = morePriority.getDesc();
+	desc = desc.equals(DEFAULT_DESC) ? lessPriority.getDesc() : desc;
+	String presentation = morePriority.getPresentation();
+	presentation = presentation.equals(DEFAULT_PRESENTATION) ? lessPriority.getPresentation() : presentation;
+	String cellPresentation = morePriority.getCellPresentation();
+	cellPresentation = cellPresentation.equals(DEFAULT_CELL_PRESENTATION) 
+						? lessPriority.getCellPresentation() : cellPresentation;
+	String thumb = morePriority.getThumb();
+	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
+	
+	Map<String,String> newDefaultValues = new HashMap<String, String>();
+	newDefaultValues.putAll(lessPriority.getDefaultValues());
+	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
+	
+	return new Metadata(u, desc, presentation, cellPresentation, thumb, newDefaultValues);
+	
+}
+
+
 public String getDesc() {
 	return desc;
 }
@@ -140,7 +161,12 @@ public String getName() {
 @Override
 public String toString() {
 
-	return "Metadata:{uri:"+uri+", desc:'"+desc+"', thumb:'"+thumb+"', presentation:'"+presentation+"'}";
+	return "Metadata:"+
+			"{uri:"+uri+
+			", desc:'"+desc+
+			"', thumb:'"+thumb+
+			"', presentation:'"+presentation+
+			"' defaults("+defaultValues.size()+")}";
 }
 
 

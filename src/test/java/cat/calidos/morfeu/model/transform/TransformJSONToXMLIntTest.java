@@ -19,9 +19,6 @@ package cat.calidos.morfeu.model.transform;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.transform.Source;
 
@@ -30,7 +27,6 @@ import org.junit.Test;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
-import org.xmlunit.input.WhitespaceStrippedSource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

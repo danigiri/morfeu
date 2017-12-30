@@ -114,6 +114,7 @@ public void testProvideCellModel() throws Exception {
 	checkComplexCellModel(data, "data", dataDesc, "testCell", modelURI+"/test/row/col/data");
 	assertEquals("/test/row/col/data cell model should be min 0", 0, data.getMinOccurs());
 	assertFalse("/test/row/col/data cell model should be unbounded", data.getMaxOccurs().isPresent());
+	//assertEquals("Default value for text (from global)", data.asComplex().attributes().attribute("text").getDefaultValue().get());
 
 	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
 	String data2Desc = "Globally provided description of 'data2'";
@@ -139,6 +140,10 @@ public void testProvideCellModel() throws Exception {
 	assertNotNull(testComplex);
 	assertEquals(2, testComplexCell.attributes().size());
 	assertEquals(0, testComplexCell.children().size());
+	
+	CellModel attribute = testComplexCell.attributes().attribute("number");
+	assertNotNull(attribute);
+	assertEquals("11", attribute.getDefaultValue().get());
 	
 	CellModel rowRef = colComplex.children().child("row");						// TEST -> ROW -> COL -> @ROW
 	assertTrue(rowRef.isReference());

@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
+import java.util.Optional;
 
 /**
 * @author daniel giribet
@@ -40,7 +41,7 @@ public BasicCellModelReference(URI u, String name,  int minOccurs, int maxOccurs
 
 	this.reference = ref;
 	this.isReference = true;
-	
+
 }
 
 

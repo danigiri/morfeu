@@ -70,7 +70,9 @@ public void setup() throws Exception {
 	schemaSet = parseSchemaFrom(modelURI);
 	HashMap<String, String> emptyDefaultValues = new HashMap<String, String>(0);
 	emptyMedatada = new Metadata(null, "desc", "PRESENTATION", "CELL-PRESENTATION", "THUMB", emptyDefaultValues);
+
 }
+
 
 @Test
 public void testRootAnonymousType() throws Exception {

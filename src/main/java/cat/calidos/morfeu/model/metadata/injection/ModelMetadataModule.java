@@ -151,16 +151,21 @@ Optional<String> thumb(@Nullable XSAnnotation annotation) {
 }
 
 
+
 @Provides
-Map<String, String> defaultValues(@Nullable XSAnnotation annotation) {
-	
+Map<String, String> defaultValues(@Nullable XSAnnotation annotation, @Named("Fallback") @Nullable Metadata fallback) {
+
+	// we extract the default values from the metadata annotation
 	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
 							.from(annotation)
 							.andTag(DEFAULT_VALUE_FIELD)
 							.build()
 							.values();
-	
-	HashMap<String, String> defaultValues = new HashMap<String, String>(nodeValues.size());
+	HashMap<String, String> defaultValues = new HashMap<String, String>();
+	// set the fallback ones first if any, as they will be overwritten by any local annotation values
+	if (fallback!=null) {
+		defaultValues.putAll(fallback.getDefaultValues());
+	}
 	for (Node n : nodeValues) {
 
 		String defaultValue = n.getTextContent();
