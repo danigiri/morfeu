@@ -17,10 +17,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Subscription }	  from 'rxjs/Subscription';
 
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+
 import { CellModelComponent } from './cell-model.component';
 
 import { Model, ModelJSON } from './model.class';
-import { Widget } from './widget.class';
+import { HotkeyWidget } from './hotkey-widget.class';
 import { RemoteObjectService } from './services/remote-object.service';
 import { CellDocument } from './cell-document.class';
 
@@ -64,14 +66,15 @@ import { StatusEvent } from './events/status.event';
 	`]
 })
 
-export class ModelComponent extends Widget implements OnInit {
+export class ModelComponent extends HotkeyWidget implements OnInit {
 	
 model: Model;
 	
 
-constructor(eventService: EventService, 
+constructor(eventService: EventService,
+            protected hotkeysService: HotkeysService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
-	super(eventService);
+	super(eventService, hotkeysService);
 }
 
 
@@ -120,6 +123,7 @@ diplayModel(m: Model) {
 
 	console.log("[UI] ModelComponent::diplayModel("+m.name+")");
 	this.model = m;
+    this.registerModelKeyShortcuts();
 
 }
 
@@ -127,9 +131,36 @@ diplayModel(m: Model) {
 clearModel() {
 
 	console.log("[UI] ModelComponent::clearModel()");
-	this.model = null;
+    this.unregisterKeyShortcuts();
+    this.model = null;
 
 }
+
+
+numberPressed = (event: KeyboardEvent): boolean => {
+    
+    return false; // Prevent keyboard event from bubbling
+
+}
+
+
+keyPressed = (event: KeyboardEvent): boolean => {
+    
+    return false; // Prevent keyboard event from bubbling
+    
+}
+
+
+private registerModelKeyShortcuts() {
+    
+    let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    this.registerNumberHotkey(new Hotkey(numbers, this.numberPressed));
+    let commands:string[] = ["m"]; 
+    this.registerCommandHotkey(new Hotkey(commands, this.keyPressed)); 
+
+
+}
+
 
 
 }

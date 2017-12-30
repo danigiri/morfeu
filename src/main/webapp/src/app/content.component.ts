@@ -25,7 +25,6 @@ import { Content, ContentJSON } from './content.class';
 import { FamilyMember } from './family-member.interface';
 import { Model } from './model.class';
 
-OperationResult
 import { RemoteDataService } from "./services/remote-data.service";
 import { RemoteObjectService } from "./services/remote-object.service";
 import { OperationResult } from "./services/operation-result.class";
@@ -33,7 +32,7 @@ import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 import { CellComponent } from './cell.component';
 import { DropAreaComponent } from './drop-area.component';
-import { Widget } from './widget.class';
+import { HotkeyWidget } from './hotkey-widget.class';
 
 import { CellActivateEvent } from './events/cell-activate.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
@@ -93,7 +92,7 @@ import { EventService } from './events/event.service';
 })
 
 
-export class ContentComponent extends Widget implements OnInit, AfterViewInit, OnDestroy {
+export class ContentComponent extends HotkeyWidget implements OnInit, AfterViewInit, OnDestroy {
 	
 content: Content;
 model: Model;
@@ -101,18 +100,15 @@ model: Model;
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 
 private cellSelectionClearSubscription: Subscription;
-
-private numberHotkey: Hotkey | Hotkey[];
 private dropAreaSelectingMode: boolean = false;
-private commandHotkey: Hotkey | Hotkey[];
 
 
 constructor(eventService: EventService,
-           private hotkeysService: HotkeysService,
+           protected hotkeysService: HotkeysService,
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("RemoteJSONDataService") private contentSaverService: RemoteDataService
             ) {
-	super(eventService);
+	super(eventService, hotkeysService);
 }
 
 
@@ -165,7 +161,6 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		document_.content = content;
 		content.associateWith(model);
 		this.displayContent(content);
-	    this.registerContentKeyShortcuts();
 		this.events.ok();
 	},
 	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
@@ -178,13 +173,14 @@ fetchContentFor(document_: CellDocument, model:Model) {
 displayContent(content: Content) {
 	console.log("[UI] ContentComponent::displayContent()");
 	this.content = content;
+    this.registerContentKeyShortcuts();
 }
 
 
 clearContent() {
 
     console.log("[UI] ContentComponent::clearContent()");
-	this.unregisterContentKeyShortcuts();
+	this.unregisterKeyShortcuts();
 	this.content = null;
 
 }
@@ -210,8 +206,8 @@ saveContent(document_:CellDocument) {
 /** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
 numberPressed = (event: KeyboardEvent): boolean => {
     
-    console.log("[UI] ContentComponent::numberPressed(key:"+event.key+", charCode:"+event.charCode+")");
-    let num:number = (event.key) ? parseInt(event.key, 10) : event.charCode-48;
+    let num:number = this.translateNumberKeyboardEvent(event);
+    console.log("[UI] ContentComponent::numberPressed(%i)", num);
     if (!this.dropAreaSelectingMode) {
         this.events.service.publish(new CellSelectEvent(num));
     } else {
@@ -226,24 +222,31 @@ numberPressed = (event: KeyboardEvent): boolean => {
 /** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
 keyPressed = (event: KeyboardEvent): boolean => {
     
-    console.log("[UI] ContentComponent::keyPressed(key:"+event.key+", charCode:"+event.charCode+")");
+    let command = this.translateCommandKeyboardEvent(event);
+    console.log("[UI] ContentComponent::keyPressed(%s)", command);
     if (this.dropAreaSelectingMode) {
         console.log("[UI] ContentComponent::selection mode deactivated");        
         this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
         this.dropAreaSelectingMode = false;
     }
-    if ((event.key && event.key=="c") || (event.charCode && event.charCode==99)) {
-        // we first send a clear so all children will clear, then back to registered in first level
-        this.events.service.publish(new CellSelectionClearEvent());
-        this.subscribeChildrenToCellSelection();
-    } else if ((event.key && event.key=="a") || (event.charCode && event.charCode==97)) {
-        this.events.service.publish(new CellActivateEvent());        
-    } else if ((event.key && event.key=="'") || (event.charCode && event.charCode==39)) {
-        console.log("[UI] ContentComponent::selection mode active for next numeric key");
-        this.events.service.publish(new StatusEvent("Drop area selection mode"));
-        this.dropAreaSelectingMode = true;
-    } else if ((event.key && event.key=="d") || (event.charCode && event.charCode==100)) {
-        this.events.service.publish(new CellDragEvent());        
+    
+    switch (command) {
+        case "c":
+            // we first send a clear so all children will clear, then back to registered in first level
+            this.events.service.publish(new CellSelectionClearEvent());
+            this.subscribeChildrenToCellSelection();
+            break;
+        case "a":
+            this.events.service.publish(new CellActivateEvent());
+            break;
+        case "'":
+            console.log("[UI] ContentComponent::selection mode active for next numeric key");
+            this.events.service.publish(new StatusEvent("Drop area selection mode"));
+            this.dropAreaSelectingMode = true;
+            break;
+        case "d":
+            this.events.service.publish(new CellDragEvent());  
+            break;
     }
 
     return false; // Prevent keyboard event from bubbling
@@ -254,7 +257,7 @@ keyPressed = (event: KeyboardEvent): boolean => {
 ngOnDestroy() {
     
     super.ngOnDestroy();
-    this.unregisterContentKeyShortcuts();
+    this.unregisterKeyShortcuts();
     
 }
 
@@ -262,20 +265,13 @@ ngOnDestroy() {
 private registerContentKeyShortcuts() {
     
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-    this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed));
+    this.registerNumberHotkey(new Hotkey(numbers, this.numberPressed));
     let commands:string[] = ["c", "a", "'", "d"]; 
-    this.commandHotkey = this.hotkeysService.add(new Hotkey(commands, this.keyPressed)); 
+    this.registerCommandHotkey(new Hotkey(commands, this.keyPressed)); 
 
 }
 
 
-private unregisterContentKeyShortcuts() {
-    
-    
-    this.hotkeysService.remove(this.numberHotkey);   
-    this.hotkeysService.remove(this.commandHotkey);   
-
-}
 
 
 private subscribeChildrenToCellSelection () {
