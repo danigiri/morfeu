@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { CellDocument } from './cell-document.class';
 import { Cell } from './cell.class';
@@ -32,7 +31,7 @@ import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 import { CellComponent } from './cell.component';
 import { DropAreaComponent } from './drop-area.component';
-import { HotkeyWidget } from './hotkey-widget.class';
+import { Widget } from "./widget.class";
 
 import { CellActivateEvent } from './events/cell-activate.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
@@ -44,6 +43,7 @@ import { ContentRefreshedEvent } from './events/content-refreshed.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { ContentSaveEvent } from './events/content-save.event';
 import { DropAreaSelectEvent } from './events/drop-area-select.event';
+import { KeyPressedEvent } from "./events/keypressed.event";
 import { StatusEvent } from './events/status.event';
 import { EventService } from './events/event.service';
 
@@ -92,7 +92,7 @@ import { EventService } from './events/event.service';
 })
 
 
-export class ContentComponent extends HotkeyWidget implements OnInit, AfterViewInit, OnDestroy {
+export class ContentComponent extends Widget implements OnInit, AfterViewInit {
 	
 content: Content;
 model: Model;
@@ -100,15 +100,16 @@ model: Model;
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 
 private cellSelectionClearSubscription: Subscription;
+private commandPressedSubscription: Subscription;
+private numberPressedSubscription: Subscription;
 private dropAreaSelectingMode: boolean = false;
 
 
 constructor(eventService: EventService,
-           protected hotkeysService: HotkeysService,
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("RemoteJSONDataService") private contentSaverService: RemoteDataService
             ) {
-	super(eventService, hotkeysService);
+	super(eventService);
 }
 
 
@@ -173,14 +174,14 @@ fetchContentFor(document_: CellDocument, model:Model) {
 displayContent(content: Content) {
 	console.log("[UI] ContentComponent::displayContent()");
 	this.content = content;
-    this.registerContentKeyShortcuts();
+    this.registerContentKeyPressedEvents();
 }
 
 
 clearContent() {
 
     console.log("[UI] ContentComponent::clearContent()");
-	this.unregisterKeyShortcuts();
+	this.unregisterContentKeyPressedEvents();
 	this.content = null;
 
 }
@@ -203,34 +204,20 @@ saveContent(document_:CellDocument) {
     );
 }
 
-/** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
-numberPressed = (event: KeyboardEvent): boolean => {
+
+registerContentKeyPressedEvents() {
     
-    let num:number = this.translateNumberKeyboardEvent(event);
-    console.log("[UI] ContentComponent::numberPressed(%i)", num);
-    if (!this.dropAreaSelectingMode) {
-        this.events.service.publish(new CellSelectEvent(num));
-    } else {
-        this.events.service.publish(new DropAreaSelectEvent(num));
-        this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
-    }
-    return false; // Prevent keyboard event from bubbling
-
-}
-
-
-/** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
-keyPressed = (event: KeyboardEvent): boolean => {
-    
-    let command = this.translateCommandKeyboardEvent(event);
-    console.log("[UI] ContentComponent::keyPressed(%s)", command);
+    this.commandPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
+                                            .filter( key => key.isCommand())
+                                            .subscribe( command => {
+    console.log("[UI] ContentComponent::keyPressed(%s)", command.str);
     if (this.dropAreaSelectingMode) {
         console.log("[UI] ContentComponent::selection mode deactivated");        
         this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
         this.dropAreaSelectingMode = false;
     }
     
-    switch (command) {
+    switch (command.str) {
         case "c":
             // we first send a clear so all children will clear, then back to registered in first level
             this.events.service.publish(new CellSelectionClearEvent());
@@ -249,29 +236,37 @@ keyPressed = (event: KeyboardEvent): boolean => {
             break;
     }
 
-    return false; // Prevent keyboard event from bubbling
-
+    }
+    ));
+    
+    this.numberPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
+            .filter( key => key.isNumber())
+            .subscribe( key => {
+                
+                console.log("[UI] ContentComponent::numberPressed(%i)", key.num);
+                if (!this.dropAreaSelectingMode) {
+                    this.events.service.publish(new CellSelectEvent(key.num));
+                } else {
+                    this.events.service.publish(new DropAreaSelectEvent(key.num));
+                    this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
+                }
+   
+    }
+            
+    ));
 }
 
 
-ngOnDestroy() {
+unregisterContentKeyPressedEvents() {
     
-    super.ngOnDestroy();
-    this.unregisterKeyShortcuts();
+    if (this.commandPressedSubscription) {
+        this.unsubscribe(this.commandPressedSubscription);
+    }
+    if (this.numberPressedSubscription) {
+        this.unsubscribe(this.numberPressedSubscription);
+    }
     
 }
-
-
-private registerContentKeyShortcuts() {
-    
-    let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-    this.registerNumberHotkey(new Hotkey(numbers, this.numberPressed));
-    let commands:string[] = ["c", "a", "'", "d"]; 
-    this.registerCommandHotkey(new Hotkey(commands, this.keyPressed)); 
-
-}
-
-
 
 
 private subscribeChildrenToCellSelection () {

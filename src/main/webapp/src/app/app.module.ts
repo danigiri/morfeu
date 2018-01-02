@@ -37,6 +37,7 @@ import { CellDocumentComponent } from './cell-document.component';
 import { CellModelComponent } from "./cell-model.component";
 import { CellInfoComponent } from "./components/cell-info.component";
 import { DropAreaComponent } from './drop-area.component';
+import { KeyCaptureComponent } from "./components/key-capture.component";
 import { ModelComponent } from './model.component';
 import { ProblemComponent } from './problem.component';
 import { StatusComponent } from './status.component';
@@ -64,6 +65,7 @@ import { StatusComponent } from './status.component';
                   ,CellInfoComponent
                   ,CellModelComponent
                   ,DropAreaComponent
+                  ,KeyCaptureComponent
 				  ,ModelComponent
 				  ,ProblemComponent 
 				  ,StatusComponent 
