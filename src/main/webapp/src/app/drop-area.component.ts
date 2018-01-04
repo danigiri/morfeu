@@ -118,7 +118,7 @@ ngOnInit() {
     
     this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .subscribe( a => {
-                if (this.matchesCellmodel(a.cellModel)) {
+                if (a.cellModel && this.matchesCellmodel(a.cellModel)) {
                     //console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
                     this.becomeActive();
                 }

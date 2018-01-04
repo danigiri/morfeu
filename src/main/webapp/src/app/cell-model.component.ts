@@ -42,6 +42,7 @@ import { EventService } from './events/event.service';
 				src={{getThumb()}} 
 				class="cell-model-thumb img-fluid" 
 				[class.cell-model-active]="active" 
+				[class.cell-model-selected]="node.data.widget.selected"
 				(mousedown)="clickDown(node.data)" 
 				(mouseup)="clickUp(node.data)"
 				(mouseenter)="clickDown(node.data)" 
@@ -66,6 +67,10 @@ import { EventService } from './events/event.service';
 			.cell-model-active {
 				border: 1px solid #f00;
 			}
+	         .cell-model-selected {
+	                border: 1px dashed #00f;
+	                border-radius: 5px;
+	        }
 			.cell-model-level-1 {}
 			.cell-model-level-2 {}
 			.cell-model-level-3 {}
@@ -109,6 +114,11 @@ ngOnInit() {
 				this.becomeActive(activated.cell);
 	}));
 	
+	// this will come from the selectableCellModelWidget via shortcuts
+	this.subscribe(this.events.service.of( CellModelActivatedEvent )
+            .filter( activated => activated.cellModel==this.node.data && !this.active)
+            .subscribe( activated => this.becomeActive(null)) 
+	);
 }
 
 

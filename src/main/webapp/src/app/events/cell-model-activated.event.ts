@@ -19,11 +19,11 @@ import { CellModel } from "../cell-model.class";
 
 export class CellModelActivatedEvent {
 
-constructor(public cellModel: CellModel) {}
+constructor(public cellModel?: CellModel) {}
 
 
 public toString = (): string => {
-	return "CellModelActivatedEvent:{cellModel:'"+this.cellModel.URI+"'}";
+	return "CellModelActivatedEvent:{cellModel:'"+(this.cellModel ? this.cellModel.URI : "<selection>")+"}'}";
 }
 
 }

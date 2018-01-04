@@ -14,10 +14,11 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Subscription }	  from 'rxjs/Subscription';
 
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { TreeComponent } from 'angular-tree-component';
 
 import { CellModelComponent } from './cell-model.component';
 
@@ -28,6 +29,9 @@ import { CellDocument } from './cell-document.class';
 
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CellSelectEvent } from './events/cell-select.event';
+import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { EventService } from './events/event.service';
 import { ModelRequestEvent } from './events/model-request.event';
@@ -70,6 +74,12 @@ export class ModelComponent extends HotkeyWidget implements OnInit {
 	
 model: Model;
 	
+protected selectionClearSubscription: Subscription;
+
+@ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
+
+private cellModelSelectingMode: boolean = false;
+
 
 constructor(eventService: EventService,
             protected hotkeysService: HotkeysService,
@@ -95,6 +105,8 @@ ngOnInit() {
 	this.subscribe(this.events.service.of(ModelRequestEvent).subscribe( requested =>
 			this.loadModel(requested.document) 
 	));
+	
+	this.subscribeToCellSelectionClear();
 	
 }
 
@@ -122,6 +134,8 @@ loadModel(document:CellDocument) {
 diplayModel(m: Model) {
 
 	console.log("[UI] ModelComponent::diplayModel("+m.name+")");
+	let i = 0;
+	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 	this.model = m;
     this.registerModelKeyShortcuts();
 
@@ -132,6 +146,9 @@ clearModel() {
 
 	console.log("[UI] ModelComponent::clearModel()");
     this.unregisterKeyShortcuts();
+	if (this.model) {
+	    this.model.cellModels.forEach(cm => cm.deactivateEventService());
+	}
     this.model = null;
 
 }
@@ -139,15 +156,51 @@ clearModel() {
 
 numberPressed = (event: KeyboardEvent): boolean => {
     
-    return false; // Prevent keyboard event from bubbling
+    let num = this.translateNumberKeyboardEvent(event);
+    if (this.cellModelSelectingMode) {
+
+        console.log("[UI] ModelComponent::numberPressed(%i)", num);
+        this.events.service.publish(new CellSelectEvent(num));
+        
+        return false;
+    } 
+    return true;
+    //return false; // Prevent keyboard event from bubbling
 
 }
 
 
 keyPressed = (event: KeyboardEvent): boolean => {
     
-    return false; // Prevent keyboard event from bubbling
+    let command = this.translateCommandKeyboardEvent(event);
+    console.log("[UI] ModelComponent::keyPressed(%s)", command);
     
+    let handled = false;
+    switch (command) {
+    case "m":
+        console.log("[UI] ModelComponent::keyPressed(%s) m1 %s", command, this.cellModelSelectingMode);
+        this.unsubscribeFromCellSelectionClear();
+        this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
+        console.log("[UI] ModelComponent::keyPressed(%s) m2 %s", command, this.cellModelSelectingMode);
+        this.subscribeToCellSelectionClear();
+        this.cellModelSelectingMode = true;
+        console.log("[UI] ModelComponent::keyPressed(%s) m3 %s", command, this.cellModelSelectingMode);
+        this.subscribeChildrenToCellSelection();
+        handled = true;
+        break;   
+    case "j":
+        console.log("[UI] ModelComponent::keyPressed(%s) j %s", command, this.cellModelSelectingMode);
+        this.events.service.publish(new CellModelActivatedEvent());    // will activate the 
+        handled = true;                                                // current selection if any
+        break;
+    case "n":
+        // generate new cell event or reuse drag event  new new new!!!!!!!!
+        handled = true;
+        break;   
+    }
+ 
+    return !handled;
+
 }
 
 
@@ -155,12 +208,49 @@ private registerModelKeyShortcuts() {
     
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     this.registerNumberHotkey(new Hotkey(numbers, this.numberPressed));
-    let commands:string[] = ["m"]; 
+    let commands:string[] = ["m", "n", "j"];
     this.registerCommandHotkey(new Hotkey(commands, this.keyPressed)); 
-
 
 }
 
 
+private subscribeChildrenToCellSelection () {
+    
+    console.log("ModelComponent::subscribeChildrenToCellSelection()");
+    this.unsubscribeChildrenFromCellSelection();
+    this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => {
+        n.expand();
+        n.data.widget.subscribeToSelection();   // breaks class-component abstraction, but there does not seem 
+                                                //to be an easy way to do this with the tree component
+        }
+    );
+    
+}
 
+
+unsubscribeChildrenFromCellSelection() {
+    // breaks class-component abstraction, but there does not seem to
+    // be an easy way to do this with the tree component we're using
+    this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
+        n.data.widget.unsubscribeFromSelection()
+    ); 
+}
+
+
+private subscribeToCellSelectionClear() {
+ // selection clear, we clear and are no longer eligible to receive selection events
+    this.selectionClearSubscription = this.subscribe(this.events.service.of(CellSelectionClearEvent).subscribe(
+              clear => {
+                  console.log("[UI] ModelComponent::received CellSelectionClearEvent");
+                  this.cellModelSelectingMode = false;
+                  this.unsubscribeChildrenFromCellSelection();
+              }
+   ));
+}
+
+private unsubscribeFromCellSelectionClear() {
+    if (this.selectionClearSubscription) {
+        this.unsubscribe(this.selectionClearSubscription);
+    }
+}
 }

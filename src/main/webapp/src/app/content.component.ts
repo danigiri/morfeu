@@ -97,9 +97,10 @@ export class ContentComponent extends HotkeyWidget implements OnInit, AfterViewI
 content: Content;
 model: Model;
 
-@ViewChildren(CellComponent) children: QueryList<CellComponent>;
+@ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
 private cellSelectionClearSubscription: Subscription;
+private cellSelectingMode: boolean = false;
 private dropAreaSelectingMode: boolean = false;
 
 
@@ -140,11 +141,13 @@ ngOnInit() {
 ngAfterViewInit() {
 
     console.log("ContentComponent::ngAfterViewInit()")
-    this.children.changes.subscribe(c => {
-        this.subscribeChildrenToCellSelection();
-        // if we send the vent immediately in the binding changing callback we'll probably be affecting the
-        // component binding values after they have been read, we trigger it outside the callback then:
-        Promise.resolve(null).then(()=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
+    this.childrenCellComponents.changes.subscribe(c => {
+        if (this.cellSelectingMode) {
+            this.subscribeChildrenToCellSelection();
+            // if we send the vent immediately in the binding changing callback we'll probably be affecting the
+            // component binding values after they have been read, we trigger it outside the callback then:
+            Promise.resolve(null).then(()=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
+        }
     });
 
 }
@@ -173,6 +176,7 @@ fetchContentFor(document_: CellDocument, model:Model) {
 displayContent(content: Content) {
 	console.log("[UI] ContentComponent::displayContent()");
 	this.content = content;
+	this.cellSelectingMode = true;
     this.registerContentKeyShortcuts();
 }
 
@@ -180,6 +184,7 @@ displayContent(content: Content) {
 clearContent() {
 
     console.log("[UI] ContentComponent::clearContent()");
+    this.cellSelectingMode = false;
 	this.unregisterKeyShortcuts();
 	this.content = null;
 
@@ -195,7 +200,7 @@ saveContent(document_:CellDocument) {
   
     this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {  // YAY!
                 console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
-                // reloading
+                // reloading would go here
                 //this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
             },
             error => this.events.problem(error.message),     // error is of the type HttpErrorResponse
@@ -206,14 +211,15 @@ saveContent(document_:CellDocument) {
 /** Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug */
 numberPressed = (event: KeyboardEvent): boolean => {
     
-    let num:number = this.translateNumberKeyboardEvent(event);
+    let num = this.translateNumberKeyboardEvent(event);
     console.log("[UI] ContentComponent::numberPressed(%i)", num);
-    if (!this.dropAreaSelectingMode) {
+    if (!this.dropAreaSelectingMode && this.cellSelectingMode) {
         this.events.service.publish(new CellSelectEvent(num));
-    } else {
+    } else if (this.dropAreaSelectingMode){
         this.events.service.publish(new DropAreaSelectEvent(num));
         this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
     }
+    
     return false; // Prevent keyboard event from bubbling
 
 }
@@ -230,26 +236,40 @@ keyPressed = (event: KeyboardEvent): boolean => {
         this.dropAreaSelectingMode = false;
     }
     
+    let captured = false;
     switch (command) {
         case "c":
             // we first send a clear so all children will clear, then back to registered in first level
             this.events.service.publish(new CellSelectionClearEvent());
+            this.cellSelectingMode = true;
             this.subscribeChildrenToCellSelection();
+            captured = true;
+            break;
+        case "m":       //FIXME: this is never called, it's owned by the model component
+            this.dropAreaSelectingMode = false;
+            this.cellSelectingMode = false;
+            captured = false;    // this needs to 
             break;
         case "a":
-            this.events.service.publish(new CellActivateEvent());
+            if (this.cellSelectingMode || this.dropAreaSelectingMode) {
+                this.events.service.publish(new CellActivateEvent());
+                captured = true;
+            }
             break;
         case "'":
             console.log("[UI] ContentComponent::selection mode active for next numeric key");
             this.events.service.publish(new StatusEvent("Drop area selection mode"));
             this.dropAreaSelectingMode = true;
+            this.cellSelectingMode = false;
+            captured = true;
             break;
         case "d":
-            this.events.service.publish(new CellDragEvent());  
+            this.events.service.publish(new CellDragEvent());
+            captured = true;
             break;
     }
 
-    return false; // Prevent keyboard event from bubbling
+    return !captured;
 
 }
 
@@ -272,18 +292,20 @@ private registerContentKeyShortcuts() {
 }
 
 
-
-
 private subscribeChildrenToCellSelection () {
     console.log("Content::subscribeChildrenToCellSelection()");
     //FIXME: detect changes: https://angular.io/api/core/ViewChildren
     // the list of children views is only available ngAfterViewInit but we assume that
     // fetching the content will have been much slower
     // we ensure there were no previous selections, avoiding double or triple selects
-    this.children.forEach(c => c.unsubscribeFromSelection());
-    this.children.forEach(c => c.subscribeToSelection());
+    this.unsubscribeChildrenFromCellSelection();
+    this.childrenCellComponents.forEach(c => c.subscribeToSelection());
 }
 
+
+private unsubscribeChildrenFromCellSelection () {
+    this.childrenCellComponents.forEach(c => c.unsubscribeFromSelection());
+}
 
 }
 

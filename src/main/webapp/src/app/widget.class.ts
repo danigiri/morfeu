@@ -26,7 +26,7 @@ export class Widget implements OnDestroy {
 protected events: Events;
 private subscriptions: Subscription[];
 
-protected constructor(private eventService: EventService) {
+constructor(private eventService: EventService) {
 
 	this.events = new Events(eventService);
 	this.subscriptions = [];
@@ -35,7 +35,7 @@ protected constructor(private eventService: EventService) {
 
 
 // at some point we will have to handle unsubscriptions more effectively
-protected subscribe(s: Subscription): Subscription {
+subscribe(s: Subscription): Subscription {
 	
 	this.subscriptions.push(s);
 	return s;
@@ -43,17 +43,22 @@ protected subscribe(s: Subscription): Subscription {
 }
 
 
-protected unsubscribe(s:Subscription) {
+unsubscribe(s:Subscription) {
 
+    if (!s) {
+        console.error("Trying to unsubscribe an undefined subscription");
+    }
    // unsusbscribe and then remove this subscription from the list
    s.unsubscribe();
    this.subscriptions = this.subscriptions.filter(sub => sub!==s);
 
 }
 
-protected subscriptionCount():number {
+
+subscriptionCount():number {
     return this.subscriptions.length;
 }
+
 
 ngOnDestroy() {
 	this.subscriptions.forEach(s => s.unsubscribe());

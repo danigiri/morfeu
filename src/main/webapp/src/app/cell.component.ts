@@ -271,9 +271,9 @@ ngOnInit() {
 	
 	// a cell model activated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-			.filter(a => this.isCompatibleWith(a.cellModel))	// //
+	        .filter( a => a.cellModel && this.isCompatibleWith(a.cellModel))
 			.subscribe( a => {
-				//console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
+				console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
 				this.becomeActive(this.cell);
 	}));
 
