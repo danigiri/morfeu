@@ -77,7 +77,7 @@ import { EventService } from './events/event.service';
         		    <problem></problem>
 		 </div>
 	  </div>
-	  <key-capture [commands]="['c', 'a', '\\'', 'd']"></key-capture>
+	  <key-capture></key-capture>
 	  `,
 	providers:	  [
 				   // note that Http is injected by the HttpModule imported in the application module

@@ -31,7 +31,7 @@ import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 import { CellComponent } from './cell.component';
 import { DropAreaComponent } from './drop-area.component';
-import { Widget } from "./widget.class";
+import { KeyListenerWidget } from "./key-listener-widget.class";
 
 import { CellActivateEvent } from './events/cell-activate.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
@@ -45,7 +45,7 @@ import { ContentSaveEvent } from './events/content-save.event';
 import { DropAreaSelectEvent } from './events/drop-area-select.event';
 import { KeyPressedEvent } from "./events/keypressed.event";
 import { StatusEvent } from './events/status.event';
-import { EventService } from './events/event.service';
+import { EventService } from "./events/event.service";
 
 
 @Component({
@@ -62,6 +62,8 @@ import { EventService } from './events/event.service';
 			    ></cell>
 			<!-- TODO: static checks using the moel and not what's already present (cells) -->
 		</div>
+        <ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
+        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container>
     </div>
 <!-- THIS DISPLAYS AS IT SHOULD -->
 <!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">
@@ -92,16 +94,17 @@ import { EventService } from './events/event.service';
 })
 
 
-export class ContentComponent extends Widget implements OnInit, AfterViewInit {
+export class ContentComponent extends KeyListenerWidget implements OnInit, AfterViewInit {
 	
+    
 content: Content;
 model: Model;
+
+protected commandKeys: string[] = ["c", "a", "d", "'", "m"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
 private cellSelectionClearSubscription: Subscription;
-private commandPressedSubscription: Subscription;
-private numberPressedSubscription: Subscription;
 private cellSelectingMode: boolean = false;
 private dropAreaSelectingMode: boolean = false;
 
@@ -147,7 +150,7 @@ ngAfterViewInit() {
             this.subscribeChildrenToCellSelection();
             // if we send the vent immediately in the binding changing callback we'll probably be affecting the
             // component binding values after they have been read, we trigger it outside the callback then:
-            Promise.resolve(null).then(()=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
+            Promise.resolve(null).then((d)=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
         }
     });
 
@@ -175,11 +178,12 @@ fetchContentFor(document_: CellDocument, model:Model) {
 
 
 displayContent(content: Content) {
-	console.log("[UI] ContentComponent::displayContent()");
+	
+    console.log("[UI] ContentComponent::displayContent()");
 	this.content = content;
 	this.cellSelectingMode = true;
-    this.registerContentKeyShortcuts();
-    this.registerContentKeyPressedEvents();
+    this.registerKeyPressedEvents();
+    
 }
 
 
@@ -187,8 +191,7 @@ clearContent() {
 
     console.log("[UI] ContentComponent::clearContent()");
     this.cellSelectingMode = false;
-	this.unregisterKeyShortcuts();
-	this.unregisterContentKeyPressedEvents();
+	this.unregisterKeyPressedEvents();
 	this.content = null;
 
 }
@@ -209,37 +212,36 @@ saveContent(document_:CellDocument) {
             error => this.events.problem(error.message),     // error is of the type HttpErrorResponse
             () => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
     );
+    
 }
 
 
-registerContentKeyPressedEvents() {
+commandPressedCallback(command: string) {
     
-    this.commandPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
-                                            .filter( key => key.isCommand())
-                                            .subscribe( command => {
-    console.log("[UI] ContentComponent::keyPressed(%s)", command.str);
+    console.log("[UI] ContentComponent::keyPressed(%s)", command);
     if (this.dropAreaSelectingMode) {
         console.log("[UI] ContentComponent::selection mode deactivated");        
         this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
         this.dropAreaSelectingMode = false;
     }
     
-    switch (command.str) {
+    switch (command) {
         case "c":
             // we first send a clear so all children will clear, then back to registered in first level
+            console.log("[UI] ContentComponent::cell selection clear");
             this.events.service.publish(new CellSelectionClearEvent());
             this.cellSelectingMode = true;
             this.subscribeChildrenToCellSelection();
             break;
-        case "m":       //FIXME: this is never called, it's owned by the model component
+        case "m":       //FIXME: this will now be called, check that it works
+            console.log("[UI] ContentComponent::not selecting anything in content");
             this.dropAreaSelectingMode = false;
             this.cellSelectingMode = false;
-            captured = false;    // this needs to 
             break;
         case "a":
             if (this.cellSelectingMode || this.dropAreaSelectingMode) {
+                console.log("[UI] ContentComponent::activating current selection");
                 this.events.service.publish(new CellActivateEvent());
-                captured = true;
             }
             break;
         case "'":
@@ -247,44 +249,29 @@ registerContentKeyPressedEvents() {
             this.events.service.publish(new StatusEvent("Drop area selection mode"));
             this.dropAreaSelectingMode = true;
             this.cellSelectingMode = false;
-            captured = true;
             break;
         case "d":
             this.events.service.publish(new CellDragEvent());  
             break;
     }
 
-    }
-    ));
+}
+
     
-    this.numberPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
-            .filter( key => key.isNumber())
-            .subscribe( key => {
+numberPressedCallback(num: number) {
                 
-                console.log("[UI] ContentComponent::numberPressed(%i)", key.num);
-                if (!this.dropAreaSelectingMode) {
-                    this.events.service.publish(new CellSelectEvent(key.num));
-                } else {
-                    this.events.service.publish(new DropAreaSelectEvent(key.num));
-                    this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
-                }
+    if (this.cellSelectingMode) {
+        console.log("[UI] ContentComponent::numberPressed(%i) [cellSelectingMode]", num);
+        this.events.service.publish(new CellSelectEvent(num));
+    } else if (this.dropAreaSelectingMode) {
+        console.log("[UI] ContentComponent::numberPressed(%i) [dropAreaSelectingMode]", num);
+        this.events.service.publish(new DropAreaSelectEvent(num));
+        this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
+    }
    
-    }
-            
-    ));
 }
 
 
-unregisterContentKeyPressedEvents() {
-    
-    if (this.commandPressedSubscription) {
-        this.unsubscribe(this.commandPressedSubscription);
-    }
-    if (this.numberPressedSubscription) {
-        this.unsubscribe(this.numberPressedSubscription);
-    }
-    
-}
 
 
 private subscribeChildrenToCellSelection () {

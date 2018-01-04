@@ -23,10 +23,9 @@ import { TreeComponent } from 'angular-tree-component';
 import { CellModelComponent } from './cell-model.component';
 
 import { Model, ModelJSON } from './model.class';
-import { HotkeyWidget } from './hotkey-widget.class';
-import { Widget } from './widget.class';
 import { RemoteObjectService } from './services/remote-object.service';
 import { CellDocument } from './cell-document.class';
+import { KeyListenerWidget } from "./key-listener-widget.class";
 
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
@@ -35,6 +34,7 @@ import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from './events/cell-model-activated.event';
 import { ContentRequestEvent } from './events/content-request.event';
 import { EventService } from './events/event.service';
+import { KeyPressedEvent } from "./events/keypressed.event";
 import { ModelRequestEvent } from './events/model-request.event';
 import { StatusEvent } from './events/status.event';
 
@@ -58,6 +58,7 @@ import { StatusEvent } from './events/status.event';
 							</ng-template>
 						</tree-root>
 					</div>
+					<ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container>
 				</div>
 			</div>
 	</ng-container>
@@ -71,16 +72,16 @@ import { StatusEvent } from './events/status.event';
 	`]
 })
 
-export class ModelComponent extends Widget implements OnInit {
+export class ModelComponent extends KeyListenerWidget implements OnInit {
 	
+    
 model: Model;
 	
+protected commandKeys: string[] = ["m", "a", "n"];
+private cellModelSelectingMode: boolean = false;
 protected selectionClearSubscription: Subscription;
 
 @ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
-
-private cellModelSelectingMode: boolean = false;
-
 
 constructor(eventService: EventService,
            // protected hotkeysService: HotkeysService,
@@ -139,7 +140,7 @@ diplayModel(m: Model) {
 	let i = 0;
 	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 	this.model = m;
-    this.registerModelKeyShortcuts();
+    this.registerKeyPressedEvents();
 
 }
 
@@ -147,7 +148,7 @@ diplayModel(m: Model) {
 clearModel() {
 
 	console.log("[UI] ModelComponent::clearModel()");
-    this.unregisterKeyShortcuts();
+    this.unregisterKeyPressedEvents();
 	if (this.model) {
 	    this.model.cellModels.forEach(cm => cm.deactivateEventService());
 	}
@@ -156,30 +157,11 @@ clearModel() {
 }
 
 
-numberPressed = (event: KeyboardEvent): boolean => {
-    
-    let num = this.translateNumberKeyboardEvent(event);
-    if (this.cellModelSelectingMode) {
+commandPressedCallback(command: string) {
 
-        console.log("[UI] ModelComponent::numberPressed(%i)", num);
-        this.events.service.publish(new CellSelectEvent(num));
-        
-        return false;
-    } 
-    return true;
-    //return false; // Prevent keyboard event from bubbling
-
-}
-
-
-keyPressed = (event: KeyboardEvent): boolean => {
-    
-    let command = this.translateCommandKeyboardEvent(event);
-    console.log("[UI] ModelComponent::keyPressed(%s)", command);
-    
-    let handled = false;
     switch (command) {
     case "m":
+        this.cellModelSelectingMode = true;
         console.log("[UI] ModelComponent::keyPressed(%s) m1 %s", command, this.cellModelSelectingMode);
         this.unsubscribeFromCellSelectionClear();
         this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
@@ -188,32 +170,35 @@ keyPressed = (event: KeyboardEvent): boolean => {
         this.cellModelSelectingMode = true;
         console.log("[UI] ModelComponent::keyPressed(%s) m3 %s", command, this.cellModelSelectingMode);
         this.subscribeChildrenToCellSelection();
-        handled = true;
         break;   
-    case "j":
-        console.log("[UI] ModelComponent::keyPressed(%s) j %s", command, this.cellModelSelectingMode);
-        this.events.service.publish(new CellModelActivatedEvent());    // will activate the 
-        handled = true;                                                // current selection if any
+    case "a":
+        if (this.cellModelSelectingMode) {
+            console.log("[UI] ModelComponent::keyPressed(%s) a %s", command, this.cellModelSelectingMode);
+            this.events.service.publish(new CellModelActivatedEvent());    // will activate the 
+            this.cellModelSelectingMode = false;                            // current selection if any
+        }
         break;
     case "n":
-        // generate new cell event or reuse drag event  new new new!!!!!!!!
-        handled = true;
+        // TODO: generate new cell event or reuse drag event  new new new!!!!!!!!
+
         break;   
     }
- 
-    return !handled;
-
+             
 }
 
-
-private registerModelKeyShortcuts() {
     
-    let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-    this.registerNumberHotkey(new Hotkey(numbers, this.numberPressed));
-    let commands:string[] = ["m"]; 
-    //this.registerCommandHotkey(new Hotkey(commands, this.keyPressed)); 
+numberPressedCallback(num: number) {
+
+    if (this.cellModelSelectingMode) {
+
+        console.log("[UI] ModelComponent::numberPressed(%i)", num);
+        this.events.service.publish(new CellSelectEvent(num));
+        
+    } 
 
 }
+
+
 
 
 private subscribeChildrenToCellSelection () {
@@ -249,6 +234,7 @@ private subscribeToCellSelectionClear() {
               }
    ));
 }
+
 
 private unsubscribeFromCellSelectionClear() {
     if (this.selectionClearSubscription) {
