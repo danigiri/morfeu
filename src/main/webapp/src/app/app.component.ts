@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2016 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -77,6 +77,7 @@ import { EventService } from './events/event.service';
         		    <problem></problem>
 		 </div>
 	  </div>
+	  <key-capture keys="['c', 'a', '\'', 'd']"></key-capture>
 	  `,
 	providers:	  [
 				   // note that Http is injected by the HttpModule imported in the application module
