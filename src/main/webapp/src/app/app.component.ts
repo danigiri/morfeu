@@ -53,7 +53,6 @@ import { EventService } from './events/event.service';
 @Component({
 	selector: 'app-root',
 	template: `
-	     <key-capture></key-capture>
 	    <div class="card">
 	        <div class="card-body">
 		      <h1 class="card-title">Morfeu application</h1>
@@ -78,6 +77,7 @@ import { EventService } from './events/event.service';
         		    <problem></problem>
 		 </div>
 	  </div>
+	  <key-capture [commands]="['c', 'a', '\\'', 'd']"></key-capture>
 	  `,
 	providers:	  [
 				   // note that Http is injected by the HttpModule imported in the application module

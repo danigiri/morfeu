@@ -28,7 +28,7 @@ import { EventService } from "../events/event.service";
     moduleId: module.id,
     selector: 'key-capture',
     template: ` 
-    <div>HOLA</div>
+    <div></div>
     `
 })
 
@@ -40,7 +40,7 @@ private readonly keyMap: {[key: number]: string} = {39:"'", 97:"a", 98:"b", 99:"
                                                     ,115:"s", 116:"t", 117:"u", 118:"v", 119:"w", 120:"x"
                                                     ,121:"y", 122:"z"};
 
-@Input() keys?: string[];
+@Input() commands?: string[];
 
 private numberHotkey: Hotkey | Hotkey[];
 private commandHotkey: Hotkey | Hotkey[];
@@ -66,8 +66,8 @@ public registerKeyShortcuts() {
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed_));
     console.log("KeyCaptureComponent::registerKeyShortcuts(%s)",  this.numberHotkey);
-    let commands:string[] = ["c", "a", "'", "d"]; 
-    this.commandHotkey = this.hotkeysService.add(new Hotkey(commands, this.keyPressed_)); 
+    //let commands:string[] = ["c", "a", "'", "d"]; 
+    this.commandHotkey = this.hotkeysService.add(new Hotkey(this.commands, this.keyPressed_)); 
     console.log("KeyCaptureComponent::registerKeyShortcuts(%s)",  this.commandHotkey);
     
 }
