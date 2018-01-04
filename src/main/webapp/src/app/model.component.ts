@@ -24,6 +24,7 @@ import { CellModelComponent } from './cell-model.component';
 
 import { Model, ModelJSON } from './model.class';
 import { HotkeyWidget } from './hotkey-widget.class';
+import { Widget } from './widget.class';
 import { RemoteObjectService } from './services/remote-object.service';
 import { CellDocument } from './cell-document.class';
 
@@ -70,7 +71,7 @@ import { StatusEvent } from './events/status.event';
 	`]
 })
 
-export class ModelComponent extends HotkeyWidget implements OnInit {
+export class ModelComponent extends Widget implements OnInit {
 	
 model: Model;
 	
@@ -82,9 +83,10 @@ private cellModelSelectingMode: boolean = false;
 
 
 constructor(eventService: EventService,
-            protected hotkeysService: HotkeysService,
+           // protected hotkeysService: HotkeysService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
-	super(eventService, hotkeysService);
+    super(eventService);
+   // super(eventService, hotkeysService);
 }
 
 
@@ -208,8 +210,8 @@ private registerModelKeyShortcuts() {
     
     let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     this.registerNumberHotkey(new Hotkey(numbers, this.numberPressed));
-    let commands:string[] = ["m", "n", "j"];
-    this.registerCommandHotkey(new Hotkey(commands, this.keyPressed)); 
+    let commands:string[] = ["m"]; 
+    //this.registerCommandHotkey(new Hotkey(commands, this.keyPressed)); 
 
 }
 

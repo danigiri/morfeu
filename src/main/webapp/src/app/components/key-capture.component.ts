@@ -40,13 +40,13 @@ private readonly keyMap: {[key: number]: string} = {39:"'", 97:"a", 98:"b", 99:"
                                                     ,115:"s", 116:"t", 117:"u", 118:"v", 119:"w", 120:"x"
                                                     ,121:"y", 122:"z"};
 
-@Input() keys: string[];
+@Input() keys?: string[];
 
 private numberHotkey: Hotkey | Hotkey[];
 private commandHotkey: Hotkey | Hotkey[];
 
     
-constructor(eventService: EventService, private hotkeysService: HotkeysService) {
+constructor(eventService: EventService, public hotkeysService: HotkeysService) {
     super(eventService);
 }
 
