@@ -29,9 +29,17 @@ protected numberPressedSubscription: Subscription;
 registerKeyPressedEvents() {
     
     this.commandPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
-            .filter( key => key.isCommand() && this.commandKeys.find( c => c===key.str)!=undefined)
-            .subscribe( key => this.commandPressedCallback(key.str))
+            .filter( key => key.isCommand())
+           .subscribe( key => {
+               if (this.commandKeys.find( c => c===key.str)!=undefined) {
+                   this.commandPressedCallback(key.str);
+               } else {
+                   this.commandNotRegisteredCallback(key.str);
+               }
+           })
     );
+    
+    
     
     this.numberPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
             .filter( key => key.isNumber())
@@ -40,9 +48,11 @@ registerKeyPressedEvents() {
 
 }
 
-
+/** This will be called when a key registered in commandKeys is triggered */
 abstract commandPressedCallback(command: string);
 
+/** This will be called when a key is triggered that is not registered in commandKeys */
+commandNotRegisteredCallback(command: string) {}
 
 abstract numberPressedCallback(num: number);
 

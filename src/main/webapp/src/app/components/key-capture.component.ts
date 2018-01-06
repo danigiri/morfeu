@@ -33,7 +33,10 @@ import { EventService } from "../events/event.service";
 })
 
 export class KeyCaptureComponent extends Widget implements OnInit, OnDestroy  {
-    
+
+public readonly ALL_KEYS: string[] = ["'", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l","m", 
+                                      "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
 private readonly keyMap: {[key: number]: string} = {39:"'", 97:"a", 98:"b", 99:"c", 100:"d", 101:"e", 102:"f"
                                                     ,103:"g", 104:"h", 105:"i", 106:"j", 107:"k", 108:"l"
                                                     ,109:"m", 110:"n", 111:"o", 112:"p", 113:"q", 114:"r"

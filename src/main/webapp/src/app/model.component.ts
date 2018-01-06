@@ -74,7 +74,7 @@ import { StatusEvent } from './events/status.event';
 
 export class ModelComponent extends KeyListenerWidget implements OnInit {
 	
-    
+	
 model: Model;
 	
 protected commandKeys: string[] = ["m", "a", "n"];
@@ -84,9 +84,8 @@ protected selectionClearSubscription: Subscription;
 @ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
 constructor(eventService: EventService,
-           // protected hotkeysService: HotkeysService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
-    super(eventService);
+	super(eventService);
    // super(eventService, hotkeysService);
 }
 
@@ -109,7 +108,7 @@ ngOnInit() {
 			this.loadModel(requested.document) 
 	));
 	
-	this.subscribeToCellSelectionClear();
+	//this.subscribeToCellSelectionClear();
 	
 }
 
@@ -140,7 +139,7 @@ diplayModel(m: Model) {
 	let i = 0;
 	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 	this.model = m;
-    this.registerKeyPressedEvents();
+	this.registerKeyPressedEvents();
 
 }
 
@@ -148,53 +147,58 @@ diplayModel(m: Model) {
 clearModel() {
 
 	console.log("[UI] ModelComponent::clearModel()");
-    this.unregisterKeyPressedEvents();
+	this.unregisterKeyPressedEvents();
 	if (this.model) {
-	    this.model.cellModels.forEach(cm => cm.deactivateEventService());
+		this.model.cellModels.forEach(cm => cm.deactivateEventService());
 	}
-    this.model = null;
+	this.model = null;
 
 }
 
 
 commandPressedCallback(command: string) {
 
-    switch (command) {
-    case "m":
-        this.cellModelSelectingMode = true;
-        console.log("[UI] ModelComponent::keyPressed(%s) m1 %s", command, this.cellModelSelectingMode);
-        this.unsubscribeFromCellSelectionClear();
-        this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
-        console.log("[UI] ModelComponent::keyPressed(%s) m2 %s", command, this.cellModelSelectingMode);
-        this.subscribeToCellSelectionClear();
-        this.cellModelSelectingMode = true;
-        console.log("[UI] ModelComponent::keyPressed(%s) m3 %s", command, this.cellModelSelectingMode);
-        this.subscribeChildrenToCellSelection();
-        break;   
-    case "a":
-        if (this.cellModelSelectingMode) {
-            console.log("[UI] ModelComponent::keyPressed(%s) a %s", command, this.cellModelSelectingMode);
-            this.events.service.publish(new CellModelActivatedEvent());    // will activate the 
-            this.cellModelSelectingMode = false;                            // current selection if any
-        }
-        break;
-    case "n":
-        // TODO: generate new cell event or reuse drag event  new new new!!!!!!!!
+	switch (command) {
+	case "m":
+		this.cellModelSelectingMode = true;
+		this.unsubscribeFromCellSelectionClear();
+		this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
+		//this.subscribeToCellSelectionClear();
+		this.cellModelSelectingMode = true;
+		this.subscribeChildrenToCellSelection();
+		break;	 
+	case "a":
+		if (this.cellModelSelectingMode) {
+			console.log("[UI] ModelComponent::keyPressed(%s) a %s", command, this.cellModelSelectingMode);
+			this.events.service.publish(new CellModelActivatedEvent());	   // will activate the 
+			this.cellModelSelectingMode = false;							// current selection if any
+		}
+		break;
+	case "n":
+		// TODO: generate new cell event or reuse drag event  new new new!!!!!!!!
 
-        break;   
-    }
-             
+		break;	 
+	}
+			 
 }
 
+
+commandNotRegisteredCallback(command: string) {
     
+    console.log("[UI] ModelComponent::keyPressed(%s) not interested", command, this.cellModelSelectingMode);
+    this.cellModelSelectingMode = false;
+    
+}
+
+
 numberPressedCallback(num: number) {
 
-    if (this.cellModelSelectingMode) {
+	if (this.cellModelSelectingMode) {
 
-        console.log("[UI] ModelComponent::numberPressed(%i)", num);
-        this.events.service.publish(new CellSelectEvent(num));
-        
-    } 
+		console.log("[UI] ModelComponent::numberPressed(%i)", num);
+		this.events.service.publish(new CellSelectEvent(num));
+
+	} 
 
 }
 
@@ -202,43 +206,43 @@ numberPressedCallback(num: number) {
 
 
 private subscribeChildrenToCellSelection () {
-    
-    console.log("ModelComponent::subscribeChildrenToCellSelection()");
-    this.unsubscribeChildrenFromCellSelection();
-    this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => {
-        n.expand();
-        n.data.widget.subscribeToSelection();   // breaks class-component abstraction, but there does not seem 
-                                                //to be an easy way to do this with the tree component
-        }
-    );
-    
+	
+	console.log("ModelComponent::subscribeChildrenToCellSelection()");
+	this.unsubscribeChildrenFromCellSelection();
+	this.cellModelComponentsRoot.treeModel.roots.forEach(r => {
+		r.expand();
+		r.data.widget.subscribeToSelection();	// breaks class-component abstraction, but there does not seem 
+												//to be an easy way to do this with the tree component
+		}
+	);
+	
 }
 
 
 unsubscribeChildrenFromCellSelection() {
-    // breaks class-component abstraction, but there does not seem to
-    // be an easy way to do this with the tree component we're using
-    this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
-        n.data.widget.unsubscribeFromSelection()
-    ); 
+	// breaks class-component abstraction, but there does not seem to
+	// be an easy way to do this with the tree component we're using
+	this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
+		n.data.widget.unsubscribeFromSelection()
+	); 
 }
 
 
 private subscribeToCellSelectionClear() {
  // selection clear, we clear and are no longer eligible to receive selection events
-    this.selectionClearSubscription = this.subscribe(this.events.service.of(CellSelectionClearEvent).subscribe(
-              clear => {
-                  console.log("[UI] ModelComponent::received CellSelectionClearEvent");
-                  this.cellModelSelectingMode = false;
-                  this.unsubscribeChildrenFromCellSelection();
-              }
+	this.selectionClearSubscription = this.subscribe(this.events.service.of(CellSelectionClearEvent).subscribe(
+			  clear => {
+				  console.log("[UI] ModelComponent::received CellSelectionClearEvent");
+				  this.cellModelSelectingMode = false;
+				  this.unsubscribeChildrenFromCellSelection();
+			  }
    ));
 }
 
 
 private unsubscribeFromCellSelectionClear() {
-    if (this.selectionClearSubscription) {
-        this.unsubscribe(this.selectionClearSubscription);
-    }
+	if (this.selectionClearSubscription) {
+		this.unsubscribe(this.selectionClearSubscription);
+	}
 }
 }

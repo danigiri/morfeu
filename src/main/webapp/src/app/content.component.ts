@@ -100,7 +100,7 @@ export class ContentComponent extends KeyListenerWidget implements OnInit, After
 content: Content;
 model: Model;
 
-protected commandKeys: string[] = ["c", "a", "d", "'", "m"];
+protected commandKeys: string[] = ["c", "a", "d", "'"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
@@ -234,9 +234,7 @@ commandPressedCallback(command: string) {
             this.subscribeChildrenToCellSelection();
             break;
         case "m":       //FIXME: this will now be called, check that it works
-            console.log("[UI] ContentComponent::not selecting anything in content");
-            this.dropAreaSelectingMode = false;
-            this.cellSelectingMode = false;
+
             break;
         case "a":
             if (this.cellSelectingMode || this.dropAreaSelectingMode) {
@@ -258,6 +256,15 @@ commandPressedCallback(command: string) {
 }
 
     
+
+commandNotRegisteredCallback(command: string) {
+
+    console.log("[UI] ContentComponent::not selecting anything in content");
+    this.dropAreaSelectingMode = false;
+    this.cellSelectingMode = false;
+
+}
+
 numberPressedCallback(num: number) {
                 
     if (this.cellSelectingMode) {

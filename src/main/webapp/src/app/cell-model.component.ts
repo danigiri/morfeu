@@ -48,11 +48,11 @@ import { EventService } from './events/event.service';
 				(mouseenter)="clickDown(node.data)" 
 				(mouseleave)="clickUp(node.data)"
 				dnd-draggable 
-	            [dragEnabled]="dragEnabled"
-	            (onDragEnd)="dragEnd(node.data)"
-                [dragData]="node.data.generateCell()"                             
+				[dragEnabled]="dragEnabled"
+				(onDragEnd)="dragEnd(node.data)"
+				[dragData]="node.data.generateCell()"							  
 					/>
-                <!-- -->
+				<!-- -->
 			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
 		</div>
 		`,
@@ -67,10 +67,10 @@ import { EventService } from './events/event.service';
 			.cell-model-active {
 				border: 1px solid #f00;
 			}
-	         .cell-model-selected {
-	                border: 1px dashed #00f;
-	                border-radius: 5px;
-	        }
+			 .cell-model-selected {
+					border: 1px dashed #00f;
+					border-radius: 5px;
+			}
 			.cell-model-level-1 {}
 			.cell-model-level-2 {}
 			.cell-model-level-3 {}
@@ -116,8 +116,8 @@ ngOnInit() {
 	
 	// this will come from the selectableCellModelWidget via shortcuts
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-            .filter( activated => activated.cellModel==this.node.data && !this.active)
-            .subscribe( activated => this.becomeActive(null)) 
+			.filter( activated => activated.cellModel==this.node.data && !this.active)
+			.subscribe( activated => this.becomeActive(null)) 
 	);
 }
 
@@ -157,10 +157,10 @@ clickUp(cellModel:CellModel) {
 
 
 dragEnd(cellModel:CellModel) {
-    
-    console.log("[UI] CellModelComponent::dragEnd()");
-    this.becomeInactive(null);
-    
+	
+	console.log("[UI] CellModelComponent::dragEnd()");
+	this.becomeInactive(null);
+	
 }
 
 isCompatibleWith(element:FamilyMember): boolean {

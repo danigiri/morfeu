@@ -34,40 +34,40 @@ constructor(public schema: number,
 
 
 getURI():string {
-    return this.URI;
+	return this.URI;
 }
 
 
 getAdoptionName():string {
-    return this.name;
+	return this.name;
 }
 
 
 getAdoptionURI():string {
-    return this.URI;
+	return this.URI;
 }
 
 
 matches(element:FamilyMember):boolean {
-    return false;
+	return false;
 }
 
 
 canAdopt(element:FamilyMember):boolean {
-    return this.cellModels.some(c => c.matches(element));   
+	return this.cellModels.some(c => c.matches(element));	
 }
 
 
 childrenCount():number {
-    return this.cellModels.length;
+	return this.cellModels.length;
 }
 
 getParent():FamilyMember {
-    return undefined;
+	return undefined;
 }
 
 equals(m:FamilyMember) {
-    return this.getURI()==m.getURI();
+	return this.getURI()==m.getURI();
 }
 
 
