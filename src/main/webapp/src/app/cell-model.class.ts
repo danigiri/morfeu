@@ -22,10 +22,12 @@ import { Type_ } from "./type_.class";
 // //// COMPONENT STUFF ////
 import { Subscription } from 'rxjs/Subscription';
 import { SelectableWidget } from './selectable-widget.class';
+import { CellDropEvent } from "./events/cell-drop.event";
 import { CellModelActivatedEvent } from "./events/cell-model-activated.event";
 import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
-import { EventService } from './events/event.service';
+import { NewCellFromModelEvent } from "./events/new-cell-from-model.event";
+import { EventService } from "./events/event.service";
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT ////
 
 export class CellModel implements FamilyMember {
@@ -243,6 +245,7 @@ class SelectableCellModelWidget extends SelectableWidget {
 active: boolean = false;
 	
 private activationSubscription: Subscription;
+private newCellSubscription: Subscription;
 
 constructor(eventService: EventService, private cellModel:CellModel, private position: number) {
 	super(eventService);
@@ -298,18 +301,13 @@ unsubscribeFromSelection() {
 	}
 }
 
+
 private subscribeToActivation() {
 	
 	console.log("[UI] SelectableCellModelWidget::subscribeToActivation("+this.cellModel.name+")");
 	this.activationSubscription = this.subscribe(this.events.service.of( CellModelActivatedEvent )
 			.filter( activated => activated.cellModel==undefined)
-			.subscribe( activated => {
-				this.active = true;
-				console.log("[UI] SelectableCellModelWidget::subscribeToActivation(activated!)");
-				// this will activate the proper component
-				this.events.service.publish(new CellModelActivatedEvent(this.cellModel));
-
-			})
+			.subscribe( activated => this.becomeActive() )
 	);
 }
 
@@ -318,6 +316,40 @@ private unsubscribeFromActivation() {
 	if (this.activationSubscription) {
 		this.unsubscribe(this.activationSubscription);
 	}
+}
+
+
+private becomeActive() {
+    this.active = true;
+    console.log("[UI] CellModel.Widget::becomeActive");
+    // this will activate the components that can show cell model data (like cell-info and stuff)
+    this.events.service.publish(new CellModelActivatedEvent(this.cellModel));
+    this.subscribeToNewCellFromModel();
+    
+}
+
+private becomeInactive() {
+    
+    this.active = false
+    this.unsubscribeToNewCellFromModel();
+    
+}
+
+
+private subscribeToNewCellFromModel() {
+    
+    this.newCellSubscription = this.subscribe(this.events.service.of( NewCellFromModelEvent ) 
+            .subscribe( nc => {
+                if (this.active && this.cellModel.canGenerateNewCell()) {
+                    console.log("-> cell model widget gets new cell event and will try to create one :)");
+                    this.events.service.publish(new CellDropEvent(this.cellModel.generateCell()));
+                }
+            })
+    );
+}
+
+private unsubscribeToNewCellFromModel() {
+    this.unsubscribe(this.newCellSubscription);
 }
 
 }

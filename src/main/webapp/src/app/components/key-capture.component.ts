@@ -82,7 +82,7 @@ public registerKeyShortcuts() {
 numberPressed_ = (event: KeyboardEvent): boolean => {
     
     let num = (event.key) ? parseInt(event.key, 10) : event.charCode-48;
-    console.log("KeyCaptureComponent::numberPressed(%s)", event.key);
+    //console.log("KeyCaptureComponent::numberPressed(%s)", event.key);
     this.events.service.publish(new KeyPressedEvent(String(num), num));
     
     return false;   // prevent event from bubbling
@@ -93,7 +93,7 @@ keyPressed_ = (event: KeyboardEvent): boolean => {
 
     // Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug
     let key = (event.key) ? event.key : this.keyMap[event.charCode];
-    console.log("KeyCaptureComponent::keyPressed(%s)", key);
+    //console.log("KeyCaptureComponent::keyPressed(%s)", key);
     this.events.service.publish(new KeyPressedEvent(key));
     
     return false;   // prevent event from bubbling

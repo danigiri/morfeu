@@ -86,7 +86,7 @@ ngOnInit() {
 		.subscribe( deactivated => this.hideCellInformation()
 	));
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-	    .filter( activated => activated.cellModel==undefined)
+	    .filter( activated => activated.cellModel!=undefined)
 		.subscribe( activated => this.showCellModelInformation(activated.cellModel)
 	));
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )

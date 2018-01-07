@@ -15,13 +15,13 @@
  */
 
 
-export class CellDragEvent {
+export class NewCellFromModelEvent {
 
 constructor() {}
 
 
 public toString = (): string => {
-	return "CellDragEvent:{currently active}";
+	return "NewCellFromModelEvent:{instantiate a new cell}";
 }
 
 }
