@@ -47,13 +47,13 @@ import { EventService } from "./events/event.service";
 				class="cell-model-thumb img-fluid" 
 				[class.cell-model-active]="active" 
 				[class.cell-model-selected]="this.selected"
-				(mousedown)="clickDown(node.data)" 
-				(mouseup)="clickUp(node.data)"
-				(mouseenter)="clickDown(node.data)" 
-				(mouseleave)="clickUp(node.data)"
+				(mousedown)="clickDown()" 
+				(mouseup)="clickUp()"
+				(mouseenter)="clickDown()" 
+				(mouseleave)="clickUp()"
 				dnd-draggable 
 				[dragEnabled]="dragEnabled"
-				(onDragEnd)="dragEnd(node.data)"
+				(onDragEnd)="dragEnd()"
 				[dragData]="node.data.generateCell()"							  
 					/>
 				<!-- -->
@@ -117,44 +117,46 @@ ngOnInit() {
 			.filter(deactivated => this.isCompatibleWith(deactivated.cell))
 			.subscribe( deactivated => {
 				//console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
-				this.becomeInactive(deactivated.cell.cellModel);
+				this.becomeInactive(true);
 	}));
 
 	this.subscribe(this.events.service.of( CellActivatedEvent )
 			.filter(activated => this.isCompatibleWith(activated.cell))
 			.subscribe( activated => {
 				//console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
-				this.becomeActive(activated.cell.cellModel);
+				this.becomeActive(true);
 	}));
 	
 	// this will come from the selectableCellModelWidget via shortcuts (notice the infinite loop prevention)
-	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-			.filter( activated => activated.cellModel && activated.cellModel==this.cellModel && !this.active)
-			.subscribe( activated => this.becomeActive(null)) 
-	);
+//	this.subscribe(this.events.service.of( CellModelActivatedEvent )
+//			.filter( activated => activated.cellModel && activated.cellModel==this.cellModel && !this.active)
+//			.subscribe( activated => this.becomeActive(null)) 
+//	);
 	
 }
 
 
-becomeActive(cellModel?: CellModel) {
+becomeActive(fromCell: boolean) {
 
-	//console.log("[UI] CellModelComponent::becomeActive()");
+	console.log("[UI] CellModelComponent::becomeActive()");
 	this.active = true;
 	this.dragEnabled = this.cellModel.canGenerateNewCell();
+	if (!fromCell) {   // if we become active from a cell, we do not need to propagate the activation
+	    this.events.service.publish(new CellModelActivatedEvent(this.cellModel));
+	}
 	this.subscribeToNewCellFromModel();
-	this.events.service.publish(new CellModelActivatedEvent(cellModel));
 	//console.log("[UI] CellModelComponent::becomeActive(dragEnabled:%s)", this.dragEnabled);
 
 }
 
 
-becomeInactive(cellModel?: CellModel) {
+becomeInactive(fromCell: boolean) {
 
-	//console.log("[UI] CellModelComponent::becomeInactive()");
+	console.log("[UI] CellModelComponent::becomeInactive()");
 	this.active = false;
 	this.dragEnabled = false;
 	this.unsubscribeToNewCellFromModel();
-	this.events.service.publish(new CellModelDeactivatedEvent(cellModel));
+	this.events.service.publish(new CellModelDeactivatedEvent(this.cellModel));
 
 }
 
@@ -165,7 +167,7 @@ select(position:number) {
         
         // if we were activated we deactivate ourselves and become selectable again
         if (this.active) {
-            this.becomeInactive();
+            this.becomeInactive(false);
         }
         
         console.log("[UI] CellModelComponent::select("+this.cellModel.name+"("+this.index+"))");
@@ -213,26 +215,26 @@ unsubscribeFromSelection() {
 
 
 
-clickDown(cellModel:CellModel) {
+clickDown() {
 
-	this.becomeActive(cellModel);
+	this.becomeActive(false);
 	//this.events.service.publish(new CellModelActivatedEvent(cellModel));
 
 }
 
 
-clickUp(cellModel:CellModel) {
+clickUp() {
 	
-	this.becomeInactive(cellModel);
+	this.becomeInactive(false);
 	//this.events.service.publish(new CellModelDeactivatedEvent(cellModel));	  
 
 }
 
 
-dragEnd(cellModel:CellModel) {
+dragEnd() {
 	
 	console.log("[UI] CellModelComponent::dragEnd()");
-	this.becomeInactive();
+	this.becomeInactive(false);
 	
 }
 
@@ -251,7 +253,7 @@ private subscribeToActivation() {
     console.log("[UI] CellModelComponent::subscribeToActivation("+this.cellModel.name+")");
     this.activationSubscription = this.subscribe(this.events.service.of( CellModelActivatedEvent )
             .filter( activated => activated.cellModel==undefined && this.selected)   // no cell model
-            .subscribe( activated => this.becomeActive() )
+            .subscribe( activated => this.becomeActive(false) )
     );
 
 }

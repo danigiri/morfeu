@@ -73,4 +73,13 @@ public UICell dropHere(UICell cell) {
 
 }
 
+
+public UIDropArea selectThroughKeyboard() {
+
+	// TODO Auto-generated method stub
+
+	return this;
+	
+}
+
 }

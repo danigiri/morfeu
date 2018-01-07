@@ -22,7 +22,8 @@ import { TreeComponent } from 'angular-tree-component';
 
 import { CellModelComponent } from './cell-model.component';
 
-import { Model, ModelJSON } from './model.class';
+import { CellModel } from "./cell-model.class";
+import { Model, ModelJSON } from "./model.class";
 import { RemoteObjectService } from './services/remote-object.service';
 import { CellDocument } from './cell-document.class';
 import { KeyListenerWidget } from "./key-listener-widget.class";
@@ -80,7 +81,6 @@ model: Model;
 	
 protected commandKeys: string[] = ["m", "a", "n"];
 private cellModelSelectingMode: boolean = false;
-protected selectionClearSubscription: Subscription;
 
 @ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
@@ -162,15 +162,14 @@ commandPressedCallback(command: string) {
 	switch (command) {
 	case "m":
 		this.cellModelSelectingMode = true;
-		this.unsubscribeFromCellSelectionClear();
 		this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
 		this.cellModelSelectingMode = true;
 		this.subscribeChildrenToCellSelection();
 		break;	 
 	case "a":
 		if (this.cellModelSelectingMode) {
-			this.events.service.publish(new CellModelActivatedEvent());	   // will activate the 
-			this.cellModelSelectingMode = false;							// current selection if any
+			this.events.service.publish(new CellModelActivatedEvent());  // will activate the 
+			this.cellModelSelectingMode = false;						   // current selection (if any)
 		}
 		break;
 	case "n":
@@ -211,8 +210,9 @@ private subscribeChildrenToCellSelection () {
 	this.unsubscribeChildrenFromCellSelection();
 	this.cellModelComponentsRoot.treeModel.roots.forEach(r => {
 		r.expand();
-		r.data.widget.subscribeToSelection();	// breaks class-component abstraction, but there does not seem 
-												//to be an easy way to do this with the tree component
+		(r.data as CellModel).component.subscribeToSelection();	// breaks class-component abstraction,
+		                                                          // but there does not seem to be an easy 
+		                                                          // way to do this with the tree component
 		}
 	);
 
@@ -223,26 +223,9 @@ unsubscribeChildrenFromCellSelection() {
 	// breaks class-component abstraction, but there does not seem to
 	// be an easy way to do this with the tree component we're using
 	this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
-		n.data.widget.unsubscribeFromSelection()
+		(n.data as CellModel).component.unsubscribeFromSelection()
 	); 
 }
 
 
-//private subscribeToCellSelectionClear() {
-// // selection clear, we clear and are no longer eligible to receive selection events
-//	this.selectionClearSubscription = this.subscribe(this.events.service.of(CellSelectionClearEvent).subscribe(
-//			  clear => {
-//				  console.log("[UI] ModelComponent::received CellSelectionClearEvent");
-//				  this.cellModelSelectingMode = false;
-//				  this.unsubscribeChildrenFromCellSelection();
-//			  }
-//   ));
-//}
-
-
-private unsubscribeFromCellSelectionClear() {
-	if (this.selectionClearSubscription) {
-		this.unsubscribe(this.selectionClearSubscription);
-	}
-}
 }

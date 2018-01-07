@@ -42,7 +42,7 @@ public void setup() {
 }
 
 
-//@Test
+@Test
 public void modelTest() {
 	
 	UICatalogues catalogues = UICatalogues.openCatalogues();
@@ -62,7 +62,7 @@ public void modelTest() {
 }
 
 
-//@Test
+@Test
 public void modelDisappearsOnClickingOtherCatalogue() {	
 	
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
@@ -81,19 +81,19 @@ public void modelDisappearsOnClickingOtherCatalogue() {
 }
 
 
-//@Test
+@Test
 public void documentWithNonValidModelIsSelected() {	
-	
+
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue catalogue = catalogues.clickOn(0).shouldAppear();
 
 	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
-	
+
 	// click on a different document model should change (for instance an problematic doc)
 	catalogue.clickOnDocumentNamed("Document with non-valid model").model();
 	model.shouldDisappear();
-	
+
 }
 
 

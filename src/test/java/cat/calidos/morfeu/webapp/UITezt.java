@@ -58,17 +58,6 @@ public static void setUpClass() throws Exception {
 }
 
 
-@AfterClass
-public static void tearDownClass() {
-	
-	//Close the browser
-	if (driver!=null) {
-		driver.quit();
-	}
-
-}
-
-
 protected UICatalogue clickOnCatalogue(int i) {
 
 	// click on catalogue list entry and it appears
@@ -81,6 +70,17 @@ protected UICatalogue clickOnCatalogue(int i) {
 	catalogue.shouldAppear();
 
 	return catalogue;
+
+}
+
+
+@AfterClass
+public static void tearDownClass() {
+	
+	//Close the browser
+	if (driver!=null) {
+		driver.quit();
+	}
 
 }
 

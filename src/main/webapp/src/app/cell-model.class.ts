@@ -35,7 +35,7 @@ isReference: boolean;
 referenceURI?: string;
 
 // //// COMPONENT STUFF                                     ////
-// to circumvent limitations of the angular tree component, we establish a relationship with the component //
+// to circumvent limitations of the angular tree, we establish a relationship with the cell model component //
 component: CellModelComponent;
 // ////                                                     ////
 
