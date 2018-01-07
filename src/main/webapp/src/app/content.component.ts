@@ -62,8 +62,8 @@ import { EventService } from "./events/event.service";
 			    ></cell>
 			<!-- TODO: static checks using the moel and not what's already present (cells) -->
 		</div>
-        <ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
-        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container>
+        <!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
+        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->
     </div>
 <!-- THIS DISPLAYS AS IT SHOULD -->
 <!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">

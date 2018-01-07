@@ -263,7 +263,7 @@ ngOnInit() {
 	
 	// A cell model was deactivated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-			.filter(d => this.isCompatibleWith(d.cellModel))	// //
+			.filter(d => d.cellModel && this.isCompatibleWith(d.cellModel))	// //
 			.subscribe( d => {
 				//console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 				this.becomeInactive(this.cell);

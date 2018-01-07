@@ -59,7 +59,7 @@ import { StatusEvent } from "./events/status.event";
 							</ng-template>
 						</tree-root>
 					</div>
-					<ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container>
+					<!--ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container-->
 				</div>
 			</div>
 	</ng-container>
@@ -138,7 +138,7 @@ diplayModel(m: Model) {
 
 	console.log("[UI] ModelComponent::diplayModel("+m.name+")");
 	let i = 0;
-	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
+//	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 	this.model = m;
 	this.registerKeyPressedEvents();
 
@@ -149,9 +149,9 @@ clearModel() {
 
 	console.log("[UI] ModelComponent::clearModel()");
 	this.unregisterKeyPressedEvents();
-	if (this.model) {
-		this.model.cellModels.forEach(cm => cm.deactivateEventService());
-	}
+//	if (this.model) {
+//		this.model.cellModels.forEach(cm => cm.deactivateEventService());
+//	}
 	this.model = null;
 
 }
@@ -175,6 +175,7 @@ commandPressedCallback(command: string) {
 		break;
 	case "n":
 		// Instantiate a new instance if any cell model is activated and a drop area is active as well 
+	    console.log("[UI] CellModelComponent::commandPressedCallback() sending new cell event");
 		this.events.service.publish(new NewCellFromModelEvent());
 		break;
 	}
