@@ -101,7 +101,7 @@ public T pressKey(String k) {
 	WebDriver driver = element.getWrappedDriver();
 	Actions actions = new Actions(driver);
 	actions.moveToElement(element.getWrappedElement());
-	actions.click();
+	//actions.click();
 	actions.sendKeys(Keys.chord((CharSequence)k));
 	actions.build().perform();
 

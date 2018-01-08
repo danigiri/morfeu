@@ -38,7 +38,7 @@ public void setup() {
 }
 
 
-//@Test
+@Test
 public void testDragCell() {
 	
 	
@@ -126,6 +126,7 @@ public void testDragCellSoOtherCellsChangeTheirURIs( ) {
 	UICell displacedRow = targetCol.child("row(1)");
 	assertNotNull("Displaced row is now at position (1)", displacedRow);
 
+	sourceCol = displacedRow.child("col(0)"); // we re-read the source col as it now has a different location
 	assertEquals("Source column should have 1 child after drag", 1, sourceCol.children().size());
 	data2 = sourceCol.child("data2(0)");
 	assertNotNull(data2);
