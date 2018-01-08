@@ -73,7 +73,8 @@ public void newAfterMouseActivationOfCellModel() {
 	rowModel.hover();
 	assertTrue("row cell model is not highlighted after rollover", rowModel.isHighlighted());
 	assertTrue("Target area should be selected on rollover", targetDropArea.isActive());
-	targetDropArea.selectThroughKeyboard();
+	targetDropArea.select();
+	
 	
 }
 

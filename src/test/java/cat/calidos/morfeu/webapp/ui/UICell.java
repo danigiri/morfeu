@@ -118,18 +118,12 @@ public UICell child(int pos) {
 }
 
 
-public UICell hover() {
 
-	element.scrollTo().hover();
-	element.hover();
-	
-	return this;
-	
-}
 
 public UICell dragTo(UIDropArea target) {
 	return target.dropHere(this);
 }
+
 
 public UICell click() {
 
@@ -138,6 +132,7 @@ public UICell click() {
 	return this;
 	
 }
+
 
 public UICell select() {
 	
@@ -158,9 +153,11 @@ public UICell select() {
 	
 }
 
+
 public boolean isCell() {
 	return element.attr(CLASS).contains("cell-img");
 }
+
 
 public boolean isWell() {
 	

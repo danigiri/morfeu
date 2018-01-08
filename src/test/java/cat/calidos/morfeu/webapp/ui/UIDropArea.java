@@ -63,10 +63,7 @@ public UICell dropHere(UICell cell) {
 	cell.select();
 	content.pressKey(UIContent.ACTIVATE);
 	
-	// select until the parent, setup drop area selection mode, select this drop area and drag-n-drop!!!
-	parent.select();
-	content.pressKey(UIContent.DROPAREA_MODE);
-	content.pressKey(position+"");
+	this.select();
 	content.pressKey(UIContent.DRAGNDROP);
 		
 	return parent.child(position);
@@ -74,10 +71,13 @@ public UICell dropHere(UICell cell) {
 }
 
 
-public UIDropArea selectThroughKeyboard() {
+public UIDropArea select() {
 
-	// TODO Auto-generated method stub
-
+	// select until the parent, setup drop area selection mode, select this drop area and drag-n-drop!!!
+	parent.select();
+	content.pressKey(UIContent.DROPAREA_MODE);
+	content.pressKey(position+"");
+		
 	return this;
 	
 }

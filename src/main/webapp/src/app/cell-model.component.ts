@@ -126,13 +126,7 @@ ngOnInit() {
 				//console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
 				this.becomeActive(true);
 	}));
-	
-	// this will come from the selectableCellModelWidget via shortcuts (notice the infinite loop prevention)
-//	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-//			.filter( activated => activated.cellModel && activated.cellModel==this.cellModel && !this.active)
-//			.subscribe( activated => this.becomeActive(null)) 
-//	);
-	
+
 }
 
 

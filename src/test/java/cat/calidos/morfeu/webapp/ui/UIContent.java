@@ -31,7 +31,7 @@ import org.openqa.selenium.interactions.Actions;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIContent {
+public class UIContent extends UIWidget<UIContent> {
 
 
 public static final String SELECTION_MODE = "c";
@@ -40,15 +40,8 @@ public static final String ACTIVATE = "a";
 public static final String DRAGNDROP = "d";
 
 
-public UIContent() {}
-
-
-public UIContent shouldBeVisible() {
-	
-	$("#content").shouldBe(visible);
-	
-	return this;
-	
+public UIContent() {
+	super($("#content"));
 }
 
 
@@ -57,36 +50,9 @@ public static void shouldNotBeVisible() {
 }
 
 
-public void shouldAppear() {
-	$("#content").should(appear);
-}
-
-
-public void shouldDisappear() {
-	$("#content").should(disappear);
-}
-
-
 public List<UICell> rootCells() {
 	return $$(".cell-level-0").stream().map(e -> new UICell(e, this, Optional.empty(), 0) ).collect(Collectors.toList());
 }
 
-public UIContent pressKey(String k) {
-	
-	// we are sending the keys this way as it seems to work as it should, selenide or selenium has a lot of trouble here
-	WebDriver driver = $("#content").getWrappedDriver();
-	Actions actions = new Actions(driver);
-	actions.moveToElement($("#content").getWrappedElement());
-	actions.click();
-	actions.sendKeys(Keys.chord((CharSequence)k));
-	actions.build().perform();
-
-	// this keeps failing randomly
-	try {
-		Thread.sleep(50);
-	} catch (InterruptedException e) {}
-
-	return this;
-}
 
 }
