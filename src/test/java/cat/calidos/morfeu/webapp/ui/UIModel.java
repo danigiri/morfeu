@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -20,29 +20,20 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIModel {
+public class UIModel extends UIWidget<UIModel> {
 
+public static final String MODEL_MODE = "m";
+public static final String ACTIVATE = "a";
+public static final String NEW_CELL= "n";
 
-public UIModel shouldAppear() {
-
-	$("#model-info").should(appear);
-
-	return this;
-
-}
-
-public void shouldDisappear() {
-	$("#model-info").should(disappear);
-}
-
-
-public void shouldBeVisible() {
-	$("#model-info").shouldBe(visible);
+public UIModel() {
+	super($("#model-info"));
 }
 
 
@@ -62,7 +53,8 @@ public String desc() {
 
 
 public List<UICellModelEntry> rootCellModels() {
-	return $$(".tree-node-level-1").stream().map( e -> new UICellModelEntry(e, 1) ).collect(Collectors.toList());
+			return $$(".tree-node-level-1").stream().map( e -> new UICellModelEntry(e, this, Optional.empty(), 1) )
+													.collect(Collectors.toList());
 }
 
 

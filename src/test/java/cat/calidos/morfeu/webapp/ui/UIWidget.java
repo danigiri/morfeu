@@ -35,6 +35,8 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIWidget<T extends UIWidget<T>> {
 
+protected static final String CLASS = "class";
+
 protected SelenideElement element;
 
 public UIWidget(SelenideElement element) {
@@ -73,13 +75,9 @@ public T shouldAppear() {
 }
 
 
-@SuppressWarnings("unchecked")
-public T shouldDisappear() {
-	
+public void shouldDisappear() {
 	element.should(disappear);
-	
-	return (T)this;
-	
+
 }
 
 
@@ -100,7 +98,7 @@ public T pressKey(String k) {
 	// we are sending the keys this way as it seems to work as it should, selenide or selenium has a lot of trouble here
 	WebDriver driver = element.getWrappedDriver();
 	Actions actions = new Actions(driver);
-	actions.moveToElement(element.getWrappedElement());
+	//actions.moveToElement(element.getWrappedElement());
 	//actions.click();
 	actions.sendKeys(Keys.chord((CharSequence)k));
 	actions.build().perform();
@@ -112,6 +110,15 @@ public T pressKey(String k) {
 
 	return (T)this;
 	
+}
+
+
+/**
+* @return
+*////////////////////////////////////////////////////////////////////////////////
+protected String class_() {
+
+	return element.attr(CLASS);
 }
 
 }

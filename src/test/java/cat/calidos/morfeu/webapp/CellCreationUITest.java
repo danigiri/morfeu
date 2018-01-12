@@ -19,7 +19,6 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.Assert.*;
 
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +45,7 @@ private UIContent content;
 public void setup() {	
 
 	open(appBaseURL);
-	UIDocument doc = UICatalogues.openCatalogues().clickOn(0).clickOnDocumentNamed("Document 1");
+	UIDocument doc = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
 	model = doc.model();
 	content = doc.content();
 
@@ -59,25 +58,64 @@ public void newAfterMouseActivationOfCellModel() {
 	model.shouldAppear();
 	content.shouldBeVisible();
 
-	UICellModelEntry testModel = model.rootCellModels().get(0);					// TEST
-	UICellModelEntry rowModel = testModel.child("row").child("row").child("col");	// TEST->ROW->COL
-	assertNotNull(rowModel);
-
+	UICellModelEntry testModel = model.rootCellModels().get(0);						// TEST
+	UICellModelEntry data2Model = testModel.child("row").child("col").child("data2");	// TEST->ROW->COL->DATA2
+	assertNotNull(data2Model);
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals("Before creating a new cell, we should only have one child", 1, targetCol.children().size());
+	assertNotNull("Before creating new cell, target child 0 is data", targetCol.child("data(0)"));
 	
 	UIDropArea targetDropArea = targetCol.dropArea(0);
 	assertFalse("Target area should not be active before rollover", targetDropArea.isActive());
 
-	rowModel.hover();
-	assertTrue("row cell model is not highlighted after rollover", rowModel.isHighlighted());
-	assertTrue("Target area should be selected on rollover", targetDropArea.isActive());
+	data2Model.hover();
+	assertTrue("data2 cell model is not highlighted after rollover", data2Model.isActive());
+	assertTrue("Target area should be active on rollover", targetDropArea.isActive());
 	targetDropArea.select();
+	assertTrue("Target drop area shoud be selected after select", targetDropArea.isSelected());
 	
+	// create a new data2 element through the keyboard shortcut
+	model.pressKey(UIModel.NEW_CELL);
+	assertEquals("After creating a new cell, we should have 2 children", 2, targetCol.children().size());
+	assertNotNull("Aftert creating new cell, target child 0 is data2", targetCol.child("data2(0)"));
+	assertNotNull("Before creating new cell, target child 1 is data", targetCol.child("data(1)"));
 	
 }
 
+
+
+@Test
+public void newAfterKeyboardActivationOfCellModel() {
+	
+	model.shouldAppear();
+	content.shouldBeVisible();
+
+	UICellModelEntry testModel = model.rootCellModels().get(0);						// TEST
+	UICellModelEntry data2Model = testModel.child("row").child("col").child("data2");	// TEST->ROW->COL->DATA2
+	assertNotNull(data2Model);
+
+	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
+	assertEquals("Before creating a new cell, we should only have one child", 1, targetCol.children().size());
+	assertNotNull("Before creating new cell, target child 0 is data", targetCol.child("data(0)"));
+	
+	UIDropArea targetDropArea = targetCol.dropArea(0);
+	assertFalse("Target area should not be active before rollover", targetDropArea.isActive());
+
+	data2Model.select().activate();
+	assertTrue("data2 cell model is not highlighted after activation", data2Model.isActive());
+	assertTrue("Target area should be active on after activating cell model", targetDropArea.isActive());
+	targetDropArea.select();
+	assertTrue("Target drop area shoud be selected after select", targetDropArea.isSelected());
+	
+	// create a new data2 element through the keyboard shortcut
+	model.pressKey(UIModel.NEW_CELL);
+	assertEquals("After creating a new cell, we should have 2 children", 2, targetCol.children().size());
+	assertNotNull("Aftert creating new cell, target child 0 is data2", targetCol.child("data2(0)"));
+	assertNotNull("Before creating new cell, target child 1 is data", targetCol.child("data(1)"));
+
+	
+}
 
 
 }

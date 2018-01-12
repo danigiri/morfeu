@@ -35,7 +35,7 @@ public class UIContent extends UIWidget<UIContent> {
 
 
 public static final String SELECTION_MODE = "c";
-public static final String DROPAREA_MODE = "'";
+public static final String DROPAREA_MODE = "t";
 public static final String ACTIVATE = "a";
 public static final String DRAGNDROP = "d";
 

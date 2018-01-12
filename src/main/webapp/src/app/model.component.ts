@@ -60,7 +60,7 @@ import { StatusEvent } from "./events/status.event";
 							</ng-template>
 						</tree-root>
 					</div>
-					<!--ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container-->
+					<ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container>
 				</div>
 			</div>
 	</ng-container>

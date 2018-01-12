@@ -26,6 +26,8 @@ public class UIDropArea {
 
 private static final String CLASS = "class";
 private static final String ACTIVE = "drop-area-active";
+private static final String SELECTED = "drop-area-selected";
+
 
 private SelenideElement element;
 private UICell parent;
@@ -43,6 +45,11 @@ public UIDropArea(SelenideElement e, UIContent content, UICell parent) {
 
 public boolean isActive() {
 	return element.attr(CLASS).contains(ACTIVE);
+}
+
+
+public boolean isSelected() {
+	return element.attr(CLASS).contains(SELECTED);
 }
 
 

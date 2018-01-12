@@ -33,7 +33,6 @@ import com.codeborne.selenide.SelenideElement;
 public class UICell extends UIWidget<UICell> {
 
 private static final String ACTIVE = "cell-active";
-private static final String CLASS = "class";
 private static final String COL_WELL = "col-well";
 private static final String WELL = "well";
 private static final String ROW_WELL = "row-well";
@@ -83,7 +82,7 @@ public String img() {
 public List<UIDropArea> dropAreas() {
 	
 	List<UIDropArea> dropAreas = element.$$(".drop-area").stream()
-									.map(e -> new UIDropArea(e, this.content, this))
+									.map(e -> new UIDropArea(e, content, this))
 									.collect(Collectors.toList());
 	int i = 0;
 	for (UIDropArea da: dropAreas) {
@@ -155,14 +154,13 @@ public UICell select() {
 
 
 public boolean isCell() {
-	return element.attr(CLASS).contains("cell-img");
+	return class_().contains("cell-img");
 }
-
 
 public boolean isWell() {
 	
 	element.$(".well");	// wait for dom updates
-	String class_ = element.attr(CLASS);
+	String class_ = class_();
 	
 	return class_.contains(WELL) && !class_.contains(ROW_WELL);
 	
@@ -173,7 +171,7 @@ public boolean isRowWell() {
 	
 	element.$(".row-well");	// wait for dom updates
 
-	return element.attr(CLASS).contains(ROW_WELL);
+	return class_().contains(ROW_WELL);
 	
 }
 
@@ -181,7 +179,7 @@ public boolean isColumnWell() {
 	
 	element.$(".col-well");	// wait for dom updates
 
-	return element.attr(CLASS).contains(COL_WELL);
+	return class_().contains(COL_WELL);
 	
 }
 
@@ -195,12 +193,12 @@ public boolean isActive() {
 		Thread.sleep(50);
 	} catch (InterruptedException e) {}
 	
-	return element.attr(CLASS).contains(ACTIVE);
+	return class_().contains(ACTIVE);
 }
 
 
 public boolean isSelected() {
-	return element.attr(CLASS).contains(SELECTED);
+	return class_().contains(SELECTED);
 }
 
 public UICellInfo cellInfo() {
@@ -209,5 +207,6 @@ public UICellInfo cellInfo() {
 	}
 	return new UICellInfo();	// at the moment there is only one info
 }
+
 
 }

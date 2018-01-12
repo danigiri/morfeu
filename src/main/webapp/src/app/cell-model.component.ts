@@ -41,7 +41,7 @@ import { EventService } from "./events/event.service";
 	selector: 'cell-model',
 	template: `
 		<div id="{{node.data.id}}" 
-			 class="cell-model-entry cell-model-level-{{node.level}}">
+			 class="cell-model-entry cell-model-level-{{node.level}} cell-model-position-{{index}}">
 			<img 
 				src={{getThumb()}} 
 				class="cell-model-thumb img-fluid" 
@@ -54,7 +54,7 @@ import { EventService } from "./events/event.service";
 				dnd-draggable 
 				[dragEnabled]="dragEnabled"
 				(onDragEnd)="dragEnd()"
-				[dragData]="node.data.generateCell()"							  
+				[dragData]="node.data.generateCell()"
 					/>
 				<!-- -->
 			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
@@ -84,6 +84,16 @@ import { EventService } from "./events/event.service";
 			.cell-model-level-7 {}
 			.cell-model-level-8 {}
 			.cell-model-level-9 {}
+            .cell-model-position-0 {}
+            .cell-model-position-1 {}
+            .cell-model-position-2 {}
+            .cell-model-position-3 {}
+            .cell-model-position-4 {}
+            .cell-model-position-5 {}
+            .cell-model-position-6 {}
+            .cell-model-position-7 {}
+            .cell-model-position-8 {}
+            .cell-model-position-9 {}
 	`]
 })
 

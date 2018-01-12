@@ -62,8 +62,8 @@ import { EventService } from "./events/event.service";
 			    ></cell>
 			<!-- TODO: static checks using the moel and not what's already present (cells) -->
 		</div>
-        <!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
-        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->
+        <ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
+        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container>
     </div>
 <!-- THIS DISPLAYS AS IT SHOULD -->
 <!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">
@@ -100,7 +100,7 @@ export class ContentComponent extends KeyListenerWidget implements OnInit, After
 content: Content;
 model: Model;
 
-protected commandKeys: string[] = ["c", "a", "d", "'"];
+protected commandKeys: string[] = ["c", "a", "d", "t"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
@@ -242,7 +242,7 @@ commandPressedCallback(command: string) {
                 this.events.service.publish(new CellActivateEvent());
             }
             break;
-        case "'":
+        case "t":
             console.log("[UI] ContentComponent::selection mode active for next numeric key");
             this.events.service.publish(new StatusEvent("Drop area selection mode"));
             this.dropAreaSelectingMode = true;

@@ -236,7 +236,6 @@ export class CellComponent extends SelectableWidget implements OnInit {
 
 active: boolean = false;
 dragEnabled:boolean = false;
-//isBeingDragged:boolean = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;		// we only have one of those!!! 

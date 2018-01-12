@@ -134,18 +134,18 @@ public void relationshipFromContentToModelTest() {
 	UIModel model = document.model();
 	//test/row/col/data
 	UICellModelEntry dataModel = model.rootCellModel("test").child("row").child("col").child("data");
-	assertTrue(dataModel.isHighlighted());
+	assertTrue(dataModel.isActive());
 	
 	UICellModelEntry data2Model =  model.rootCellModel("test").child("row").child("col").child("data2");
-	assertFalse(data2Model.isHighlighted());
+	assertFalse(data2Model.isActive());
 	
 	UICell data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").child("data2(0)");
 	assertFalse(data2.isActive());
 
 	data2.hover();
 	assertTrue(data2.isActive());
-	assertTrue(data2Model.isHighlighted());
-	assertFalse(dataModel.isHighlighted());
+	assertTrue(data2Model.isActive());
+	assertFalse(dataModel.isActive());
 	
 }
 
@@ -165,12 +165,12 @@ public void relationshipFromModelToContentTest() {
 
 	// let's check for model drop area activations, we highlight row so test can allow them
 	UICellModelEntry rowModel = model.rootCellModel("test").child("row").hover();
-	assertTrue(rowModel.isHighlighted());
+	assertTrue(rowModel.isActive());
 	assertTrue(test.dropArea(0).isActive());
 
 	// we highlight data2, on this column there are two of them so no drop areas are active
 	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2").hover();
-	assertTrue(data2Model.isHighlighted());
+	assertTrue(data2Model.isActive());
 	List<UIDropArea> dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").dropAreas();
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 
