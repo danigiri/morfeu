@@ -31,18 +31,18 @@ import { EventService } from "../events/event.service";
 
 @Component({
 	moduleId: module.id,
-	selector: 'cell-info',
+	selector: 'cell-data',
 	template: `
-		<div id="cell-info" class="card mt-2" *ngIf="cellModel">
-				<h4 id="cell-info-header" class="card-title card-header">
+		<div class="card mt-2 cell-data" *ngIf="cellModel">
+				<h4 class="cell-data-header card-title card-header">
 					{{cellModel.name}}
 					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
-						<span id="cell-info-source" *ngIf="cell!=undefined" class="badge badge-pill badge-secondary float-secondary float-right">CELL</span>
-                         <span id="cell-info-source" *ngIf="cell==undefined" class="badge badge-pill badge-dark float-dark float-right">MODEL</span>
+						<span *ngIf="cell!=undefined" class="cell-data-source badge badge-pill badge-secondary float-secondary float-right">CELL</span>
+                         <span *ngIf="cell==undefined" class="cell-data-source badge badge-pill badge-dark float-dark float-right">MODEL</span>
 				</h4>
 			<div class="card-body">
-				<p id="cell-info-model-desc" class="card-subtitle">{{cellModel.desc}}<p>
-				<p id="cell-info-model-uri" class="card-text">URI: <span id="cell-info-uri" class="text-muted">{{uri}}</span></p>
+				<p class="cell-data-model-desc card-subtitle">{{cellModel.desc}}<p>
+				<p class="cell-data-model-uri card-text">URI: <span class="cell-data-uri text-muted">{{uri}}</span></p>
 			</div>
 	        <ng-container *ngIf="!editor">
    			    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
@@ -69,15 +69,15 @@ import { EventService } from "../events/event.service";
 		
 			   `,
 	styles:[`
-			#cell-info {}
-	        #cell-info-header {}
-	        #cell-info-model-desc {}
-	        #cell-info-uri {}
-	        #cell-info-source {}
+            .cell-data {}
+	        .cell-data-header {}
+	        .cell-data-model-desc {}
+	        .cell-data-uri {}
+	        .cell-data-source {}
 	`]
 })
 
-export class CellInfoComponent extends Widget implements OnInit {
+export class CellDataComponent extends Widget implements OnInit {
 
 @Input() uri: string;
 @Input() cell: Cell;

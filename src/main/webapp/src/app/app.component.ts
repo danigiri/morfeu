@@ -68,7 +68,7 @@ import { EventService } from './events/event.service';
                      </div>
             		    <div class="col-3">
             			    <model></model>
-            			    <cell-info></cell-info>
+            			    <cell-data></cell-data>
             		    </div>
 	              </div>
             	  </div>
@@ -123,7 +123,7 @@ ngAfterViewInit() {
 	console.log("AppComponent::ngAfterViewInit()");
  
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	let foo = true;
+	let foo = false;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent)

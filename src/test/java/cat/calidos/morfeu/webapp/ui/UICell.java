@@ -153,6 +153,17 @@ public UICell select() {
 }
 
 
+public UICell activate() {
+
+	if (this.isSelected()) {
+		content.pressKey(UIModel.ACTIVATE);
+	}
+
+	return this;
+	
+}
+
+
 public boolean isCell() {
 	return class_().contains("cell-img");
 }
@@ -201,11 +212,28 @@ public boolean isSelected() {
 	return class_().contains(SELECTED);
 }
 
+
 public UICellInfo cellInfo() {
+	
 	if (!isActive()) {
 		throw new NoSuchElementException("Trying the to get the info of a not active cell");
+
 	}
+	
 	return new UICellInfo();	// at the moment there is only one info
+
+}
+
+public UICellEditor editor() {
+
+	if (!isActive()) {
+		throw new NoSuchElementException("Trying the to get the editor of a not active cell");
+
+	}
+	content.pressKey("e");
+	
+	return new UICellEditor();
+	
 }
 
 

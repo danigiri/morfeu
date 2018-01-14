@@ -37,29 +37,34 @@ import cat.calidos.morfeu.webapp.ui.UIModel;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellInfoUITest extends UITezt {
 
+private UICell test;
+
+
 @Before
 public void setup() {
+	
 	open(appBaseURL);
-}
-
-
-@Test
-public void checkCelInfo() {
-
 	UIContent content = UICatalogues.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1")
 			.content();
 	content.shouldBeVisible();
-	UICell test = content.rootCells().get(0);
+	test = content.rootCells().get(0);
+	
+}
+
+
+@Test
+public void checkCelInfo() {
+
 
 	// target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)
 	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
 	assertNotNull(data);
-	
+
 	UICellInfo.shouldNotBeVisible();
-	
+
 	data.hover();
 	UICellInfo dataInfo = data.cellInfo();
 	assertNotNull(dataInfo);
@@ -99,14 +104,6 @@ public void checkCelInfo() {
 @Test
 public void checkCellInfoMissingAttributes() {
 	
-	UIContent content = UICatalogues.openCatalogues()
-			.shouldAppear()
-			.clickOn(0)
-			.clickOnDocumentNamed("Document 1")
-			.content();
-	content.shouldBeVisible();
-	UICell test = content.rootCells().get(0);
-	
 	// this cell only has 'number' attribute and no 'text'
 	// target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data(0)
 	UICell data = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data(0)");
@@ -115,8 +112,7 @@ public void checkCellInfoMissingAttributes() {
 	UICellInfo.shouldNotBeVisible();
 	
 	data.hover();
-	UICellInfo.shouldAppear();
-	UICellInfo dataInfo = data.cellInfo();
+	UICellInfo dataInfo = data.cellInfo().shouldAppear();
 	assertNotNull(dataInfo);
 	
 	List<UIAttributeInfo> attributes = dataInfo.attributes();
@@ -146,8 +142,7 @@ public void checkCellModelInfo() {
 
 	UICellInfo.shouldNotBeVisible();
 	testModelEntry.hover();
-	UICellInfo.shouldAppear();
-	UICellInfo testInfo = testModelEntry.cellInfo();
+	UICellInfo testInfo = testModelEntry.cellInfo().shouldAppear();
 	assertTrue("cell info from hovering on the model should come from the model", testInfo.isFromModel());
 	assertFalse("cell info from hovering on the model should come from the model", testInfo.isFromCell());
 	

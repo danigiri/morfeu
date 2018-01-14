@@ -33,11 +33,11 @@ import { UXEvent } from "../events/ux.event";
     selector: 'cell-editor',
     template: `
         <ng-template let-c="close" let-d="dismiss" #editor>
-            <div class="modal-body">
-            <cell-info [uri]="cell.URI" 
+            <div id="cell-editor" class="modal-body">
+            <cell-data [uri]="cell.URI" 
                         [cell]="cell" 
                         [cellModel]="cell.cellModel" 
-                        [editor]="true"></cell-info>
+                        [editor]="true"></cell-data>
             </div>
             <div class="modal-footer">
              <button type="button" class="btn btn-outline-secondary float-left" (click)="c('Discard')">Discard</button>

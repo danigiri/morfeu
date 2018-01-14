@@ -55,6 +55,7 @@ public T check(Predicate<T> check, String message) {
 	
 }
 
+
 @SuppressWarnings("unchecked")
 public T shouldBeVisible() {
 	

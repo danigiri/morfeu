@@ -26,35 +26,34 @@ import java.util.stream.Collectors;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UICellInfo {
+public class UICellInfo extends UIWidget<UICellInfo>{
 
-public static void shouldNotBeVisible() {
-	$("#cell-info").shouldNotBe(visible);
+UICellInfo() {
+	super($(".cell-data"));
 }
 
-
-public static void shouldAppear() {
-	$("#cell-info").should(appear);
+public static void shouldNotBeVisible() {
+	$(".cell-data").shouldNotBe(visible);
 }
 
 
 public String header() {
-	return $("#cell-info-header").text();
+	return element.$(".cell-data-header").text();
 }
 
 
 public String desc() {
-	return $("#cell-info-model-desc").text();
+	return element.$(".cell-data-model-desc").text();
 }
 
 
 public String URI() {
-	return $("#cell-info-model-uri").text();
+	return element.$(".cell-data-model-uri").text();
 }
 
 
 public boolean isFromCell() {
-	return $("#cell-info-source").getText().equals("CELL");
+	return element.$(".cell-data-source").getText().equals("CELL");
 }
 
 
@@ -64,8 +63,9 @@ public boolean isFromModel() {
 
 
 public List<UIAttributeInfo> attributes() {
-	return $$(".attribute-info").stream().map( e -> new UIAttributeInfo(e)).collect(Collectors.toList());
+	return element.$$(".attribute-info").stream().map( e -> new UIAttributeInfo(e)).collect(Collectors.toList());
 }
+
 
 // we have * at the end of compulsory
 public UIAttributeInfo attribute(String name) {
