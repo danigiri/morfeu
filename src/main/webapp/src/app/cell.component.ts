@@ -28,6 +28,7 @@ import { CellActivatedEvent } from './events/cell-activated.event';
 import { CellDeactivatedEvent } from './events/cell-deactivated.event';
 import { CellDragEvent } from './events/cell-drag.event';
 import { CellDropEvent } from "./events/cell-drop.event";
+import { CellEditEvent } from "./events/cell-edit.event";
 import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
 import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
@@ -301,7 +302,17 @@ ngOnInit() {
 				this.events.service.publish(new CellDropEvent(this.cell));
 	}));
 	
-   
+   // Want to edit this cell
+	this.subscribe(this.events.service.of( CellEditEvent )
+	            .filter(edit => !edit.cell && this.isEditable())
+	            .subscribe( edit => {
+	                console.log("-> cell comp gets cell edit event and will try to edit :)");
+	                this.events.service.publish(new CellEditEvent(this.cell));
+	    }));
+	    
+	   
+	
+	
 }	 
 
 
@@ -377,7 +388,7 @@ isCompatibleWith(element:FamilyMember): boolean {
 
 
 canBeActivated():boolean {
-	return !this.cell.cellModel.presentation.startsWith("WELL");
+	return !this.cell.cellModel.presentation.includes("WELL");
 }
 
 
@@ -444,6 +455,10 @@ subscribeToSelection() {
 
 getCellPresentation() {
 	return this.cell.cellModel.getPresentation();
+}
+
+private isEditable(): boolean {
+    return this.active && !this.cell.cellModel.presentation.includes("WELL");
 }
 
 }

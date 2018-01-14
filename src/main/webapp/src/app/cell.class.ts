@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -254,6 +254,30 @@ setPosition(position:number):Cell {
 	return this;
 
 }
+
+
+deepClone(): Cell {
+    
+    let clone = Cell.fromJSON(this.toJSON()); // easy peasy
+    
+    // let's not forget the runtime information
+    if (this.parent) {
+        clone.parent = this.parent;
+    }
+    if (this.position) {
+        clone.position = this. position;
+    }
+    if (this.cellModel) {
+        clone.cellModel = this. cellModel;
+    }
+    
+    return clone;
+
+//    let cell:Cell = Object.create(Cell.prototype);
+//    return Object.assign(cell, this);
+
+}
+
 
 // replaces the prefix of the URI with a new one, recursively
 private replaceURIPrefix_(old:string, newPrefix:string): Cell {

@@ -37,6 +37,7 @@ import { CellActivateEvent } from './events/cell-activate.event';
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
 import { CellDragEvent } from './events/cell-drag.event';
+import { CellEditEvent } from "./events/cell-edit.event";
 import { CellSelectEvent } from './events/cell-select.event';
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { ContentRefreshedEvent } from './events/content-refreshed.event';
@@ -62,8 +63,8 @@ import { EventService } from "./events/event.service";
 			    ></cell>
 			<!-- TODO: static checks using the moel and not what's already present (cells) -->
 		</div>
-        <ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
-        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container>
+        <!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
+        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->
     </div>
 <!-- THIS DISPLAYS AS IT SHOULD -->
 <!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">
@@ -95,12 +96,11 @@ import { EventService } from "./events/event.service";
 
 
 export class ContentComponent extends KeyListenerWidget implements OnInit, AfterViewInit {
-	
-    
+
 content: Content;
 model: Model;
 
-protected commandKeys: string[] = ["c", "a", "d", "t"];
+protected commandKeys: string[] = ["c", "a", "d", "t", "e"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
@@ -250,6 +250,10 @@ commandPressedCallback(command: string) {
             break;
         case "d":
             this.events.service.publish(new CellDragEvent());  
+            break;
+        case "e":
+            console.log("[UI] ContentComponent::got key to edit current active cell");
+            this.events.service.publish(new CellEditEvent());  
             break;
     }
 

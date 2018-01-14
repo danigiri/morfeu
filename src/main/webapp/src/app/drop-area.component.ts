@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event
 import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 import { DropAreaSelectEvent } from './events/drop-area-select.event';
 import { EventService } from './events/event.service';
-import { UXEvent } from './events/ux.event';
+import { UXEvent } from "./events/ux.event";
 
 @Component({
 	moduleId: module.id,

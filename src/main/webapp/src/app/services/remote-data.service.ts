@@ -44,7 +44,9 @@ get<T>(uri: string): Observable<T> {
 	console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
 	//TODO: handle errors with .catch here
 	
-	return this.http.get<T>(uri);
+	return this.http.get<T>(uri).retryWhen(errors => errors.delay(200).take(5)
+    //.concat(Observable.throw(new Error("Too many retries")))
+    );
 
 }
 

@@ -18,7 +18,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { FormsModule } from "@angular/forms";
+import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';  // new angular 5 http client module
 
 import { DndModule } from 'ng2-dnd';
@@ -27,12 +28,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent }	  from './app.component';
+import { AttributeEditComponent } from "./components/attribute-edit.component";
 import { AttributeInfoComponent } from "./components/attribute-info.component";
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from "./catalogue.component";
 import { CollapsibleComponent } from "./components/collapsible.component";
 import { ContentComponent } from './content.component';
 import { CellComponent } from './cell.component';
+import { CellEditorComponent } from "./components/cell-editor.component";
 import { CellDocumentComponent } from './cell-document.component';
 import { CellModelComponent } from "./cell-model.component";
 import { CellInfoComponent } from "./components/cell-info.component";
@@ -48,6 +51,7 @@ import { StatusComponent } from './status.component';
           		  ,BrowserModule
 				  ,BrowserAnimationsModule
 				  ,CommonModule
+				  ,FormsModule
                   ,HttpModule
                   ,HttpClientModule
 				  ,TreeModule
@@ -55,12 +59,14 @@ import { StatusComponent } from './status.component';
 				  ,HotkeyModule.forRoot()
 				  ],
   declarations: [ AppComponent
+                  ,AttributeEditComponent
                   ,AttributeInfoComponent
 				  ,CatalogueListComponent 
 				  ,CatalogueComponent
 				  ,CollapsibleComponent
 				  ,ContentComponent 
 				  ,CellComponent
+				  ,CellEditorComponent
 				  ,CellDocumentComponent
                   ,CellInfoComponent
                   ,CellModelComponent
@@ -70,6 +76,7 @@ import { StatusComponent } from './status.component';
 				  ,ProblemComponent 
 				  ,StatusComponent 
 				],
+//entryComponents: [CellEditorComponent],
   providers:	[],
   bootstrap:	[ AppComponent ]
 })

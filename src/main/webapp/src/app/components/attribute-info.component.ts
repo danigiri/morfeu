@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ export class AttributeInfoComponent {
 
 @Input() isFromCell: boolean;    // if it's form a cell and we have no value we skip this attribute
 @Input() isFromModel: boolean;
-@Input() cell?: Cell;    // optional, only when showing information of cell (and not just a cell model)
+@Input() parentCell?: Cell;    // optional, only when showing information of cell (and not just a cell model)
 @Input() cellModel: CellModel;
 hasValue: boolean;
 
@@ -56,13 +56,13 @@ ngOnInit() {
 
 // do we have a value to show?
 private hasValue_(): boolean {
-    return this.cell 
-            && this.cell.attributes && this.cell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
+    return this.parentCell && this.parentCell.attributes 
+            && this.parentCell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
 }
 
 
 getValue(): string {
-    return this.cell.attributes.find(a=> a.name==this.cellModel.name).value;
+    return this.parentCell.attributes.find(a=> a.name==this.cellModel.name).value;
 }
 
 hasDesc(): boolean {

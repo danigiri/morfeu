@@ -15,7 +15,7 @@
  */
 
 
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
 import { Cell } from "../cell.class";
 import { CellModel } from "../cell-model.class";
@@ -44,16 +44,27 @@ import { EventService } from "../events/event.service";
 				<p id="cell-info-model-desc" class="card-subtitle">{{cellModel.desc}}<p>
 				<p id="cell-info-model-uri" class="card-text">URI: <span id="cell-info-uri" class="text-muted">{{uri}}</span></p>
 			</div>
-			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">
-	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
-			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-				<attribute-info *ngFor="let a of cellModel.attributes" 
-                    [isFromCell]="cell!=undefined"				    
-				    [cell]="cell" 
-				    [cellModel]="a"
-				    [isFromModel]="cell==undefined"
-				    ></attribute-info>
-			</ul>
+	        <ng-container *ngIf="!editor">
+   			    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
+        	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
+        			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
+        				<attribute-info *ngFor="let a of cellModel.attributes" 
+                            [isFromCell]="cell!=undefined"				    
+        				    [parentCell]="cell" 
+        				    [cellModel]="a"
+        				    [isFromModel]="cell==undefined"
+        				    ></attribute-info>
+        			</ul>
+            </ng-container>
+	        <ng-container *ngIf="editor">
+                    <form *ngIf="cellModel.attributes">
+                          <attribute-edit *ngFor="let a of cellModel.attributes" 
+                            [parentCell]="cell" 
+                            [cellModel]="a"
+                            ></attribute-edit>
+                    </form>
+                    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
+            </ng-container>
 		</div>
 		
 			   `,
@@ -68,10 +79,11 @@ import { EventService } from "../events/event.service";
 
 export class CellInfoComponent extends Widget implements OnInit {
 
-uri: string;
-cell: Cell;
-cellModel: CellModel;
-	
+@Input() uri: string;
+@Input() cell: Cell;
+@Input() cellModel: CellModel;
+@Input() editor: boolean = false;
+
 constructor(eventService: EventService) {
 	super(eventService);
 }
@@ -79,19 +91,21 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	this.subscribe(this.events.service.of( CellActivatedEvent )
-		.subscribe( activated => this.showCellInformation(activated.cell)
-	));
-	this.subscribe(this.events.service.of( CellDeactivatedEvent )
-		.subscribe( deactivated => this.hideCellInformation()
-	));
-	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-	    .filter( activated => activated.cellModel!=undefined)
-		.subscribe( activated => this.showCellModelInformation(activated.cellModel)
-	));
-	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-		.subscribe( activated => this.hideCellInformation()
-	));
+    if (!this.editor) {
+        	this.subscribe(this.events.service.of( CellActivatedEvent )
+        		.subscribe( activated => this.showCellInformation(activated.cell)
+        	));
+        	this.subscribe(this.events.service.of( CellDeactivatedEvent )
+        		.subscribe( deactivated => this.hideCellInformation()
+        	));
+        	this.subscribe(this.events.service.of( CellModelActivatedEvent )
+        	    .filter( activated => activated.cellModel!=undefined)
+        		.subscribe( activated => this.showCellModelInformation(activated.cellModel)
+        	));
+        	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
+        		.subscribe( activated => this.hideCellInformation()
+        	));
+    }
 
 }
 

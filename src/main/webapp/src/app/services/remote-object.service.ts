@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -45,7 +45,9 @@ get(uri: string, type_: Constructor<T>): Observable<T> {
 
 	console.log("[SERVICE] RemoteObjectService::get("+uri+")"); 
 	//TODO: handle errors with .catch here
-	return this.http.get(uri).map(response => <T>createInstance(type_).fromJSON(response.text()));
+	return this.http.get(uri).retryWhen(errors => errors.delay(200).take(5)
+	//.concat(Observable.throw(new Error("Too many retries")))
+	).map(response => <T>createInstance(type_).fromJSON(response.text()));
 
 }
 
