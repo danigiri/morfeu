@@ -21,27 +21,28 @@ import { CellModel } from "../cell-model.class";
 
 @Component({
 	moduleId: module.id,
-	selector: 'attribute-info',
+	selector: 'attribute-data-info',
 	template: `
 		<li *ngIf="isFromModel || (isFromCell && hasValue)" 
-		    class="list-group-item attribute-info"
+		    class="attribute-data attribute-data-info list-group-item"
 		    [class.list-group-item-secondary]="isFromModel"
 	        >
-			<span class="font-weight-bold attribute-info-name">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
-	        <span *ngIf="hasValue" class="attribute-info-value">{{getValue()}}</span>
-			<span class="text-muted attribute-info-type-name float-right">({{cellModel.type_.name}})</span>
+			<span class="font-weight-bold attribute-data-name">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+	        <span *ngIf="hasValue" class="attribute-data-value">{{getValue()}}</span>
+			<span class="text-muted attribute-data-type-name float-right">({{cellModel.type_.name}})</span>
 		</li>
 		`,
 		styles:[`
-                .attribute-info {}
-                .attribute-info-name {}
-                .attribute-info-value {}
-		        .attribute-info-type-name {}
-		        .attribute-info-from-model {}
+                .attribute-data {}
+		        .attribute-data-info {}
+                .attribute-data-name {}
+                .attribute-data-value {}
+		        .attribute-data-type-name {}
+		        .attribute-data-from-model {}
 		`]
 })
 
-export class AttributeInfoComponent {
+export class AttributeDataInfoComponent {
 
 @Input() isFromCell: boolean;    // if it's form a cell and we have no value we skip this attribute
 @Input() isFromModel: boolean;

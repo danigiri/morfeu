@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -21,12 +21,10 @@ import com.codeborne.selenide.SelenideElement;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIAttributeInfo {
+public class UIAttributeData extends UIWidget<UIAttributeData> {
 
-private SelenideElement element;
-
-public UIAttributeInfo(SelenideElement e) {
-	this.element = e;
+public UIAttributeData(SelenideElement element) {
+	super(element);
 }
 
 
@@ -51,20 +49,23 @@ public boolean isMandatory() {
 	return name_().endsWith("*:");
 }
 
+public boolean isEditable() {
+	return class_().contains("attribute-data-editor");
+}
 
 private String name_() {
 
-	return element.$(".attribute-info-name").text();
+	return element.$(".attribute-data-name").text();
 }
 
 
 public String value() {
-	return element.$(".attribute-info-value").text();
+	return element.$(".attribute-data-value").text();
 }
 
 
 public boolean hasValue() {
-	return element.attr("class").contains("list-group-item-secondary");	// this is 
+	return class_().contains("list-group-item-secondary");	// this is brittle?
 }
 
 }

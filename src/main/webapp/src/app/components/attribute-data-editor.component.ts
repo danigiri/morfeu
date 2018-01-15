@@ -21,15 +21,15 @@ import { CellModel } from "../cell-model.class";
 
 @Component({
     moduleId: module.id,
-    selector: 'attribute-edit',
+    selector: 'attribute-data-editor',
     template: `
         
-        <div *ngIf="hasValue_()" class="input-group-sm mb-3">
+        <div *ngIf="hasValue_()" class="attribute-data attribute-data-editor input-group-sm mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container></span>
+            <span class="input-group-text attribute-data-name" id="">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
           </div>
         <input type="text" 
-                class="form-control" 
+                class="form-control attribute-data-value" 
                 attr.aria-label="{{cellModel.name}}" 
                 attr.aria-describedby="{{cellModel.desc}}" 
                 [(ngModel)]="this.value" />
@@ -39,13 +39,15 @@ import { CellModel } from "../cell-model.class";
 
     `,
     styles:[`
-            .attribute-edit {}
-            .attribute-edit-name {}
+                .attribute-data {}
+                .attribute-data-editor {}
+                .attribute-data-name {}
+                .attribute-data-value {}
     `]
 })
 
 
-export class AttributeEditComponent {
+export class AttributeDataEditorComponent {
 
 @Input() cellModel: CellModel;
 @Input() parentCell: Cell;

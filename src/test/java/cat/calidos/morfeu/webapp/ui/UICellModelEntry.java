@@ -178,13 +178,13 @@ public boolean isActive() {
 }
 
 
-public UICellInfo cellInfo() {
+public UICellData cellInfo() {
 	
 	if (!isActive()) {
 		throw new NoSuchElementException("Trying the to get the info of an inactive cell model");
 	}
 
-	return new UICellInfo();	// at the moment there is only one info :)
+	return new UICellData();	// at the moment there is only one info :)
 
 }
 

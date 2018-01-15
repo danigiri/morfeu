@@ -33,7 +33,10 @@ import { EventService } from "../events/event.service";
 	moduleId: module.id,
 	selector: 'cell-data',
 	template: `
-		<div class="card mt-2 cell-data" *ngIf="cellModel">
+		<div  *ngIf="cellModel" 
+		      class="card mt-2 cell-data" 
+              [class.cell-data-info]="!editor" 
+              [class.cell-data-editor]="editor">
 				<h4 class="cell-data-header card-title card-header">
 					{{cellModel.name}}
 					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
@@ -48,20 +51,20 @@ import { EventService } from "../events/event.service";
    			    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
         	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
         			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-        				<attribute-info *ngFor="let a of cellModel.attributes" 
+        				<attribute-data-info *ngFor="let a of cellModel.attributes" 
                             [isFromCell]="cell!=undefined"				    
         				    [parentCell]="cell" 
         				    [cellModel]="a"
         				    [isFromModel]="cell==undefined"
-        				    ></attribute-info>
+        				    ></attribute-data-info>
         			</ul>
             </ng-container>
 	        <ng-container *ngIf="editor">
                     <form *ngIf="cellModel.attributes">
-                          <attribute-edit *ngFor="let a of cellModel.attributes" 
+                          <attribute-data-editor *ngFor="let a of cellModel.attributes" 
                             [parentCell]="cell" 
                             [cellModel]="a"
-                            ></attribute-edit>
+                            ></attribute-data-editor>
                     </form>
                     <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
             </ng-container>
@@ -70,6 +73,8 @@ import { EventService } from "../events/event.service";
 			   `,
 	styles:[`
             .cell-data {}
+            .cell-data-info {}
+            .cell-data-editor {}
 	        .cell-data-header {}
 	        .cell-data-model-desc {}
 	        .cell-data-uri {}

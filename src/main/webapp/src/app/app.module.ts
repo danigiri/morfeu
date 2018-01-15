@@ -28,8 +28,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent }	  from './app.component';
-import { AttributeEditComponent } from "./components/attribute-edit.component";
-import { AttributeInfoComponent } from "./components/attribute-info.component";
+import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
+import { AttributeDataInfoComponent } from "./components/attribute-data-info.component";
 import { CatalogueListComponent } from './catalogue-list.component';
 import { CatalogueComponent } from "./catalogue.component";
 import { CollapsibleComponent } from "./components/collapsible.component";
@@ -59,8 +59,8 @@ import { StatusComponent } from './status.component';
 				  ,HotkeyModule.forRoot()
 				  ],
   declarations: [ AppComponent
-                  ,AttributeEditComponent
-                  ,AttributeInfoComponent
+                  ,AttributeDataEditorComponent
+                  ,AttributeDataInfoComponent
 				  ,CatalogueListComponent 
 				  ,CatalogueComponent
 				  ,CollapsibleComponent
@@ -76,7 +76,6 @@ import { StatusComponent } from './status.component';
 				  ,ProblemComponent 
 				  ,StatusComponent 
 				],
-//entryComponents: [CellEditorComponent],
   providers:	[],
   bootstrap:	[ AppComponent ]
 })

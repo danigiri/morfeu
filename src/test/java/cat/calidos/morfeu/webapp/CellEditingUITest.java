@@ -17,13 +17,18 @@
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import cat.calidos.morfeu.webapp.ui.UIAttributeData;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
+import cat.calidos.morfeu.webapp.ui.UICellData;
 import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
@@ -61,11 +66,39 @@ public void editCellAndSave() {
 	UICellEditor.shouldNotBeVisible();
 
 	UICellEditor dataEditor = data.editor().shouldAppear();
+	assertNotNull(dataEditor);
+	
+	UICellData cellEditorData = dataEditor.cellData();
+	assertNotNull(cellEditorData);
+	assertTrue("Editing the cell should show an editor", cellEditorData.isEditor());
+	assertTrue("Editing the cell should show an editor with data coming from the cell", cellEditorData.isFromCell());
+	
+	List<UIAttributeData> attributes = cellEditorData.attributes();
+	assertNotNull(attributes);
+	assertEquals("We should be editing two attributes", 2, attributes.size());
+	UIAttributeData name = checkEditableAttribute(attributes, "text", "blahblah");
+
+	Optional<UIAttributeData> numberOpt = attributes.stream().filter(a -> a.name().matches("number")).findFirst();
+	assertTrue(numberOpt.isPresent());
+	UIAttributeData number = checkEditableAttribute(attributes, "number", "text");
+
+	// let's modify the values
 	
 	
 	
+}
+
+
+private UIAttributeData checkEditableAttribute(List<UIAttributeData> attributes, String name, String expectedValue) {
+
+	Optional<UIAttributeData> attributeOptional = attributes.stream().filter(a -> a.name().matches(name)).findFirst();
+	assertTrue(attributeOptional.isPresent());
+	UIAttributeData attribute = attributeOptional.get();
+	assertEquals("Wrong value of "+name+" in editor", expectedValue, attribute.value());
+	assertTrue("Attribute "+name+" should be editable", attribute.isEditable());
 	
-	
+	return attribute;
+
 }
 
 

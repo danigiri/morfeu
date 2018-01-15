@@ -23,14 +23,22 @@ import static com.codeborne.selenide.Selenide.$$;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.codeborne.selenide.SelenideElement;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UICellInfo extends UIWidget<UICellInfo>{
+public class UICellData extends UIWidget<UICellData>{
 
-UICellInfo() {
+UICellData() {
 	super($(".cell-data"));
 }
+
+
+public UICellData(SelenideElement e) {
+	super(e);
+}
+
 
 public static void shouldNotBeVisible() {
 	$(".cell-data").shouldNotBe(visible);
@@ -62,13 +70,18 @@ public boolean isFromModel() {
 }
 
 
-public List<UIAttributeInfo> attributes() {
-	return element.$$(".attribute-info").stream().map( e -> new UIAttributeInfo(e)).collect(Collectors.toList());
+public boolean isEditor() {
+	return class_().contains("cell-data-editor");
+}
+
+
+public List<UIAttributeData> attributes() {
+	return element.$$(".attribute-data").stream().map( e -> new UIAttributeData(e)).collect(Collectors.toList());
 }
 
 
 // we have * at the end of compulsory
-public UIAttributeInfo attribute(String name) {
+public UIAttributeData attribute(String name) {
 	return attributes().stream().filter(a -> a.name().equals(name)).findAny().get();
 }
 
