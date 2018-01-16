@@ -60,12 +60,24 @@ private String name_() {
 
 
 public String value() {
-	return element.$(".attribute-data-value").text();
+	return isEditable()? element.$(".attribute-data-value").getValue() : element.$(".attribute-data-value").text();
 }
 
 
 public boolean hasValue() {
 	return class_().contains("list-group-item-secondary");	// this is brittle?
+}
+
+
+public UIAttributeData enterText(String value) {
+
+	if (!isEditable()) {
+		throw new UnsupportedOperationException("Cannot set the value of a non-editable field");
+	}
+	
+	element.$(".attribute-data-value").setValue(value);
+	
+	return this;
 }
 
 }

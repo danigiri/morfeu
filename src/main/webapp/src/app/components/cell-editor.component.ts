@@ -40,13 +40,21 @@ import { UXEvent } from "../events/ux.event";
                         [editor]="true"></cell-data>
             </div>
             <div class="modal-footer">
-             <button type="button" class="btn btn-outline-secondary float-left" (click)="c('Discard')">Discard</button>
-             <button type="button" class="btn btn-success float-right" (click)="c('Save')">Save</button>
+             <button    id="cell-editor-discard-button"
+                        type="button" 
+                        class="btn btn-outline-secondary float-left" 
+                        (click)="c('Discard')">Discard</button>
+             <button    id="cell-editor-save-button" 
+                        type="button" 
+                        class="btn btn-success float-right" 
+                        (click)="c('Save')">Save</button>
             </div>
         </ng-template>
         `,
     styles:[`
-
+            #cell-editor-discard-button {}
+            #cell-editor-save-button {}
+            
 `]
 })
 

@@ -34,6 +34,24 @@ public static void shouldNotBeVisible() {
 }
 
 
+public UICellEditor clickSave() {
+
+	$("#cell-editor-save-button").click();	// can access from global id
+	
+	return this;
+
+}
+
+
+public UICellEditor clickDiscardButton() {
+
+	$("#cell-editor-discard-button").click();	// can access from global id
+	
+	return this;
+
+}
+
+
 public UICellData cellData() {
 	return new UICellData(element);
 }

@@ -123,7 +123,7 @@ ngAfterViewInit() {
 	console.log("AppComponent::ngAfterViewInit()");
  
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	let foo = false;
+	let foo = true;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent)

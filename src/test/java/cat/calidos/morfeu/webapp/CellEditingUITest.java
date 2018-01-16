@@ -60,12 +60,16 @@ public void editCellAndSave() {
 	
 	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
 	assertNotNull(data);
+	List<UIAttributeData> attributes = data.cellInfo().attributes();
+	checkAttribute(attributes, "text", "blahblah");
+	checkAttribute(attributes, "number", "42");
+	
 	data.select();
 	UICellEditor.shouldNotBeVisible();
 	data.activate();
 	UICellEditor.shouldNotBeVisible();
 
-	UICellEditor dataEditor = data.editor().shouldAppear();
+	UICellEditor dataEditor = data.edit().shouldAppear();
 	assertNotNull(dataEditor);
 	
 	UICellData cellEditorData = dataEditor.cellData();
@@ -73,39 +77,76 @@ public void editCellAndSave() {
 	assertTrue("Editing the cell should show an editor", cellEditorData.isEditor());
 	assertTrue("Editing the cell should show an editor with data coming from the cell", cellEditorData.isFromCell());
 	
-	List<UIAttributeData> attributes = cellEditorData.attributes();
+	attributes = cellEditorData.attributes();
 	assertNotNull(attributes);
 	assertEquals("We should be editing two attributes", 2, attributes.size());
-	UIAttributeData name = checkEditableAttribute(attributes, "text", "blahblah");
+	UIAttributeData name = checkAttribute(attributes, "text", "blahblah");
+	assertTrue("Attribute text should be editable", name.isEditable());
 
 	Optional<UIAttributeData> numberOpt = attributes.stream().filter(a -> a.name().matches("number")).findFirst();
 	assertTrue(numberOpt.isPresent());
-	UIAttributeData number = checkEditableAttribute(attributes, "number", "text");
+	UIAttributeData number = checkAttribute(attributes, "number", "42");
+	assertTrue("Attribute number should be editable", number.isEditable());
 
 	// let's modify the values
-	
-	
-	
-}
+	name.enterText("foo");
+	number.enterText("66");
+	dataEditor.clickSave();
 
-
-private UIAttributeData checkEditableAttribute(List<UIAttributeData> attributes, String name, String expectedValue) {
-
-	Optional<UIAttributeData> attributeOptional = attributes.stream().filter(a -> a.name().matches(name)).findFirst();
-	assertTrue(attributeOptional.isPresent());
-	UIAttributeData attribute = attributeOptional.get();
-	assertEquals("Wrong value of "+name+" in editor", expectedValue, attribute.value());
-	assertTrue("Attribute "+name+" should be editable", attribute.isEditable());
+	attributes = data.cellInfo().attributes();	// re-read attributes from the now-modified cell
+	name = checkAttribute(attributes, "text", "foo");
+	number = checkAttribute(attributes, "number", "66");
 	
-	return attribute;
-
 }
 
 
 @Test
 public void editCellAndDismiss() {
 	
+	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
+	assertNotNull(data);
+	List<UIAttributeData> attributes = data.cellInfo().attributes();
+	checkAttribute(attributes, "text", "blahblah");
+	checkAttribute(attributes, "number", "42");
+
+	data.select();
+	data.activate();
+	UICellEditor.shouldNotBeVisible();
 	
+	UICellEditor dataEditor = data.edit();
+	assertNotNull(dataEditor);
+	UICellData cellEditorData = dataEditor.shouldAppear().cellData();
+	assertNotNull(cellEditorData);
+	
+	attributes = cellEditorData.attributes();
+	assertNotNull(attributes);
+	UIAttributeData name = checkAttribute(attributes, "text", "blahblah");
+	UIAttributeData number = checkAttribute(attributes, "number", "42");
+	
+	// let's modify the values
+	name.enterText("foo");
+	number.enterText("66");
+	
+	dataEditor.clickDiscardButton();
+
+	data.select();
+	data.activate();
+	attributes = data.cellInfo().attributes();				// re-read attributes from the now-modified cell
+	name = checkAttribute(attributes, "text", "blahblah");		// boom, magically restored
+	number = checkAttribute(attributes, "number", "42");
+	
+}
+
+
+private UIAttributeData checkAttribute(List<UIAttributeData> attributes, String name, String expectedValue) {
+
+	Optional<UIAttributeData> attributeOptional = attributes.stream().filter(a -> a.name().matches(name)).findFirst();
+	assertTrue(attributeOptional.isPresent());
+	UIAttributeData attribute = attributeOptional.get();
+	assertEquals("Wrong value of '"+name+"'", expectedValue, attribute.value());
+	
+	return attribute;
+
 }
 
 

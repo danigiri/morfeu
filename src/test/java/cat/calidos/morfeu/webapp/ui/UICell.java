@@ -224,7 +224,8 @@ public UICellData cellInfo() {
 
 }
 
-public UICellEditor editor() {
+
+public UICellEditor edit() {
 
 	if (!isActive()) {
 		throw new NoSuchElementException("Trying the to get the editor of a not active cell");
