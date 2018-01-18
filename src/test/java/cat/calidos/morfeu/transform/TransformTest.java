@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -103,5 +106,75 @@ public void streamOfTransforms2Test() {
 
 //TODO: test with holders so we can do type transforms
 
+@Test
+public void holder2Test() {
+	
+	
+	UnaryOperator<Holder2<Object>> identity2 = (h) -> h;
+	UnaryOperator<Holder2<Object>> replace2 = (h) -> Holder2.from(((String)h.getData()).replace("a", "b"));
+	
+	LinkedList<UnaryOperator<Holder2<Object>>> ops = new LinkedList<UnaryOperator<Holder2<Object>>>();
+	ops.add(identity2);
+	ops.add(replace2);
+	
+	
+	Holder2<Object> d = new Holder2<Object>("This is a test");
+	for (UnaryOperator<Holder2<Object>> t : ops) {
+		d = t.apply(d);
+	}
+	assertEquals("This is b test", d.getData());
+	
+	
+	UnaryOperator<String> identity3 = (s) -> s;
+	UnaryOperator<String> replace3 = (s) ->s.replace("1", "2");
+	Function<String, Integer> toInt3 = (s) -> Integer.valueOf(s);
+	
+	Function<String, Integer> composite3 = identity3.andThen(replace3).andThen(toInt3);
+	assertEquals(22, composite3.apply("11").intValue());
+	
+	
+	UnaryOperator<Holder3> identity4 = (s) -> s;
+	UnaryOperator<Holder3> replace4 = (s) -> Holder3.string(s.asString().replace("1", "2"));
+	UnaryOperator<Holder3>  toInt4 = (s) -> Holder3.integer(Integer.valueOf(s.asString()));
+	
+	Function<Holder3, Holder3> composite4 = identity4.andThen(replace4).andThen(toInt4);
+	assertEquals(22, composite4.apply(Holder3.string("11")).asInteger().intValue());
+	
+}
+
+
+@Test
+public void streamChainTest() {
+	
+	// I pre-create a set of variables that hold the different states 
+	// and keep playing with them: <string, string>, <int,string>, <string, int>, <int,int>
+	// to create a virtual chain list of composite operations
+	// string->string->string ---> composite, when I need to convert, I push the composite onto the list
+	// push string-> integer and then either get an integer->string
+	// or just integer->integer...
+
+	// while ops left to be done
+	UnaryOperator<String> identity3 = (s) -> s;
+	UnaryOperator<String> replace3 = (s) -> s.replace("1", "2");
+	
+		// while string do compose..
+	Function<String, String> stringComposite = identity3.compose(replace3);
+	// if ned to change, apply and then switch modes
+	Function<String, Integer> toInt3 = (s) -> Integer.valueOf(s);	
+	Function<String, Integer> compose = toInt3.compose(stringComposite);
+	
+	UnaryOperator<Integer> increment = (i) -> i.intValue()+1;	
+	Function<String, Integer> chain = increment.compose(compose);
+	
+	Function<Integer, String> back = (i) -> i.toString();
+	
+	Function<String, String> finalChain = back.compose(chain);
+	
+	assertEquals("23", finalChain.apply("11"));
+	
+	// this way I always play with strong types and there are no casts anywhere =)
+	
+	
+}
 
 }

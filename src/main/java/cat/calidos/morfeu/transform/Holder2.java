@@ -20,10 +20,25 @@ package cat.calidos.morfeu.transform;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Holder<T> {
+public class Holder2<T> {
 
-default String getType() { return this.getClass().getTypeParameters()[0].getTypeName(); }
+private T data;
 
-T getContent();
+public Holder2(T data) {
+	this.data = data;
+}
+
+public String getType() { 
+	return this.getClass().getTypeParameters()[0].getTypeName(); 
+}
+
+public T getData() {
+	return this.data;
+}
+
+public static <T> Holder2<T> from(T data) {
+	return new Holder2<T>(data);
+}
+
 
 }

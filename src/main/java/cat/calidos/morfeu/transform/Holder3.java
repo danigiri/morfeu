@@ -20,10 +20,36 @@ package cat.calidos.morfeu.transform;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Holder<T> {
+public class Holder3 {
 
-default String getType() { return this.getClass().getTypeParameters()[0].getTypeName(); }
+private String str;
+private Integer int_;
 
-T getContent();
+protected Holder3(String str) {
+	this.str = str;
+}
+	
+
+protected Holder3(Integer int_) {
+	this.int_ = int_;
+}
+
+String asString() {
+	return this.str;
+}
+
+Integer asInteger() {
+	return this.int_;
+}
+
+
+static Holder3 string(String str) {
+	return new Holder3(str);
+}
+
+
+static Holder3 integer(Integer int_) {
+	return new Holder3(int_);
+}
 
 }
