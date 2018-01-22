@@ -18,6 +18,7 @@ package cat.calidos.morfeu.control;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
@@ -49,6 +50,7 @@ private final static Logger log = LoggerFactory.getLogger(ContentPOSTControl.cla
 private String prefix;
 private String path;
 private String destination;
+private Optional<String> transforms;
 private String modelPath;
 private String content;
 
@@ -57,13 +59,15 @@ private String contentSnippet;
 private HashMap<String, String> resultMetadata;
 
 
-public ContentPOSTControl(String prefix, String path, String content, @Nullable String modelPath) {
+
+public ContentPOSTControl(String prefix, String path, String content, Optional<String> transforms, String modelPath) {
 
 	super("POST content:"+path, "templates/operation-ok.twig", "templates/operation-problem.twig");
 
 	this.prefix = prefix;
 	this.path = path;
 	this.destination = prefix+path;
+	this.transforms = transforms;
 	this.modelPath = modelPath;
 	this.content = content;
 	this.contentSnippet = content.substring(0, Math.min(10, content.length()));
@@ -71,6 +75,7 @@ public ContentPOSTControl(String prefix, String path, String content, @Nullable 
 
 	resultMetadata.put("target", path);
 	resultMetadata.put("operation", "FileSaver");
+	resultMetadata.put("transforms", transforms.orElse(""));
 	resultMetadata.put("operationTime", "-1");
 
 }
@@ -78,7 +83,7 @@ public ContentPOSTControl(String prefix, String path, String content, @Nullable 
 
 /* (non-Javadoc)
 * @see cat.calidos.morfeu.control.Control#process()
-*//////////////////////////////////////////////////////////////////////////////
+*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Override
 protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException, 
 									FetchingException, ConfigurationException, SavingException {

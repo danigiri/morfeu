@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -41,7 +41,6 @@ import dagger.producers.ProductionComponent;
 @ProductionComponent(modules={ContentParserModule.class, ParseStringModule.class, FileSaverModule.class, 
 								ModelModule.class, ListeningExecutorServiceModule.class})
 public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
-
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
 ListenableFuture<Composite<Cell>> content() throws ParsingException;

@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,8 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	String path = normalisedPathFrom(req);
-	String modelPath = req.getParameter("model");
+	String modelPath = req.getParameter("model");	//TODO: handle exception if not present
+	Optional<String> transforms =  Optional.ofNullable(req.getParameter("t"));
 	log.info("ContentServlet::doPost '[{}]{}' model:'{}'", resourcesPrefix, path, modelPath);
 	
 	if(!req.getContentType().equals("application/json")) {
@@ -72,7 +74,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 	}
 	
 	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
-	String result = new ContentPOSTControl(resourcesPrefix, path, content, modelPath).processRequest();
+	String result = new ContentPOSTControl(resourcesPrefix, path, content, transforms, modelPath).processRequest();
 	
 	resp.setContentType("application/json");
 	writeTo(result, resp);

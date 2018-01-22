@@ -16,12 +16,15 @@
 
 package cat.calidos.morfeu.problems;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ConfigurationException extends Exception {
+
+public ConfigurationException(String message) {
+	super(message);
+}
+
 
 public ConfigurationException(String message, Throwable e) {
 	super(message+"("+e.getMessage()+")", e);

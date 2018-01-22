@@ -14,16 +14,32 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.transform;
+package cat.calidos.morfeu.model.transform.injection;
 
+import javax.inject.Named;
+
+import com.google.common.util.concurrent.ListenableFuture;
+
+import cat.calidos.morfeu.model.transform.Transform;
+import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
+import dagger.BindsInstance;
+import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Holder<T> {
+@ProductionComponent(modules={TransformModule.class, ListeningExecutorServiceModule.class})
+public interface TransformComponent {
 
-default String getType() { return this.getClass().getTypeParameters()[0].getTypeName(); }
+ListenableFuture<Transform<String, String>> transformation();
 
-T getContent();
+@ProductionComponent.Builder
+interface Builder {
+
+	@BindsInstance Builder transforms(@Named("Transforms") String transforms);
+
+	TransformComponent build();
+
+}
 
 }

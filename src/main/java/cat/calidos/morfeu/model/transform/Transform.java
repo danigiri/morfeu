@@ -14,42 +14,27 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.transform;
+package cat.calidos.morfeu.model.transform;
 
+import java.util.concurrent.ExecutionException;
+
+import cat.calidos.morfeu.problems.ParsingException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Holder3 {
+@FunctionalInterface
+public interface Transform<T, R> {
 
-private String str;
-private Integer int_;
+R apply(T t) throws ParsingException, ExecutionException, InterruptedException;
 
-protected Holder3(String str) {
-	this.str = str;
-}
-	
-
-protected Holder3(Integer int_) {
-	this.int_ = int_;
-}
-
-String asString() {
-	return this.str;
-}
-
-Integer asInteger() {
-	return this.int_;
+default <V> Transform<T, V> andThen(Transform<? super R, ? extends V> after) {
+	return (T t) -> after.apply(apply(t));
 }
 
 
-static Holder3 string(String str) {
-	return new Holder3(str);
-}
-
-
-static Holder3 integer(Integer int_) {
-	return new Holder3(int_);
+default <V> Transform<V, R> compose(Transform<? super V, ? extends T> before) {
+    return (V v) -> apply(before.apply(v));
 }
 
 }

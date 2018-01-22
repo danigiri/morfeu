@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.io.File;
 import javax.xml.transform.Source;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
@@ -30,6 +31,7 @@ import org.xmlunit.diff.Diff;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import cat.calidos.morfeu.model.transform.injection.DaggerTransformComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -40,12 +42,20 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 public class TransformJSONToXMLIntTest {
 
 
+private String content;
+
+
+@Before
+public void setup() throws Exception {
+
+	File inputFile = new File("target/test-classes/test-resources/transform/document1-as-view.json");
+	content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
+	
+}
+
 @Test
 public void testTransformUsingTemplate() throws Exception {
-	
-	File inputFile = new File("target/test-classes/test-resources/transform/document1-as-view.json");
-	String content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
-	
+
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	assertNotNull(json);
 
@@ -55,10 +65,35 @@ public void testTransformUsingTemplate() throws Exception {
 											.build()
 											.render();
 	
-	System.err.println(transformed);
-	Source transformedSource = Input.fromString(transformed).build();
+	//System.err.println(transformed);
+	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
 	
-	File originalFile = new File("target/test-classes/test-resources/documents/document1.xml");
+}
+
+@Test
+public void testTransform() throws Exception {
+
+	String transforms = "string-to-json,content-to-xml";
+	
+	Transform<String, String> transform = DaggerTransformComponent.builder()
+																.transforms(transforms)
+																.build()
+																.transformation()
+																.get();
+	
+	
+	String transformed = transform.apply(content);
+	System.err.println(transformed);
+	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	
+}
+
+
+private void compareStringWithFile(String content, String path) {
+
+	Source transformedSource = Input.fromString(content).build();
+	
+	File originalFile = new File(path);
 	Source originalSource = Input.fromFile(originalFile).build();
 
 	Diff diff = DiffBuilder.compare(originalSource)
@@ -68,7 +103,6 @@ public void testTransformUsingTemplate() throws Exception {
 							.build();
 	
 	assertFalse("Transformed JSON to XML should be the same as original", diff.hasDifferences());
-	
 }
 
 }
