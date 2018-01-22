@@ -68,10 +68,11 @@ Map<String, Transform<String, String>> stringToStringTransforms() {
 	
 	HashMap<String, Transform<Object, String>> map = new HashMap<String, Transform<Object, String>>(0);
 	map.put("content-to-xml", (json) -> DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-json-to-xml.twig")
-			.withValue(json)
-			.build()
-			.render());
+										.withTemplate("templates/transform/content-json-to-xml.twig")
+										.withValue(json)
+										.build()
+										.render()
+	);
 	
 	return map;
 }
@@ -118,7 +119,6 @@ public static Transform<String, String> transform(List<String> transforms,
 				stringString = stringString.andThen(transform);
 			} else if (stringToObjectTransforms.containsKey(t)) {			// TRANSITION TO STRING-OBJECT STATE
 				Transform<String, Object> transform = stringToObjectTransforms.get(t);
-				stringIdentity = (s) -> s;
 				stringObject = transform.compose(stringIdentity);
 				state = OBJECT_STATE;
 			} else {
@@ -133,8 +133,8 @@ public static Transform<String, String> transform(List<String> transforms,
 				stringObject = transform.compose(stringObject);
 			} else if (objectToStringTransforms.containsKey(t)) {			// TRANSITION TO STRING-STRING STATE
 				Transform<Object, String> transform = objectToStringTransforms.get(t);
-				stringIdentity = (s) -> s;
-				stringString  = stringIdentity.compose(transform);
+				//stringIdentity = (s) -> s;
+				stringString  = stringObject.andThen(transform);
 				state = STRING_STATE;
 			} else {
 				throw new ConfigurationException("Broken transform: '"+t+"' cannot transition from obj state");

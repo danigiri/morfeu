@@ -83,7 +83,7 @@ public void testTransform() throws Exception {
 	
 	
 	String transformed = transform.apply(content);
-	System.err.println(transformed);
+	//System.err.println(transformed);
 	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
 	
 }
