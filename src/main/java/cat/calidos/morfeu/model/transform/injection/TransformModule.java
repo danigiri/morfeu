@@ -119,7 +119,7 @@ public static Transform<String, String> transform(List<String> transforms,
 				stringString = stringString.andThen(transform);
 			} else if (stringToObjectTransforms.containsKey(t)) {			// TRANSITION TO STRING-OBJECT STATE
 				Transform<String, Object> transform = stringToObjectTransforms.get(t);
-				stringObject = transform.compose(stringIdentity);
+				stringObject = stringString.andThen(transform); //transform.compose(stringIdentity);
 				state = OBJECT_STATE;
 			} else {
 				throw new ConfigurationException("Broken transform: '"+t+"' cannot transition from string state");

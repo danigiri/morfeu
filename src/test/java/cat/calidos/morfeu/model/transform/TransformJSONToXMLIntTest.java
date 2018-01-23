@@ -53,6 +53,7 @@ public void setup() throws Exception {
 	
 }
 
+
 @Test
 public void testTransformUsingTemplate() throws Exception {
 
@@ -69,6 +70,7 @@ public void testTransformUsingTemplate() throws Exception {
 	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
 	
 }
+
 
 @Test
 public void testTransform() throws Exception {
