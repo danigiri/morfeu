@@ -19,6 +19,7 @@
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
 		<jackson-2-version>2.9.4</jackson-2-version>
 		<dagger-2-version>2.11</dagger-2-version>
+		<jtwig-version>5.86.1.RELEASE</jtwig-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -240,12 +241,12 @@
 		<dependency>
        		<groupId>org.jtwig</groupId>
         	<artifactId>jtwig-core</artifactId>
-        	<version>5.85.3.RELEASE</version>
+        	<version>${jtwig-version}</version>
 	    </dependency>
 		<dependency>
        		<groupId>org.jtwig</groupId>
         	<artifactId>jtwig-reflection</artifactId>
-        	<version>5.85.3.RELEASE</version>
+        	<version>${jtwig-version}</version>
 	    </dependency>
 
 		<!-- UNIT TESTING -->

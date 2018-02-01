@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,10 @@ private String cellPresentation;
 private String thumb;
 private Map<String, String> defaultValues;
 
+private Map<String, Set<String>> directives;
+
+private Map<String, Set<String>> attributes;
+
 public static final String DEFAULT_VALUE_PREFIX = "@";
 //private static String UNDEFINED = "";
 
@@ -52,13 +57,18 @@ public Metadata(URI uri,
 				String presentation, 
 				String cellPresentation, 
 				String thumb, 
-				Map<String, String> defaultValues) {
+				Map<String, String> defaultValues,
+				Map<String, Set<String>> directives,
+				Map<String, Set<String>> attributes
+			) {
 	this(uri, 
 			Optional.ofNullable(desc), 
 			Optional.ofNullable(presentation), 
 			Optional.ofNullable(cellPresentation), 
 			Optional.ofNullable(thumb),
-			defaultValues);
+			defaultValues,
+			directives,
+			attributes);
 }
 
 
@@ -67,7 +77,9 @@ public Metadata(URI uri,
 				Optional<String> presentation, 
 				Optional<String> cellPresentation,
 				Optional<String> thumb,
-				Map<String, String> defaultValues) {
+				Map<String, String> defaultValues,
+				Map<String, Set<String>> directives,
+				Map<String, Set<String>> attributes) {
 
 	this.uri = uri;
 	this.desc = desc.orElse(DEFAULT_DESC);
@@ -75,7 +87,9 @@ public Metadata(URI uri,
 	this.cellPresentation = cellPresentation.orElse(DEFAULT_CELL_PRESENTATION);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	this.defaultValues = defaultValues;
-	
+	this.directives = directives;
+	this.attributes = attributes;
+
 }
 
 
@@ -85,13 +99,17 @@ public Metadata(URI uri,
 			    Optional<String> cellPresentation,
 				Optional<String> thumb,
 				Map<String, String> defaultValues,
-				Metadata fallback) {
+				Metadata fallback,
+				Map<String, Set<String>> directives,
+				Map<String, Set<String>> attributes) {
 	this(uri,
 		 desc.orElse(fallback.getDesc()),
 		 pres.orElse(fallback.getPresentation()),
 		 cellPresentation.orElse(fallback.getCellPresentation()),
 		 thumb.orElse(fallback.getThumb()),
-		 defaultValues);
+		 defaultValues,
+		 directives,
+		 attributes);
 }
 
 
@@ -111,7 +129,11 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
 	
-	return new Metadata(u, desc, presentation, cellPresentation, thumb, newDefaultValues);
+	Map<String, Set<String>> directives = new HashMap<String, Set<String>>();
+	
+	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>();
+	
+	return new Metadata(u, desc, presentation, cellPresentation, thumb, newDefaultValues, directives, attributes);
 	
 }
 
@@ -153,6 +175,16 @@ public String getName() {
 	// TODO Auto-generated method stub
 	return null;
 }
+
+
+Set<String> getDirectivesFor(String case_) {
+	
+} 
+
+Set<String> getAttributessFor(String case_) {
+	
+} 
+
 
 
 /* (non-Javadoc)

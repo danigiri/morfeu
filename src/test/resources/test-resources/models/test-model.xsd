@@ -32,12 +32,17 @@
 				<mf:desc>Root cell-model desc</mf:desc>
 				<mf:presentation>WELL</mf:presentation>
 				<mf:thumb>assets/images/test-thumb.svg</mf:thumb>
+				<mf:serialize case="xml-to-yaml" type="directive">ATTRIBUTES-ONLY</mf:serialize>
+				<!--mf:serialize from="yaml" to="xml" type="directive">ROOT</mf:serialize-->
+				<mf:serialize from="yaml-to-xml" type="attribute">xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</mf:serialize>
+				<mf:serialize from="yaml-to-xml" type="attribute">xmlns:mf="http://dani.calidos.com/morfeu/metadata"</mf:serialize>
 			</mf:metadata>
 		</xs:appinfo>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
 				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<!-- no need to define serialize metadata as we will use the default (append 's') -->
                     <xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:choice>
 			</xs:sequence>

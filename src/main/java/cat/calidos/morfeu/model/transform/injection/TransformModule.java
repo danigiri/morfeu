@@ -17,13 +17,20 @@
 package cat.calidos.morfeu.model.transform.injection;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterators;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.inject.Named;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.transform.Transform;
 import cat.calidos.morfeu.problems.ConfigurationException;
@@ -62,11 +69,17 @@ public static List<String> parseTransforms(@Named("Transforms") String requested
 
 @Produces 
 Map<String, Transform<String, String>> stringToStringTransforms() {
-	return new HashMap<String, Transform<String, String>>(0);
+	
+	HashMap<String, Transform<String, String>> map = new HashMap<String, Transform<String, String>>(1);
+	//map.put("str-replace", value)
+	return map;
+
 }
+
+
 @Produces Map<String, Transform<Object, String>> objectToStringTransforms() {
 	
-	HashMap<String, Transform<Object, String>> map = new HashMap<String, Transform<Object, String>>(0);
+	HashMap<String, Transform<Object, String>> map = new HashMap<String, Transform<Object, String>>(1);
 	map.put("content-to-xml", (json) -> DaggerViewComponent.builder()
 										.withTemplate("templates/transform/content-json-to-xml.twig")
 										.withValue(json)
@@ -81,17 +94,16 @@ Map<String, Transform<String, String>> stringToStringTransforms() {
 @Produces 
 Map<String, Transform<String, Object>> stringToObjectTransforms() {
 	
-	HashMap<String, Transform<String, Object>> map = new HashMap<String, Transform<String, Object>>(0);
+	HashMap<String, Transform<String, Object>> map = new HashMap<String, Transform<String, Object>>(1);
 	map.put("string-to-json", (content) -> DaggerJSONParserComponent.builder().from(content).build().json().get());
 	
 	return map;
 }
 
+
 @Produces Map<String, Transform<Object, Object>> objectToObjectTransforms() {
 	return new HashMap<String, Transform<Object, Object>>(0);
 }
-
-
 
 
 @Produces
@@ -111,33 +123,37 @@ public static Transform<String, String> transform(List<String> transforms,
 	Transform<String, Object> stringObject = null;
 	
 	for (String t : transforms) {
+		
+		String op = parseOperationNameFromTransform(t);
+		Map<String, String> parameters = parseParametersFrom(t);	//TODO: use parameters to build this
+		
 		switch (state) {
 		case STRING_STATE:
 
-			if (stringToStringTransforms.containsKey(t)) {				// REMAIN AT STRING-STRING STATE
-				Transform<String, String> transform = stringToStringTransforms.get(t);
+			if (stringToStringTransforms.containsKey(op)) {				// REMAIN AT STRING-STRING STATE
+				Transform<String, String> transform = stringToStringTransforms.get(op);
 				stringString = stringString.andThen(transform);
-			} else if (stringToObjectTransforms.containsKey(t)) {			// TRANSITION TO STRING-OBJECT STATE
+			} else if (stringToObjectTransforms.containsKey(op)) {			// TRANSITION TO STRING-OBJECT STATE
 				Transform<String, Object> transform = stringToObjectTransforms.get(t);
 				stringObject = stringString.andThen(transform); //transform.compose(stringIdentity);
 				state = OBJECT_STATE;
 			} else {
-				throw new ConfigurationException("Broken transform: '"+t+"' cannot transition from string state");
+				throw new ConfigurationException("Broken transform: '"+op+"' cannot transition from string state");
 			}
 			break;
 
 		case OBJECT_STATE:
 
-			if (objectToObjectTransforms.containsKey(t)) {				// REMAIN AT STRING-OBJECT STATE
-				Transform<Object, Object> transform = objectToObjectTransforms.get(t);
+			if (objectToObjectTransforms.containsKey(op)) {				// REMAIN AT STRING-OBJECT STATE
+				Transform<Object, Object> transform = objectToObjectTransforms.get(op);
 				stringObject = transform.compose(stringObject);
-			} else if (objectToStringTransforms.containsKey(t)) {			// TRANSITION TO STRING-STRING STATE
-				Transform<Object, String> transform = objectToStringTransforms.get(t);
+			} else if (objectToStringTransforms.containsKey(op)) {			// TRANSITION TO STRING-STRING STATE
+				Transform<Object, String> transform = objectToStringTransforms.get(op);
 				//stringIdentity = (s) -> s;
 				stringString  = stringObject.andThen(transform);
 				state = STRING_STATE;
 			} else {
-				throw new ConfigurationException("Broken transform: '"+t+"' cannot transition from obj state");
+				throw new ConfigurationException("Broken transform: '"+op+"' cannot transition from obj state");
 			}
 			break;
 		}
@@ -147,5 +163,49 @@ public static Transform<String, String> transform(List<String> transforms,
 
 }
 
+
+private static String parseOperationNameFromTransform(String t) throws ConfigurationException {
+
+	String op = t;
+	if (hasParameters(op)) {
+		 
+		int paramsIndex = beginningOfParameters(op);
+		if (paramsIndex==-1) {
+			throw new ConfigurationException("Operation '"+op+"' not parsing correctly");
+		}
+		op = op.substring(0, paramsIndex);
+
+	}
+	
+	return op;
+	
+}
+
+
+private static boolean hasParameters(String t) {
+	return t.endsWith("{");
+}
+
+
+private static int beginningOfParameters(String t) {
+	return t.lastIndexOf("}");
+}
+
+
+private static Map<String, String> parseParametersFrom(String t) throws ConfigurationException {
+
+	String paramString = t.substring(beginningOfParameters(t));
+	JsonNode paramsJSON = null;
+	try {
+		paramsJSON = DaggerJSONParserComponent.builder().from(paramString).build().json().get();
+	} catch (InterruptedException | ExecutionException | ParsingException e) {
+		throw new ConfigurationException("Execution of parsing parameters of '"+t+"' did not go well", e);
+	}
+
+	Iterator<Entry<String, JsonNode>> fields = paramsJSON.fields();
+	return StreamSupport.stream(Spliterators.spliteratorUnknownSize(fields, 0), false)
+							.collect(Collectors.toMap(Entry::getKey, e -> e.getValue().toString()));
+
+}
 
 }
