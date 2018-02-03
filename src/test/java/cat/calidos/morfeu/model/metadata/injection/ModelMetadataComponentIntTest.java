@@ -19,10 +19,15 @@ package cat.calidos.morfeu.model.metadata.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.xml.xsom.XSAnnotation;
+import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
@@ -36,21 +41,50 @@ import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelMetadataComponentIntTest extends ModelTezt {
 
+private URI modelURI;
+private String uri;
+private XSSchema schema;
+private XSSchemaSet schemaSet;
+
+
+@Before
+public void setup() throws Exception {
+
+	uri = "target/test-classes/test-resources/models/test-model.xsd";
+	modelURI = new URI(uri);
+	schemaSet = parseSchemaFrom(modelURI);
+	schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
+	
+}
+
 
 @Test
-public void testValue() throws Exception {
-	
-	String uri = "target/test-classes/test-resources/models/test-model.xsd";
-	URI modelURI = new URI(uri);
-	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
-	
-	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
+public void testValue() {
+
 	XSAnnotation annotation = schema.getAnnotation();
-	
 	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).withParentURI(modelURI).build().value();
 	assertEquals("Description of test model", meta.getDesc());
 	assertEquals(uri+"/test/row/col/data", meta.getURI().toString());
 
+}
+
+
+@Test
+public void testSerializeAttributes() {
+	
+	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
+	XSAnnotation annotation = elem.getAnnotation();
+	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).withParentURI(modelURI).build().value();
+	assertFalse(meta.getAttributesFor("nonexistant").isPresent());
+	
+	
+	assertTrue(meta.getAttributesFor("yaml-to-xml").isPresent());
+	Set<String> ytxAttributes = meta.getAttributesFor("yaml-to-xml").get();
+	assertNotNull(ytxAttributes);
+	assertEquals("We should have two yaml-to-xml attributes", 2, ytxAttributes.size());
+	assertTrue(ytxAttributes.contains("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""));
+	assertTrue(ytxAttributes.contains("xmlns:mf=\"http://dani.calidos.com/morfeu/metadata\""));
+	
 }
 
 }

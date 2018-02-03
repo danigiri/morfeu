@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.plaf.synth.SynthSeparatorUI;
 import javax.xml.XMLConstants;
@@ -68,8 +70,10 @@ public void setup() throws Exception {
 
 	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	schemaSet = parseSchemaFrom(modelURI);
-	HashMap<String, String> emptyDefaultValues = new HashMap<String, String>(0);
-	emptyMedatada = new Metadata(null, "desc", "PRESENTATION", "CELL-PRESENTATION", "THUMB", emptyDefaultValues);
+	Map<String, String> emptyDefaultValues = new HashMap<String, String>(0);
+	Map<String, Set<String>> directives = new HashMap<String, Set<String>>(0);
+	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(0);
+	emptyMedatada = new Metadata(null, "desc", "PRESENTATION", "CELL-PRESENTATION", "THUMB", emptyDefaultValues, directives, attributes);
 
 }
 

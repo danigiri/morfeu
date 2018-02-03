@@ -203,6 +203,7 @@ private static Map<String, String> parseParametersFrom(String t) throws Configur
 	}
 
 	Iterator<Entry<String, JsonNode>> fields = paramsJSON.fields();
+	
 	return StreamSupport.stream(Spliterators.spliteratorUnknownSize(fields, 0), false)
 							.collect(Collectors.toMap(Entry::getKey, e -> e.getValue().toString()));
 

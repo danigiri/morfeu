@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -38,13 +39,17 @@ public void testMergeMetadata() throws Exception {
 	URI priorityURI = new URI("priority.xsd");
 	HashMap<String, String> priorityDefaultValues = new HashMap<String, String>(1);
 	priorityDefaultValues.put("@a", "priority-default-a");
-	Metadata priorityMetadata = new Metadata(priorityURI, "descA", "A", "ACP", "DEFAULT", priorityDefaultValues);
+	Map<String, Set<String>> directives = new HashMap<String, Set<String>>(0);
+	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(0);
+	Metadata priorityMetadata = new Metadata(priorityURI, "descA", "A", "ACP", "DEFAULT", priorityDefaultValues, directives, attributes);
 
 	URI metadataURI = new URI("priority.xsd");
 	HashMap<String, String> metadataDefaultValues = new HashMap<String, String>(2);
 	metadataDefaultValues.put("@a", "meta-default-a");
 	metadataDefaultValues.put("@b", "meta-default-b");
-	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "THUMB", metadataDefaultValues);
+	Map<String, Set<String>> directives2 = new HashMap<String, Set<String>>(0);
+	Map<String, Set<String>> attributes2 = new HashMap<String, Set<String>>(0);
+	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "THUMB", metadataDefaultValues, directives2, attributes2);
 
 	URI mergedURI = new URI("foo.xsd");
 	Metadata merged = Metadata.merge(mergedURI, priorityMetadata, metadata);

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -99,9 +99,9 @@ public Metadata(URI uri,
 			    Optional<String> cellPresentation,
 				Optional<String> thumb,
 				Map<String, String> defaultValues,
-				Metadata fallback,
 				Map<String, Set<String>> directives,
-				Map<String, Set<String>> attributes) {
+				Map<String, Set<String>> attributes,
+				Metadata fallback) {
 	this(uri,
 		 desc.orElse(fallback.getDesc()),
 		 pres.orElse(fallback.getPresentation()),
@@ -177,14 +177,14 @@ public String getName() {
 }
 
 
-Set<String> getDirectivesFor(String case_) {
-	
+public Optional<Set<String>> getDirectivesFor(String case_) {
+	return Optional.ofNullable(directives.get(case_));
 } 
 
-Set<String> getAttributessFor(String case_) {
-	
-} 
 
+public Optional<Set<String>> getAttributesFor(String case_) {
+	return Optional.ofNullable(attributes	.get(case_));
+} 
 
 
 /* (non-Javadoc)

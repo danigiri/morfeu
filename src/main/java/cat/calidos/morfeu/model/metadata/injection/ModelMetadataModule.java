@@ -18,9 +18,15 @@ package cat.calidos.morfeu.model.metadata.injection;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -56,34 +62,52 @@ private static final String PRESENTATION_FIELD = "mf:presentation";
 private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
 private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
+// serialisation metadata definitions
+private static final String SERIALIZE_TAG = "mf:serialize";
+private static final String SERIALIZE_TYPE_ATTR = "type";
+private static final String ATTRIBUTE_TYPE = "attribute";
+private static final String DIRECTIVE_TYPE = "directive";
+private static final String SERIALIZE_CASE_ATTR = "case";
+
 
 @Provides
-Metadata provideMetadata(URI uri,
-						@Named("desc") Optional<String> desc,
-						@Named("presentation") Optional<String> presentation,
-						@Named("cellPresentation") Optional<String> cellPresentation,
-						@Named("thumb") Optional<String> thumb,
-						Map<String, String> defaultValues,
-						@Named("Fallback") @Nullable Metadata fallback) {
+public static Metadata provideMetadata(URI uri,
+										@Named("desc") Optional<String> desc,
+										@Named("presentation") Optional<String> presentation,
+										@Named("cellPresentation") Optional<String> cellPresentation,
+										@Named("thumb") Optional<String> thumb,
+										Map<String, String> defaultValues,
+										@Named("Fallback") @Nullable Metadata fallback,
+										@Named("Directives") Map<String, Set<String>> directives,
+										@Named("Attributes") Map<String, Set<String>> attributes) {
 	
 	if (fallback==null) {
 
-		return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues);
+		return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues, directives, attributes);
 
 	} else {
 
-		return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues, fallback);
+		return new Metadata(uri, 
+							desc, 
+							presentation, 
+							cellPresentation, 
+							thumb, 
+							defaultValues,
+							directives, 
+							attributes,
+							fallback);
 
-	} 
+	}
+
 }
 
 
 @Provides
-URI uri(@Nullable XSAnnotation annotation,
-	    @Nullable @Named("ParentURI") URI parentURI,
-	    @Named("DefaultURI") Lazy<URI> defaultURI) {
+public static URI uri(@Nullable XSAnnotation annotation,
+					    @Nullable @Named("ParentURI") URI parentURI,
+					    @Named("DefaultURI") Lazy<URI> defaultURI) {
 	
-	Optional<String> uriValue = contentOf(annotation, URI_FIELD);
+	Optional<String> uriValue = annotationTaggedAs(annotation, URI_FIELD);
 	URI uri = null;
 
 	if (uriValue.isPresent()) {
@@ -108,7 +132,7 @@ URI uri(@Nullable XSAnnotation annotation,
 
 // we derive the URI from the parent
 @Provides @Named("DefaultURI")
-URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
+public static URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
 	
 	URI uri = null;
 	try {
@@ -127,33 +151,34 @@ URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
 	
 }
 
+
 @Provides @Named("desc")
-Optional<String> desc(@Nullable XSAnnotation annotation) {
-	return contentOf(annotation, DESC_FIELD);
+public static Optional<String> desc(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, DESC_FIELD);
 }
 
 
 @Provides @Named("presentation")
-Optional<String> presentation(@Nullable XSAnnotation annotation) {
-	return contentOf(annotation, PRESENTATION_FIELD);
+public static Optional<String> presentation(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, PRESENTATION_FIELD);
 }
 
 
 @Provides @Named("cellPresentation")
-Optional<String> cellPresentation(@Nullable XSAnnotation annotation) {
-	return contentOf(annotation, CELL_PRESENTATION_FIELD);
+public static Optional<String> cellPresentation(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, CELL_PRESENTATION_FIELD);
 }
 
 
 @Provides @Named("thumb")
-Optional<String> thumb(@Nullable XSAnnotation annotation) {
-	return contentOf(annotation, THUMB_FIELD);
+public static Optional<String> thumb(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, THUMB_FIELD);
 }
 
 
-
 @Provides
-Map<String, String> defaultValues(@Nullable XSAnnotation annotation, @Named("Fallback") @Nullable Metadata fallback) {
+public static Map<String, String> defaultValues(@Nullable XSAnnotation annotation, 
+												@Named("Fallback") @Nullable Metadata fallback) {
 
 	// we extract the default values from the metadata annotation
 	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
@@ -187,8 +212,27 @@ Map<String, String> defaultValues(@Nullable XSAnnotation annotation, @Named("Fal
 	
 }
 
-//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
-private static Optional<String> contentOf(@Nullable XSAnnotation annotation, String tag) {
+
+// list of <mf:serialize> nodes
+@Provides @Named("SerializeNodes")
+public static List<Node> serializeNodes(@Nullable XSAnnotation annotation) {
+	return DaggerMetadataAnnotationComponent.builder().from(annotation).andTag(SERIALIZE_TAG).build().values();
+}
+
+
+@Provides @Named("Directives")
+public static Map<String, Set<String>> directives(@Named("SerializeNodes") List<Node> serializeNodes) {
+	return groupSerializeTagsByCaseFilterBy(DIRECTIVE_TYPE, serializeNodes);
+}
+
+
+@Provides @Named("Attributes") 
+Map<String, Set<String>> attributes(@Named("SerializeNodes") List<Node> serializeNodes) {
+	return groupSerializeTagsByCaseFilterBy(ATTRIBUTE_TYPE, serializeNodes);
+}
+
+
+private static Optional<String> annotationTaggedAs(@Nullable XSAnnotation annotation, String tag) {
 
 	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
 																.from(annotation)
@@ -197,9 +241,35 @@ private static Optional<String> contentOf(@Nullable XSAnnotation annotation, Str
 																.values();
 
 	//TODO: we assume the first value of the tag is the one we want, careful with nested stuff
-	
 	return !nodeValues.isEmpty() ? Optional.of(nodeValues.get(0).getTextContent()) : Optional.empty();
 
+}
+
+
+private static Map<String, Set<String>> groupSerializeTagsByCaseFilterBy(String type, List<Node> nodeValues) {
+	
+	Map<String, Set<String>> groups = new HashMap<String, Set<String>>(0);
+	// first we get all the serialize tags of the given type
+	Stream<Node> attributeNodes = nodeValues.stream()
+									.filter(Node::hasAttributes)
+									.filter(nv -> { 
+													Node typeNode = nv.getAttributes().getNamedItem(SERIALIZE_TYPE_ATTR);
+													return typeNode!=null 
+															&& typeNode.getTextContent().equals(type);
+									});
+
+	// next we group them by cases
+	attributeNodes.filter(an -> an.getAttributes().getNamedItem(SERIALIZE_CASE_ATTR)!=null)
+					.forEach(an -> {
+									String case_ = an.getAttributes().getNamedItem(SERIALIZE_CASE_ATTR).getTextContent();
+									if (!groups.containsKey(case_)) {
+										groups.put(case_, new HashSet<String>());
+									}
+									groups.get(case_).add(an.getTextContent());
+	});
+	
+	return groups;
+	
 }
 
 
