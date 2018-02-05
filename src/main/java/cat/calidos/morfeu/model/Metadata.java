@@ -129,9 +129,8 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
 	
-	Map<String, Set<String>> directives = new HashMap<String, Set<String>>();
-	
-	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>();
+	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
+	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
 	
 	return new Metadata(u, desc, presentation, cellPresentation, thumb, newDefaultValues, directives, attributes);
 	
@@ -182,9 +181,19 @@ public Optional<Set<String>> getDirectivesFor(String case_) {
 } 
 
 
+public Map<String, Set<String>> getDirectives() {
+	return directives;
+}
+
+
 public Optional<Set<String>> getAttributesFor(String case_) {
 	return Optional.ofNullable(attributes	.get(case_));
 } 
+
+
+public Map<String, Set<String>> getAttributes() {
+	return attributes;
+}
 
 
 /* (non-Javadoc)
@@ -202,5 +211,20 @@ public String toString() {
 }
 
 
+private static Map<String, Set<String>> mergeMapSet(Map<String, Set<String>> more, Map<String, Set<String>> less) {
+
+	Map<String, Set<String>> merged = new HashMap<String, Set<String>>();
+	merged.putAll(less);
+	more.keySet().forEach(d -> {
+		if (merged.containsKey(d)) {
+			merged.get(d).addAll(more.get(d));
+		} else {
+			merged.put(d, more.get(d));
+		}
+	});
+
+	return merged;
+
+}
 
 }

@@ -19,10 +19,14 @@ package cat.calidos.morfeu.model.metadata;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.model.Metadata;
@@ -32,27 +36,45 @@ import cat.calidos.morfeu.model.Metadata;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MetadataTest {
 
+private URI mergedURI;
+private Metadata merged;
 
-@Test
-public void testMergeMetadata() throws Exception {
-	
+@Before
+public void setp() throws Exception {
+
 	URI priorityURI = new URI("priority.xsd");
 	HashMap<String, String> priorityDefaultValues = new HashMap<String, String>(1);
 	priorityDefaultValues.put("@a", "priority-default-a");
-	Map<String, Set<String>> directives = new HashMap<String, Set<String>>(0);
-	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(0);
+	Map<String, Set<String>> directives = new HashMap<String, Set<String>>(1);
+	HashSet<String> directivesA = new HashSet<String>(1);
+	directivesA.add("directive-A");
+	directives.put("directives", directivesA);
+	HashSet<String> directivesA2 = new HashSet<String>(1);
+	directivesA2.add("directive-A2");
+	directives.put("directives2", directivesA2);
+	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(1);
 	Metadata priorityMetadata = new Metadata(priorityURI, "descA", "A", "ACP", "DEFAULT", priorityDefaultValues, directives, attributes);
-
+	
 	URI metadataURI = new URI("priority.xsd");
 	HashMap<String, String> metadataDefaultValues = new HashMap<String, String>(2);
 	metadataDefaultValues.put("@a", "meta-default-a");
 	metadataDefaultValues.put("@b", "meta-default-b");
-	Map<String, Set<String>> directives2 = new HashMap<String, Set<String>>(0);
+	directives = new HashMap<String, Set<String>>(0);
+	HashSet<String> directivesB = new HashSet<String>(1);
+	directivesB.add("directive-B");
+	directives.put("directives", directivesB);
 	Map<String, Set<String>> attributes2 = new HashMap<String, Set<String>>(0);
-	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "THUMB", metadataDefaultValues, directives2, attributes2);
+	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "THUMB", metadataDefaultValues, directives, attributes2);
+	
+	mergedURI = new URI("foo.xsd");
+	merged = Metadata.merge(mergedURI, priorityMetadata, metadata);
+	
+}
 
-	URI mergedURI = new URI("foo.xsd");
-	Metadata merged = Metadata.merge(mergedURI, priorityMetadata, metadata);
+
+@Test
+public void testMergeMetadataBasic() {
+	
 	
 	assertEquals(mergedURI, merged.getURI());
 	assertEquals("descA", merged.getDesc());
@@ -64,7 +86,27 @@ public void testMergeMetadata() throws Exception {
 	assertEquals(2, mergedDefaultValues.size());
 	assertEquals("priority-default-a", mergedDefaultValues.get("@a"));
 	assertEquals("meta-default-b", mergedDefaultValues.get("@b"));
+}
+
+
+@Test
+public void testMergeMetadataDirectives() {
 	
+	Optional<Set<String>> mergedDirectives = merged.getDirectivesFor("directives");
+	assertNotNull(mergedDirectives);
+	assertTrue(mergedDirectives.isPresent());
+	Set<String> directives = mergedDirectives.get();
+	assertEquals(2, directives.size());
+	assertTrue(directives.contains("directive-A"));
+	assertTrue(directives.contains("directive-B"));
+
+	mergedDirectives = merged.getDirectivesFor("directives2");
+	assertNotNull(mergedDirectives);
+	assertTrue(mergedDirectives.isPresent());
+	directives = mergedDirectives.get();
+	assertEquals(1, directives.size());
+	assertTrue(directives.contains("directive-A2"));
+
 }
 
 }
