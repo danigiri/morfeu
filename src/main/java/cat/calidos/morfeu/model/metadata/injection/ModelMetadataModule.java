@@ -63,11 +63,11 @@ private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
 private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
 // serialisation metadata definitions
-private static final String SERIALIZE_TAG = "mf:serialize";
-private static final String SERIALIZE_TYPE_ATTR = "type";
+private static final String TRANSFORM_TAG = "mf:transform";
+private static final String TRANSFORM_TYPE_ATTR = "type";
 private static final String ATTRIBUTE_TYPE = "attribute";
 private static final String DIRECTIVE_TYPE = "directive";
-private static final String SERIALIZE_CASE_ATTR = "case";
+private static final String TRANSFORM_CASE_ATTR = "case";
 
 
 @Provides
@@ -213,22 +213,22 @@ public static Map<String, String> defaultValues(@Nullable XSAnnotation annotatio
 }
 
 
-// list of <mf:serialize> nodes
-@Provides @Named("SerializeNodes")
+// list of <mf:transform> nodes
+@Provides @Named("TransformNodes")
 public static List<Node> serializeNodes(@Nullable XSAnnotation annotation) {
-	return DaggerMetadataAnnotationComponent.builder().from(annotation).andTag(SERIALIZE_TAG).build().values();
+	return DaggerMetadataAnnotationComponent.builder().from(annotation).andTag(TRANSFORM_TAG).build().values();
 }
 
 
 @Provides @Named("Directives")
-public static Map<String, Set<String>> directives(@Named("SerializeNodes") List<Node> serializeNodes) {
-	return groupSerializeTagsByCaseFilterBy(DIRECTIVE_TYPE, serializeNodes);
+public static Map<String, Set<String>> directives(@Named("TransformNodes") List<Node> transformNodes) {
+	return groupSerializeTagsByCaseFilterBy(DIRECTIVE_TYPE, transformNodes);
 }
 
 
 @Provides @Named("Attributes") 
-Map<String, Set<String>> attributes(@Named("SerializeNodes") List<Node> serializeNodes) {
-	return groupSerializeTagsByCaseFilterBy(ATTRIBUTE_TYPE, serializeNodes);
+Map<String, Set<String>> attributes(@Named("TransformNodes") List<Node> transformNodes) {
+	return groupSerializeTagsByCaseFilterBy(ATTRIBUTE_TYPE, transformNodes);
 }
 
 
@@ -253,15 +253,15 @@ private static Map<String, Set<String>> groupSerializeTagsByCaseFilterBy(String 
 	Stream<Node> attributeNodes = nodeValues.stream()
 									.filter(Node::hasAttributes)
 									.filter(nv -> { 
-													Node typeNode = nv.getAttributes().getNamedItem(SERIALIZE_TYPE_ATTR);
+													Node typeNode = nv.getAttributes().getNamedItem(TRANSFORM_TYPE_ATTR);
 													return typeNode!=null 
 															&& typeNode.getTextContent().equals(type);
 									});
 
 	// next we group them by cases
-	attributeNodes.filter(an -> an.getAttributes().getNamedItem(SERIALIZE_CASE_ATTR)!=null)
+	attributeNodes.filter(an -> an.getAttributes().getNamedItem(TRANSFORM_CASE_ATTR)!=null)
 					.forEach(an -> {
-									String case_ = an.getAttributes().getNamedItem(SERIALIZE_CASE_ATTR).getTextContent();
+									String case_ = an.getAttributes().getNamedItem(TRANSFORM_CASE_ATTR).getTextContent();
 									if (!groups.containsKey(case_)) {
 										groups.put(case_, new HashSet<String>());
 									}
