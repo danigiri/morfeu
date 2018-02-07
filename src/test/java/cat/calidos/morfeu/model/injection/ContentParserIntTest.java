@@ -56,8 +56,8 @@ public void testValidate() throws Exception {
 							.validator()
 							.get();
 	validator.validate();
-	
 	// should not throw exception
+	
 }
 
 

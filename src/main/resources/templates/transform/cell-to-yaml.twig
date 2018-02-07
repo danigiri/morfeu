@@ -1,0 +1,7 @@
+$( set meta = cell.cellModel.metadata -)$
+$(- set i = indentation -)$
+$(- set directives = meta.directives -)$
+$#- indentation goes here -#$
+$(- if directives['ATTRIBUTES-ONLY'] is null )$$[ cell.name ]$:$( set i = i+2 )$$( endif -)$
+$#- now for the attributes -#$
+$#- and the children -#$
