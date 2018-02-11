@@ -78,7 +78,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 				.withStartCode("$(").withEndCode(")$")
 				.withStartOutput("$[").withEndOutput("]$")
 				.withStartComment("$#").withEndComment("#$")
-			
+
 			.and()
 		.and()
 		.build();

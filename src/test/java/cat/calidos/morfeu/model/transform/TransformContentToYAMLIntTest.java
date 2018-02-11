@@ -51,7 +51,7 @@ public void testTransformUsingTemplate() throws Exception {
 			.build()
 			.render();
 	
-	
+	System.err.println(transformed);
 }
 
 

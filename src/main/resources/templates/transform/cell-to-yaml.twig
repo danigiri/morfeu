@@ -1,7 +1,10 @@
-$( set meta = cell.cellModel.metadata -)$
+$( import 'macros.twig' as m -)$
+$(- set meta = cell.cellModel.Metadata -)$
 $(- set i = indentation -)$
 $(- set directives = meta.directives -)$
-$#- indentation goes here -#$
-$(- if directives['ATTRIBUTES-ONLY'] is null )$$[ cell.name ]$:$( set i = i+2 )$$( endif -)$
+$[- i -]$
+$(- set d = cell.CellModel.Metadata.Directives -)$
+$(- set a = d[case].contains('ATTRIBUTES-ONLY') -)$
+$(- if a is null )$$[ cell.name ]$:$( set i = concat(i,'  ') )$$( endif -)$
 $#- now for the attributes -#$
 $#- and the children -#$
