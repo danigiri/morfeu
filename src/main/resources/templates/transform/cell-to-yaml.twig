@@ -1,10 +1,19 @@
 $( import 'macros.twig' as m -)$
 $(- set meta = cell.cellModel.Metadata -)$
 $(- set i = indentation -)$
-$(- set directives = meta.directives -)$
 $[- i -]$
-$(- set d = cell.CellModel.Metadata.Directives -)$
-$(- set a = d[case].contains('ATTRIBUTES-ONLY') -)$
-$(- if a is null )$$[ cell.name ]$:$( set i = concat(i,'  ') )$$( endif -)$
+$(- set d =  meta.getDirectivesFor(case) -)$
+$(- if d.isPresent() -)$
+	$(if  not d.get().contains("ATTRIBUTES-ONLY") )$$[ cell.name ]$:$( set i = concat(i,'  ') )$
+	$(- else -)$
+# ($[cell.name]$) directives: $[d.get().size()]$
+	$(- endif -)$
+$(- endif -)$
 $#- now for the attributes -#$
+$(- if cell.isComplex )$
+$( for a in cell.asComplex.attributes.asList -)$
+$[- i -]$$[a.name]$: $[a.value]$
+$(- endfor )$
 $#- and the children -#$
+
+$(- endif -)$

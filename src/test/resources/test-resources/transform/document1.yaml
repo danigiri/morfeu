@@ -1,25 +1,33 @@
 rows:
 - 
   cols:
-    - size: 4
+    - 
+      size: 4
       data:
-        - number: 42
+        - 
+          number: 42
           text: blahblah
     - size: 8
       rows:
         - 
           cols:
-          - size: 6
+          - 
+            size: 6
             data:
-              - number: 42
+              - 
+                number: 42
             data2:
-              - number: 42
+              - 
+                number: 42
                 text: blahblah
-          - size: 6
+          - 
+            size: 6
             data2:
-              - number: 42
+              - 
+                number: 42
                 text: blahblah
-              - number: 42
+              - 
+                number: 42
                 text: blahblah
 
 

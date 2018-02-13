@@ -32,8 +32,7 @@
 				<mf:desc>Root cell-model desc</mf:desc>
 				<mf:presentation>WELL</mf:presentation>
 				<mf:thumb>assets/images/test-thumb.svg</mf:thumb>
-				<mf:transform case="obj-to-yaml" type="directive">ATTRIBUTES-ONLY</mf:transform>
-				<!--mf:serialize from="yaml" to="xml" type="directive">ROOT</mf:serialize-->
+				<!--mf:transform case="obj-to-yaml" type="directive">ATTRIBUTES-ONLY</mf:transform-->
 				<mf:transform case="yaml-to-xml" type="attribute">xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</mf:transform>
 				<mf:transform case="yaml-to-xml" type="attribute">xmlns:mf="http://dani.calidos.com/morfeu/metadata"</mf:transform>
 			</mf:metadata>
