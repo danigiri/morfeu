@@ -1,19 +1,34 @@
-$( import 'macros.twig' as m -)$
-$(- set meta = cell.cellModel.Metadata -)$
-$(- set i = indentation -)$
-$[- i -]$
+$(- import 'macros.twig' as m -)$
+$(- set meta = cell.cellModel.metadata -)$
+$(- set i = indent -)$
 $(- set d =  meta.getDirectivesFor(case) -)$
-$(- if d.isPresent() -)$
-	$(if  not d.get().contains("ATTRIBUTES-ONLY") )$$[ cell.name ]$:$( set i = concat(i,'  ') )$
-	$(- else -)$
-# ($[cell.name]$) directives: $[d.get().size()]$
-	$(- endif -)$
-$(- endif -)$
+$(if d.contains("ATTRIBUTES-ONLY") -)$
+$( else -)$
+	$[-i]$$[ cell.name ]$:$( set i = concat(i,'  ') )$
+$( endif -)$
 $#- now for the attributes -#$
-$(- if cell.isComplex )$
-$( for a in cell.asComplex.attributes.asList -)$
-$[- i -]$$[a.name]$: $[a.value]$
-$(- endfor )$
+$(- if cell.isComplex -)$
+	$(- if cell.asComplex.attributes.size() > 0 -)$
+		$(- for a in cell.asComplex.attributes.asList -)$
+			$[-i]$$[a.name]$: $[a.value]$
+$( endfor -)$
+	$(- endif -)$
 $#- and the children -#$
-
+$(- if cell.asComplex.children.size > 0 -)$
+$(- set liststart = true -)$
+$( set i = concat(i,'  ') )$
+$(- for c in cell.asComplex.children.asList -)$
+$(- if liststart -)$
+	$(- if c.cellModel.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
+		$(- set name = c.name -)$
+	$(- else -)$
+		$(- set name = concat(c.name,'s') -)$
+	$(- endif -)$
+$[ i ]$$[name]$:
+$[ i ]$-
+$(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': i} only -)$
+$(- else -)$
+$(- endif -)$
+$( endfor -)$
+$(- endif -)$
 $(- endif -)$

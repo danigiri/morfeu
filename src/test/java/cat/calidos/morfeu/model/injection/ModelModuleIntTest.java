@@ -28,6 +28,7 @@ import org.junit.Test;
 import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
+import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ParsingException;
 
@@ -67,7 +68,7 @@ public void testParseModel() throws Exception {
 
 
 @Test
-public void testGlobalMetadata( ) {
+public void testGlobalMetadata() {
 
 	ComplexCellModel col = model.getRootCellModels()
 								.get(0)
@@ -86,6 +87,27 @@ public void testGlobalMetadata( ) {
 	CellModel data = col.children().child("data");
 	assertEquals("Globally provided description of 'data'", data.getMetadata().getDesc());
 	assertEquals("assets/images/data-thumb.svg", data.getMetadata().getThumb());
+
+}
+
+
+@Test
+public void testMetadataDirectives() {
+	
+	ComplexCellModel col = model.getRootCellModels()
+			.get(0)
+			.asComplex()
+			.children()
+			.child("row")
+			.asComplex()
+			.children()
+			.child("col")
+			.asComplex();
+
+	Metadata meta = col.children().child("data").getMetadata();
+	assertEquals(1, meta.getDirectives().size());
+	
+	Metadata meta2 = col.children().child("data2").getMetadata();
 
 }
 

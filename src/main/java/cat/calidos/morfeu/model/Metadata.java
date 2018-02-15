@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +33,9 @@ import org.slf4j.LoggerFactory;
 public class Metadata implements Locatable {
 
 protected final static Logger log = LoggerFactory.getLogger(Metadata.class);
-		
+
+private static final HashSet<String> EMPTY_SET = new HashSet<String>(0);
+
 private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_THUMB = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
@@ -176,8 +179,8 @@ public String getName() {
 }
 
 
-public Optional<Set<String>> getDirectivesFor(String case_) {
-	return Optional.ofNullable(directives.get(case_));
+public Set<String> getDirectivesFor(String case_) {
+	return directives.containsKey(case_) ? directives.get(case_) : EMPTY_SET;
 } 
 
 
@@ -186,8 +189,8 @@ public Map<String, Set<String>> getDirectives() {
 }
 
 
-public Optional<Set<String>> getAttributesFor(String case_) {
-	return Optional.ofNullable(attributes	.get(case_));
+public Set<String> getAttributesFor(String case_) {
+	return attributes.containsKey(case_) ? attributes	.get(case_) : EMPTY_SET;
 } 
 
 

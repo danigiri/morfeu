@@ -18,6 +18,7 @@
 			<mf:metadata>
 				<mf:desc>testCell desc</mf:desc>
 				<mf:default-value name="@number">11</mf:default-value>
+				<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
 			</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
