@@ -75,11 +75,9 @@ public void testTransformAttributes() {
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	XSAnnotation annotation = elem.getAnnotation();
 	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).withParentURI(modelURI).build().value();
-	assertFalse(meta.getAttributesFor("nonexistant").isPresent());
+	assertTrue(meta.getAttributesFor("nonexistant").isEmpty());
 	
-	assertTrue(meta.getAttributesFor("yaml-to-xml").isPresent());
-	
-	Set<String> ytxAttributes = meta.getAttributesFor("yaml-to-xml").get();
+	Set<String> ytxAttributes = meta.getAttributesFor("yaml-to-xml");
 	assertNotNull(ytxAttributes);
 	assertEquals("We should have two yaml-to-xml attributes", 2, ytxAttributes.size());
 	assertTrue(ytxAttributes.contains("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""));
@@ -94,11 +92,9 @@ public void testTransformDirectives() {
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	XSAnnotation annotation = elem.getAnnotation();
 	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).withParentURI(modelURI).build().value();
-	assertFalse(meta.getDirectivesFor("nonexistant").isPresent());
+	assertTrue(meta.getDirectivesFor("nonexistant").isEmpty());
 
-	assertTrue(meta.getDirectivesFor("xml-to-yaml").isPresent());
-
-	Set<String> directives = meta.getDirectivesFor("xml-to-yaml").get();
+	Set<String> directives = meta.getDirectivesFor("obj-to-yaml");
 	assertNotNull(directives);
 	assertEquals("We should have one xml-to-yaml directive", 1, directives.size());
 

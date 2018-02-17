@@ -10,23 +10,23 @@
 		XML Schema types used to test the system
 		</xs:documentation>
 	</xs:annotation>
-	
-	
+
+
 	<xs:complexType name="testCell">
 		<xs:annotation>
 			<xs:appinfo>
-			<mf:metadata>
-				<mf:desc>testCell desc</mf:desc>
-				<mf:default-value name="@number">11</mf:default-value>
-				<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
-			</mf:metadata>
+				<mf:metadata>
+					<mf:desc>testCell desc</mf:desc>
+					<mf:default-value name="@number">11</mf:default-value>
+					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
+				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:attribute name="text" type="textField" />
 		<xs:attribute name="number" use="required" type="numberField" />
 	</xs:complexType>
-		
-	
+
+
 	<xs:complexType name="colCell">
 		<xs:annotation>
 			<xs:appinfo>

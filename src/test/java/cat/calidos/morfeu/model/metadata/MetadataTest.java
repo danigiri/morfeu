@@ -74,36 +74,32 @@ public void setp() throws Exception {
 
 @Test
 public void testMergeMetadataBasic() {
-	
-	
+
 	assertEquals(mergedURI, merged.getURI());
 	assertEquals("descA", merged.getDesc());
 	assertEquals("A", merged.getPresentation());
 	assertEquals("ACP", merged.getCellPresentation());
 	assertEquals("THUMB", merged.getThumb());
-	
+
 	Map<String, String> mergedDefaultValues = merged.getDefaultValues();
 	assertEquals(2, mergedDefaultValues.size());
 	assertEquals("priority-default-a", mergedDefaultValues.get("@a"));
 	assertEquals("meta-default-b", mergedDefaultValues.get("@b"));
+
 }
 
 
 @Test
 public void testMergeMetadataDirectives() {
 	
-	Optional<Set<String>> mergedDirectives = merged.getDirectivesFor("directives");
-	assertNotNull(mergedDirectives);
-	assertTrue(mergedDirectives.isPresent());
-	Set<String> directives = mergedDirectives.get();
+	Set<String> directives = merged.getDirectivesFor("directives");
+	assertNotNull(directives);
 	assertEquals(2, directives.size());
 	assertTrue(directives.contains("directive-A"));
 	assertTrue(directives.contains("directive-B"));
 
-	mergedDirectives = merged.getDirectivesFor("directives2");
-	assertNotNull(mergedDirectives);
-	assertTrue(mergedDirectives.isPresent());
-	directives = mergedDirectives.get();
+	directives = merged.getDirectivesFor("directives2");
+	assertNotNull(directives);
 	assertEquals(1, directives.size());
 	assertTrue(directives.contains("directive-A2"));
 

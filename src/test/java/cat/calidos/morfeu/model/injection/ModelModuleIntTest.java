@@ -21,6 +21,8 @@ import static org.junit.Assert.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -105,7 +107,11 @@ public void testMetadataDirectives() {
 			.asComplex();
 
 	Metadata meta = col.children().child("data").getMetadata();
-	assertEquals(1, meta.getDirectives().size());
+	Map<String, Set<String>> directives = meta.getDirectives();
+	assertNotNull(directives);
+	assertEquals(1, directives.size());
+	assertTrue(directives.containsKey("obj-to-yaml"));
+	assertTrue(directives.get("obj-to-yaml").contains("LISTS-NO-PLURAL"));
 	
 	Metadata meta2 = col.children().child("data2").getMetadata();
 
