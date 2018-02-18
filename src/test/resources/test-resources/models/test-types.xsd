@@ -38,12 +38,27 @@
 
 	<xs:simpleType name="textField">
 		<xs:annotation>
-			<xs:documentation>
-			textField desc
-			</xs:documentation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>textField desc</mf:desc>
+				</mf:metadata>
+			</xs:appinfo>
 		</xs:annotation>
 
 		<xs:restriction base="xs:string" />
 	</xs:simpleType>
+	
+	<xs:simpleType name="textContent">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>textContent is a text area for simple content</mf:desc>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+	
 	
 </xs:schema>
