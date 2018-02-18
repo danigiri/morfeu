@@ -50,7 +50,6 @@ import dagger.Lazy;
 public class CellModelModuleIntTest extends ModelTezt {
 
 @Mock Lazy<Collection<? extends XSAttributeUse>> mockAttributesProducer;
-@Mock Metadata mockCellMetadata;
 
 private URI modelURI;
 private XSSchemaSet schemaSet;
@@ -215,9 +214,10 @@ public void testAttributesDefaultValues() {
 	
 	HashMap<String, String> defaultValues = new HashMap<String, String>(1);
 	defaultValues.put("@text", "foo");
-	when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
+	Metadata cellMetadata = new Metadata(null, "desc", "", "", "", defaultValues, null, null);
+	//when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
 	
-	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, mockCellMetadata, globals);
+	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, cellMetadata, globals);
 	assertNotNull(attributes);
 	
 	CellModel textAttribute = attributes.attribute("text");

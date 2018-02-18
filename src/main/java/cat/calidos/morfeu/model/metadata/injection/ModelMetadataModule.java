@@ -77,28 +77,9 @@ public static Metadata provideMetadata(URI uri,
 										@Named("cellPresentation") Optional<String> cellPresentation,
 										@Named("thumb") Optional<String> thumb,
 										Map<String, String> defaultValues,
-										@Named("Fallback") @Nullable Metadata fallback,
 										@Named("Directives") Map<String, Set<String>> directives,
 										@Named("Attributes") Map<String, Set<String>> attributes) {
-	
-	if (fallback==null) {
-
-		return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues, directives, attributes);
-
-	} else {
-
-		return new Metadata(uri, 
-							desc, 
-							presentation, 
-							cellPresentation, 
-							thumb, 
-							defaultValues,
-							directives, 
-							attributes,
-							fallback);
-
-	}
-
+	return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues, directives, attributes);
 }
 
 
@@ -177,8 +158,7 @@ public static Optional<String> thumb(@Nullable XSAnnotation annotation) {
 
 
 @Provides
-public static Map<String, String> defaultValues(@Nullable XSAnnotation annotation, 
-												@Named("Fallback") @Nullable Metadata fallback) {
+public static Map<String, String> defaultValues(@Nullable XSAnnotation annotation) {
 
 	// we extract the default values from the metadata annotation
 	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
@@ -187,10 +167,6 @@ public static Map<String, String> defaultValues(@Nullable XSAnnotation annotatio
 							.build()
 							.values();
 	HashMap<String, String> defaultValues = new HashMap<String, String>();
-	// set the fallback ones first if any, as they will be overwritten by any local annotation values
-	if (fallback!=null) {
-		defaultValues.putAll(fallback.getDefaultValues());
-	}
 	for (Node n : nodeValues) {
 
 		String defaultValue = n.getTextContent();

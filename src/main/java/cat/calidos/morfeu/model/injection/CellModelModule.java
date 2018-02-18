@@ -369,19 +369,22 @@ public static Metadata metadata(XSElementDecl elem,
 								@Named("isReference") boolean isReference,
 								@Named("reference") Provider<CellModel> referenceProvider) {
 
-	// we get the metadata from the current cell model, with fallback from merging global(if available) and type
+	// we get the metadata from the current cell model, this will have the highest priority
+	Metadata meta = DaggerModelMetadataComponent.builder()
+			.from(elem.getAnnotation())
+			.withParentURI(uri)
+			.build()
+			.value();
+
+	//fallback from merging global(if available) and type
 	Metadata typeMetadata = t.getMetadata();
 	Metadata fallback = (globalMetadata!=null  && globalMetadata.containsKey(uri)) ?
 							Metadata.merge(uri, globalMetadata.get(uri), typeMetadata) : typeMetadata;
+							
+	// then we merge the current cell model metadata with the fallback 
+	meta = Metadata.merge(uri, meta, fallback);
 	
-	
-	Metadata meta = DaggerModelMetadataComponent.builder()
-										.from(elem.getAnnotation())
-										.withParentURI(uri)
-										.andFallback(fallback)
-										.build()
-										.value();
-
+	// then if we are a reference we will merge the reference metadata as well :)
 	if (isReference) {
 		// We use the given metadata (probably from global) and we merge it with the reference meta to cover any gaps
 		// Notice our own metadata has more priority
@@ -413,9 +416,10 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 	Metadata attributeMetadata = DaggerModelMetadataComponent.builder()
 			.from(xsAttributeDecl.getAnnotation())
 			.withParentURI(attributeURI)
-			.andFallback(type.getMetadata())
 			.build()
 			.value();
+	
+	attributeMetadata = Metadata.merge(attributeURI, attributeMetadata, type.getMetadata());
 	
 	// default value priorities
 	// 1) the Cell metadata, with '<mf:default-value name="@attributename">foo</mf:default-value>'

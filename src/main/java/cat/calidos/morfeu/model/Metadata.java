@@ -96,50 +96,6 @@ public Metadata(URI uri,
 }
 
 
-public Metadata(URI uri, 
-				Optional<String> desc, 
-				Optional<String> pres, 
-			    Optional<String> cellPresentation,
-				Optional<String> thumb,
-				Map<String, String> defaultValues,
-				Map<String, Set<String>> directives,
-				Map<String, Set<String>> attributes,
-				Metadata fallback) {
-	this(uri,
-		 desc.orElse(fallback.getDesc()),
-		 pres.orElse(fallback.getPresentation()),
-		 cellPresentation.orElse(fallback.getCellPresentation()),
-		 thumb.orElse(fallback.getThumb()),
-		 defaultValues,
-		 directives,
-		 attributes);
-}
-
-
-public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority) {
-	
-	String desc = morePriority.getDesc();
-	desc = desc.equals(DEFAULT_DESC) ? lessPriority.getDesc() : desc;
-	String presentation = morePriority.getPresentation();
-	presentation = presentation.equals(DEFAULT_PRESENTATION) ? lessPriority.getPresentation() : presentation;
-	String cellPresentation = morePriority.getCellPresentation();
-	cellPresentation = cellPresentation.equals(DEFAULT_CELL_PRESENTATION) 
-						? lessPriority.getCellPresentation() : cellPresentation;
-	String thumb = morePriority.getThumb();
-	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
-	
-	Map<String,String> newDefaultValues = new HashMap<String, String>();
-	newDefaultValues.putAll(lessPriority.getDefaultValues());
-	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
-	
-	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
-	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
-	
-	return new Metadata(u, desc, presentation, cellPresentation, thumb, newDefaultValues, directives, attributes);
-	
-}
-
-
 public String getDesc() {
 	return desc;
 }
@@ -211,6 +167,30 @@ public String toString() {
 			"', thumb:'"+thumb+
 			"', presentation:'"+presentation+
 			"' defaults("+defaultValues.size()+")}";
+}
+
+
+public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority) {
+	
+	String desc = morePriority.getDesc();
+	desc = desc.equals(DEFAULT_DESC) ? lessPriority.getDesc() : desc;
+	String presentation = morePriority.getPresentation();
+	presentation = presentation.equals(DEFAULT_PRESENTATION) ? lessPriority.getPresentation() : presentation;
+	String cellPresentation = morePriority.getCellPresentation();
+	cellPresentation = cellPresentation.equals(DEFAULT_CELL_PRESENTATION) 
+						? lessPriority.getCellPresentation() : cellPresentation;
+	String thumb = morePriority.getThumb();
+	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
+	
+	Map<String,String> newDefaultValues = new HashMap<String, String>();
+	newDefaultValues.putAll(lessPriority.getDefaultValues());
+	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
+	
+	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
+	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
+	
+	return new Metadata(u, desc, presentation, cellPresentation, thumb, newDefaultValues, directives, attributes);
+	
 }
 
 
