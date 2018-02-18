@@ -188,12 +188,16 @@ private static boolean hasParameters(String t) {
 
 
 private static int beginningOfParameters(String t) {
-	return t.lastIndexOf("}");
+	return t.lastIndexOf("{");
 }
 
 
 private static Map<String, String> parseParametersFrom(String t) throws ConfigurationException {
 
+	if (!hasParameters(t)) {
+		return new HashMap<String, String>(0);
+	}
+	
 	String paramString = t.substring(beginningOfParameters(t));
 	JsonNode paramsJSON = null;
 	try {

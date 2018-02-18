@@ -13,10 +13,10 @@ $(- if cell.isComplex -)$
 			$[-i]$$[a.name]$: $[a.value]$
 $( endfor -)$
 	$(- endif -)$
-$#- and the children -#$
-$(- if cell.asComplex.children.size > 0 -)$
-$(- set liststart = true -)$
-$( set i = concat(i,'  ') )$
+	$#- and the children -#$
+	$(- if cell.asComplex.children.size > 0 -)$
+		$(- set liststart = true -)$
+		$#- set i = concat(i,'  ') -#$
 $(- for c in cell.asComplex.children.asList -)$
 $(- if liststart -)$
 	$(- if c.cellModel.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
@@ -26,7 +26,7 @@ $(- if liststart -)$
 	$(- endif -)$
 $[ i ]$$[name]$:
 $[ i ]$-
-$(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': i} only -)$
+$(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(i,'  ')} only -)$
 $(- else -)$
 $(- endif -)$
 $( endfor -)$
