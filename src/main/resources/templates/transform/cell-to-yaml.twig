@@ -2,7 +2,7 @@ $(- import 'macros.twig' as m -)$
 $(- set meta = cell.cellModel.metadata -)$
 $(- set i = indent -)$
 $(- set d =  meta.getDirectivesFor(case) -)$
-$(if d.contains("ATTRIBUTES-ONLY") -)$
+$(if d.contains("ATTRIBUTES-ONLY") or hidename==true -)$
 $( else -)$
 	$[-i]$$[ cell.name ]$:$( set i = concat(i,'  ') )$
 $( endif -)$
@@ -16,19 +16,22 @@ $( endfor -)$
 	$#- and the children -#$
 	$(- if cell.asComplex.children.size > 0 -)$
 		$(- set liststart = true -)$
-		$#- set i = concat(i,'  ') -#$
-$(- for c in cell.asComplex.children.asList -)$
-$(- if liststart -)$
-	$(- if c.cellModel.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
-		$(- set name = c.name -)$
-	$(- else -)$
-		$(- set name = concat(c.name,'s') -)$
-	$(- endif -)$
+		$(- set current = '' -)$
+		$(- set ilist = concat(i,'  ') -)$
+		$(- for c in cell.asComplex.children.asList -)$
+			$(- if c.cellModel.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
+				$(- set name = c.name -)$
+			$(- else -)$
+				$(- set name = concat(c.name,'s') -)$
+			$(- endif -)$
+			$(- if current != c.name -)$
 $[ i ]$$[name]$:
-$[ i ]$-
-$(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(i,'  ')} only -)$
+$( set current = c.name -)$
+			$(- endif -)$
+$[ ilist ]$-
+$(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -)$
+		$(- endfor -)$
+	$(- endif -)$
 $(- else -)$
-$(- endif -)$
-$( endfor -)$
-$(- endif -)$
+$#- simple value based output -#$
 $(- endif -)$

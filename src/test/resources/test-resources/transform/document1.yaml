@@ -1,36 +1,36 @@
 %YAML 1.2
 ---
 rows:
-- 
-  cols:
-    - 
-      size: 4
-      data:
-        - 
-          number: 42
-          text: blahblah
-    - 
-      size: 8
-      rows:
-        - 
-          cols:
+  - 
+    cols:
+      - 
+        size: 4
+        data:
           - 
-            size: 6
-            data:
-              - 
-                number: 42
-            data2:
-              - 
-                number: 42
-                text: blahblah
+            number: 42
+            text: blahblah
+      - 
+        size: 8
+        rows:
           - 
-            size: 6
-            data2:
-              - 
-                number: 42
-                text: blahblah
-              - 
-                number: 42
-                text: blahblah
+            cols:
+            - 
+              size: 6
+              data:
+                - 
+                  number: 42
+              data2:
+                - 
+                  number: 42
+                  text: blahblah
+            - 
+              size: 6
+              data2:
+                - 
+                  number: 42
+                  text: blahblah
+                - 
+                  number: 42
+                  text: blahblah
 
 
