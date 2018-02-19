@@ -57,7 +57,13 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) 
 	while (annotationNodes.size()>0) {
 		
 		Node currentNode = annotationNodes.pop();
-		if (currentNode.getNodeName().equals(tag)) {
+		if (currentNode==null) {
+			// FIXME: is this a problem or is intrinsic from the annotations (like empty value XML nodes)?
+			log.trace("************** pop spits out a nullpointer value when retrieving metadata for '{}'", tagExpr);
+			continue;
+		}
+		String nodeName = currentNode.getNodeName();
+		if (nodeName.equals(tag)) {
 			if (attributeIndex==-1) {
 				content.add(currentNode);
 			} else {
@@ -95,10 +101,9 @@ LinkedList<Node> annotationNode(@Nullable XSAnnotation annotation) {
 		Node annotationRootNode = (Node)annotation.getAnnotation(); // as we are using the DomAnnotationParserFactory from XSOM
 		annotationNodes.add(annotationRootNode);
 	}
-	
-	return annotationNodes;
-	
-}
 
+	return annotationNodes;
+
+}
 
 }

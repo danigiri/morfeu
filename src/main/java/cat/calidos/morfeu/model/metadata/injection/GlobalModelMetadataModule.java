@@ -73,8 +73,8 @@ public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotat
 													.withParentURI(uri)
 													.build()
 													.value()
-			).collect(Collectors.toMap(Metadata::getURI, Functions.identity()));
-
+			).collect(Collectors.toMap(Metadata::getURI, Functions.identity(), (p1, p2) -> p1));
+			// FIXME: sometimes we get a duplicate here, we should investigate at some point
 	
 }
 
