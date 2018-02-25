@@ -55,19 +55,18 @@ private static final String DEFAULT_VALUE = "";
 	
 
 @Provides
-public static Cell provideCell(Node node, 
-							   @Named("SimpleInstance") Provider<Cell> providerCell, 
-							   @Named("ComplexInstance") Provider<ComplexCell> providerComplexCell) {
-	if (node instanceof Element) {
-		//System.err.println("Node:"+node.getNodeName()+"[complex]");
+public static Cell provideCell(CellModel model,
+								@Named("SimpleInstance") Provider<Cell> providerCell, 
+								@Named("ComplexInstance") Provider<ComplexCell> providerComplexCell) {
+
+	if (model.isComplex()) {
 
 		return providerComplexCell.get();
-	
+
 	} else { 
-		//System.err.println("Node:"+node.getNodeName()+"[simple]");
-	
+
 		return providerCell.get();
-	
+
 	}
 
 }
@@ -110,11 +109,11 @@ public static String desc() {
 
 @Provides @Named("value") 
 public static String valueFrom(Node node) {
-	
-	String value = node.getNodeValue();
-	
+
+	String value = node.getTextContent();
+
 	return (value!=null)? value : DEFAULT_VALUE;	//TODO: how to handle empty values properly
-	
+
 }
 
 
@@ -162,7 +161,7 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 	}
 
 	return children;
-	
+
 }
 
 

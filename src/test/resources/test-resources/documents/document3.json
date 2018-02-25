@@ -1,0 +1,8 @@
+{
+	"name": "Document 3"
+	,"desc": "Third document"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/documents/document3.xml"
+	
+}

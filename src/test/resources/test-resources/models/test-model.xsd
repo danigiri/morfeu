@@ -7,6 +7,11 @@
 		<xs:appinfo>
 			<mf:desc>Description of test model</mf:desc>
 			<mf:extra-metadata>
+				<mf:metadata uri="test/row/col/stuff">
+					<mf:desc>Large body of text</mf:desc>
+					<mf:thumb>assets/images/stuff-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/stuff-cell.svg</mf:cell-presentation>
+				</mf:metadata>
 				<mf:metadata uri="test/row/col/data">
 					<mf:desc>Globally provided description of 'data'</mf:desc>
 					<mf:thumb>assets/images/data-thumb.svg</mf:thumb>

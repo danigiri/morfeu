@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import org.junit.Before;
@@ -28,8 +27,6 @@ import org.w3c.dom.Document;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.Cell;
-import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
@@ -70,12 +67,6 @@ public void setup() throws Exception {
 
 }
 
-@Test
-public void testBuildCell() throws Exception {
-
-	//TODO: complete test HEREHRE REHREHRE HERE 
-
-}
 
 @Test
 public void testChildrenFrom() throws Exception {
