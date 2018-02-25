@@ -55,15 +55,17 @@ private static final String DEFAULT_VALUE = "";
 	
 
 @Provides
-public static Cell provideCell(CellModel model,
+public static Cell provideCell(Node node,
+								CellModel model,
 								@Named("SimpleInstance") Provider<Cell> providerCell, 
 								@Named("ComplexInstance") Provider<ComplexCell> providerComplexCell) {
 
-	if (model.isComplex()) {
+	// we are only complex if we have a complex cell model and we're an element
+	if (model.isComplex() && node instanceof Element) {
 
 		return providerComplexCell.get();
 
-	} else { 
+	} else {	// this can happen when we have a simple cell model or we're an (internal) attribute
 
 		return providerCell.get();
 

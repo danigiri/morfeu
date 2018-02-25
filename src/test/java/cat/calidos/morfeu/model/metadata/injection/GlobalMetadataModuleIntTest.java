@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public void testGlobalMetadataFromModel() throws Exception {
 	
 	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, modelURI);
 	assertNotNull("global metadata parser should not return null", globalMetadata);
-	assertEquals("global metadata should have two entries", 2, globalMetadata.size());
+	assertEquals("global metadata should have three entries", 3, globalMetadata.size());
 
 	URI dataURI = new URI(uri+"/test/row/col/data");
 	Metadata dataMetadata = globalMetadata.get(dataURI);	

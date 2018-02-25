@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public void testValue() {
 	XSAnnotation annotation = schema.getAnnotation();
 	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).withParentURI(modelURI).build().value();
 	assertEquals("Description of test model", meta.getDesc());
-	assertEquals(uri+"/test/row/col/data", meta.getURI().toString());
+	assertEquals(uri+"/test/row/col/stuff", meta.getURI().toString());
 
 }
 

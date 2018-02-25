@@ -106,7 +106,7 @@ public void testProvideCellModel() throws Exception {
 	CellModel sizeAttribute = colComplex.attributes().attribute("size");
 	assertEquals("Size attribute of columns should be compulsory", 1, sizeAttribute.getMinOccurs());
 	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
-	assertEquals(3, colComplex.children().size());
+	assertEquals(4, colComplex.children().size());
 
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	String dataDesc = "Globally provided description of 'data'";

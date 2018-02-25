@@ -50,15 +50,17 @@ public void documentBasicDataTest() {
 	catalogue.shouldAppear();
 	
 	UIDocument document = catalogue.clickOnDocumentNamed("Document 1");
-	assertTrue("'Document 1' is not titled",  document.title().contains("Document 1"));
-	assertTrue("'Document 1' is not correctly detected as xml", document.title().contains("xml"));
+	String title = document.title();
+	assertTrue("'Document 1' is not titled correltly ("+title+")",  title.contains("Document 1"));
+	assertTrue("'Document 1' is not correctly detected as xml", title.contains("xml"));
 	assertEquals("First document", document.desc());
 	assertTrue(document.isValid());
 
 	
 	document = catalogue.clickOnDocumentNamed("Document with non-valid content");
-	assertTrue("'non valid doc' is not titled",  document.title().contains("Problematic document"));
-	assertTrue("'non valid doc' is not correctly detected as Unknown", document.title().contains("Unknown"));
+	title = document.title();
+	assertTrue("'non valid doc' is not titled correctly ("+title+")",  title.contains("Problematic document"));
+	assertTrue("'non valid doc' is not correctly detected as Unknown", title.contains("Unknown"));
 	assertEquals("Unknown", document.desc());
 	assertFalse(document.isValid());
 	
