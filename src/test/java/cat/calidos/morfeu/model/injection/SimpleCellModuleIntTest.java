@@ -64,10 +64,9 @@ public void testSimpleCell() throws Exception {
 	Cell stuff = col.children().child("stuff(0)");
 	assertTrue(stuff.isSimple());
 	assertFalse(stuff.isComplex());
-	assertEquals("Stuff content", stuff.getValue());
-	
-	
-	
+	assertTrue(stuff.getValue().isPresent());
+	assertEquals("Stuff content", stuff.getValue().get());
+
 }
 
 }

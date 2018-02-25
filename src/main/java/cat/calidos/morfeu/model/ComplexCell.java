@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -34,13 +35,13 @@ private Attributes<Cell> internalAttributes;
 public ComplexCell(URI u, 
 					String name, 
 					String desc, 
-					String value, 
+					Optional<String> value, 
 					CellModel cm, 
 					Composite<Cell> children, 
 					Attributes<Cell> attributes,
 					Attributes<Cell> internalAttributes) {
 	
-	super(u, name, value, desc, cm);
+	super(u, name, desc, value, cm);
 	
 	this.children = children;
 	this.attributes = attributes;

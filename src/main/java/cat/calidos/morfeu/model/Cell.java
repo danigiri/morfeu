@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,8 +17,7 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
-
-import javax.inject.Inject;
+import java.util.Optional;
 
 /**
 * @author daniel giribet
@@ -26,7 +25,7 @@ import javax.inject.Inject;
 public class Cell extends RemoteResource {
 
 protected CellModel cellModel;
-protected String value;
+protected Optional<String> value;
 protected boolean isSimple = true;
 
 public Cell(URI u) {
@@ -39,7 +38,7 @@ public Cell(URI u, String name, String desc) {
 }
 
 
-public Cell(URI u, String name, String desc, String value, CellModel cm) {
+public Cell(URI u, String name, String desc, Optional<String> value, CellModel cm) {
 
 	super(u, name, desc);
 
@@ -69,7 +68,7 @@ public ComplexCell asComplex() {
 }
 
 
-public String getValue() {
+public Optional<String> getValue() {
 	return value;
 }
 

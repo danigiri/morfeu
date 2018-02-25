@@ -118,13 +118,13 @@ public void testAttributesFrom() throws Exception {
 	
 	Cell number = attributes.attribute("number");
 	assertNotNull(number);
-	assertEquals("42", number.getValue());
+	assertEquals("42", number.getValue().get());
 	assertEquals("number", number.getCellModel().getName());
 	assertEquals("numberField", number.getCellModel().getType().getName());
 	
 	Cell text = attributes.attribute("text");
 	assertNotNull(text);
-	assertEquals("blahblah", text.getValue());
+	assertEquals("blahblah", text.getValue().get());
 	assertEquals("text", text.getCellModel().getName());
 	assertEquals("textField", text.getCellModel().getType().getName());
 
@@ -139,8 +139,8 @@ public void testInternalAttributes() throws Exception {
 																	testCellModel);
 	assertNotNull(attributes);
 	assertEquals("More internal attributes than expected", 2, attributes.size());
-	assertEquals("http://www.w3.org/2001/XMLSchema-instance", attributes.attribute("xmlns:xsi").getValue());
-	assertEquals("../models/test-model.xsd", attributes.attribute("xsi:noNamespaceSchemaLocation").getValue());
+	assertEquals("http://www.w3.org/2001/XMLSchema-instance", attributes.attribute("xmlns:xsi").getValue().get());
+	assertEquals("../models/test-model.xsd", attributes.attribute("xsi:noNamespaceSchemaLocation").getValue().get());
 
 }
 

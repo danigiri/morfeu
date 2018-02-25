@@ -129,7 +129,6 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("11", data2Complex.attributes().attribute("number").getDefaultValue().get());	// type default
 	assertFalse("Should not have default", data2Complex.attributes().attribute("text").getDefaultValue().isPresent());
 
-	
 	assertTrue(data.isReference() || data2.isReference());
 
 	CellModel testCell;

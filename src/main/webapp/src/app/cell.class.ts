@@ -22,6 +22,7 @@ import { Model } from './model.class';
 
 export class Cell implements Adopter {
 
+value?: string;
 attributes?: Cell[];
 internalAttributes?: Cell[];
 children?: Cell[];
@@ -33,7 +34,6 @@ constructor(public schema: number,
 			public URI: string,
 			public name: string,
 			public desc: string,
-			public value: string,
 			public cellModelURI: string,
 			public isSimple: boolean) {}
 	
@@ -427,10 +427,10 @@ schema: number,
 URI: string,
 name: string,
 desc: string,
-value: string;
 cellModelURI: string,
 isSimple: boolean,
 	
+value?: string;
 attributes?: CellJSON[];
 internalAttributes?: CellJSON[];
 children?: CellJSON[];

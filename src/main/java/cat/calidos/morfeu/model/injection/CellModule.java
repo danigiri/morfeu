@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 
 import javax.inject.Named;
 import javax.inject.Provider;
+import javax.xml.stream.events.Characters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 import dagger.Module;
 import dagger.Provides;
@@ -76,23 +78,22 @@ public static Cell provideCell(Node node,
 
 @Provides @Named("SimpleInstance")
 public static Cell buildCellFrom(URI u, 
-								 @Named("name") String name, 
-								 @Named("desc") String desc, 
-								 @Named("value") String value, 
-								 CellModel cm) {
+								@Named("name") String name, 
+								@Named("desc") String desc, 
+								@Named("value") Optional<String> value, 
+								CellModel cm) {
 	return new Cell(u, name, desc, value, cm);
 }
 
 @Provides @Named("ComplexInstance")
 public static ComplexCell buildComplexCellFrom(URI u, 
-										       @Named("name") String name, 
-											   @Named("desc") String desc, 
-											   @Named("value") String value, 
-											   CellModel cm,
-											   Composite<Cell> children,
-											   Attributes<Cell> attributes,
-											   @Named("InternalAttributes") Attributes<Cell> internalAttributes
-											   ) {
+												@Named("name") String name, 
+												@Named("desc") String desc, 
+												@Named("value") Optional<String> value, 
+												CellModel cm,
+												Composite<Cell> children,
+												Attributes<Cell> attributes,
+												@Named("InternalAttributes") Attributes<Cell> internalAttributes) {
 	return new ComplexCell(u, name, desc, value, cm, children, attributes, internalAttributes);
 }
 
@@ -110,11 +111,31 @@ public static String desc() {
 
 
 @Provides @Named("value") 
-public static String valueFrom(Node node) {
+public static Optional<String> valueFrom(Node node) {
 
-	String value = node.getTextContent();
-
-	return (value!=null)? value : DEFAULT_VALUE;	//TODO: how to handle empty values properly
+	// if we are in a situation where we have <foo>bar</foo>, we need to remember that we have
+	// node (ELEMENT_NODE)
+	//	node (TEXT_NODE)
+	// and this last node is the one having the content
+	// we ignore whitespace, or just a newline without any content (several newlines are kept)
+	
+	String value = null;
+	if (node.hasChildNodes() && node.getFirstChild().getNodeType()==Node.TEXT_NODE) {
+		
+		Text textNode = (Text)node.getFirstChild();
+		if (!textNode.isElementContentWhitespace()) {	// TODO: add metadata so we can control this process better
+			value = textNode.getTextContent();
+			value = value.replace("\n", "\\n");
+			value = value.replace("\"", "\\\"");
+			value = value.trim();
+			System.err.println("'"+value+"'");
+			if (value.equals("\\n")) {
+				value = null;
+			}
+		}
+	}
+	
+	return Optional.ofNullable(value);
 
 }
 

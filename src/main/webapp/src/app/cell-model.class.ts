@@ -126,14 +126,15 @@ generateCell():Cell {
 	
 	let cellURI = "/"+this.getAdoptionName()+"(0)"; // this is will be changed on adoption
 	let desc = "";									// empty description for the moment
-	let value = (this.defaultValue) ? this.defaultValue : "";
 	let newCell:Cell = new Cell(this.schema, 
 								cellURI, 
 								this.getAdoptionName(), 
 								desc,
-								value, 
 								this.getAdoptionURI(), 
 								this.isSimple);
+	if (this.defaultValue) {
+	    newCell.value = this.defaultValue;
+	}
 	
 	newCell.cellModel = this;						// we associate the cell model straightaway, easy peasy =)
  
@@ -199,16 +200,18 @@ private generateAttributeFrom(attribute: CellModel): Cell {
 	
 	let attrURI = "/"+this.getAdoptionName()+"(0)@"+attribute.getAdoptionName(); //	 be changed on adoption
 	let desc = "";									// empty description for the moment
-	let value = (attribute.defaultValue) ? attribute.defaultValue : ""; // sanity check, as we only generate
-																		// attributes for defaults for now
+	let value = (attribute.defaultValue) ? attribute.defaultValue : ""; 
 	let newCell:Cell = new Cell(attribute.schema, 
 								attrURI, 
 								attribute.getAdoptionName(), 
 								desc,
-								value, 
 								attribute.getAdoptionURI(), 
 								attribute.isSimple);	// should always be true
 
+	if (attribute.defaultValue) {                  // sanity check, as we only generate	       
+	    newCell.value = attribute.defaultValue;    // attributes for defaults for now
+	}
+	
 	newCell.cellModel = attribute; // associate the cell model straightaway, yo! =)
  
 	return newCell;
