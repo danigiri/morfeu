@@ -59,7 +59,7 @@ public void testSimpleCell() throws Exception {
 	assertEquals(1, children.size());
 	
 	ComplexCell col = children.child("row(0)").asComplex().children().child("col(0)").asComplex();
-	assertEquals(2, col.children().size());
+	assertEquals(4, col.children().size());
 	
 	Cell stuff = col.children().child("stuff(0)");
 	assertTrue(stuff.isSimple());

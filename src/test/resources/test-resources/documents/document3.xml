@@ -6,6 +6,8 @@
 	<row>
 		<col size="12">
     			<stuff>Stuff content</stuff>
+    			<stuff>Stuff content 2</stuff>
+    			<stuff>Stuff content 3</stuff>
 			<data number="42"/>
 		</col>
 	</row>

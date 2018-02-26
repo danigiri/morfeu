@@ -3,327 +3,277 @@
   "children": [
     {
       "schema": 0,
-      "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)",
+      "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)",
       "name": "test",
       "desc": "",
-      "value": "",
-      "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test",
+      "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
       "isSimple": false,
-      "attributes": [
-        
-      ],
+      "attributes": [],
       "internalAttributes": [
         {
           "schema": 0,
-          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)@xmlns:xsi",
+          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)@xmlns:xsi",
           "name": "xmlns:xsi",
           "desc": "",
-          "value": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
-          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test",
+          "value": "http://www.w3.org/2001/XMLSchema-instance",
+          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
           "isSimple": true
         },
         {
           "schema": 0,
-          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)@xsi:noNamespaceSchemaLocation",
+          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)@xsi:noNamespaceSchemaLocation",
           "name": "xsi:noNamespaceSchemaLocation",
           "desc": "",
-          "value": "..\/models\/test-model.xsd",
-          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test",
+          "value": "../models/test-model.xsd",
+          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
           "isSimple": true
         }
       ],
       "children": [
         {
           "schema": 0,
-          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)",
+          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)",
           "name": "row",
           "desc": "",
-          "value": "",
-          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row",
+          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row",
           "isSimple": false,
-          "attributes": [
-            
-          ],
-          "internalAttributes": [
-            
-          ],
+          "attributes": [],
+          "internalAttributes": [],
           "children": [
             {
               "schema": 0,
-              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(0)",
+              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)",
               "name": "col",
               "desc": "",
-              "value": "",
-              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col",
+              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
               "isSimple": false,
               "attributes": [
                 {
                   "schema": 0,
-                  "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(0)@size",
+                  "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)@size",
                   "name": "size",
                   "desc": "",
                   "value": "4",
-                  "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col@size",
+                  "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
                   "isSimple": true
                 }
               ],
-              "internalAttributes": [
-                
-              ],
+              "internalAttributes": [],
               "children": [
                 {
                   "schema": 0,
-                  "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(0)\/data(0)",
+                  "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)",
                   "name": "data",
                   "desc": "",
-                  "value": "",
-                  "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data",
+                  "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data",
                   "isSimple": false,
                   "attributes": [
                     {
                       "schema": 0,
-                      "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(0)\/data(0)@number",
+                      "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)@number",
                       "name": "number",
                       "desc": "",
                       "value": "42",
-                      "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@number",
+                      "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data@number",
                       "isSimple": true
                     },
                     {
                       "schema": 0,
-                      "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(0)\/data(0)@text",
+                      "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)@text",
                       "name": "text",
                       "desc": "",
                       "value": "blahblah",
-                      "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@text",
+                      "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data@text",
                       "isSimple": true
                     }
                   ],
-                  "internalAttributes": [
-                    
-                  ],
-                  "children": [
-                    
-                  ]
+                  "internalAttributes": [],
+                  "children": []
                 }
               ]
             },
             {
               "schema": 0,
-              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)",
+              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)",
               "name": "col",
               "desc": "",
-              "value": "",
-              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col",
+              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
               "isSimple": false,
               "attributes": [
                 {
                   "schema": 0,
-                  "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)@size",
+                  "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)@size",
                   "name": "size",
                   "desc": "",
                   "value": "8",
-                  "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col@size",
+                  "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
                   "isSimple": true
                 }
               ],
-              "internalAttributes": [
-                
-              ],
+              "internalAttributes": [],
               "children": [
                 {
                   "schema": 0,
-                  "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)",
+                  "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)",
                   "name": "row",
                   "desc": "",
-                  "value": "",
-                  "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/row",
+                  "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/row",
                   "isSimple": false,
-                  "attributes": [
-                    
-                  ],
-                  "internalAttributes": [
-                    
-                  ],
+                  "attributes": [],
+                  "internalAttributes": [],
                   "children": [
                     {
                       "schema": 0,
-                      "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(0)",
+                      "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)",
                       "name": "col",
                       "desc": "",
-                      "value": "",
-                      "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col",
+                      "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
                       "isSimple": false,
                       "attributes": [
                         {
                           "schema": 0,
-                          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(0)@size",
+                          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)@size",
                           "name": "size",
                           "desc": "",
                           "value": "6",
-                          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col@size",
+                          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
                           "isSimple": true
                         }
                       ],
-                      "internalAttributes": [
-                        
-                      ],
+                      "internalAttributes": [],
                       "children": [
                         {
                           "schema": 0,
-                          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(0)\/data(0)",
+                          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data(0)",
                           "name": "data",
                           "desc": "",
-                          "value": "",
-                          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data",
+                          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data",
                           "isSimple": false,
                           "attributes": [
                             {
                               "schema": 0,
-                              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(0)\/data(0)@number",
+                              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data(0)@number",
                               "name": "number",
                               "desc": "",
                               "value": "42",
-                              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@number",
+                              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data@number",
                               "isSimple": true
                             }
                           ],
-                          "internalAttributes": [
-                            
-                          ],
-                          "children": [
-                            
-                          ]
+                          "internalAttributes": [],
+                          "children": []
                         },
                         {
                           "schema": 0,
-                          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(0)\/data2(1)",
+                          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data2(1)",
                           "name": "data2",
                           "desc": "",
-                          "value": "",
-                          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2",
+                          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2",
                           "isSimple": false,
                           "attributes": [
                             {
                               "schema": 0,
-                              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(0)\/data2(1)@number",
+                              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data2(1)@number",
                               "name": "number",
                               "desc": "",
                               "value": "42",
-                              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@number",
+                              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@number",
                               "isSimple": true
                             },
                             {
                               "schema": 0,
-                              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(0)\/data2(1)@text",
+                              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data2(1)@text",
                               "name": "text",
                               "desc": "",
                               "value": "blahblah",
-                              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@text",
+                              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@text",
                               "isSimple": true
                             }
                           ],
-                          "internalAttributes": [
-                            
-                          ],
-                          "children": [
-                            
-                          ]
+                          "internalAttributes": [],
+                          "children": []
                         }
                       ]
                     },
                     {
                       "schema": 0,
-                      "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)",
+                      "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)",
                       "name": "col",
                       "desc": "",
-                      "value": "",
-                      "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col",
+                      "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
                       "isSimple": false,
                       "attributes": [
                         {
                           "schema": 0,
-                          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)@size",
+                          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)@size",
                           "name": "size",
                           "desc": "",
                           "value": "6",
-                          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col@size",
+                          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
                           "isSimple": true
                         }
                       ],
-                      "internalAttributes": [
-                        
-                      ],
+                      "internalAttributes": [],
                       "children": [
                         {
                           "schema": 0,
-                          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)\/data2(0)",
+                          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(0)",
                           "name": "data2",
                           "desc": "",
-                          "value": "",
-                          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2",
+                          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2",
                           "isSimple": false,
                           "attributes": [
                             {
                               "schema": 0,
-                              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)\/data2(0)@number",
+                              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(0)@number",
                               "name": "number",
                               "desc": "",
                               "value": "42",
-                              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@number",
+                              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@number",
                               "isSimple": true
                             },
                             {
                               "schema": 0,
-                              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)\/data2(0)@text",
+                              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(0)@text",
                               "name": "text",
                               "desc": "",
                               "value": "blahblah",
-                              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@text",
+                              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@text",
                               "isSimple": true
                             }
                           ],
-                          "internalAttributes": [
-                            
-                          ],
-                          "children": [
-                            
-                          ]
+                          "internalAttributes": [],
+                          "children": []
                         },
                         {
                           "schema": 0,
-                          "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)\/data2(1)",
+                          "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)",
                           "name": "data2",
                           "desc": "",
-                          "value": "",
-                          "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2",
+                          "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2",
                           "isSimple": false,
                           "attributes": [
                             {
                               "schema": 0,
-                              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)\/data2(1)@number",
+                              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)@number",
                               "name": "number",
                               "desc": "",
                               "value": "42",
-                              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@number",
+                              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@number",
                               "isSimple": true
                             },
                             {
                               "schema": 0,
-                              "URI": "target\/test-classes\/test-resources\/documents\/document1.xml\/test(0)\/row(0)\/col(1)\/row(0)\/col(1)\/data2(1)@text",
+                              "URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)@text",
                               "name": "text",
                               "desc": "",
                               "value": "blahblah",
-                              "cellModelURI": "target\/test-classes\/test-resources\/models\/test-model.xsd\/test\/row\/col\/data2@text",
+                              "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@text",
                               "isSimple": true
                             }
                           ],
-                          "internalAttributes": [
-                            
-                          ],
-                          "children": [
-                            
-                          ]
+                          "internalAttributes": [],
+                          "children": []
                         }
                       ]
                     }

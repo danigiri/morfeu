@@ -65,6 +65,7 @@ public void testTransformUsingTemplate() throws Exception {
 											.withValue(json)
 											.build()
 											.render();
+	System.err.println(transformed);
 	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
 	
 }
@@ -102,7 +103,7 @@ private void compareStringWithFile(String content, String path) {
 							.ignoreWhitespace()
 							.build();
 	
-	assertFalse("Transformed JSON to XML should be the same as original", diff.hasDifferences());
+	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
 }
 
 }

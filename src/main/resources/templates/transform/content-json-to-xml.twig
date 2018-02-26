@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 $( for rootnode in v.children )$
-$( include "cell-json-to-xml.twig" with {'node': rootnode, 'indent': 1} only )$
+$( include "cell-json-to-xml.twig" with {'node': rootnode, 'i': ''} only )$
 $( endfor )$
