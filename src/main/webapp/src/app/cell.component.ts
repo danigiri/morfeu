@@ -41,9 +41,9 @@ import { EventService } from './events/event.service';
 	selector: 'cell',
 	template: `
 
-			<ng-container [ngSwitch]="cell.cellModel.presentation">
+			<ng-container [ngSwitch]="true">
 
-				<ng-container *ngSwitchCase="'WELL'">
+				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'WELL'">
 					<div id="{{cell.URI}}" 
 						class="well container-fluid show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
@@ -65,7 +65,7 @@ import { EventService } from './events/event.service';
 					 <!-- TODO: we probable want a drop area here to be able to add new wells -->
 				</ng-container>
 
-				<ng-container *ngSwitchCase="'ROW-WELL'">
+				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'ROW-WELL'">
 					<div id="{{cell.URI}}" 
 						class="row-well row show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
@@ -87,7 +87,7 @@ import { EventService } from './events/event.service';
 					 </div>
 				</ng-container>
 				
-				<ng-container *ngSwitchCase="'COL-WELL'">
+				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'COL-WELL'">
 					<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
 					<div id="{{cell.URI}}" 
 						class="col-well col show-grid cell-level-{{level}} rounded"
@@ -105,7 +105,7 @@ import { EventService } from './events/event.service';
 					 </div>
 				</ng-container>
 
-				<ng-container *ngSwitchCase="'CELL'">
+				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'CELL' || cell.cellModel.presentation === 'TEXT'">
 						<!-- TODO: check the model and the content as well (counts, etc.) -->
 						<img id="{{cell.URI}}"
 							class="cell cell-img cell-level-{{level}}"

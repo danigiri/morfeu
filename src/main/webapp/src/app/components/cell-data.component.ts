@@ -49,10 +49,12 @@ import { EventService } from "../events/event.service";
 			</div>
 	        <ng-container *ngIf="!editor">
    			    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
+   			    <!-- if we have a value field we should show it -->
+   			    <p *ngIf="cell!=undefined && cell.value" class="card-text">{{cell.value}}</p>
         	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
         			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
         				<attribute-data-info *ngFor="let a of cellModel.attributes" 
-                            [isFromCell]="cell!=undefined"				    
+                         [isFromCell]="cell!=undefined"	
         				    [parentCell]="cell" 
         				    [cellModel]="a"
         				    [isFromModel]="cell==undefined"
@@ -60,8 +62,16 @@ import { EventService } from "../events/event.service";
         			</ul>
             </ng-container>
 	        <ng-container *ngIf="editor">
-                    <form *ngIf="cellModel.attributes">
-                          <attribute-data-editor *ngFor="let a of cellModel.attributes" 
+                    <form *ngIf="cellModel.attributes || cell.value">
+	                    <textarea *ngIf="cell.value" 
+	                        class="form-control" 
+	                        id="" 
+	                        rows="3"
+	                        name="{{cellModel.name}}.value"
+	                        attr.aria-label="{{cellModel.name}}.value" 
+                            attr.aria-describedby="{{cellModel.desc}} value" 
+	                        [(ngModel)]="cell.value"></textarea>
+                        <attribute-data-editor *ngFor="let a of cellModel.attributes" 
                             [parentCell]="cell" 
                             [cellModel]="a"
                             ></attribute-data-editor>
