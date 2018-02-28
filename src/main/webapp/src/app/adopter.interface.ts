@@ -20,7 +20,8 @@ import { FamilyMember } from './family-member.interface';
 
 export interface Adopter extends FamilyMember {
     
-adopt(newCell:Cell, position:number);
+/** new cell must not have a parent */
+adopt(orphan:Cell, position:number);
 
 removeChild(child:Cell);
 

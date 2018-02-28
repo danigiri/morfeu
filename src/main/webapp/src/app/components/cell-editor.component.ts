@@ -82,9 +82,11 @@ ngOnInit() {
 
 edit(cell: Cell) {
 
+    console.log("[UI] Discard changes at position "+cell.position);
     this.editing = true;
     this.cellBackup = cell.deepClone();
     this.cell = cell;
+
     //this.events.service.publish(new CellActivatedEvent(this.cell));
     this.modalService.open(this.editor).result.then((result) => this.button(result), 
                                                     (reason) => this.outside());
@@ -111,20 +113,23 @@ outside() {
     
 }
 
-// FIXME: this is not working properly, we need to thoroughly test it, it may be need to put in a future exec
+
 private rollbackChanges() {
     
-    console.log("[UI] Discard changes");
     let position = this.cell.position;
     let parent = this.cell.parent;
+
+    console.log("[UI] Discard changes at position "+position);
     parent.removeChild(this.cell);    // TODO: slow but no need to change the interface for now
+    this.cellBackup.parent = undefined; // backup must be an orphan for it to be adopted
     parent.adopt(this.cellBackup, position);
     
-    // reload 
+    // reload ?
     //this.events.service.publish(new CellActivateEvent());
     this.events.service.publish(new CellActivatedEvent(this.cellBackup));
-    
+
 }
+
 
 private clear() {
     this.cell = undefined;

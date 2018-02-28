@@ -354,6 +354,10 @@ adoptCellAtPosition(newCell:Cell, position:number) {
 	console.log("[UI] CellComponent::adoptCellAtPosition("+position+")");
 	// deactivate based on old location
 	this.events.service.publish(new CellDeactivatedEvent(newCell));
+	// must be an orphan before adopting
+	if (newCell.parent) {
+	    newCell.parent.removeChild(newCell);
+	}
 	this.cell.adopt(newCell, position);
 
 }

@@ -74,7 +74,7 @@ getParent():FamilyMember {
     return undefined;
 }
 
-adopt(newCell:Cell, position:number) {
+adopt(orphan:Cell, position:number) {
     //TODO: to be implemented
 }
 

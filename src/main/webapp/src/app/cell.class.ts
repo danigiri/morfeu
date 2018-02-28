@@ -167,41 +167,44 @@ equals(m:FamilyMember) {
 }
 
 
-adopt(newMember:Cell, position:number) {
-	
-	if (newMember.parent) {
-		newMember.parent.removeChild(newMember);
+adopt(orphan:Cell, position:number) {
+    
+    // notice that we are adopting only orphan cells as we do not want this method to have side effects on
+    // the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
+    // and the old parent, this last change would be non-intuitive), therefore we only accept orphans
+    
+	if (!orphan.parent) {
+	    console.error("Adopting child that was not an orphan");
 	}
-	
-	newMember.parent = this;
-	newMember.setPosition(position);   // this actually changes the URI fo the new member to the correct one
-	
-	if (!this.children) {
-		this.children = [newMember];
-	} else if (this.children.length<=position) { //> //> // works for empty list and also append at the end
-		this.children.push(newMember);
-	} else {
-	
-		let newChildren:Cell[] = [];
-		let i:number = 0;
-		this.children.forEach(c => {
-			if (i<position) { //>
-				newChildren.push(c);
-			} else if (i==position) {
-				newChildren.push(newMember);
-				i++;
-				newChildren.push(c.setPosition(i));	   // set next to a a shifted position of +1
-			} else {
-				newChildren.push(c.setPosition(i));	   // set the rest of children
-			}
-			i++;
-		});
-		this.children = newChildren;
 
-	}
+	orphan.parent = this;
+    orphan.setPosition(position);   // this actually changes the URI fo the new member to the correct one
+    
+    if (!this.children) {
+        this.children = [ orphan ];
+    } else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
+        this.children.push(orphan);
+    } else {
+    
+        let newChildren:Cell[] = [];
+        let i:number = 0;
+        this.children.forEach(c => {
+            if (i<position) { //>
+                newChildren.push(c);
+            } else if (i==position) {
+                newChildren.push(orphan);
+                i++;
+                newChildren.push(c.setPosition(i));    // set next to a a shifted position of +1
+            } else {
+                newChildren.push(c.setPosition(i));    // set the rest of children
+            }
+            i++;
+        });
+        this.children = newChildren;
+
+    }
 
 }
-
 
 removeChild(child:Cell) {
 
