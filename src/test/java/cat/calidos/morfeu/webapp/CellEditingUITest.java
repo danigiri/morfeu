@@ -58,16 +58,12 @@ public void setup() {
 @Test
 public void editCellAndSave() {
 	
-	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
+	UICell data = test.child("row(0)").child("col(0)").child("data(0)").select().activate();
 	assertNotNull(data);
+	UICellEditor.shouldNotBeVisible();
 	List<UIAttributeData> attributes = data.cellInfo().attributes();
 	checkAttribute(attributes, "text", "blahblah");
 	checkAttribute(attributes, "number", "42");
-	
-	data.select();
-	UICellEditor.shouldNotBeVisible();
-	data.activate();
-	UICellEditor.shouldNotBeVisible();
 
 	UICellEditor dataEditor = data.edit().shouldAppear();
 	assertNotNull(dataEditor);
@@ -103,14 +99,12 @@ public void editCellAndSave() {
 @Test
 public void editCellAndDismiss() {
 	
-	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
+	UICell data = test.child("row(0)").child("col(0)").child("data(0)").select().activate();
 	assertNotNull(data);
 	List<UIAttributeData> attributes = data.cellInfo().attributes();
 	checkAttribute(attributes, "text", "blahblah");
 	checkAttribute(attributes, "number", "42");
 
-	data.select();
-	data.activate();
 	UICellEditor.shouldNotBeVisible();
 	
 	UICellEditor dataEditor = data.edit();

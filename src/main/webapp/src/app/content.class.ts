@@ -37,49 +37,49 @@ associateWith(model: Model) {
 
 
 getURI():string {
-    return this.getAdoptionURI();
+	return this.getAdoptionURI();
 }
 
 // part of the drag and drop scaffolding, we return true if this cell can be one of the root cells
 getAdoptionName():string {
-    return "";
+	return "";
 }
 
 
 getAdoptionURI():string {
-    return "/";
+	return "/";
 }
 
 
 matches(element:FamilyMember):boolean {
-    return false;   // content does not match with anything
+	return false;	// content does not match with anything
 }
 
 
 canAdopt(newMember:FamilyMember):boolean {
-    return this.children.some(c => c.canAdopt(newMember));
+	return this.children.some(c => c.canAdopt(newMember));
 }
 
 childrenCount():number {
-    return this.children ? this.children.length : 0;
+	return this.children ? this.children.length : 0;
 }
 
 
 equals(m:FamilyMember) {
-    return this.getURI()==m.getURI();
+	return this.getURI()==m.getURI();
 }
 
 
 getParent():FamilyMember {
-    return undefined;
+	return undefined;
 }
 
 adopt(orphan:Cell, position:number) {
-    //TODO: to be implemented
+	//TODO: to be implemented
 }
 
 removeChild(child:Cell) {
-    //TODO: to be implemented
+	//TODO: to be implemented
 }
 
 
@@ -95,15 +95,15 @@ fromJSON(json: ContentJSON|string): Content {
 		return JSON.parse(json, Content.reviver);
 		
 	} else {
-	    let i:number = 0;
+		let i:number = 0;
 		let content = Object.create(Content.prototype);
 		content = Object.assign(content, json);
 		content = Object.assign(content, {children: json.children.map(c => {
-		    let fullCell:Cell = Cell.fromJSON(c);
-		        fullCell.position = i++;
-		        fullCell.parent = content;
-		        return fullCell;
-		    })});
+			let fullCell:Cell = Cell.fromJSON(c);
+				fullCell.position = i++;
+				fullCell.parent = content;
+				return fullCell;
+			})});
 		
 		return content;
 		

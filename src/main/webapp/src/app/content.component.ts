@@ -57,33 +57,33 @@ import { EventService } from "./events/event.service";
 		<div id="content" class="card-body">
 			<drop-area [parent]="model" position="0"></drop-area> <!-- FIXME: this should activate and it doesn't -->
 			<cell *ngFor="let cell of content.children; let i=index" 
-			    [parent]="content" 
-			    [cell]="cell" [level]="0" 
-			    [position]="i"
-			    ></cell>
+				[parent]="content" 
+				[cell]="cell" [level]="0" 
+				[position]="i"
+				></cell>
 			<!-- TODO: static checks using the moel and not what's already present (cells) -->
 		</div>
-        <!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
-        <ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->
-    </div>
+		<!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
+		<ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->
+	</div>
 <!-- THIS DISPLAYS AS IT SHOULD -->
 <!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">
   <div class="row" style="border: 2px solid rgba(86, 62, 128, .2)">
-    <div class="col-4" style="border: 2px solid rgba(86, 62, 128, .2)">
-      <img class="img-fluid" src="http://localhost:3000/assets/images/data-cell.svg" />
-    </div>
-    <div class="col-8" style="border: 2px solid rgba(86, 62, 128, .2)">
-      <div class="row">
-    <div class="col-6" style="border: 2px solid rgba(86, 62, 128, .2)">
-      <img src="http://localhost:3000/assets/images/data-cell.svg" />
-      <img src="http://localhost:3000/assets/images/data-cell.svg" />
-    </div>
-    <div class="col-6" style="border: 2px solid rgba(86, 62, 128, .2)">
-      <img src="http://localhost:3000/assets/images/data-cell.svg" />
-      <img src="http://localhost:3000/assets/images/data-cell.svg" />
-    </div>
+	<div class="col-4" style="border: 2px solid rgba(86, 62, 128, .2)">
+	  <img class="img-fluid" src="http://localhost:3000/assets/images/data-cell.svg" />
+	</div>
+	<div class="col-8" style="border: 2px solid rgba(86, 62, 128, .2)">
+	  <div class="row">
+	<div class="col-6" style="border: 2px solid rgba(86, 62, 128, .2)">
+	  <img src="http://localhost:3000/assets/images/data-cell.svg" />
+	  <img src="http://localhost:3000/assets/images/data-cell.svg" />
+	</div>
+	<div class="col-6" style="border: 2px solid rgba(86, 62, 128, .2)">
+	  <img src="http://localhost:3000/assets/images/data-cell.svg" />
+	  <img src="http://localhost:3000/assets/images/data-cell.svg" />
+	</div>
 
-    </div>
+	</div>
   </div>
 </div-->
 	`,
@@ -112,7 +112,7 @@ private dropAreaSelectingMode: boolean = false;
 constructor(eventService: EventService,
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("RemoteJSONDataService") private contentSaverService: RemoteDataService
-            ) {
+			) {
 	super(eventService);
 }
 
@@ -136,7 +136,7 @@ ngOnInit() {
 	));
 	
 	this.subscribe(this.events.service.of(ContentSaveEvent).subscribe(
-	       save => this.saveContent(save.document)
+		   save => this.saveContent(save.document)
 	));
 }
 
@@ -144,15 +144,15 @@ ngOnInit() {
 // we make sure we subscribe to new elements if we are waiting for selections at root level
 ngAfterViewInit() {
 
-    console.log("ContentComponent::ngAfterViewInit()")
-    this.childrenCellComponents.changes.subscribe(c => {
-        if (this.cellSelectingMode) {
-            this.subscribeChildrenToCellSelection();
-            // if we send the vent immediately in the binding changing callback we'll probably be affecting the
-            // component binding values after they have been read, we trigger it outside the callback then:
-            Promise.resolve(null).then((d)=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
-        }
-    });
+	console.log("ContentComponent::ngAfterViewInit()")
+	this.childrenCellComponents.changes.subscribe(c => {
+		if (this.cellSelectingMode) {
+			this.subscribeChildrenToCellSelection();
+			// if we send the vent immediately in the binding changing callback we'll probably be affecting the
+			// component binding values after they have been read, we trigger it outside the callback then:
+			Promise.resolve(null).then((d)=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
+		}
+	});
 
 }
 
@@ -170,7 +170,7 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		this.displayContent(content);
 		this.events.ok();
 	},
-	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
+	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
 	);
 	
@@ -179,18 +179,18 @@ fetchContentFor(document_: CellDocument, model:Model) {
 
 displayContent(content: Content) {
 	
-    console.log("[UI] ContentComponent::displayContent()");
+	console.log("[UI] ContentComponent::displayContent()");
 	this.content = content;
 	this.cellSelectingMode = true;
-    this.registerKeyPressedEvents();
-    
+	this.registerKeyPressedEvents();
+	
 }
 
 
 clearContent() {
 
-    console.log("[UI] ContentComponent::clearContent()");
-    this.cellSelectingMode = false;
+	console.log("[UI] ContentComponent::clearContent()");
+	this.cellSelectingMode = false;
 	this.unregisterKeyPressedEvents();
 	this.content = null;
 
@@ -198,87 +198,86 @@ clearContent() {
 
 
 saveContent(document_:CellDocument) {
-    
-    this.events.service.publish(new StatusEvent("Saving content"));
-    let postURI = "/morfeu/content/"+document_.contentURI+"?model="+document_.model.getURI();
-    let content = document_.content.toJSON();
-    console.log("ContentComponent::saveContent('%s')", postURI);
+	
+	this.events.service.publish(new StatusEvent("Saving content"));
+	let postURI = "/morfeu/content/"+document_.contentURI+"?model="+document_.model.getURI();
+	let content = document_.content.toJSON();
+	console.log("ContentComponent::saveContent('%s')", postURI);
   
-    this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {  // YAY!
-                console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
-                // reloading would go here
-                //this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
-            },
-            error => this.events.problem(error.message),     // error is of the type HttpErrorResponse
-            () => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
-    );
-    
+	this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
+				console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
+				// reloading would go here
+				//this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
+			},
+			error => this.events.problem(error.message),	 // error is of the type HttpErrorResponse
+			() => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
+	);
+	
 }
 
 
 commandPressedCallback(command: string) {
-    
-    console.log("[UI] ContentComponent::keyPressed(%s)", command);
-    if (this.dropAreaSelectingMode) {
-        console.log("[UI] ContentComponent::selection mode deactivated");        
-        this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
-        this.dropAreaSelectingMode = false;
-    }
-    
-    switch (command) {
-        case "c":
-            // we first send a clear so all children will clear, then back to registered in first level
-            console.log("[UI] ContentComponent::cell selection clear");
-            this.events.service.publish(new CellSelectionClearEvent());
-            this.cellSelectingMode = true;
-            this.subscribeChildrenToCellSelection();
-            break;
-        case "m":       //FIXME: this will now be called, check that it works
+	
+	console.log("[UI] ContentComponent::keyPressed(%s)", command);
+	if (this.dropAreaSelectingMode) {
+		console.log("[UI] ContentComponent::selection mode deactivated");		 
+		this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
+		this.dropAreaSelectingMode = false;
+	}
+	
+	switch (command) {
+		case "c":
+			// we first send a clear so all children will clear, then back to registered in first level
+			console.log("[UI] ContentComponent::cell selection clear");
+			this.events.service.publish(new CellSelectionClearEvent());
+			this.cellSelectingMode = true;
+			this.subscribeChildrenToCellSelection();
+			break;
+		case "m":		//FIXME: this will now be called, check that it works
 
-            break;
-        case "a":
-            if (this.cellSelectingMode || this.dropAreaSelectingMode) {
-                console.log("[UI] ContentComponent::activating current selection");
-                this.events.service.publish(new CellActivateEvent());
-            }
-            break;
-        case "t":
-            console.log("[UI] ContentComponent::selection mode active for next numeric key");
-            this.events.service.publish(new StatusEvent("Drop area selection mode"));
-            this.dropAreaSelectingMode = true;
-            this.cellSelectingMode = false;
-            break;
-        case "d":
-            this.events.service.publish(new CellDragEvent());  
-            break;
-        case "e":
-            console.log("[UI] ContentComponent::got key to edit current active cell");
-            this.events.service.publish(new CellEditEvent());  
-            break;
-    }
+			break;
+		case "a":
+			if (this.cellSelectingMode || this.dropAreaSelectingMode) {
+				console.log("[UI] ContentComponent::activating current selection");
+				this.events.service.publish(new CellActivateEvent());
+			}
+			break;
+		case "t":
+			console.log("[UI] ContentComponent::selection mode active for next numeric key");
+			this.events.service.publish(new StatusEvent("Drop area selection mode"));
+			this.dropAreaSelectingMode = true;
+			this.cellSelectingMode = false;
+			break;
+		case "d":
+			this.events.service.publish(new CellDragEvent());  
+			break;
+		case "e":
+			console.log("[UI] ContentComponent::got key to edit current active cell");
+			this.events.service.publish(new CellEditEvent());  
+			break;
+	}
 
 }
 
-    
 
 commandNotRegisteredCallback(command: string) {
 
-    console.log("[UI] ContentComponent::not selecting anything in content");
-    this.dropAreaSelectingMode = false;
-    this.cellSelectingMode = false;
+	console.log("[UI] ContentComponent::not selecting anything in content");
+	this.dropAreaSelectingMode = false;
+	this.cellSelectingMode = false;
 
 }
 
 numberPressedCallback(num: number) {
-                
-    if (this.cellSelectingMode) {
-        console.log("[UI] ContentComponent::numberPressed(%i) [cellSelectingMode]", num);
-        this.events.service.publish(new CellSelectEvent(num));
-    } else if (this.dropAreaSelectingMode) {
-        console.log("[UI] ContentComponent::numberPressed(%i) [dropAreaSelectingMode]", num);
-        this.events.service.publish(new DropAreaSelectEvent(num));
-        this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
-    }
+				
+	if (this.cellSelectingMode) {
+		console.log("[UI] ContentComponent::numberPressed(%i) [cellSelectingMode]", num);
+		this.events.service.publish(new CellSelectEvent(num));
+	} else if (this.dropAreaSelectingMode) {
+		console.log("[UI] ContentComponent::numberPressed(%i) [dropAreaSelectingMode]", num);
+		this.events.service.publish(new DropAreaSelectEvent(num));
+		this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
+	}
    
 }
 
@@ -286,18 +285,18 @@ numberPressedCallback(num: number) {
 
 
 private subscribeChildrenToCellSelection () {
-    console.log("Content::subscribeChildrenToCellSelection()");
-    //FIXME: detect changes: https://angular.io/api/core/ViewChildren
-    // the list of children views is only available ngAfterViewInit but we assume that
-    // fetching the content will have been much slower
-    // we ensure there were no previous selections, avoiding double or triple selects
-    this.unsubscribeChildrenFromCellSelection();
-    this.childrenCellComponents.forEach(c => c.subscribeToSelection());
+	console.log("Content::subscribeChildrenToCellSelection()");
+	//FIXME: detect changes: https://angular.io/api/core/ViewChildren
+	// the list of children views is only available ngAfterViewInit but we assume that
+	// fetching the content will have been much slower
+	// we ensure there were no previous selections, avoiding double or triple selects
+	this.unsubscribeChildrenFromCellSelection();
+	this.childrenCellComponents.forEach(c => c.subscribeToSelection());
 }
 
 
 private unsubscribeChildrenFromCellSelection () {
-    this.childrenCellComponents.forEach(c => c.unsubscribeFromSelection());
+	this.childrenCellComponents.forEach(c => c.unsubscribeFromSelection());
 }
 
 }
