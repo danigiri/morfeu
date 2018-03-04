@@ -43,7 +43,7 @@ public UICellEditor clickSave() {
 }
 
 
-public UICellEditor clickDiscardButton() {
+public UICellEditor clickDiscard() {
 
 	$("#cell-editor-discard-button").click();	// can access from global id
 	

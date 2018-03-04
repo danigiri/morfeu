@@ -73,7 +73,39 @@ public void editSimpleCellAndSave() {
 	assertTrue("Editing the cell should show an editor", cellEditorData.isEditor());
 	assertTrue("Editing the cell should show an editor with data coming from the cell", cellEditorData.isFromCell());
 
-	
+	cellEditorData.enterText("New stuff content");
+	stuffEditor.clickSave();
+	 value = stuff.cellInfo().value();
+	assertTrue(value.isPresent());
+	assertEquals("New stuff content", value.get());
+
 }
+
+@Test
+public void editSimpleCellAndDismiss() {
+
+	UICell stuff = test.child("row(0)").child("col(0)").child("stuff(0)").select().activate();
+	assertNotNull(stuff);
+	
+	Optional<String> value = stuff.cellInfo().value();
+	assertTrue(value.isPresent());
+	assertEquals("Stuff content", value.get());
+	
+	UICellEditor stuffEditor = stuff.edit().shouldAppear();
+	assertNotNull(stuffEditor);
+
+	UICellData cellEditorData = stuffEditor.cellData();
+	assertNotNull(cellEditorData);
+	
+	cellEditorData.enterText("New stuff content");
+	stuffEditor.clickDiscard();
+	
+	stuff = test.child("row(0)").child("col(0)").child("stuff(0)").select().activate();
+	value = stuff.cellInfo().value();
+	assertTrue(value.isPresent());
+	assertEquals("Stuff content", value.get());
+
+}
+
 
 }

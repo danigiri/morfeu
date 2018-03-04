@@ -21,6 +21,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.codeborne.selenide.SelenideElement;
@@ -77,6 +78,24 @@ public boolean isEditor() {
 
 public List<UIAttributeData> attributes() {
 	return element.$$(".attribute-data").stream().map( e -> new UIAttributeData(e)).collect(Collectors.toList());
+}
+
+
+public Optional<String> value() {
+	return Optional.ofNullable(element.$(".cell-data-value").text());
+}
+
+public UICellData enterText(String value) {
+
+	if (!isEditor()) {
+		throw new UnsupportedOperationException("Trying to edit value of without the editor");
+	}
+
+	
+	element.$(".cell-data-value").setValue(value);
+	
+	return this;
+
 }
 
 

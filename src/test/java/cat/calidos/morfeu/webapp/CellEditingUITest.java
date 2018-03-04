@@ -121,7 +121,7 @@ public void editCellAndDismiss() {
 	name.enterText("foo");
 	number.enterText("66");
 	
-	dataEditor.clickDiscardButton();
+	dataEditor.clickDiscard();
 
 	data.select();
 	data.activate();
