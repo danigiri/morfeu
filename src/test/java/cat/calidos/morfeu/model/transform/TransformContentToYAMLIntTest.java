@@ -16,17 +16,18 @@
 
 package cat.calidos.morfeu.model.transform;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
-import cat.calidos.morfeu.model.Cell;
-import cat.calidos.morfeu.model.Composite;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+
 import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.injection.ModelTezt;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
@@ -36,7 +37,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 public class TransformContentToYAMLIntTest extends ModelTezt {
 
 @Test
-public void testTransformUsingTemplate() throws Exception {
+public void testTransformUsingTemplateDocument1() throws Exception {
 
 	Document doc = produceDocumentFromPath("test-resources/documents/document1.json");
 	assertNotNull(doc);
@@ -51,8 +52,78 @@ public void testTransformUsingTemplate() throws Exception {
 			.build()
 			.render();
 	
-	System.err.println(transformed);
+	//System.err.println(transformed);
+	
+	YAMLMapper mapper = new YAMLMapper();
+//	mapper.registerModule(new Jdk8Module());	// this seems to do nothing
+	JsonNode yaml = mapper.readTree(transformed);
+	assertNotNull(yaml);
+	assertTrue(yaml.isObject());
+	assertTrue(yaml.has("rows"));
+
+	JsonNode rows = yaml.get("rows");			//rows
+	assertNotNull(rows);
+	assertTrue(rows.isArray());
+	assertEquals(1, rows.size());
+
+	JsonNode cols = rows.get(0).get("cols");	//rows/cols
+	assertNotNull(cols);
+	assertTrue(cols.isArray());
+	assertEquals(2, cols.size());
+
+	JsonNode col0 = cols.get(0);				//rows/cols/col0
+	assertTrue(col0.isObject());
+	assertTrue(col0.has("size"));
+	assertEquals(4, col0.get("size").asInt());
+	assertTrue(col0.has("data"));
+	
+	JsonNode datas = col0.get("data");
+	assertNotNull(datas);
+	assertTrue(datas.isArray());
+	assertEquals(1, datas.size());
+	assertTrue(datas.has(0));
+
+	JsonNode data0 = datas.get(0);			//rows/cols/col0/data0
+	assertNotNull(data0);
+	assertTrue(data0.isObject());
+	assertEquals(42, data0.get("number").asInt());
+	assertEquals("blahblah", data0.get("text").asText());
+
 }
+
+
+@Test
+public void testTransformUsingTemplateDocument3() throws Exception {
+	Document doc = produceDocumentFromPath("test-resources/documents/document3.json");
+	assertNotNull(doc);
+
+	Map<String, Object> values = new HashMap<String, Object>(2);
+	values.put("cells", doc.getContent().asList());
+	values.put("model", doc.getModel());
+	
+	String transformed = DaggerViewComponent.builder()
+			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withValue(values)
+			.build()
+			.render();
+	
+	//System.err.println(transformed);
+	
+	YAMLMapper mapper = new YAMLMapper();
+//	mapper.registerModule(new Jdk8Module());	// this seems to do nothing
+	JsonNode yaml = mapper.readTree(transformed);
+	assertNotNull(yaml);
+	
+	JsonNode stuffs = yaml.get("rows").get(0).get("cols").get(0).get("stuff");
+	assertNotNull(stuffs);
+	assertTrue(stuffs.isArray());
+	assertEquals(3, stuffs.size());
+	assertEquals("Stuff content", stuffs.get(0).asText());
+	assertEquals("Stuff content 2", stuffs.get(1).asText());
+	assertEquals("Stuff content 3", stuffs.get(2).asText());
+
+}
+
 
 
 }

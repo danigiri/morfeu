@@ -128,7 +128,6 @@ public static Optional<String> valueFrom(Node node) {
 			value = value.replace("\n", "\\n");
 			value = value.replace("\"", "\\\"");
 			value = value.trim();
-			System.err.println("'"+value+"'");
 			if (value.equals("\\n")) {
 				value = null;
 			}

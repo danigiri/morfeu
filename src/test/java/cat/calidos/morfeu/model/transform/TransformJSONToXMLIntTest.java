@@ -65,7 +65,7 @@ public void testTransformUsingTemplate() throws Exception {
 											.withValue(json)
 											.build()
 											.render();
-	System.err.println(transformed);
+	//System.err.println(transformed);
 	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
 	
 }

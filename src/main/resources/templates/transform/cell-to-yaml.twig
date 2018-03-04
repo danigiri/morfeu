@@ -6,14 +6,15 @@ $(if d.contains("ATTRIBUTES-ONLY") or hidename==true -)$
 $( else -)$
 	$[-i]$$[ cell.name ]$:$( set i = concat(i,'  ') )$
 $( endif -)$
-$#- now for the attributes -#$
 $(- if cell.isComplex -)$
+	$#- ____________ complex content case ____________ -#$
+	$#- 1) the attributes -#$
 	$(- if cell.asComplex.attributes.size() > 0 -)$
 		$(- for a in cell.asComplex.attributes.asList -)$
-			$[-i]$$[a.name]$: $[a.value]$
+			$[-i]$$[a.name]$: $( if a.value.isPresent )$$[a.value.get]$$( endif )$
 $( endfor -)$
 	$(- endif -)$
-	$#- and the children -#$
+	$#- 2) the children -#$
 	$(- if cell.asComplex.children.size > 0 -)$
 		$(- set liststart = true -)$
 		$(- set current = '' -)$
@@ -25,13 +26,16 @@ $( endfor -)$
 				$(- set name = concat(c.name,'s') -)$
 			$(- endif -)$
 			$(- if current != c.name -)$
-$[ i ]$$[name]$:
+			$[- i ]$$[name]$:
 $( set current = c.name -)$
 			$(- endif -)$
-$[ ilist ]$-
+			$(- if c.isComplex -)$
+				$[- ilist ]$-
+$( endif -)$
 $(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -)$
 		$(- endfor -)$
 	$(- endif -)$
 $(- else -)$
-$#- simple value based output -#$
-$(- endif -)$
+	$#- ____________ simple content case ____________ -#$
+	$[-i]$- $[ cell.value.get ]$
+$(endif -)$
