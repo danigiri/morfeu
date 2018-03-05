@@ -12,7 +12,7 @@
 					<mf:thumb>assets/images/stuff-thumb.svg</mf:thumb>
 					<mf:cell-presentation>assets/images/stuff-cell.svg</mf:cell-presentation>
 					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
-					
+					<mf:transform case="yaml-to-obj" type="directive">LISTS-NO-PLURAL</mf:transform>
 				</mf:metadata>
 				<mf:metadata uri="test/row/col/data">
 					<mf:desc>Globally provided description of 'data'</mf:desc>

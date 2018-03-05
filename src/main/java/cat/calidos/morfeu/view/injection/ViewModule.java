@@ -16,24 +16,24 @@
 
 package cat.calidos.morfeu.view.injection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
+import org.jtwig.functions.FunctionRequest;
+import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.convert.Converter.Result;
 
 import dagger.Module;
 import dagger.Provides;
-import dagger.producers.Producer;
-import dagger.producers.ProducerModule;
-import dagger.producers.Produces;
 
 
 /**
@@ -70,18 +70,20 @@ public Map<String, Object> values(@Named("value") Object v, @Nullable @Named("pr
 public static EnvironmentConfiguration defaultConfiguration() {
 	
 	return EnvironmentConfigurationBuilder.configuration()
-//			.escape()
-//			.withDefaultEngine("js")
-//			.and()
-			.parser()
-			.syntax()
-				.withStartCode("$(").withEndCode(")$")
-				.withStartOutput("$[").withEndOutput("]$")
-				.withStartComment("$#").withEndComment("#$")
-
-			.and()
-		.and()
-		.build();
+											.functions()
+												.add(range)
+												.add(chop)
+								//			.escape()
+								//			.withDefaultEngine("js")
+											.and()
+											.parser()
+												.syntax()
+													.withStartCode("$(").withEndCode(")$")
+													.withStartOutput("$[").withEndOutput("]$")
+													.withStartComment("$#").withEndComment("#$")
+												.and()
+											.and()
+											.build();
 	
 }
 
@@ -98,4 +100,47 @@ public static JtwigModel produceJTwigModel(Map<String, Object> values) {
 }
 
 
+final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
+
+    @Override
+    public String name() {
+        return "range";
+    }
+
+    @Override
+    public Object execute(FunctionRequest request) {
+
+    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+    		int n = request.getEnvironment()
+    						.getValueEnvironment()
+    						.getNumberConverter()
+    						.convert(request.get(0))
+    						.get()
+    						.intValue();
+    		List<Integer> range = new ArrayList<Integer>(n);
+    		for (int i=0; i<n; n++) {
+    			range.add(i);
+    		} 
+
+    		return range;
+    }
+};
+
+
+final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
+
+    @Override
+    public String name() {
+        return "chop";
+    }
+
+    @Override
+    public Object execute(FunctionRequest request) {
+
+    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+    		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+    		
+    		return s.substring(0, s.length()-1);
+    }
+};
 }

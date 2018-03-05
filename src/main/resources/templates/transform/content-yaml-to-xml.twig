@@ -1,6 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?>
-$( if v.model.rootCellModels.size==1 )$
-
-$( else )$
-
-$( endif )$
+$( if v -)$
+	$(- set yaml = v.yaml -)$
+	$(- set cellmodels = v.cellmodels -)$
+	$(- set case = v.case -)$
+	$(- set i = v.i -)$
+$(- endif -)$
+$( for cm in cellmodels -)$
+$[i]$<!-- cm: $[cm.name]$ -->
+	$(- if cm.isSimple -)$
+		$#- ___________ simple __________ -#$
+		$(- if yaml.isObject -)$
+		$[i]$
+		$(- endif -)$
+	$(- else -)$
+		$#- ___________ complex _________ -#$
+		$[-i]$<!-- cm: complex -->
+			$#- ___________ yaml is object _________ -#$
+			$(- set found = false -)$
+			$(- for a in cm.asComplex.attributes.asList -)$ 
+				$[-i]$<!-- cm: a: $[a]$ -->
+				$(- if v.yaml.has(a) -)$
+					$(- set found = true -)$
+				$(- endif -)$
+			$(- endfor -)$
+			$(- if not found -)$
+				$(- for c in cm.asComplex.children.asList -)$
+					$(- if c.cellModel.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
+						$(- set matchname = c.name -)$
+					$(- else -)$
+						$(- set matchname = concat(c.name, 's') -)$
+					$(- endif -)$
+					$[-i]$<!-- cm: c: $[c.name]$ matchname: $[matchname]$ -->
+					$(- if yaml.has(matchname) -)$
+						$#- Matched a field in the yaml and and an attribute, we assume we have a match -#$
+					$(- set found = true -)$
+					$(- endif -)$
+				$(- endfor -)$
+			$(- endif -)$
+			$(- if found )$
+$[i]$<$[cm.name]$>
+		$( if yaml.isObject -)$
+			$(- include "content-yaml-to-xml.twig" with {'yaml': yaml.get(matchname), 'cellmodels': c.asComplex.children.asList, 'i':concat(i,'\t'), 'case': case} only -)$
+		$(- else -)$
+			$#- ___________ yaml is array _________ -#$
+			$(- for y in range(yaml.size()) -)$
+				$(- include "content-yaml-to-xml.twig" with {'yaml': yaml.get(y), 'cellmodels':[cm], 'i':concat(i,'\t'), 'case': case} only -)$
+			$(- endfor -)$
+		$(- endif )$
+$[i]$</$[cm.name]$>
+			$( endif -)$
+	$(- endif -)$
+$( endfor )$

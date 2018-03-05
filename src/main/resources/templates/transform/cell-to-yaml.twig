@@ -29,7 +29,7 @@ $( endfor -)$
 			$[- i ]$$[name]$:
 $( set current = c.name -)$
 			$(- endif -)$
-			$(- if c.isComplex -)$
+			$(- if c.isComplex -)$$# FIXME: we do not assume it's a list if maxOccurs is==1 #$
 				$[- ilist ]$-
 $( endif -)$
 $(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -)$
