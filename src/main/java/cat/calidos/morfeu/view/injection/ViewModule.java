@@ -18,6 +18,7 @@ package cat.calidos.morfeu.view.injection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +74,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 											.functions()
 												.add(range)
 												.add(chop)
+												.add(list)
 								//			.escape()
 								//			.withDefaultEngine("js")
 											.and()
@@ -118,7 +120,7 @@ final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
     						.get()
     						.intValue();
     		List<Integer> range = new ArrayList<Integer>(n);
-    		for (int i=0; i<n; n++) {
+    		for (int i=0; i<n; i++) {
     			range.add(i);
     		} 
 
@@ -143,4 +145,29 @@ final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
     		return s.substring(0, s.length()-1);
     }
 };
+
+
+final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
+
+    @Override
+    public String name() {
+        return "list";
+    }
+
+    @Override
+    public Object execute(FunctionRequest request) {
+
+    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+    		@SuppressWarnings("unchecked")
+		Iterator<Object> iterator = (Iterator<Object>) request.get(0);
+    		
+    		ArrayList<Object> list = new ArrayList<Object>();
+    		while (iterator.hasNext()) {
+    			list.add(iterator.next());
+    		}
+    		
+    		return list;
+    }
+};
+
 }

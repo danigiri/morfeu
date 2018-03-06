@@ -44,11 +44,11 @@ public void testTransformUsintTemplateDocument3() throws Exception {
 	
 	
 	YAMLMapper mapper = new YAMLMapper();
-	File inputFile = new File("target/test-classes/test-resources/transform/document1.yaml");
+	File inputFile = new File("target/test-classes/test-resources/transform/document3.yaml");
 	String content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
 	JsonNode yaml = mapper.readTree(content);
 
-	Document doc = produceDocumentFromPath("test-resources/documents/document1.json");
+	Document doc = produceDocumentFromPath("test-resources/documents/document3.json");
 	assertNotNull(doc);
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("yaml", yaml);

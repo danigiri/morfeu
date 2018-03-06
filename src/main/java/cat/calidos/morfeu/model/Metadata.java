@@ -146,7 +146,7 @@ public Map<String, Set<String>> getDirectives() {
 
 
 public Set<String> getAttributesFor(String case_) {
-	return attributes.containsKey(case_) ? attributes	.get(case_) : EMPTY_SET;
+	return attributes.containsKey(case_) ? attributes.get(case_) : EMPTY_SET;
 } 
 
 
