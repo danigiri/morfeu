@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+//import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.injection.ModelTezt;
