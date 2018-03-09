@@ -12,32 +12,32 @@ $(- if yaml.isObject -)$
 		$#- We try to find a matching cell model -#$
 	
 		$(- for c in cellmodels -)$
-			$#- if c.metadata.getDirectivesFor(case).contains("ATTRIBUTES-ONLY") -#$
+			$(- if c.metadata.getDirectivesFor(case).contains('ATTRIBUTES-ONLY') -)$
 				$#- match by attributes or children -#$
-				$(- for a in cm.asComplex.attributes.asList -)$ 
+				$(- for a in c.asComplex.attributes.asList -)$ 
 				$(- if yaml.has(a.name) -)$
 					$(- set found = true -)$
-					$(- include "content-yaml-to-xml.twig" with {'yaml': yaml, 'cellmodels':[c], 'i':i, 'case': case} only -)$
+					$(- include 'content-yaml-to-xml.twig' with {'yaml': yaml, 'cellmodels':[c], 'i':i, 'case': case} only -)$
 				$(- endif -)$
 				$(- endfor -)$
 				$(- if not found -)$
 					$(- for child in cm.asComplex.children.asList -)$
-						$(- if child.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
+						$(- if child.metadata.getDirectivesFor(case).contains('LISTS-NO-PLURAL') -)$
 							$(- set matchname = child.name -)$
 						$(- else -)$
 							$(- set matchname = concat(child.name, 's') -)$
 						$(- endif -)$
 						$(- if yaml.has(matchname) -)$
-							$#- Matched a field in the yaml and and an attribute, we assume we have a match -#$
+							$#- Matched a field in the yaml and an attribute, we assume we have a match -#$
 							$(- set found = true -)$
-							$(- include "content-yaml-to-xml.twig" with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -)$
+							$(- include 'content-yaml-to-xml.twig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -)$
 						$(- endif -)$
 					$(- endfor -)$
 				$( endif )$
-			$#- else -#$
+			$(- else -)$
 				$#- match by name -#$
-				
-			$# endif -#$
+				MATCH BY NAME
+			$( endif -)$
 		$(- endfor -)$
 	
 	
@@ -46,33 +46,42 @@ $(- if yaml.isObject -)$
 	
 		$(- if cellmodels[0].isSimple -)$
 $[i]$<$[cellmodels[0].name]$>$[yaml.asText]$</$[cellmodels[0].name]$>
-$(else)$
+$(else)$	$#- complex #$
 $[i]$<$[cellmodels[0].name]$
-				$(- for a in cellmodels[0].asComplex.attributes.asList -)$$( if yaml.has(a.name))$ $[a.name]$="$[yaml.get(a.name)]$"$(endif)$$( endfor -)$
-				$(- for a in list(cellmodels[0].metadata.getAttributesFor(case).iterator) )$ $[a]$$( endfor -)$
-			>$( for y in list(yaml.fieldNames) -)$ $#- FIXME: this may actually be a recursive call of ourselves, just unfolded -#$
-			$( for c in cellmodels[0].children.asList -)$
-				$(- if c.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
-					$(- set matchname = c.name -)$
-				$(- else -)$
-					$(- set matchname = concat(c.name, 's') -)$
-				$(- endif -)$
-				$(- if matchname.equals(y) -)$ $(- set cm = c -)$ $(- set found=true -)$ $(- endif -)$
-			$(- endfor )$
-			$(-if found -)$
-$( include "content-yaml-to-xml.twig" with {'yaml': yaml.get(y), 'cellmodels':[cm], 'i':concat(i,'\t'), 'case': case} only -)$
-			$( endif)$
-										$(- endfor )$
+			$(- for a in cellmodels[0].asComplex.attributes.asList )$ $(- if yaml.has(a.name))$ $[a.name]$="$[yaml.get(a.name)]$"$(-endif)$$(- endfor -)$
+			$(- for a in list(cellmodels[0].metadata.getAttributesFor(case).iterator) )$ $[a-]$$(- endfor -)$
+				
+			$(- if cellmodels[0].asComplex.children.size()>0 -)$
+				>$( for y in list(yaml.fieldNames) -)$ $#- THIS LOOKS LIKE THE CODE ABOVE FOR ONE CELL, WE CAN DO AN INCLUDE OF GIVEN ONE CM + FIELD NAMES, WE MATCH -#$ 
+					$(- for child in cellmodels[0].asComplex.children.asList -)$
+						$(- if child.metadata.getDirectivesFor(case).contains('LISTS-NO-PLURAL') -)$
+							$(- set matchname = child.name -)$
+						$(- else -)$
+							$(- set matchname = concat(child.name, 's') -)$
+						$(- endif -)$
+						$(- if y==matchname -)$
+							$#- Matched a field in the yaml and a child in the model, we have a match -#$
+							$(- set found = true -)$
+							$(- include 'content-yaml-to-xml.twig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -)$
+						$(- endif -)$
+					$(- endfor -)$
+				$(- endfor )$
 $[i]$</$[cellmodels[0].name]$>
-$(- endif -)$
-		
-	$(- endif -)$
+			$(- else -)$
+				/>
+			$(- endif )$
+		$(- endif -)$
 
-$(- else -)$
+	$(- endif -)$ $#- size -#$
+
+$(- elseif yaml.isTextual -)$
+	$#- ___________ yaml is a simple text node _________ -#$
+$[i]$<$[cellmodels[0].name]$>$[yaml.asText]$</$[cellmodels[0].name]$>
+$( elseif yaml.isArray -)$
 	$#- ___________ yaml is array _________ -#$
 
 	$(- for y in range(yaml.size()) -)$
-$( include "content-yaml-to-xml.twig" with {'yaml': yaml.get(y), 'cellmodels':cellmodels, 'i':i, 'case': case} only -)$
+$( include 'content-yaml-to-xml.twig' with {'yaml': yaml.get(y), 'cellmodels':cellmodels, 'i':concat(i,'\t'), 'case': case} only -)$
 	$(- endfor -)$
 
 $(- endif -)$

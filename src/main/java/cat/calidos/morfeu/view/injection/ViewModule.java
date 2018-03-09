@@ -75,6 +75,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(range)
 												.add(chop)
 												.add(list)
+												.add(deb)
 								//			.escape()
 								//			.withDefaultEngine("js")
 											.and()
@@ -169,5 +170,24 @@ final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
     		return list;
     }
 };
+
+
+final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
+
+    @Override
+    public String name() {
+        return "deb";
+    }
+
+    @Override
+    public Object execute(FunctionRequest request) {
+
+    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
+    		Object v = request.get(0);
+    		System.err.println(v);
+    		return new Object();
+    }
+};
+
 
 }
