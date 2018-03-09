@@ -76,6 +76,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(chop)
 												.add(list)
 												.add(deb)
+												.add(quote)
 								//			.escape()
 								//			.withDefaultEngine("js")
 											.and()
@@ -129,7 +130,7 @@ final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
     }
 };
 
-
+/** remove last char */
 final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
 
     @Override
@@ -147,7 +148,7 @@ final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
     }
 };
 
-
+/** iterator to list */
 final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
 
     @Override
@@ -169,15 +170,16 @@ final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
     		
     		return list;
     }
+    
 };
 
 
 final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 
-    @Override
-    public String name() {
-        return "deb";
-    }
+	@Override
+	public String name() {
+		return "deb";
+	}
 
     @Override
     public Object execute(FunctionRequest request) {
@@ -185,8 +187,33 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
     		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
     		Object v = request.get(0);
     		System.err.println(v);
+
     		return new Object();
     }
+
+};
+
+
+final static SimpleJtwigFunction quote = new SimpleJtwigFunction() {
+
+	@Override
+    public String name() {
+        return "quote";
+    }
+
+    @Override
+    public Object execute(FunctionRequest request) {
+
+    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+    		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+    		if (!s.startsWith("\"") && !s.endsWith("\"")) {
+    			s = "\""+s+"\"";
+    		}
+
+    		return s;
+
+    }
+    
 };
 
 

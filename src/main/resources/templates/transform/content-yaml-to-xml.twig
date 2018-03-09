@@ -48,9 +48,8 @@ $(- if yaml.isObject -)$
 $[i]$<$[cellmodels[0].name]$>$[yaml.asText]$</$[cellmodels[0].name]$>
 $(else)$	$#- complex #$
 $[i]$<$[cellmodels[0].name]$
-			$(- for a in cellmodels[0].asComplex.attributes.asList )$ $(- if yaml.has(a.name))$ $[a.name]$="$[yaml.get(a.name)]$"$(-endif)$$(- endfor -)$
 			$(- for a in list(cellmodels[0].metadata.getAttributesFor(case).iterator) )$ $[a-]$$(- endfor -)$
-				
+			$(- for a in cellmodels[0].asComplex.attributes.asList )$ $(- if yaml.has(a.name))$ $[a.name]$=$[quote(yaml.get(a.name))]$$(endif)$$(- endfor -)$
 			$(- if cellmodels[0].asComplex.children.size()>0 -)$
 				>$( for y in list(yaml.fieldNames) -)$ $#- THIS LOOKS LIKE THE CODE ABOVE FOR ONE CELL, WE CAN DO AN INCLUDE OF GIVEN ONE CM + FIELD NAMES, WE MATCH -#$ 
 					$(- for child in cellmodels[0].asComplex.children.asList -)$
