@@ -20,14 +20,9 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
-import javax.xml.transform.Source;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.builder.Input;
-import org.xmlunit.diff.Diff;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -39,7 +34,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TransformJSONToXMLIntTest {
+public class TransformJSONToXMLIntTest extends TransformTezt {
 
 
 private String content;
@@ -66,7 +61,7 @@ public void testTransformUsingTemplate() throws Exception {
 											.build()
 											.render();
 	//System.err.println(transformed);
-	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
 	
 }
 
@@ -85,25 +80,8 @@ public void testTransform() throws Exception {
 	
 	String transformed = transform.apply(content);
 	//System.err.println(transformed);
-	compareStringWithFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
 	
-}
-
-
-private void compareStringWithFile(String content, String path) {
-
-	Source transformedSource = Input.fromString(content).build();
-	
-	File originalFile = new File(path);
-	Source originalSource = Input.fromFile(originalFile).build();
-
-	Diff diff = DiffBuilder.compare(originalSource)
-							.withTest(transformedSource)
-							.ignoreComments()
-							.ignoreWhitespace()
-							.build();
-	
-	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
 }
 
 }
