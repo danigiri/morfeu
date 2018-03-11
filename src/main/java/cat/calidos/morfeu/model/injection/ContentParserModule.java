@@ -227,6 +227,7 @@ public static DOMSource produceDOMSource(org.w3c.dom.Document xmldoc) {
 	return new DOMSource(xmldoc);
 }
 
+
 @Produces
 public static Validable xsdValidator(Validator v, DOMSource xmldom) {
 	return new XSDValidator(v, xmldom);

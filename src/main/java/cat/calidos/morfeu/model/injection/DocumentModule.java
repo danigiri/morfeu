@@ -50,8 +50,8 @@ import cat.calidos.morfeu.utils.injection.RemoteModule;
 public class DocumentModule extends RemoteModule {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class);
-		
-		
+
+
 @Produces
 public static Document produceDocument(@Named("NormalisedDocument") Document doc, 
 											  Provider<ModelSubcomponent.Builder> modelComponentProvider,

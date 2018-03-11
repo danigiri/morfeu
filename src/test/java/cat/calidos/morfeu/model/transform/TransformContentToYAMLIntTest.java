@@ -25,7 +25,6 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-//import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.injection.ModelTezt;
@@ -51,11 +50,9 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-	
 	//System.err.println(transformed);
 	
 	YAMLMapper mapper = new YAMLMapper();
-//	mapper.registerModule(new Jdk8Module());	// this seems to do nothing
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 	assertTrue(yaml.isObject());
@@ -106,11 +103,9 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-	
 	//System.err.println(transformed);
 	
 	YAMLMapper mapper = new YAMLMapper();
-//	mapper.registerModule(new Jdk8Module());	// this seems to do nothing
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 	

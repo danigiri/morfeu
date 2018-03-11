@@ -54,11 +54,11 @@ protected Object process()
 
 	URI uri = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
 	return DaggerDocumentComponent.builder()
-										.from(uri)
-										.withPrefix(prefix)
-										.build()
-										.produceDocument()
-										.get();
+									.from(uri)
+									.withPrefix(prefix)
+									.build()
+									.produceDocument()
+									.get();
 
 }
 

@@ -1,0 +1,13 @@
+{
+	"name": "Catalogue YAML"
+	,"desc": "First Catalogue with YAML format"
+	,"documents": [
+		{ "name":"Document 1 YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document1-yaml.json" }
+		,{ "name":"Document 3 YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document3-yaml.json" }
+		]
+	,"snippets": [
+		{ "name":"empty", "uri":"/test-resources/"}
+		,{ "name":"table"}
+		]
+		
+}

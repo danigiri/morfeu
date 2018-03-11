@@ -1,5 +1,6 @@
 [
 	{ "name":"Catalogue 1", "uri":"/morfeu/test-resources/catalogues/catalogue1.json" }
 	,{ "name":"Catalogue 2", "uri":"/morfeu/test-resources/catalogues/catalogue2.json"  }
+	,{ "name":"Catalogue 1 yaml", "uri":"/morfeu/test-resources/catalogues/catalogue1-yaml.json"  }
 	,{ "name":"Catalogue not found", "uri":"/morfeu/test-resources/catalogues/catalogue-nonexistant.json"  }
-]	
+]
