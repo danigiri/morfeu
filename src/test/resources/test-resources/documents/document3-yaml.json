@@ -3,6 +3,6 @@
 	,"desc": "Third document (YAML)"
 	,"kind": "yaml"
 	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
-	,"contentURI": "target/test-classes/test-resources/documents/document3.yaml"
+	,"contentURI": "target/test-classes/test-resources/transform/document3.yaml"
 	
 }
