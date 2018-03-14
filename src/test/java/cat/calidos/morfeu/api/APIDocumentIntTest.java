@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -39,25 +39,25 @@ public class APIDocumentIntTest extends APITezt {
 
 @Test
 public void testDocument() throws Exception {
-	
+
 	InputStream content = fetchRemoteInputStreamFrom("documents/"+pathPrefix+"documents/document1.json");
 	assertNotNull(content);
-	
+
 	JsonNode doc = parseJson(content);
 	assertEquals("Document 1", doc.get("name").asText());
 	assertEquals("First document", doc.get("desc").asText());
 	assertEquals("xml", doc.get("kind").asText());
-	
+
 	String modelURI = pathPrefix+"models/test-model.xsd";
 	assertEquals(modelURI, doc.get("modelURI").asText());
 	assertEquals(modelURI, doc.get("fetchableModelURI").asText());
-	
+
 	String contentURI = pathPrefix+"documents/document1.xml";
 	assertEquals(contentURI, doc.get("contentURI").asText());
 	assertEquals(contentURI, doc.get("fetchableContentURI").asText());
-	
+
 	assertTrue(doc.get("valid").asBoolean());
-	
+
 }
 
 
