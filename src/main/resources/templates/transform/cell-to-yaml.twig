@@ -2,7 +2,7 @@
 {%- set meta = cell.cellModel.metadata -%}
 {%- set i = indent -%}
 {%- set d =  meta.getDirectivesFor(case) -%}
-{%if d.contains("ATTRIBUTES-ONLY") or hidename==true -%}
+{% if d.contains("ATTRIBUTES-ONLY") or hidename==true -%}
 {% else -%}
 	{{-i}}{{ cell.name }}:{% set i = concat(i,'  ') %}
 {% endif -%}

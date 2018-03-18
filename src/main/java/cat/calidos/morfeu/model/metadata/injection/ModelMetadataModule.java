@@ -62,6 +62,8 @@ private static final String PRESENTATION_FIELD = "mf:presentation";
 private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
 private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
+private static final String IDENTIFIER_FIELD = "mf:identifier";
+
 // serialisation metadata definitions
 private static final String TRANSFORM_TAG = "mf:transform";
 private static final String TRANSFORM_TYPE_ATTR = "type";

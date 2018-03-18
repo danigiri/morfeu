@@ -25,6 +25,11 @@
 					<mf:thumb>assets/images/data2-thumb.svg</mf:thumb>
 					<mf:cell-presentation>assets/images/data2-cell.svg</mf:cell-presentation>
 				</mf:metadata>
+				<mf:metadata uri="test/row/col/data3">
+					<mf:desc>Data3 has the number field as identifier</mf:desc>
+					<mf:thumb>assets/images/data3-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/data3-cell.svg</mf:cell-presentation>
+				</mf:metadata>
 			</mf:extra-metadata>
 		</xs:appinfo>
 	</xs:annotation>
