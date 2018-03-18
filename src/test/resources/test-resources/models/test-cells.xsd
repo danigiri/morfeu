@@ -11,7 +11,6 @@
 		</xs:documentation>
 	</xs:annotation>
 
-
 	<xs:complexType name="testCell">
 		<xs:annotation>
 			<xs:appinfo>
@@ -20,6 +19,24 @@
 					<mf:default-value name="@number">11</mf:default-value>
 					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
 					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="text" type="textField" />
+		<xs:attribute name="number" use="required" type="numberField" />
+	</xs:complexType>
+
+	<xs:complexType name="testIdCell">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>testIdCell desc (one field identifier)</mf:desc>
+					<mf:thumb>assets/images/data3-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/data3-cell.svg</mf:cell-presentation>
+					<mf:default-value name="@number">0</mf:default-value>
+					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:identifier>text</mf:identifier>
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
@@ -43,7 +60,7 @@
 			<xs:element name="stuff" type="textContent" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data2" type="testCell" minOccurs="0" maxOccurs="2"/>
-			<xs:element name="data3" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="data3" type="testIdCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="size" use="required" type="colField" />
