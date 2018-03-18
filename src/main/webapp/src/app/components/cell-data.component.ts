@@ -34,62 +34,72 @@ import { EventService } from "../events/event.service";
 	selector: 'cell-data',
 	template: `
 		<div  *ngIf="cellModel" 
-		      class="card mt-2 cell-data" 
-              [class.cell-data-info]="!editor" 
-              [class.cell-data-editor]="editor">
+			  class="card mt-2 cell-data" 
+			  [class.cell-data-info]="!editor" 
+			  [class.cell-data-editor]="editor">
 				<h4 class="cell-data-header card-title card-header">
 					{{cellModel.name}}
 					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
 						<span *ngIf="cell!=undefined" class="cell-data-source badge badge-pill badge-secondary float-secondary float-right">CELL</span>
-                         <span *ngIf="cell==undefined" class="cell-data-source badge badge-pill badge-dark float-dark float-right">MODEL</span>
+						 <span *ngIf="cell==undefined" class="cell-data-source badge badge-pill badge-dark float-dark float-right">MODEL</span>
 				</h4>
 			<div class="card-body">
 				<p class="cell-data-model-desc card-subtitle">{{cellModel.desc}}<p>
 				<p class="cell-data-model-uri card-text">URI: <span class="cell-data-uri text-muted">{{uri}}</span></p>
 			</div>
-	        <ng-container *ngIf="!editor">
-   			    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
-   			    <!-- if we have a value field we should show it -->
-   			    <p *ngIf="cell!=undefined && cell.value" class="cell-data-value card-text">{{cell.value}}</p>
-        	        <!-- even if we are showing a cell or a cell model, we use the model to iterate -->
-        			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-        				<attribute-data-info *ngFor="let a of cellModel.attributes" 
-                         [isFromCell]="cell!=undefined"	
-        				    [parentCell]="cell" 
-        				    [cellModel]="a"
-        				    [isFromModel]="cell==undefined"
-        				    ></attribute-data-info>
-        			</ul>
-            </ng-container>
-	        <ng-container *ngIf="editor">
-                    <form *ngIf="cellModel.attributes || cell.value">
-	                    <textarea *ngIf="cell.value" 
-	                        class="cell-data-value form-control" 
-	                        id="" 
-	                        rows="3"
-	                        name="{{cellModel.name}}.value"
-	                        attr.aria-label="{{cellModel.name}}.value" 
-                            attr.aria-describedby="{{cellModel.desc}} value" 
-	                        [(ngModel)]="cell.value"></textarea>
-                        <attribute-data-editor *ngFor="let a of cellModel.attributes" 
-                            [parentCell]="cell" 
-                            [cellModel]="a"
-                            ></attribute-data-editor>
-                    </form>
-                    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">        
-            </ng-container>
+			<ng-container *ngIf="!editor">
+				<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">		
+				<!-- if we have a value field we should show it (readonly!) -->
+	            <div class="card-body">
+                     <form *ngIf="cell!=undefined && cell.value">
+                            <textarea readonly
+                                class="card-text" 
+                                id="" 
+                                rows="3"
+                                name="{{cellModel.name}}.value"
+                                attr.aria-label="{{cellModel.name}}.value" 
+                                attr.aria-describedby="{{cellModel.desc}} value" 
+                                [(ngModel)]="cell.value"></textarea>
+    	             </form>
+				</div>
+				<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
+				<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
+					<attribute-data-info *ngFor="let a of cellModel.attributes" 
+					 [isFromCell]="cell!=undefined" 
+						[parentCell]="cell" 
+						[cellModel]="a"
+						[isFromModel]="cell==undefined"
+						></attribute-data-info>
+				</ul>
+			</ng-container>
+			<ng-container *ngIf="editor">
+					<form>
+						<textarea
+							class="cell-data-value form-control" 
+							id="" 
+							rows="3"
+							name="{{cellModel.name}}.value"
+							attr.aria-label="{{cellModel.name}}.value" 
+							attr.aria-describedby="{{cellModel.desc}} value" 
+							[(ngModel)]="cell.value"></textarea>
+						<attribute-data-editor *ngFor="let a of cellModel.attributes" 
+							[parentCell]="cell" 
+							[cellModel]="a"
+							></attribute-data-editor>
+					</form>
+					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">		
+			</ng-container>
 		</div>
-		
 			   `,
 	styles:[`
-            .cell-data {}
-            .cell-data-info {}
-            .cell-data-value {}
-            .cell-data-editor {}
-	        .cell-data-header {}
-	        .cell-data-model-desc {}
-	        .cell-data-uri {}
-	        .cell-data-source {}
+			.cell-data {}
+			.cell-data-info {}
+			.cell-data-value {}
+			.cell-data-editor {}
+			.cell-data-header {}
+			.cell-data-model-desc {}
+			.cell-data-uri {}
+			.cell-data-source {}
 	`]
 })
 
@@ -107,21 +117,21 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-    if (!this.editor) {
-        	this.subscribe(this.events.service.of( CellActivatedEvent )
-        		.subscribe( activated => this.showCellInformation(activated.cell)
-        	));
-        	this.subscribe(this.events.service.of( CellDeactivatedEvent )
-        		.subscribe( deactivated => this.hideCellInformation()
-        	));
-        	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-        	    .filter( activated => activated.cellModel!=undefined)
-        		.subscribe( activated => this.showCellModelInformation(activated.cellModel)
-        	));
-        	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-        		.subscribe( activated => this.hideCellInformation()
-        	));
-    }
+	if (!this.editor) {
+			this.subscribe(this.events.service.of( CellActivatedEvent )
+				.subscribe( activated => this.showCellInformation(activated.cell)
+			));
+			this.subscribe(this.events.service.of( CellDeactivatedEvent )
+				.subscribe( deactivated => this.hideCellInformation()
+			));
+			this.subscribe(this.events.service.of( CellModelActivatedEvent )
+				.filter( activated => activated.cellModel!=undefined)
+				.subscribe( activated => this.showCellModelInformation(activated.cellModel)
+			));
+			this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
+				.subscribe( activated => this.hideCellInformation()
+			));
+	}
 
 }
 
@@ -146,7 +156,7 @@ showCellModelInformation(cellModel: CellModel) {
 
 hideCellInformation() {
 
-    this.cellModel = undefined;
+	this.cellModel = undefined;
 	this.cell = undefined; // not strictly needed, but for completeness and to avoid any future side-effects
 }
 

@@ -39,6 +39,7 @@
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:sequence>
+		<!--      	<xs:choice maxOccurs="unbounded"> to disregard order -->
 			<xs:element name="stuff" type="textContent" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data2" type="testCell" minOccurs="0" maxOccurs="2"/>
