@@ -1,14 +1,14 @@
 {
 	"schema" : 0
-	,"URI": "$[v.URI]$"
-	,"name": "$[v.Name]$"
-	,"desc": "$[v.Desc]$"
+	,"URI": "{{v.URI}}"
+	,"name": "{{v.Name}}"
+	,"desc": "{{v.Desc}}"
 	,"valid": true
-	$( if defined(problem) )$
-		,"problem": "$[ problem ]$"
-	$( endif )$
+	{% if defined(problem) %}
+		,"problem": "{{ problem }}"
+	{% endif %}
 	
-	,"cellModels": [$( for cellModel in v.rootCellModels )$
-			$( include "cell-model.twig" with {'cm': cellModel} only )$ $( if (loop.last) )$ $(else)$,,$(endif)$
-		$( endfor )$]
+	,"cellModels": [{% for cellModel in v.rootCellModels %}
+			{% include "cell-model.twig" with {'cm': cellModel} only %} {% if (loop.last) %} {%else%},,{%endif%}
+		{% endfor %}]
 }

@@ -25,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';  // new angular 5 http 
 import { DndModule } from 'ng2-dnd';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TreeModule } from 'angular-tree-component';
+import { TreeModule } from "angular-tree-component";
 
 import { AppComponent }	  from './app.component';
 import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
@@ -51,12 +51,12 @@ import { StatusComponent } from './status.component';
           		  ,BrowserModule
 				  ,BrowserAnimationsModule
 				  ,CommonModule
+				  ,DndModule.forRoot()
 				  ,FormsModule
                   ,HttpModule
                   ,HttpClientModule
-				  ,TreeModule
-				  ,DndModule.forRoot()
 				  ,HotkeyModule.forRoot()
+				  ,TreeModule
 				  ],
   declarations: [ AppComponent
                   ,AttributeDataEditorComponent

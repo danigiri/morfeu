@@ -1,9 +1,9 @@
 {
 	"schema": 0
-	,"children": [$( for cell in v )$
-		$( include "cell.twig" with {'cell': cell} only )$ $( if (loop.last) )$ $(else)$,,$(endif)$
-	$( endfor )$]
-	$( if defined(problem) )$
-		,"problem": "$[ problem ]$"
-	$( endif )$
+	,"children": [{% for cell in v %}
+		{% include "cell.twig" with {'cell': cell} only %} {% if (loop.last) %} {%else%},,{%endif%}
+	{% endfor %}]
+	{% if defined(problem) %}
+		,"problem": "{{ problem }}"
+	{% endif %}
 }

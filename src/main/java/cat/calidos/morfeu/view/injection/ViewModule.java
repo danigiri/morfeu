@@ -80,13 +80,13 @@ public static EnvironmentConfiguration defaultConfiguration() {
 								//			.escape()
 								//			.withDefaultEngine("js")
 											.and()
-											.parser()
-												.syntax()
-													.withStartCode("$(").withEndCode(")$")
-													.withStartOutput("$[").withEndOutput("]$")
-													.withStartComment("$#").withEndComment("#$")
-												.and()
-											.and()
+//											.parser()
+//												.syntax()
+//													.withStartCode("$(").withEndCode(")$")
+//													.withStartOutput("$[").withEndOutput("]$")
+//													.withStartComment("$#").withEndComment("#$")
+//												.and()
+//											.and()
 											.build();
 	
 }

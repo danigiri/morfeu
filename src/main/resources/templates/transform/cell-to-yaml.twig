@@ -1,41 +1,41 @@
-$(- import 'macros.twig' as m -)$
-$(- set meta = cell.cellModel.metadata -)$
-$(- set i = indent -)$
-$(- set d =  meta.getDirectivesFor(case) -)$
-$(if d.contains("ATTRIBUTES-ONLY") or hidename==true -)$
-$( else -)$
-	$[-i]$$[ cell.name ]$:$( set i = concat(i,'  ') )$
-$( endif -)$
-$(- if cell.isComplex -)$
-	$#- ____________ complex content case ____________ -#$
-	$#- 1) the attributes -#$
-	$(- if cell.asComplex.attributes.size() > 0 -)$
-		$(- for a in cell.asComplex.attributes.asList -)$
-			$[-i]$$[a.name]$: $( if a.value.isPresent )$$[a.value.get]$$( endif )$
-$( endfor -)$
-	$(- endif -)$
-	$#- 2) the children -#$
-	$(- if cell.asComplex.children.size > 0 -)$
-		$(- set liststart = true -)$
-		$(- set current = '' -)$
-		$(- set ilist = concat(i,'  ') -)$
-		$(- for c in cell.asComplex.children.asList -)$
-			$(- if c.cellModel.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -)$
-				$(- set name = c.name -)$
-			$(- else -)$
-				$(- set name = concat(c.name,'s') -)$
-			$(- endif -)$
-			$(- if current != c.name -)$
-			$[- i ]$$[name]$:
-$( set current = c.name -)$
-			$(- endif -)$
-			$(- if c.isComplex -)$$# FIXME: we do not assume it's a list if maxOccurs is==1 #$
-				$[- ilist ]$-
-$( endif -)$
-$(include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -)$
-		$(- endfor -)$
-	$(- endif -)$
-$(- else -)$
-	$#- ____________ simple content case ____________ -#$
-	$[-i]$- $[ cell.value.get ]$
-$(endif -)$
+{%- import 'macros.twig' as m -%}
+{%- set meta = cell.cellModel.metadata -%}
+{%- set i = indent -%}
+{%- set d =  meta.getDirectivesFor(case) -%}
+{%if d.contains("ATTRIBUTES-ONLY") or hidename==true -%}
+{% else -%}
+	{{-i}}{{ cell.name }}:{% set i = concat(i,'  ') %}
+{% endif -%}
+{%- if cell.isComplex -%}
+	{#- ____________ complex content case ____________ -#}
+	{#- 1) the attributes -#}
+	{%- if cell.asComplex.attributes.size() > 0 -%}
+		{%- for a in cell.asComplex.attributes.asList -%}
+			{{-i}}{{a.name}}: {% if a.value.isPresent %}{{a.value.get}}{% endif %}
+{% endfor -%}
+	{%- endif -%}
+	{#- 2) the children -#}
+	{%- if cell.asComplex.children.size > 0 -%}
+		{%- set liststart = true -%}
+		{%- set current = '' -%}
+		{%- set ilist = concat(i,'  ') -%}
+		{%- for c in cell.asComplex.children.asList -%}
+			{%- if c.cellModel.metadata.getDirectivesFor(case).contains("LISTS-NO-PLURAL") -%}
+				{%- set name = c.name -%}
+			{%- else -%}
+				{%- set name = concat(c.name,'s') -%}
+			{%- endif -%}
+			{%- if current != c.name -%}
+			{{- i }}{{name}}:
+{% set current = c.name -%}
+			{%- endif -%}
+			{%- if c.isComplex -%}{# FIXME: we do not assume it's a list if maxOccurs is==1 #}
+				{{- ilist }}-
+{% endif -%}
+{%include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -%}
+		{%- endfor -%}
+	{%- endif -%}
+{%- else -%}
+	{#- ____________ simple content case ____________ -#}
+	{{-i}}- {{ cell.value.get }}
+{%endif -%}

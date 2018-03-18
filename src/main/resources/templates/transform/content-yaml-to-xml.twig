@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-$(- include 'cell-yaml-to-xml.twig' with {'yaml': v.yaml, 'cellmodels':v.cellmodels, 'i':'', 'case': v.case} only -)$
+{%- include 'cell-yaml-to-xml.twig' with {'yaml': v.yaml, 'cellmodels':v.cellmodels, 'i':'', 'case': v.case} only -%}

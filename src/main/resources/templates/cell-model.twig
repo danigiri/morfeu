@@ -1,40 +1,40 @@
 {
 	"schema": 0
-	,"URI": "$[cm.URI]$"
-	,"name": "$[cm.Name]$"
-	,"desc": "$[cm.Desc | trim]$"
-	,"presentation": "$[cm.metadata.Presentation]$"
-	$( if not cm.metadata.thumb is empty )$
-		,"thumb": "$[ cm.metadata.thumb ]$"
-	$( endif )$
-	$( if not cm.metadata.cellPresentation is empty )$
-		,"cellPresentation": "$[cm.metadata.cellPresentation]$"
-	$( endif )$
-	,"isSimple": $[cm.isSimple]$
+	,"URI": "{{cm.URI}}"
+	,"name": "{{cm.Name}}"
+	,"desc": "{{cm.Desc | trim}}"
+	,"presentation": "{{cm.metadata.Presentation}}"
+	{% if not cm.metadata.thumb is empty %}
+		,"thumb": "{{ cm.metadata.thumb }}"
+	{% endif %}
+	{% if not cm.metadata.cellPresentation is empty %}
+		,"cellPresentation": "{{cm.metadata.cellPresentation}}"
+	{% endif %}
+	,"isSimple": {{cm.isSimple}}
 	,"type_": {
-		"name": "$[cm.type.name]$"
-		,"isSimple": $[cm.type.isSimple]$
-		,"desc": "$[cm.type.metadata.desc | trim]$"
+		"name": "{{cm.type.name}}"
+		,"isSimple": {{cm.type.isSimple}}
+		,"desc": "{{cm.type.metadata.desc | trim}}"
 	}
-	,"minOccurs": $[cm.minOccurs]$
-	$( if cm.maxOccurs.isPresent )$
-		,"maxOccurs": $[cm.maxOccurs.getAsInt]$
-	$( endif )$
-	$( if cm.defaultValue.isPresent )$
-		,"defaultValue": "$[cm.defaultValue.get]$"
-	$( endif )$
-	,"isReference": $[cm.isReference]$
-	$( if cm.isReference )$
-		,"referenceURI": "$[cm.reference.get.getURI]$"
-	$( endif )$	
-	$( if cm.isComplex )$
-		,"attributes": [$( for a in cm.asComplex.attributes.asList )$
-				$( include "cell-model.twig" with {'cm': a} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
-			$( endfor )$]
-		$( if not (cm.isReference) )$
-			,"children": [$( for c in cm.asComplex.children.asList )$
-							$( include "cell-model.twig" with {'cm': c} only )$ $( if (loop.last) )$ $(else)$,$(endif)$
-						$( endfor )$]
-		$( endif )$
-	$( endif )$
+	,"minOccurs": {{cm.minOccurs}}
+	{% if cm.maxOccurs.isPresent %}
+		,"maxOccurs": {{cm.maxOccurs.getAsInt}}
+	{% endif %}
+	{% if cm.defaultValue.isPresent %}
+		,"defaultValue": "{{cm.defaultValue.get}}"
+	{% endif %}
+	,"isReference": {{cm.isReference}}
+	{% if cm.isReference %}
+		,"referenceURI": "{{cm.reference.get.getURI}}"
+	{% endif %}	
+	{% if cm.isComplex %}
+		,"attributes": [{% for a in cm.asComplex.attributes.asList %}
+				{% include "cell-model.twig" with {'cm': a} only %} {% if (loop.last) %} {%else%},{%endif%}
+			{% endfor %}]
+		{% if not (cm.isReference) %}
+			,"children": [{% for c in cm.asComplex.children.asList %}
+							{% include "cell-model.twig" with {'cm': c} only %} {% if (loop.last) %} {%else%},{%endif%}
+						{% endfor %}]
+		{% endif %}
+	{% endif %}
 }
