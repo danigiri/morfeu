@@ -30,7 +30,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, ParseURIModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
 public interface ContentParserTeztComponent {
 
 ListenableFuture<org.w3c.dom.Document> parsedXMLDocument();

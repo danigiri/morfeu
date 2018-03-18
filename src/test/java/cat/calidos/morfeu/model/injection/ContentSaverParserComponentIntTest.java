@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
@@ -45,8 +46,7 @@ private URI modelURI;
 private URI modelFetchableURI;
 private String content;
 private URI contentURI;
-private URI outputURI;
-private String outputPath;
+private String tmpPath;
 
 
 @Before
@@ -62,10 +62,7 @@ public void setup() throws Exception {
 	URI fullContentURI = new URI(fullContentPath);
 	content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 
-	String tmp = setupTempDirectory();
-	System.err.println("ContentSaverParserComponentIntTest::Using '"+tmp+"' as temporary test folder");
-	outputPath = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
-	outputURI = new URI("file://"+outputPath);
+	tmpPath = setupTempDirectory();
 
 }
 
@@ -73,6 +70,7 @@ public void setup() throws Exception {
 @Test
 public void testValidateString() throws Exception {
 
+	URI outputURI = new URI("file://"+temporaryOutputFilePath());
 	ContentSaverParserComponent contentComponent = DaggerContentSaverParserComponent
 													.builder()
 													.from(content)
@@ -100,6 +98,8 @@ public void testValidateString() throws Exception {
 @Test
 public void testNonValidString() throws Exception {
 	
+	URI outputURI = new URI("file://"+temporaryOutputFilePath());
+
 	String contentPath = "test-resources/documents/nonvalid-document.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	URI fullContentURI = new URI(fullContentPath);
@@ -127,7 +127,10 @@ public void testNonValidString() throws Exception {
 
 
 @Test
-public void testSaveString() throws Exception {
+public void testSaveToXML() throws Exception {
+
+	String outputPath = temporaryOutputFilePath();
+	URI outputURI = new URI("file://"+outputPath);
 
 	FileSaver saver = DaggerContentSaverParserComponent.builder()
 														.from(content)
@@ -146,6 +149,49 @@ public void testSaveString() throws Exception {
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
 	assertEquals("Content saved to file is not the same as input", content, writtenContent);
 
+}
+
+
+@Test
+public void testSaveToYAML() throws Exception {
+
+	String outputPath = temporaryOutputFilePath()+".yaml";
+	URI outputURI = new URI("file://"+outputPath);
+
+	FileSaver saver = DaggerContentSaverParserComponent.builder()
+														.from(content)
+														.to(outputURI)
+														.having(contentURI)
+														.model(modelURI)
+														.withModelFetchedFrom(modelFetchableURI)
+														.build()
+														.saver()
+														.get();
+	saver.save();
+	File savedFile = new File(outputPath);
+	assertTrue("Saver component did not create a file", savedFile.exists());
+	savedFile.deleteOnExit();
+
+	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
+
+	YAMLMapper mapper = new YAMLMapper();
+	JsonNode yaml = mapper.readTree(writtenContent);
+	assertNotNull(yaml);
+	assertTrue(yaml.isObject());
+	assertTrue(yaml.has("rows"));
+
+	JsonNode rows = yaml.get("rows");			//rows
+	assertNotNull(rows);
+	assertTrue(rows.isArray());
+	assertEquals(1, rows.size());
+
+}
+
+
+
+private String temporaryOutputFilePath() {
+
+	return tmpPath+"/filesaver-test-"+System.currentTimeMillis()+".txt";
 }
 
 }

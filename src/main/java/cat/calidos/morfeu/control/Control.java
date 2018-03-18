@@ -22,6 +22,7 @@ import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.SavingException;
+import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -70,7 +71,8 @@ public String processRequest() {
 		problem = "Interrupted processing '"+operation+"' ("+e.getMessage()+")";	
 	} catch (ExecutionException e) {
 		Throwable root = MorfeuUtils.findRootCauseFrom(e);
-		problem = "Problem processing '"+operation+"' ("+root.getMessage()+")";
+		problem = "Problem processing '"+operation+"' ("+root.getMessage()+", "+e.getMessage()+")";
+		e.printStackTrace();
 	} catch (ValidationException e) {
 		problem = "Problem validating '"+operation+"' ("+e.getMessage()+")";
 	} catch (FetchingException e) {
@@ -81,6 +83,8 @@ public String processRequest() {
 		problem = "Problem configuring for '"+operation+"' ("+e.getMessage()+")";
 	} catch (SavingException e) {
 		problem = "Problem saving in '"+operation+"' ("+e.getMessage()+")";
+	} catch (TransformException e) {
+		problem = "Problem transforming in '"+operation+"' ("+e.getMessage()+")";
 	}
 		
 	if (problem.length()==0) {
@@ -97,7 +101,8 @@ public String processRequest() {
 
 
 protected abstract Object process() throws InterruptedException, ExecutionException, ValidationException, 
-									ParsingException, FetchingException,	ConfigurationException, SavingException;
+									ParsingException, FetchingException,	ConfigurationException, SavingException, 
+									TransformException;
 
 protected abstract void beforeProcess();
 

@@ -32,6 +32,7 @@ import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 
 /**
@@ -59,7 +60,7 @@ public ContentGETControl(String prefix, String path, @Nullable String modelPath)
 
 @Override
 protected Object process() throws InterruptedException, ExecutionException, ValidationException, 
-									ParsingException, FetchingException, ConfigurationException {
+									ParsingException, FetchingException, ConfigurationException, TransformException {
 
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();

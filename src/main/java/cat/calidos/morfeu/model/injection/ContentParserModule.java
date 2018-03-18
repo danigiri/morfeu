@@ -51,7 +51,6 @@ import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.XSDValidator;
 import cat.calidos.morfeu.problems.ConfigurationException;
-import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.OrderedMap;
 import dagger.producers.ProducerModule;

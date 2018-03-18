@@ -35,7 +35,7 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class ParseStringModule {
+public class StringToParsedModule {
 
 
 //notice this is a DOM Document and not a morfeu document

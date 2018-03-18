@@ -25,10 +25,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
+import cat.calidos.morfeu.model.transform.injection.StringFormatModule;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.SavingException;
+import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.FileSaver;
 import cat.calidos.morfeu.utils.injection.FileSaverModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
@@ -38,12 +40,12 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, ParseStringModule.class, FileSaverModule.class, 
-								ModelModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ContentParserModule.class, StringToParsedModule.class, StringFormatModule.class,
+								FileSaverModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
 public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
-ListenableFuture<Composite<Cell>> content() throws ParsingException;
+ListenableFuture<Composite<Cell>> content() throws ParsingException, TransformException;
 ListenableFuture<FileSaver> saver() throws SavingException;
 
 @ProductionComponent.Builder

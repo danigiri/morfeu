@@ -38,7 +38,8 @@ protected final static Logger log = LoggerFactory.getLogger(FileSaverModule.clas
 		
 		
 @Produces
-public static FileSaver produceFileSaver(@Named("DestinationPath") String path, @Named("Content") String content) {
+public static FileSaver produceFileSaver(@Named("DestinationPath") String path,
+										@Named("EffectiveContent") String content) {
 	return new FileSaver(path, content);
 }
 

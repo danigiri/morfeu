@@ -30,17 +30,18 @@ import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 /**
 * 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, ParseURIModule.class, ModelModule.class, 
+@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, ModelModule.class, 
 								ListeningExecutorServiceModule.class})
 public interface ContentParserComponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
-ListenableFuture<Composite<Cell>> content() throws ParsingException;
+ListenableFuture<Composite<Cell>> content() throws FetchingException, ParsingException, TransformException;
 
 
 @ProductionComponent.Builder

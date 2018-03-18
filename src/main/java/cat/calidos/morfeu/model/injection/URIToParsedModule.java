@@ -45,6 +45,7 @@ import org.xml.sax.SAXException;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
@@ -53,32 +54,32 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 * Handles parsing raw XML or YAML (hardcoded transformation)
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class ParseURIModule {
+public class URIToParsedModule {
 
-protected final static Logger log = LoggerFactory.getLogger(ParseURIModule.class);
+protected final static Logger log = LoggerFactory.getLogger(URIToParsedModule.class);
 		
 //notice this is a DOM Document and not a morfeu document
 @Produces
 public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db, 
 													@Named("FetchableContentURI") URI uri, 
-													@Named("FetchedContentReady") InputStream contentReady) 
+													@Named("FetchedEffectiveContent") InputStream effectiveContent) 
 															throws ParsingException, FetchingException {
 	
 	// TODO: we can probably parse with something faster than building into dom
 	try {
-		return db.parse(contentReady);
+		return db.parse(effectiveContent);
 	} catch (SAXException e) {
-		log.error("Could not parse '{}' ({}", uri, e);
+		log.error("Could not parse '{}' ({})", uri, e);
 		throw new ParsingException("Problem when parsing '"+uri+"'", e);
 	} catch (IOException e) {
-		log.error("Could not fetch '{}' ({}", uri, e);
+		log.error("Could not fetch '{}' ({})", uri, e);
 		throw new FetchingException("Problem when fetching '"+uri+"'", e);
 	}
 
 }
 
 
-@Produces @Named("FetchedContentReady") 
+@Produces @Named("FetchedEffectiveContent") 
 InputStream fetchedContentReady(@Named("FetchableContentURI") URI uri, 
 								@Named("FetchedRawContent") Producer<InputStream> rawContentProvider,
 								@Named("FetchedTransformedContent") Producer<InputStream> transformedContentProvider
@@ -130,7 +131,8 @@ public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI ur
 public static InputStream fetchedTransformedContent(@Named("FetchableContentURI") URI uri,
 													@Named("FetchedRawContent") InputStream fetchedRawContent, 
 													YAMLMapper mapper, 
-													Producer<Model> model) throws FetchingException {
+													Producer<Model> model) 
+							throws FetchingException, TransformException {
 
 	// get the yaml and apply the transformation from yaml to xml
 	
@@ -151,9 +153,12 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		
 		return IOUtils.toInputStream(transformedContent, Config.DEFAULT_CHARSET);
 		
-	} catch (IOException | InterruptedException | ExecutionException e) {
+	} catch (IOException e) {
 		log.error("Could not fetch yaml '{}' ({}", uri, e);
 		throw new FetchingException("Problem when fetching yaml '"+uri+"'", e);
+	} catch (InterruptedException | ExecutionException e) {
+		log.error("Could not transform yaml to xml '{}' ({}", uri, e);
+		throw new TransformException("Problem when transforming yaml to xml '"+uri+"'", e);
 	}
 
 }

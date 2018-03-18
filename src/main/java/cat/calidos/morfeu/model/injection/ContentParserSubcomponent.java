@@ -31,7 +31,7 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ContentParserModule.class,ParseURIModule.class, ModelModule.class, 
+@ProductionSubcomponent(modules={ContentParserModule.class,URIToParsedModule.class, ModelModule.class, 
 								ListeningExecutorServiceModule.class})
 public interface ContentParserSubcomponent {
 

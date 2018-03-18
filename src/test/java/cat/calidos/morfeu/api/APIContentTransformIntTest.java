@@ -34,7 +34,7 @@ public class APIContentTransformIntTest extends APITezt {
 
 @Test
 public void testDocument1YAMLTransform() throws Exception {
-	
+
 	String model = pathPrefix+"models/test-model.xsd";
 	InputStream content = fetchRemoteInputStreamFrom("content/"+pathPrefix+"transform/document1.yaml?model="+model);
 	assertNotNull(content);
@@ -42,7 +42,7 @@ public void testDocument1YAMLTransform() throws Exception {
 	JsonNode doc = parseJson(content);
 	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
 	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
-	
+
 	JsonNode test = doc.get("children").get(0);				// /test(0)
 	assertEquals("/children/test(0) has a wrong name", "test", test.get("name").asText());
 
@@ -55,12 +55,11 @@ public void testDocument1YAMLTransform() throws Exception {
 	assertNotNull(testAttributes);
 	assertTrue("/children/test(0)@attributes should be an array", testAttributes.isArray());
 	assertEquals("/children/test(0)@attributes should have zero elems", 0, testAttributes.size());
-	
+
 	JsonNode row = test.get("children").get(0);				// /test(0)/row(0)
 	assertNotNull(row);
 	assertEquals("/children/test(0)/row(0) has a wrong name", "row", row.get("name").asText());
 
-	
 }
 
 }

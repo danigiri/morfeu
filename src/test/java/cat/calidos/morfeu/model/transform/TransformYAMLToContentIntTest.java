@@ -65,7 +65,7 @@ public void testTransformUsintTemplateDocument3() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/documents/document3.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-	System.err.println(transformed);
+	//System.err.println(transformed);
 	compareWithXML(transformed,  xmlPath);
 
 }
