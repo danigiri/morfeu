@@ -347,7 +347,10 @@ private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
 		if (currentCellModel.URI==uri) {
 			cellModel = currentCellModel;
 		} else {
-			if (currentCellModel.children) { 
+		    // Only do a recursive call if current cellModel is not what we look for *and* not a reference.
+		    // This is to avoid infinite loops in nested structures, a nested reference to a parent
+		    // will necessarily be a reference cellModel, therefore do not add its children to be processed
+			if (!currentCellModel.isReference && currentCellModel.children) { 
 				currentCellModel.children.forEach(cm => pending.push(cm));
 			}
 		}
