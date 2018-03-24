@@ -41,8 +41,10 @@ canAdopt(newMember:FamilyMember):boolean;
 
 //canRemoveAsChild(cell:Cell):boolean;
 
+/** return the number of children */
 childrenCount():number;
 
+/** reference to the parent */
 getParent():FamilyMember;
 
 /** exactly the same? */

@@ -38,6 +38,7 @@ constructor(public schema: number,
 			public isSimple: boolean) {}
 	
 
+/** We associate this cell with the given model */
 associateWith(model: Model):Cell {
 
 	this.associateWith_(model.cellModels, model.cellModels);
@@ -47,6 +48,7 @@ associateWith(model: Model):Cell {
 }
 
 
+/** get the attribute named this way, or return undefined if no such attribute is present */
 attribute(name:string):string {
 
 	let value:string;
@@ -62,7 +64,7 @@ attribute(name:string):string {
 }
 
 
-// we look for a field that has representation of COL-FIELD or 1 as default
+/** we look for an attribute that has representation of COL-FIELD and return its value (1 as default) */
 columnFieldValue():string {
 
 	let value: string = "1";
@@ -206,6 +208,7 @@ adopt(orphan:Cell, position:number) {
 
 }
 
+
 removeChild(child:Cell) {
 
 	let position:number = child.position;
@@ -222,20 +225,22 @@ removeChild(child:Cell) {
 	this.children = newChildren;
  
 }
-	 
 
-// This is tricky, imagine this cases
-// /foo(0)/bar(0), bar(0) position:1 --> /foo(0)/bar(1), easy peasy
-// But what about:
-// /foo(0)/bar(0), now we get bar(0) to position:1
-// /foo(0)/bar(0)/geez(0)
-// /foo(0)/bar(0)/geez(1)
-// This means we end up with
-// /foo(0)/bar(1)
-// /foo(0)/bar(1)/geez(0)
-// /foo(0)/bar(1)/geez(1)
-// Neat, uh?
+
+/** set ourselves at this position, uses information from the parent but does not mutate the parent */
 setPosition(position:number):Cell {
+
+    // This is tricky, imagine this cases
+    // /foo(0)/bar(0), bar(0) position:1 --> /foo(0)/bar(1), easy peasy
+    // But what about:
+    // /foo(0)/bar(0), now we get bar(0) to position:1
+    // /foo(0)/bar(0)/geez(0)
+    // /foo(0)/bar(0)/geez(1)
+    // This means we end up with
+    // /foo(0)/bar(1)
+    // /foo(0)/bar(1)/geez(0)
+    // /foo(0)/bar(1)/geez(1)
+    // Neat, uh?
 
 	let oldPrefix = this.parent.getURI()+"/"+this.name+"("+this.position;
 	let newPrefix = this.parent.getURI()+"/"+this.name+"("+position;
@@ -259,6 +264,7 @@ setPosition(position:number):Cell {
 }
 
 
+/** return a deep clone of this cell, it includes all children plus runtime information (parent ref, ...) */
 deepClone(): Cell {
     
     let clone = Cell.fromJSON(this.toJSON()); // easy peasy
@@ -293,6 +299,7 @@ private replaceURIPrefix_(old:string, newPrefix:string): Cell {
 	return this;
 
 }
+
 
 private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell {
 

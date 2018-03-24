@@ -80,7 +80,7 @@ ngOnInit() {
 }	 
 
 
-edit(cell: Cell) {
+private edit(cell: Cell) {
 
 	console.log("[UI] Discard changes at position "+cell.position);
 	this.editing = true;
@@ -93,7 +93,8 @@ edit(cell: Cell) {
 	
 }
 
-button(result: any) {
+
+private button(result: any) {
 	
 	if (result=="Save") {
 		console.log("[UI] Saved cell");
@@ -105,7 +106,8 @@ button(result: any) {
 	this.clear();
 }
 
-outside() {
+
+private outside() {
  
 	console.log("[UI] Dismissed editor without saving");
 	this.rollbackChanges();

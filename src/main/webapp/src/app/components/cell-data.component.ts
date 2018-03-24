@@ -50,31 +50,32 @@ import { EventService } from "../events/event.service";
 			<ng-container *ngIf="!editor">
 				<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">		
 				<!-- if we have a value field we should show it (readonly!) -->
-	            <div class="card-body">
-                     <form *ngIf="cell!=undefined && cell.value">
-                            <textarea readonly
-                                class="card-text" 
-                                id="" 
-                                rows="3"
-                                name="{{cellModel.name}}.value"
-                                attr.aria-label="{{cellModel.name}}.value" 
-                                attr.aria-describedby="{{cellModel.desc}} value" 
-                                [(ngModel)]="cell.value"></textarea>
-    	             </form>
+				<div class="card-body">
+					 <form *ngIf="cell!=undefined && cell.value && showValue()">
+							<textarea readonly
+								class="card-text" 
+								id="" 
+								rows="3"
+								name="{{cellModel.name}}.value"
+								attr.aria-label="{{cellModel.name}}.value" 
+								attr.aria-describedby="{{cellModel.desc}} value" 
+								[(ngModel)]="cell.value"></textarea>
+					 </form>
 				</div>
 				<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
 				<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
 					<attribute-data-info *ngFor="let a of cellModel.attributes" 
-					 [isFromCell]="cell!=undefined" 
-						[parentCell]="cell" 
-						[cellModel]="a"
+					    [isFromCell]="cell!=undefined" 
+					    [parentCell]="cell" 
+					    [cellModel]="a"
 						[isFromModel]="cell==undefined"
 						></attribute-data-info>
+				    <li *ngIf="cell!=undefined && remainingAttributes()>0" class="list-group-item">Not used: {{remainingAttributes()}} attribute(s)</li>
 				</ul>
 			</ng-container>
 			<ng-container *ngIf="editor">
 					<form>
-						<textarea
+						<textarea *ngIf="showValue()"
 							class="cell-data-value form-control" 
 							id="" 
 							rows="3"
@@ -82,10 +83,12 @@ import { EventService } from "../events/event.service";
 							attr.aria-label="{{cellModel.name}}.value" 
 							attr.aria-describedby="{{cellModel.desc}} value" 
 							[(ngModel)]="cell.value"></textarea>
-						<attribute-data-editor *ngFor="let a of cellModel.attributes" 
-							[parentCell]="cell" 
-							[cellModel]="a"
-							></attribute-data-editor>
+						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
+								<attribute-data-editor *ngFor="let a of cellModel.attributes" 
+									[parentCell]="cell" 
+									[cellModel]="a"
+									></attribute-data-editor>
+						</ul>
 					</form>
 					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">		
 			</ng-container>
@@ -136,7 +139,7 @@ ngOnInit() {
 }
 
 
-showCellInformation(cell: Cell) {
+private showCellInformation(cell: Cell) {
 
 	this.uri = cell.URI;
 	this.cell = cell;
@@ -145,7 +148,7 @@ showCellInformation(cell: Cell) {
 }
 
 
-showCellModelInformation(cellModel: CellModel) {
+private showCellModelInformation(cellModel: CellModel) {
 
 	this.uri = cellModel.URI;
 	this.cell = undefined;
@@ -154,15 +157,25 @@ showCellModelInformation(cellModel: CellModel) {
 }
 
 
-hideCellInformation() {
+private hideCellInformation() {
 
 	this.cellModel = undefined;
 	this.cell = undefined; // not strictly needed, but for completeness and to avoid any future side-effects
 }
 
 
-showPresentation() {
+private remainingAttributes() {
+	return this.cellModel.attributes ? this.cellModel.attributes.length - this.cell.attributes.length : 0;
+}
+
+
+private showPresentation() {
 	return this.cellModel.presentation=="CELL";
+}
+
+
+private showValue() {
+	return this.cellModel.presentation=="TEXT"; // if we need to show the text area or not
 }
 
 }

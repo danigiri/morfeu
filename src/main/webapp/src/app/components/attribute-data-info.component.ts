@@ -24,56 +24,57 @@ import { CellModel } from "../cell-model.class";
 	selector: 'attribute-data-info',
 	template: `
 		<li *ngIf="isFromModel || (isFromCell && hasValue)" 
-		    class="attribute-data attribute-data-info list-group-item"
-		    [class.list-group-item-secondary]="isFromModel"
-	        >
+			class="attribute-data attribute-data-info list-group-item"
+			[class.list-group-item-secondary]="isFromModel"
+			>
 			<span class="font-weight-bold attribute-data-name">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
-	        <span *ngIf="hasValue" class="attribute-data-value">{{getValue()}}</span>
+			<span *ngIf="hasValue" class="attribute-data-value">{{getValue()}}</span>
 			<span class="text-muted attribute-data-type-name float-right">({{cellModel.type_.name}})</span>
 		</li>
 		`,
 		styles:[`
-                .attribute-data {}
-		        .attribute-data-info {}
-                .attribute-data-name {}
-                .attribute-data-value {}
-		        .attribute-data-type-name {}
-		        .attribute-data-from-model {}
+				attribute-data {}
+				attribute-data-info {}
+				attribute-data-name {}
+				attribute-data-value {}
+				attribute-data-type-name {}
+				attribute-data-from-model {}
 		`]
 })
 
 export class AttributeDataInfoComponent {
 
-@Input() isFromCell: boolean;    // if it's form a cell and we have no value we skip this attribute
+@Input() isFromCell: boolean;	 // if it's form a cell and we have no value we skip this attribute
 @Input() isFromModel: boolean;
-@Input() parentCell?: Cell;    // optional, only when showing information of cell (and not just a cell model)
+@Input() parentCell?: Cell;	   // optional, only when showing information of cell (and not just a cell model)
 @Input() cellModel: CellModel;
 hasValue: boolean;
 
 ngOnInit() {
-    this.hasValue = this.hasValue_();
+	this.hasValue = this.hasValue_();
 }
 
 
 // do we have a value to show?
 private hasValue_(): boolean {
-    return this.parentCell && this.parentCell.attributes 
-            && this.parentCell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
+	return this.parentCell && this.parentCell.attributes 
+			&& this.parentCell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
 }
 
 
 getValue(): string {
-    return this.parentCell.attributes.find(a=> a.name==this.cellModel.name).value;
+	return this.parentCell.attributes.find(a=> a.name==this.cellModel.name).value;
 }
 
+
 hasDesc(): boolean {
-    return this.cellModel.desc!=undefined || this.cellModel.type_.desc!=undefined;
+	return this.cellModel.desc!=undefined || this.cellModel.type_.desc!=undefined;
 }
 
 
 getDesc(): string {
-    return (this.cellModel.desc && this.cellModel.desc.length!=0) 
-            ? this.cellModel.desc : this.cellModel.type_.desc;
+	return (this.cellModel.desc && this.cellModel.desc.length!=0) 
+			? this.cellModel.desc : this.cellModel.type_.desc;
 }
 
 }

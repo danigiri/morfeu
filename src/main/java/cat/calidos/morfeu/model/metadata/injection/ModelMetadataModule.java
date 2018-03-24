@@ -181,7 +181,7 @@ public static Map<String, String> defaultValues(@Nullable XSAnnotation annotatio
 				log.warn("Ignoring a metadata default that doesn't have a name starting with '@' ({})", n);
 			}
 		} else {
-			defaultValues.put(null, defaultValue); 		// this is the default value for the cell
+			defaultValues.put(null, defaultValue); 		// this is the default value for the cell content
 		}
 		
 	}

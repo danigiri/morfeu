@@ -163,7 +163,8 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 		// New cell model:
 		// We create the cell model first, find out if it's global, add it globals if so and then generate the
 		// attributes and children. This means that if a child references an already defined CellModel (which could
-		// include this very one), there will be no infinite loops and the child will be created as a reference to this one 
+		// include this very one), there will be no infinite loops and the child will be created as a reference to this
+		// one we've just created 
 
 		newComplexCellModel = new ComplexCellModel(u, 
 				name, 
@@ -274,7 +275,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	// RECURSIVE CASE:
 	//	we go through all the children and we add them
 	if (t.isSimple()) {
-		return new OrderedMap<CellModel>(0);							// base case, simple type sanity check
+		return new OrderedMap<CellModel>(0);							// * base case, simple type sanity check
 	}
 
 	Composite<CellModel> children = new OrderedMap<CellModel>();
@@ -282,10 +283,10 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	XSComplexType complexType = elem.getType().asComplexType();
 	XSContentType contentType = complexType.getContentType();
 	if (contentType.asEmpty()!=null) {
-		return new OrderedMap<CellModel>(0);							// base case, no children, we return
+		return new OrderedMap<CellModel>(0);							// * base case, no children, we return
 	}
 	
-	XSParticle particle = contentType.asParticle();						// recursive case, go through all children
+	XSParticle particle = contentType.asParticle();					// * recursive case, go through all children
 	LinkedList<XSParticle> termTypes = new LinkedList<XSParticle>();	// list of all the particles left to process
 	termTypes.add(particle);
 	while (!termTypes.isEmpty()) {
@@ -293,9 +294,10 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 
 		if (particle.getTerm().isModelGroup()) {
 			// FIXME: this is reverse order!!!
-			// FIXME: we need to see when we have more complex groups like unions and stuff 
+			// FIXME: we need to see what to do when we have more complex groups like unions and stuff 
 			XSModelGroup typeModelGroup = particle.getTerm().asModelGroup();
-			typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.asParticle())); 
+			typeModelGroup.iterator().forEachRemaining(m -> termTypes.add(m.asParticle()));
+			//typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.asParticle()));
 		} else {
 
 			XSElementDecl childElem = particle.getTerm().asElementDecl();
