@@ -84,16 +84,16 @@ import { EventService } from "./events/event.service";
 			.cell-model-level-7 {}
 			.cell-model-level-8 {}
 			.cell-model-level-9 {}
-            .cell-model-position-0 {}
-            .cell-model-position-1 {}
-            .cell-model-position-2 {}
-            .cell-model-position-3 {}
-            .cell-model-position-4 {}
-            .cell-model-position-5 {}
-            .cell-model-position-6 {}
-            .cell-model-position-7 {}
-            .cell-model-position-8 {}
-            .cell-model-position-9 {}
+			.cell-model-position-0 {}
+			.cell-model-position-1 {}
+			.cell-model-position-2 {}
+			.cell-model-position-3 {}
+			.cell-model-position-4 {}
+			.cell-model-position-5 {}
+			.cell-model-position-6 {}
+			.cell-model-position-7 {}
+			.cell-model-position-8 {}
+			.cell-model-position-9 {}
 	`]
 })
 
@@ -146,7 +146,7 @@ becomeActive(fromCell: boolean) {
 	this.active = true;
 	this.dragEnabled = this.cellModel.canGenerateNewCell();
 	if (!fromCell) {   // if we become active from a cell, we do not need to propagate the activation
-	    this.events.service.publish(new CellModelActivatedEvent(this.cellModel));
+		this.events.service.publish(new CellModelActivatedEvent(this.cellModel));
 	}
 	this.subscribeToNewCellFromModel();
 	//console.log("[UI] CellModelComponent::becomeActive(dragEnabled:%s)", this.dragEnabled);
@@ -166,55 +166,55 @@ becomeInactive(fromCell: boolean) {
 
 
 select(position:number) {
-    
-    if (position==this.index) {
-        
-        // if we were activated we deactivate ourselves and become selectable again
-        if (this.active) {
-            this.becomeInactive(false);
-        }
-        
-        console.log("[UI] CellModelComponent::select("+this.cellModel.name+"("+this.index+"))");
-        this.selected = true; 
-        this.unsubscribeFromSelection();
-        // cleverly, we now subscribe to cellmodel activation events that may be triggered by shortcuts
-        this.subscribeToActivation();
-        
-        // We temporarly unsubscribe from clear, send a clear event and re-subscribe
-        // This means we are the only ones selected now (previous parent will be unselected, for instance)
-        this.unsubscribeFromSelectionClear();
-        this.events.service.publish(new CellSelectionClearEvent()); // warning: resets model state variables
-        this.subscribeToSelectionClear();
-        
-        this.cellModel.children.forEach(c => c.component.subscribeToSelection());
-        
-        // TODO: implement out of bounds handling for cell-models
-//    } else if (this.cellModel.parent && position>=this.cell.parent.childrenCount()) {
-//        console.log("[UI] SelectableCellModelWidget::select(out of bounds)");
-     } else {
-         this.clearSelection();  // out of bounds, sorry, clear
-    }
+	
+	if (position==this.index) {
+		
+		// if we were activated we deactivate ourselves and become selectable again
+		if (this.active) {
+			this.becomeInactive(false);
+		}
+		
+		console.log("[UI] CellModelComponent::select("+this.cellModel.name+"("+this.index+"))");
+		this.selected = true; 
+		this.unsubscribeFromSelection();
+		// cleverly, we now subscribe to cellmodel activation events that may be triggered by shortcuts
+		this.subscribeToActivation();
+		
+		// We temporarly unsubscribe from clear, send a clear event and re-subscribe
+		// This means we are the only ones selected now (previous parent will be unselected, for instance)
+		this.unsubscribeFromSelectionClear();
+		this.events.service.publish(new CellSelectionClearEvent()); // warning: resets model state variables
+		this.subscribeToSelectionClear();
+		
+		this.cellModel.children.forEach(c => c.component.subscribeToSelection());
+		
+		// TODO: implement out of bounds handling for cell-models
+//	  } else if (this.cellModel.parent && position>=this.cell.parent.childrenCount()) {
+//		  console.log("[UI] SelectableCellModelWidget::select(out of bounds)");
+	 } else {
+		 this.clearSelection();	 // out of bounds, sorry, clear
+	}
 
 }
 
 
 subscribeToSelection() {
 
-    this.selectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
-            .subscribe( cs => this.select(cs.position) )
-    );
-    this.subscribeToSelectionClear();  // if we are selectable we are also clearable
-    
+	this.selectionSubscription = this.subscribe(this.events.service.of( CellSelectEvent )
+			.subscribe( cs => this.select(cs.position) )
+	);
+	this.subscribeToSelectionClear();  // if we are selectable we are also clearable
+	
 }
 
 
 unsubscribeFromSelection() {
-    
-    super.unsubscribeFromSelection();
-    if (this.activationSubscription) {  // if we were selectable we may have been activable as well
-        this.unsubscribe(this.activationSubscription);
-    }
-    
+	
+	super.unsubscribeFromSelection();
+	if (this.activationSubscription) {	// if we were selectable we may have been activable as well
+		this.unsubscribe(this.activationSubscription);
+	}
+	
 }
 
 
@@ -253,47 +253,47 @@ getThumb():string {
 
 
 private subscribeToActivation() {
-    
-    console.log("[UI] CellModelComponent::subscribeToActivation("+this.cellModel.name+")");
-    this.activationSubscription = this.subscribe(this.events.service.of( CellModelActivatedEvent )
-            .filter( activated => activated.cellModel==undefined && this.selected)   // no cell model
-            .subscribe( activated => this.becomeActive(false) )
-    );
+	
+	console.log("[UI] CellModelComponent::subscribeToActivation("+this.cellModel.name+")");
+	this.activationSubscription = this.subscribe(this.events.service.of( CellModelActivatedEvent )
+			.filter( activated => activated.cellModel==undefined && this.selected)	 // no cell model
+			.subscribe( activated => this.becomeActive(false) )
+	);
 
 }
 
 
 private unsubscribeFromActivation() {
-    
-    if (this.activationSubscription) {
-        this.unsubscribe(this.activationSubscription);
-    }
-    
+	
+	if (this.activationSubscription) {
+		this.unsubscribe(this.activationSubscription);
+	}
+	
 }
 
 
 private subscribeToNewCellFromModel() {
 
-    if (!this.newCellSubscription) {
-        this.newCellSubscription = this.subscribe(this.events.service.of( NewCellFromModelEvent ) 
-                .subscribe( nc => {
-                    if (this.active && this.cellModel.canGenerateNewCell()) {
-                        console.log("-> cell model widget gets new cell event and will try to create one :)");
-                        this.events.service.publish(new CellDropEvent(this.cellModel.generateCell()));
-                    }
-                })
-        );
-    }
+	if (!this.newCellSubscription) {
+		this.newCellSubscription = this.subscribe(this.events.service.of( NewCellFromModelEvent ) 
+				.subscribe( nc => {
+					if (this.active && this.cellModel.canGenerateNewCell()) {
+						console.log("-> cell model widget gets new cell event and will try to create one :)");
+						this.events.service.publish(new CellDropEvent(this.cellModel.generateCell()));
+					}
+				})
+		);
+	}
 }
 
 
 private unsubscribeToNewCellFromModel() {
-    
-    if (this.newCellSubscription) {
-        this.unsubscribe(this.newCellSubscription);
-        this.newCellSubscription = undefined;
-    }
-    
+	
+	if (this.newCellSubscription) {
+		this.unsubscribe(this.newCellSubscription);
+		this.newCellSubscription = undefined;
+	}
+	
 }
 
 

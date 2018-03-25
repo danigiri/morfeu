@@ -24,15 +24,22 @@ import { CellModel } from "../cell-model.class";
 	selector: 'attribute-data-editor',
 	template: `
 		<li class="attribute-data attribute-data-editor list-group-item">
-			<div *ngIf="hasValue_()" class="input-group-sm mb-3">
+			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
-					<span class="input-group-text attribute-data-name" id="">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+					<span class="attribute-data-name input-group-text" id="{{cellModel.name}}">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
 				</div>
 				<input type="text" 
-						class="form-control attribute-data-value" 
-						attr.aria-label="{{cellModel.name}}" 
-						attr.aria-describedby="{{cellModel.desc}}" 
-						[(ngModel)]="this.value" />
+					class="attribute-data-value form-control" 
+					attr.aria-label="{{cellModel.name}}" 
+					attr.aria-describedby="{{cellModel.desc}}" 
+					[(ngModel)]="this.value" 
+					/>
+                 <div class="input-group-append">
+                    <img class="btn btn-outline-danger float-right" 
+                        src="assets/images/open-iconic/circle-x.svg" 
+                        (click)="delete()"
+                        />
+                  </div>
 			</div>
 		 </li>
 	`,
@@ -63,9 +70,15 @@ get value(): string {
 
 
 set value(v: string) {
-   let attributeCell = this.parentCell.attributes.find(a=> a.name==this.cellModel.name);
+   let attributeCell = this.parentCell.attributes.find(a => a.name==this.cellModel.name);
    attributeCell.value = v;
 }
 
-
+// delete current value
+private delete() {
+    
+    console.log("[UI] deleting cell attribute ", this.cellModel.name);
+    
+    
+}
 }

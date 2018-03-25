@@ -107,10 +107,10 @@ public static BasicCellModel buildCellModelFrom(URI u,
 	if (isReference) {
 		// we are a cell model reference, so we get the reference cell model and use it to build ourselves
 		CellModel reference = referenceProvider.get();
-		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, defaultValue, metadata, reference);
+		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, false, defaultValue, metadata, reference);
 	} else {
 		// we are a new cell model, we create a new instance and add it to globals so future cells can reference it
-		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, defaultValue, metadata);
+		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, false, defaultValue, metadata);
 		updateGlobalsWith(globals, t, newCellModel);
 	}
 
@@ -387,10 +387,14 @@ public static Metadata metadata(XSElementDecl elem,
 	meta = Metadata.merge(uri, meta, fallback);
 	
 	// then if we are a reference we will merge the reference metadata as well :)
+	// * but we do it with the type metadata, as the reference cellModel will have merged the global stuff
+	// * and the global stuff is referenced with an explicit URI that is not the current cell model, therefore it is
+	// * not intuitive to merge our meta with the reference type + the reference cell model (global) meta
+	// --> which means we go for the reference type only
 	if (isReference) {
-		// We use the given metadata (probably from global) and we merge it with the reference meta to cover any gaps
-		// Notice our own metadata has more priority
-		meta = Metadata.merge(uri, meta, referenceProvider.get().getMetadata());
+		// We use the given metadata (just the type, not global) and we merge it with the reference meta to cover any 
+		// gaps (Notice our own metadata has more priority)
+		meta = Metadata.merge(uri, meta, referenceProvider.get().getType().getMetadata());
 	}
 	
 	return meta;
@@ -448,6 +452,7 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 								   type, 
 								   minOccurs,
 								   ATTRIBUTE_MAX,
+								   true,					// is an attribute
 								   defaultValue,
 								   attributeMetadata);
 //	}

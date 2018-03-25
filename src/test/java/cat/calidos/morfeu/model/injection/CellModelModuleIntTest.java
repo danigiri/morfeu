@@ -104,9 +104,10 @@ public void testProvideCellModel() throws Exception {
 	assertNotNull(colComplex);
 	assertEquals(1, colComplex.attributes().size());
 	CellModel sizeAttribute = colComplex.attributes().attribute("size");
+	assertTrue(sizeAttribute.isAttribute());
 	assertEquals("Size attribute of columns should be compulsory", 1, sizeAttribute.getMinOccurs());
 	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
-	assertEquals(4, colComplex.children().size());
+	assertEquals(5, colComplex.children().size());
 
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	String dataDesc = "Globally provided description of 'data'";
@@ -127,7 +128,8 @@ public void testProvideCellModel() throws Exception {
 	// we only have the type default and nothing from global
 	ComplexCellModel data2Complex = data2.asComplex();
 	assertEquals("11", data2Complex.attributes().attribute("number").getDefaultValue().get());	// type default
-	assertFalse("Should not have default", data2Complex.attributes().attribute("text").getDefaultValue().isPresent());
+	textAttribute = data2Complex.attributes().attribute("text");
+	assertFalse("Should not have default", textAttribute.getDefaultValue().isPresent());
 
 	assertTrue(data.isReference() || data2.isReference());
 

@@ -14,13 +14,15 @@
  *	 limitations under the License.
  */
 
-import { Adopter } from './adopter.interface';
-import { FamilyMember } from './family-member.interface';
-import { CellModel } from './cell-model.class';
-import { Model } from './model.class';
+import { Adopter } from "./adopter.interface";
+import { Lifecycle } from "./lifecycle.interface";
+import { FamilyMember } from "./family-member.interface";
+import { CellModel } from "./cell-model.class";
+import { Model } from "./model.class";
+import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 
-export class Cell implements Adopter {
+export class Cell implements Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
 value?: string;
 attributes?: Cell[];
@@ -170,41 +172,41 @@ equals(m:FamilyMember) {
 
 
 adopt(orphan:Cell, position:number) {
-    
-    // notice that we are adopting only orphan cells as we do not want this method to have side effects on
-    // the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
-    // and the old parent, this last change would be non-intuitive), therefore we only accept orphans
-    
+	
+	// notice that we are adopting only orphan cells as we do not want this method to have side effects on
+	// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
+	// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
+	
 	if (!orphan.parent) {
-	    console.error("Adopting child that was not an orphan");
+		console.error("Adopting child that was not an orphan");
 	}
 
 	orphan.parent = this;
-    orphan.setPosition(position);   // this actually changes the URI fo the new member to the correct one
-    
-    if (!this.children) {
-        this.children = [ orphan ];
-    } else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
-        this.children.push(orphan);
-    } else {
-    
-        let newChildren:Cell[] = [];
-        let i:number = 0;
-        this.children.forEach(c => {
-            if (i<position) { //>
-                newChildren.push(c);
-            } else if (i==position) {
-                newChildren.push(orphan);
-                i++;
-                newChildren.push(c.setPosition(i));    // set next to a a shifted position of +1
-            } else {
-                newChildren.push(c.setPosition(i));    // set the rest of children
-            }
-            i++;
-        });
-        this.children = newChildren;
+	orphan.setPosition(position);	// this actually changes the URI fo the new member to the correct one
+	
+	if (!this.children) {
+		this.children = [ orphan ];
+	} else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
+		this.children.push(orphan);
+	} else {
+	
+		let newChildren:Cell[] = [];
+		let i:number = 0;
+		this.children.forEach(c => {
+			if (i<position) { //>
+				newChildren.push(c);
+			} else if (i==position) {
+				newChildren.push(orphan);
+				i++;
+				newChildren.push(c.setPosition(i));	   // set next to a a shifted position of +1
+			} else {
+				newChildren.push(c.setPosition(i));	   // set the rest of children
+			}
+			i++;
+		});
+		this.children = newChildren;
 
-    }
+	}
 
 }
 
@@ -230,17 +232,17 @@ removeChild(child:Cell) {
 /** set ourselves at this position, uses information from the parent but does not mutate the parent */
 setPosition(position:number):Cell {
 
-    // This is tricky, imagine this cases
-    // /foo(0)/bar(0), bar(0) position:1 --> /foo(0)/bar(1), easy peasy
-    // But what about:
-    // /foo(0)/bar(0), now we get bar(0) to position:1
-    // /foo(0)/bar(0)/geez(0)
-    // /foo(0)/bar(0)/geez(1)
-    // This means we end up with
-    // /foo(0)/bar(1)
-    // /foo(0)/bar(1)/geez(0)
-    // /foo(0)/bar(1)/geez(1)
-    // Neat, uh?
+	// This is tricky, imagine this cases
+	// /foo(0)/bar(0), bar(0) position:1 --> /foo(0)/bar(1), easy peasy
+	// But what about:
+	// /foo(0)/bar(0), now we get bar(0) to position:1
+	// /foo(0)/bar(0)/geez(0)
+	// /foo(0)/bar(0)/geez(1)
+	// This means we end up with
+	// /foo(0)/bar(1)
+	// /foo(0)/bar(1)/geez(0)
+	// /foo(0)/bar(1)/geez(1)
+	// Neat, uh?
 
 	let oldPrefix = this.parent.getURI()+"/"+this.name+"("+this.position;
 	let newPrefix = this.parent.getURI()+"/"+this.name+"("+position;
@@ -266,24 +268,25 @@ setPosition(position:number):Cell {
 
 /** return a deep clone of this cell, it includes all children plus runtime information (parent ref, ...) */
 deepClone(): Cell {
-    
-    let clone = Cell.fromJSON(this.toJSON()); // easy peasy
-    
-    // let's not forget the runtime information
-    if (this.parent) {
-        clone.parent = this.parent;
-    }
-    if (this.position) {
-        clone.position = this. position;
-    }
-    if (this.cellModel) {
-        clone.cellModel = this. cellModel;
-    }
-    
-    return clone;
 
-//    let cell:Cell = Object.create(Cell.prototype);
-//    return Object.assign(cell, this);
+    let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
+	let clone = CELL.fromJSON(this.toJSON()); // easy peasy cloning :)
+	
+	// let's not forget the runtime information
+	if (this.parent) {
+		clone.parent = this.parent;
+	}
+	if (this.position) {
+		clone.position = this. position;
+	}
+	if (this.cellModel) {
+		clone.cellModel = this. cellModel;
+	}
+	
+	return clone;
+
+//	  let cell:Cell = Object.create(Cell.prototype);
+//	  return Object.assign(cell, this);
 
 }
 
@@ -311,9 +314,9 @@ private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell 
 			// we take the philosophy of completing the cellmodel reference with the missing data (children)
 			// we keep rest of the cell model information (like the name, which can be different)
 			let reference:CellModel = this.findCellModelWithURI(rootCellmodels, cellModel.referenceURI);
-		    if (!reference) {
-		        console.error("Could not find cellModel of reference cellModel:{}",cellModel.name);
-		    }
+			if (!reference) {
+				console.error("Could not find cellModel of reference cellModel:{}",cellModel.name);
+			}
 			cellModel.children = reference.children;
 
 		}
@@ -354,9 +357,9 @@ private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
 		if (currentCellModel.URI==uri) {
 			cellModel = currentCellModel;
 		} else {
-		    // Only do a recursive call if current cellModel is not what we look for *and* not a reference.
-		    // This is to avoid infinite loops in nested structures, a nested reference to a parent
-		    // will necessarily be a reference cellModel, therefore do not add its children to be processed
+			// Only do a recursive call if current cellModel is not what we look for *and* not a reference.
+			// This is to avoid infinite loops in nested structures, a nested reference to a parent
+			// will necessarily be a reference cellModel, therefore do not add its children to be processed
 			if (!currentCellModel.isReference && currentCellModel.children) { 
 				currentCellModel.children.forEach(cm => pending.push(cm));
 			}
@@ -367,6 +370,19 @@ private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
 
 }
 
+
+//// Lifecycle ////
+
+remove() {
+    
+    if (this.parent) {  // sanity check
+        this.parent.removeChild(this);
+    }
+    
+}
+
+
+//// SerialisableToJSON ////
 
 toJSON(): CellJSON {
 
@@ -391,7 +407,7 @@ toJSON(): CellJSON {
 }
 
 
-static fromJSON(json: CellJSON|string):Cell {
+fromJSON(json: CellJSON|string): Cell {
 
 	if (typeof json === 'string') {
 
@@ -399,21 +415,23 @@ static fromJSON(json: CellJSON|string):Cell {
 
 	} else {
 		
+	    let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
+	    
 		let cell:Cell = Object.create(Cell.prototype);
 		cell = Object.assign(cell, json);
 
 		if (json.attributes) {
-			cell = Object.assign(cell, {attributes: json.attributes.map(a => Cell.fromJSON(a))});
+			cell = Object.assign(cell, {attributes: json.attributes.map(a => CELL.fromJSON(a))});
 		}
 		if (json.internalAttributes) {
-			cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => Cell.fromJSON(a))});
+			cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => CELL.fromJSON(a))});
 		}
 
 		// we complete the children runtime information so we have the parent reference as well as position
 		if (json.children) {
 			let i:number = 0;
 			cell = Object.assign(cell, {children: json.children.map(c => {
-				let fullCell:Cell = Cell.fromJSON(c);
+				let fullCell:Cell = CELL.fromJSON(c);
 				fullCell.position = i++;
 				fullCell.parent = cell;
 				return fullCell;
@@ -428,7 +446,11 @@ static fromJSON(json: CellJSON|string):Cell {
 
 
 static reviver(key: string, value: any): any {
-	return key === "" ? Cell.fromJSON(value) : value;
+
+    let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
+
+	return key === "" ? CELL.fromJSON(value) : value;
+
 }
 
 

@@ -32,8 +32,8 @@
 */
 export interface SerialisableToJSON<T, J> {
 
-	fromJSON(json: J|string): SerialisableToJSON<T, J>;
+fromJSON(json: J|string): SerialisableToJSON<T, J>;
 
-	toJSON():J;
+toJSON():J;
 
 }

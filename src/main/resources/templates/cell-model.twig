@@ -20,6 +20,9 @@
 	{% if cm.maxOccurs.isPresent %}
 		,"maxOccurs": {{cm.maxOccurs.getAsInt}}
 	{% endif %}
+	{% if cm.isAttribute %}
+	, "isAttribute": true
+	{% endif %}
 	{% if cm.defaultValue.isPresent %}
 		,"defaultValue": "{{cm.defaultValue.get}}"
 	{% endif %}

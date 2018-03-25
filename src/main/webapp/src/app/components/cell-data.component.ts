@@ -65,12 +65,12 @@ import { EventService } from "../events/event.service";
 				<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
 				<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
 					<attribute-data-info *ngFor="let a of cellModel.attributes" 
-					    [isFromCell]="cell!=undefined" 
-					    [parentCell]="cell" 
-					    [cellModel]="a"
+						[isFromCell]="cell!=undefined" 
+						[parentCell]="cell" 
+						[cellModel]="a"
 						[isFromModel]="cell==undefined"
 						></attribute-data-info>
-				    <li *ngIf="cell!=undefined && remainingAttributes()>0" class="list-group-item">Not used: {{remainingAttributes()}} attribute(s)</li>
+					<li *ngIf="cell!=undefined && remainingAttributes()>0" class="list-group-item">Not used: {{remainingAttributes()}} attribute(s)</li>
 				</ul>
 			</ng-container>
 			<ng-container *ngIf="editor">
@@ -84,10 +84,10 @@ import { EventService } from "../events/event.service";
 							attr.aria-describedby="{{cellModel.desc}} value" 
 							[(ngModel)]="cell.value"></textarea>
 						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-								<attribute-data-editor *ngFor="let a of cellModel.attributes" 
-									[parentCell]="cell" 
-									[cellModel]="a"
-									></attribute-data-editor>
+							<attribute-data-editor *ngFor="let a of cellModel.attributes" 
+								[parentCell]="cell" 
+								[cellModel]="a"
+								></attribute-data-editor>
 						</ul>
 					</form>
 					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">		

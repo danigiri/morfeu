@@ -42,7 +42,7 @@ public ComplexCellModel(URI u,
 						Attributes<CellModel> attributes, 
 						Composite<CellModel> children) {
 
-	super(u, name, desc, type, minOccurs, maxOccurs, defaultValue, meta);
+	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, meta);
 
 	this.attributes = attributes;
 	this.children = children;
@@ -62,7 +62,7 @@ public ComplexCellModel(URI u,
 						Attributes<CellModel> attributes, 
 						ComplexCellModel ref) {
 
-	super(u, name, desc, type, minOccurs, maxOccurs, defaultValue, meta, ref);
+	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, meta, ref);
 
 	this.attributes = attributes;		// attributes are the same as the reference, but may have different metadata
 	this.children = null;			// we will use the ones from the reference to ensure they are the same

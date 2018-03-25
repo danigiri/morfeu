@@ -263,7 +263,7 @@ ngOnInit() {
 	
 	// A cell model was deactivated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-			.filter(d => d.cellModel && this.isCompatibleWith(d.cellModel))	// //
+			.filter(d => d.cellModel && this.isCompatibleWith(d.cellModel)) // //
 			.subscribe( d => {
 				//console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 				this.becomeInactive(this.cell);
@@ -271,7 +271,7 @@ ngOnInit() {
 	
 	// a cell model activated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-	        .filter( a => a.cellModel && this.isCompatibleWith(a.cellModel))
+			.filter( a => a.cellModel && this.isCompatibleWith(a.cellModel))
 			.subscribe( a => {
 				console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
 				this.becomeActive(this.cell);
@@ -304,12 +304,12 @@ ngOnInit() {
 	
    // Want to edit this cell
 	this.subscribe(this.events.service.of( CellEditEvent )
-	            .filter(edit => !edit.cell && this.isEditable())
-	            .subscribe( edit => {
-	                console.log("-> cell comp gets cell edit event and will try to edit :)");
-	                this.events.service.publish(new CellEditEvent(this.cell));
-	    }));
-	    
+				.filter(edit => !edit.cell && this.isEditable())
+				.subscribe( edit => {
+					console.log("-> cell comp gets cell edit event and will try to edit :)");
+					this.events.service.publish(new CellEditEvent(this.cell));
+		}));
+		
 	   
 	
 	
@@ -356,7 +356,7 @@ adoptCellAtPosition(newCell:Cell, position:number) {
 	this.events.service.publish(new CellDeactivatedEvent(newCell));
 	// must be an orphan before adopting
 	if (newCell.parent) {
-	    newCell.parent.removeChild(newCell);
+		newCell.parent.removeChild(newCell);
 	}
 	this.cell.adopt(newCell, position);
 
@@ -462,7 +462,7 @@ getCellPresentation() {
 }
 
 private isEditable(): boolean {
-    return this.active && !this.cell.cellModel.presentation.includes("WELL");
+	return this.active && !this.cell.cellModel.presentation.includes("WELL");
 }
 
 }

@@ -19,10 +19,10 @@ import { Cell } from "./cell.class";
 import { FamilyMember } from "./family-member.interface";
 import { Type_ } from "./type_.class";
 
-// //// COMPONENT STUFF                                     ////
-// //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT   ////
+// //// COMPONENT STUFF										////
+// //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
 import { CellModelComponent } from "./cell-model.component";
-// ////                                                     ////
+// ////														////
 
 export class CellModel implements FamilyMember {
 
@@ -34,10 +34,10 @@ children: CellModel[];
 isReference: boolean;
 referenceURI?: string;
 
-// //// COMPONENT STUFF                                     ////
+// //// COMPONENT STUFF										////
 // to circumvent limitations of the angular tree, we establish a relationship with the cell model component //
 component: CellModelComponent;
-// ////                                                     ////
+// ////														////
 
 constructor(public schema: number, 
 			public URI: string, 
@@ -49,6 +49,7 @@ constructor(public schema: number,
 			public isSimple: boolean, 
 			public type_: Type_,
 			public minOccurs: number,
+			public isAttribute?: boolean,
 			public maxOccurs?: number,
 			public defaultValue?: string
 			) {
@@ -57,7 +58,7 @@ constructor(public schema: number,
 
 
 setComponent(c: CellModelComponent) {
-    this.component = c;
+	this.component = c;
 }
 
 // there are values specific to comply wit the treemodel model, we set them explicitly here 
@@ -124,7 +125,7 @@ canGenerateNewCell(): boolean {
 /** Generate a new cell from this model, using defaults if available */
 generateCell():Cell {
 	
-	let cellURI = "/"+this.getAdoptionName()+"(0)"; // this is will be changed on adoption
+	let cellURI = "/"+this.getAdoptionName()+"(0)";    // this is will be changed on adoption
 	let desc = "";									// empty description for the moment
 	let newCell:Cell = new Cell(this.schema, 
 								cellURI, 
@@ -133,7 +134,7 @@ generateCell():Cell {
 								this.getAdoptionURI(), 
 								this.isSimple);
 	if (this.defaultValue) {
-	    newCell.value = this.defaultValue;
+		newCell.value = this.defaultValue;
 	}
 	
 	newCell.cellModel = this;						// we associate the cell model straightaway, easy peasy =)
@@ -208,8 +209,8 @@ private generateAttributeFrom(attribute: CellModel): Cell {
 								attribute.getAdoptionURI(), 
 								attribute.isSimple);	// should always be true
 
-	if (attribute.defaultValue) {                  // sanity check, as we only generate	       
-	    newCell.value = attribute.defaultValue;    // attributes for defaults for now
+	if (attribute.defaultValue) {				   // sanity check, as we only generate		   
+		newCell.value = attribute.defaultValue;	   // attributes for defaults for now
 	}
 	
 	newCell.cellModel = attribute; // associate the cell model straightaway, yo! =)
@@ -235,6 +236,7 @@ isReference: boolean;
 type_: Type_;
 minOccurs: number;
 maxOccurs?: number;
+isAttribute?: boolean;
 defaultValue?: string;
 
 attributes?: CellModelJSON[];

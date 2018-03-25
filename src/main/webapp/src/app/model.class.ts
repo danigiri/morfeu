@@ -74,6 +74,7 @@ equals(m:FamilyMember) {
 adopt(newMember:Cell, position:number) {}
 
 
+//// SerialisableToJSON ////
 // check out this excellent post http://choly.ca/post/typescript-json/ to find out how to deserialize objects
 toJSON(): ModelJSON {
 	return Object.assign({}, this, {cellModels: this.cellModels.map(cm =>cm.toJSON()) });

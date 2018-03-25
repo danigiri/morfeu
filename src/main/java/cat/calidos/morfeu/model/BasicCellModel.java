@@ -29,10 +29,11 @@ private Type type;
 private int minOccurs;
 private OptionalInt maxOccurs;
 private Optional<String> defaultValue;
+private boolean isAttribute;
+protected boolean isSimple = true;
 private Metadata metadata;
 private boolean isReference;
 private Optional<CellModel> reference;
-protected boolean isSimple = true;
 
 
 public BasicCellModel(URI u, 
@@ -41,14 +42,16 @@ public BasicCellModel(URI u,
 						Type type,  
 						int minOccurs, 
 						int maxOccurs, 
+						boolean isAttribute,
 						Optional<String> defaultValue, 
 						Metadata meta) {
 
 	super(u, name, desc);
 
+	this.type = type;
 	this.minOccurs = minOccurs;
 	this.maxOccurs = maxOccurs==CellModel.UNBOUNDED ? OptionalInt.empty() : OptionalInt.of(maxOccurs);
-	this.type = type;
+	this.isAttribute = isAttribute;
 	this.defaultValue = defaultValue;
 	this.metadata = meta;
 	this.isReference = false;
@@ -56,17 +59,19 @@ public BasicCellModel(URI u,
 	
 }
 
+
 public BasicCellModel(URI u, 
 		String name, 
 		String desc, 
 		Type type,  
 		int minOccurs, 
 		int maxOccurs, 
+		boolean isAttribute,
 		Optional<String> defaultValue, 
 		Metadata meta,
 		CellModel ref) {
 	
-	this(u, name, desc, type, minOccurs, maxOccurs, defaultValue, meta);
+	this(u, name, desc, type, minOccurs, maxOccurs, isAttribute, defaultValue, meta);
 
 	this.isReference = true;
 	this.reference = Optional.of(ref);
@@ -87,6 +92,12 @@ public boolean isSimple() {
 public boolean isComplex() {
 	// this is implemented as jtwig is unable to use a default interface method
 	return !isSimple();
+}
+
+
+@Override
+public boolean isAttribute() {
+	return isAttribute;
 }
 
 
