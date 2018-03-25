@@ -17,5 +17,5 @@
 export interface Lifecycle {
     
 /** delete this element */
-remove();
+delete();
 }

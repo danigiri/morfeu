@@ -211,21 +211,28 @@ adopt(orphan:Cell, position:number) {
 }
 
 
-removeChild(child:Cell) {
+remove(child:Cell) {
 
-	let position:number = child.position;
-	let newChildren:Cell[] = [];
-	let i:number = 0;
-	this.children.forEach(c => {
-		if (i<position) { //>
-			newChildren.push(c);
-		} else if (i>position) {
-			newChildren.push(c.setPosition(i-1));	 // set the following children to a shifted -1 position
-		}
-		i++;
-	});		  
-	this.children = newChildren;
- 
+    if (child.cellModel.isAttribute) {
+        
+        this.attributes =  this.attributes.filter( a => a.getURI()!=child.getURI());
+
+    } else {    // assuming child
+        let position = child.position;
+        let newChildren:Cell[] = [];
+        let i:number = 0;
+        this.children.forEach(c => {
+            if (i<position) { //>
+                    newChildren.push(c);
+            } else if (i>position) {
+                newChildren.push(c.setPosition(i-1));    // set the following elems to a shifted -1 position
+            }
+            i++;
+        });   
+        this.children = newChildren;
+    
+    } 
+
 }
 
 
@@ -373,10 +380,10 @@ private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
 
 //// Lifecycle ////
 
-remove() {
+delete() {
     
     if (this.parent) {  // sanity check
-        this.parent.removeChild(this);
+        this.parent.remove(this);
     }
     
 }
@@ -452,7 +459,6 @@ static reviver(key: string, value: any): any {
 	return key === "" ? CELL.fromJSON(value) : value;
 
 }
-
 
 }
 

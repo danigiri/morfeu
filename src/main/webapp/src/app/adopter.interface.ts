@@ -23,7 +23,7 @@ export interface Adopter extends FamilyMember {
 /** new cell must not have a parent */
 adopt(orphan:Cell, position:number);
 
-/** remove this child from our children */ 
-removeChild(child:Cell);
+/** remove this child from our children or attributes */ 
+remove(child:Cell);
 
 }

@@ -356,7 +356,7 @@ adoptCellAtPosition(newCell:Cell, position:number) {
 	this.events.service.publish(new CellDeactivatedEvent(newCell));
 	// must be an orphan before adopting
 	if (newCell.parent) {
-		newCell.parent.removeChild(newCell);
+		newCell.parent.remove(newCell);
 	}
 	this.cell.adopt(newCell, position);
 

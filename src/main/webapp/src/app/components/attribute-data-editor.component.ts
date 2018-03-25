@@ -34,7 +34,7 @@ import { CellModel } from "../cell-model.class";
 					attr.aria-describedby="{{cellModel.desc}}" 
 					[(ngModel)]="this.value" 
 					/>
-                 <div class="input-group-append">
+                 <div *ngIf="cellModel.minOccurs==0" class="input-group-append">
                     <img class="btn btn-outline-danger float-right" 
                         src="assets/images/open-iconic/circle-x.svg" 
                         (click)="delete()"
@@ -76,9 +76,10 @@ set value(v: string) {
 
 // delete current value
 private delete() {
-    
+
     console.log("[UI] deleting cell attribute ", this.cellModel.name);
-    
+    Promise.resolve(null).then(() => 
+        this.parentCell.remove(this.parentCell.attributes.find(a=> a.name==this.cellModel.name)));
     
 }
 }

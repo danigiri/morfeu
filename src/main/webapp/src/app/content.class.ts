@@ -74,11 +74,13 @@ getParent():FamilyMember {
 	return undefined;
 }
 
+
 adopt(orphan:Cell, position:number) {
 	//TODO: to be implemented
 }
 
-removeChild(child:Cell) {
+
+remove(child:Cell) {
 	//TODO: to be implemented
 }
 
@@ -99,7 +101,7 @@ fromJSON(json: ContentJSON|string): Content {
 		let content = Object.create(Content.prototype);
 		content = Object.assign(content, json);
 		content = Object.assign(content, {children: json.children.map(c => {
-			let fullCell:Cell = Cell.fromJSON(c);
+			let fullCell:Cell = Object.create(Cell.prototype).fromJSON(c);
 				fullCell.position = i++;
 				fullCell.parent = content;
 				return fullCell;

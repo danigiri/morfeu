@@ -122,7 +122,7 @@ private rollbackChanges() {
 	let parent = this.cell.parent;
 
 	console.log("[UI] Discard changes at position "+position);
-	parent.removeChild(this.cell);	  // TODO: slow but no need to change the interface for now
+	parent.remove(this.cell);	  // TODO: slow but no need to change the interface for now
 	this.cellBackup.parent = undefined; // backup must be an orphan for it to be adopted
 	parent.adopt(this.cellBackup, position);
 	
