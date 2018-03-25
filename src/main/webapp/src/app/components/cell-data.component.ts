@@ -70,7 +70,8 @@ import { EventService } from "../events/event.service";
 						[cellModel]="a"
 						[isFromModel]="cell==undefined"
 						></attribute-data-info>
-					<li *ngIf="cell!=undefined && remainingAttributes()>0" class="list-group-item">Not used: {{remainingAttributes()}} attribute(s)</li>
+                    <li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
+                    <li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
 				</ul>
 			</ng-container>
 			<ng-container *ngIf="editor">
