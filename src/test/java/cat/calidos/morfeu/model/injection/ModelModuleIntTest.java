@@ -109,9 +109,11 @@ public void testMetadataDirectives() {
 	Metadata meta = col.children().child("data").getMetadata();
 	Map<String, Set<String>> directives = meta.getDirectives();
 	assertNotNull(directives);
-	assertEquals(1, directives.size());
+	assertEquals(2, directives.size());
 	assertTrue(directives.containsKey("obj-to-yaml"));
 	assertTrue(directives.get("obj-to-yaml").contains("LISTS-NO-PLURAL"));
+	assertTrue(directives.containsKey("yaml-to-xml"));
+	assertTrue(directives.get("yaml-to-xml").contains("LISTS-NO-PLURAL"));
 	
 	Metadata meta2 = col.children().child("data2").getMetadata();
 

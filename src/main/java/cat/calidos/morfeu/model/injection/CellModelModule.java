@@ -279,13 +279,13 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	}
 
 	Composite<CellModel> children = new OrderedMap<CellModel>();
-	
+
 	XSComplexType complexType = elem.getType().asComplexType();
 	XSContentType contentType = complexType.getContentType();
 	if (contentType.asEmpty()!=null) {
 		return new OrderedMap<CellModel>(0);							// * base case, no children, we return
 	}
-	
+
 	XSParticle particle = contentType.asParticle();					// * recursive case, go through all children
 	LinkedList<XSParticle> termTypes = new LinkedList<XSParticle>();	// list of all the particles left to process
 	termTypes.add(particle);
@@ -293,11 +293,11 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 		particle = termTypes.removeFirst();
 
 		if (particle.getTerm().isModelGroup()) {
-			// FIXME: this is reverse order!!!
+
 			// FIXME: we need to see what to do when we have more complex groups like unions and stuff 
 			XSModelGroup typeModelGroup = particle.getTerm().asModelGroup();
 			typeModelGroup.iterator().forEachRemaining(m -> termTypes.add(m.asParticle()));
-			//typeModelGroup.iterator().forEachRemaining(m -> termTypes.addFirst(m.asParticle()));
+
 		} else {
 
 			XSElementDecl childElem = particle.getTerm().asElementDecl();
@@ -313,9 +313,9 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 
 		}
 	}
-	
+
 	return children;
-	
+
 }
 
 

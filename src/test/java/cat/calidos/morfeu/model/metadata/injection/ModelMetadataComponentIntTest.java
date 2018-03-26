@@ -81,7 +81,7 @@ public void testTransformAttributes() {
 	assertNotNull(ytxAttributes);
 	assertEquals("We should have two yaml-to-xml attributes", 2, ytxAttributes.size());
 	assertTrue(ytxAttributes.contains("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""));
-	assertTrue(ytxAttributes.contains("xmlns:mf=\"http://dani.calidos.com/morfeu/metadata\""));
+	assertTrue(ytxAttributes.contains("xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\""));
 	
 }
 
