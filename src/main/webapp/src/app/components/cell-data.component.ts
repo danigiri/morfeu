@@ -76,7 +76,7 @@ import { EventService } from "../events/event.service";
 			</ng-container>
 			<ng-container *ngIf="editor">
 					<form>
-						<textarea *ngIf="showValue()"
+						<textarea *ngIf="cell.value && showValue()"
 							class="cell-data-value form-control" 
 							id="" 
 							rows="3"
@@ -84,6 +84,10 @@ import { EventService } from "../events/event.service";
 							attr.aria-label="{{cellModel.name}}.value" 
 							attr.aria-describedby="{{cellModel.desc}} value" 
 							[(ngModel)]="cell.value"></textarea>
+							<img class="btn btn-outline-danger float-right" 
+                                src="assets/images/open-iconic/circle-x.svg" 
+                                (click)="removeValue()"
+                                /><!-- TODO: add the PLUS BUTTON -->
 						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
 							<attribute-data-editor *ngFor="let a of cellModel.attributes" 
 								[parentCell]="cell" 
@@ -177,6 +181,14 @@ private showPresentation() {
 
 private showValue() {
 	return this.cellModel.presentation=="TEXT"; // if we need to show the text area or not
+}
+	
+
+private removeValue() {
+    
+    console.log("[UI] Removing value for '%s'", this.uri);
+    this.cell.removeValue();
+    
 }
 
 }

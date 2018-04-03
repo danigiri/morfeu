@@ -298,6 +298,12 @@ deepClone(): Cell {
 }
 
 
+// no value for this cell
+removeValue() {
+    delete this['value'];
+}
+
+
 // replaces the prefix of the URI with a new one, recursively
 private replaceURIPrefix_(old:string, newPrefix:string): Cell {
 

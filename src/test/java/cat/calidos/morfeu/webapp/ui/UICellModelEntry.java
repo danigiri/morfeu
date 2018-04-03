@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -71,8 +71,12 @@ public UIWidget<UICellModelEntry> clickOnArrow() {
 
 public UICellModelEntry hover() {
 
-	element.$(".cell-model-thumb").scrollTo().hover();
-	
+	SelenideElement thumb = element.$(".cell-model-thumb");
+	try {
+		Thread.sleep(10);
+	} catch (Exception e) {}
+	thumb.hover();
+
 	return this;
 	
 }
