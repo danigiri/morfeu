@@ -51,7 +51,7 @@ import { EventService } from "../events/event.service";
 				<img *ngIf="showPresentation()" class="card-img-bottom" src="{{this.cellModel.getPresentation()}}" alt="Card image cap">		
 				<!-- if we have a value field we should show it (readonly!) -->
 				<div class="card-body">
-					 <form *ngIf="cell!=undefined && cell.value && showValue()">
+					 <form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
 							<textarea readonly
 								class="card-text" 
 								id="" 
@@ -76,7 +76,7 @@ import { EventService } from "../events/event.service";
 			</ng-container>
 			<ng-container *ngIf="editor">
 					<form>
-						<textarea *ngIf="cell.value && showValue()"
+						<textarea *ngIf="cell.value!=undefined && showValue()"
 							class="cell-data-value form-control" 
 							id="" 
 							rows="3"
@@ -84,10 +84,19 @@ import { EventService } from "../events/event.service";
 							attr.aria-label="{{cellModel.name}}.value" 
 							attr.aria-describedby="{{cellModel.desc}} value" 
 							[(ngModel)]="cell.value"></textarea>
-							<img class="btn btn-outline-danger float-right" 
-                                src="assets/images/open-iconic/circle-x.svg" 
-                                (click)="removeValue()"
-                                /><!-- TODO: add the PLUS BUTTON -->
+							<!-- remove value button -->
+							<img  *ngIf="cell.value!=undefined && showValue()"
+							    class="btn btn-outline-danger float-right" 
+                                 src="assets/images/open-iconic/circle-x.svg" 
+                                 (click)="removeValue()"
+                                />
+                            <!-- plus value button -->
+                            <img  *ngIf="cell.value==undefined && showValue()"
+                                class="btn btn-outline-danger float-right" 
+                                 src="assets/images/open-iconic/plus.svg" 
+                                 (click)="createValue()"
+                                />
+
 						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
 							<attribute-data-editor *ngFor="let a of cellModel.attributes" 
 								[parentCell]="cell" 
@@ -182,12 +191,20 @@ private showPresentation() {
 private showValue() {
 	return this.cellModel.presentation=="TEXT"; // if we need to show the text area or not
 }
-	
+
+
+private createValue() {
+    
+    console.log("[UI] Create new (empty|default) value for '%s'", this.uri);
+    Promise.resolve(null).then(() => this.cell.createValue());
+    
+}
+
 
 private removeValue() {
     
     console.log("[UI] Removing value for '%s'", this.uri);
-    this.cell.removeValue();
+    Promise.resolve(null).then(() => this.cell.removeValue());
     
 }
 

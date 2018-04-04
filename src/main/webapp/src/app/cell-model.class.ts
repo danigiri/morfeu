@@ -26,6 +26,8 @@ import { CellModelComponent } from "./cell-model.component";
 
 export class CellModel implements FamilyMember {
 
+static readonly DEFAULT_EMPTY_VALUE = "";
+    
 id: string;
 isExpanded: boolean;
 

@@ -304,6 +304,12 @@ removeValue() {
 }
 
 
+// create a new value for this cell, using the cellmodel default value or empty
+createValue() {
+    this.value = this.cellModel.defaultValue ? this.cellModel.defaultValue : CellModel.DEFAULT_EMPTY_VALUE;
+}
+
+
 // replaces the prefix of the URI with a new one, recursively
 private replaceURIPrefix_(old:string, newPrefix:string): Cell {
 
