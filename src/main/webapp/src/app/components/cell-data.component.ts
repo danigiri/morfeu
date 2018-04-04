@@ -84,17 +84,19 @@ import { EventService } from "../events/event.service";
 							attr.aria-label="{{cellModel.name}}.value" 
 							attr.aria-describedby="{{cellModel.desc}} value" 
 							[(ngModel)]="cell.value"></textarea>
-							<!-- remove value button -->
-							<img  *ngIf="cell.value!=undefined && showValue()"
-							    class="btn btn-outline-danger float-right" 
-                                 src="assets/images/open-iconic/circle-x.svg" 
-                                 (click)="removeValue()"
-                                />
-                            <!-- plus value button -->
+                            <!-- create new value button -->
                             <img  *ngIf="cell.value==undefined && showValue()"
+                                id="cell-data-create-value-button"
                                 class="btn btn-outline-danger float-right" 
                                  src="assets/images/open-iconic/plus.svg" 
                                  (click)="createValue()"
+                                />
+							<!-- remove value button -->
+							<img  *ngIf="cell.value!=undefined && showValue()"
+							    id="cell-data-remove-value-button"
+							    class="btn btn-outline-danger float-right" 
+                                 src="assets/images/open-iconic/circle-x.svg" 
+                                 (click)="removeValue()"
                                 />
 
 						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
@@ -117,6 +119,8 @@ import { EventService } from "../events/event.service";
 			.cell-data-model-desc {}
 			.cell-data-uri {}
 			.cell-data-source {}
+			#cell-data-create-value-button {}
+			#cell-data-remove-value-button {}
 	`]
 })
 

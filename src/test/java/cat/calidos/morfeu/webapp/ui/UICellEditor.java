@@ -52,6 +52,38 @@ public UICellEditor clickDiscard() {
 }
 
 
+public boolean isRemoveValueVisible() {
+	
+	return $("#cell-data-remove-value-button").exists();
+	
+}
+
+
+public UICellEditor clickRemoveValue() {
+	
+	$("#cell-data-remove-value-button").click();
+	
+	return this;
+	
+}
+
+
+public boolean isCreateValueVisible() {
+	
+	return $("#cell-data-create-value-button").exists();
+	
+}
+
+
+public UICellEditor clickCreateValue() {
+	
+	$("#cell-data-create-value-button").click();
+	
+	return this;
+	
+}
+
+
 public UICellData cellData() {
 	return new UICellData(element);
 }

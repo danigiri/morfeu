@@ -42,7 +42,7 @@ private UIContent content;
 
 @Before
 public void setup() {
-	
+
 	open(appBaseURL);
 	content = UICatalogues.openCatalogues()
 			.shouldAppear()
@@ -51,7 +51,7 @@ public void setup() {
 			.content();
 	content.shouldBeVisible();
 	test = content.rootCells().get(0);
-	
+
 }
 
 
