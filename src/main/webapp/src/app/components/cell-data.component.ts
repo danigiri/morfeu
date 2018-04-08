@@ -53,7 +53,7 @@ import { EventService } from "../events/event.service";
 				<div class="card-body">
 					 <form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
 							<textarea readonly
-								class="card-text" 
+								class="cell-data-value card-text" 
 								id="" 
 								rows="3"
 								name="{{cellModel.name}}.value"

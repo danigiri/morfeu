@@ -19,6 +19,8 @@ package cat.calidos.morfeu.webapp.ui;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
+import java.util.Optional;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +51,13 @@ public UICellEditor clickDiscard() {
 	
 	return this;
 
+}
+
+
+public Optional<String> getValue() {
+	return $("#cell-editor .cell-data-value").exists() 
+			? Optional.of($("#cell-editor .cell-data-value").val()): Optional.empty();
+		
 }
 
 

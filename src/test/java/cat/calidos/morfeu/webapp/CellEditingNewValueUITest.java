@@ -19,13 +19,19 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.Assert.*;
 
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UICellEditor;
+import cat.calidos.morfeu.webapp.ui.UICellModelEntry;
 import cat.calidos.morfeu.webapp.ui.UIContent;
+import cat.calidos.morfeu.webapp.ui.UIDocument;
+import cat.calidos.morfeu.webapp.ui.UIDropArea;
+import cat.calidos.morfeu.webapp.ui.UIModel;
 
 /**
 * @author daniel giribet
@@ -34,19 +40,20 @@ public class CellEditingNewValueUITest extends UITezt {
 
 private UICell test;
 private UIContent content;
+private UIModel model;
 
 @Before
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()
-			.shouldAppear()
-			.clickOn(0)
-			.clickOnDocumentNamed("Document 3")
-			.content();
-	content.shouldBeVisible();
+	UIDocument doc = UICatalogues.openCatalogues()
+					.shouldAppear()
+					.clickOn(0)
+					.clickOnDocumentNamed("Document 3");
+	content = doc.content();
 	test = content.rootCells().get(0);
-
+	model = doc.model();
+	
 }
 
 
@@ -60,10 +67,50 @@ public void removeCellValue() {
 
 	UICellEditor stuffEditor = stuff.edit().shouldAppear();
 	assertNotNull(stuffEditor);
+	Optional<String> value = stuffEditor.getValue();
+	assertTrue(value.isPresent());
+	assertEquals("Stuff content", value.get());
 	assertFalse("Should not be able to create a value for this cell",  stuffEditor.isCreateValueVisible());
 	assertTrue("Should be able to remove value for this cell",  stuffEditor.isRemoveValueVisible());
 
+	stuffEditor.clickRemoveValue();
+	value = stuffEditor.getValue();
+	assertFalse(value.isPresent());
+
 }
 
+
+@Test
+public void addCellValue() {
+	
+	//target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)
+	
+
+	// TEST->ROW->COL->STUFF
+	UICellModelEntry stuffModel = model.rootCellModels().get(0).child("row").child("col").child("stuff");	
+	stuffModel.hover();
+	
+	UICell col = test.child("row(0)").child("col(0)");
+	assertEquals("We should have four children at the beginning", 4, col.children().size());
+	UIDropArea targetDropArea = col.dropArea(0);
+	targetDropArea.select();
+	
+	// create a new stuff element through the keyboard shortcut
+	model.pressKey(UIModel.NEW_CELL);
+	assertEquals("We should have 5 children after adding a new 'stuff'", 5, col.children().size());
+	
+	UICell stuff = test.child("row(0)").child("col(0)").child("stuff(0)");
+	UICellEditor stuffEditor = stuff.select().activate().edit().shouldAppear();
+	assertNotNull(stuffEditor);
+	Optional<String> value = stuffEditor.getValue();
+	assertFalse(value.isPresent());
+	assertTrue("Should be able to create a value for new cell",  stuffEditor.isCreateValueVisible());
+	assertFalse("Should not be able to remove value for new cell",  stuffEditor.isRemoveValueVisible());
+
+	// CONTINUE TO ADD NEW VALUE
+	
+	//FIXME: JUST FOUND A BUG, THE SECOND TIME WE LOAD A DOCUMENT, THE CELL SELECTION SHORTCUTS DON'T WORK AS EXPECTED
+	
+}
 
 }
