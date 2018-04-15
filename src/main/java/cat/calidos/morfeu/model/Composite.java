@@ -25,12 +25,14 @@ import java.util.stream.Stream;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public interface Composite<T> {
 
+public boolean hasChildren();
+
+
 /** @return all children of this composite object */
 public List<T> asList();
 
 /** how many children do we have */
 public int size();
-
 
 /** @return child element at position i */
 public T child(int i);

@@ -3,8 +3,8 @@
 {%- set i = indent -%}
 {%- set d =  meta.getDirectivesFor(case) -%}
 {% if d.contains("ATTRIBUTES-ONLY") or hidename==true -%}
-{% else -%}
-	{{-i}}{{ cell.name }}:{% set i = concat(i,'  ') %}
+{% else -%}											{#- the include will handle the empty values -#}
+	{{-i}}{{ cell.name }}:{% set i = concat(i,'  ') %}{%include "empty-cell-to-yaml.twig" with {'c': cell} only %}
 {% endif -%}
 {%- if cell.isComplex -%}
 	{#- ____________ complex content case ____________ -#}
@@ -26,7 +26,7 @@
 				{%- set name = concat(c.name,'s') -%}
 			{%- endif -%}
 			{%- if current != c.name -%}
-			{{- i }}{{name}}:
+			{{- i }}{{name}}:{%include "empty-cell-to-yaml.twig" with {'c': c} only %}
 {% set current = c.name -%}
 			{%- endif -%}
 			{%- if c.isComplex -%}{# FIXME: we do not assume it's a list if maxOccurs is==1 #}
@@ -35,7 +35,7 @@
 {%include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -%}
 		{%- endfor -%}
 	{%- endif -%}
-{%- else -%}
+{%- elseif cell.value.isPresent -%}
 	{#- ____________ simple content case ____________ -#}
 	{{-i}}- {{ cell.value.get }}
 {%endif -%}

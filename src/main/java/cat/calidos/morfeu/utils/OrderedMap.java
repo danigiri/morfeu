@@ -58,6 +58,12 @@ public OrderedMap(int initialCapacity) {
 
 
 @Override
+public boolean hasChildren() {
+	return hasAttributes();
+}
+
+
+@Override
 public boolean hasAttributes() {
 
 	return !keys.isEmpty();

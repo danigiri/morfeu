@@ -146,15 +146,15 @@ public void checkCellModelData() {
 	UICellData testData = testModelEntry.cellInfo().shouldAppear();
 	assertTrue("cell data from hovering on the model should come from the model", testData.isFromModel());
 	assertFalse("cell data from hovering on the model should come from the model", testData.isFromCell());
-	
+
 	String header = testData.header();
 	assertTrue("Bad information from model, we did not get 'test' in the cell info header", header.contains("test"));
 	assertTrue("Bad information from model, should have 1..1 as the cardinality of 'test'", header.contains("[1..1]"));
-	
+
 	String desc = testData.desc();
 	String expectedDesc = "Root cell-model desc";
 	assertTrue("Bad information from model, does not have the correct description", desc.contains(expectedDesc));
-	
+
 	List<UIAttributeData> attributes = testData.attributes();
 	assertNotNull(attributes);
 	assertEquals("Wrong number of attributes of 'test', should be 1", 1, attributes.size());

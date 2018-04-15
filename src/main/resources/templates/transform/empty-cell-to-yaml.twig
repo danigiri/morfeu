@@ -1,0 +1,4 @@
+{#- if we are empty -#}{% if c.isSimple %}{% if c.isPresent %}{% else %} {}{% endif -%}
+{%- elseif c.isComplex -%}x {{c.asComplex.attributes.hasAttributes}},{{c.asComplex.children.hasChildren}}
+	{%- if (not c.asComplex.attributes.hasAttributes) and (not c.asComplex.children.hasChildren) -%} {}{% endif -%}
+{%- endif %}

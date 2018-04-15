@@ -110,7 +110,7 @@ public void enterText(String value) {
 	if (isCreateValueVisible()) {
 		throw new UnsupportedOperationException("Cannot set the value when text field is not visible");
 	}
-	
+
 	// cannot get selenide to select the element (textarea is missing in the setValue method)
 	// so we send the keys which works
 	content.pressKey("\t");

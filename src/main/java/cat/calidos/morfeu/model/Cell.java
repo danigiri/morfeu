@@ -73,4 +73,13 @@ public Optional<String> getValue() {
 }
 
 
+/* (non-Javadoc)
+* @see java.lang.Object#toString()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public String toString() {
+	return name+":{value:'"+value.orElse("<novalue>")+"', uri:"+uri+"}";
+}
+
+
 }

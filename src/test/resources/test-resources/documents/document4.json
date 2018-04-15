@@ -1,0 +1,8 @@
+{
+	"name": "Document 4"
+	,"desc": "Third document - empty values and ids"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/documents/document4.xml"
+	
+}

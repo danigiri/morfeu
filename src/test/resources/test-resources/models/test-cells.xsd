@@ -36,7 +36,7 @@
 					<mf:default-value name="@number">0</mf:default-value>
 					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
 					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
-					<mf:identifier>text</mf:identifier>
+					<mf:identifier name="@text" />
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
@@ -44,6 +44,22 @@
 		<xs:attribute name="number" use="required" type="numberField" />
 	</xs:complexType>
 
+	<xs:complexType name="testEmptyCell">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>testIdCell desc (one field identifier)</mf:desc>
+					<mf:thumb>assets/images/data4-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/data4-cell.svg</mf:cell-presentation>
+					<mf:default-value name="@number">0</mf:default-value>
+					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="text" type="textField" />
+		<xs:attribute name="number" type="numberField" />
+	</xs:complexType>
 
 	<xs:complexType name="colCell">
 		<xs:annotation>

@@ -19,6 +19,9 @@ package cat.calidos.morfeu.model.transform;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -26,7 +29,10 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cat.calidos.morfeu.model.transform.injection.DaggerTransformComponent;
+import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -34,22 +40,23 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TransformJSONToXMLIntTest extends TransformTezt {
+public class TransformNoValueIntTest extends TransformTezt {
 
 private String content;
 
 @Before
 public void setup() throws Exception {
 
-	File inputFile = new File("target/test-classes/test-resources/transform/document1-as-view.json");
+	File inputFile = new File("target/test-classes/test-resources/transform/document4-as-view.json");
 	content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
-	
+
 }
 
 
 @Test
-public void testTransformUsingTemplate() throws Exception {
+public void testTransformJSONToXML() throws Exception {
 
+	
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	assertNotNull(json);
 
@@ -59,27 +66,29 @@ public void testTransformUsingTemplate() throws Exception {
 											.build()
 											.render();
 	//System.err.println(transformed);
-	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	compareWithXML(transformed, "target/test-classes/test-resources/documents/document4.xml");
 
 }
 
 
 @Test
-public void testTransform() throws Exception {
+public void testTransformJSONToYAML() throws Exception {
 
-	String transforms = "string-to-json,content-to-xml";
+	Document doc = produceDocumentFromPath("test-resources/documents/document4.json");
+	assertNotNull(doc);
+
+	Map<String, Object> values = new HashMap<String, Object>(2);
+	values.put("cells", doc.getContent().asList());
+	values.put("model", doc.getModel());
 	
-	Transform<String, String> transform = DaggerTransformComponent.builder()
-																.transforms(transforms)
-																.build()
-																.transformation()
-																.get();
-	
-	
-	String transformed = transform.apply(content);
-	//System.err.println(transformed);
-	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	String transformed = DaggerViewComponent.builder()
+			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withValue(values)
+			.build()
+			.render();
+System.err.println(transformed);
 	
 }
+
 
 }
