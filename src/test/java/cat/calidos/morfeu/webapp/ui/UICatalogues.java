@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,15 +18,12 @@ package cat.calidos.morfeu.webapp.ui;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-
-import com.codeborne.selenide.ElementsCollection;
 
 /**
 * @author daniel giribet
@@ -46,6 +43,14 @@ public UICatalogues shouldAppear() {
 
 	return this;
 
+}
+
+
+public UICatalogues shouldBeVisible() {
+
+	$("#catalogue-list").shouldBe(visible);
+	
+	return this;
 }
 
 

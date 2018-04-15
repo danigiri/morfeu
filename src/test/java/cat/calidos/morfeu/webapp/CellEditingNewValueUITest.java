@@ -22,6 +22,7 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -48,9 +49,11 @@ public void setup() {
 	open(appBaseURL);
 	UIDocument doc = UICatalogues.openCatalogues()
 					.shouldAppear()
+					.shouldBeVisible()
 					.clickOn(0)
 					.clickOnDocumentNamed("Document 3");
-	content = doc.content();
+	doc.shouldBeVisible();
+	content = doc.content().shouldAppear();
 	test = content.rootCells().get(0);
 	model = doc.model();
 	
@@ -107,7 +110,12 @@ public void addCellValue() {
 	assertTrue("Should be able to create a value for new cell",  stuffEditor.isCreateValueVisible());
 	assertFalse("Should not be able to remove value for new cell",  stuffEditor.isRemoveValueVisible());
 
-	// CONTINUE TO ADD NEW VALUE
+	stuffEditor.clickCreateValue();
+	assertFalse("Should not be able to create a value again",  stuffEditor.isCreateValueVisible());
+	assertTrue("Should be able to remove value for this cell",  stuffEditor.isRemoveValueVisible());
+
+	stuffEditor.enterText("Foo bar");
+	assertEquals("Foo bar", stuffEditor.getValue().get());
 	
 	//FIXME: JUST FOUND A BUG, THE SECOND TIME WE LOAD A DOCUMENT, THE CELL SELECTION SHORTCUTS DON'T WORK AS EXPECTED
 	

@@ -233,7 +233,7 @@ public UICellEditor edit() {
 	}
 	content.pressKey("e");
 	
-	return new UICellEditor();
+	return new UICellEditor(content);
 	
 }
 

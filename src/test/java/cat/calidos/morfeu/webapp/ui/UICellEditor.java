@@ -21,13 +21,24 @@ import static com.codeborne.selenide.Selenide.$;
 
 import java.util.Optional;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICellEditor extends UIWidget<UICellEditor> {
 
-public UICellEditor() {
+private UIContent content;
+
+
+public UICellEditor(UIContent content) {
 	super($("#cell-editor .cell-data"));
+	
+	this.content = content;
 }
 
 
@@ -55,8 +66,8 @@ public UICellEditor clickDiscard() {
 
 
 public Optional<String> getValue() {
-	return $("#cell-editor .cell-data-value").exists() 
-			? Optional.of($("#cell-editor .cell-data-value").val()): Optional.empty();
+	return $(".cell-data-value").exists() 
+			? Optional.of($(".cell-data-value").val()): Optional.empty();
 		
 }
 
@@ -90,6 +101,21 @@ public UICellEditor clickCreateValue() {
 	
 	return this;
 	
+}
+
+
+
+public void enterText(String value) {
+
+	if (isCreateValueVisible()) {
+		throw new UnsupportedOperationException("Cannot set the value when text field is not visible");
+	}
+	
+	// cannot get selenide to select the element (textarea is missing in the setValue method)
+	// so we send the keys which works
+	content.pressKey("\t");
+	content.pressKey(value);
+
 }
 
 

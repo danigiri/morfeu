@@ -54,7 +54,6 @@ import { EventService } from "../events/event.service";
 					 <form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
 							<textarea readonly
 								class="cell-data-value card-text" 
-								id="" 
 								rows="3"
 								name="{{cellModel.name}}.value"
 								attr.aria-label="{{cellModel.name}}.value" 
@@ -77,8 +76,7 @@ import { EventService } from "../events/event.service";
 			<ng-container *ngIf="editor">
 					<form>
 						<textarea *ngIf="cell.value!=undefined && showValue()"
-							class="cell-data-value form-control" 
-							id="" 
+							class="cell-data-value cell-data-value-field form-control"
 							rows="3"
 							name="{{cellModel.name}}.value"
 							attr.aria-label="{{cellModel.name}}.value" 
@@ -113,7 +111,8 @@ import { EventService } from "../events/event.service";
 	styles:[`
 			.cell-data {}
 			.cell-data-info {}
-			.cell-data-value {}
+            .cell-data-value {}
+            .cell-data-value-field {}
 			.cell-data-editor {}
 			.cell-data-header {}
 			.cell-data-model-desc {}
