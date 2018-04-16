@@ -67,6 +67,17 @@
 									"desc": "",
 									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff",
 									"isSimple": true
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/document4.xml/test(0)/row(0)/col(0)/data4(1)",
+									"name": "data4",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data4",
+									"isSimple": false,
+									"attributes": [],
+									"internalAttributes": [],
+									"children": []
 								}
 							]
 						}

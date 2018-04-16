@@ -48,10 +48,9 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:metadata>
-					<mf:desc>testIdCell desc (one field identifier)</mf:desc>
+					<mf:desc>testEmptyCell desc (all fields optional)</mf:desc>
 					<mf:thumb>assets/images/data4-thumb.svg</mf:thumb>
 					<mf:cell-presentation>assets/images/data4-cell.svg</mf:cell-presentation>
-					<mf:default-value name="@number">0</mf:default-value>
 					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
 					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
 				</mf:metadata>
@@ -77,6 +76,7 @@
 			<xs:element name="data" type="testCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data2" type="testCell" minOccurs="0" maxOccurs="2"/>
 			<xs:element name="data3" type="testIdCell" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="data4" type="testEmptyCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="size" use="required" type="colField" />
