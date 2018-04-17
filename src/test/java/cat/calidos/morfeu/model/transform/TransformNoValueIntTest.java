@@ -28,6 +28,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
@@ -86,8 +88,26 @@ public void testTransformJSONToYAML() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-System.err.println(transformed);
+	System.err.println(transformed);
 	
+	YAMLMapper mapper = new YAMLMapper();
+	JsonNode yaml = mapper.readTree(transformed);
+	assertNotNull(yaml);
+	assertTrue(yaml.isObject());
+	assertTrue(yaml.has("rows"));
+
+	JsonNode col = yaml.get("rows").get(0).get("cols").get(0);	//rows/cols/col
+	assertNotNull(col);
+	assertTrue(col.isObject());
+	assertTrue(col.has("stuff"));
+	assertTrue(col.has("data4"));
+
+	JsonNode stuff = col.get("stuff");
+	assertEquals("stuff : {} in transformed yaml should be an empty node", 0, stuff.size());
+	
+	JsonNode data4 = col.get("data4");
+	assertEquals("data4: {} in transformed yaml should be an empty node", 0, data4.size());
+
 }
 
 
