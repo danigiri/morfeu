@@ -31,11 +31,14 @@
 			{%- endif -%}
 			{%- if c.isComplex -%}{# FIXME: we do not assume it's a list if maxOccurs is==1 #}
 				{%-if c.value.isPresent or c.asComplex.attributes.hasAttributes or c.asComplex.children.hasChildren%}{{ ilist }}-{%endif%}
-{% endif -%}
 {%include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -%}
+			{%- else -%}
+				{#- ____________ simple content case ____________ -#}
+				{%- include "cell-simple-to-yaml.twig" with {'cell': c, 'indent': i} only -%}
+{% endif -%}
 		{%- endfor -%}
 	{%- endif -%}
-{%- elseif cell.value.isPresent -%}
+{%- else -%}
 	{#- ____________ simple content case ____________ -#}
-	{{-i}}- {{ cell.value.get }}
+	{%- include "cell-simple-to-yaml.twig" with {'cell': cell, 'indent': i} only -%}
 {%endif -%}

@@ -40,8 +40,8 @@
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
-		<xs:attribute name="text" type="textField" />
-		<xs:attribute name="number" use="required" type="numberField" />
+		<xs:attribute name="text" use="required" type="textField" />
+		<xs:attribute name="number" type="numberField" />
 	</xs:complexType>
 
 	<xs:complexType name="testEmptyCell">
@@ -81,8 +81,7 @@
 		</xs:sequence>
 		<xs:attribute name="size" use="required" type="colField" />
 	</xs:complexType>
-		   
-		   
+
 	<xs:complexType name="rowCell">
 		<xs:annotation>
 			<xs:appinfo>
@@ -98,6 +97,5 @@
 		</xs:sequence>
 		<xs:attribute name="number" type="numberField" />
 	</xs:complexType>
-	
-	
+
 </xs:schema>

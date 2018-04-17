@@ -25,7 +25,7 @@ public class TransformYAMLToContentIntTest extends TransformTezt {
 
 @Test
 public void testTransformUsintTemplateDocument1() throws Exception {
-	
+
 	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
 	String documentPath = "test-resources/documents/document1.json";
 	String xmlPath = "src/test/resources/test-resources/documents/document1.xml";
@@ -49,6 +49,5 @@ public void testTransformUsintTemplateDocument3() throws Exception {
 	compareWithXML(transformed,  xmlPath);
 
 }
-
 
 }

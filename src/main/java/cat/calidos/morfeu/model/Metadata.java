@@ -46,11 +46,13 @@ private String desc;
 private String presentation;
 private String cellPresentation;
 private String thumb;
+private Optional<String> identifier;
 private Map<String, String> defaultValues;
 
 private Map<String, Set<String>> directives;
 
 private Map<String, Set<String>> attributes;
+
 
 public static final String DEFAULT_VALUE_PREFIX = "@";
 //private static String UNDEFINED = "";
@@ -59,7 +61,8 @@ public Metadata(URI uri,
 				String desc, 
 				String presentation, 
 				String cellPresentation, 
-				String thumb, 
+				String thumb,
+				String identifier,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes
@@ -69,6 +72,7 @@ public Metadata(URI uri,
 			Optional.ofNullable(presentation), 
 			Optional.ofNullable(cellPresentation), 
 			Optional.ofNullable(thumb),
+			Optional.ofNullable(identifier),
 			defaultValues,
 			directives,
 			attributes);
@@ -80,6 +84,7 @@ public Metadata(URI uri,
 				Optional<String> presentation, 
 				Optional<String> cellPresentation,
 				Optional<String> thumb,
+				Optional<String> identifier,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes) {
@@ -89,6 +94,7 @@ public Metadata(URI uri,
 	this.presentation = presentation.orElse(DEFAULT_PRESENTATION);
 	this.cellPresentation = cellPresentation.orElse(DEFAULT_CELL_PRESENTATION);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
+	this.identifier = identifier;
 	this.defaultValues = defaultValues;
 	this.directives = directives;
 	this.attributes = attributes;
@@ -113,6 +119,11 @@ public String getCellPresentation() {
 
 public String getThumb() {
 	return thumb;
+}
+
+
+public Optional<String> getIdentifier() {
+	return identifier;
 }
 
 
@@ -155,9 +166,6 @@ public Map<String, Set<String>> getAttributes() {
 }
 
 
-/* (non-Javadoc)
-* @see java.lang.Object#toString()
-*//////////////////////////////////////////////////////////////////////////////
 @Override
 public String toString() {
 
@@ -182,6 +190,8 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	String thumb = morePriority.getThumb();
 	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
 	
+	String identifier = morePriority.getIdentifier().isPresent() ? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
+	
 	Map<String,String> newDefaultValues = new HashMap<String, String>();
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
@@ -189,7 +199,7 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
 	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
 	
-	return new Metadata(u, desc, presentation, cellPresentation, thumb, newDefaultValues, directives, attributes);
+	return new Metadata(u, desc, presentation, cellPresentation, thumb, identifier, newDefaultValues, directives, attributes);
 	
 }
 

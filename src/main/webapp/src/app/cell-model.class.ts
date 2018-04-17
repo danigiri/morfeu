@@ -53,7 +53,8 @@ constructor(public schema: number,
 			public minOccurs: number,
 			public isAttribute?: boolean,
 			public maxOccurs?: number,
-			public defaultValue?: string
+			public defaultValue?: string,
+		    public identifier?: CellModel
 			) {
 	this.init();
 }	 
@@ -90,7 +91,7 @@ getAdoptionURI():string {
 matches(e:FamilyMember):boolean {
 	return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
-	
+
 
 canAdopt(element:FamilyMember):boolean {
 	return this.children.some(c => c.matches(element));
@@ -153,6 +154,11 @@ generateCell():Cell {
 toJSON(): CellModelJSON {
 
 	let serialisedCellModel:CellModelJSON = Object.assign({}, this);
+
+    if (serialisedCellModel.identifier) {
+        serialisedCellModel.identifier = this.identifier.name;  // we serialise to the (attribute) name
+    }
+
 	if (this.attributes) {
 		serialisedCellModel.attributes = this.attributes.map(a => a.toJSON());
 	}
@@ -168,19 +174,28 @@ toJSON(): CellModelJSON {
 static fromJSON(json: CellModelJSON|string): CellModel {
 
 	if (typeof json === 'string') {
-		
+
 		return JSON.parse(json, CellModel.reviver);
-		
+
 	} else {
-	
+
 		let cellModel = Object.create(CellModel.prototype);
 		cellModel = Object.assign(cellModel, json); // add parsed attributes like schema, URI, name...
 		cellModel.init();							// make sure we have all attributes ok
-		
+
 		if (json.attributes) {
 			cellModel = Object.assign(cellModel, 
 									  {attributes: json.attributes.map(a => CellModel.fromJSON(a))});
 		}
+
+		// handle the identifier if we have one defined, so we turn it into a reference to the attribute
+		if (cellModel.identifier) {
+		    cellModel.identifier = cellModel.attributes.find(a => a.name==cellModel.identifier);
+		    if (cellModel.identifier==undefined) {
+		        console.error("Wrong identifier reference in %s", cellModel.name);
+		    }
+		}
+		
 		if (json.children) {
 			cellModel = Object.assign(cellModel, 
 									  {children: json.children.map(c => CellModel.fromJSON(c))});
@@ -240,7 +255,8 @@ minOccurs: number;
 maxOccurs?: number;
 isAttribute?: boolean;
 defaultValue?: string;
-
+identifier?: string | CellModel;    // coming from the JSON it will be a string, coming from an object it will
+                                    // be an reference to the attribute that is the identifier
 attributes?: CellModelJSON[];
 children?: CellModelJSON[];
 referenceURI?: string;

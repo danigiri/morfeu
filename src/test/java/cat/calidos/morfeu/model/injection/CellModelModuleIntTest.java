@@ -107,7 +107,7 @@ public void testProvideCellModel() throws Exception {
 	assertTrue(sizeAttribute.isAttribute());
 	assertEquals("Size attribute of columns should be compulsory", 1, sizeAttribute.getMinOccurs());
 	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
-	assertEquals(5, colComplex.children().size());
+	assertEquals(6, colComplex.children().size());
 
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	String dataDesc = "Globally provided description of 'data'";
@@ -215,7 +215,7 @@ public void testAttributesDefaultValues() {
 	
 	HashMap<String, String> defaultValues = new HashMap<String, String>(1);
 	defaultValues.put("@text", "foo");
-	Metadata cellMetadata = new Metadata(null, "desc", "", "", "", defaultValues, null, null);
+	Metadata cellMetadata = new Metadata(null, "desc", "pres", "cellpres", "thumb", null, defaultValues, null, null);
 	//when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
 	
 	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, cellMetadata, globals);
