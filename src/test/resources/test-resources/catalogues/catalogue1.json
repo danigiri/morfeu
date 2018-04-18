@@ -6,6 +6,7 @@
 		,{ "name":"Document 2", "kind": "xml", "uri":"target/test-classes/test-resources/documents/document2.json" }
 		,{ "name":"Document 3", "kind": "xml", "uri":"target/test-classes/test-resources/documents/document3.json" }
 		,{ "name":"Document 4", "kind": "xml", "uri":"target/test-classes/test-resources/documents/document4.json" }
+		,{ "name":"Document 5", "kind": "xml", "uri":"target/test-classes/test-resources/documents/document5.json" }
 		,{ "name":"Document with non-valid content", "kind": "xml", "uri":"target/test-classes/test-resources/documents/document-with-nonvalid-content.json" }
 		,{ "name":"Document with non-valid model", "kind": "xml", "uri":"target/test-classes/test-resources/documents/document-with-nonvalid-model.json" }
 		,{ "name":"Document with not-found content", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document-with-notfound-model.json" }

@@ -111,4 +111,17 @@ public void testTransformJSONToYAML() throws Exception {
 }
 
 
+@Test
+public void testTransformYAMLToXML() throws Exception {
+
+	String yamlPath = "target/test-classes/test-resources/transform/document4.yaml";
+	String documentPath = "test-resources/documents/document4.json";
+	String xmlPath = "src/test/resources/test-resources/documents/document4.xml";
+
+	String transformed = transformYAMLToXML(yamlPath, documentPath);
+	System.err.println(transformed);
+	compareWithXML(transformed,  xmlPath);
+	
+}
+
 }

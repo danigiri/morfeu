@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package cat.calidos.morfeu.model.metadata;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,7 +39,7 @@ private URI mergedURI;
 private Metadata merged;
 
 @Before
-public void setp() throws Exception {
+public void setup() throws Exception {
 
 	URI priorityURI = new URI("priority.xsd");
 	HashMap<String, String> priorityDefaultValues = new HashMap<String, String>(1);
@@ -53,8 +52,8 @@ public void setp() throws Exception {
 	directivesA2.add("directive-A2");
 	directives.put("directives2", directivesA2);
 	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(1);
-	Metadata priorityMetadata = new Metadata(priorityURI, "descA", "A", "ACP", "DEFAULT", priorityDefaultValues, directives, attributes);
-	
+	Metadata priorityMetadata = new Metadata(priorityURI, "descA", "A", "ACP", "DEFAULT", "idA", priorityDefaultValues, directives, attributes);
+
 	URI metadataURI = new URI("priority.xsd");
 	HashMap<String, String> metadataDefaultValues = new HashMap<String, String>(2);
 	metadataDefaultValues.put("@a", "meta-default-a");
@@ -64,11 +63,11 @@ public void setp() throws Exception {
 	directivesB.add("directive-B");
 	directives.put("directives", directivesB);
 	Map<String, Set<String>> attributes2 = new HashMap<String, Set<String>>(0);
-	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "THUMB", metadataDefaultValues, directives, attributes2);
-	
+	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "THUMB", "idB", metadataDefaultValues, directives, attributes2);
+
 	mergedURI = new URI("foo.xsd");
 	merged = Metadata.merge(mergedURI, priorityMetadata, metadata);
-	
+
 }
 
 
@@ -81,6 +80,9 @@ public void testMergeMetadataBasic() {
 	assertEquals("ACP", merged.getCellPresentation());
 	assertEquals("THUMB", merged.getThumb());
 
+	assertTrue(merged.getIdentifier().isPresent());
+	assertEquals("idA", merged.getIdentifier().get());
+
 	Map<String, String> mergedDefaultValues = merged.getDefaultValues();
 	assertEquals(2, mergedDefaultValues.size());
 	assertEquals("priority-default-a", mergedDefaultValues.get("@a"));
@@ -91,7 +93,7 @@ public void testMergeMetadataBasic() {
 
 @Test
 public void testMergeMetadataDirectives() {
-	
+
 	Set<String> directives = merged.getDirectivesFor("directives");
 	assertNotNull(directives);
 	assertEquals(2, directives.size());

@@ -35,9 +35,12 @@
 	
 	{%- else -%}
 		{#- cellmodels.size()==1 - We are already matched to a cell model, we start printing -#}
-	
 		{%- if cellmodels[0].isSimple -%}
+			{%- if yaml.size>0 %}
 {{i}}<{{cellmodels[0].name}}>{{yaml.asText}}</{{cellmodels[0].name}}>
+				{%- else %}
+{{i}}<{{cellmodels[0].name}}/>
+				{%- endif -%}
 {%else%}	{#- complex #}
 {{i}}<{{cellmodels[0].name}}
 			{%- for a in list(cellmodels[0].metadata.getAttributesFor(case).iterator) %} {{a-}}{%- endfor -%}

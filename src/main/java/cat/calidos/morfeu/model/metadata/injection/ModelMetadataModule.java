@@ -62,7 +62,9 @@ private static final String PRESENTATION_FIELD = "mf:presentation";
 private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
 private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
-private static final String IDENTIFIER_FIELD = "mf:identifier";
+private static final String IDENTIFIER_FIELD = "mf:identifier@name";
+private static final String IDENTIFIER_FIELD_PREFIX = "@";
+
 
 // serialisation metadata definitions
 private static final String TRANSFORM_TAG = "mf:transform";
@@ -78,10 +80,19 @@ public static Metadata provideMetadata(URI uri,
 										@Named("presentation") Optional<String> presentation,
 										@Named("cellPresentation") Optional<String> cellPresentation,
 										@Named("thumb") Optional<String> thumb,
+										@Named("identifier") Optional<String> identifier,
 										Map<String, String> defaultValues,
 										@Named("Directives") Map<String, Set<String>> directives,
 										@Named("Attributes") Map<String, Set<String>> attributes) {
-	return new Metadata(uri, desc, presentation, cellPresentation, thumb, defaultValues, directives, attributes);
+	return new Metadata(uri, 
+						desc, 
+						presentation, 
+						cellPresentation, 
+						thumb, 
+						identifier, 
+						defaultValues, 
+						directives, 
+						attributes);
 }
 
 
@@ -156,6 +167,19 @@ public static Optional<String> cellPresentation(@Nullable XSAnnotation annotatio
 @Provides @Named("thumb")
 public static Optional<String> thumb(@Nullable XSAnnotation annotation) {
 	return annotationTaggedAs(annotation, THUMB_FIELD);
+}
+
+
+@Provides @Named("identifier")
+public static Optional<String> identifier(@Nullable XSAnnotation annotation) {	
+	
+	Optional<String> identifier = annotationTaggedAs(annotation, IDENTIFIER_FIELD);
+	if (identifier.isPresent() && identifier.get().startsWith(IDENTIFIER_FIELD_PREFIX)) {
+		identifier = Optional.of(identifier.get().substring(IDENTIFIER_FIELD_PREFIX.length()));
+	} 
+
+	return identifier;
+
 }
 
 

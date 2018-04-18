@@ -4,12 +4,15 @@
 	,"name": "{{cm.Name}}"
 	,"desc": "{{cm.Desc | trim}}"
 	,"presentation": "{{cm.metadata.Presentation}}"
-	{% if not cm.metadata.thumb is empty %}
+	{%- if not cm.metadata.thumb is empty %}
 		,"thumb": "{{ cm.metadata.thumb }}"
-	{% endif %}
-	{% if not cm.metadata.cellPresentation is empty %}
+	{%- endif -%}
+	{%- if cm.metadata.identifier.isPresent %}
+		,"identifier": "{{ cm.metadata.identifier.get }}"
+	{%- endif -%}
+	{%- if not cm.metadata.cellPresentation is empty %}
 		,"cellPresentation": "{{cm.metadata.cellPresentation}}"
-	{% endif %}
+	{%- endif %}
 	,"isSimple": {{cm.isSimple}}
 	,"type_": {
 		"name": "{{cm.type.name}}"

@@ -1,0 +1,7 @@
+{
+	"name": "Document 5"
+	,"desc": "Fifth document - ids"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/documents/document5.xml"
+}

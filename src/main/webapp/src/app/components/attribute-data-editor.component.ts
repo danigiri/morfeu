@@ -26,7 +26,9 @@ import { CellModel } from "../cell-model.class";
 		<li class="attribute-data attribute-data-editor list-group-item">
 			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
-					<span class="attribute-data-name input-group-text" id="{{cellModel.name}}">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+					<span class="attribute-data-name input-group-text" 
+					    [class.attribute-data-editor-identifier]="this.parentCell.cellModel.identifier==this.cellModel"
+					    id="{{cellModel.name}}">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
 				</div>
 				<input type="text" 
 					class="attribute-data-value form-control" 
@@ -46,6 +48,9 @@ import { CellModel } from "../cell-model.class";
 	styles:[`
 				.attribute-data {}
 				.attribute-data-editor {}
+                .attribute-data-editor-identifier {
+                    text-decoration: underline;
+                }
 				.attribute-data-name {}
 				.attribute-data-value {}
 	`]
