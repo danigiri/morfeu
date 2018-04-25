@@ -5,7 +5,7 @@
 >
 	<row>
 		<col size="4">
-			<data number="42" text="blahblah"/>
+			<data text="blahblah" number="42" />
     		</col>
     		<col size="8">
     			<row>

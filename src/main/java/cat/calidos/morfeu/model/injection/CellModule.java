@@ -217,7 +217,7 @@ private static  Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellM
 	
 	// 								** recursive case **
 	OrderedMap<Cell> attributes = new OrderedMap<Cell>(node.getAttributes().getLength());
-	NamedNodeMap elemAttributes = node.getAttributes();
+	NamedNodeMap elemAttributes = node.getAttributes();	// TODO: notice this is not ordered like the input ^^'
 	for (int i=0; i<elemAttributes.getLength(); i++) {
 		
 		Node attribute = elemAttributes.item(i);
@@ -234,8 +234,8 @@ private static  Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellM
 														.withCellModel(attributeCellModel)
 														.builder()
 														.createCell();
-			attributes.addChild(attributeName, attributeCell);
-			
+			attributes.addChild(attributeName, attributeCell); 
+			//System.err.println("\t\ta["+i+"]:"+attributeName+":"+attributeCell.getValue());
 		} else  {
 
 		}

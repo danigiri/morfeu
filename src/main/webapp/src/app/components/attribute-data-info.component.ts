@@ -26,7 +26,7 @@ import { CellModel } from "../cell-model.class";
 		<li *ngIf="isFromModel || (isFromCell && hasValue)" 
 			class="attribute-data attribute-data-info list-group-item"
 			[class.list-group-item-secondary]="isFromModel"
-			>{{parentCell.identifier}}
+			>
 			<span class="font-weight-bold attribute-data-name"
 			    [class.attribute-data-identifier]="isIdentifier()"
 			>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
@@ -69,11 +69,11 @@ private hasValue_(): boolean {
 
 private isIdentifier(): boolean {
     return this.parentCell!=undefined && this.parentCell.cellModel.identifier!=undefined 
-    && this.parentCell.cellModel.identifier==this.cellModel;
+            && this.parentCell.cellModel.identifier==this.cellModel;
 }
 
 getValue(): string {
-	return this.parentCell.attributes.find(a=> a.name==this.cellModel.name).value;
+	return this.parentCell.attributes.find(a => a.name==this.cellModel.name).value;
 }
 
 

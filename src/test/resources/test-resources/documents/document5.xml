@@ -7,7 +7,7 @@
 		<col size="12">
 			<data3 text="identifier 1" number="1"/>
 			<data3 text="identifier 2" />
-			<data3 text="identifier 3" number="3"/>
+			<data3 text="identifier 3" number="1"/>
 		</col>
 	</row>
 </test>

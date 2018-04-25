@@ -10,9 +10,7 @@
 	{#- ____________ complex content case ____________ -#}
 	{#- 1) the attributes -#}
 	{%- if cell.asComplex.attributes.size() > 0 -%}
-		{%- for a in cell.asComplex.attributes.asList -%}
-			{{-i}}{{a.name}}: {% if a.value.isPresent %}{{a.value.get}}{% endif %}
-{% endfor -%}
+			{%- include "cell-attributes-to-yaml.twig" with {'cell': cell, 'attribute': a, 'indent': i} only -%}
 	{%- endif -%}
 	{#- 2) the children -#}
 	{%- if cell.asComplex.children.size > 0 -%}
@@ -30,7 +28,7 @@
 {% set current = c.name -%}
 			{%- endif -%}
 			{%- if c.isComplex -%}{# FIXME: we do not assume it's a list if maxOccurs is==1 #}
-				{%-if c.value.isPresent or c.asComplex.attributes.hasAttributes or c.asComplex.children.hasChildren%}{{ ilist }}-{%endif%}
+{%- include "cell-start-to-yaml.twig" with {'c': c, 'indent': ilist} only -%}
 {%include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -%}
 			{%- else -%}
 				{#- ____________ simple content case ____________ -#}

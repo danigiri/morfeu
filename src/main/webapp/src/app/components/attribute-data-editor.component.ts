@@ -27,7 +27,7 @@ import { CellModel } from "../cell-model.class";
 			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
 					<span class="attribute-data-name input-group-text" 
-					    [class.attribute-data-editor-identifier]="this.parentCell.cellModel.identifier==this.cellModel"
+					    [class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
 					    id="{{cellModel.name}}">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
 				</div>
 				<input type="text" 

@@ -1,0 +1,3 @@
+{#- we check if we have data, attributes or children, then we check if we do not have an identifier and only then put the - and a linefeed -#}
+{%-if c.value.isPresent or c.asComplex.attributes.hasAttributes or c.asComplex.children.hasChildren %}{% if not(c.cellModel.metadata.identifier.isPresent)%}{{ indent }}-
+{%endif%}{%endif -%}

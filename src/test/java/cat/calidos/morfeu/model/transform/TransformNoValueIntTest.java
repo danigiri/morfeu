@@ -82,14 +82,14 @@ public void testTransformJSONToYAML() throws Exception {
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("cells", doc.getContent().asList());
 	values.put("model", doc.getModel());
-	
+
 	String transformed = DaggerViewComponent.builder()
 			.withTemplate("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();
 	System.err.println(transformed);
-	
+
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);

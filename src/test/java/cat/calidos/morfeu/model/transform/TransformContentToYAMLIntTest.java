@@ -50,7 +50,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-	//System.err.println(transformed);
+	System.err.println(transformed);
 	
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -86,29 +86,32 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	assertEquals(42, data0.get("number").asInt());
 	assertEquals("blahblah", data0.get("text").asText());
 
+	// now we check the order of the attributes that should be the one we want (like the one in the xml)
+	// this is not supported in the dom so we will skip this test
 }
 
 
 @Test
 public void testTransformUsingTemplateDocument3() throws Exception {
+
 	Document doc = produceDocumentFromPath("test-resources/documents/document3.json");
 	assertNotNull(doc);
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("cells", doc.getContent().asList());
 	values.put("model", doc.getModel());
-	
+
 	String transformed = DaggerViewComponent.builder()
 			.withTemplate("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();
-	//System.err.println(transformed);
-	
+	System.err.println(transformed);
+
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
-	
+
 	JsonNode stuffs = yaml.get("rows").get(0).get("cols").get(0).get("stuff");
 	assertNotNull(stuffs);
 	assertTrue(stuffs.isArray());
