@@ -53,7 +53,7 @@
 			<xs:appinfo>
 				<mf:metadata>
 					<mf:desc>textContent is a text area for simple content</mf:desc>
-					<mf:presentation>TEXT</mf:presentation>
+					<mf:presentation>CELL-TEXT</mf:presentation>
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>

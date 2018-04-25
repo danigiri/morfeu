@@ -105,7 +105,7 @@ import { EventService } from './events/event.service';
 					 </div>
 				</ng-container>
 
-				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'CELL' || cell.cellModel.presentation === 'TEXT'">
+				<ng-container *ngSwitchCase="cell.cellModel.presentation.startsWith('CELL')">
 						<!-- TODO: check the model and the content as well (counts, etc.) -->
 						<img id="{{cell.URI}}"
 							class="cell cell-img cell-level-{{level}}"

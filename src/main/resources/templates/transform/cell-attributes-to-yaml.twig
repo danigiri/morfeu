@@ -1,5 +1,5 @@
-{# this template takes all the attributes of a complex cell and prints them out as yaml, taking care of -#}
-{# the fact that if we have an identifier we put it first and use the compact mapping form -#}
+{#- this template takes all the attributes of a complex cell and prints them out as yaml, taking care of -#}
+{#- the fact that if we have an identifier we put it first and use the compact mapping form -#}
 {# hack to put the identifier first -#}
 {%- if cell.cellModel.metadata.identifier.isPresent -%}
 	{%- set id = cell.cellModel.metadata.identifier.get -%}
