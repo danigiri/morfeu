@@ -104,11 +104,11 @@ public void testTransformJSONToYAML() throws Exception {
 
 	JsonNode stuff = col.get("stuff");
 	assertTrue(stuff.isArray());
-	assertEquals("stuff : {} in transformed yaml should have no elements", 0, stuff.size());
+	assertEquals("stuff : [] in transformed yaml should have no elements", 0, stuff.size());
 	
 	JsonNode data4 = col.get("data4");
 	assertTrue(data4.isObject());
-	assertEquals("data4: [] in transformed yaml should be empty", 0, data4.size());
+	assertEquals("data4: {} in transformed yaml should be empty", 0, data4.size());
 
 }
 
