@@ -118,7 +118,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	assertEquals(3, stuffs.size());
 	assertEquals("Stuff content", stuffs.get(0).asText());
 	assertEquals("Stuff content 2", stuffs.get(1).asText());
-	assertEquals("Stuff content 3", stuffs.get(2).asText());
+	assertEquals("Multiline stuff\ncontent\n", stuffs.get(2).asText());
 
 }
 

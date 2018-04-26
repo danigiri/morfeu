@@ -77,6 +77,8 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(list)
 												.add(deb)
 												.add(quote)
+												.add(isMultiline)
+												.add(multiline)
 								//			.escape()
 								//			.withDefaultEngine("js")
 											.and()
@@ -159,16 +161,16 @@ final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
     @Override
     public Object execute(FunctionRequest request) {
 
-    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-    		@SuppressWarnings("unchecked")
+    	request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+    	@SuppressWarnings("unchecked")
 		Iterator<Object> iterator = (Iterator<Object>) request.get(0);
-    		
-    		ArrayList<Object> list = new ArrayList<Object>();
-    		while (iterator.hasNext()) {
-    			list.add(iterator.next());
-    		}
-    		
-    		return list;
+
+    	ArrayList<Object> list = new ArrayList<Object>();
+    	while (iterator.hasNext()) {
+    		list.add(iterator.next());
+    	}
+
+    	return list;
     }
     
 };
@@ -178,18 +180,20 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 
 	@Override
 	public String name() {
+
 		return "deb";
 	}
 
-    @Override
-    public Object execute(FunctionRequest request) {
 
-    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
-    		Object v = request.get(0);
-    		System.err.println(v);
+	@Override
+	public Object execute(FunctionRequest request) {
 
-    		return new Object();
-    }
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
+		Object v = request.get(0);
+		System.err.println(v);
+
+		return new Object();
+	}
 
 };
 
@@ -197,23 +201,78 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 final static SimpleJtwigFunction quote = new SimpleJtwigFunction() {
 
 	@Override
-    public String name() {
-        return "quote";
-    }
+	public String name() {
 
-    @Override
-    public Object execute(FunctionRequest request) {
+		return "quote";
+	}
 
-    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-    		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
-    		if (!s.startsWith("\"") && !s.endsWith("\"")) {
-    			s = "\""+s+"\"";
-    		}
 
-    		return s;
+	@Override
+	public Object execute(FunctionRequest request) {
 
-    }
-    
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		String s = request.getEnvironment().getValueEnvironment()
+							.getStringConverter().convert(request.get(0));
+		if (!s.startsWith("\"") && !s.endsWith("\"")) {
+			s = "\"" + s + "\"";
+		}
+
+		return s;
+
+	}
+
+};
+
+
+/** returns true if the input has the '\n' literal */
+final static SimpleJtwigFunction isMultiline = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "isMultiline";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		String s = request.getEnvironment().getValueEnvironment()
+							.getStringConverter().convert(request.get(0));
+		// System.err.println("\t\t"+s+","+s.contains("\\n"));
+
+		return s.contains("\\n");
+
+	}
+
+};
+
+
+/** returns true if the input has the '\n' literal */
+final static SimpleJtwigFunction multiline = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "multiline";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(2).maximumNumberOfArguments(2);
+		String indent = request.getEnvironment().getValueEnvironment()
+								.getStringConverter().convert(request.get(0));
+		String s = request.getEnvironment().getValueEnvironment()
+							.getStringConverter().convert(request.get(1));
+		String indentedLinefeed = "\n"+indent;
+		
+		return s.replace("\\n", indentedLinefeed);
+
+	}
+
 };
 
 

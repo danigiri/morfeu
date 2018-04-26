@@ -11,6 +11,6 @@
 {%- endif -%}
 {%- for a in cell.asComplex.attributes.asList -%}
 {%- if a.name!=id -%}
-	{{-indent}}{{a.name}}: {% if a.value.isPresent %}{{a.value.get}}{% endif %}
+	{{-indent}}{{a.name}}: {% if a.value.isPresent %}{{a.value.get}}{% endif %}{# no multiline attributes allowed #}
 {% endif -%}
 {% endfor -%}

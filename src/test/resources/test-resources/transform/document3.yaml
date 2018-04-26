@@ -8,7 +8,10 @@ rows:
         stuff:
           - Stuff content
           - Stuff content 2
-          - Stuff content 3
+          - |
+            Multiline stuff
+            content
+
         data:
           -
             number: 33

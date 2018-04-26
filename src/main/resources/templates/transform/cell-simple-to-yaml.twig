@@ -1,3 +1,9 @@
 {%- if cell.value.isPresent -%}
-	{{-indent}}- {{ cell.value.get }}
-{%endif -%}
+	{%- if cell.cellModel.metadata.presentation=='CELL-TEXT' and isMultiline(cell.value.get) -%}
+		{%- set textindent = concat(indent, '  ') -%}
+		{{-indent}}- |
+{{textindent}}{{ multiline(textindent, cell.value.get) }}
+{% else -%}
+		{{-indent}}- {{ cell.value.get }}
+{% endif -%}
+{%- endif -%}
