@@ -35,10 +35,12 @@ String render();
 
 @Component.Builder
 interface Builder {
+
 	@BindsInstance Builder withValue(@Named("value") Object v);
 	@BindsInstance Builder withTemplate(@Named("templatePath") String p);
 	@BindsInstance Builder andProblem(@Nullable @Named("problem") String p);
 	ViewComponent build();
+
 }
 
 }

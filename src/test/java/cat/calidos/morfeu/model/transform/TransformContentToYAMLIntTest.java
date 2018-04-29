@@ -50,7 +50,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-	System.err.println(transformed);
+	//System.err.println(transformed);
 	
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -106,7 +106,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-	System.err.println(transformed);
+	//System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);

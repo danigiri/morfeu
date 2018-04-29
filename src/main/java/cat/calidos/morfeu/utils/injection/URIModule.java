@@ -33,11 +33,13 @@ public class URIModule {
 
 @Produces
 public static URI uri(String uri) throws FetchingException {
+
 	try {
 		return new URI(uri);
 	} catch (URISyntaxException e) {
 		throw new FetchingException("Problem due to invalid URI '"+uri+"'", e);
 	}
+
 }
 
 }

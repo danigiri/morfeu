@@ -54,7 +54,7 @@ public void catalogueListTest() throws Exception {
 	assertEquals("Wrong catalogue content", "Catalogue 1 yaml", catalogueEntries.get(2).name());
 	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(3).name());
 	UIProblem.shouldNotBeVisible();
-	
+
 }
 
 

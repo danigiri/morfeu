@@ -88,7 +88,7 @@ public void testTransformJSONToYAML() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-	System.err.println(transformed);
+	//System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -121,7 +121,7 @@ public void testTransformYAMLToXML() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/documents/document4.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-	System.err.println(transformed);
+	//System.err.println(transformed);
 	compareWithXML(transformed,  xmlPath);
 	
 }

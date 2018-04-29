@@ -190,7 +190,7 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
 		Object v = request.get(0);
-		System.err.println(v);
+		//System.err.println(v);
 
 		return new Object();
 	}
