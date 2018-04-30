@@ -16,8 +16,6 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +28,11 @@ import static com.codeborne.selenide.Selenide.$$;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICatalogues {
 
+private static final String CATALOGUE_LIST = "#catalogue-list";
+private static final String CATALOGUE_LIST_ENTRY = ".catalogue-list-entry";
+
+private UICatalogues() {}
+
 public static UICatalogues openCatalogues() {
 
 	return new UICatalogues();
@@ -39,7 +42,7 @@ public static UICatalogues openCatalogues() {
 
 public UICatalogues shouldAppear() {
 	
-	$("#catalogue-list").should(appear);
+	$(CATALOGUE_LIST).should(appear);
 
 	return this;
 
@@ -48,27 +51,29 @@ public UICatalogues shouldAppear() {
 
 public UICatalogues shouldBeVisible() {
 
-	$("#catalogue-list").shouldBe(visible);
+	$(CATALOGUE_LIST).shouldBe(visible);
 	
 	return this;
 }
 
 
-public List<UICatalogueEntry> getCatalogueEntries() {
-	return $$(".catalogue-list-entry").stream().map( e -> new UICatalogueEntry(e)).collect(Collectors.toList());
+public List<UICatalogueEntry> allCatalogueEntries() {
+	return $$(CATALOGUE_LIST_ENTRY).stream().map(e -> new UICatalogueEntry(e)).collect(Collectors.toList());
 }
 
 
+// convenience method
 public UICatalogue clickOn(int i) {
 
-	List<UICatalogueEntry> catalogueEntries = this.getCatalogueEntries();
+	List<UICatalogueEntry> catalogueEntries = this.allCatalogueEntries();
 	int count = catalogueEntries.size();
-	assertTrue("Could not click on catalogue entry "+i+" as there are only "+count+" entries", i<count);
+	if (i>=count) { 
+		throw new IndexOutOfBoundsException("Could not click on catalogue entry "+i+" as there are only "+count);
+	}
 	catalogueEntries.get(i).click();
 
-	return new UICatalogue();
+	return UICatalogue.openCatalogue();
 
 }
-
 
 }

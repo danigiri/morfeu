@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
-import static org.junit.Assert.*;
-
 import java.util.Optional;
 
 import static com.codeborne.selenide.Condition.*;
@@ -32,6 +30,12 @@ import com.codeborne.selenide.SelenideElement;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICatalogue {
+
+private UICatalogue() {}
+
+public static UICatalogue openCatalogue() {
+	return new UICatalogue();
+}
 
 public static void shouldNotBeVisible() {
 
@@ -65,8 +69,9 @@ public UIDocument clickOnDocument(int i) {
 	
 	ElementsCollection documentEntries = getDocuments();
 	int count = documentEntries.size();
-	assertTrue("Could not click on document entry "+i+" as there are only "+count+" entries", count<i);
-	
+	if (i>=count) { 
+		throw new IndexOutOfBoundsException("Could not click on doc entry "+i+" as there are only "+count);
+	}
 	documentEntries.get(i).click();
 	
 	return currentlySelectedDocument();
@@ -77,10 +82,10 @@ public UIDocument clickOnDocument(int i) {
 public UIDocument clickOnDocumentNamed(String name) {
 	
 	ElementsCollection documentEntries = getDocuments();
-	Optional<SelenideElement> foundDocument = documentEntries.stream() //.map(d -> { System.out.println("XX"+d.getText().trim()+"=="+name);return d;} )
-												.filter(d -> d.getText().trim().equals(name)).findFirst();
-	assertTrue("Could not find document named '"+name+"'", foundDocument.isPresent());
-	foundDocument.get().click();
+	Optional<SelenideElement> foundDocument = documentEntries.stream()
+																.filter(d -> d.getText().trim().equals(name))
+																.findFirst();
+	foundDocument.orElseThrow(() -> new IndexOutOfBoundsException("Could not find document named '"+name+"'")).click();
 	
 	return currentlySelectedDocument();
 	

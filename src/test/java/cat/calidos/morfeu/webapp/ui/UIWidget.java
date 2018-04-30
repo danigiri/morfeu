@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,9 +19,8 @@ package cat.calidos.morfeu.webapp.ui;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static org.junit.Assert.fail;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.openqa.selenium.Keys;
@@ -41,18 +40,6 @@ protected SelenideElement element;
 
 public UIWidget(SelenideElement element) {
 	this.element = element;
-}
-
-
-@SuppressWarnings("unchecked")
-public T check(Predicate<T> check, String message) {
-	
-	if (!check.test((T) this)) {
-		fail(message);
-	}
-
-	return (T)this;
-	
 }
 
 

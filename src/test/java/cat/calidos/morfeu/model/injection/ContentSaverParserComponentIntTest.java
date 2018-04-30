@@ -23,6 +23,7 @@ import java.net.URI;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,6 +67,13 @@ public void setup() throws Exception {
 
 }
 
+
+@AfterClass
+public static void teardownClass() throws InterruptedException {
+
+	Thread.sleep(5000); // wait for reboot of jetty env
+
+}
 
 @Test
 public void testValidateString() throws Exception {
@@ -144,11 +152,16 @@ public void testSaveToXML() throws Exception {
 	saver.save();
 	File savedFile = new File(outputPath);
 	assertTrue("Saver component did not create a file", savedFile.exists());
-	savedFile.deleteOnExit();
 
-	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
-	assertEquals("Content saved to file is not the same as input", content, writtenContent);
-
+	try {
+		String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
+		assertEquals("Content saved to file is not the same as input", content, writtenContent);
+	} finally {
+		if (savedFile.exists()) {
+			savedFile.delete();
+		}
+	}
+	
 }
 
 

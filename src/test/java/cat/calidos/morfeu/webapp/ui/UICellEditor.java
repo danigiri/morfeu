@@ -21,12 +21,6 @@ import static com.codeborne.selenide.Selenide.$;
 
 import java.util.Optional;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

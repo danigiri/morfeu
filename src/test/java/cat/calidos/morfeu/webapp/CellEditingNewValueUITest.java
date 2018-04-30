@@ -22,7 +22,6 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -48,15 +47,15 @@ public void setup() {
 
 	open(appBaseURL);
 	UIDocument doc = UICatalogues.openCatalogues()
-					.shouldAppear()
-					.shouldBeVisible()
-					.clickOn(0)
-					.clickOnDocumentNamed("Document 3");
+									.shouldAppear()
+									.shouldBeVisible()
+									.clickOn(0)
+									.clickOnDocumentNamed("Document 3");
 	doc.shouldBeVisible();
 	content = doc.content().shouldAppear();
 	test = content.rootCells().get(0);
 	model = doc.model();
-	
+
 }
 
 
@@ -85,23 +84,22 @@ public void removeCellValue() {
 
 @Test
 public void addCellValue() {
-	
+
 	//target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)
-	
 
 	// TEST->ROW->COL->STUFF
 	UICellModelEntry stuffModel = model.rootCellModels().get(0).child("row").child("col").child("stuff");	
 	stuffModel.hover();
-	
+
 	UICell col = test.child("row(0)").child("col(0)");
 	assertEquals("We should have four children at the beginning", 4, col.children().size());
 	UIDropArea targetDropArea = col.dropArea(0);
 	targetDropArea.select();
-	
+
 	// create a new stuff element through the keyboard shortcut
 	model.pressKey(UIModel.NEW_CELL);
 	assertEquals("We should have 5 children after adding a new 'stuff'", 5, col.children().size());
-	
+
 	UICell stuff = test.child("row(0)").child("col(0)").child("stuff(0)");
 	UICellEditor stuffEditor = stuff.select().activate().edit().shouldAppear();
 	assertNotNull(stuffEditor);
@@ -116,9 +114,9 @@ public void addCellValue() {
 
 	stuffEditor.enterText("Foo bar");
 	assertEquals("Foo bar", stuffEditor.getValue().get());
-	
+
 	//FIXME: JUST FOUND A BUG, THE SECOND TIME WE LOAD A DOCUMENT, THE CELL SELECTION SHORTCUTS DON'T WORK AS EXPECTED
-	
+
 }
 
 }

@@ -42,12 +42,11 @@ private static final int EXPECTED_DOCUMENTS_SIZE = 8;
 @Test
 public void catalogueListTest() throws Exception {
 
-	// catalogue list appears and has three entries
 	open(appBaseURL);
 
 	List<UICatalogueEntry> catalogueEntries = UICatalogues.openCatalogues()
 													  		.shouldAppear()
-													  		.getCatalogueEntries();
+													  		.allCatalogueEntries();
 	assertEquals(EXPECTED_CATALOGUES_COUNT, catalogueEntries.size());
 	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).name());
 	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).name());
@@ -85,14 +84,14 @@ public void catalogueDetailTest() throws Exception {
 
 @Test
 public void catalogueDetailErrorTest() {
-	
+
 	// notice here we are not using the helper method to open a catalogue given that they don't expect errors
 	open(appBaseURL);
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
-	
-	List<UICatalogueEntry> catalogueEntries = catalogues.getCatalogueEntries();
+
+	List<UICatalogueEntry> catalogueEntries = catalogues.allCatalogueEntries();
 	catalogueEntries.get(2).click();
 
 	UIProblem problem = UIProblem.problem().shouldAppear();
@@ -100,7 +99,7 @@ public void catalogueDetailErrorTest() {
 
 	catalogueEntries.get(0).click();
 	problem.shouldDisappear();
-	
+
 }
 
 }

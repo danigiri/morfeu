@@ -117,10 +117,10 @@ public void testCellModels() {
 	
 	//TODO: add cell model children testing
 	
-	testModelEntry.check(cm -> cm.isExpanded(), "Model is not expanded by default")
-					.clickOnArrow()
-					.check(cm -> cm.isCollapsed(), "Model should collapse when clicked")
-					.clickOnArrow();	// let's expand again so we can find the children =)
+	assertTrue("Model is not expanded by default",  testModelEntry.isExpanded());
+	testModelEntry.clickOnArrow();
+	assertTrue("Model should collapse when clicked", testModelEntry.isCollapsed());
+	testModelEntry.clickOnArrow();	// let's expand again so we can find the children =)
 	
 	List<UICellModelEntry> testModelChildren = testModelEntry.children();
 	assertEquals(1, testModelChildren.size());

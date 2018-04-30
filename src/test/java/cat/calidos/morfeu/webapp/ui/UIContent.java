@@ -23,16 +23,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
-
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIContent extends UIWidget<UIContent> {
-
 
 public static final String SELECTION_MODE = "c";
 public static final String DROPAREA_MODE = "t";
