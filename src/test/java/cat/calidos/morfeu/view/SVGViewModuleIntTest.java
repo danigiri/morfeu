@@ -20,9 +20,22 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 
@@ -32,16 +45,28 @@ import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 public class SVGViewModuleIntTest {
 
 @Test
-public void testRenderSVG() {
+public void testRenderSVG() throws Exception {
 	
-	String string = DaggerSVGViewComponent.builder().from("01234").truncate(true).build().render();
-	System.err.println(string);
-	try {
-		FileUtils.writeStringToFile(new File("/tmp/hola.svg"), string);
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	String svg = DaggerSVGViewComponent.builder().from("Short text").truncate(true).build().render();
+	assertNotNull(svg);
+	assertTrue("Should not get an empty SVG", svg.length()>0);
+	System.err.println(svg);
+
+	DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+	builderFactory.setValidating(false);	// no need to validate, just parse
+	DocumentBuilder builder = builderFactory.newDocumentBuilder();
+	InputSource svgSource = new InputSource(new StringReader(svg));
+	Document xmlDocument = builder.parse(svgSource);
+	XPath xPath = XPathFactory.newInstance().newXPath();
+	String expression = "//text";
+
+	NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+	assertNotNull(nodeList);
+	assertEquals("Should only have one text element in the svg", 1, nodeList.getLength());
+
+	Node text = nodeList.item(0).getFirstChild();	// text is the top XML node and the first child has the content
+	assertEquals("Should have the short text as SVG content", "Short text", text.getNodeValue());
+
 }
 
 }
