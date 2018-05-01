@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import { RemoteObjectService } from './services/remote-object.service';
 
 import { EventService } from './events/event.service';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
 import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
 import { ContentSaveEvent } from './events/content-save.event';
 import { ModelRequestEvent } from './events/model-request.event';
@@ -79,38 +80,21 @@ ngOnInit() {
 
 	console.log("DocumentComponent::ngOnInit()");
 	
+    this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => {
+            this.clear();
+            this.events.ok();
+        }
+    ));
+
 	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
-			selected => {
-				if (selected.url!=null) {
-					this.loadDocument(selected.url);
-				} else {
-					this.clear();
-				}
-
-			}
-	));
-	
-	this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
-			loaded => { 
-	
-				this.display(loaded.document);
-				if (!loaded.document.hasProblem()) {
-					this.events.ok();
-					this.events.service.publish(new ModelRequestEvent(loaded.document));
-				} else {
-					// even though there is a case where we could display the model of a problematic document,
-					// for instance, when the model is ok but the content is not found, we're conservative
-					// and not fetch the model, just display the original problem
-					this.events.problem(loaded.document.problem);
-				}
-
-			}
+	        selected => this.loadDocument(selected.url)
 	));
 	
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
 	this.subscribe(this.events.service.of( UXEvent ) 
-			.filter( e => e.type==UXEvent.DOCUMENT_DIRTY)
-			.subscribe( e => this.enableSave() ));
+			.filter(e => e.type==UXEvent.DOCUMENT_DIRTY)
+			.subscribe(e => this.enableSave())
+	);
 
 }
 
@@ -121,15 +105,26 @@ loadDocument(url: string) {
 	this.events.service.publish(new StatusEvent("Fetching document"));
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
 	this.documentService.get("/morfeu/documents/"+url, CellDocument).subscribe(d => {
+	    
 				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
-				this.events.service.publish(new CellDocumentLoadedEvent(d)); // now we have it =)
-			},
+				if (!d.hasProblem()) {  // we only publish the load if we have no issues with the doc
+				    this.events.service.publish(new CellDocumentLoadedEvent(d));
+	                this.display(d);
+	                this.events.ok()
+	            } else {
+	                this.events.service.publish(new CellDocumentClearEvent());  // clear everything
+	                // after clearing we show the problem message and the problematic document stub
+	                this.problem(d.problem);   // document loaded but was problematic
+	                this.document = d;         // we still show whatever was answered back
+	            }
+	        },
 			error => {
-				this.events.problem(error.message);	 // error is of the type HttpErrorResponse
-				this.events.service.publish(new CellDocumentSelectionEvent(null));
-				this.document = null;
+                console.log("DocumentComponent::loadDocument() itself got an error");
+			    this.problem(error.message);	 // error is of the type HttpErrorResponse
+                this.events.service.publish(new CellDocumentClearEvent());  // also clear document
+			    this.document = null;            // we have no document loaded at all, so no show here
 			},
-			() =>	  this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
+			() => this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
 	);
 
 }
@@ -137,7 +132,7 @@ loadDocument(url: string) {
 
 display(d: CellDocument) {
 
-	console.log("[UI] document component gets Document ("+d.name+")");
+    console.log("[UI] document component gets Document ("+d.name+")");
 	this.document = d;
 	this.disableSave();
 
@@ -146,10 +141,10 @@ display(d: CellDocument) {
 
 clear() {
 
-	console.log("[UI] document component gets null document (no document selected)");
+	console.log("[UI] document component clear");
 	this.document = null;
 	this.disableSave();
-	
+
 }
 
 
@@ -166,10 +161,15 @@ enableSave() {
 saveDocument() {
 
 	console.log("[UI] User clicked on save document, let's go!!!");
-	this.events.service.publish(
-			new ContentSaveEvent(this.document)
-	);
+	this.events.service.publish(new ContentSaveEvent(this.document));
 
+}
+
+private problem(message: String) {
+    
+    console.log("[UI] CellDocumentComponent::problem()");
+    this.events.problem(message);
+    
 }
 
 }

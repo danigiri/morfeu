@@ -14,53 +14,54 @@
  *	 limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
-import { HttpClientModule } from '@angular/common/http';  // new angular 5 http client module
+import { HttpClientModule } from "@angular/common/http";  // new angular 5 http client module
 
-import { DndModule } from 'ng2-dnd';
-import { HotkeyModule } from 'angular2-hotkeys';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DndModule } from "ng2-dnd";
+import { HotkeyModule } from "angular2-hotkeys";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { TreeModule } from "angular-tree-component";
 
-import { AppComponent }	  from './app.component';
+import { AppComponent } from "./app.component";
 import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
 import { AttributeDataInfoComponent } from "./components/attribute-data-info.component";
-import { CatalogueListComponent } from './catalogue-list.component';
+import { CatalogueListComponent } from "./catalogue-list.component";
 import { CatalogueComponent } from "./catalogue.component";
 import { CollapsibleComponent } from "./components/collapsible.component";
-import { ContentComponent } from './content.component';
-import { CellComponent } from './cell.component';
+import { ContentComponent } from "./content.component";
+import { CellComponent } from "./cell.component";
 import { CellEditorComponent } from "./components/cell-editor.component";
-import { CellDocumentComponent } from './cell-document.component';
+import { CellDocumentComponent } from "./cell-document.component";
 import { CellModelComponent } from "./cell-model.component";
 import { CellDataComponent } from "./components/cell-data.component";
-import { DropAreaComponent } from './drop-area.component';
+import { DropAreaComponent } from "./drop-area.component";
 import { KeyCaptureComponent } from "./components/key-capture.component";
-import { ModelComponent } from './model.component';
-import { ProblemComponent } from './problem.component';
-import { StatusComponent } from './status.component';
+import { ModelAreaComponent } from "./components/model-area.component";
+import { ModelComponent } from "./components/model.component";
+import { ProblemComponent } from "./problem.component";
+import { StatusComponent } from "./status.component";
 
 @NgModule({
   imports:		[ 
-          		  NgbModule.forRoot()
-          		  ,BrowserModule
+				  NgbModule.forRoot()
+				  ,BrowserModule
 				  ,BrowserAnimationsModule
 				  ,CommonModule
 				  ,DndModule.forRoot()
 				  ,FormsModule
-                  ,HttpModule
-                  ,HttpClientModule
+				  ,HttpModule
+				  ,HttpClientModule
 				  ,HotkeyModule.forRoot()
 				  ,TreeModule
 				  ],
   declarations: [ AppComponent
-                  ,AttributeDataEditorComponent
-                  ,AttributeDataInfoComponent
+				  ,AttributeDataEditorComponent
+				  ,AttributeDataInfoComponent
 				  ,CatalogueListComponent 
 				  ,CatalogueComponent
 				  ,CollapsibleComponent
@@ -68,10 +69,11 @@ import { StatusComponent } from './status.component';
 				  ,CellComponent
 				  ,CellEditorComponent
 				  ,CellDocumentComponent
-                  ,CellDataComponent
-                  ,CellModelComponent
-                  ,DropAreaComponent
-                  ,KeyCaptureComponent
+				  ,CellDataComponent
+				  ,CellModelComponent
+				  ,DropAreaComponent
+				  ,KeyCaptureComponent
+				  ,ModelAreaComponent
 				  ,ModelComponent
 				  ,ProblemComponent 
 				  ,StatusComponent 

@@ -26,7 +26,8 @@ import { RemoteDataService } from './services/remote-data.service';
 import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 import { CatalogueLoadedEvent } from './events/catalogue-loaded.event';
 import { EventService } from './events/event.service';
-import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
+import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
 import { StatusEvent } from './events/status.event';
 
 @Component({
@@ -90,8 +91,6 @@ ngOnInit() {
 loadCatalogueAt(selectedCatalogueUri: string) {
 
 	this.selectedDocumentURI = null;
-	this.events.service.publish(new CellDocumentSelectionEvent(null));	// reset document selection and related
-
 	this.events.service.publish(new StatusEvent("Fetching catalogue"));
 	this.catalogueService.get<Catalogue>(selectedCatalogueUri)
 			.subscribe(c => { 
@@ -101,11 +100,13 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 			},
 			error => {
 				this.events.problem(error.message); // error is of the type HttpErrorResponse
-				this.events.service.publish(new CellDocumentSelectionEvent(null));	// also clear selection
 				this.catalogue = null;
 			},
 			// FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??
-			() => {this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))}
+			() => {
+			    this.events.service.publish(new CellDocumentClearEvent());  // also clear document
+			    this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))
+			}
 		);
 		
 }

@@ -142,7 +142,7 @@ ngOnInit() {
 
 becomeActive(fromCell: boolean) {
 
-	console.log("[UI] CellModelComponent::becomeActive()");
+	//console.log("[UI] CellModelComponent::becomeActive()");
 	this.active = true;
 	this.dragEnabled = this.cellModel.canGenerateNewCell();
 	if (!fromCell) {   // if we become active from a cell, we do not need to propagate the activation
@@ -156,7 +156,7 @@ becomeActive(fromCell: boolean) {
 
 becomeInactive(fromCell: boolean) {
 
-	console.log("[UI] CellModelComponent::becomeInactive()");
+	//console.log("[UI] CellModelComponent::becomeInactive()");
 	this.active = false;
 	this.dragEnabled = false;
 	this.unsubscribeToNewCellFromModel();

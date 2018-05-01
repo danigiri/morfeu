@@ -88,7 +88,7 @@ public void testGlobalMetadataFromModel() throws Exception {
 	assertEquals(data2URI.toString(), data2Metadata.getURI().toString());
 	assertNotNull("global metadata parser should return data2 cell metadata", data2Metadata);
 	assertEquals("assets/images/data2-thumb.svg", data2Metadata.getThumb());
-	assertEquals("assets/images/data2-cell.svg", data2Metadata.getCellPresentation());
+	assertEquals("/morfeu/preview/data2.svg?$ATTRIBUTES", data2Metadata.getCellPresentation());	//dynamic preview
 	assertTrue("data2 global metadata has no defaults defined", data2Metadata.getDefaultValues().isEmpty());
 	
 }

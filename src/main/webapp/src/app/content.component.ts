@@ -34,8 +34,7 @@ import { DropAreaComponent } from './drop-area.component';
 import { KeyListenerWidget } from "./key-listener-widget.class";
 
 import { CellActivateEvent } from './events/cell-activate.event';
-import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
-import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
 import { CellDragEvent } from './events/cell-drag.event';
 import { CellEditEvent } from "./events/cell-edit.event";
 import { CellSelectEvent } from './events/cell-select.event';
@@ -121,20 +120,12 @@ ngOnInit() {
 
 	console.log("ContentComponent::ngOnInit()");
 	
-	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).filter(s => s.url==null).subscribe(
-			selected => this.clearContent()
-	));
+    this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => this.clear()));
 
-	// if we load a problematic document we don't display anything
-	this.subscribe(this.events.service.of(CellDocumentLoadedEvent)
-			.filter(loaded => loaded.document.hasProblem() )
-			.subscribe(loadedProblematicDocument => this.clearContent()
-	));
-	
-	this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
-			requested => this.fetchContentFor(requested.document, requested.model)
-	));
-	
+    this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
+            requested => this.fetchContentFor(requested.document, requested.model)
+    ));
+
 	this.subscribe(this.events.service.of(ContentSaveEvent).subscribe(
 		   save => this.saveContent(save.document)
 	));
@@ -187,7 +178,7 @@ displayContent(content: Content) {
 }
 
 
-clearContent() {
+clear() {
 
 	console.log("[UI] ContentComponent::clearContent()");
 	this.cellSelectingMode = false;

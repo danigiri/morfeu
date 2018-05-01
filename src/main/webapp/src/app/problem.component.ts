@@ -52,9 +52,9 @@ ngOnInit() {
 		if ( p.message != null ) {
 			console.log( "-> ProblemComponent gets problem"+p.message );
 		} else {
-			//console.log( "-> ProblemComponent clears problem" );
+			console.log( "-> ProblemComponent clears problem" );
 		}
-		this.problem = p.message;
+	        this.problem = p.message;
 	}));
 	
 }

@@ -14,32 +14,32 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { Subscription }	  from 'rxjs/Subscription';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
-import { TreeComponent } from 'angular-tree-component';
+import { HotkeysService, Hotkey } from "angular2-hotkeys";
+import { TreeComponent } from "angular-tree-component";
 
-import { CellModelComponent } from './cell-model.component';
+import { CellModelComponent } from "../cell-model.component";
 
-import { CellModel } from "./cell-model.class";
-import { Model, ModelJSON } from "./model.class";
-import { RemoteObjectService } from './services/remote-object.service';
-import { CellDocument } from './cell-document.class';
-import { KeyListenerWidget } from "./key-listener-widget.class";
+import { CellModel } from "../cell-model.class";
+import { Model, ModelJSON } from "../model.class";
+import { RemoteObjectService } from "../services/remote-object.service";
+import { CellDocument } from "../cell-document.class";
+import { KeyListenerWidget } from "../key-listener-widget.class";
 
-import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
-import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
-import { CellSelectEvent } from './events/cell-select.event';
-import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
-import { CellModelActivatedEvent } from './events/cell-model-activated.event';
-import { ContentRequestEvent } from './events/content-request.event';
-import { EventService } from './events/event.service';
-import { KeyPressedEvent } from "./events/keypressed.event";
-import { ModelRequestEvent } from './events/model-request.event';
-import { NewCellFromModelEvent } from "./events/new-cell-from-model.event";
-import { StatusEvent } from "./events/status.event";
-
+import { CellDocumentClearEvent } from "../events/cell-document-clear.event";
+import { CellSelectEvent } from "../events/cell-select.event";
+import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
+import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
+import { ContentRequestEvent } from "../events/content-request.event";
+import { EventService } from "../events/event.service";
+import { KeyPressedEvent } from "../events/keypressed.event";
+import { ModelLoadedEvent } from "../events/model-loaded.event";
+import { ModelDisplayEvent } from "../events/model-display.event";
+import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
+import { ModelRequestEvent } from "../events/model-request.event";
+import { NewCellFromModelEvent } from "../events/new-cell-from-model.event";
+import { StatusEvent } from "../events/status.event";
 
 @Component({
 	moduleId: module.id,
@@ -74,9 +74,8 @@ import { StatusEvent } from "./events/status.event";
 	`]
 })
 
-export class ModelComponent extends KeyListenerWidget implements OnInit {
-	
-	
+export class ModelComponent extends KeyListenerWidget implements OnInit, OnDestroy {
+
 model: Model;
 	
 protected commandKeys: string[] = ["m", "a", "n"];
@@ -95,22 +94,25 @@ ngOnInit() {
 	
 	console.log("ModelComponent::ngOnInit()"); 
 	
-	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).filter(s => s.url==null).subscribe(
-			selected => this.clearModel()
+	// if we are in a tab area this is redundant, as the parent will remove us from the component tree
+	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(selected => this.clearModel()));
+
+	this.subscribe(this.events.service.of(ModelDisplayEvent).subscribe(
+	        display => this.displayModel(display.model)
 	));
 
-	// if we load a problematic document we don't display anything (enjoying event-based coding right now)
-	this.subscribe(this.events.service.of(CellDocumentLoadedEvent)
-			.filter(loaded => loaded.document.hasProblem() )
-			.subscribe(loadedProblematicDocument => this.clearModel())
-	);
-	
-	this.subscribe(this.events.service.of(ModelRequestEvent).subscribe( requested =>
-			this.loadModel(requested.document) 
+	this.subscribe(this.events.service.of(ModelRequestEvent).subscribe(
+	        requested => this.loadModel(requested.document) 
 	));
-	
+
 	//this.subscribeToCellSelectionClear();
-	
+
+}
+
+
+ngAfterViewInit() {
+    // we are ready to reload the model
+    Promise.resolve(null).then(() => this.events.service.publish(new ModelDisplayReadyEvent()));
 }
 
 
@@ -120,27 +122,29 @@ loadModel(document:CellDocument) {
 	let modelURI = "/morfeu/models/"+document.modelURI;
 	this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
 			console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
-			this.diplayModel(model);	// not firing a load event yet if not needed
+			this.displayModel(model);	// not firing a load event yet if not needed
 			document.model = model;	 // associating the document with the recently loaded model
 			// now that we have loaded the model we can safely load the content (as both are related
 			this.events.service.publish(new ContentRequestEvent(document, model));
+            this.events.service.publish(new ModelLoadedEvent(model));
 			this.events.ok();
 	},
 	//TODO: check for network errors (see https://angular.io/guide/http)
 	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
 	);
-	
+
 }
 
 
-diplayModel(m: Model) {
+displayModel(m: Model) {
 
-	console.log("[UI] ModelComponent::diplayModel("+m.name+")");
+	console.log("[UI] ModelComponent::displayModel("+m.name+")");
 	let i = 0;
 //	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 	this.model = m;
 	this.registerKeyPressedEvents();
+    console.log("[UI] ModelComponent::displayModel [end]");
 
 }
 
@@ -202,8 +206,6 @@ numberPressedCallback(num: number) {
 }
 
 
-
-
 private subscribeChildrenToCellSelection () {
 
 	console.log("ModelComponent::subscribeChildrenToCellSelection()");
@@ -227,5 +229,10 @@ unsubscribeChildrenFromCellSelection() {
 	); 
 }
 
+
+ngOnDestroy() {
+    console.log("ModelComponent::ngOnDestroy()");
+    super.ngOnDestroy();
+}
 
 }

@@ -45,7 +45,7 @@ import dagger.Provides;
 @Module
 public class SVGViewModule {
 
-private static final int ARC = 20;
+private static final int ARC = 10;
 private static final int TRUNCATE_TEXT_LENGHT = 12;
 private static final int FONT_SIZE = 18;
 private static final int BORDER_SIZE = 2;
