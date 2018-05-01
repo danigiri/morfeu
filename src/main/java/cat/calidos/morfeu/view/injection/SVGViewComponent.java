@@ -14,42 +14,28 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.view.injection;
 
-import java.net.URI;
-import java.util.Map;
-
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
-import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSParticle;
-
-import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.Metadata;
 import dagger.BindsInstance;
 import dagger.Component;
-
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = CellModelModule.class)
-public interface CellModelComponent {
+@Component(modules=SVGViewModule.class)
+public interface SVGViewComponent {
 
-CellModel cellModel();
-
+String render();
 
 @Component.Builder
 interface Builder {
 
-	@BindsInstance Builder fromElem(XSElementDecl elem);
-	@BindsInstance Builder fromParticle(XSParticle particle);
-	@BindsInstance Builder withParentURI(@Named("ParentURI") URI uri);
-	@BindsInstance Builder withGlobalMetadata(Map<URI, Metadata> globalMetadata);
-	@BindsInstance Builder andExistingGlobals(Map<String, CellModel> globals);
-
-	CellModelComponent build();
-	
+	@BindsInstance Builder from(@Named("text") String content);
+	@BindsInstance Builder truncate(@Nullable Boolean truncate);
+	SVGViewComponent build();
 }
 
 }

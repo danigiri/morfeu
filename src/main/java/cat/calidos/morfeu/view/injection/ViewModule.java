@@ -45,7 +45,7 @@ public class ViewModule {
 
 
 @Provides
-public static String renderTemplate(JtwigTemplate template, JtwigModel model) {
+public static String render(JtwigTemplate template, JtwigModel model) {
 	return template.render(model);
 }
 

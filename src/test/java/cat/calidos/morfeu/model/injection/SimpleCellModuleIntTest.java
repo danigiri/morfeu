@@ -19,7 +19,6 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.junit.Test;
 import org.w3c.dom.Document;

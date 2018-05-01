@@ -233,9 +233,19 @@
 			<version>2.6</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.apache.httpcomponents</groupId>
-		  <artifactId>httpasyncclient</artifactId>
-		  <version>4.1.2</version>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency><!-- to test dynamic preview with SVG -->
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-dom</artifactId>
+			<version>1.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-svggen</artifactId>
+			<version>1.9.1</version>
 		</dependency>
 
 		<!-- logback -->
@@ -264,9 +274,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>org.mockito</groupId>
-		    <artifactId>mockito-core</artifactId>
-		    <version>2.18.3</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.18.3</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -334,6 +344,16 @@
 
 
 	<repositories>
+		<!--repository>
+			<id>Maven-Central</id>
+			<name>Maven central</name>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository-->
+		<repository>
+			<id>Apache-releases</id>
+			<name>Apache releases</name>
+			<url>https://repository.apache.org/content/repositories/releases</url>
+		</repository>
 	    <repository>
 	      <id>RedHat-GA</id>
 	      <name>RedHat GA repository</name>

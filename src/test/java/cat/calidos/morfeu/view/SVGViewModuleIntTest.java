@@ -14,38 +14,34 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.metadata.injection;
+package cat.calidos.morfeu.view;
 
-import java.util.List;
-import java.util.Optional;
+import static org.junit.Assert.*;
 
-import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
 
-import org.w3c.dom.Node;
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 
-import com.sun.xml.xsom.XSAnnotation;
-
-import dagger.BindsInstance;
-import dagger.Component;
-
+import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=MetadataAnnotationModule.class)
-public interface MetadataAnnotationComponent {
+public class SVGViewModuleIntTest {
 
-List<Node> values();
-
-@Component.Builder
-interface Builder {
-
-	@BindsInstance Builder from(@Nullable XSAnnotation annotation); 
-	@BindsInstance Builder andTag(String tag);
+@Test
+public void testRenderSVG() {
 	
-	MetadataAnnotationComponent build();
-
+	String string = DaggerSVGViewComponent.builder().from("01234").truncate(true).build().render();
+	System.err.println(string);
+	try {
+		FileUtils.writeStringToFile(new File("/tmp/hola.svg"), string);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 }
-
 
 }
