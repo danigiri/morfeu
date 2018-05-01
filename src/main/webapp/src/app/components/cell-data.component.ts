@@ -48,7 +48,7 @@ import { EventService } from "../events/event.service";
 				<p class="cell-data-model-uri card-text">URI: <span class="cell-data-uri text-muted">{{uri}}</span></p>
 			</div>
 			<ng-container *ngIf="!editor">
-				<img *ngIf="showPresentation()" class="card-img-bottom" src="{{cellModel.getPresentation()}}" alt="Image representation of the cell">
+				<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
 				<!-- if we have a value field we should show it (readonly!) -->
 				<div class="card-body">
 					 <form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
@@ -104,7 +104,7 @@ import { EventService } from "../events/event.service";
 								></attribute-data-editor>
 						</ul>
 					</form>
-					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{cellModel.getPresentation()}}" alt="Image representation of the cell">
+					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
 			</ng-container>
 		</div>
 			   `,
@@ -190,6 +190,10 @@ private showPresentation() {
 	return this.cellModel.presentation.startsWith("CELL");
 }
 
+
+private getPresentation(): String {    
+    return this.cell==undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
+}
 
 private showValue() {
 	return this.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not

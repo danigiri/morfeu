@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,29 +26,33 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.DocumentGETControl;
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentsServlet extends MorfeuServlet {
+public class PreviewServlet extends MorfeuServlet {
 
-protected final static Logger log = LoggerFactory.getLogger(DocumentsServlet.class);
+protected final static Logger log = LoggerFactory.getLogger(PreviewServlet.class);
 
 /* (non-Javadoc)
 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-*//////////////////////////////////////////////////////////////////////////////
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+	// http://localhost:8080/morfeu/preview/foo.svg?a=1&b=2
+
 	String path = normalisedPathFrom(req);
-	log.trace("DocumentsServlet::doGet '[{}]{}'", resourcesPrefix, path);
+	Map<String, String[]> params = req.getParameterMap();
+	log.trace("PreviewServlet::doGet '[{}]{}' params:'{}'", resourcesPrefix, path, params);
 
-	String doc = new DocumentGETControl(resourcesPrefix, path).processRequest();
+	String content = new PreviewGETControl(resourcesPrefix, path, params).processRequest();
 
-	//resp.setContentType(contentType);
-	writeTo(doc, resp);
-	
+	if (path.endsWith("svg")) {
+		writeTo(content, "image/svg+xml", resp);
+	} else {
+		writeTo(content, resp);
+	}
+
 }
 
 }

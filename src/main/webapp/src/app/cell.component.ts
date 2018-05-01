@@ -458,7 +458,7 @@ subscribeToSelection() {
 
 
 getCellPresentation() {
-	return this.cell.cellModel.getPresentation();
+	return this.cell.getPresentation();
 }
 
 private isEditable(): boolean {

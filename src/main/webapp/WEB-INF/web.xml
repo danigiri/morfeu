@@ -22,39 +22,51 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 
 	<!-- Documents -->
 	<servlet>
-    	<display-name>document-servlet</display-name>
-    	<servlet-name>DocumentsServlet</servlet-name>
-   		<servlet-class>cat.calidos.morfeu.webapp.DocumentsServlet</servlet-class>
+		<display-name>document-servlet</display-name>
+		<servlet-name>DocumentsServlet</servlet-name>
+		<servlet-class>cat.calidos.morfeu.webapp.DocumentsServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-    	<servlet-name>DocumentsServlet</servlet-name>
-    	<url-pattern>/documents/*</url-pattern>
-  	</servlet-mapping>
+		<servlet-name>DocumentsServlet</servlet-name>
+		<url-pattern>/documents/*</url-pattern>
+	</servlet-mapping>
 	
 	
 	<!-- Models -->
 	<servlet>
-    	<display-name>model-servlet</display-name>
-    	<servlet-name>ModelsServlet</servlet-name>
-   		<servlet-class>cat.calidos.morfeu.webapp.ModelsServlet</servlet-class>
+		<display-name>model-servlet</display-name>
+		<servlet-name>ModelsServlet</servlet-name>
+		<servlet-class>cat.calidos.morfeu.webapp.ModelsServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-    	<servlet-name>ModelsServlet</servlet-name>
-    	<url-pattern>/models/*</url-pattern>
-  	</servlet-mapping>
+		<servlet-name>ModelsServlet</servlet-name>
+		<url-pattern>/models/*</url-pattern>
+	</servlet-mapping>
 	
 	<!-- Content -->
 	<servlet>
-    	<display-name>content-servlet</display-name>
-    	<servlet-name>ContentServlet</servlet-name>
-   		<servlet-class>cat.calidos.morfeu.webapp.ContentServlet</servlet-class>
+		<display-name>content-servlet</display-name>
+		<servlet-name>ContentServlet</servlet-name>
+		<servlet-class>cat.calidos.morfeu.webapp.ContentServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-    	<servlet-name>ContentServlet</servlet-name>
-    	<url-pattern>/content/*</url-pattern>
-  	</servlet-mapping>
+		<servlet-name>ContentServlet</servlet-name>
+		<url-pattern>/content/*</url-pattern>
+	</servlet-mapping>
 	
+	<!-- Preview -->
+	<servlet>
+		<display-name>preview-servlet</display-name>
+		<servlet-name>PreviewServlet</servlet-name>
+		<servlet-class>cat.calidos.morfeu.webapp.PreviewServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PreviewServlet</servlet-name>
+		<url-pattern>/preview/*</url-pattern>
+	</servlet-mapping>
+
 </web-app>

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -52,7 +52,6 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 
 	String content = new ContentGETControl(resourcesPrefix, path, modelPath).processRequest(); 
 
-	resp.setContentType("application/json");
 	writeTo(content, resp);
 
 }
@@ -76,7 +75,6 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
 	String result = new ContentPOSTControl(resourcesPrefix, path, content, transforms, modelPath).processRequest();
 	
-	resp.setContentType("application/json");
 	writeTo(result, resp);
 
 }

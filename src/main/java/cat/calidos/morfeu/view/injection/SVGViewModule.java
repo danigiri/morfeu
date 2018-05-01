@@ -17,10 +17,12 @@
 package cat.calidos.morfeu.view.injection;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextLayout;
+import java.awt.geom.RoundRectangle2D;
 import java.io.StringWriter;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
@@ -43,10 +45,12 @@ import dagger.Provides;
 @Module
 public class SVGViewModule {
 
+private static final int ARC = 20;
 private static final int TRUNCATE_TEXT_LENGHT = 12;
-private static final int FONT_SIZE = 12;
+private static final int FONT_SIZE = 18;
 private static final int BORDER_SIZE = 2;
-private static final int RECTANGLE_SIZE = 99;
+private static final int RECTANGLE_WIDTH = 88;
+private static final int RECTANGLE_HEIGHT = 70;
 private static final int TEXT_START = BORDER_SIZE+2;
 private static final int TEXT_MAX_WIDTH = 80;
 private static final int TEXT_MAX_HEIGHT = 80;
@@ -83,11 +87,18 @@ public static org.w3c.dom.Document document(DOMImplementation domImplementation)
 public static SVGGraphics2D generator(org.w3c.dom.Document document, Font font) {
 
 	SVGGraphics2D generator = new SVGGraphics2D(document);
+	generator.setSVGCanvasSize(new Dimension(RECTANGLE_WIDTH, RECTANGLE_HEIGHT)); // set total viewport to the minimum
+	
 	generator.setPaint(Color.DARK_GRAY);
-	generator.fill(new Rectangle(0, 0, RECTANGLE_SIZE, RECTANGLE_SIZE));
+	RoundRectangle2D.Double rect = new RoundRectangle2D.Double(0, 0, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, ARC, ARC);
+	generator.fill(rect);
+	
+	int innerRectWidth = RECTANGLE_WIDTH-2*BORDER_SIZE;
+	int innerRectHeight = RECTANGLE_HEIGHT-2*BORDER_SIZE;
+	rect = new RoundRectangle2D.Double(BORDER_SIZE, BORDER_SIZE, innerRectWidth, innerRectHeight, ARC, ARC);
 	generator.setPaint(Color.LIGHT_GRAY);
-	int innerRectangleSize = RECTANGLE_SIZE-2*BORDER_SIZE;
-	generator.fill(new Rectangle(BORDER_SIZE, BORDER_SIZE, innerRectangleSize, innerRectangleSize));
+	generator.fill(rect);
+
 	generator.setPaint(Color.BLACK);
 	generator.setFont(font);
 
@@ -119,6 +130,7 @@ public static AttributedCharacterIterator paragraph(AttributedString content) {
 	return content.getIterator();
 }
 
+
 @Provides
 public static LineBreakMeasurer lineMeasurer(SVGGraphics2D generator, AttributedCharacterIterator paragraph) {
 	return new LineBreakMeasurer(paragraph, generator.getFontRenderContext());
@@ -134,11 +146,12 @@ public static SVGGraphics2D completedGraphics(@Named("text") String content,
 	return truncate!=null && truncate ?  providerShortText.get() : providerLongText.get();
 }
 
+
 @Provides @Named("GraphicsShortText") 
 public static SVGGraphics2D graphicsShortText(@Named("text") String content, SVGGraphics2D generator) {
 
 	String truncatedContent = content.substring(0, Math.min(content.length(), TRUNCATE_TEXT_LENGHT));
-	generator.drawString(truncatedContent, (int)TEXT_START, (int)TEXT_START*5); 
+	generator.drawString(truncatedContent, TEXT_START, TEXT_START*3); 
 
 	return generator;
 	
@@ -160,7 +173,7 @@ public static SVGGraphics2D graphicsLongText(LineBreakMeasurer lineMeasurer,
 
 	while (lineMeasurer.getPosition() < paragraphEnd && drawPosY < TEXT_MAX_HEIGHT) {
 		TextLayout layout = lineMeasurer.nextLayout(breakWidth);
-		float drawPosX = layout.isLeftToRight() ? 0 : breakWidth - layout.getAdvance();
+		float drawPosX = layout.isLeftToRight() ? TEXT_START : breakWidth - layout.getAdvance();
 		drawPosY += layout.getAscent();
 		layout.draw(generator, drawPosX, drawPosY);
 		drawPosY += layout.getDescent() + layout.getLeading();

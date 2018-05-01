@@ -45,7 +45,7 @@ protected static final String DEFAULT_RESOURCES_PREFIX = "http://localhost:8080/
 
 protected Properties configuration;
 protected String resourcesPrefix;
-
+protected String defaultContentType = "application/json";
 
 /* (non-Javadoc)
 * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
@@ -82,6 +82,9 @@ public void init(ServletConfig config) throws ServletException {
 }
 
 
+/** @param req from the servlet
+* @return normalised path that does not start with '/'
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 protected String normalisedPathFrom(HttpServletRequest req) {
 
 	//String path = req.getPathTranslated();
@@ -91,10 +94,11 @@ protected String normalisedPathFrom(HttpServletRequest req) {
 	}
 
 	return path;
+	
 }
 
 
-protected void writeTo(String content, HttpServletResponse resp) throws IOException {
+protected void writeTo(String content, String contentType, HttpServletResponse resp) throws IOException {
 
 	// to simulate slowness
 //	try {
@@ -103,10 +107,16 @@ protected void writeTo(String content, HttpServletResponse resp) throws IOExcept
 //		// TODO Auto-generated catch block
 //		e.printStackTrace();
 //	}
+	resp.setContentType(contentType);
 	PrintWriter out = resp.getWriter();
 	out.print(content);
 	out.close();
 
+}
+
+
+protected void writeTo(String content, HttpServletResponse resp) throws IOException {
+	writeTo(content, defaultContentType, resp);
 }
 
 }

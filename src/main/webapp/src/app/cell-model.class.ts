@@ -113,8 +113,25 @@ getParent():FamilyMember {
 }
 
 
-getPresentation() {
+getRawPresentation() {
 	return (this.cellPresentation=='DEFAULT') ? "assets/images/cell.svg" : this.cellPresentation;
+}
+
+
+getPresentation() {
+    
+    let effectivePresentation = this.getRawPresentation();
+    
+    if (effectivePresentation.includes("$")) {
+        if (effectivePresentation.includes("$ATTRIBUTES")) {    // basic preview: attributes as parameters
+            let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.type_.name).join("&") : "";
+            attribs = "_name="+ this.name+"&"+attribs;   // adding the name at the beginning
+            effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
+        }
+    }
+    
+    return effectivePresentation;
+
 }
 
 

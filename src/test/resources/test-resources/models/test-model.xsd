@@ -23,7 +23,7 @@
 				<mf:metadata uri="test/row/col/data2">
 					<mf:desc>Globally provided description of 'data2'</mf:desc>
 					<mf:thumb>assets/images/data2-thumb.svg</mf:thumb>
-					<mf:cell-presentation>assets/images/data2-cell.svg</mf:cell-presentation>
+					<mf:cell-presentation>/morfeu/preview/data2.svg?$ATTRIBUTES</mf:cell-presentation>
 				</mf:metadata>
 			</mf:extra-metadata>
 		</xs:appinfo>
