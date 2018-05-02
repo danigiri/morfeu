@@ -112,6 +112,7 @@ ngOnInit() {
 
 ngAfterViewInit() {
     // we are ready to reload the model
+    console.log("ModelComponent::ngAfterViewInit()"); 
     Promise.resolve(null).then(() => this.events.service.publish(new ModelDisplayReadyEvent()));
 }
 
@@ -125,8 +126,8 @@ loadModel(document:CellDocument) {
 			this.displayModel(model);	// not firing a load event yet if not needed
 			document.model = model;	 // associating the document with the recently loaded model
 			// now that we have loaded the model we can safely load the content (as both are related
-			this.events.service.publish(new ContentRequestEvent(document, model));
             this.events.service.publish(new ModelLoadedEvent(model));
+			this.events.service.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
 	//TODO: check for network errors (see https://angular.io/guide/http)
@@ -140,7 +141,7 @@ loadModel(document:CellDocument) {
 displayModel(m: Model) {
 
 	console.log("[UI] ModelComponent::displayModel("+m.name+")");
-	let i = 0;
+//	let i = 0;
 //	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 	this.model = m;
 	this.registerKeyPressedEvents();

@@ -63,6 +63,8 @@ model?: Model;
     
 @ViewChild(ModelComponent) private modelComponent: ModelComponent;
 
+private modelDisplayReadySubscription: Subscription;
+
 constructor(eventService: EventService) {
     super(eventService);
 }
@@ -70,30 +72,27 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
     
+    console.log("ModelComponent::ngOnInit()");
+
     this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => this.clear()));
 
-    console.log("ModelComponent::ngOnInit()");
     this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
             loaded => this.events.service.publish(new ModelRequestEvent(loaded.document))
     ));
     
     this.subscribe(this.events.service.of(ModelLoadedEvent).subscribe(loaded => this.store(loaded.model)));
 
-    this.subscribe(this.events.service.of(ModelDisplayReadyEvent).subscribe(loaded => {
-            if (this.model) {
-                this.redisplayModel();
-            }
-        
-    }));
+
 
 }
 
 
 private beforeTabChange($event: NgbTabChangeEvent) {
-    console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.nextId);
+    console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
     if ($event.activeId=="model-tab") {
-        
     } else if ($event.activeId=="snippets-tab") {
+        this.modelDisplayReadySubscription = this.subscribe(this.events.service.of(ModelDisplayReadyEvent)
+                .subscribe(loaded => this.redisplayModel()));
     }
 
 }
@@ -106,7 +105,7 @@ private isVisible(): boolean {
 
 private store(model: Model) {
     
-    console.log("[UI] ModelAreaComponent:: show(%s)", model.URI);
+    console.log("[UI] ModelAreaComponent:: store(%s)", model.URI);
     this.model = model;
 }
 
@@ -114,6 +113,7 @@ private store(model: Model) {
 private redisplayModel() {    
 
     console.log("[UI] ModelAreaComponent:: redisplayModel(%s), sending display event", this.model.name);
+    this.unsubscribe(this.modelDisplayReadySubscription);
     this.events.service.publish(new ModelDisplayEvent(this.model));
     console.log("[UI] ModelAreaComponent:: redisplayModel(%s), display event sent", this.model.name);
 

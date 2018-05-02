@@ -157,7 +157,10 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
 		// we associate the content with the document and the model so it al fits together
 		document_.content = content;
-		content.associateWith(model);
+		
+		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
+	    this.model = MODEL.fromJSON(model.toJSON());      // CLONE AS 
+		content.associateWith(this.model);                // THIS MUTATES THE CELL MODEL, NEED TO FIX
 		this.displayContent(content);
 		this.events.ok();
 	},

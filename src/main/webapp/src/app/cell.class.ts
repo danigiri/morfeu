@@ -199,7 +199,7 @@ private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell 
 			if (!reference) {
 				console.error("Could not find cellModel of reference cellModel:{}",cellModel.name);
 			}
-			cellModel.children = reference.children;
+			cellModel.children = reference.children; //THIS MUTATES THE CELL MODEL, SIDE EFFECT!!! FIXME
 
 		}
 		
