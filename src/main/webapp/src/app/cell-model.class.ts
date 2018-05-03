@@ -17,6 +17,7 @@
 
 import { Cell } from "./cell.class";
 import { FamilyMember } from "./family-member.interface";
+import { NameValue } from "./name-value.interface";
 import { Type_ } from "./type_.class";
 
 // //// COMPONENT STUFF										////
@@ -24,7 +25,7 @@ import { Type_ } from "./type_.class";
 import { CellModelComponent } from "./cell-model.component";
 // ////														////
 
-export class CellModel implements FamilyMember {
+export class CellModel implements NameValue, FamilyMember {
 
 static readonly DEFAULT_EMPTY_VALUE = "";
     
@@ -168,6 +169,8 @@ generateCell():Cell {
 }
 
 
+//// SerialisableToJSON ////
+
 toJSON(): CellModelJSON {
 
 	let serialisedCellModel:CellModelJSON = Object.assign({}, this);
@@ -229,6 +232,8 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 static reviver(key: string, value: any): any {
 	return key === "" ? CellModel.fromJSON(value) : value;
 }
+
+//// SerialisableToJSON [end] ////
 
 
 private generateAttributeFrom(attribute: CellModel): Cell {

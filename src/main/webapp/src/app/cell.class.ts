@@ -83,24 +83,6 @@ columnFieldValue():string {
 }
 
 
-/** return presentation with all substitutions for dynamic preview */
-getPresentation():String {
-    
-    let effectivePresentation = this.cellModel.getRawPresentation();
-    
-    if (effectivePresentation.includes("$")) {
-        if (effectivePresentation.includes("$ATTRIBUTES")) {    // basic preview: attributes as parameters
-            let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.value).join("&") : "";
-            attribs = "_name="+ this.name+"&"+attribs;   // adding the name at the beginning
-            effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
-        }
-    }
-    
-    return effectivePresentation;
-    
-}
-
-
 /** set ourselves at this position, uses information from the parent but does not mutate the parent */
 setPosition(position:number):Cell {
 
@@ -255,7 +237,24 @@ private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
 }
 
 
-////Adopter ////
+/** return presentation with all substitutions for dynamic preview */
+getPresentation():string {
+    
+    let effectivePresentation = this.cellModel.getRawPresentation();
+    
+    if (effectivePresentation.includes("$")) {
+        if (effectivePresentation.includes("$ATTRIBUTES")) {    // basic preview: attributes as parameters
+            let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.value).join("&") : "";
+            effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
+        }
+    }
+    
+    return effectivePresentation;
+    
+}
+
+
+//// Adopter ////
 
 adopt(orphan:Cell, position:number) {
     
@@ -494,6 +493,8 @@ static reviver(key: string, value: any): any {
 	return key === "" ? CELL.fromJSON(value) : value;
 
 }
+
+//// SerialisableToJSON [end] ////
 
 }
 

@@ -16,9 +16,11 @@
 
 import { NameValue } from "./name-value.interface";
 
-export class Presentation {
+export class PresentationParser {
     
-static generateGETPresentation(presentation: string, values: NameValue[]) {}
-    
-    
+static expand(str: string, variable: string, data: NameValue|NameValue[]): string {
+    return "";
+}
+
+
 } 
