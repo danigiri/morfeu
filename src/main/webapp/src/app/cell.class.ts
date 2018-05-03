@@ -19,10 +19,11 @@ import { Lifecycle } from "./lifecycle.interface";
 import { FamilyMember } from "./family-member.interface";
 import { CellModel } from "./cell-model.class";
 import { Model } from "./model.class";
+import { NameValue } from "./name-value.interface";
 import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 
-export class Cell implements Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
+export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
 value?: string;
 attributes?: Cell[];
@@ -98,6 +99,7 @@ getPresentation():String {
     return effectivePresentation;
     
 }
+
 
 /** set ourselves at this position, uses information from the parent but does not mutate the parent */
 setPosition(position:number):Cell {

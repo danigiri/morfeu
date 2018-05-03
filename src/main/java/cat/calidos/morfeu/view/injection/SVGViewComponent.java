@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.view.injection;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
@@ -33,8 +35,9 @@ String render();
 @Component.Builder
 interface Builder {
 
-	@BindsInstance Builder from(@Named("text") String content);
-	@BindsInstance Builder truncate(@Nullable Boolean truncate);
+	@BindsInstance Builder from(@Named("Text") String text);
+	@BindsInstance Builder withHeader(@Named("Header") Optional<String> header);
+	@BindsInstance Builder truncate(Boolean truncate);
 	SVGViewComponent build();
 }
 

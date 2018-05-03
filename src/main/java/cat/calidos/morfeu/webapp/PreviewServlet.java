@@ -18,6 +18,7 @@ package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,11 +27,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.control.PreviewGETControl;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class PreviewServlet extends MorfeuServlet {
 
+private static final String HEADER_PARAM = "__header";
 protected final static Logger log = LoggerFactory.getLogger(PreviewServlet.class);
 
 /* (non-Javadoc)
@@ -45,7 +49,8 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	Map<String, String[]> params = req.getParameterMap();
 	log.trace("PreviewServlet::doGet '[{}]{}' params:'{}'", resourcesPrefix, path, params);
 
-	String content = new PreviewGETControl(resourcesPrefix, path, params).processRequest();
+	Optional<String> header = extractHeaderFrom(params);
+	String content = new PreviewGETControl(resourcesPrefix, path, header, params).processRequest();
 
 	if (path.endsWith("svg")) {
 		writeTo(content, "image/svg+xml", resp);
@@ -53,6 +58,21 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 		writeTo(content, resp);
 	}
 
+}
+
+
+private Optional<String> extractHeaderFrom(Map<String, String[]> params) {
+	
+	Optional<String> header =  Optional.empty();
+	if (params.containsKey(HEADER_PARAM)) {
+		String[] param = params.get(HEADER_PARAM);
+		if (param.length>0) {
+			header = Optional.of(param[0]);
+		}
+	}
+	
+	return header;
+	
 }
 
 }

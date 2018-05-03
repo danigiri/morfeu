@@ -14,16 +14,16 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.control;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.Control;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -42,16 +42,19 @@ protected final static Logger log = LoggerFactory.getLogger(PreviewGETControl.cl
 
 private String prefix;
 private String path;
+private Optional<String> header;
+private boolean truncate;
 private Map<String, String[]> params;
 
-public PreviewGETControl(String prefix, String path, Map<String, String[]> params) {
+public PreviewGETControl(String prefix, String path, Optional<String> header, Map<String, String[]> params) {
 
 		super("preview", "", "");
 
 		this.prefix = prefix;
 		this.path = path;
 		this.params = params;
-
+		this.header = header;
+		this.truncate = false;
 }
 
 
@@ -61,7 +64,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 
 	String text = params.entrySet().stream().map(Map.Entry::getValue).map(sa -> sa[0]).collect(Collectors.joining(","));
 
-	return DaggerSVGViewComponent.builder().from(text).build().render();
+	return DaggerSVGViewComponent.builder().from(text).withHeader(header).truncate(truncate).build().render();
 
 }
 

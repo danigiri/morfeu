@@ -26,6 +26,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.io.StringWriter;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -119,8 +120,14 @@ public static Font font() {
 }
 
 
+@Provides @Named("EffectiveText")
+public static String effectiveText(@Named("Text") String text, @Named("Header") Optional<String> header) {
+	return header.isPresent() ? header.get()+"\n"+text : text;
+}
+
+
 @Provides
-public static AttributedString attributedString(@Named("text") String content) {
+public static AttributedString attributedString(@Named("EffectiveText") String content) {
 	return new AttributedString(content);
 }
 
@@ -138,17 +145,17 @@ public static LineBreakMeasurer lineMeasurer(SVGGraphics2D generator, Attributed
 
 
 @Provides @Named("CompletedGraphics")
-public static SVGGraphics2D completedGraphics(@Named("text") String content, 
-												@Nullable Boolean truncate,
+public static SVGGraphics2D completedGraphics(@Named("EffectiveText") String effectiveContent, 
+												boolean truncate,
 												@Named("GraphicsShortText") Provider<SVGGraphics2D> providerShortText,
 		 										@Named("GraphicsLongText") Provider<SVGGraphics2D> providerLongText) {
 
-	return truncate!=null && truncate ?  providerShortText.get() : providerLongText.get();
+	return truncate ?  providerShortText.get() : providerLongText.get();
 }
 
 
 @Provides @Named("GraphicsShortText") 
-public static SVGGraphics2D graphicsShortText(@Named("text") String content, SVGGraphics2D generator) {
+public static SVGGraphics2D graphicsShortText(@Named("Text") String content, SVGGraphics2D generator) {
 
 	String truncatedContent = content.substring(0, Math.min(content.length(), TRUNCATE_TEXT_LENGHT));
 	generator.drawString(truncatedContent, TEXT_START, TEXT_START*3); 
