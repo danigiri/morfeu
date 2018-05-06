@@ -16,9 +16,8 @@
 
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
+import { Observable ,  BehaviorSubject } from 'rxjs';
+
 
 import { SerialisableToJSON } from '../serialisable-to-json.interface';
 

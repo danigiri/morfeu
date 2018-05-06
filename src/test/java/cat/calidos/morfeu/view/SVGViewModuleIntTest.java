@@ -19,6 +19,7 @@ package cat.calidos.morfeu.view;
 import static org.junit.Assert.*;
 
 import java.io.StringReader;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,10 +43,11 @@ public class SVGViewModuleIntTest {
 @Test
 public void testRenderSVG() throws Exception {
 	
-	String svg = DaggerSVGViewComponent.builder().from("Short text").truncate(true).build().render();
+	Optional<String> header = Optional.empty();
+	String svg = DaggerSVGViewComponent.builder().from("Short text").withHeader(header).truncate(true).build().render();
 	assertNotNull(svg);
 	assertTrue("Should not get an empty SVG", svg.length()>0);
-	System.err.println(svg);
+	//System.err.println(svg);
 
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 	builderFactory.setValidating(false);	// no need to validate, just parse

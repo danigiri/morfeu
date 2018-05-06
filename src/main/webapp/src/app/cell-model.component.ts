@@ -16,8 +16,7 @@
 
 
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from "rxjs/Observable";
-import { Subscription } from "rxjs/Subscription";
+import { Observable ,  Subscription } from "rxjs";
 
 import { TreeNode } from 'angular-tree-component';
 

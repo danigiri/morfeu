@@ -105,7 +105,7 @@ public void contentTest() {
 	assertTrue(col3b.isColumnWell());
 
 	UICell data2 = col3b.child("row(0)").child("col(0)").child("data2(1)");
-	assertTrue("'data2' cell representation img is wrong", data2.img().endsWith("assets/images/data2-cell.svg"));
+	assertTrue("'data2' cell representation img is wrong", data2.img().contains("morfeu/preview/data2.svg"));
 
 }
 

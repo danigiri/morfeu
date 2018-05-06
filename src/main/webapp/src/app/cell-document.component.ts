@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Subscription }	  from 'rxjs/Subscription';
+import { Subscription }	  from 'rxjs';
 
 import { CellDocument, CellDocumentJSON } from './cell-document.class';
 import { Widget } from './widget.class';

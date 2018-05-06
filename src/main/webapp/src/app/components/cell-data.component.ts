@@ -98,9 +98,10 @@ import { EventService } from "../events/event.service";
                                 />
 
 						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-							<attribute-data-editor *ngFor="let a of cellModel.attributes" 
+							<attribute-data-editor *ngFor="let a of cellModel.attributes; let i = index" 
 								[parentCell]="cell" 
 								[cellModel]="a"
+								[index]="i"
 								></attribute-data-editor>
 						</ul>
 					</form>

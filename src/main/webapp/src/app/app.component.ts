@@ -15,7 +15,7 @@
  */
 
 import { Component, AfterViewInit } from "@angular/core";
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 import { isDevMode } from "@angular/core";
 import { Http } from "@angular/http";
 import { HttpClient } from "@angular/common/http";	// new angular 5 http client
@@ -123,7 +123,7 @@ ngAfterViewInit() {
 	console.log("AppComponent::ngAfterViewInit()");
  
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	let foo = true;
+	let foo = false;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent)

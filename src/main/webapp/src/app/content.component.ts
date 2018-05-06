@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 
 import { CellDocument } from './cell-document.class';

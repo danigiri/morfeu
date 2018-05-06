@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Widget } from './widget.class';
 import { CollapsibleComponent } from "./components/collapsible.component";

@@ -75,7 +75,20 @@ public UIAttributeData enterText(String value) {
 		throw new UnsupportedOperationException("Cannot set the value of a non-editable field");
 	}
 	
-	element.$(".attribute-data-value").setValue(value);
+//	int attributeIndex = 0;
+//	try {
+//		attributeIndex = Integer.parseInt(element.attr("index"));
+//	} catch (Exception e) {}
+//	
+//	for (int i=0; i<=attributeIndex; i++) {
+//		pressKey("\t");
+//	}
+	// this only works if called in order, selenide is not happy about the setValue so we're hacking it
+	pressKey("\t");
+	pressKey(value);
+	
+	//element.$(".attribute-data-value").setValue(value);
+	//element.setValue(value);
 	
 	return this;
 }

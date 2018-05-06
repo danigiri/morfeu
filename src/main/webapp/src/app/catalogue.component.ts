@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit } from '@angular/core';
-import { Subscription }	  from 'rxjs/Subscription';
+import { Subscription }	  from 'rxjs';
 
 import { Widget } from './widget.class';
 import { Catalogue } from './catalogue.class';

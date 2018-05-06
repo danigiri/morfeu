@@ -17,9 +17,8 @@
 import { Injectable } from '@angular/core';
 //import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';  // new angular 5 http client
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
+import { Observable ,  BehaviorSubject } from 'rxjs';
+
 
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead 
 */

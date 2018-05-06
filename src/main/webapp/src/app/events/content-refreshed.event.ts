@@ -14,7 +14,7 @@
  *	 limitations under the License.
  */
 
-import { Content } from "../Content.class";
+import { Content } from "../content.class";
 
 
 export class ContentRefreshedEvent {

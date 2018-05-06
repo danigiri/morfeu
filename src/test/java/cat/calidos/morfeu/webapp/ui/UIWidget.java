@@ -38,8 +38,13 @@ protected static final String CLASS = "class";
 
 protected SelenideElement element;
 
+private WebDriver driver;
+
 public UIWidget(SelenideElement element) {
+
 	this.element = element;
+	this.driver = element.getWrappedDriver();
+	
 }
 
 
@@ -72,7 +77,7 @@ public void shouldDisappear() {
 @SuppressWarnings("unchecked")
 public T hover() {
 
-	element.scrollTo().hover();
+	//element.scrollTo().hover();
 	element.hover();
 	
 	return (T)this;
@@ -84,7 +89,7 @@ public T hover() {
 public T pressKey(String k) {
 	
 	// we are sending the keys this way as it seems to work as it should, selenide or selenium has a lot of trouble here
-	WebDriver driver = element.getWrappedDriver();
+
 	Actions actions = new Actions(driver);
 	//actions.moveToElement(element.getWrappedElement());
 	//actions.click();
@@ -100,6 +105,18 @@ public T pressKey(String k) {
 	
 }
 
+
+@SuppressWarnings("unchecked")
+public T pressBackspace() {
+
+	WebDriver driver = element.getWrappedDriver();
+	Actions actions = new Actions(driver);
+	actions.sendKeys(Keys.BACK_SPACE);
+	actions.build().perform();
+	
+	return (T) this;
+
+}
 
 /**
 * @return

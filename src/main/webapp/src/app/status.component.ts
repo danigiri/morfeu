@@ -15,7 +15,7 @@
  */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription }	  from 'rxjs/Subscription';
+import { Subscription }	  from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
   
 import { EventService } from './events/event.service';

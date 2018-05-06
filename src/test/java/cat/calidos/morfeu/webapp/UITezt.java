@@ -20,6 +20,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import cat.calidos.morfeu.utils.Tezt;
@@ -51,9 +52,12 @@ public static void setUpClass() throws Exception {
 
 	appBaseURL = defineSystemVariable(URL_PROPERTY, DEFAULT_URL);
 
-	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-	capabilities.setCapability("chrome.verbose", false);
-	driver = new ChromeDriver(capabilities);
+
+	ChromeOptions chromeOptions = new ChromeOptions();
+	//chromeOptions.addArguments("--log-level=3");
+	chromeOptions.addArguments("--log-path=/dev/null");	//really?
+	chromeOptions.addArguments("--silent");
+	driver = new ChromeDriver(chromeOptions);	
 
 }
 

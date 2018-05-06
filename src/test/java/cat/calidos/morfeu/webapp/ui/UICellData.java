@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.openqa.selenium.Keys;
+
 import com.codeborne.selenide.SelenideElement;
 
 /**
@@ -81,8 +83,9 @@ public List<UIAttributeData> attributes() {
 
 
 public Optional<String> value() {
-	return Optional.ofNullable(element.$(".cell-data-value").text());
+	return Optional.ofNullable(element.$(".cell-data-value").getValue());
 }
+
 
 public UICellData enterText(String value) {
 
@@ -90,8 +93,15 @@ public UICellData enterText(String value) {
 		throw new UnsupportedOperationException("Trying to edit value of without the editor");
 	}
 
+	// selenide does not like setValue
 	
-	element.$(".cell-data-value").setValue(value);
+	pressKey("\t");
+	int l = value().get().length();
+	for (int i=0; i<l; i++) { 
+		pressBackspace(); 
+	}
+	pressKey(value);
+	//element.$(".cell-data-value").setValue(value);
 	
 	return this;
 
