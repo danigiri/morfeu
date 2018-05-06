@@ -67,7 +67,7 @@ public static Document produceDocument(@Named("NormalisedDocument") Document doc
 		 doc.setValidator(contentParser.validator().get());
 		 doc.validate();	// if this does not throw an exception, it means content is valid
 		 doc.setContent(contentParser.content().get());
-		
+
 	} catch (Exception e) {
 		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);
 	}

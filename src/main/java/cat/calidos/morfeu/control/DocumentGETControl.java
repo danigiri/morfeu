@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 public class DocumentGETControl extends Control {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentGETControl.class);
+
 private String prefix;
 private String path;
 
@@ -65,13 +66,13 @@ protected Object process()
 
 @Override
 protected void beforeProcess() {
-	log.trace("DocumentControl::loadDocument('{}', '{}')", prefix, path);
+	log.trace("Loading Document('{}', '{}')", prefix, path);
 }
 
 
 @Override
 protected void afterProblem(String problem) {
-	log.trace("Problem loading document('{}', '{}'): {}", prefix, path, problem);
+	log.warn("Problem loading document('{}', '{}'): {}", prefix, path, problem);
 }
 
 
