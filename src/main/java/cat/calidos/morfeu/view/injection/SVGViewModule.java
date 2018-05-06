@@ -122,7 +122,7 @@ public static Font font() {
 
 @Provides @Named("EffectiveText")
 public static String effectiveText(@Named("Text") String text, @Named("Header") Optional<String> header) {
-	return header.isPresent() ? header.get()+"\n"+text : text;
+	return header.isPresent() ? "**"+header.get()+"** "+text : text;
 }
 
 

@@ -18,13 +18,16 @@ package cat.calidos.morfeu.view;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.junit.Test;
@@ -32,6 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 
@@ -41,7 +45,7 @@ import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 public class SVGViewModuleIntTest {
 
 @Test
-public void testRenderSVG() throws Exception {
+public void testRenderSVGTruncate() throws Exception {
 	
 	Optional<String> header = Optional.empty();
 	String svg = DaggerSVGViewComponent.builder().from("Short text").withHeader(header).truncate(true).build().render();
@@ -49,20 +53,42 @@ public void testRenderSVG() throws Exception {
 	assertTrue("Should not get an empty SVG", svg.length()>0);
 	//System.err.println(svg);
 
+	NodeList nodeList = readFromSVG(svg, "//text");
+	assertNotNull(nodeList);
+	assertEquals("Should only have one text element in the svg", 1, nodeList.getLength());
+
+	Node text = nodeList.item(0).getFirstChild();	// text is the top XML node and the first child has the content
+	assertEquals("Should have the short text as SVG content", "Short text", text.getNodeValue());
+
+}
+
+
+@Test
+public void testRenderSVGHeader() throws Exception {
+
+	Optional<String> header = Optional.of("Header");
+	String svg = DaggerSVGViewComponent.builder().from("Short text").withHeader(header).truncate(true).build().render();
+	assertNotNull(svg);
+
+	NodeList nodeList = readFromSVG(svg, "//text");
+
+	Node text = nodeList.item(0).getFirstChild();	// text is the top XML node and the first child has the content
+	assertTrue("Should have the header in the SVG content", text.getNodeValue().contains("Header"));
+
+}
+
+
+private NodeList readFromSVG(String svg, String xpath) throws Exception {
+
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 	builderFactory.setValidating(false);	// no need to validate, just parse
 	DocumentBuilder builder = builderFactory.newDocumentBuilder();
 	InputSource svgSource = new InputSource(new StringReader(svg));
 	Document xmlDocument = builder.parse(svgSource);
 	XPath xPath = XPathFactory.newInstance().newXPath();
-	String expression = "//text";
+	NodeList nodeList = (NodeList) xPath.compile(xpath).evaluate(xmlDocument, XPathConstants.NODESET);
 
-	NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
-	assertNotNull(nodeList);
-	assertEquals("Should only have one text element in the svg", 1, nodeList.getLength());
-
-	Node text = nodeList.item(0).getFirstChild();	// text is the top XML node and the first child has the content
-	assertEquals("Should have the short text as SVG content", "Short text", text.getNodeValue());
+	return nodeList;
 
 }
 
