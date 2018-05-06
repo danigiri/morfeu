@@ -38,16 +38,16 @@ import { StatusEvent } from './events/status.event';
 	selector: 'catalogue-list',
 	template: `
 	<collapsible header="Catalogues" class="mb-2"  [folded]="false">
-            	<div id="catalogue-list" class="list-group2">
-        			<a *ngFor="let c of catalogues"
-        				 href="#" 
-        				class="catalogue-list-entry list-group-item list-group-item-action"
-        				[class.active]="c.uri === selectedCatalogueURI"
-        				(click)="clickOnCatalogue(c)">
-        			<img src="assets/images/open-iconic/folder.svg" alt="catalogue"/> {{c.name}}</a>
-            	</div>
-	        <catalogue></catalogue>
-	    </collapsible>
+				<div id="catalogue-list" class="list-group2">
+					<a *ngFor="let c of catalogues"
+						 href="#" 
+						class="catalogue-list-entry list-group-item list-group-item-action"
+						[class.active]="c.uri === selectedCatalogueURI"
+						(click)="clickOnCatalogue(c)">
+					<img src="assets/images/open-iconic/folder.svg" alt="catalogue"/> {{c.name}}</a>
+				</div>
+			<catalogue></catalogue>
+		</collapsible>
 	`,
 	styles:[`
 		#catalogue-list {}
@@ -92,12 +92,12 @@ fetchCatalogues(url: string) {
 	this.events.service.publish(new StatusEvent("Fetching catalogues"));
 	// TODO: make this configurable and into an event
 	this.catalogueService.getAll<Catalogue>(url).subscribe(c => { 
-	        this.catalogues = c;
-        	this.events.service.publish(new CataloguesLoadedEvent(c));
-        	this.events.ok();
-        },
-        error => this.events.problem(error.message), // error is of the type HttpErrorResponse
-        () => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
+			this.catalogues = c;
+			this.events.service.publish(new CataloguesLoadedEvent(c));
+			this.events.ok();
+		},
+		error => this.events.problem(error.message), // error is of the type HttpErrorResponse
+		() => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
 	);
 	
 }

@@ -35,19 +35,19 @@ import { StatusEvent } from './events/status.event';
 	selector: 'catalogue',
 	template: `
 	<div id="catalogue" class="card bg-light mt-2" *ngIf="catalogue">
-		    <h5 id="catalogue-name" class="card-header">{{catalogue.name}}</h5>
-	        <div class="card-body">
-	            <div id="catalogue-desc" class="card-title">{{catalogue.desc}}</div>
-			    <div id="document-list" class="list-group">
-			        <a *ngFor="let d of catalogue.documents"
-				        href="#" 
-                        class="document-list-entry list-group-item list-group-item-action" 
-                        [class.active]="d.uri === selectedDocumentURI"
-                        (click)="clickOnDocument(d)">
-                        <img src="assets/images/open-iconic/file.svg" alt="document"/> {{d.name}}
-                    </a>	                
-	            </div>
-		    </div>
+			<h5 id="catalogue-name" class="card-header">{{catalogue.name}}</h5>
+			<div class="card-body">
+				<div id="catalogue-desc" class="card-title">{{catalogue.desc}}</div>
+				<div id="document-list" class="list-group">
+					<a *ngFor="let d of catalogue.documents"
+						href="#" 
+						class="document-list-entry list-group-item list-group-item-action" 
+						[class.active]="d.uri === selectedDocumentURI"
+						(click)="clickOnDocument(d)">
+						<img src="assets/images/open-iconic/file.svg" alt="document"/> {{d.name}}
+					</a>					
+				</div>
+			</div>
 	  </div>
 	`,
 	styles:[`
@@ -104,8 +104,8 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 			},
 			// FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??
 			() => {
-			    this.events.service.publish(new CellDocumentClearEvent());  // also clear document
-			    this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))
+				this.events.service.publish(new CellDocumentClearEvent());	// also clear document
+				this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))
 			}
 		);
 		

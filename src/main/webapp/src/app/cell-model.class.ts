@@ -18,7 +18,7 @@
 import { Cell } from "./cell.class";
 import { FamilyMember } from "./family-member.interface";
 import { NameValue } from "./name-value.interface";
-import { Type_ } from "./type_.class";
+import { CellType } from "./cell-type.class";
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
@@ -28,7 +28,7 @@ import { CellModelComponent } from "./cell-model.component";
 export class CellModel implements NameValue, FamilyMember {
 
 static readonly DEFAULT_EMPTY_VALUE = "";
-    
+	
 id: string;
 isExpanded: boolean;
 
@@ -50,12 +50,12 @@ constructor(public schema: number,
 			public cellPresentation: string,
 			public thumb: string,
 			public isSimple: boolean, 
-			public type_: Type_,
+			public type_: CellType,
 			public minOccurs: number,
 			public isAttribute?: boolean,
 			public maxOccurs?: number,
 			public defaultValue?: string,
-		    public identifier?: CellModel
+			public identifier?: CellModel
 			) {
 	this.init();
 }	 
@@ -120,18 +120,18 @@ getRawPresentation() {
 
 
 getPresentation() {
-    
-    let effectivePresentation = this.getRawPresentation();
-    
-    if (effectivePresentation.includes("$")) {
-        if (effectivePresentation.includes("$ATTRIBUTES")) {    // basic preview: attributes as parameters
-            let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.type_.name).join("&") : "";
-            attribs = "_name="+ this.name+"&"+attribs;   // adding the name at the beginning
-            effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
-        }
-    }
-    
-    return effectivePresentation;
+	
+	let effectivePresentation = this.getRawPresentation();
+	
+	if (effectivePresentation.includes("$")) {
+		if (effectivePresentation.includes("$ATTRIBUTES")) {	// basic preview: attributes as parameters
+			let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.type_.name).join("&") : "";
+			attribs = "_name="+ this.name+"&"+attribs;	 // adding the name at the beginning
+			effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
+		}
+	}
+	
+	return effectivePresentation;
 
 }
 
@@ -146,7 +146,7 @@ canGenerateNewCell(): boolean {
 /** Generate a new cell from this model, using defaults if available */
 generateCell():Cell {
 	
-	let cellURI = "/"+this.getAdoptionName()+"(0)";    // this is will be changed on adoption
+	let cellURI = "/"+this.getAdoptionName()+"(0)";	   // this is will be changed on adoption
 	let desc = "";									// empty description for the moment
 	let newCell:Cell = new Cell(this.schema, 
 								cellURI, 
@@ -175,9 +175,9 @@ toJSON(): CellModelJSON {
 
 	let serialisedCellModel:CellModelJSON = Object.assign({}, this);
 
-    if (serialisedCellModel.identifier) {
-        serialisedCellModel.identifier = this.identifier.name;  // we serialise to the (attribute) name
-    }
+	if (serialisedCellModel.identifier) {
+		serialisedCellModel.identifier = this.identifier.name;	// we serialise to the (attribute) name
+	}
 
 	if (this.attributes) {
 		serialisedCellModel.attributes = this.attributes.map(a => a.toJSON());
@@ -210,10 +210,10 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 
 		// handle the identifier if we have one defined, so we turn it into a reference to the attribute
 		if (cellModel.identifier) {
-		    cellModel.identifier = cellModel.attributes.find(a => a.name==cellModel.identifier);
-		    if (cellModel.identifier==undefined) {
-		        console.error("Wrong identifier reference in %s", cellModel.name);
-		    }
+			cellModel.identifier = cellModel.attributes.find(a => a.name==cellModel.identifier);
+			if (cellModel.identifier==undefined) {
+				console.error("Wrong identifier reference in %s", cellModel.name);
+			}
 		}
 		
 		if (json.children) {
@@ -272,13 +272,13 @@ cellPresentation: string,
 thumb: string;
 isSimple: boolean; 
 isReference: boolean;
-type_: Type_;
+type_: CellType;
 minOccurs: number;
 maxOccurs?: number;
 isAttribute?: boolean;
 defaultValue?: string;
-identifier?: string | CellModel;    // coming from the JSON it will be a string, coming from an object it will
-                                    // be an reference to the attribute that is the identifier
+identifier?: string | CellModel;	// coming from the JSON it will be a string, coming from an object it will
+									// be an reference to the attribute that is the identifier
 attributes?: CellModelJSON[];
 children?: CellModelJSON[];
 referenceURI?: string;

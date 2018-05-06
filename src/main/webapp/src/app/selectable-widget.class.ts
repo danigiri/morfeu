@@ -1,17 +1,17 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *	  Copyright 2017 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *		 http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
  */
 
 import { Subscription } from 'rxjs';
@@ -22,8 +22,8 @@ import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
 
 
 export abstract class SelectableWidget extends Widget {
-    
-selected: boolean = false;          // are we selected?
+	
+selected: boolean = false;			// are we selected?
  
 protected selectionSubscription: Subscription;
 protected selectionClearSubscription: Subscription;
@@ -37,9 +37,9 @@ abstract subscribeToSelection();
 
 clearSelection() {
 
-    this.unsubscribeFromSelection();
-    this.unsubscribeFromSelectionClear();
-    this.selected = false;
+	this.unsubscribeFromSelection();
+	this.unsubscribeFromSelectionClear();
+	this.selected = false;
 
 }
 
@@ -47,28 +47,28 @@ clearSelection() {
 /** This cell is no longer eligible to be selected */
 unsubscribeFromSelection() {
 
-    if (this.selectionSubscription) {
-        this.unsubscribe(this.selectionSubscription);
-        this.selectionSubscription = undefined;
-    }
-    
+	if (this.selectionSubscription) {
+		this.unsubscribe(this.selectionSubscription);
+		this.selectionSubscription = undefined;
+	}
+	
 }
 
 
 subscribeToSelectionClear() {
-    this.selectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
-            .subscribe( cs => this.clearSelection() )
-    );
+	this.selectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
+			.subscribe( cs => this.clearSelection() )
+	);
 }
 
 
 unsubscribeFromSelectionClear() {
-    
-    if (this.selectionClearSubscription){
-        this.unsubscribe(this.selectionClearSubscription);
-        this.selectionClearSubscription = undefined;
-    }
-    
+	
+	if (this.selectionClearSubscription){
+		this.unsubscribe(this.selectionClearSubscription);
+		this.selectionClearSubscription = undefined;
+	}
+	
 }
 
 

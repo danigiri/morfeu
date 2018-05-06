@@ -69,8 +69,8 @@ import { EventService } from "../events/event.service";
 						[cellModel]="a"
 						[isFromModel]="cell==undefined"
 						></attribute-data-info>
-                    <li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
-                    <li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
+					<li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
+					<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
 				</ul>
 			</ng-container>
 			<ng-container *ngIf="editor">
@@ -82,20 +82,20 @@ import { EventService } from "../events/event.service";
 							attr.aria-label="{{cellModel.name}}.value" 
 							attr.aria-describedby="{{cellModel.desc}} value" 
 							[(ngModel)]="cell.value"></textarea>
-                            <!-- create new value button -->
-                            <img  *ngIf="cell.value==undefined && showValue()"
-                                id="cell-data-create-value-button"
-                                class="btn btn-outline-danger float-right" 
-                                 src="assets/images/open-iconic/plus.svg" 
-                                 (click)="createValue()"
-                                />
+							<!-- create new value button -->
+							<img  *ngIf="cell.value==undefined && showValue()"
+								id="cell-data-create-value-button"
+								class="btn btn-outline-danger float-right" 
+								 src="assets/images/open-iconic/plus.svg" 
+								 (click)="createValue()"
+								/>
 							<!-- remove value button -->
 							<img  *ngIf="cell.value!=undefined && showValue()"
-							    id="cell-data-remove-value-button"
-							    class="btn btn-outline-danger float-right" 
-                                 src="assets/images/open-iconic/circle-x.svg" 
-                                 (click)="removeValue()"
-                                />
+								id="cell-data-remove-value-button"
+								class="btn btn-outline-danger float-right" 
+								 src="assets/images/open-iconic/circle-x.svg" 
+								 (click)="removeValue()"
+								/>
 
 						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
 							<attribute-data-editor *ngFor="let a of cellModel.attributes; let i = index" 
@@ -112,8 +112,8 @@ import { EventService } from "../events/event.service";
 	styles:[`
 			.cell-data {}
 			.cell-data-info {}
-            .cell-data-value {}
-            .cell-data-value-field {}
+			.cell-data-value {}
+			.cell-data-value-field {}
 			.cell-data-editor {}
 			.cell-data-header {}
 			.cell-data-model-desc {}
@@ -192,8 +192,8 @@ private showPresentation() {
 }
 
 
-private getPresentation(): String {    
-    return this.cell==undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
+private getPresentation(): String {	   
+	return this.cell==undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
 }
 
 private showValue() {
@@ -202,18 +202,18 @@ private showValue() {
 
 
 private createValue() {
-    
-    console.log("[UI] Create new (empty|default) value for '%s'", this.uri);
-    Promise.resolve(null).then(() => this.cell.createValue());
-    
+	
+	console.log("[UI] Create new (empty|default) value for '%s'", this.uri);
+	Promise.resolve(null).then(() => this.cell.createValue());
+	
 }
 
 
 private removeValue() {
-    
-    console.log("[UI] Removing value for '%s'", this.uri);
-    Promise.resolve(null).then(() => this.cell.removeValue());
-    
+	
+	console.log("[UI] Removing value for '%s'", this.uri);
+	Promise.resolve(null).then(() => this.cell.removeValue());
+	
 }
 
 }

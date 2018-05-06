@@ -120,11 +120,11 @@ ngOnInit() {
 
 	console.log("ContentComponent::ngOnInit()");
 	
-    this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => this.clear()));
+	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => this.clear()));
 
-    this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
-            requested => this.fetchContentFor(requested.document, requested.model)
-    ));
+	this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
+			requested => this.fetchContentFor(requested.document, requested.model)
+	));
 
 	this.subscribe(this.events.service.of(ContentSaveEvent).subscribe(
 		   save => this.saveContent(save.document)
@@ -159,8 +159,8 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		document_.content = content;
 		
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
-	    this.model = MODEL.fromJSON(model.toJSON());      // CLONE AS 
-		content.associateWith(this.model);                // THIS MUTATES THE CELL MODEL, NEED TO FIX
+		this.model = MODEL.fromJSON(model.toJSON());	  // CLONE AS 
+		content.associateWith(this.model);				  // THIS MUTATES THE CELL MODEL, NEED TO FIX
 		this.displayContent(content);
 		this.events.ok();
 	},

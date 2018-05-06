@@ -54,7 +54,7 @@ ngOnInit() {
 		} else {
 			console.log( "-> ProblemComponent clears problem" );
 		}
-	        this.problem = p.message;
+			this.problem = p.message;
 	}));
 	
 }

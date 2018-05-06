@@ -14,15 +14,15 @@
  *	 limitations under the License.
  */
 
-import { OnDestroy } from '@angular/core';
-import { Subscription }	  from 'rxjs';
+import { OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
 
-import { EventService } from './events/event.service';
-import { Events } from './events/events.class';
+import { EventService } from "./events/event.service";
+import { Events } from "./events/events.class";
 
 
 export class Widget implements OnDestroy {
-	
+
 protected events: Events;
 private subscriptions: Subscription[];
 
@@ -36,27 +36,27 @@ constructor(private eventService: EventService) {
 
 // at some point we will have to handle unsubscriptions more effectively
 subscribe(s: Subscription): Subscription {
-	
+
 	this.subscriptions.push(s);
 	return s;
-	
-}
-
-
-unsubscribe(s:Subscription) {
-
-    if (!s) {
-        console.error("Trying to unsubscribe an undefined subscription");
-    }
-   // unsusbscribe and then remove this subscription from the list
-   s.unsubscribe();
-   this.subscriptions = this.subscriptions.filter(sub => sub!==s);
 
 }
 
 
-subscriptionCount():number {
-    return this.subscriptions.length;
+unsubscribe(s: Subscription) {
+
+	if (!s) {
+		console.error("Trying to unsubscribe an undefined subscription");
+	}
+	// unsusbscribe and then remove this subscription from the list
+	s.unsubscribe();
+	this.subscriptions = this.subscriptions.filter(sub => sub!==s);
+
+}
+
+
+subscriptionCount(): number {
+	return this.subscriptions.length;
 }
 
 

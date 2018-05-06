@@ -28,7 +28,7 @@ import { CellModel } from "../cell-model.class";
 			[class.list-group-item-secondary]="isFromModel"
 			>
 			<span class="font-weight-bold attribute-data-name"
-			    [class.attribute-data-identifier]="isIdentifier()"
+				[class.attribute-data-identifier]="isIdentifier()"
 			>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
 			<span *ngIf="hasValue" class="attribute-data-value">{{getValue()}}</span>
 			<span class="text-muted attribute-data-type-name float-right">({{cellModel.type_.name}})</span>
@@ -37,10 +37,10 @@ import { CellModel } from "../cell-model.class";
 		styles:[`
 				.attribute-data {}
 				.attribute-data-info {}
-                .attribute-data-name {}
-                .attribute-data-identifier {
-                    text-decoration: underline;
-                }
+				.attribute-data-name {}
+				.attribute-data-identifier {
+					text-decoration: underline;
+				}
 				.attribute-data-value {}
 				.attribute-data-type-name {}
 				.attribute-data-from-model {}
@@ -68,8 +68,8 @@ private hasValue_(): boolean {
 
 
 private isIdentifier(): boolean {
-    return this.parentCell!=undefined && this.parentCell.cellModel.identifier!=undefined 
-            && this.parentCell.cellModel.identifier==this.cellModel;
+	return this.parentCell!=undefined && this.parentCell.cellModel.identifier!=undefined 
+			&& this.parentCell.cellModel.identifier==this.cellModel;
 }
 
 getValue(): string {

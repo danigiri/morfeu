@@ -27,8 +27,8 @@ import { CellModel } from "../cell-model.class";
 			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
 					<span class="attribute-data-name input-group-text" 
-					    [class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
-					    id="{{cellModel.name}}">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+						[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
+						id="{{cellModel.name}}">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
 				</div>
 				<input type="text" 
 					class="attribute-data-value form-control" 
@@ -36,21 +36,21 @@ import { CellModel } from "../cell-model.class";
 					attr.aria-describedby="{{cellModel.desc}}" 
 					[(ngModel)]="this.value" 
 					/>
-                 <div *ngIf="cellModel.minOccurs==0" class="input-group-append">
-                    <img class="btn btn-outline-danger float-right" 
-                        src="assets/images/open-iconic/circle-x.svg" 
-                        (click)="delete()"
-                        />
-                  </div>
+				 <div *ngIf="cellModel.minOccurs==0" class="input-group-append">
+					<img class="btn btn-outline-danger float-right" 
+						src="assets/images/open-iconic/circle-x.svg" 
+						(click)="delete()"
+						/>
+				  </div>
 			</div>
 		 </li>
 	`,
 	styles:[`
 				.attribute-data {}
 				.attribute-data-editor {}
-                .attribute-data-editor-identifier {
-                    text-decoration: underline;
-                }
+				.attribute-data-editor-identifier {
+					text-decoration: underline;
+				}
 				.attribute-data-name {}
 				.attribute-data-value {}
 	`]
@@ -83,9 +83,9 @@ set value(v: string) {
 // delete current value
 private delete() {
 
-    console.log("[UI] deleting cell attribute ", this.cellModel.name);
-    Promise.resolve(null).then(() => 
-        this.parentCell.remove(this.parentCell.attributes.find(a=> a.name==this.cellModel.name)));
-    
+	console.log("[UI] deleting cell attribute ", this.cellModel.name);
+	Promise.resolve(null).then(() => 
+		this.parentCell.remove(this.parentCell.attributes.find(a=> a.name==this.cellModel.name)));
+	
 }
 }

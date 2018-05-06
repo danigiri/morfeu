@@ -80,14 +80,14 @@ ngOnInit() {
 
 	console.log("DocumentComponent::ngOnInit()");
 	
-    this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => {
-            this.clear();
-            this.events.ok();
-        }
-    ));
+	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => {
+			this.clear();
+			this.events.ok();
+		}
+	));
 
 	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
-	        selected => this.loadDocument(selected.url)
+			selected => this.loadDocument(selected.url)
 	));
 	
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
@@ -105,24 +105,24 @@ loadDocument(url: string) {
 	this.events.service.publish(new StatusEvent("Fetching document"));
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
 	this.documentService.get("/morfeu/documents/"+url, CellDocument).subscribe(d => {
-	    
+		
 				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
-				if (!d.hasProblem()) {  // we only publish the load if we have no issues with the doc
-				    this.events.service.publish(new CellDocumentLoadedEvent(d));
-	                this.display(d);
-	                this.events.ok()
-	            } else {
-	                this.events.service.publish(new CellDocumentClearEvent());  // clear everything
-	                // after clearing we show the problem message and the problematic document stub
-	                this.problem(d.problem);   // document loaded but was problematic
-	                this.document = d;         // we still show whatever was answered back
-	            }
-	        },
+				if (!d.hasProblem()) {	// we only publish the load if we have no issues with the doc
+					this.events.service.publish(new CellDocumentLoadedEvent(d));
+					this.display(d);
+					this.events.ok()
+				} else {
+					this.events.service.publish(new CellDocumentClearEvent());	// clear everything
+					// after clearing we show the problem message and the problematic document stub
+					this.problem(d.problem);   // document loaded but was problematic
+					this.document = d;		   // we still show whatever was answered back
+				}
+			},
 			error => {
-                console.log("DocumentComponent::loadDocument() itself got an error");
-			    this.problem(error.message);	 // error is of the type HttpErrorResponse
-                this.events.service.publish(new CellDocumentClearEvent());  // also clear document
-			    this.document = null;            // we have no document loaded at all, so no show here
+				console.log("DocumentComponent::loadDocument() itself got an error");
+				this.problem(error.message);	 // error is of the type HttpErrorResponse
+				this.events.service.publish(new CellDocumentClearEvent());	// also clear document
+				this.document = null;			 // we have no document loaded at all, so no show here
 			},
 			() => this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
 	);
@@ -132,7 +132,7 @@ loadDocument(url: string) {
 
 display(d: CellDocument) {
 
-    console.log("[UI] document component gets Document ("+d.name+")");
+	console.log("[UI] document component gets Document ("+d.name+")");
 	this.document = d;
 	this.disableSave();
 
@@ -166,10 +166,10 @@ saveDocument() {
 }
 
 private problem(message: String) {
-    
-    console.log("[UI] CellDocumentComponent::problem()");
-    this.events.problem(message);
-    
+	
+	console.log("[UI] CellDocumentComponent::problem()");
+	this.events.problem(message);
+	
 }
 
 }

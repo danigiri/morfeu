@@ -16,17 +16,17 @@
 
 import { Cell } from './cell.class';
 
-/**  we can have /test(0)/foo(1)
-*    which accepts children named 'bar' of type /model/bar
-*    AdoptionName is 'bar', and model (adoption uri) is '/model/bar'
-*    Elements named 'fubar' of model '/model/bar' are not accepted into the family
-*    So would be elements named 'bar' but with model '/model/whatever'
+/**	 we can have /test(0)/foo(1)
+*	 which accepts children named 'bar' of type /model/bar
+*	 AdoptionName is 'bar', and model (adoption uri) is '/model/bar'
+*	 Elements named 'fubar' of model '/model/bar' are not accepted into the family
+*	 So would be elements named 'bar' but with model '/model/whatever'
 */
 export interface FamilyMember {
 
 /** unique location */
 getURI():string;
-    
+	
 /** name of element in respect to creating new family members or adopting ones, in the example 'bar' */
 getAdoptionName():string;
 

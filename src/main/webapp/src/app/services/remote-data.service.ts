@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 //import { Http } from '@angular/http';
-import { HttpClient } from '@angular/common/http';  // new angular 5 http client
+import { HttpClient } from '@angular/common/http';	// new angular 5 http client
 import { Observable ,  BehaviorSubject } from 'rxjs';
 
 
@@ -33,7 +33,7 @@ getAll<T>(uri: string): Observable<T[]> {
 	console.log("[SERVICE] RemoteDataService::getAll('%s')", uri); 
 	//TODO: handle errors here
 	
-    return this.http.get<T[]>(uri);
+	return this.http.get<T[]>(uri);
 
 }
 
@@ -44,18 +44,18 @@ get<T>(uri: string): Observable<T> {
 	//TODO: handle errors with .catch here
 	
 	return this.http.get<T>(uri).retryWhen(errors => errors.delay(200).take(5)
-    //.concat(Observable.throw(new Error("Too many retries")))
-    );
+	//.concat(Observable.throw(new Error("Too many retries")))
+	);
 
 }
 
 post<T>(uri: string, content: any): Observable<T> {
-    
-    console.log("[SERVICE] RemoteDataService::post('%s')", uri);
-    //TODO: handle errors here
-    
-    return this.http.post<T>(uri, content);
-    
+	
+	console.log("[SERVICE] RemoteDataService::post('%s')", uri);
+	//TODO: handle errors here
+	
+	return this.http.post<T>(uri, content);
+	
 }
 
 

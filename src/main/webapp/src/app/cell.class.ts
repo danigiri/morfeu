@@ -123,7 +123,7 @@ setPosition(position:number):Cell {
 /** return a deep clone of this cell, it includes all children plus runtime information (parent ref, ...) */
 deepClone(): Cell {
 
-    let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
+	let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
 	let clone = CELL.fromJSON(this.toJSON()); // easy peasy cloning :)
 	
 	// let's not forget the runtime information
@@ -147,13 +147,13 @@ deepClone(): Cell {
 
 // no value for this cell
 removeValue() {
-    delete this['value'];
+	delete this['value'];
 }
 
 
 // create a new value for this cell, using the cellmodel default value or empty
 createValue() {
-    this.value = this.cellModel.defaultValue ? this.cellModel.defaultValue : CellModel.DEFAULT_EMPTY_VALUE;
+	this.value = this.cellModel.defaultValue ? this.cellModel.defaultValue : CellModel.DEFAULT_EMPTY_VALUE;
 }
 
 
@@ -239,84 +239,84 @@ private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
 
 /** return presentation with all substitutions for dynamic preview */
 getPresentation():string {
-    
-    let effectivePresentation = this.cellModel.getRawPresentation();
-    
-    if (effectivePresentation.includes("$")) {
-        if (effectivePresentation.includes("$ATTRIBUTES")) {    // basic preview: attributes as parameters
-            let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.value).join("&") : "";
-            effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
-        }
-    }
-    
-    return effectivePresentation;
-    
+	
+	let effectivePresentation = this.cellModel.getRawPresentation();
+	
+	if (effectivePresentation.includes("$")) {
+		if (effectivePresentation.includes("$ATTRIBUTES")) {	// basic preview: attributes as parameters
+			let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.value).join("&") : "";
+			effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
+		}
+	}
+	
+	return effectivePresentation;
+	
 }
 
 
 //// Adopter ////
 
 adopt(orphan:Cell, position:number) {
-    
-    // notice that we are adopting only orphan cells as we do not want this method to have side effects on
-    // the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
-    // and the old parent, this last change would be non-intuitive), therefore we only accept orphans
-    
-    if (!orphan.parent) {
-        console.error("Adopting child that was not an orphan");
-    }
+	
+	// notice that we are adopting only orphan cells as we do not want this method to have side effects on
+	// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
+	// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
+	
+	if (!orphan.parent) {
+		console.error("Adopting child that was not an orphan");
+	}
 
-    orphan.parent = this;
-    orphan.setPosition(position);   // this actually changes the URI fo the new member to the correct one
-    
-    if (!this.children) {
-        this.children = [ orphan ];
-    } else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
-        this.children.push(orphan);
-    } else {
-    
-        let newChildren:Cell[] = [];
-        let i:number = 0;
-        this.children.forEach(c => {
-            if (i<position) { //>
-                newChildren.push(c);
-            } else if (i==position) {
-                newChildren.push(orphan);
-                i++;
-                newChildren.push(c.setPosition(i));    // set next to a a shifted position of +1
-            } else {
-                newChildren.push(c.setPosition(i));    // set the rest of children
-            }
-            i++;
-        });
-        this.children = newChildren;
+	orphan.parent = this;
+	orphan.setPosition(position);	// this actually changes the URI fo the new member to the correct one
+	
+	if (!this.children) {
+		this.children = [ orphan ];
+	} else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
+		this.children.push(orphan);
+	} else {
+	
+		let newChildren:Cell[] = [];
+		let i:number = 0;
+		this.children.forEach(c => {
+			if (i<position) { //>
+				newChildren.push(c);
+			} else if (i==position) {
+				newChildren.push(orphan);
+				i++;
+				newChildren.push(c.setPosition(i));	   // set next to a a shifted position of +1
+			} else {
+				newChildren.push(c.setPosition(i));	   // set the rest of children
+			}
+			i++;
+		});
+		this.children = newChildren;
 
-    }
+	}
 
 }
 
 
 remove(child:Cell) {
 
-    if (child.cellModel.isAttribute) {
-        
-        this.attributes =  this.attributes.filter( a => a.getURI()!=child.getURI());
+	if (child.cellModel.isAttribute) {
+		
+		this.attributes =  this.attributes.filter( a => a.getURI()!=child.getURI());
 
-    } else {    // assuming child
-        let position = child.position;
-        let newChildren:Cell[] = [];
-        let i:number = 0;
-        this.children.forEach(c => {
-            if (i<position) { //>
-                    newChildren.push(c);
-            } else if (i>position) {
-                newChildren.push(c.setPosition(i-1));    // set the following elems to a shifted -1 position
-            }
-            i++;
-        });   
-        this.children = newChildren;
-    
-    } 
+	} else {	// assuming child
+		let position = child.position;
+		let newChildren:Cell[] = [];
+		let i:number = 0;
+		this.children.forEach(c => {
+			if (i<position) { //>
+					newChildren.push(c);
+			} else if (i>position) {
+				newChildren.push(c.setPosition(i-1));	 // set the following elems to a shifted -1 position
+			}
+			i++;
+		});	  
+		this.children = newChildren;
+	
+	} 
 
 }
 
@@ -324,17 +324,17 @@ remove(child:Cell) {
 // FamilyMember ////
 
 getURI():string {
-    return this.URI;
+	return this.URI;
 }
 
 
 getAdoptionName():string {
-    return this.name;
+	return this.name;
 }
 
 
 getAdoptionURI():string {
-    return this.cellModelURI;
+	return this.cellModelURI;
 }
 
 
@@ -346,80 +346,80 @@ matches(e:FamilyMember):boolean {
 // FIXME: need to check that we are not moving the same cell around in the same col (for instance change order)
 canAdopt(newMember:FamilyMember):boolean {
 
-    // we will do all checks one by one and return to optimise speed
-    
-    // we check the model compatibility first
-    if (!this.cellModel.canAdopt(newMember)) {
-        return false;
-        
-    }
-    
-    // next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
-    // place, example:
-    //  <col>
-    //      [drop area 0]
-    //      <thingie/>
-    //      [drop area 1]
-    //  </col>
-    // in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
+	// we will do all checks one by one and return to optimise speed
+	
+	// we check the model compatibility first
+	if (!this.cellModel.canAdopt(newMember)) {
+		return false;
+		
+	}
+	
+	// next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
+	// place, example:
+	//	<col>
+	//		[drop area 0]
+	//		<thingie/>
+	//		[drop area 1]
+	//	</col>
+	// in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
 
-    if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
-        return false;
-    }
-    
-    // next, we check if we have more than one element but we are in the same droppable parent which means
-    // that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
-    //  <col>
-    //      [drop area 0]
-    //      <thingie/>
-    //      [drop area 1]  // TODO: if we want to move the first thingie, areas 0 and 1 are not needed :)
-    //      <thingie/>
-    //      [drop area 2]
-    //  </col>
-    if (this.children && this.parent && this.equals(newMember.getParent())) {
-        return true;
-    }
-    
-    // next, we check the allowed count
-    let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
-    let childCount:number = matchingChildren.length;
-    if (childCount>0) {
-        // we are not considering the problem of the childcount being less than the minimum
-        //TODO: add check: are we able to remove this cell as child?
-        let matchingCellModel:CellModel = matchingChildren[0].cellModel;
-        if (matchingCellModel.maxOccurs && childCount >= matchingCellModel.maxOccurs) { // notice we use '>=' as we are adding one more
-            return false;
-        }
-    }
-        
-    return true;    // apologies for the long method (mostly comments ^^')
+	if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
+		return false;
+	}
+	
+	// next, we check if we have more than one element but we are in the same droppable parent which means
+	// that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
+	//	<col>
+	//		[drop area 0]
+	//		<thingie/>
+	//		[drop area 1]  // TODO: if we want to move the first thingie, areas 0 and 1 are not needed :)
+	//		<thingie/>
+	//		[drop area 2]
+	//	</col>
+	if (this.children && this.parent && this.equals(newMember.getParent())) {
+		return true;
+	}
+	
+	// next, we check the allowed count
+	let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
+	let childCount:number = matchingChildren.length;
+	if (childCount>0) {
+		// we are not considering the problem of the childcount being less than the minimum
+		//TODO: add check: are we able to remove this cell as child?
+		let matchingCellModel:CellModel = matchingChildren[0].cellModel;
+		if (matchingCellModel.maxOccurs && childCount >= matchingCellModel.maxOccurs) { // notice we use '>=' as we are adding one more
+			return false;
+		}
+	}
+		
+	return true;	// apologies for the long method (mostly comments ^^')
 
 }
 
 
 childrenCount():number {
-    return this.children ? this.children.length : 0;   
+	return this.children ? this.children.length : 0;   
 }
 
 
 getParent():FamilyMember {
-    return this.parent;
+	return this.parent;
 }
 
 
 equals(m:FamilyMember) {
-    return m && this.getURI()==m.getURI();  // FIXME: at the beginning, if m is a model, it is undefined
+	return m && this.getURI()==m.getURI();	// FIXME: at the beginning, if m is a model, it is undefined
 }
 
 
 //// Lifecycle ////
 
 delete() {
-    
-    if (this.parent) {  // sanity check
-        this.parent.remove(this);
-    }
-    
+	
+	if (this.parent) {	// sanity check
+		this.parent.remove(this);
+	}
+	
 }
 
 
@@ -456,8 +456,8 @@ fromJSON(json: CellJSON|string): Cell {
 
 	} else {
 		
-	    let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
-	    
+		let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
+		
 		let cell:Cell = Object.create(Cell.prototype);
 		cell = Object.assign(cell, json);
 
@@ -488,7 +488,7 @@ fromJSON(json: CellJSON|string): Cell {
 
 static reviver(key: string, value: any): any {
 
-    let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
+	let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
 
 	return key === "" ? CELL.fromJSON(value) : value;
 

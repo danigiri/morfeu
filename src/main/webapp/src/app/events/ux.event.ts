@@ -25,14 +25,14 @@ constructor(public type: number, public payload?: any) {}
 
 public toString = () : string => {
 
-    let message: string;
+	let message: string;
 
-    switch (this.type) {
+	switch (this.type) {
 	case UXEvent.DOCUMENT_DIRTY:
-	    message = "DOCUMENT_DIRTY";
+		message = "DOCUMENT_DIRTY";
 		break;
 	default:
-	    message = "UNKNOWN";
+		message = "UNKNOWN";
 		break;
 }
 	return "UXEvent:{'"+message+"'}";

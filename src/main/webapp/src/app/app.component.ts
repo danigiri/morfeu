@@ -138,7 +138,7 @@ ngAfterViewInit() {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
 						let document = loaded.catalogue.documents[0].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
-						    this.events.service.publish(new CellDocumentSelectionEvent(document))
+							this.events.service.publish(new CellDocumentSelectionEvent(document))
 						);
 			}
 		));

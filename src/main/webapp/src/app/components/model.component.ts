@@ -98,11 +98,11 @@ ngOnInit() {
 	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(selected => this.clearModel()));
 
 	this.subscribe(this.events.service.of(ModelDisplayEvent).subscribe(
-	        display => this.displayModel(display.model)
+			display => this.displayModel(display.model)
 	));
 
 	this.subscribe(this.events.service.of(ModelRequestEvent).subscribe(
-	        requested => this.loadModel(requested.document) 
+			requested => this.loadModel(requested.document) 
 	));
 
 	//this.subscribeToCellSelectionClear();
@@ -111,9 +111,9 @@ ngOnInit() {
 
 
 ngAfterViewInit() {
-    // we are ready to reload the model
-    console.log("ModelComponent::ngAfterViewInit()"); 
-    Promise.resolve(null).then(() => this.events.service.publish(new ModelDisplayReadyEvent()));
+	// we are ready to reload the model
+	console.log("ModelComponent::ngAfterViewInit()"); 
+	Promise.resolve(null).then(() => this.events.service.publish(new ModelDisplayReadyEvent()));
 }
 
 
@@ -126,7 +126,7 @@ loadModel(document:CellDocument) {
 			this.displayModel(model);	// not firing a load event yet if not needed
 			document.model = model;	 // associating the document with the recently loaded model
 			// now that we have loaded the model we can safely load the content (as both are related
-            this.events.service.publish(new ModelLoadedEvent(model));
+			this.events.service.publish(new ModelLoadedEvent(model));
 			this.events.service.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
@@ -145,7 +145,7 @@ displayModel(m: Model) {
 //	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 	this.model = m;
 	this.registerKeyPressedEvents();
-    console.log("[UI] ModelComponent::displayModel [end]");
+	console.log("[UI] ModelComponent::displayModel [end]");
 
 }
 
@@ -173,13 +173,13 @@ commandPressedCallback(command: string) {
 		break;	 
 	case "a":
 		if (this.cellModelSelectingMode) {
-			this.events.service.publish(new CellModelActivatedEvent());  // will activate the 
+			this.events.service.publish(new CellModelActivatedEvent());	 // will activate the 
 			this.cellModelSelectingMode = false;						   // current selection (if any)
 		}
 		break;
 	case "n":
 		// Instantiate a new instance if any cell model is activated and a drop area is active as well 
-	    console.log("[UI] CellModelComponent::commandPressedCallback() sending new cell event");
+		console.log("[UI] CellModelComponent::commandPressedCallback() sending new cell event");
 		this.events.service.publish(new NewCellFromModelEvent());
 		break;
 	}
@@ -188,10 +188,10 @@ commandPressedCallback(command: string) {
 
 
 commandNotRegisteredCallback(command: string) {
-    
-    console.log("[UI] ModelComponent::keyPressed(%s) not interested", command, this.cellModelSelectingMode);
-    this.cellModelSelectingMode = false;
-    
+	
+	console.log("[UI] ModelComponent::keyPressed(%s) not interested", command, this.cellModelSelectingMode);
+	this.cellModelSelectingMode = false;
+	
 }
 
 
@@ -213,9 +213,9 @@ private subscribeChildrenToCellSelection () {
 	this.unsubscribeChildrenFromCellSelection();
 	this.cellModelComponentsRoot.treeModel.roots.forEach(r => {
 		r.expand();
-		(r.data as CellModel).component.subscribeToSelection();	// breaks class-component abstraction,
-		                                                          // but there does not seem to be an easy 
-		                                                          // way to do this with the tree component
+		(r.data as CellModel).component.subscribeToSelection(); // breaks class-component abstraction,
+																  // but there does not seem to be an easy 
+																  // way to do this with the tree component
 		}
 	);
 
@@ -232,8 +232,8 @@ unsubscribeChildrenFromCellSelection() {
 
 
 ngOnDestroy() {
-    console.log("ModelComponent::ngOnDestroy()");
-    super.ngOnDestroy();
+	console.log("ModelComponent::ngOnDestroy()");
+	super.ngOnDestroy();
 }
 
 }
