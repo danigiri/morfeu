@@ -145,8 +145,7 @@ public static LineBreakMeasurer lineMeasurer(SVGGraphics2D generator, Attributed
 
 
 @Provides @Named("CompletedGraphics")
-public static SVGGraphics2D completedGraphics(@Named("EffectiveText") String effectiveContent, 
-												boolean truncate,
+public static SVGGraphics2D completedGraphics(boolean truncate,
 												@Named("GraphicsShortText") Provider<SVGGraphics2D> providerShortText,
 		 										@Named("GraphicsLongText") Provider<SVGGraphics2D> providerLongText) {
 
@@ -155,7 +154,7 @@ public static SVGGraphics2D completedGraphics(@Named("EffectiveText") String eff
 
 
 @Provides @Named("GraphicsShortText") 
-public static SVGGraphics2D graphicsShortText(@Named("Text") String content, SVGGraphics2D generator) {
+public static SVGGraphics2D graphicsShortText(@Named("EffectiveText") String content, SVGGraphics2D generator) {
 
 	String truncatedContent = content.substring(0, Math.min(content.length(), TRUNCATE_TEXT_LENGHT));
 	generator.drawString(truncatedContent, TEXT_START, TEXT_START*3); 
