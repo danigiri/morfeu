@@ -14,11 +14,12 @@
  *	 limitations under the License.
  */
 
-
 import { Cell } from "./cell.class";
 import { FamilyMember } from "./family-member.interface";
 import { NameValue } from "./name-value.interface";
 import { CellType } from "./cell-type.class";
+
+import { PresentationParser } from "./presentation-parser.class";
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
@@ -58,12 +59,8 @@ constructor(public schema: number,
 			public identifier?: CellModel
 			) {
 	this.init();
-}	 
-
-
-setComponent(c: CellModelComponent) {
-	this.component = c;
 }
+
 
 // there are values specific to comply wit the treemodel model, we set them explicitly here 
 init() {
@@ -74,43 +71,8 @@ init() {
 }
 
 
-getURI():string {
-	return this.URI;
-}
-
-
-getAdoptionName():string {
-	return this.name;
-}
-
-
-getAdoptionURI():string {
-	return this.URI;
-}
-
-
-matches(e:FamilyMember):boolean {
-	return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
-}
-
-
-canAdopt(element:FamilyMember):boolean {
-	return this.children.some(c => c.matches(element));
-}
-
-
-childrenCount():number {
-	return this.children ? this.children.length : 0;
-}
-
-
-equals(m:FamilyMember) {
-	return this.getURI()==m.getURI();
-}
-
-
-getParent():FamilyMember {
-	return undefined;	//TODO: we do not need to setup the parent yet
+setComponent(c: CellModelComponent) {
+    this.component = c;
 }
 
 
@@ -121,18 +83,39 @@ getRawPresentation() {
 
 getPresentation() {
 	
-	let effectivePresentation = this.getRawPresentation();
-	
-	if (effectivePresentation.includes("$")) {
-		if (effectivePresentation.includes("$ATTRIBUTES")) {	// basic preview: attributes as parameters
-			let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.type_.name).join("&") : "";
-			attribs = "_name="+ this.name+"&"+attribs;	 // adding the name at the beginning
-			effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
-		}
-	}
-	
-	return effectivePresentation;
+	let finalPres = this.getRawPresentation();
 
+	if (finalPres.includes("$")) {
+			finalPres = PresentationParser.expand(finalPres, "$NAME", this.name);
+	}
+
+	return finalPres;
+
+}
+
+
+/** Mutates the cellModel so any references point to  the original cell model**/
+normaliseReferencesWith(rootCellModels: CellModel[]) {
+    
+    if (this.isReference) {
+        let reference:CellModel = this.findCellModelWithURI(rootCellModels, this.referenceURI);
+        if (!reference) {
+            console.error("Could not find cellModel of reference cellModel:%s", this.name);
+        }
+        
+        // we take the philosophy of completing the cellmodel reference with the missing data (children)
+        // we keep rest of the cell model information (like the name, which can be different)
+        this.children = reference.children;
+        
+    } else {
+        if (this.children) {
+            this.children.forEach(c => c.normaliseReferencesWith(rootCellModels));
+        }
+        if (this.attributes) {
+            this.attributes.forEach(a => a.normaliseReferencesWith(rootCellModels));
+        }
+    }
+    
 }
 
 
@@ -144,10 +127,10 @@ canGenerateNewCell(): boolean {
 
 
 /** Generate a new cell from this model, using defaults if available */
-generateCell():Cell {
-	
-	let cellURI = "/"+this.getAdoptionName()+"(0)";	   // this is will be changed on adoption
-	let desc = "";									// empty description for the moment
+generateCell(): Cell {
+
+	const cellURI = "/"+this.getAdoptionName()+"(0)";  // this is will be changed on adoption
+	const desc = "";								   // empty description for the moment
 	let newCell:Cell = new Cell(this.schema, 
 								cellURI, 
 								this.getAdoptionName(), 
@@ -157,15 +140,64 @@ generateCell():Cell {
 	if (this.defaultValue) {
 		newCell.value = this.defaultValue;
 	}
-	
+
 	newCell.cellModel = this;						// we associate the cell model straightaway, easy peasy =)
  
 	if (this.attributes) {							// now we set the attributes when we have defaults
 		newCell.attributes = this.attributes.filter(a => a.defaultValue)
 												.map(a => this.generateAttributeFrom(a));
 	}
-	
+
 	return newCell;
+
+}
+
+
+/** return a deep clone of this cell model, it includes all children and so forth */
+deepClone(): CellModel {
+    return CellModel.fromJSON(this.toJSON());
+}
+
+
+////FamilyMember ////
+
+getURI(): string {
+    return this.URI;
+}
+
+
+getAdoptionName(): string {
+    return this.name;
+}
+
+
+getAdoptionURI(): string {
+    return this.URI;
+}
+
+
+matches(e:FamilyMember): boolean {
+    return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
+}
+
+
+canAdopt(element:FamilyMember): boolean {
+    return this.children.some(c => c.matches(element));
+}
+
+
+childrenCount(): number {
+    return this.children ? this.children.length : 0;
+}
+
+
+getParent():FamilyMember {
+    return undefined;   //TODO: we do not need to setup the parent yet
+}
+
+
+equals(m: FamilyMember) {
+    return this.getURI()==m.getURI();
 }
 
 
@@ -185,9 +217,9 @@ toJSON(): CellModelJSON {
 	if (this.children) {
 		serialisedCellModel.children = this.children.map(c => c.toJSON());
 	}
-	
+
 	return serialisedCellModel;
-	
+
 }
 
 
@@ -204,8 +236,8 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 		cellModel.init();							// make sure we have all attributes ok
 
 		if (json.attributes) {
-			cellModel = Object.assign(cellModel, 
-									  {attributes: json.attributes.map(a => CellModel.fromJSON(a))});
+			cellModel = Object.assign(cellModel,
+									    {attributes: json.attributes.map(a => CellModel.fromJSON(a))});
 		}
 
 		// handle the identifier if we have one defined, so we turn it into a reference to the attribute
@@ -215,7 +247,7 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 				console.error("Wrong identifier reference in %s", cellModel.name);
 			}
 		}
-		
+
 		if (json.children) {
 			cellModel = Object.assign(cellModel, 
 									  {children: json.children.map(c => CellModel.fromJSON(c))});
@@ -238,9 +270,9 @@ static reviver(key: string, value: any): any {
 
 private generateAttributeFrom(attribute: CellModel): Cell {
 	
-	let attrURI = "/"+this.getAdoptionName()+"(0)@"+attribute.getAdoptionName(); //	 be changed on adoption
-	let desc = "";									// empty description for the moment
-	let value = (attribute.defaultValue) ? attribute.defaultValue : ""; 
+	const attrURI = "/"+this.getAdoptionName()+"(0)@"+attribute.getAdoptionName(); // be changed on adoption
+	const desc = "";															  // empty description
+	const value = (attribute.defaultValue) ? attribute.defaultValue : ""; 
 	let newCell:Cell = new Cell(attribute.schema, 
 								attrURI, 
 								attribute.getAdoptionName(), 
@@ -251,26 +283,54 @@ private generateAttributeFrom(attribute: CellModel): Cell {
 	if (attribute.defaultValue) {				   // sanity check, as we only generate		   
 		newCell.value = attribute.defaultValue;	   // attributes for defaults for now
 	}
-	
+
 	newCell.cellModel = attribute; // associate the cell model straightaway, yo! =)
  
 	return newCell;
 
 }
 
+
+// given a cell model URI, look for it in a cell model hierarchy, avoids following references
+private findCellModelWithURI(cellModels: CellModel[], uri: string): CellModel {
+
+    let cellModel:CellModel;
+    let pending:CellModel[] = [];
+    cellModels.forEach(cm => pending.push(cm));
+    
+    while (!cellModel && pending.length>0) {
+        
+        let currentCellModel:CellModel = pending.pop();
+        if (currentCellModel.URI==uri) {
+            cellModel = currentCellModel;
+        } else {
+            // Only do a recursive call if current cellModel is not what we look for *and* not a reference.
+            // This is to avoid infinite loops in nested structures, a nested reference to a parent
+            // will necessarily be a reference cellModel, therefore do not add its children to be processed
+            if (!currentCellModel.isReference && currentCellModel.children) { 
+                currentCellModel.children.forEach(cm => pending.push(cm));
+            }
+        }
+    }
+
+    return cellModel;
+
+}
+
+
 }
 
 
 export interface CellModelJSON {
-	
-schema: number; 
+
+schema: number;
 URI: string;
-name: string; 
+name: string;
 desc: string;
 presentation: string;
 cellPresentation: string,
 thumb: string;
-isSimple: boolean; 
+isSimple: boolean;
 isReference: boolean;
 type_: CellType;
 minOccurs: number;

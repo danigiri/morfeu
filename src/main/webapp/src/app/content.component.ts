@@ -157,10 +157,12 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
 		// we associate the content with the document and the model so it al fits together
 		document_.content = content;
-		
+		// as we want the model to have all references, we create a copy, as this may have
+		// an infinite recursion structure
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
-		this.model = MODEL.fromJSON(model.toJSON());	  // CLONE AS 
-		content.associateWith(this.model);				  // THIS MUTATES THE CELL MODEL, NEED TO FIX
+		this.model = MODEL.fromJSON(model.toJSON());	  
+		this.model.normaliseReferences();
+		content.associateWith(this.model);
 		this.displayContent(content);
 		this.events.ok();
 	},

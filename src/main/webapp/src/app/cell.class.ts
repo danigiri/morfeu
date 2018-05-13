@@ -20,6 +20,8 @@ import { FamilyMember } from "./family-member.interface";
 import { CellModel } from "./cell-model.class";
 import { Model } from "./model.class";
 import { NameValue } from "./name-value.interface";
+
+import { PresentationParser } from "./presentation-parser.class";
 import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 
@@ -170,40 +172,32 @@ private replaceURIPrefix_(old:string, newPrefix:string): Cell {
 }
 
 
-private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell {
+private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Cell {
 
 	let cellModel:CellModel = undefined;
 	if (cellModels) {
-		
-		cellModel = cellModels.find(cm => cm.URI===this.cellModelURI);	// current cell model level
-		if (cellModel.isReference) {
-			// we take the philosophy of completing the cellmodel reference with the missing data (children)
-			// we keep rest of the cell model information (like the name, which can be different)
-			let reference:CellModel = this.findCellModelWithURI(rootCellmodels, cellModel.referenceURI);
-			if (!reference) {
-				console.error("Could not find cellModel of reference cellModel:{}",cellModel.name);
-			}
-			cellModel.children = reference.children; //THIS MUTATES THE CELL MODEL, SIDE EFFECT!!! FIXME
 
-		}
-		
+		cellModel = cellModels.find(cm => cm.URI===this.cellModelURI);	// current cell model level
+
 		//TODO: handle inconsistent cell that cannot find cellmodule even though the content is valid		 
 //		  if (!cellModel) {												  // cell model children maybe?
 //			  cellModel = cellModels.map(cm => this.associateWith_(cm.children)).find(cm => cm!=undefined);
 //		  }
 
 		if (cellModel) {												// now attributes and cell children
-		   if (this.attributes) {
-				   this.attributes = this.attributes.map(a => a.associateWith_(rootCellmodels, cellModel.attributes));
-		   }
-		   // notice we do not associate the internal attributes as there is no model for them
-		   if (this.children) {
-			   this.children = this.children.map(c => c.associateWith_(rootCellmodels, cellModel.children));
-		   }
+			if (this.attributes) {
+				this.attributes = this.attributes.map(a => a.associateWith_(rootCellmodels, cellModel.attributes));
+			}
+			// notice we do not associate the internal attributes as there is no model for them
+			if (this.children) {
+				this.children = this.children.map(c => c.associateWith_(rootCellmodels, cellModel.children));
+			}
+		} else {
+		    console.error();
 		}
-	   
+
 	this.cellModel = cellModel;
-	
+
 	}
 
 	return this;
@@ -211,52 +205,24 @@ private associateWith_(rootCellmodels:CellModel[], cellModels:CellModel[]):Cell 
 }
 
 
-private findCellModelWithURI(cellModels:CellModel[], uri: string): CellModel {
-
-	let cellModel:CellModel;
-	let pending:CellModel[] = [];
-	cellModels.forEach(cm => pending.push(cm));
-	
-	while (!cellModel && pending.length>0) {
-		
-		let currentCellModel:CellModel = pending.pop();
-		if (currentCellModel.URI==uri) {
-			cellModel = currentCellModel;
-		} else {
-			// Only do a recursive call if current cellModel is not what we look for *and* not a reference.
-			// This is to avoid infinite loops in nested structures, a nested reference to a parent
-			// will necessarily be a reference cellModel, therefore do not add its children to be processed
-			if (!currentCellModel.isReference && currentCellModel.children) { 
-				currentCellModel.children.forEach(cm => pending.push(cm));
-			}
-		}
-	}
-
-	return cellModel;
-
-}
-
-
 /** return presentation with all substitutions for dynamic preview */
-getPresentation():string {
-	
-	let effectivePresentation = this.cellModel.getRawPresentation();
-	
-	if (effectivePresentation.includes("$")) {
-		if (effectivePresentation.includes("$ATTRIBUTES")) {	// basic preview: attributes as parameters
-			let attribs = this.attributes ? this.attributes.map(a => a.name+"="+a.value).join("&") : "";
-			effectivePresentation = effectivePresentation.replace("$ATTRIBUTES", attribs);
-		}
+getPresentation(): string {
+
+	let finalPres = this.cellModel.getRawPresentation();
+
+	if (finalPres.includes("$")) {
+			finalPres = PresentationParser.expand(finalPres, "$NAME", this.name);
+			finalPres = PresentationParser.expand(finalPres, "$ATTRIBUTES", this.attributes);
 	}
-	
-	return effectivePresentation;
-	
+
+	return finalPres;
+
 }
 
 
 //// Adopter ////
 
-adopt(orphan:Cell, position:number) {
+adopt(orphan: Cell, position: number) {
 	
 	// notice that we are adopting only orphan cells as we do not want this method to have side effects on
 	// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell

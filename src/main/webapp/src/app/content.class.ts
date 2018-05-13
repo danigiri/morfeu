@@ -36,27 +36,30 @@ associateWith(model: Model) {
 }
 
 
-getURI():string {
+//// FamilyMember ////
+
+getURI(): string {
 	return this.getAdoptionURI();
 }
 
+
 // part of the drag and drop scaffolding, we return true if this cell can be one of the root cells
-getAdoptionName():string {
+getAdoptionName(): string {
 	return "";
 }
 
 
-getAdoptionURI():string {
+getAdoptionURI(): string {
 	return "/";
 }
 
 
-matches(element:FamilyMember):boolean {
+matches(element: FamilyMember):boolean {
 	return false;	// content does not match with anything
 }
 
 
-canAdopt(newMember:FamilyMember):boolean {
+canAdopt(newMember: FamilyMember):boolean {
 	return this.children.some(c => c.canAdopt(newMember));
 }
 
@@ -75,6 +78,8 @@ getParent():FamilyMember {
 }
 
 
+//// Adopter ////
+
 adopt(orphan:Cell, position:number) {
 	//TODO: to be implemented
 }
@@ -85,18 +90,21 @@ remove(child:Cell) {
 }
 
 
+//// SerialisableToJSON ////
+
 toJSON(): ContentJSON {
-   return Object.assign({}, this, {children: this.children.map(c => c.toJSON())});
-}	
+    return Object.assign({}, this, {children: this.children.map(c => c.toJSON())});
+}
 
 
 fromJSON(json: ContentJSON|string): Content {
-	
+
 	if (typeof json === 'string') {
-		
+
 		return JSON.parse(json, Content.reviver);
-		
+
 	} else {
+	    
 		let i:number = 0;
 		let content = Object.create(Content.prototype);
 		content = Object.assign(content, json);
@@ -108,7 +116,7 @@ fromJSON(json: ContentJSON|string): Content {
 			})});
 		
 		return content;
-		
+
 	}
 	
 }

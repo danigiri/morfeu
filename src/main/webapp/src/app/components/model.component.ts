@@ -111,9 +111,11 @@ ngOnInit() {
 
 
 ngAfterViewInit() {
-	// we are ready to reload the model
+
+    // we are ready to reload the model
 	console.log("ModelComponent::ngAfterViewInit()"); 
 	Promise.resolve(null).then(() => this.events.service.publish(new ModelDisplayReadyEvent()));
+
 }
 
 

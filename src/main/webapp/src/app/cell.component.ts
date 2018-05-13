@@ -309,10 +309,7 @@ ngOnInit() {
 					console.log("-> cell comp gets cell edit event and will try to edit :)");
 					this.events.service.publish(new CellEditEvent(this.cell));
 		}));
-		
-	   
-	
-	
+
 }	 
 
 

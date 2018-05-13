@@ -33,6 +33,14 @@ constructor(public schema: number,
 }
 
 
+/** All cell models will point to references **/
+normaliseReferences() {
+    this.cellModels.forEach(cm => cm.normaliseReferencesWith(this.cellModels));
+}
+
+
+//// FamilyMember ////
+
 getURI():string {
 	return this.URI;
 }
@@ -53,20 +61,22 @@ matches(element:FamilyMember):boolean {
 }
 
 
-canAdopt(element:FamilyMember):boolean {
+canAdopt(element: FamilyMember): boolean {
 	return this.cellModels.some(c => c.matches(element));	
 }
 
 
-childrenCount():number {
+childrenCount(): number {
 	return this.cellModels.length;
 }
 
-getParent():FamilyMember {
+
+getParent(): FamilyMember {
 	return undefined;
 }
 
-equals(m:FamilyMember) {
+
+equals(m: FamilyMember) {
 	return this.getURI()==m.getURI();
 }
 
@@ -82,19 +92,19 @@ toJSON(): ModelJSON {
 
 
 fromJSON(json: ModelJSON|string): Model {
-	
+
 	if (typeof json === 'string') {
-	
+
 		return JSON.parse(json, Model.reviver);
-	
+
 	} else {
-		
+
 		let model = Object.create(Model.prototype);
-		
+
 		return Object.assign(model, json, {cellModels: json.cellModels.map( cm => CellModel.fromJSON(cm))});
 
 	}
-	
+
 }
 
 
