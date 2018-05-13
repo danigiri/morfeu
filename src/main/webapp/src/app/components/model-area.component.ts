@@ -35,7 +35,7 @@ import { EventService } from "../events/event.service";
 
 @Component({
 	moduleId: module.id,
-	selector: 'model-area',
+	selector: "model-area",
 	template: `
 		<div [hidden]="!isVisible()">
 		<ngb-tabset type="pills" activeId="model-tab" (tabChange)="beforeTabChange($event)">

@@ -34,9 +34,7 @@ import { EventService } from "../events/event.service";
 	selector: 'cell-data',
 	template: `
 		<div  *ngIf="cellModel" 
-			  class="card mt-2 cell-data" 
-			  [class.cell-data-info]="!editor" 
-			  [class.cell-data-editor]="editor">
+			  class="card mt-2 cell-data cell-data-info">
 				<h4 class="cell-data-header card-title card-header">
 					{{cellModel.name}}
 					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
@@ -47,66 +45,30 @@ import { EventService } from "../events/event.service";
 				<p class="cell-data-model-desc card-subtitle">{{cellModel.desc}}<p>
 				<p class="cell-data-model-uri card-text">URI: <span class="cell-data-uri text-muted">{{uri}}</span></p>
 			</div>
-			<ng-container *ngIf="!editor">
-				<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
-				<!-- if we have a value field we should show it (readonly!) -->
-				<div class="card-body">
-					 <form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
-							<textarea readonly
-								class="cell-data-value card-text" 
-								rows="3"
-								name="{{cellModel.name}}.value"
-								attr.aria-label="{{cellModel.name}}.value" 
-								attr.aria-describedby="{{cellModel.desc}} value" 
-								[(ngModel)]="cell.value"></textarea>
-					 </form>
-				</div>
-				<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
-				<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-					<attribute-data-info *ngFor="let a of cellModel.attributes" 
-						[isFromCell]="cell!=undefined" 
-						[parentCell]="cell" 
-						[cellModel]="a"
-						[isFromModel]="cell==undefined"
-						></attribute-data-info>
-					<li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
-					<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
-				</ul>
-			</ng-container>
-			<ng-container *ngIf="editor">
-					<form>
-						<textarea *ngIf="cell.value!=undefined && showValue()"
-							class="cell-data-value cell-data-value-field form-control"
+			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
+			<!-- if we have a value field we should show it (readonly!) -->
+			<div class="card-body">
+				 <form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
+						<textarea readonly
+							class="cell-data-value card-text" 
 							rows="3"
 							name="{{cellModel.name}}.value"
 							attr.aria-label="{{cellModel.name}}.value" 
 							attr.aria-describedby="{{cellModel.desc}} value" 
 							[(ngModel)]="cell.value"></textarea>
-							<!-- create new value button -->
-							<img  *ngIf="cell.value==undefined && showValue()"
-								id="cell-data-create-value-button"
-								class="btn btn-outline-danger float-right" 
-								 src="assets/images/open-iconic/plus.svg" 
-								 (click)="createValue()"
-								/>
-							<!-- remove value button -->
-							<img  *ngIf="cell.value!=undefined && showValue()"
-								id="cell-data-remove-value-button"
-								class="btn btn-outline-danger float-right" 
-								 src="assets/images/open-iconic/circle-x.svg" 
-								 (click)="removeValue()"
-								/>
-
-						<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-							<attribute-data-editor *ngFor="let a of cellModel.attributes; let i = index" 
-								[parentCell]="cell" 
-								[cellModel]="a"
-								[index]="i"
-								></attribute-data-editor>
-						</ul>
-					</form>
-					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
-			</ng-container>
+				 </form>
+			</div>
+			<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
+			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
+				<attribute-data-info *ngFor="let a of cellModel.attributes" 
+					[isFromCell]="cell!=undefined" 
+					[parentCell]="cell" 
+					[cellModel]="a"
+					[isFromModel]="cell==undefined"
+					></attribute-data-info>
+				<li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
+				<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
+			</ul>
 		</div>
 			   `,
 	styles:[`
@@ -114,13 +76,10 @@ import { EventService } from "../events/event.service";
 			.cell-data-info {}
 			.cell-data-value {}
 			.cell-data-value-field {}
-			.cell-data-editor {}
 			.cell-data-header {}
 			.cell-data-model-desc {}
 			.cell-data-uri {}
 			.cell-data-source {}
-			#cell-data-create-value-button {}
-			#cell-data-remove-value-button {}
 	`]
 })
 
@@ -129,7 +88,6 @@ export class CellDataComponent extends Widget implements OnInit {
 @Input() uri: string;
 @Input() cell: Cell;
 @Input() cellModel: CellModel;
-@Input() editor: boolean = false;
 
 constructor(eventService: EventService) {
 	super(eventService);
@@ -138,21 +96,19 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	if (!this.editor) {
-			this.subscribe(this.events.service.of( CellActivatedEvent )
+	this.subscribe(this.events.service.of( CellActivatedEvent )
 				.subscribe( activated => this.showCellInformation(activated.cell)
-			));
-			this.subscribe(this.events.service.of( CellDeactivatedEvent )
-				.subscribe( deactivated => this.hideCellInformation()
-			));
-			this.subscribe(this.events.service.of( CellModelActivatedEvent )
-				.filter( activated => activated.cellModel!=undefined)
-				.subscribe( activated => this.showCellModelInformation(activated.cellModel)
-			));
-			this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-				.subscribe( activated => this.hideCellInformation()
-			));
-	}
+	));
+	this.subscribe(this.events.service.of( CellDeactivatedEvent )
+			.subscribe( deactivated => this.hideCellInformation()
+	));
+	this.subscribe(this.events.service.of( CellModelActivatedEvent )
+			.filter( activated => activated.cellModel!=undefined)
+			.subscribe( activated => this.showCellModelInformation(activated.cellModel)
+	));
+	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
+			.subscribe( activated => this.hideCellInformation()
+	));
 
 }
 
@@ -192,9 +148,10 @@ private showPresentation() {
 }
 
 
-private getPresentation(): String {	   
+private getPresentation(): string {
 	return this.cell==undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
 }
+
 
 private showValue() {
 	return this.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
