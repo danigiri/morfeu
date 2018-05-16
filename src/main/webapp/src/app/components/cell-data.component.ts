@@ -34,17 +34,8 @@ import { EventService } from "../events/event.service";
 	selector: 'cell-data',
 	template: `
 		<div  *ngIf="cellModel" 
-			  class="card mt-2 cell-data cell-data-info">
-				<h4 class="cell-data-header card-title card-header">
-					{{cellModel.name}}
-					[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
-						<span *ngIf="cell!=undefined" class="cell-data-source badge badge-pill badge-secondary float-secondary float-right">CELL</span>
-						 <span *ngIf="cell==undefined" class="cell-data-source badge badge-pill badge-dark float-dark float-right">MODEL</span>
-				</h4>
-			<div class="card-body">
-				<p class="cell-data-model-desc card-subtitle">{{cellModel.desc}}<p>
-				<p class="cell-data-model-uri card-text">URI: <span class="cell-data-uri text-muted">{{uri}}</span></p>
-			</div>
+			class="card mt-2 cell-data cell-data-info">
+	        <cell-header [uri]="uri" [cellModel]="cellModel"></cell-header>
 			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
 			<!-- if we have a value field we should show it (readonly!) -->
 			<div class="card-body">
@@ -70,13 +61,12 @@ import { EventService } from "../events/event.service";
 				<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
 			</ul>
 		</div>
-			   `,
+			    `,
 	styles:[`
 			.cell-data {}
 			.cell-data-info {}
 			.cell-data-value {}
 			.cell-data-value-field {}
-			.cell-data-header {}
 			.cell-data-model-desc {}
 			.cell-data-uri {}
 			.cell-data-source {}

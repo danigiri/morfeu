@@ -36,6 +36,7 @@ import { CollapsibleComponent } from "./components/collapsible.component";
 import { ContentComponent } from "./content.component";
 import { CellComponent } from "./cell.component";
 import { CellEditorComponent } from "./components/cell-editor.component";
+import { CellHeaderComponent } from "./components/cell-header.component";
 import { CellDocumentComponent } from "./cell-document.component";
 import { CellModelComponent } from "./cell-model.component";
 import { CellDataComponent } from "./components/cell-data.component";
@@ -47,39 +48,41 @@ import { ProblemComponent } from "./problem.component";
 import { StatusComponent } from "./status.component";
 
 @NgModule({
-  imports:		[ 
-				  NgbModule.forRoot()
-				  ,BrowserModule
-				  ,BrowserAnimationsModule
-				  ,CommonModule
-				  ,DndModule.forRoot()
-				  ,FormsModule
-				  ,HttpModule
-				  ,HttpClientModule
-				  ,HotkeyModule.forRoot()
-				  ,TreeModule
-				  ],
-  declarations: [ AppComponent
-				  ,AttributeDataEditorComponent
-				  ,AttributeDataInfoComponent
-				  ,CatalogueListComponent 
-				  ,CatalogueComponent
-				  ,CollapsibleComponent
-				  ,ContentComponent 
-				  ,CellComponent
-				  ,CellEditorComponent
-				  ,CellDocumentComponent
-				  ,CellDataComponent
-				  ,CellModelComponent
-				  ,DropAreaComponent
-				  ,KeyCaptureComponent
-				  ,ModelAreaComponent
-				  ,ModelComponent
-				  ,ProblemComponent 
-				  ,StatusComponent 
-				],
-  providers:	[],
-  bootstrap:	[ AppComponent ]
+	imports: [
+				NgbModule.forRoot()
+				,BrowserModule
+				,BrowserAnimationsModule
+				,CommonModule
+				,DndModule.forRoot()
+				,FormsModule
+				,HttpModule
+				,HttpClientModule
+				,HotkeyModule.forRoot()
+				,TreeModule
+	],
+	declarations: [
+					AppComponent
+					,AttributeDataEditorComponent
+					,AttributeDataInfoComponent
+					,CatalogueListComponent 
+					,CatalogueComponent
+					,CollapsibleComponent
+					,ContentComponent 
+					,CellComponent
+					,CellEditorComponent
+					,CellHeaderComponent
+					,CellDocumentComponent
+					,CellDataComponent
+					,CellModelComponent
+					,DropAreaComponent
+					,KeyCaptureComponent
+					,ModelAreaComponent
+					,ModelComponent
+					,ProblemComponent 
+					,StatusComponent 
+	],
+	providers:	[],
+	bootstrap:	[ AppComponent ]
 })
 
 export class AppModule { }

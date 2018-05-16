@@ -34,69 +34,69 @@ import { UXEvent } from "../events/ux.event";
 	template: `
 		<ng-template let-c="close" let-d="dismiss" #editor>
 			<div id="cell-editor" class="card mt-2 modal-body">
-			    <div class="card-body">
-			        <form>
-                        <textarea *ngIf="cell.value!=undefined && showValue()"
-                            class="cell-editor-value form-control"
-                            rows="3"
-                            name="{{cell.cellModel.name}}.value"
-                            attr.aria-label="{{cell.cellModel.name}}.value" 
-                            attr.aria-describedby="{{cell.cellModel.desc}} value" 
-                            [(ngModel)]="cell.value"></textarea>
-                            <!-- create new value button -->
-                            <img  *ngIf="cell.value==undefined && showValue()"
-                                id="cell-editor-create-value-button"
-                                class="btn btn-outline-danger float-right" 
-                                 src="assets/images/open-iconic/plus.svg" 
-                                 (click)="createValue()"
-                                />
-                            <!-- remove value button -->
-                            <img  *ngIf="cell.value!=undefined && showValue()"
-                                id="cell-editor-remove-value-button"
-                                class="btn btn-outline-danger float-right" 
-                                 src="assets/images/open-iconic/circle-x.svg" 
-                                 (click)="removeValue()"
-                                />
+	            <cell-header [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
+				<div class="card-body">
+					<form>
+						<textarea *ngIf="cell.value!=undefined && showValue()"
+							class="cell-editor-value form-control"
+							rows="3"
+							name="{{cell.cellModel.name}}.value"
+							attr.aria-label="{{cell.cellModel.name}}.value" 
+							attr.aria-describedby="{{cell.cellModel.desc}} value" 
+							[(ngModel)]="cell.value"></textarea>
+							<!-- create new value button -->
+							<img  *ngIf="cell.value==undefined && showValue()"
+								id="cell-editor-create-value-button"
+								class="btn btn-outline-danger float-right" 
+								src="assets/images/open-iconic/plus.svg" 
+								(click)="createValue()"
+								/>
+							<!-- remove value button -->
+							<img  *ngIf="cell.value!=undefined && showValue()"
+								id="cell-editor-remove-value-button"
+								class="btn btn-outline-danger float-right" 
+								src="assets/images/open-iconic/circle-x.svg" 
+								(click)="removeValue()"
+								/>
 
-                        <ul class="list-group list-group-flush" *ngIf="cell.cellModel.attributes">
-                            <attribute-data-editor *ngFor="let a of cell.cellModel.attributes; let i = index" 
-                                [parentCell]="cell" 
-                                [cellModel]="a"
-                                [index]="i"
-                                ></attribute-data-editor>
-                        </ul>
-                    </form>
-                    <img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell" />
-			    </div>
-    			<div class="modal-footer card-footer">
-        			<button	id="cell-editor-discard-button"
-        					type="button" 
-        					class="btn btn-outline-secondary float-left" 
-        					(click)="c('Discard')">Discard</button>
-        			<button	id="cell-editor-save-button" 
-        					type="button" 
-        					class="btn btn-success float-right" 
-        					(click)="c('Save')">Save</button>
-    			</div>
+						<ul class="list-group list-group-flush" *ngIf="cell.cellModel.attributes">
+							<attribute-data-editor *ngFor="let a of cell.cellModel.attributes; let i = index" 
+								[parentCell]="cell" 
+								[cellModel]="a"
+								[index]="i"
+								></attribute-data-editor>
+						</ul>
+					</form>
+					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell" />
+				</div>
+				<div class="modal-footer card-footer">
+					<button id="cell-editor-discard-button"
+							type="button" 
+							class="btn btn-outline-secondary float-left" 
+							(click)="c('Discard')">Discard</button>
+					<button id="cell-editor-save-button" 
+							type="button" 
+							class="btn btn-success float-right" 
+							(click)="c('Save')">Save</button>
+				</div>
 			</div>
 		</ng-template>
 		`,
 	styles:[`
-	        #cell-editor {}
+			#cell-editor {}
 			#cell-editor-discard-button {}
 			#cell-editor-save-button {}
-	        #cell-editor-create-value-button {}
-	        #cell-editor-remove-value-button {}
-	        .cell-editor-value {}
-
+			#cell-editor-create-value-button {}
+			#cell-editor-remove-value-button {}
+			.cell-editor-value {}
 `]
 })
 
 
 export class CellEditorComponent  extends Widget implements OnInit {
-	
+
 @ViewChild("editor") editor: ElementRef;
-	
+
 cell: Cell;
 cellBackup: Cell;
 editing: boolean = false;
@@ -115,7 +115,7 @@ ngOnInit() {
 
 
 private showValue() {
-    return this.cell.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
+	return this.cell.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
 }
 
 private edit(cell: Cell) {
@@ -133,12 +133,12 @@ private edit(cell: Cell) {
 
 
 private showPresentation() {
-    return this.cell.cellModel.presentation.startsWith("CELL");
+	return this.cell.cellModel.presentation.startsWith("CELL");
 }
 
 
 private getPresentation(): string {
-    return this.cell==undefined ? this.cell.cellModel.getPresentation() : this.cell.getPresentation();
+	return this.cell==undefined ? this.cell.cellModel.getPresentation() : this.cell.getPresentation();
 }
 
 
