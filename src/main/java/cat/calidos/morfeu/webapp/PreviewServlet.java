@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,6 +51,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	log.trace("PreviewServlet::doGet '[{}]{}' params:'{}'", resourcesPrefix, path, params);
 
 	Optional<String> header = extractHeaderFrom(params);
+	params = removeHeaderFrom(params);
 	String content = new PreviewGETControl(resourcesPrefix, path, header, params).processRequest();
 
 	if (path.endsWith("svg")) {
@@ -62,7 +64,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 
 
 private Optional<String> extractHeaderFrom(Map<String, String[]> params) {
-	
+
 	Optional<String> header =  Optional.empty();
 	if (params.containsKey(HEADER_PARAM)) {
 		String[] param = params.get(HEADER_PARAM);
@@ -70,9 +72,19 @@ private Optional<String> extractHeaderFrom(Map<String, String[]> params) {
 			header = Optional.of(param[0]);
 		}
 	}
-	
+
 	return header;
-	
+
+}
+
+
+private Map<String, String[]> removeHeaderFrom(Map<String, String[]> params) {
+
+	HashMap<String, String[]> out = new HashMap<String, String[]>(params);
+	out.remove(HEADER_PARAM);	// this checks if present
+
+	return out;
+
 }
 
 }

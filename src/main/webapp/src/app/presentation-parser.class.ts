@@ -19,18 +19,24 @@ import { NameValue } from "./name-value.interface";
 export class PresentationParser {
 	
 /** perform parameter expansion */
-static expand(str: string, variable: string, data: NameValue|NameValue[]): string {
+static expand(str: string, variable: string, data: string|NameValue[]): string {
+
+	if (data==null || data==undefined) {
+		return str;
+	}
 	
 	let out = str;
 	if (out.includes(variable)) {
-		if (typeof data =='string') {
-			
+		if (typeof data === "string") {	  // we do a single variable replacement
+			out = out.replace(variable, data);
+		} else {
+			const values = (<NameValue[]> data).map(v => v.name+"="+v.value).join("&");
+			out = out.replace(variable, values);
 		}
 	}
-	
-	return out;
-	
-}
 
+	return out;
+
+}
 
 }
