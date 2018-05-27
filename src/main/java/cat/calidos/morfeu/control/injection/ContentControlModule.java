@@ -18,7 +18,14 @@ package cat.calidos.morfeu.control.injection;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
+
+import javax.inject.Named;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -26,6 +33,9 @@ import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
 import cat.calidos.morfeu.control.ContentGETControl;
+import cat.calidos.morfeu.control.ContentPOSTControl;
+import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.webapp.MorfeuServlet;
 
 /**
 * @author daniel giribet
@@ -33,20 +43,38 @@ import cat.calidos.morfeu.control.ContentGETControl;
 @Module
 public class ContentControlModule {
 
-@Provides @IntoMap
+protected final static Logger log = LoggerFactory.getLogger(ContentControlModule.class);
+
+@Provides @IntoMap 
 @StringKey("/content/(.+)")
-public static BiFunction<List<String>, Map<String, String>, String> contentController() {
+public static BiFunction<List<String>, Map<String, String>, String> getContentControl() {
 
 	return (pathElems, params) -> {
 
-		String path = pathElems.get(0);
-		String modelPath = params.get("model");
-		String resourcesPrefix = params.get("__resourcesPrefix");
+				String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+				String path = pathElems.get(1);		// normalised already
+				String modelPath = params.get("model");
+				log.trace("ContentControlModule::contentControl [{}]{}, model: {}", resourcesPrefix, path, modelPath);
 
-		return new ContentGETControl(resourcesPrefix, path, modelPath).processRequest();
+				return new ContentGETControl(resourcesPrefix, path, modelPath).processRequest();
 
 	};
-
 }
 
+
+@Provides @IntoMap
+@StringKey("POST:/content/(.+)")
+public static BiFunction<List<String>, Map<String, String>, String> saveContentControl() {
+	
+	return (pathElems, params) -> {
+
+		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+		String path = pathElems.get(1);		// normalised already
+		String modelPath = params.get("model");
+		String content = params.get(MorfeuServlet.POST_VALUE);
+		
+		return new ContentPOSTControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();
+		
+	};
+}
 }

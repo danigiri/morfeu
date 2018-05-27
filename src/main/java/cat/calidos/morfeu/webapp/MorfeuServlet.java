@@ -1,5 +1,5 @@
 /*
- *    Copyright 2016 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,10 +18,8 @@ package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Properties;
 
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.webapp.di.DaggerServletConfigComponent;
+import cat.calidos.morfeu.webapp.injection.DaggerServletConfigComponent;
 
 
 /**
@@ -40,8 +38,10 @@ import cat.calidos.morfeu.webapp.di.DaggerServletConfigComponent;
 public class MorfeuServlet extends HttpServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
-protected final static String RESOURCES_PREFIX = "RESOURCES_PREFIX";
+public final static String RESOURCES_PREFIX = "__RESOURCES_PREFIX";
 protected static final String DEFAULT_RESOURCES_PREFIX = "http://localhost:8080/morfeu/";
+public static final String METHOD = "__METHOD";
+public static final String POST_VALUE = "__POST";
 
 protected Properties configuration;
 protected String resourcesPrefix;
