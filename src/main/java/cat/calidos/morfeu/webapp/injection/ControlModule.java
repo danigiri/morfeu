@@ -70,6 +70,7 @@ Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> compiledCont
 }
 
 
+// given a map of compiled regexp patterns, return the first matched pattern 
 @Provides
 public static Optional<Pattern> matchedPathPattern(@Named("Path") String path, 
 									Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> controls) {
@@ -77,6 +78,7 @@ public static Optional<Pattern> matchedPathPattern(@Named("Path") String path,
 }
 
 
+// 
 @Provides
 List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPathPattern) {
 

@@ -45,7 +45,7 @@ public class ContentControlModule {
 
 protected final static Logger log = LoggerFactory.getLogger(ContentControlModule.class);
 
-@Provides @IntoMap 
+@Provides @IntoMap @Named("GET")
 @StringKey("/content/(.+)")
 public static BiFunction<List<String>, Map<String, String>, String> getContentControl() {
 
@@ -59,11 +59,12 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentCo
 				return new ContentGETControl(resourcesPrefix, path, modelPath).processRequest();
 
 	};
+
 }
 
 
-@Provides @IntoMap
-@StringKey("POST:/content/(.+)")
+@Provides @IntoMap @Named("POST")
+@StringKey("/content/(.+)")
 public static BiFunction<List<String>, Map<String, String>, String> saveContentControl() {
 	
 	return (pathElems, params) -> {
