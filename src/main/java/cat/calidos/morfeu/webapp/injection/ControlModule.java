@@ -38,14 +38,16 @@ import dagger.Provides;
 public class ControlModule {
 
 // Given the input path, the path elements, the explicit parameters, look for the control and run it on the data
-@Provides
+@Provides 
 public static String process(@Named("Path") String path,
 								Lazy<List<String>> pathElems,
 								@Named("Params") Map<String, String> params,
-								Optional<Pattern> matchedPathPattern,
-								Map<String, BiFunction<List<String>, Map<String, String>, String>> controls) {
-	return controls.get(matchedPathPattern.orElseThrow(() -> new UnsupportedOperationException("No matched "+path)).pattern())
-					.apply(pathElems.get(), params);
+								Optional<Pattern> matchedPath,
+								@Named("GET") Map<String, BiFunction<List<String>, Map<String, String>, String>> get,
+								@Named("POST") Map<String, BiFunction<List<String>, Map<String, String>, String>> post
+								) {
+	return get.get(matchedPath.orElseThrow(() -> new UnsupportedOperationException("No matched "+path)).pattern())
+				.apply(pathElems.get(), params);
 }
 
 
@@ -56,15 +58,20 @@ public static boolean matches(Optional<Pattern> matchedPathPattern) {
 }
 
 
-// given the list of paths and controls, compile the regexp of the paths
-@Provides
+// given the list of paths and controls, compile the regexp of the paths for GET
+@Provides 
 Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> compiledControls(
-										Map<String, BiFunction<List<String>, Map<String, String>, String>> controls) {
+						@Named("Method") String method,
+						@Named("GET") Lazy<Map<String, BiFunction<List<String>, Map<String, String>, String>>> get,
+						@Named("POST") Lazy<Map<String, BiFunction<List<String>, Map<String, String>, String>>> post
+						) {
 
+	Map<String, BiFunction<List<String>, Map<String, String>, String>> controls =  method.equals("GET") 
+																					? get.get(): post.get();
 	Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> patternControls = 
 			new HashMap<Pattern, BiFunction<List<String>, Map<String, String>, String>>(controls.size());
 	controls.keySet().forEach(k -> patternControls.put(Pattern.compile(k), controls.get(k)));
-	
+
 	return patternControls;
 
 }
