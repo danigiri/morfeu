@@ -27,20 +27,30 @@ import dagger.Component;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = {ControlModule.class, PingControlModule.class, ContentControlModule.class})
+@Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class, 
+						ContentControlModule.class, ModelsControlModule.class, PreviewControlModule.class})
 public interface ControlComponent {
 
+	public static final String GET = "GET";
+	public static final String POST = "POST";
+	public static final String TEXT = "text/plain";
+	public static final String JSON = "application/json";
+	public static final String SVG = "image/svg+xml";
+
 	//Map<String, BiFunction<List<String>, Map<String, String>, String>> controls();
-	String process();
+	@Named("Content") String process();
+	@Named("Content-Type") String contentType();
 	boolean matches();
 
 @Component.Builder
 interface Builder {
 
 	@BindsInstance Builder withPath(@Named("Path") String path);
+	@BindsInstance Builder method(@Named("Method") String method);
 	@BindsInstance Builder withParams(@Named("Params") Map<String, String> params);
-	
+
 	ControlComponent build();
+
 }
 
 }

@@ -32,10 +32,13 @@ public void testPingControl() {
 
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath("/ping")
+																.method(DaggerControlComponent.GET)
 																.withParams(new HashMap<String, String>(0))
 																.build();
 	assertTrue("Should match /ping path", controlComponent.matches());
 	assertEquals("OK", controlComponent.process());
+	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
+	
 }
 
 
@@ -44,11 +47,13 @@ public void testPingControlWithParam() {
 
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath("/ping/param")
+																.method(DaggerControlComponent.GET)
 																.withParams(new HashMap<String, String>(0))
 																.build();
 	assertTrue("Should match /ping/param path", controlComponent.matches());
 	assertEquals("OK param", controlComponent.process());
-	
+	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
+
 }
 
 
@@ -56,11 +61,13 @@ public void testPingControlWithParam() {
 public void testNoMatch() {
 	
 	ControlComponent controlComponent = DaggerControlComponent.builder()
-			.withPath("/foo")
-			.withParams(new HashMap<String, String>(0))
-			.build();
+																.withPath("/foo")
+																.method(DaggerControlComponent.GET)
+																.withParams(new HashMap<String, String>(0))
+																.build();
 
 	assertFalse(controlComponent.matches());
+	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
 
 }
 

@@ -22,6 +22,8 @@ import java.util.function.BiFunction;
 
 import javax.inject.Named;
 
+import cat.calidos.morfeu.control.ModelControl;
+import cat.calidos.morfeu.webapp.MorfeuServlet;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -31,19 +33,29 @@ import dagger.multibindings.StringKey;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class PingControlModule {
+public class ModelsControlModule {
+
 
 @Provides @IntoMap @Named("GET")
-@StringKey("/ping/?(.+)?")
-public static BiFunction<List<String>, Map<String, String>, String> contentController() {
-	return (pathElems, params) -> pathElems.size()>1 ? "OK "+pathElems.get(1) : "OK";
+@StringKey("/models/(.+)")
+public static BiFunction<List<String>, Map<String, String>, String> getContent() {
+
+	return (pathElems, params) -> {
+
+		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+		String path = pathElems.get(1);		// normalised already
+		
+		return  new ModelControl(resourcesPrefix, path).processRequest();
+		
+	};
+
 }
 
 
 @Provides @IntoMap @Named("Content-Type")
-@StringKey("/ping/?(.+)?")
+@StringKey("/models/(.+)")
 public static String contentType() {
-	return ControlComponent.TEXT;
+	return ControlComponent.JSON;
 }
 
 }

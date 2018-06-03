@@ -44,9 +44,9 @@ private String prefix;
 private String path;
 private Optional<String> header;
 private boolean truncate;
-private Map<String, String[]> params;
+private Map<String, String> params;
 
-public PreviewGETControl(String prefix, String path, Optional<String> header, Map<String, String[]> params) {
+public PreviewGETControl(String prefix, String path, Optional<String> header, Map<String, String> params) {
 
 		super("preview", "", "");
 
@@ -62,7 +62,7 @@ public PreviewGETControl(String prefix, String path, Optional<String> header, Ma
 protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException,
 		FetchingException, ConfigurationException, SavingException, TransformException {
 
-	String text = params.entrySet().stream().map(Map.Entry::getValue).map(sa -> sa[0]).collect(Collectors.joining(","));
+	String text = params.values().stream().collect(Collectors.joining(","));
 
 	return DaggerSVGViewComponent.builder().from(text).withHeader(header).truncate(truncate).build().render();
 

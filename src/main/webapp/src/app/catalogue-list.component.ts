@@ -72,12 +72,12 @@ constructor(eventService: EventService,
 ngOnInit() {
 
 	console.log("StatusComponent::ngOnInit()");
-	
+
 	this.subscribe(this.events.service.of( CataloguesRequestEvent ).subscribe( s => {
 		   console.log("-> catalogue-list component gets request event for '"+s.url+"'");
 		   this.fetchCatalogues(s.url);
 	}));
-	
+
 	// on catalogue selection we highlight the selected catalogue and clear the document selection
 	this.subscribe(this.events.service.of( CatalogueSelectionEvent ).subscribe( s => {
 		console.log("-> catalogue-list component gets selection event for '"+s.url+"'");

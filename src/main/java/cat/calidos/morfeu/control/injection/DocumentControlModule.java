@@ -22,6 +22,11 @@ import java.util.function.BiFunction;
 
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cat.calidos.morfeu.control.DocumentGETControl;
+import cat.calidos.morfeu.webapp.MorfeuServlet;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -31,19 +36,32 @@ import dagger.multibindings.StringKey;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class PingControlModule {
+public class DocumentControlModule {
+
+protected final static Logger log = LoggerFactory.getLogger(DocumentControlModule.class);
 
 @Provides @IntoMap @Named("GET")
-@StringKey("/ping/?(.+)?")
-public static BiFunction<List<String>, Map<String, String>, String> contentController() {
-	return (pathElems, params) -> pathElems.size()>1 ? "OK "+pathElems.get(1) : "OK";
+@StringKey("/documents/(.+)")
+public static BiFunction<List<String>, Map<String, String>, String> getDocument() {
+
+	return (pathElems, params) -> {
+
+		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+		String path = pathElems.get(1);		// normalised already
+		log.trace("DocumentControlModule::getDocument '[{}]{}'", resourcesPrefix, path);
+
+		return new DocumentGETControl(resourcesPrefix, path).processRequest();
+
+	};
+
 }
 
 
 @Provides @IntoMap @Named("Content-Type")
-@StringKey("/ping/?(.+)?")
+@StringKey("/documents/(.+)")
 public static String contentType() {
-	return ControlComponent.TEXT;
+	return ControlComponent.JSON;
 }
+
 
 }

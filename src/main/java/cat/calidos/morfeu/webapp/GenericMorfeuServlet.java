@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,10 +54,10 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	log.trace("GenericMorfeuServlet::doGet {}", path);
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath(path)
+																.method(DaggerControlComponent.GET)
 																.withParams(params)
 																.build();
-	String result = controlComponent.process();
-	writeTo(result, resp);
+	handleResponse(resp, controlComponent);
 
 }
 
@@ -76,12 +77,22 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 	log.trace("GenericMorfeuServlet::doPost {}", path);
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath(path)
+																.method(DaggerControlComponent.POST)
 																.withParams(params)
 																.build();
-	String result = controlComponent.process();
-	writeTo(result, resp);
+	handleResponse(resp, controlComponent);
+
+}
 
 
+protected void handleResponse(HttpServletResponse resp, ControlComponent controlComponent) throws IOException {
+
+	if (controlComponent.matches()) {
+		String result = controlComponent.process();
+		writeTo(result, controlComponent.contentType(), resp);
+	} else {
+		resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	}
 }
 
 

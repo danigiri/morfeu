@@ -47,7 +47,7 @@ protected final static Logger log = LoggerFactory.getLogger(ContentControlModule
 
 @Provides @IntoMap @Named("GET")
 @StringKey("/content/(.+)")
-public static BiFunction<List<String>, Map<String, String>, String> getContentControl() {
+public static BiFunction<List<String>, Map<String, String>, String> getContent() {
 
 	return (pathElems, params) -> {
 
@@ -65,7 +65,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentCo
 
 @Provides @IntoMap @Named("POST")
 @StringKey("/content/(.+)")
-public static BiFunction<List<String>, Map<String, String>, String> saveContentControl() {
+public static BiFunction<List<String>, Map<String, String>, String> postContent() {
 	
 	return (pathElems, params) -> {
 
@@ -73,9 +73,18 @@ public static BiFunction<List<String>, Map<String, String>, String> saveContentC
 		String path = pathElems.get(1);		// normalised already
 		String modelPath = params.get("model");
 		String content = params.get(MorfeuServlet.POST_VALUE);
-		
+
 		return new ContentPOSTControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();
-		
+
 	};
 }
+
+
+@Provides @IntoMap @Named("Content-Type")
+@StringKey("/content/(.+)")
+public static String contentType() {
+	return ControlComponent.JSON;
+}
+
+
 }

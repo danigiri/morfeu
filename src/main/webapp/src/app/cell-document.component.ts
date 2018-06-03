@@ -104,8 +104,8 @@ loadDocument(url: string) {
 	//this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
 	this.events.service.publish(new StatusEvent("Fetching document"));
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
-	this.documentService.get("/morfeu/documents/"+url, CellDocument).subscribe(d => {
-		
+	this.documentService.get("/morfeu/dyn/documents/"+url, CellDocument).subscribe(d => {
+
 				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
 				if (!d.hasProblem()) {	// we only publish the load if we have no issues with the doc
 					this.events.service.publish(new CellDocumentLoadedEvent(d));

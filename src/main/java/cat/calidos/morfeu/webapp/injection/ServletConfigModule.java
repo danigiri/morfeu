@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp.di;
+package cat.calidos.morfeu.webapp.injection;
 
 import java.util.Collections;
 import java.util.Map;

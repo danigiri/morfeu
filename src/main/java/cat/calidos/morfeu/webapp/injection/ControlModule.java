@@ -27,6 +27,10 @@ import java.util.regex.Pattern;
 
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cat.calidos.morfeu.control.injection.ControlComponent;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
@@ -37,8 +41,10 @@ import dagger.Provides;
 @Module
 public class ControlModule {
 
+protected final static Logger log = LoggerFactory.getLogger(ControlModule.class);
+
 // Given the input path, the path elements, the explicit parameters, look for the control and run it on the data
-@Provides 
+@Provides @Named("Content")
 public static String process(@Named("Path") String path,
 								Lazy<List<String>> pathElems,
 								@Named("Params") Map<String, String> params,
@@ -48,6 +54,14 @@ public static String process(@Named("Path") String path,
 								) {
 	return get.get(matchedPath.orElseThrow(() -> new UnsupportedOperationException("No matched "+path)).pattern())
 				.apply(pathElems.get(), params);
+}
+
+
+// return the specified content type
+@Provides @Named("Content-Type")
+public static String contentType(@Named("Content-Type") Map<String, String> contentTypes, 
+									Optional<Pattern> matchedPath) {
+	return matchedPath.isPresent() ? contentTypes.get(matchedPath.get().pattern()) : ControlComponent.TEXT;
 }
 
 

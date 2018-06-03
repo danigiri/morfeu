@@ -50,11 +50,11 @@ public void testDocument() throws Exception {
 
 	String modelURI = pathPrefix+"models/test-model.xsd";
 	assertEquals(modelURI, doc.get("modelURI").asText());
-	assertEquals(modelURI, doc.get("fetchableModelURI").asText());
+	assertTrue("Fetchable model uri does not end correctly", doc.get("fetchableModelURI").asText().endsWith(modelURI));
 
 	String contentURI = pathPrefix+"documents/document1.xml";
 	assertEquals(contentURI, doc.get("contentURI").asText());
-	assertEquals(contentURI, doc.get("fetchableContentURI").asText());
+	assertTrue("Fetchable content uri not correct",  doc.get("fetchableContentURI").asText().endsWith(contentURI));
 
 	assertTrue(doc.get("valid").asBoolean());
 

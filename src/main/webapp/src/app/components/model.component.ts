@@ -122,7 +122,7 @@ ngAfterViewInit() {
 loadModel(document:CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Fetching model"));
-	let modelURI = "/morfeu/models/"+document.modelURI;
+	let modelURI = "/morfeu/dyn/models/"+document.modelURI;
 	this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
 			console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
 			this.displayModel(model);	// not firing a load event yet if not needed

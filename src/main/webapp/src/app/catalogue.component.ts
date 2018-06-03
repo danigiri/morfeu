@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ constructor(eventService: EventService,
 	super(eventService);
 }
 
+
 ngOnInit() {
 	
 	console.log("DocumentComponent::ngOnInit()");
@@ -113,14 +114,18 @@ loadCatalogueAt(selectedCatalogueUri: string) {
  
 
 clickOnDocument(stub: CellDocument) {
-	console.log("[UI] Clicked on document='"+stub.uri+"' from catalogue");
+
+    console.log("[UI] Clicked on document='"+stub.uri+"' from catalogue");
 	this.events.service.publish(new CellDocumentSelectionEvent(stub.uri));
 	
 }
 
+
 markDocumentAsSelected(uri: string) {
-	console.log("[UI] Marking document='"+uri+"' as selected in catalogue");
+
+    console.log("[UI] Marking document='"+uri+"' as selected in catalogue");
 	this.selectedDocumentURI = uri;
+
 }
 
 }

@@ -152,7 +152,7 @@ fetchContentFor(document_: CellDocument, model:Model) {
 
 	this.events.service.publish(new StatusEvent("Fetching content"));
 	let uri = document_.contentURI;
-	let contentURI = "/morfeu/content/"+uri+"?model="+model.URI;
+	let contentURI = "/morfeu/dyn/content/"+uri+"?model="+model.URI;
 	this.contentService.get(contentURI, Content).subscribe( (content:Content) => {
 		console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
 		// we associate the content with the document and the model so it al fits together
@@ -196,7 +196,7 @@ clear() {
 saveContent(document_:CellDocument) {
 	
 	this.events.service.publish(new StatusEvent("Saving content"));
-	let postURI = "/morfeu/content/"+document_.contentURI+"?model="+document_.model.getURI();
+	let postURI = "/morfeu/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
 	let content = document_.content.toJSON();
 	console.log("ContentComponent::saveContent('%s')", postURI);
   

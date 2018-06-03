@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import cat.calidos.morfeu.webapp.di.ServletConfigModule;
+import cat.calidos.morfeu.webapp.injection.ServletConfigModule;
 
 
 public class ConfigModuleTest {

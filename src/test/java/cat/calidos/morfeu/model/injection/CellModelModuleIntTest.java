@@ -17,7 +17,6 @@
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import java.net.URI;
 import java.util.Collection;
