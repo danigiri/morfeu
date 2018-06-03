@@ -160,7 +160,7 @@ public static SVGGraphics2D graphicsShortText(@Named("EffectiveText") String con
 	generator.drawString(truncatedContent, TEXT_START, TEXT_START*3); 
 
 	return generator;
-	
+
 }
 
 

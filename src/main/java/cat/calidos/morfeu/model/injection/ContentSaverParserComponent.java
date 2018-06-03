@@ -41,7 +41,8 @@ import dagger.producers.ProductionComponent;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, StringToParsedModule.class, StringFormatModule.class,
-								FileSaverModule.class, ModelModule.class, ListeningExecutorServiceModule.class})
+								FileSaverModule.class, ModelModule.class, XSDValidatorModule.class,
+								ListeningExecutorServiceModule.class})
 public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;

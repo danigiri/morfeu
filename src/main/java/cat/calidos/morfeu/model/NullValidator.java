@@ -14,27 +14,30 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.injection;
+package cat.calidos.morfeu.model;
 
-import java.util.concurrent.ExecutionException;
-
-import com.google.common.util.concurrent.ListenableFuture;
-
-import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ValidationException;
-import dagger.producers.ProductionSubcomponent;
 
-/**
+
+/** Always return true, whenever we do not want to do any semantic validation at all
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ModelModule.class})
-public interface ModelSubcomponent {
+public class NullValidator implements Validable {
 
-ListenableFuture<Model> model() throws ValidationException, ExecutionException;
-
-@ProductionSubcomponent.Builder
-interface Builder {
-	ModelSubcomponent builder();
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.Validable#isValid()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public boolean isValid() {
+	return true;
 }
+
+
+/* (non-Javadoc)
+* @see cat.calidos.morfeu.model.Validable#validate()
+*//////////////////////////////////////////////////////////////////////////////
+@Override
+public void validate() throws ValidationException, FetchingException {}
 
 }

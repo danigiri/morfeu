@@ -16,25 +16,20 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.util.concurrent.ExecutionException;
-
-import com.google.common.util.concurrent.ListenableFuture;
-
-import cat.calidos.morfeu.model.Model;
-import cat.calidos.morfeu.problems.ValidationException;
-import dagger.producers.ProductionSubcomponent;
+import cat.calidos.morfeu.model.NullValidator;
+import cat.calidos.morfeu.model.Validable;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ModelModule.class})
-public interface ModelSubcomponent {
+@ProducerModule
+public class NullValidatorModule {
 
-ListenableFuture<Model> model() throws ValidationException, ExecutionException;
-
-@ProductionSubcomponent.Builder
-interface Builder {
-	ModelSubcomponent builder();
+@Produces
+public static Validable produceNullValidator() {
+	return new NullValidator();
 }
 
 }

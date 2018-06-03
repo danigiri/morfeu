@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.inject.Named;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,7 +38,6 @@ import javax.xml.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -65,71 +64,15 @@ public class ContentParserModule {
 protected final static Logger log = LoggerFactory.getLogger(ContentParserModule.class);
 
 @Produces
-public static Validator produceValidator(Schema s) {
-	
-	Validator v = s.newValidator();
-	// TODO: check if this is needed
-	v.setErrorHandler(new ErrorHandler() {
-	
-	@Override
-	public void warning(SAXParseException exception) throws SAXException {
-		
-		log.warn("Warning '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
-
-	}
-	
-	
-	@Override
-	public void fatalError(SAXParseException exception) throws SAXException {
-		
-		log.error("Fatal problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
-		
-	}
-	
-	
-	@Override
-	public void error(SAXParseException exception) throws SAXException {
-		
-		log.error("Problem '{}' when parsing '{}'", exception.getMessage(), s.toString());
-		throw exception;
-		
-	}
-	});
-	
-	return v;
-	
-}
-
-
-
-@Produces
-public static Composite<Cell> produceContent(@Named("ContentURI") URI u, org.w3c.dom.Document xmldoc, Model m) throws ParsingException {
-	
-	// TODO: test root node attributes and value as cells
-	LinkedList<Node> pendingNodes = new LinkedList<Node>();
-
-	// TODO: we may be doing the list in reverse
-	Node rootNode = xmldoc.getFirstChild();
-	while (rootNode!=null) {
-		pendingNodes.add(rootNode);
-		rootNode = rootNode.getNextSibling();
-	}
-	
-	List<CellModel> rootCellModels = m.getRootCellModels();
-
-	return contentCells(pendingNodes, u, rootCellModels);
-	
-}
-
-
-private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI uri, List<CellModel> cellModels) throws ParsingException {
+public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
+												@Named("ContentRootNodes") LinkedList<Node> nodes,
+												List<CellModel> cellModels)	// from ModelModule
+								throws ParsingException {
 
 	//FIXME: this is a quite repetitive from cellmodule, not following DRY	
 	Composite<Cell> contentCells = new OrderedMap<Cell>();
 	int cellIndex = 0;
-	for (Node node : pendingNodes) {
+	for (Node node : nodes) {
 		
 		String name = node.getNodeName();
 		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
@@ -137,8 +80,8 @@ private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI u
 			log.error("Could not match root content node '{}' with any cellmodel even tough content is valid", name);
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
+
 		CellModel cellModel = matchedCellModel.get();
-		
 		URI cellURI;
 		String indexedName = name+"("+cellIndex+")";
 		String proposedCellURI = uri+"/"+indexedName;
@@ -148,7 +91,7 @@ private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI u
 			log.error("Could not build URI of root content node '{}'", name);
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
-		
+
 		Cell cell = DaggerCellComponent.builder()
 										.withURI(cellURI)
 										.fromNode(node)
@@ -157,13 +100,29 @@ private static Composite<Cell> contentCells(LinkedList<Node> pendingNodes, URI u
 										.createCell();
 		contentCells.addChild(indexedName, cell);
 		cellIndex++;
-		
+
 	};
 	
 	return contentCells;
 
 }
 
+
+@Produces @Named("ContentRootNodes")
+public static LinkedList<Node> contentRootNodes(org.w3c.dom.Document xmldoc) {
+
+	// TODO: test root node attributes and value as cells
+	LinkedList<Node> pendingNodes = new LinkedList<Node>();
+
+	// TODO: we may be doing the list in reverse
+	Node rootNode = xmldoc.getFirstChild();
+	while (rootNode!=null) {
+		pendingNodes.add(rootNode);
+		rootNode = rootNode.getNextSibling();
+	}
+
+	return pendingNodes;
+}
 
 
 @Produces
@@ -226,10 +185,5 @@ public static DOMSource produceDOMSource(org.w3c.dom.Document xmldoc) {
 	return new DOMSource(xmldoc);
 }
 
-
-@Produces
-public static Validable xsdValidator(Validator v, DOMSource xmldom) {
-	return new XSDValidator(v, xmldom);
-}
 
 }

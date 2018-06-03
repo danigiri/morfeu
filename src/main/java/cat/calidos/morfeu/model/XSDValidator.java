@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ public XSDValidator(Validator v, DOMSource s) {
 	
 }
 
+
 /* (non-Javadoc)
 * @see cat.calidos.morfeu.model.Validable#validate()
 *//////////////////////////////////////////////////////////////////////////////
@@ -61,6 +62,7 @@ public void validate() throws ValidationException, FetchingException {
 	}
 	
 }
+
 
 @Override
 public boolean isValid() {
