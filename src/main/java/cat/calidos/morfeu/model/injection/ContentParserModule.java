@@ -65,19 +65,19 @@ protected final static Logger log = LoggerFactory.getLogger(ContentParserModule.
 
 @Produces
 public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
-												@Named("ContentRootNodes") LinkedList<Node> nodes,
-												List<CellModel> cellModels)	// from ModelModule
+												@Named("ContentNodes") LinkedList<Node> nodes,
+												@Named("CellModels") List<CellModel> cellModels) // <- CellModelsFilter
 								throws ParsingException {
 
 	//FIXME: this is a quite repetitive from cellmodule, not following DRY	
-	Composite<Cell> contentCells = new OrderedMap<Cell>();
+	Composite<Cell> contentCells = new OrderedMap<Cell>(nodes.size());
 	int cellIndex = 0;
 	for (Node node : nodes) {
 		
 		String name = node.getNodeName();
 		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
 		if (!matchedCellModel.isPresent()) {
-			log.error("Could not match root content node '{}' with any cellmodel even tough content is valid", name);
+			log.error("Could not match content node '{}' with any cellmodel even tough content is valid", name);
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 
@@ -108,7 +108,7 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 }
 
 
-@Produces @Named("ContentRootNodes")
+@Produces @Named("ContentNodes")
 public static LinkedList<Node> contentRootNodes(org.w3c.dom.Document xmldoc) {
 
 	// TODO: test root node attributes and value as cells

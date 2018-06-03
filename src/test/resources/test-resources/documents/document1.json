@@ -4,5 +4,4 @@
 	,"kind": "xml"
 	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
 	,"contentURI": "target/test-classes/test-resources/documents/document1.xml"
-	
 }

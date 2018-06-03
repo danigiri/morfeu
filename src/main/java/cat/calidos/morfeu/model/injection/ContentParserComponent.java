@@ -36,13 +36,13 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 /**
 * 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, ModelModule.class, 
-								XSDValidatorModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, ModelModule.class,
+								CellModelsFilterModule.class, XSDValidatorModule.class, 
+								ListeningExecutorServiceModule.class})
 public interface ContentParserComponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
 ListenableFuture<Composite<Cell>> content() throws FetchingException, ParsingException, TransformException;
-
 
 @ProductionComponent.Builder
 interface Builder {

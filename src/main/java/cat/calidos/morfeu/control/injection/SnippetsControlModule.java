@@ -18,73 +18,50 @@ package cat.calidos.morfeu.control.injection;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 import javax.inject.Named;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.webapp.MorfeuServlet;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
-import cat.calidos.morfeu.control.ContentGETControl;
-import cat.calidos.morfeu.control.ContentPOSTControl;
-import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.webapp.MorfeuServlet;
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class ContentControlModule {
+public class SnippetsControlModule {
 
-protected final static Logger log = LoggerFactory.getLogger(ContentControlModule.class);
+protected final static Logger log = LoggerFactory.getLogger(SnippetsControlModule.class);
 
 @Provides @IntoMap @Named("GET")
-@StringKey("/content/(.+)")
-public static BiFunction<List<String>, Map<String, String>, String> content() {
+@StringKey("/snippets/(.+)")
+public static BiFunction<List<String>, Map<String, String>, String> snippet() {
 
 	return (pathElems, params) -> {
 
-				String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
-				String path = pathElems.get(1);		// normalised already
-				String modelPath = params.get("model");
-				log.trace("ContentControlModule::content [{}]{}, model: {}", resourcesPrefix, path, modelPath);
-
-				return new ContentGETControl(resourcesPrefix, path, modelPath).processRequest();
-
-	};
-
-}
-
-
-@Provides @IntoMap @Named("POST")
-@StringKey("/content/(.+)")
-public static BiFunction<List<String>, Map<String, String>, String> postContent() {
-	
-	return (pathElems, params) -> {
-
-		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+		String pref = params.get(MorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
 		String modelPath = params.get("model");
-		String content = params.get(MorfeuServlet.POST_VALUE);
+		String cellModel = params.get("cell-model");
+		log.trace("SnippetsControlModule::snippet [{}]{}, model: {}, cell-model: {}", pref, path, modelPath, cellModel);
 
-		return new ContentPOSTControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();
+		return new SnippetGETControl(pref, path, modelPath, cellModel).processRequest();
 
 	};
+	
 }
 
 
 @Provides @IntoMap @Named("Content-Type")
-@StringKey("/content/(.+)")
+@StringKey("/snippets/(.+)")
 public static String contentType() {
 	return ControlComponent.JSON;
 }
-
 
 }

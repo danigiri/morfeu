@@ -1,0 +1,13 @@
+{
+	 "name": "Simple"
+	,"desc": "Standalone elements"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"snippets": [
+		{
+			 "name": "Simple stuff"
+			,"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff"
+			,"uri": "target/test-classes/test-resources/snippets/stuff.xml"
+		}
+	
+	]
+}

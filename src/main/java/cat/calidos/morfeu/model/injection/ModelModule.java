@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.xml.sax.SAXException;
@@ -35,10 +34,12 @@ import org.xml.sax.SAXException;
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSParticle;
-import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.impl.util.SchemaTreeTraverser;
 import com.sun.xml.xsom.parser.XSOMParser;
+
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
@@ -49,9 +50,7 @@ import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.injection.RemoteModule;
-import dagger.Provides;
-import dagger.producers.ProducerModule;
-import dagger.producers.Produces;
+
 
 /**
 * @author daniel giribet
@@ -67,7 +66,7 @@ public static Model produceModel(@Named("ModelURI") URI u,
 								@Named("desc") String desc,
 								@Named("FetchableModelURI") URI fetchableURI,
 								XSSchemaSet schemaSet, 
-								List<CellModel> rootTypes) {
+								@Named("RootCellModels") List<CellModel> rootTypes) {
 	return new Model(u, desc, fetchableURI, schemaSet, rootTypes);
 }
 
@@ -98,7 +97,7 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 }
 
 
-@Produces
+@Produces @Named("CellModels")
 public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
 												@Named("ModelURI") URI u,
 												Map<URI, Metadata> globalMetadata) {
@@ -140,7 +139,7 @@ public static String descriptionFromSchemaAnnotation(XSAnnotation annotation) {
 
 
 @Produces
-XSAnnotation annotationFrom(XSSchemaSet schemaSet) {
+public static XSAnnotation annotationFrom(XSSchemaSet schemaSet) {
 	return schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
 }
 

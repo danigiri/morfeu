@@ -28,7 +28,8 @@ import dagger.Component;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class, 
-						ContentControlModule.class, ModelsControlModule.class, PreviewControlModule.class})
+						ContentControlModule.class, ModelsControlModule.class, PreviewControlModule.class,
+						SnippetsControlModule.class})
 public interface ControlComponent {
 
 	public static final String GET = "GET";
