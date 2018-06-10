@@ -16,10 +16,35 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+
+import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cat.calidos.morfeu.model.Document;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface SnippetParserComponent {
+@ProducerModule
+public class DefaultModelURIModule {
+
+protected final static Logger log = LoggerFactory.getLogger(DefaultModelURIModule.class);
+
+//this is the basic model uri, usually relative and easy to read and understand, cannot necesarily be fetched from
+//the runtime context
+@Produces @Named("ModelURI")
+public static URI modelURI(@Named("ParsedDocument") Document doc) {
+	
+	URI modelURI = doc.getModelURI();
+	log.trace("Using provided model URI "+modelURI);
+	
+	return modelURI;
+	
+}
 
 }

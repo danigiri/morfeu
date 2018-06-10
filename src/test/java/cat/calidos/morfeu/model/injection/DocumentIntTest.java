@@ -2,7 +2,6 @@ package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
 
-import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
@@ -30,7 +29,7 @@ public void testProduceCompleteDocument() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/document1.json");
 	assertNotNull(doc);
 
-	DocumentModuleTest.testDocument1(doc);
+	DocumentTest.testDocument1(doc);
 
 	Composite<Cell> content = doc.getContent();
 	assertNotNull(content);

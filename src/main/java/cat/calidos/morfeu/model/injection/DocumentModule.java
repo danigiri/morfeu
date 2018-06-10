@@ -40,6 +40,7 @@ import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.utils.injection.RemoteModule;
 
 
@@ -158,19 +159,19 @@ public static URI documentPrefix(@Named("ParsedDocument") Document doc,
 }
 
 
-// this is the basic model uri, usually relative and easy to read and understand, cannot necesarily be fetched from
-// the runtime context
-@Produces @Named("ModelURI")
-public static URI modelURI(@Named("ParsedDocument") Document doc) {
-	return doc.getModelURI();
+@Produces @Named("SkipValidation")
+public static Boolean skipValidation(@Named("ParsedDocument") Document doc) {
+	return doc.skipValidation();
 }
 
 
-// this is a model uri that is absolute and fetchable, guaranteed to be reachable from any runtime context
+//this is a model uri that is absolute and fetchable, guaranteed to be reachable from any runtime context
 @Produces @Named("FetchableModelURI")
-public static URI fetchableModelURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
-	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getModelURI());
+public static URI fetchableModelURI(@Named("PrefixURI") URI prefix, @Named("ModelURI") URI uri) 
+					throws ParsingException {
+	return MorfeuUtils.makeAbsoluteURIIfNeeded(prefix, uri);
 }
+
 
 @Produces @Named("ContentURI")
 public static URI contentURI(@Named("ParsedDocument") Document doc) {
@@ -181,26 +182,7 @@ public static URI contentURI(@Named("ParsedDocument") Document doc) {
 //this is a content uri that is absolute and fetchable, guaranteed to be reachable from any runtime context
 @Produces @Named("FetchableContentURI")
 public static URI fetchableContentURI(@Named("PrefixURI") URI prefix, @Named("ParsedDocument") Document doc) throws ParsingException {
-	return DocumentModule.makeAbsoluteURIIfNeeded(prefix, doc.getContentURI());
-}
-
-
-// if the uri is absolute we don't modify it, if prefix is a file://, we don't modify it either, otherwise we prepend the prefix
-private static URI makeAbsoluteURIIfNeeded(URI prefix, URI uri) throws ParsingException {
-	
-	URI finalURI = null;
-	if (!uri.isAbsolute() && prefix.getScheme()!=null && !prefix.getScheme().equals("file")) {
-		try {
-			finalURI = new URI(prefix+uri.toString());
-		} catch (URISyntaxException e) {
-			throw new ParsingException("Problem composing absolute urls with prefix:'"+prefix+"', and:'"+uri+"'",e);
-		}
-	} else {
-		finalURI = uri;
-	}
-	
-	return finalURI;
-
+	return MorfeuUtils.makeAbsoluteURIIfNeeded(prefix, doc.getContentURI());
 }
 
 

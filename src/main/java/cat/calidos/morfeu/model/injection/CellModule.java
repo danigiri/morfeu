@@ -160,7 +160,7 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 	int nodeIndex = 0;
 	// this works for now, but some day it will come back with a vengeance :)
 	NodeList nodeList = ((Element)node).getElementsByTagName("*");	//TODO: use node and detect text as values as this gives you all descendants
-	for (int i=0; i<nodeList.getLength();i++) {						// or use normalise (SLOW CODE!)
+	for (int i=0; i<nodeList.getLength(); i++) {					// or use normalise (SLOW CODE!)
 		
 		Element childElem = (Element) nodeList.item(i);	// We know it's element but this is not guaranteed not to change
 		if (childElem.getParentNode()==node) {			// Only handle the current element children!!! (SLOW!)

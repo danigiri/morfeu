@@ -37,12 +37,13 @@ import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.utils.injection.JSONMapperModule;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentModuleTest {
+public class DocumentTest {
 
 @Rule 
 public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -96,17 +97,18 @@ public void testModelURI() throws Exception {
 	String model = "model.xsd";
 	String content = "content.xml";
 	Document doc = createDocument(site, path, model, content);
+	URI modelURI = doc.getModelURI();
 	
 	// url should be "http://foo.com/well/model.xsd" as we want to ensure we reach the server
 	URI expected = new URI(site+model);
-	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, modelURI));
 	
 	site = "http://foo.com:8080/well/";
 	prefixURI = new URI(site);
 	doc = createDocument(site, path, model, content);
 	
 	expected = new URI(site+model);
-	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, modelURI));
 	
 	// for file paths we don't make them absolute as per current contract, so unmodified model URI
 	site = "file://tmp/";
@@ -114,15 +116,16 @@ public void testModelURI() throws Exception {
 	prefixURI = new URI(site);
 	
 	expected = new URI(model);
-	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, modelURI));
 
 	model = "http://bar.com/absolute.xsd";
 	site = "http://foo.com/well/";
 	doc = createDocument(site, path, model, content);
+	modelURI = doc.getModelURI();
 	prefixURI = new URI(site);
 
 	expected = new URI(model);
-	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, doc));
+	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, modelURI));
 
 }
 
@@ -134,7 +137,7 @@ public static void testDocument1(Document document) throws URISyntaxException {
 	assertEquals("xml", document.getKind());
 
 	// FIXME: we should not leak maven structure is possible
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd?not=used");
 	URI contentURI = new URI("target/test-classes/test-resources/documents/document1.xml");
 	assertEquals(modelURI, document.getModelURI());
 	assertEquals(contentURI, document.getContentURI());
@@ -153,7 +156,6 @@ private Document parseRelativeLocation(String location) throws ParsingException,
 	return document;
 
 }
-
 
 
 private Document createDocument(String site, String path, String model, String content) throws URISyntaxException {

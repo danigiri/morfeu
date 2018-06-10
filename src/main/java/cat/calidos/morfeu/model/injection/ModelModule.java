@@ -97,7 +97,7 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 }
 
 
-@Produces @Named("CellModels")
+@Produces @Named("RootCellModels")
 public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
 												@Named("ModelURI") URI u,
 												Map<URI, Metadata> globalMetadata) {
@@ -122,7 +122,7 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
 										rootCellModels.add(cellModel);
 									}
 	);
-	
+
 	return rootCellModels;
 
 }

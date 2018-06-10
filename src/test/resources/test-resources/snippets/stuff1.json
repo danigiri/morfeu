@@ -1,0 +1,8 @@
+{
+	"name": "Stuff 1"
+	,"desc": "Stuff with simple content"
+	,"kind": "simple"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff"
+	,"skipValidation": true
+	,"contentURI": "target/test-classes/test-resources/snippets/stuff1.xml"
+}

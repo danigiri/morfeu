@@ -40,8 +40,7 @@ import cat.calidos.morfeu.utils.FileSaver;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ContentSaverParserComponentIntTest extends ModelTezt {
-
+public class ContentSaverParserIntTest extends ModelTezt {
 
 private URI modelURI;
 private URI modelFetchableURI;
@@ -87,7 +86,7 @@ public void testValidateString() throws Exception {
 													.model(modelURI)
 													.withModelFetchedFrom(modelFetchableURI)
 													.build();
-	
+
 	Validable validator = contentComponent.validator().get();
 	assertNotNull(validator);
 	validator.validate();	// this would throw an exception

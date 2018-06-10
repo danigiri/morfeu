@@ -19,8 +19,6 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 
@@ -29,10 +27,7 @@ import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
-import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
-import cat.calidos.morfeu.utils.Tezt;
-
 
 /**
 * @author daniel giribet
@@ -55,9 +50,9 @@ public void testValidate() throws Exception {
 							.build()
 							.validator()
 							.get();
-	validator.validate();
-	// should not throw exception
-	
+	validator.validate(); // should not throw exception
+	assertTrue(validator.isValid());
+
 }
 
 
@@ -84,6 +79,7 @@ public void testNonValidDocument() throws Exception {
 	}
 
 }
+
 
 @Test
 public void testProduceContent() throws Exception {

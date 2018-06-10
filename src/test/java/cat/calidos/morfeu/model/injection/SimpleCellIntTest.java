@@ -31,7 +31,7 @@ import cat.calidos.morfeu.model.Composite;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class SimpleCellModuleIntTest extends ModelTezt {
+public class SimpleCellIntTest extends ModelTezt {
 
 private Composite<Cell> children;
 
@@ -44,13 +44,13 @@ public void testSimpleCell() throws Exception {
 	URI modelURI = new URI(modelPath);
 
 	Document document = DaggerContentParserTeztComponent.builder()
-			.content(contentURI)
-			.fetchedContentFrom(contentURI)
-			.model(modelURI)
-			.withModelFetchedFrom(modelURI)
-			.build()
-			.parsedXMLDocument()
-			.get();
+															.content(contentURI)
+															.fetchedContentFrom(contentURI)
+															.model(modelURI)
+															.withModelFetchedFrom(modelURI)
+															.build()
+															.parsedXMLDocument()
+															.get();
 
 	// we're expecting a fetchable relative path here
 	ComplexCellModel testCellModel = cellModelFrom(modelURI, "test").asComplex();	

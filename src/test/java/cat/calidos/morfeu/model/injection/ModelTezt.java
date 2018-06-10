@@ -64,7 +64,7 @@ throws InterruptedException, ExecutionException, ParsingException, FetchingExcep
 										.withPrefix("")
 										.build();
 
-	return docComponent.produceDocument().get();
+	return docComponent.document().get();
 
 }
 

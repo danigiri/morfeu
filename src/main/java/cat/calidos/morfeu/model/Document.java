@@ -39,7 +39,7 @@ protected Composite<Cell> content;
 protected Model model;
 protected Validable validator;
 protected boolean isValid = false;
-
+protected boolean skipValidation = false;
 
 public Document(URI u) {
 	super(u);
@@ -119,6 +119,7 @@ public URI getModelURI() {
 	return modelURI;
 }
 
+
 /** this is the user-friendly, relative URI used to easily identify this document model */
 @JsonProperty("modelURI") 
 public void setModelURI(URI uri) {
@@ -141,6 +142,7 @@ public void setFetchableModelURI(URI uri) {
 	
 }
 
+
 /** this is the user-friendly, relative URI used to easily identify this document content */
 public URI getContentURI() {
 	return contentURI;
@@ -162,6 +164,17 @@ public URI getFetchableContentURI() {
 @JsonProperty("fetchableContentURI") 
 public void setFetchableContentURI(URI uri) {
 	this.fetchableContentURI = uri;
+}
+
+
+public boolean skipValidation() {
+	return skipValidation;
+}
+
+
+@JsonProperty("skipValidation") 
+public void skipValidation(boolean skip) {
+	this.skipValidation = skip;
 }
 
 

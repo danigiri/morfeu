@@ -16,20 +16,36 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import cat.calidos.morfeu.model.NullValidator;
-import cat.calidos.morfeu.model.Validable;
-import dagger.producers.ProducerModule;
-import dagger.producers.Produces;
+import static org.junit.Assert.*;
+
+import java.net.URI;
+
+import org.junit.Test;
+
+import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule
-public class NullValidatorModule {
+public class SnippetIntTest extends ModelTezt {
 
-@Produces
-public static Validable produceNullValidator() {
-	return new NullValidator();
+
+@Test
+public void testSnippet() throws Exception {
+	
+	String path = "test-resources/snippets/stuff1.json";
+	String doc1Path = testAwareFullPathFrom(path);
+	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
+	
+	Document snippet = DaggerSnippetComponent.builder().from(uri).withPrefix("").build().snippet().get();
+	assertNotNull(snippet);
+	
+	Composite<Cell> content = snippet.getContent();
+	assertNotNull(content);
+	
 }
 
 }

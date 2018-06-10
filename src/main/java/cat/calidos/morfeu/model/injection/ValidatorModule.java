@@ -16,6 +16,10 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
+import javax.inject.Named;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.Validator;
@@ -26,22 +30,48 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.model.XSDValidator;
+import dagger.BindsOptionalOf;
+import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+
+import cat.calidos.morfeu.model.NullValidator;
+import cat.calidos.morfeu.model.Validable;
+import cat.calidos.morfeu.model.XSDValidator;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class XSDValidatorModule {
+public abstract class ValidatorModule {
 
-protected final static Logger log = LoggerFactory.getLogger(XSDValidatorModule.class);
+protected final static Logger log = LoggerFactory.getLogger(ValidatorModule.class);
+
 
 @Produces
-public static Validable producerXSDValidator(Validator v, DOMSource xmldom) {
+public static Validable produceValidator(@Named("SkipValidation") Optional<Boolean> skipValidation,
+											@Named("XSDValidator") Producer<Validable> xsdValidator,
+											@Named("NullValidator") Producer<Validable> nullValidator) 
+							throws InterruptedException, ExecutionException {
+	return skipValidation.isPresent() && skipValidation.get().booleanValue() 
+			? nullValidator.get().get() : xsdValidator.get().get() ;
+
+}
+
+
+@Named("SkipValidation")
+@BindsOptionalOf abstract Boolean skipValidation();
+
+
+@Produces @Named("XSDValidator")
+public static Validable xsdValidator(Validator v, DOMSource xmldom) {
 	return new XSDValidator(v, xmldom);
+}
+
+
+@Produces @Named("NullValidator")
+public static Validable produceNullValidator() {	// will be used if skipValidation == true
+	return new NullValidator();
 }
 
 

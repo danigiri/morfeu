@@ -38,7 +38,7 @@ import cat.calidos.morfeu.problems.ParsingException;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelModuleIntTest extends ModelTezt {
+public class ModelIntTest extends ModelTezt {
 
 private URI modelURI;
 private Model model;

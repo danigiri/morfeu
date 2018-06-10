@@ -36,16 +36,17 @@ import dagger.producers.ProductionComponent;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, JSONMapperModule.class, 
-							  ListeningExecutorServiceModule.class})
+								DefaultModelURIModule.class, ListeningExecutorServiceModule.class})
 public interface DocumentComponent {
 
-ListenableFuture<Document> produceDocument() throws ParsingException, FetchingException, ValidationException;
+ListenableFuture<Document> document() throws ParsingException, FetchingException, ValidationException;
 
 @ProductionComponent.Builder
 interface Builder {
 
 	@BindsInstance Builder from(URI u);
 	@BindsInstance Builder withPrefix(@Named("Prefix") String p);
+	
 	DocumentComponent build();
 
 }

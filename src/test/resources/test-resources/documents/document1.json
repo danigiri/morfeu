@@ -2,6 +2,6 @@
 	"name": "Document 1"
 	,"desc": "First document"
 	,"kind": "xml"
-	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd?not=used"
 	,"contentURI": "target/test-classes/test-resources/documents/document1.xml"
 }

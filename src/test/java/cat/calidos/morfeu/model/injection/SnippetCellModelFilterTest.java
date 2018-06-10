@@ -14,34 +14,39 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.api;
+package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-import java.io.InputStream;
+import java.net.URI;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import cat.calidos.morfeu.model.Document;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class APIContentIntTest extends APITezt {
+public class SnippetCellModelFilterTest {
+
+@Rule public MockitoRule mockitoRule = MockitoJUnit.rule(); 
+
 
 @Test
-public void testContent() throws Exception {
-
-	// http://localhost:8080/morfeu/dyn/content/target/test-classes/test-resources/documents/document1.xml?model=
-	String model = pathPrefix+"models/test-model.xsd";
-	InputStream content = fetchRemoteInputStreamFrom("content/"+pathPrefix+"documents/document1.xml?model="+model);
-	assertNotNull(content);
-
-	JsonNode doc = parseJson(content);
-	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
-	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
-	assertEquals("/children/test(0) has a wrong name", "test", doc.get("children").get(0).get("name").asText());
-
+public void testCellModelFilter() throws Exception {
+	
+	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff");
+	URI expected = new URI("target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff");
+	
+	Document documentMock = mock(Document.class);
+	when(documentMock.getModelURI()).thenReturn(modelURI);
+	assertEquals(expected, SnippetModelURIModule.cellModelFilter(documentMock));
+	
 }
 
 }

@@ -16,7 +16,11 @@
 
 package cat.calidos.morfeu.utils;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
+
+import cat.calidos.morfeu.problems.ParsingException;
 
 /**
 * @author daniel giribet
@@ -32,6 +36,24 @@ public static Throwable findRootCauseFrom(ExecutionException e) {
 	}
 	
 	return cause;
+
+}
+
+// if the uri is absolute we don't modify it, if prefix is a file://, we don't modify it either, otherwise we prepend the prefix
+public static URI makeAbsoluteURIIfNeeded(URI prefix, URI uri) throws ParsingException {
+	
+	URI finalURI = null;
+	if (!uri.isAbsolute() && prefix.getScheme()!=null && !prefix.getScheme().equals("file")) {
+		try {
+			finalURI = new URI(prefix+uri.toString());
+		} catch (URISyntaxException e) {
+			throw new ParsingException("Problem composing absolute urls with prefix:'"+prefix+"', and:'"+uri+"'",e);
+		}
+	} else {
+		finalURI = uri;
+	}
+	
+	return finalURI;
 
 }
 

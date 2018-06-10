@@ -31,7 +31,7 @@ import cat.calidos.morfeu.utils.injection.JSONMapperModule;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ParserModuleTest {
+public class ParserTest {
 
 @Test
 public void testProduceSAXParserFactory() throws Exception {

@@ -16,32 +16,40 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.URI;
+
+import javax.inject.Named;
+
 import com.google.common.util.concurrent.ListenableFuture;
 
-import dagger.producers.ProductionSubcomponent;
+import dagger.BindsInstance;
+import dagger.producers.ProductionComponent;
 
-import cat.calidos.morfeu.model.Cell;
-import cat.calidos.morfeu.model.Composite;
-import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.problems.ConfigurationException;
+import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.injection.HttpClientModule;
+import cat.calidos.morfeu.utils.injection.JSONMapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ContentParserModule.class, URIToParsedModule.class, ModelModule.class, 
-									CellModelsFilterModule.class, ValidatorModule.class,
-									ListeningExecutorServiceModule.class})
-public interface ContentParserSubcomponent {
+@ProductionComponent(modules={DocumentModule.class, SnippetModelURIModule.class, HttpClientModule.class, JSONMapperModule.class, 
+		  ListeningExecutorServiceModule.class})
+public interface SnippetComponent {
 
-ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
-ListenableFuture<Composite<Cell>> content() throws ParsingException;
+ListenableFuture<Document> snippet() throws ParsingException, FetchingException, ValidationException;
 
-@ProductionSubcomponent.Builder
+@ProductionComponent.Builder
 interface Builder {
-	ContentParserSubcomponent builder();
+
+	@BindsInstance Builder from(URI u);
+	@BindsInstance Builder withPrefix(@Named("Prefix") String p);
+
+	SnippetComponent build();
+	
 }
 
 }

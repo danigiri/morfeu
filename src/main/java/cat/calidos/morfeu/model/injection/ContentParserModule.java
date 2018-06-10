@@ -68,7 +68,7 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 												@Named("ContentNodes") LinkedList<Node> nodes,
 												@Named("CellModels") List<CellModel> cellModels) // <- CellModelsFilter
 								throws ParsingException {
-
+	
 	//FIXME: this is a quite repetitive from cellmodule, not following DRY	
 	Composite<Cell> contentCells = new OrderedMap<Cell>(nodes.size());
 	int cellIndex = 0;
