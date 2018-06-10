@@ -26,30 +26,32 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
-import cat.calidos.morfeu.model.injection.ContentParserComponent;
-import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
-import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
+import cat.calidos.morfeu.model.injection.DaggerSnippetComponent;
+import cat.calidos.morfeu.model.injection.SnippetComponent;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
+
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ContentGETControl extends Control {
+public class SnippetGETControl extends Control {
 
-private final static Logger log = LoggerFactory.getLogger(ContentGETControl.class);
+protected final static Logger log = LoggerFactory.getLogger(SnippetGETControl.class);
 
 private String prefix;
 private String path;
 private String modelPath;
-		
 
-public ContentGETControl(String prefix, String path, @Nullable String modelPath) {
 
-	super("GET content:"+path, "templates/content.twig", "templates/content-problem.twig");
+public SnippetGETControl(String prefix, String path, @Nullable String modelPath) {
+
+	super("GET snippet:"+path, "templates/content.twig", "templates/content-problem.twig");
 
 	this.prefix = prefix;
 	this.path = path;
@@ -59,22 +61,22 @@ public ContentGETControl(String prefix, String path, @Nullable String modelPath)
 
 
 @Override
-protected Object process() throws InterruptedException, ExecutionException, ValidationException, 
-									ParsingException, FetchingException, ConfigurationException, TransformException {
+protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException,
+		FetchingException, ConfigurationException, SavingException, TransformException {
 
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
 	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
+	SnippetComponent snippetComponent = DaggerSnippetComponent.builder()
+																.content(uri)
+																.fetchedContentFrom(fetchableURI)
+																.modelFiltered(modelURI)
+																.withModelFetchedFrom(fetchableModelPath)
+																.build();
 
-	ContentParserComponent contentComponent = DaggerContentParserComponent.builder()
-																		.content(uri)
-																		.fetchedContentFrom(fetchableURI)
-																		.model(modelURI)
-																		.withModelFetchedFrom(fetchableModelPath)
-																		.build();
-	contentComponent.validator().get().validate();
-	Composite<Cell> content = contentComponent.content().get();
+	snippetComponent.validator().get().validate();	// may or may not do any kind of validation
+	Composite<Cell> content = snippetComponent.content().get();
 
 	return content.asList();
 
@@ -83,24 +85,19 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 
 @Override
 protected void beforeProcess() {
-	log.trace("About to load content '[{}]{}' given model '{}'", prefix, path, modelPath);
+	log.trace("About to load snippet '[{}]{}' given model '{}'", prefix, path, modelPath);
 }
 
 
 @Override
 protected void afterProblem(String problem) {
-	log.trace("Problem loading content('{}', '{}', '{}'): '{}'", prefix, path, modelPath, problem);
+	log.trace("Problem loading snippet('{}', '{}', '{}'): '{}'", prefix, path, modelPath, problem);
 }
 
 
 @Override
 protected Object problemInformation() {
-
-	// TODO Auto-generated method stub
-	return null;
+	return path;	// we show the problematic path on the template
 }
 
-
-
-	
 }

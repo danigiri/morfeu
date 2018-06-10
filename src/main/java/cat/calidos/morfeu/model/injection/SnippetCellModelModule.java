@@ -33,18 +33,24 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class SnippetModelURIModule {
+public class SnippetCellModelModule {
 
 
-protected final static Logger log = LoggerFactory.getLogger(SnippetModelURIModule.class);
+protected final static Logger log = LoggerFactory.getLogger(SnippetCellModelModule.class);
 
 @Produces @Named("ModelURI")
-public static URI modelURI(@Named("ParsedDocument") Document doc) throws ConfigurationException {
+public static URI modelURI(@Named("FilteredModelURI") URI uri) throws ConfigurationException {
 	
-	String modelURI = doc.getModelURI().toString();
+	log.trace("Filtering cell model URI "+uri);
+	
+	String modelURI = uri.toString();
+	int queryIndex = modelURI.indexOf("?filter=");
+	if (queryIndex==-1) {
+		throw new ConfigurationException("Filtered model uri did not have '?filter=' ("+modelURI+")");		
+	}
 	
 	try {
-		return new URI(modelURI.substring(0, modelURI.indexOf("?")));
+		return new URI(modelURI.substring(0, queryIndex));
 	} catch (URISyntaxException e) {
 		log.error("Snippet model uri creation failed, could not remove query from "+modelURI);
 		throw new ConfigurationException("Problem when creating effective model URI for snippet", e);
@@ -52,13 +58,19 @@ public static URI modelURI(@Named("ParsedDocument") Document doc) throws Configu
 			
 }
 
+@Produces @Named("SkipValidation")
+public static Boolean skipValidation() {
+	return true;
+}
+
+
 // return the uri of the snippet model so we can link it to the snippet content, at the moment we remove filter
 @Produces @Named("CellModelFilter")
-public static URI cellModelFilter(@Named("ParsedDocument") Document doc) throws ConfigurationException {
+public static URI cellModelFilter(@Named("FilteredModelURI") URI uri) throws ConfigurationException {
 	
 	try {
 		
-		return new URI(doc.getModelURI().toString().replace("?filter=", ""));
+		return new URI(uri.toString().replace("?filter=", ""));
 		
 	} catch (URISyntaxException e) {
 		log.error("Snippet cell model filter creation failed");

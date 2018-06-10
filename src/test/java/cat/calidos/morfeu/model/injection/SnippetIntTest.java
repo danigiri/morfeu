@@ -27,6 +27,7 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
 /**
@@ -38,14 +39,18 @@ public class SnippetIntTest extends ModelTezt {
 @Test
 public void testSnippet() throws Exception {
 	
-	String path = "test-resources/snippets/stuff1.json";
-	String doc1Path = testAwareFullPathFrom(path);
-	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
-	
-	Document snippet = DaggerSnippetComponent.builder().from(uri).withPrefix("").build().snippet().get();
-	assertNotNull(snippet);
-	
-	Composite<Cell> content = snippet.getContent();
+	String contentPath = "test-resources/snippets/stuff1.xml";
+	String fullContentPath = testAwareFullPathFrom(contentPath);
+	String modelPath = "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff";
+	String testAwareModelPath = testAwareFullPathFrom("test-resources/models/test-model.xsd");
+	Composite<Cell> content = DaggerSnippetComponent.builder()
+														.content(new URI(contentPath))
+														.fetchedContentFrom(new URI(fullContentPath))
+														.modelFiltered(new URI(modelPath))
+														.withModelFetchedFrom(new URI(testAwareModelPath))
+														.build()
+														.content()
+														.get();
 	assertNotNull(content);
 	assertEquals("There should be only one stuff snippet", 1, content.size());
 	

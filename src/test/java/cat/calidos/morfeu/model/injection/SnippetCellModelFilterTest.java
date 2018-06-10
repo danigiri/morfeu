@@ -17,24 +17,15 @@
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import java.net.URI;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
-import cat.calidos.morfeu.model.Document;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SnippetCellModelFilterTest {
-
-@Rule public MockitoRule mockitoRule = MockitoJUnit.rule(); 
 
 
 @Test
@@ -43,9 +34,7 @@ public void testCellModelFilter() throws Exception {
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff");
 	URI expected = new URI("target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff");
 	
-	Document documentMock = mock(Document.class);
-	when(documentMock.getModelURI()).thenReturn(modelURI);
-	assertEquals(expected, SnippetModelURIModule.cellModelFilter(documentMock));
+	assertEquals(expected, SnippetCellModelModule.cellModelFilter(modelURI));
 	
 }
 
