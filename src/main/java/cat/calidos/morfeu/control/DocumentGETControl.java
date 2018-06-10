@@ -58,7 +58,7 @@ protected Object process()
 									.from(uri)
 									.withPrefix(prefix)
 									.build()
-									.produceDocument()
+									.document()
 									.get();
 
 }
