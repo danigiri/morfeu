@@ -23,5 +23,6 @@ export class Catalogue {
 	desc: string;
 
 	documents: CellDocument[];
+    snippets: CellDocument[];
 
 }

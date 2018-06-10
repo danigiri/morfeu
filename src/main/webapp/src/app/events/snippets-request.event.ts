@@ -15,11 +15,10 @@
  */
 
 import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
 
-export class ContentRequestEvent {
+export class SnippetsRequestEvent {
 
 
-constructor(public document: CellDocument, public model: Model) {}
+constructor(public snippets: CellDocument[]) {}
 
 }

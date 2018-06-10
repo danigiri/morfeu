@@ -72,7 +72,7 @@ init() {
 
 
 setComponent(c: CellModelComponent) {
-    this.component = c;
+	this.component = c;
 }
 
 
@@ -96,26 +96,26 @@ getPresentation() {
 
 /** Mutates the cellModel so any references point to  the original cell model**/
 normaliseReferencesWith(rootCellModels: CellModel[]) {
-    
-    if (this.isReference) {
-        let reference:CellModel = this.findCellModelWithURI(rootCellModels, this.referenceURI);
-        if (!reference) {
-            console.error("Could not find cellModel of reference cellModel:%s", this.name);
-        }
-        
-        // we take the philosophy of completing the cellmodel reference with the missing data (children)
-        // we keep rest of the cell model information (like the name, which can be different)
-        this.children = reference.children;
-        
-    } else {
-        if (this.children) {
-            this.children.forEach(c => c.normaliseReferencesWith(rootCellModels));
-        }
-        if (this.attributes) {
-            this.attributes.forEach(a => a.normaliseReferencesWith(rootCellModels));
-        }
-    }
-    
+	
+	if (this.isReference) {
+		let reference:CellModel = this.findCellModelWithURI(rootCellModels, this.referenceURI);
+		if (!reference) {
+			console.error("Could not find cellModel of reference cellModel:%s", this.name);
+		}
+		
+		// we take the philosophy of completing the cellmodel reference with the missing data (children)
+		// we keep rest of the cell model information (like the name, which can be different)
+		this.children = reference.children;
+		
+	} else {
+		if (this.children) {
+			this.children.forEach(c => c.normaliseReferencesWith(rootCellModels));
+		}
+		if (this.attributes) {
+			this.attributes.forEach(a => a.normaliseReferencesWith(rootCellModels));
+		}
+	}
+	
 }
 
 
@@ -155,49 +155,49 @@ generateCell(): Cell {
 
 /** return a deep clone of this cell model, it includes all children and so forth */
 deepClone(): CellModel {
-    return CellModel.fromJSON(this.toJSON());
+	return CellModel.fromJSON(this.toJSON());
 }
 
 
 ////FamilyMember ////
 
 getURI(): string {
-    return this.URI;
+	return this.URI;
 }
 
 
 getAdoptionName(): string {
-    return this.name;
+	return this.name;
 }
 
 
 getAdoptionURI(): string {
-    return this.URI;
+	return this.URI;
 }
 
 
 matches(e:FamilyMember): boolean {
-    return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
+	return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
 
 
 canAdopt(element:FamilyMember): boolean {
-    return this.children.some(c => c.matches(element));
+	return this.children.some(c => c.matches(element));
 }
 
 
 childrenCount(): number {
-    return this.children ? this.children.length : 0;
+	return this.children ? this.children.length : 0;
 }
 
 
 getParent():FamilyMember {
-    return undefined;   //TODO: we do not need to setup the parent yet
+	return undefined;	//TODO: we do not need to setup the parent yet
 }
 
 
 equals(m: FamilyMember) {
-    return this.getURI()==m.getURI();
+	return this.getURI()==m.getURI();
 }
 
 
@@ -237,7 +237,7 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 
 		if (json.attributes) {
 			cellModel = Object.assign(cellModel,
-									    {attributes: json.attributes.map(a => CellModel.fromJSON(a))});
+										{attributes: json.attributes.map(a => CellModel.fromJSON(a))});
 		}
 
 		// handle the identifier if we have one defined, so we turn it into a reference to the attribute
@@ -294,26 +294,26 @@ private generateAttributeFrom(attribute: CellModel): Cell {
 // given a cell model URI, look for it in a cell model hierarchy, avoids following references
 private findCellModelWithURI(cellModels: CellModel[], uri: string): CellModel {
 
-    let cellModel:CellModel;
-    let pending:CellModel[] = [];
-    cellModels.forEach(cm => pending.push(cm));
-    
-    while (!cellModel && pending.length>0) {
-        
-        let currentCellModel:CellModel = pending.pop();
-        if (currentCellModel.URI==uri) {
-            cellModel = currentCellModel;
-        } else {
-            // Only do a recursive call if current cellModel is not what we look for *and* not a reference.
-            // This is to avoid infinite loops in nested structures, a nested reference to a parent
-            // will necessarily be a reference cellModel, therefore do not add its children to be processed
-            if (!currentCellModel.isReference && currentCellModel.children) { 
-                currentCellModel.children.forEach(cm => pending.push(cm));
-            }
-        }
-    }
+	let cellModel:CellModel;
+	let pending:CellModel[] = [];
+	cellModels.forEach(cm => pending.push(cm));
+	
+	while (!cellModel && pending.length>0) {
+		
+		let currentCellModel:CellModel = pending.pop();
+		if (currentCellModel.URI==uri) {
+			cellModel = currentCellModel;
+		} else {
+			// Only do a recursive call if current cellModel is not what we look for *and* not a reference.
+			// This is to avoid infinite loops in nested structures, a nested reference to a parent
+			// will necessarily be a reference cellModel, therefore do not add its children to be processed
+			if (!currentCellModel.isReference && currentCellModel.children) { 
+				currentCellModel.children.forEach(cm => pending.push(cm));
+			}
+		}
+	}
 
-    return cellModel;
+	return cellModel;
 
 }
 

@@ -193,7 +193,7 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 				this.children = this.children.map(c => c.associateWith_(rootCellmodels, cellModel.children));
 			}
 		} else {
-		    console.error();
+			console.error();
 		}
 
 	this.cellModel = cellModel;

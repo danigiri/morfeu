@@ -6,8 +6,6 @@
 		,{ "name":"Document 3 YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document3-yaml.json" }
 		]
 	,"snippets": [
-		{ "name":"empty", "uri":"/test-resources/"}
-		,{ "name":"table"}
+		 { "name": "Stuff", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
 		]
-		
 }

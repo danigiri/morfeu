@@ -62,7 +62,7 @@ import { StatusEvent } from './events/status.event';
 })
 	
 	//`
-export class CatalogueComponent extends Widget {
+export class CatalogueComponent extends Widget implements OnInit {
 	
 catalogue: Catalogue;
 selectedDocumentURI: string;
@@ -93,8 +93,8 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 
 	this.selectedDocumentURI = null;
 	this.events.service.publish(new StatusEvent("Fetching catalogue"));
-	this.catalogueService.get<Catalogue>(selectedCatalogueUri)
-			.subscribe(c => { 
+	this.catalogueService.get<Catalogue>(selectedCatalogueUri).subscribe(
+	        c => { 
 				this.catalogue = c;
 				this.events.service.publish(new CatalogueLoadedEvent(c));
 				this.events.ok();

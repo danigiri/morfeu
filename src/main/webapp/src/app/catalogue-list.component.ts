@@ -29,8 +29,8 @@ import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
 import { CataloguesRequestEvent } from './events/catalogues-request.event';
 import { CataloguesLoadedEvent } from './events/catalogues-loaded.event';
 import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { StatusEvent } from "./events/status.event";
 import { EventService } from './events/event.service';
-import { StatusEvent } from './events/status.event';
 
 
 @Component({

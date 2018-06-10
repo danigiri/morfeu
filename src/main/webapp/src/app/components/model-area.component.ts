@@ -25,12 +25,14 @@ import { Widget } from "../widget.class";
 import { CellDocument } from "../cell-document.class";
 import { Model } from "../model.class";
 
+import { CatalogueLoadedEvent } from "../events/catalogue-loaded.event";
 import { CellDocumentClearEvent } from "../events/cell-document-clear.event";
 import { CellDocumentLoadedEvent } from "../events/cell-document-loaded.event";
 import { ModelDisplayEvent } from "../events/model-display.event";
 import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
 import { ModelRequestEvent } from "../events/model-request.event";
 import { ModelLoadedEvent } from "../events/model-loaded.event";
+import { SnippetsRequestEvent } from "../events/snippets-request.event";
 import { EventService } from "../events/event.service";
 
 @Component({
@@ -46,7 +48,7 @@ import { EventService } from "../events/event.service";
 			</ngb-tab>
 			<ngb-tab title="Snippets" id="snippets-tab">
 				<ng-template ngbTabContent>
-					
+					<snippets *ngIf="snippets" [snippetStubs]="snippets"></snippets>
 				</ng-template>
 			</ngb-tab>
 		</ngb-tabset>
@@ -59,11 +61,12 @@ import { EventService } from "../events/event.service";
 export class ModelAreaComponent extends Widget implements OnInit {
 
 model?: Model;
-//snippet?: ;
-	
+snippets?: CellDocument[];
+
 @ViewChild(ModelComponent) private modelComponent: ModelComponent;
 
 private modelDisplayReadySubscription: Subscription;
+
 
 constructor(eventService: EventService) {
 	super(eventService);
@@ -82,14 +85,19 @@ ngOnInit() {
 	
 	this.subscribe(this.events.service.of(ModelLoadedEvent).subscribe(loaded => this.store(loaded.model)));
 
-
-
+	this.subscribe(this.events.service.of(CatalogueLoadedEvent).subscribe(
+	        loaded => this.snippets = loaded.catalogue.snippets
+    ));
 }
 
 
 private beforeTabChange($event: NgbTabChangeEvent) {
 	console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
 	if ($event.activeId=="model-tab") {
+//	    console.log("[UI] ModelAreaComponent:: sending SnippetsRequestEvent");
+//	    Promise.resolve(null).then(() =>
+//	        this.events.service.publish(new SnippetsRequestEvent(this.snippets))
+//	    );
 	} else if ($event.activeId=="snippets-tab") {
 		this.modelDisplayReadySubscription = this.subscribe(this.events.service.of(ModelDisplayReadyEvent)
 				.subscribe(loaded => this.redisplayModel()));

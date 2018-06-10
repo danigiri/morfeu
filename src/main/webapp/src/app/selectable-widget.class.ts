@@ -14,7 +14,7 @@
  *	 limitations under the License.
  */
 
-import { Subscription } from 'rxjs';
+import { Subscription } from "rxjs";
 
 import { Widget } from './widget.class';
 

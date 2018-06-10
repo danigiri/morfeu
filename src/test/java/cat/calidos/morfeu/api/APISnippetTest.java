@@ -32,10 +32,10 @@ public class APISnippetTest extends APITezt {
 @Test
 public void testStuffSnippet() throws Exception {
 
-	// http://localhost:8080/morfeu/dyn/snippets/target/test-classes/test-resources/snippets/stuff1.xml
+	// http://localhost:8080/morfeu/dyn/snippets/target/test-classes/test-resources/snippets/stuff.xml
 	//  &model=target/test-classes/test-resources/models/test-model.xsd%3Ffilter=/test/row/col/stuff
 	String model = pathPrefix+"models/test-model.xsd%3Ffilter=/test/row/col/stuff";
-	String uri = "snippets/"+pathPrefix+"snippets/stuff1.xml?model="+model;
+	String uri = "snippets/"+pathPrefix+"snippets/stuff.xml?model="+model;
 	InputStream content = fetchRemoteInputStreamFrom(uri);
 	assertNotNull(content);
 

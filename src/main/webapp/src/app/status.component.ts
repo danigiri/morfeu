@@ -61,7 +61,7 @@ private readonly ANIMATING_OUT = 3;
 visibility = "hidden";
 state = this.HIDDEN;
 statuses: StatusEvent[];		// what is shown
-pendingStatuses: StatusEvent[];	// what is pending to be shown given that statuses is full
+pendingStatuses: StatusEvent[]; // what is pending to be shown given that statuses is full
 eventSubscription: Subscription;
 
 constructor(private eventService: EventService) {}

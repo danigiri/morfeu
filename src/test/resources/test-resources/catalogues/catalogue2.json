@@ -2,12 +2,10 @@
 	"name": "catalogue 2"
 	,"desc": "Second catalogue"
 	,"documents": [
-		{ "name":"empty2", "kind": "xml", "uri":"test-resources/documents/document1.json"}
+		 { "name":"empty2", "kind": "xml", "uri":"test-resources/documents/document1.json"}
 		,{ "name":"table2", "kind": "xml", "uri":"test-resources/documents/document1.json"}
 		]
 	,"snippets": [
-		{ "name":"empty", "uri":"/test-resources/"}
-		,{ "name":"table"}
+		{ "name": "Stuff", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
 		]
-		
 }

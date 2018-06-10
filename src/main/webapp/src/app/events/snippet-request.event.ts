@@ -14,12 +14,10 @@
  *	 limitations under the License.
  */
 
-import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
 
-export class ContentRequestEvent {
+export class SnippetRequestEvent {
+	
 
-
-constructor(public document: CellDocument, public model: Model) {}
-
+constructor(public index: number) {} 
+	
 }

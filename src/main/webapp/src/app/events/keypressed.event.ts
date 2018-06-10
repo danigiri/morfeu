@@ -15,20 +15,22 @@
  */
 
 export class KeyPressedEvent {
-	
+
+
 constructor(public str: string, public num?: number) {}
 
 public isNumber(): boolean {
 	return this.num!=undefined;
 }
 
+
 public isCommand(): boolean {
 	return !this.isNumber();
 }
 
+
 public toString = (): string => {
 	return "KeyPressedEvent:{ key:"+this.str+( (this.num) ? ", num:"+this.num : "" )+"}";
 }
-
 
 }

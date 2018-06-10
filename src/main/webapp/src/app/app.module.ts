@@ -45,6 +45,7 @@ import { KeyCaptureComponent } from "./components/key-capture.component";
 import { ModelAreaComponent } from "./components/model-area.component";
 import { ModelComponent } from "./components/model.component";
 import { ProblemComponent } from "./problem.component";
+import { SnippetsComponent } from "./components/snippets.component";
 import { StatusComponent } from "./status.component";
 
 @NgModule({
@@ -79,6 +80,7 @@ import { StatusComponent } from "./status.component";
 					,ModelAreaComponent
 					,ModelComponent
 					,ProblemComponent 
+					,SnippetsComponent
 					,StatusComponent 
 	],
 	providers:	[],

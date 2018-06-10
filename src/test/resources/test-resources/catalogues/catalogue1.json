@@ -14,5 +14,4 @@
 	,"snippets": [
 		 { "name": "Stuff", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
 		]
-		
 }
