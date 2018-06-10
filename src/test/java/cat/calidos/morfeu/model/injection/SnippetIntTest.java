@@ -19,10 +19,12 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.junit.Test;
 
 import cat.calidos.morfeu.model.Cell;
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
@@ -45,6 +47,17 @@ public void testSnippet() throws Exception {
 	
 	Composite<Cell> content = snippet.getContent();
 	assertNotNull(content);
+	assertEquals("There should be only one stuff snippet", 1, content.size());
+	
+	Cell stuff = content.child(0);
+	assertNotNull(stuff);
+	
+	Optional<String> stuffValue = stuff.getValue();
+	assertTrue(stuffValue.isPresent());
+	assertEquals("Stuff content", stuffValue.get());
+	
+	CellModel stuffModel = stuff.getCellModel();
+	assertEquals("stuff", stuffModel.getName());
 	
 }
 
