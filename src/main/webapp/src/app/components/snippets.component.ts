@@ -17,14 +17,15 @@
 import { Component, AfterViewInit, Inject, Input, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 
+import { RemoteDataService } from "../services/remote-data.service";
 import { RemoteObjectService } from "../services/remote-object.service";
 
 import { CellDocument, CellDocumentJSON } from "../cell-document.class";
 
 import { KeyListenerWidget } from "../key-listener-widget.class";
 
-import { SnippetsRequestEvent } from "../events/snippets-request.event";
-import { SnippetRequestEvent } from "../events/snippet-request.event";
+import { SnippetContentRequestEvent } from "../events/snippet-content-request.event";
+import { SnippetDocumentRequestEvent } from "../events/snippet-document-request.event";
 import { StatusEvent } from "../events/status.event";
 import { EventService } from "../events/event.service";
 
@@ -45,11 +46,13 @@ export class SnippetsComponent extends KeyListenerWidget implements AfterViewIni
 
 snippets: CellDocument[];
 
-protected snippetSubscription: Subscription;
+protected snippetDocumentSubs: Subscription;
+protected snippetContentSubs: Subscription;
 
 	
 constructor(eventService: EventService,
-			@Inject("SnippetsService") private snippetService: RemoteObjectService<CellDocument, CellDocumentJSON>,
+            @Inject("RemoteJSONDataService") private snippetService: RemoteDataService,
+            @Inject("SnippetContentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON> 
 			) {
 	super(eventService);
 }
@@ -60,41 +63,49 @@ ngAfterViewInit() {
 }
 
 
-// fetch all snippets
+// fetch all snippet documents
 private fetchSnippets() {
 
 	if (this.snippetStubs.length>0) {
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
-		this.snippetSubscription = this.subscribe(this.events.service.of(SnippetRequestEvent).subscribe(
-				loaded => this.loadSnippet(this.snippetStubs[loaded.index], loaded.index)
+		this.snippetContentSubs = this.subscribe(this.events.service.of(SnippetContentRequestEvent)
+		        .subscribe(
+		                req => this.loadSnippetContent(req.document)
 		));
-		this.events.service.publish(new SnippetRequestEvent(0));
+		this.snippetDocumentSubs = this.subscribe(this.events.service.of(SnippetDocumentRequestEvent)
+		        .subscribe(
+		            req => this.loadSnippetDocument(this.snippetStubs[req.index], req.index)
+		));
+		this.events.service.publish(new SnippetDocumentRequestEvent(0));
     }
 
 }
 
 
-// TODO: this needs to fetch the document and then we extract the content from it =)
-private loadSnippet(snippet: CellDocument, index: number) {
+// load all snippet documents which in turn will be used to fetch all snippets
+private loadSnippetDocument(snippetStub: CellDocument, index: number) {
    
-	let snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
-	console.log("Loading snippet %s", snippetURI);
-	this.snippetService.get(snippetURI, CellDocument).subscribe(
-			s => {
-				this.snippets.push(s);
-			},
-			error => {
-				this.events.problem(error.message);
-			},
+	let uri = "/morfeu/"+snippetStub.uri;
+	console.log("Loading snippet document %s", uri);
+	this.snippetService.get<CellDocument>(uri).subscribe(
+	        snippetDoc => this.loadSnippetContent(snippetDoc),
+			error => this.events.problem(error.message),
 			() => {
-				if (index<this.snippetStubs.length) {
-					this.events.service.publish(new SnippetRequestEvent(index+1));
+				if (index<this.snippetStubs.length-1) {
+					this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
 				} else {
-					this.unsubscribe(this.snippetSubscription);
+					this.unsubscribe(this.snippetDocumentSubs);
 					this.events.ok();	// this means we don't see errors for that long unfortunately
 				}
 			}
 	);
+
+}
+
+private loadSnippetContent(snippet: CellDocument) {
+
+	let snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
+	console.log("Loading snippet content %s", snippetURI);
 
 }
 

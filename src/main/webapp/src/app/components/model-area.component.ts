@@ -32,7 +32,6 @@ import { ModelDisplayEvent } from "../events/model-display.event";
 import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
 import { ModelRequestEvent } from "../events/model-request.event";
 import { ModelLoadedEvent } from "../events/model-loaded.event";
-import { SnippetsRequestEvent } from "../events/snippets-request.event";
 import { EventService } from "../events/event.service";
 
 @Component({
@@ -94,10 +93,6 @@ ngOnInit() {
 private beforeTabChange($event: NgbTabChangeEvent) {
 	console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
 	if ($event.activeId=="model-tab") {
-//	    console.log("[UI] ModelAreaComponent:: sending SnippetsRequestEvent");
-//	    Promise.resolve(null).then(() =>
-//	        this.events.service.publish(new SnippetsRequestEvent(this.snippets))
-//	    );
 	} else if ($event.activeId=="snippets-tab") {
 		this.modelDisplayReadySubscription = this.subscribe(this.events.service.of(ModelDisplayReadyEvent)
 				.subscribe(loaded => this.redisplayModel()));

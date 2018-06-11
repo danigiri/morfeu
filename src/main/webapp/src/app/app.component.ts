@@ -99,7 +99,7 @@ import { EventService } from "./events/event.service";
                        useFactory: (http:Http) => (new RemoteObjectService<Model, ModelJSON>(http)), 
                        deps: [Http]
                     }
-                   ,{provide: 'SnippetsService', 
+                   ,{provide: 'SnippetContentService', 
                        useFactory: (http:Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)), 
                        deps: [Http]
                     }

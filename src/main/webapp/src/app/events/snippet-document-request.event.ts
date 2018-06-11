@@ -14,11 +14,9 @@
  *	 limitations under the License.
  */
 
-import { CellDocument } from "../cell-document.class";
-
-export class SnippetsRequestEvent {
+export class SnippetDocumentRequestEvent {
 
 
-constructor(public snippets: CellDocument[]) {}
-
+constructor(public index: number) {} 
+	
 }
