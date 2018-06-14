@@ -12,6 +12,7 @@
 		,{ "name":"Document with not-found content", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document-with-notfound-model.json" }
 		]
 	,"snippets": [
-		 { "name": "Stuff", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
+		 { "name": "Stuff 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
+		,{ "name": "Data 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data.json"}
 		]
 }
