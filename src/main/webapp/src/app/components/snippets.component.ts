@@ -15,7 +15,7 @@
  */
 
 import { Component, AfterViewInit, Inject, Input, OnInit } from "@angular/core";
-import { Observable, BehaviorSubject, Subscription } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 
 import { RemoteDataService } from "../services/remote-data.service";
 import { RemoteObjectService } from "../services/remote-object.service";
@@ -48,7 +48,7 @@ export class SnippetsComponent extends KeyListenerWidget implements AfterViewIni
 @Input() snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
 _snippets: Array<CellDocument>;
-_snippetsSubject: BehaviorSubject<Array<CellDocument>>;
+_snippetsSubject: Subject<Array<CellDocument>>;
 snippets: Observable<Array<CellDocument>>;
 
 protected snippetDocumentSubs: Subscription;
@@ -72,7 +72,7 @@ private fetchSnippets() {
 
 	if (this.snippetStubs.length>0) {
 	    this._snippets = [];
-	    this._snippetsSubject = new BehaviorSubject(this._snippets);
+	    this._snippetsSubject = new Subject();
 	    this.snippets = this._snippetsSubject.asObservable();
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
 		this.snippetDocumentSubs = this.subscribe(this.events.service.of(SnippetDocumentRequestEvent)
@@ -107,6 +107,7 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 	console.log("Loading snippet content %s", snippetURI);
 	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent:Content) => {
 	    this._snippets.push(snippet);
+	    this._snippetsSubject.next(this._snippets);
 	},
 	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
 	() => {
