@@ -30,11 +30,16 @@ children?:Cell[];
 constructor(public schema: number) {}
 
 
-// associate the content cells with the corresponding cell models
-associateWith(model: Model) {
+// associate the content cells with the corresponding cell models, starting from the root
+associateFromRoot(model: Model) {
    this.children = this.children.map(c => c.associateWith(model));
 }
 
+
+//associate the content cells with the corresponding cell models, starting from the cell model uri of each
+associate(model: Model) {
+    this.children = this.children.map(c => c.associateWith(model, c.cellModelURI));
+}
 
 //// FamilyMember ////
 

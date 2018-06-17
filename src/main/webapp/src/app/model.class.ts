@@ -81,6 +81,15 @@ equals(m: FamilyMember) {
 }
 
 
+// given a cell model URI, look for it in a cell model hierarchy, avoids following references
+findCellModel(uri: string): CellModel {
+    let foundCellModels = this.cellModels.map(cm => cm.findCellModel(uri)).filter(cm => cm!=undefined);
+    if (foundCellModels.length==0) {
+        console.error("Incorrect cell model reference %s", uri);
+    }
+    return foundCellModels[0];
+}
+
 adopt(newMember:Cell, position:number) {}
 
 

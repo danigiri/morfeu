@@ -49,18 +49,18 @@ import { EventService } from './events/event.service';
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
 					 >
-						 <!-- drop area to be able to add new rows to this well -->
-						 <div class="row">
-							 <div class="col">
-								 <drop-area *ngIf="parent" [parent]="cell" position="0"></drop-area>
-							 </div>
-						 </div>
-						 <cell *ngFor="let c of cell.children; let i=index" 
+						<!-- drop area to be able to add new rows to this well -->
+						<div class="row">
+							<div class="col">
+								<drop-area *ngIf="parent" [parent]="cell" position="0"></drop-area>
+							</div>
+						</div>
+						<cell *ngFor="let c of cell.children; let i=index" 
 								[cell]="c" 
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
-						  ></cell>
+						></cell>
 					 </div>
 					 <!-- TODO: we probable want a drop area here to be able to add new wells -->
 				</ng-container>

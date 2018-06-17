@@ -43,11 +43,15 @@ constructor(public schema: number,
 			public isSimple: boolean) {}
 	
 
-/** We associate this cell with the given model */
-associateWith(model: Model):Cell {
+/** We associate this cell with the given model, optionally specifying a deep uri within the model */
+associateWith(model: Model, uri?:string):Cell {
 
-	this.associateWith_(model.cellModels, model.cellModels);
-	
+    if (uri) {
+        this.associateWith_(model.cellModels, [model.findCellModel(uri)]);  // deep uri within the model
+    } else {
+        this.associateWith_(model.cellModels, model.cellModels);    // we start at the root of the model
+    }
+    
 	return this;
 
 }
@@ -201,7 +205,7 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 	}
 
 	return this;
-	
+
 }
 
 

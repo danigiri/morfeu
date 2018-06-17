@@ -162,7 +162,7 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
 		this.model = MODEL.fromJSON(model.toJSON());	  
 		this.model.normaliseReferences();
-		content.associateWith(this.model);
+		content.associateFromRoot(this.model);
 		this.displayContent(content);
 		this.events.ok();
 	},

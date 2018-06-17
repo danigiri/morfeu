@@ -47,7 +47,7 @@ import { EventService } from "../events/event.service";
 			</ngb-tab>
 			<ngb-tab title="Snippets" id="snippets-tab">
 				<ng-template ngbTabContent>
-					<snippets *ngIf="snippets" [snippetStubs]="snippets"></snippets>
+					<snippets *ngIf="snippets" [snippetStubs]="snippets" [model]="model"></snippets>
 				</ng-template>
 			</ngb-tab>
 		</ngb-tabset>

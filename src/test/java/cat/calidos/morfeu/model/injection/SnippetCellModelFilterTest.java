@@ -30,12 +30,12 @@ public class SnippetCellModelFilterTest {
 
 @Test
 public void testCellModelFilter() throws Exception {
-	
+
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff");
 	URI expected = new URI("target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff");
-	
+
 	assertEquals(expected, SnippetCellModelModule.cellModelFilter(modelURI));
-	
+
 }
 
 }

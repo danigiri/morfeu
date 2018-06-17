@@ -27,6 +27,9 @@ import java.util.stream.Stream;
 
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -40,6 +43,8 @@ import dagger.producers.Produces;
 @ProducerModule
 public abstract class CellModelsFilterModule {
 
+protected final static Logger log = LoggerFactory.getLogger(CellModelsFilterModule.class);
+
 // it may be that we want to match content with a cell model deep down the hierarchy
 @Produces @Named("CellModels") 
 public static List<CellModel> filterCellModels(@Named("RootCellModels") List<CellModel> cellModels, 
@@ -47,6 +52,9 @@ public static List<CellModel> filterCellModels(@Named("RootCellModels") List<Cel
 
 	if (cellModelFilter.isPresent()) {
 		URI filter = cellModelFilter.get();
+		
+		log.trace("*** Looking for cell model filter "+filter);
+		
 		CellModel cellModel = cellModels.stream().map(cm -> lookForCellModel(cm,filter))
 													.findFirst()
 													.get()
@@ -70,22 +78,23 @@ public static List<CellModel> filterCellModels(@Named("RootCellModels") List<Cel
 private static Optional<CellModel> lookForCellModel(CellModel cellModel, URI filter) {
 	
 	Optional<CellModel> found;
-	
+
 	if (cellModel.getURI().equals(filter)) {
 		found = Optional.of(cellModel);
 	} else if (cellModel.isSimple()) {
 		found = Optional.empty();
 	} else {
 
+		// do a recursive search, for each child do a recursive call and unfold the optional if found in the children
+		// if no children have it, the last filter will not find match anything so we return a plain empty
 		return cellModel.asComplex()
 							.children()
 							.asList()
 							.stream()
 							.map(cm -> lookForCellModel(cm, filter))
 							.filter(f -> f.isPresent())
-							.findAny()	// returns an Optional<Optional<CellModel>>
-							.get();
-		
+							.findAny()	// return Optional<Optional<CellModel>>
+							.orElse(Optional.empty());
 	}
 	
 	return found;

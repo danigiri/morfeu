@@ -1,0 +1,8 @@
+{
+	"name": "Data 4"
+	,"desc": "Data4 with simple content"
+	,"kind": "simple"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/data4"
+	,"skipValidation": true
+	,"contentURI": "target/test-classes/test-resources/snippets/data4.xml"
+}

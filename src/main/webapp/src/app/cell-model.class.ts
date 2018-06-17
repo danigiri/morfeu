@@ -159,6 +159,12 @@ deepClone(): CellModel {
 }
 
 
+// either return this or one of the descendants, avoids following references, can return undefined 
+findCellModel(uri: string): CellModel {
+    return this.findCellModelWithURI(this, uri);
+}
+
+
 ////FamilyMember ////
 
 getURI(): string {
@@ -292,11 +298,15 @@ private generateAttributeFrom(attribute: CellModel): Cell {
 
 
 // given a cell model URI, look for it in a cell model hierarchy, avoids following references
-private findCellModelWithURI(cellModels: CellModel[], uri: string): CellModel {
+private findCellModelWithURI(cellModels: CellModel[] | CellModel, uri: string): CellModel {
 
 	let cellModel:CellModel;
 	let pending:CellModel[] = [];
-	cellModels.forEach(cm => pending.push(cm));
+	if (cellModels instanceof Array) {
+	    cellModels.forEach(cm => pending.push(cm));
+	} else {
+	    pending.push(cellModels)
+	}
 	
 	while (!cellModel && pending.length>0) {
 		

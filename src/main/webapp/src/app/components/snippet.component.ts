@@ -14,23 +14,50 @@
  *   limitations under the License.
  */
 
-import { Component } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
+
+import { CellDocument } from "../cell-document.class";
+import { Content } from "../content.class";
+import { Model } from "../model.class";
 
 import { SelectableWidget } from "../selectable-widget.class";
+
+import { EventService } from "../events/event.service";
 
 @Component({
     moduleId: module.id,
     selector: "snippet",
     template: `
+        <a href="#" class="list-group-item list-group-item-action">
+                <cell *ngFor="let cell of snippet.content.children; let i=index" 
+                [parent]="snippet.content" 
+                [cell]="cell" [level]="0" 
+                [position]="i"
+                ></cell>
+        </a>
 `,
     styles:[`
     `]
 })
 
-export class SnippetComponent extends SelectableWidget {
-    
-active:boolean = false;
-dragEnabled:boolean = false;
+export class SnippetComponent extends SelectableWidget implements OnInit {
+
+@Input() model: Model;
+@Input() snippet: CellDocument;
+
+
+active: boolean = false;
+dragEnabled: boolean = false;
+
+
+constructor(eventService: EventService) {
+    super(eventService);
+}
+
+
+ngOnInit() {
+    console.log("SnippetComponent::ngOnInit()");
+}
 
 becomeActive() {
 
@@ -45,6 +72,7 @@ becomeInactive() {
     this.active = false;
     
 }
+
 
 //// SelectableWidget ////
 

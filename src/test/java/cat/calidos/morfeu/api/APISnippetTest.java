@@ -46,4 +46,22 @@ public void testStuffSnippet() throws Exception {
 
 }
 
+
+@Test
+public void testData2Snippet() throws Exception {
+
+	// http://localhost:8080/morfeu/dyn/snippets/target/test-classes/test-resources/snippets/data2.xml
+	//  &model=target/test-classes/test-resources/models/test-model.xsd%3Ffilter=/test/row/col/data2
+	String model = pathPrefix+"models/test-model.xsd%3Ffilter=/test/row/col/data2";
+	String uri = "snippets/"+pathPrefix+"snippets/data2.xml?model="+model;
+	InputStream content = fetchRemoteInputStreamFrom(uri);
+	assertNotNull(content);
+
+	JsonNode doc = parseJson(content);
+	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
+	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
+	assertEquals("/children/data2(0) has a wrong name", "data2", doc.get("children").get(0).get("name").asText());
+
+}
+
 }

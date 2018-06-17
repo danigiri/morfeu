@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -50,9 +50,10 @@ import cat.calidos.morfeu.utils.OrderedMap;
 @Module
 public class CellModule {
 
+protected final static Logger log = LoggerFactory.getLogger(CellModule.class);
+
 private static final String ATTRIBUTE_PREFIX = "@";
 private static final String DEFAULT_DESC = "";
-protected final static Logger log = LoggerFactory.getLogger(CellModule.class);
 private static final String DEFAULT_VALUE = "";
 	
 
