@@ -34,29 +34,33 @@ import { EventService } from "../events/event.service";
 	moduleId: module.id,
 	selector: "snippets",
 	template: `
-	    <ul class="list-group">
-	        <li *ngFor="let snippet of snippets | async">{{snippet.name}}</li>
-	    </ul>
+		<ul id="snippets" class="list-group">
+			 <a href="#" *ngFor="let snippet of snippets | async" class="list-group-item">{{snippet.name}}</a>
+		</ul>
 	`,
 	styles:[`
-
+	    #snippets {}
 	`]
 })
 
-export class SnippetsComponent extends KeyListenerWidget implements AfterViewInit {
+export class SnippetsListComponent extends KeyListenerWidget implements AfterViewInit {
 
 @Input() snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
-_snippets: Array<CellDocument>;
-_snippetsSubject: Subject<Array<CellDocument>>;
-snippets: Observable<Array<CellDocument>>;
+snippets: Observable<Array<CellDocument>>;          // snippets document observable, for async display
+_snippets: Array<CellDocument>;                     // snippets document list
+_snippetsSubject: Subject<Array<CellDocument>>;     // snippets document subject, to push new documents into
+snippetsContent: Content[];                         // snippets content list
+
+protected commandKeys: string[] = ["p"];
+private snippetSelectingMode: boolean = false;
 
 protected snippetDocumentSubs: Subscription;
 
 	
 constructor(eventService: EventService,
-            @Inject("RemoteJSONDataService") private snippetDocumentService: RemoteDataService,
-            @Inject("SnippetContentService") private snippetContentService: RemoteObjectService<Content, ContentJSON> 
+			@Inject("RemoteJSONDataService") private snippetDocumentService: RemoteDataService,
+			@Inject("SnippetContentService") private snippetContentService: RemoteObjectService<Content, ContentJSON> 
 			) {
 	super(eventService);
 }
@@ -71,27 +75,28 @@ ngAfterViewInit() {
 private fetchSnippets() {
 
 	if (this.snippetStubs.length>0) {
-	    this._snippets = [];
-	    this._snippetsSubject = new Subject();
-	    this.snippets = this._snippetsSubject.asObservable();
+		this._snippets = [];
+		this._snippetsSubject = new Subject();
+		this.snippets = this._snippetsSubject.asObservable();
+		this.snippetsContent = [];
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
 		this.snippetDocumentSubs = this.subscribe(this.events.service.of(SnippetDocumentRequestEvent)
-		        .subscribe(
-		            req => this.loadSnippetDocument(this.snippetStubs[req.index], req.index)
+				.subscribe(
+					req => this.loadSnippetDocument(this.snippetStubs[req.index], req.index)
 		));
 		this.events.service.publish(new SnippetDocumentRequestEvent(0));
-    }
+	}
 
 }
 
 
 // load all snippet documents which in turn will be used to fetch all snippets
 private loadSnippetDocument(snippetStub: CellDocument, index: number) {
-   
+
 	let uri = "/morfeu/"+snippetStub.uri;
 	console.log("Loading snippet document %s", uri);
 	this.snippetDocumentService.get<CellDocument>(uri).subscribe(
-	        snippetDoc => this.loadSnippetContent(snippetDoc, index),
+			snippetDoc => this.loadSnippetContent(snippetDoc, index),
 			error => this.events.problem(error.message),
 			() => {
 			}
@@ -99,25 +104,27 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 
 }
 
-// }
 
 private loadSnippetContent(snippet: CellDocument, index: number) {
 
 	let snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
 	console.log("Loading snippet content %s", snippetURI);
 	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent:Content) => {
-	    this._snippets.push(snippet);
-	    this._snippetsSubject.next(this._snippets);
+	    // we have the content, so we can push the snippet document so it can de displayed
+	    // and we add the content to the list
+		this._snippets.push(snippet);
+		this._snippetsSubject.next(this._snippets);
+		this.snippetsContent.push(snippetContent);
 	},
-	error => this.events.problem(error.message),    // error is of the type HttpErrorResponse
+	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() => {
-	    
-        if (index<this.snippetStubs.length-1) {
-                this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
-        } else {
-                this.unsubscribe(this.snippetDocumentSubs);
-        this.events.ok();   // this means we don't see errors for that long unfortunately
-        }
+		
+		if (index<this.snippetStubs.length-1) {
+				this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
+		} else {
+				this.unsubscribe(this.snippetDocumentSubs);
+		this.events.ok();	// this means we don't see errors for that long unfortunately
+		}
 	});
 
 }

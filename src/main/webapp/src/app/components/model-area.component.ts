@@ -54,6 +54,8 @@ import { EventService } from "../events/event.service";
 		</div>
 	`,
 	styles:[`
+	        #model-tab {}
+	        #snippets-tab {}
 	 `]
 })
 

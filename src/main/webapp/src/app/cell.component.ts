@@ -293,7 +293,7 @@ ngOnInit() {
 				console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
 				this.becomeInactive(this.cell);
 	}));
-   
+
 	// External component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.subscribe(this.events.service.of( CellDragEvent )
 			.filter(a => this.active)
@@ -301,8 +301,8 @@ ngOnInit() {
 				console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
 				this.events.service.publish(new CellDropEvent(this.cell));
 	}));
-	
-   // Want to edit this cell
+
+    // Want to edit this cell
 	this.subscribe(this.events.service.of( CellEditEvent )
 				.filter(edit => !edit.cell && this.isEditable())
 				.subscribe( edit => {
@@ -310,7 +310,7 @@ ngOnInit() {
 					this.events.service.publish(new CellEditEvent(this.cell));
 		}));
 
-}	 
+}
 
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
