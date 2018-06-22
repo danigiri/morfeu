@@ -241,6 +241,7 @@ dragEnd() {
 	
 }
 
+
 isCompatibleWith(element:FamilyMember): boolean {
 	return this.cellModel.matches(element);
 }

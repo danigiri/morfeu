@@ -60,6 +60,7 @@ import { EventService } from './events/event.service';
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
+                                [clone]="clone"
 						></cell>
 					 </div>
 					 <!-- TODO: we probable want a drop area here to be able to add new wells -->
@@ -77,6 +78,7 @@ import { EventService } from './events/event.service';
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
+                                [clone]="clone"
 						  ></cell>
 					 </div>
 					 <!-- drop area to be able to add new row after this one -->
@@ -101,6 +103,7 @@ import { EventService } from './events/event.service';
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
+								[clone]="clone"
 						  ></cell>
 					 </div>
 				</ng-container>
@@ -117,7 +120,7 @@ import { EventService } from './events/event.service';
 							 dnd-draggable 
 							 [dragEnabled]="dragEnabled"
 							 (onDragEnd)="dragEnd(cell)"
-							 [dragData]="cell"
+							 [dragData]="cellDragData()"
 							 />
 						<!-- the position of the drop area is always where droped cells will go -->
 						<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
@@ -232,6 +235,7 @@ export class CellComponent extends SelectableWidget implements OnInit {
 
 @Input() parent: FamilyMember;
 @Input() cell: Cell;
+@Input() clone?: boolean;
 @Input() level: number;
 @Input() position: number;
 
@@ -460,6 +464,23 @@ getCellPresentation() {
 
 private isEditable(): boolean {
 	return this.active && !this.cell.cellModel.presentation.includes("WELL");
+}
+
+
+// data that is being dragged (and potentially dropped)
+private cellDragData() {
+    
+    let cellDragData: Cell;
+    if (this.clone) {   // if we are cloning, we deep clone the cell and remove the parent ref
+                        // as cloning will keep it
+        cellDragData = this.cell.deepClone();
+        delete cellDragData["parent"];
+    } else {
+        cellDragData = this.cell;
+    }
+    
+    return cellDragData;
+    
 }
 
 }

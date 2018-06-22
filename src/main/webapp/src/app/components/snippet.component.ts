@@ -1,17 +1,17 @@
 /*
- *    Copyright 2018 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *		 http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
  */
 
 import { Component, Input, OnInit } from "@angular/core";
@@ -25,19 +25,20 @@ import { SelectableWidget } from "../selectable-widget.class";
 import { EventService } from "../events/event.service";
 
 @Component({
-    moduleId: module.id,
-    selector: "snippet",
-    template: `
-        <a href="#" class="list-group-item list-group-item-action">
-                <cell *ngFor="let cell of snippet.content.children; let i=index" 
-                [parent]="snippet.content" 
-                [cell]="cell" [level]="0" 
-                [position]="i"
-                ></cell>
-        </a>
+	moduleId: module.id,
+	selector: "snippet",
+	template: `
+		<a href="#" class="list-group-item list-group-item-action">
+				<cell *ngFor="let cell of snippet.content.children; let i=index" 
+					[parent]="snippet.content" 
+					[cell]="cell" [level]="0" 
+					[position]="i"
+					[clone]="true"
+				></cell>
+		</a>
 `,
-    styles:[`
-    `]
+	styles:[`
+	`]
 })
 
 export class SnippetComponent extends SelectableWidget implements OnInit {
@@ -51,26 +52,26 @@ dragEnabled: boolean = false;
 
 
 constructor(eventService: EventService) {
-    super(eventService);
+	super(eventService);
 }
 
 
 ngOnInit() {
-    console.log("SnippetComponent::ngOnInit()");
+	console.log("SnippetComponent::ngOnInit()");
 }
 
 becomeActive() {
 
-    this.active = true;
-    this.dragEnabled = true;
+	this.active = true;
+	this.dragEnabled = true;
 
 }
 
 
 becomeInactive() {
 
-    this.active = false;
-    
+	this.active = false;
+	
 }
 
 

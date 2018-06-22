@@ -37,13 +37,13 @@ import { EventService } from "../events/event.service";
 	template: `
 		<ul id="snippets" class="list-group">
 			<snippet *ngFor="let snippet of snippets | async; let i=index" 
-			    class="list-group-item"
-			    [snippet]="snippet"
-			    [model]="normalisedModel"></snippet>
+				class="list-group-item"
+				[snippet]="snippet"
+				[model]="normalisedModel"></snippet>
 		</ul>
 	`,
 	styles:[`
-	    #snippets {}
+		#snippets {}
 	`]
 })
 
@@ -53,9 +53,9 @@ export class SnippetsListComponent extends KeyListenerWidget implements AfterVie
 @Input() snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
 private normalisedModel: Model;
-snippets: Observable<Array<CellDocument>>;          // snippets document observable, for async display
-_snippets: Array<CellDocument>;                     // snippets document list
-_snippetsSubject: Subject<Array<CellDocument>>;     // snippets document subject, to push new documents into
+snippets: Observable<Array<CellDocument>>;			// snippets document observable, for async display
+_snippets: Array<CellDocument>;						// snippets document list
+_snippetsSubject: Subject<Array<CellDocument>>;		// snippets document subject, to push new documents into
 
 protected commandKeys: string[] = ["p"];
 private snippetSelectingMode: boolean = false;
@@ -73,7 +73,7 @@ constructor(eventService: EventService,
 
 ngAfterViewInit() {
 
-    console.log("ContentComponent::ngAfterViewInit()");
+	console.log("ContentComponent::ngAfterViewInit()");
 	Promise.resolve(null).then(() => this.fetchSnippets());
 
 }
@@ -83,13 +83,13 @@ ngAfterViewInit() {
 private fetchSnippets() {
 
 	if (this.snippetStubs.length>0) {
-	    
-	    // we copy and normalise the model as we will link it with the snippets
-        let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
-	    this.normalisedModel = MODEL.fromJSON(this.model.toJSON());
-	    this.normalisedModel.normaliseReferences();
-	    
-	    // we initialise the snippet structures
+		
+		// we copy and normalise the model as we will link it with the snippets
+		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
+		this.normalisedModel = MODEL.fromJSON(this.model.toJSON());
+		this.normalisedModel.normaliseReferences();
+		
+		// we initialise the snippet structures
 		this._snippets = [];
 		this._snippetsSubject = new Subject();
 		this.snippets = this._snippetsSubject.asObservable();
@@ -124,11 +124,11 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 	let snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
 	console.log("Loading snippet content %s", snippetURI);
 	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent:Content) => {
-	    // we set the document with the content, associate it with the model
-	    snippet.content = snippetContent;
-	    snippetContent.associate(this.normalisedModel);
+		// we set the document with the content, associate it with the model
+		snippet.content = snippetContent;
+		snippetContent.associate(this.normalisedModel);
 
-	    // we have the content, so we can push the snippet document so it can de displayed
+		// we have the content, so we can push the snippet document so it can de displayed
 		this._snippets.push(snippet);
 		this._snippetsSubject.next(this._snippets);
 	},
