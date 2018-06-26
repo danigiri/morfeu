@@ -17,5 +17,6 @@
 		,{ "name": "Data 2", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data2.json"}
 		,{ "name": "Data 3", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data3.json"}
 		,{ "name": "Data 4", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data4.json"}
+		,{ "name": "Row", "kind": "complex", "uri": "target/test-classes/test-resources/snippets/row.json"}
 		]
 }

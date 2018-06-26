@@ -30,16 +30,19 @@ constructor(public name: string,
 			public modelURI: string,
 			public contentURI: string,
 			public valid:boolean,
-			public problem: string) {}
+			public problem: string,
+			public presentation?: string) {}
 
 
 hasProblem(): boolean {
 	return this.problem!=null && this.problem.length>0;
 }
 
+
 toJSON(): CellDocumentJSON {
 	return Object.assign({}, this);
 }
+
 
 fromJSON(json: CellDocumentJSON|string): CellDocument {
 	
@@ -78,5 +81,6 @@ modelURI: string;
 contentURI: string;
 valid:boolean;
 problem: string;
+presentation?: string;
 
 }

@@ -84,7 +84,7 @@ constructor(eventService: EventService) {
 	super(eventService);   
 
 }
-	
+
 
 ngOnInit() {
 	

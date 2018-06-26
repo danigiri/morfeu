@@ -28,16 +28,22 @@ import { EventService } from "../events/event.service";
 	moduleId: module.id,
 	selector: "snippet",
 	template: `
-		<a href="#" class="list-group-item list-group-item-action">
+		<a href="#" class="list-group-item list-group-item-action flex-column align-items-start snippet">
+        		<div class="d-flex justify-content-between">
+                  <h5 class="mb-1">{{snippet.name}}</h5>
 				<cell *ngFor="let cell of snippet.content.children; let i=index" 
 					[parent]="snippet.content" 
 					[cell]="cell" [level]="0" 
 					[position]="i"
-					[clone]="true"
+					[snippet]="true"
 				></cell>
+            </div>
 		</a>
 `,
 	styles:[`
+	        .snippet {
+	            /* border: 3px dashed #f00; */
+	        }
 	`]
 })
 

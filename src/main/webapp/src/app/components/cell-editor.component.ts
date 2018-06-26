@@ -34,7 +34,7 @@ import { UXEvent } from "../events/ux.event";
 	template: `
 		<ng-template let-c="close" let-d="dismiss" #editor>
 			<div id="cell-editor" class="card mt-2 modal-body">
-	            <cell-header [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
+				<cell-header [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
 				<div class="card-body">
 					<form>
 						<textarea *ngIf="cell.value!=undefined && showValue()"

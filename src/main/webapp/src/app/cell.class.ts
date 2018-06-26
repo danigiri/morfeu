@@ -46,13 +46,33 @@ constructor(public schema: number,
 /** We associate this cell with the given model, optionally specifying a deep uri within the model */
 associateWith(model: Model, uri?:string):Cell {
 
-    if (uri) {
-        this.associateWith_(model.cellModels, [model.findCellModel(uri)]);  // deep uri within the model
-    } else {
-        this.associateWith_(model.cellModels, model.cellModels);    // we start at the root of the model
+	if (uri) {
+		this.associateWith_(model.cellModels, [model.findCellModel(uri)]);	// deep uri within the model
+	} else {
+		this.associateWith_(model.cellModels, model.cellModels);	// we start at the root of the model
+	}
+	
+	return this;
+
+}
+
+
+// remove prefix (context) from this cell, its attributes and children
+stripPrefixFromURIs(prefix: string) {
+    
+    if (this.getURI().startsWith(prefix)) {
+        console.log("--> Old uri %s", this.URI);
+        this.URI = this.URI.substr(prefix.length);
+        console.log("--> New uri %s", this.URI);
+        if (this.attributes) {
+            this.attributes = this.attributes.map(a => a.stripPrefixFromURIs(prefix));
+        }
+        if (this.children) {
+            this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
+        }
     }
     
-	return this;
+    return this;
 
 }
 
@@ -232,12 +252,15 @@ adopt(orphan: Cell, position: number) {
 	// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
 	// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
 	
-	if (!orphan.parent) {
+	if (orphan.parent) {
 		console.error("Adopting child that was not an orphan");
 	}
 
 	orphan.parent = this;
 	orphan.setPosition(position);	// this actually changes the URI fo the new member to the correct one
+	                                //       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
+	                                // TODO: DOUBLE CHECK FOR SNIPPET ADOPTION AS THERE IS NO CONTEXT
+	                                //       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
 	
 	if (!this.children) {
 		this.children = [ orphan ];

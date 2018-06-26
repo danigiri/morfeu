@@ -161,7 +161,7 @@ deepClone(): CellModel {
 
 // either return this or one of the descendants, avoids following references, can return undefined 
 findCellModel(uri: string): CellModel {
-    return this.findCellModelWithURI(this, uri);
+	return this.findCellModelWithURI(this, uri);
 }
 
 
@@ -303,9 +303,9 @@ private findCellModelWithURI(cellModels: CellModel[] | CellModel, uri: string): 
 	let cellModel:CellModel;
 	let pending:CellModel[] = [];
 	if (cellModels instanceof Array) {
-	    cellModels.forEach(cm => pending.push(cm));
+		cellModels.forEach(cm => pending.push(cm));
 	} else {
-	    pending.push(cellModels)
+		pending.push(cellModels)
 	}
 	
 	while (!cellModel && pending.length>0) {

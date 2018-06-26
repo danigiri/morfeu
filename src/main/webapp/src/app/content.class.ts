@@ -41,6 +41,18 @@ associate(model: Model) {
     this.children = this.children.map(c => c.associateWith(model, c.cellModelURI));
 }
 
+
+// mutate the content so this prefix is stripped from all content URIs, useful for snippet documents
+stripPrefixFromURIs(prefix: string) {
+    
+    //if (this.getURI().startsWith(prefix)) {   // not used until we add uri support to content
+    this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
+    //}
+    
+    return this;
+    
+}
+
 //// FamilyMember ////
 
 getURI(): string {
@@ -67,6 +79,7 @@ matches(element: FamilyMember):boolean {
 canAdopt(newMember: FamilyMember):boolean {
 	return this.children.some(c => c.canAdopt(newMember));
 }
+
 
 childrenCount():number {
 	return this.children ? this.children.length : 0;
@@ -119,11 +132,11 @@ fromJSON(json: ContentJSON|string): Content {
 				fullCell.parent = content;
 				return fullCell;
 			})});
-		
+
 		return content;
 
 	}
-	
+
 }
 
 

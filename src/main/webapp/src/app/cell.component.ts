@@ -1,3 +1,4 @@
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -40,10 +41,10 @@ import { EventService } from './events/event.service';
 	moduleId: module.id,
 	selector: 'cell',
 	template: `
-
+{{cell.URI}}
 			<ng-container [ngSwitch]="true">
 
-				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'WELL'">
+				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
 					<div id="{{cell.URI}}" 
 						class="well container-fluid show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
@@ -60,36 +61,48 @@ import { EventService } from './events/event.service';
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
-                                [clone]="clone"
+								[snippet]="snippet"
 						></cell>
 					 </div>
 					 <!-- TODO: we probable want a drop area here to be able to add new wells -->
 				</ng-container>
 
-				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'ROW-WELL'">
+				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'ROW-WELL'">
 					<div id="{{cell.URI}}" 
 						class="row-well row show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
 					 >
-						 <!-- add a drop area here if we ever want to dynamically add new columns -->
-						 <cell *ngFor="let c of cell.children; let i=index" 
+					<!-- TODO: add an affordance here to move rows, activable and dragable -->
+						<!-- add a drop area here if we ever want to dynamically add new columns -->
+						<cell *ngFor="let c of cell.children; let i=index" 
 								[cell]="c" 
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
-                                [clone]="clone"
-						  ></cell>
-					 </div>
-					 <!-- drop area to be able to add new row after this one -->
-					 <div class="row">
+								[snippet]="snippet"
+						></cell>
+					</div>
+					<img src="assets/images/drag.svg"
+						 class="img-fluid"
+						 [class.drag-active]="active"
+						 [class.drag-inactive]="!active"
+						 (mouseenter)="focusOn(cell)" 
+						 (mouseleave)="focusOff(cell)"
+						 dnd-draggable 
+						 [dragEnabled]="dragEnabled"
+						 (onDragEnd)="dragEnd(cell)"
+						 [dragData]="cellDragData()" 
+					/>
+					<!-- drop area to be able to add new row after this one -->
+					<div class="row">
 						<div class="col">
 							<drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
 						</div>
 					 </div>
 				</ng-container>
-				
-				<ng-container *ngSwitchCase="cell.cellModel.presentation === 'COL-WELL'">
+
+				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
 					<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
 					<div id="{{cell.URI}}" 
 						class="col-well col show-grid cell-level-{{level}} rounded"
@@ -103,12 +116,12 @@ import { EventService } from './events/event.service';
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
-								[clone]="clone"
+								[snippet]="snippet"
 						  ></cell>
 					 </div>
 				</ng-container>
 
-				<ng-container *ngSwitchCase="cell.cellModel.presentation.startsWith('CELL')">
+				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL')">
 						<!-- TODO: check the model and the content as well (counts, etc.) -->
 						<img id="{{cell.URI}}"
 							class="cell cell-img cell-level-{{level}}"
@@ -136,7 +149,9 @@ import { EventService } from './events/event.service';
 				align-content: stretch;
  */
 				}
-			.row-well {}
+			.row-well {
+				background-color: rgba(255, 0, 0, .05);
+			}
 			.col-well {
 				/*
 				padding-right: 0;
@@ -167,6 +182,12 @@ import { EventService } from './events/event.service';
 			 .cell-dragged {
 				 opacity: .2;
 			 }
+			 .drag-inactive {
+				 opacity: .1;
+			 }
+			.drag-active {
+				opacity: .8;
+			}
 			 .cell-col-1 {
 				 max-width: 8.3%;
 				 width: 8.3%;
@@ -235,7 +256,7 @@ export class CellComponent extends SelectableWidget implements OnInit {
 
 @Input() parent: FamilyMember;
 @Input() cell: Cell;
-@Input() clone?: boolean;
+@Input() snippet?: boolean;
 @Input() level: number;
 @Input() position: number;
 
@@ -306,7 +327,7 @@ ngOnInit() {
 				this.events.service.publish(new CellDropEvent(this.cell));
 	}));
 
-    // Want to edit this cell
+	// Want to edit this cell
 	this.subscribe(this.events.service.of( CellEditEvent )
 				.filter(edit => !edit.cell && this.isEditable())
 				.subscribe( edit => {
@@ -392,8 +413,10 @@ isCompatibleWith(element:FamilyMember): boolean {
 }
 
 
+// it can be activated (for drag and drop, etc) if it's not a well
+// if it's a snippet, we can always activate it, so it can be cloned
 canBeActivated():boolean {
-	return !this.cell.cellModel.presentation.includes("WELL");
+	return !this.cell.cellModel.presentation.includes("WELL") || this.snippet;
 }
 
 
@@ -462,6 +485,7 @@ getCellPresentation() {
 	return this.cell.getPresentation();
 }
 
+
 private isEditable(): boolean {
 	return this.active && !this.cell.cellModel.presentation.includes("WELL");
 }
@@ -469,18 +493,19 @@ private isEditable(): boolean {
 
 // data that is being dragged (and potentially dropped)
 private cellDragData() {
-    
-    let cellDragData: Cell;
-    if (this.clone) {   // if we are cloning, we deep clone the cell and remove the parent ref
-                        // as cloning will keep it
-        cellDragData = this.cell.deepClone();
-        delete cellDragData["parent"];
-    } else {
-        cellDragData = this.cell;
-    }
-    
-    return cellDragData;
-    
+	
+	let cellDragData: Cell;
+	if (this.snippet) {    // If we are cloning, we deep clone the cell and remove the parent ref
+						   // as cloning will also clone the reference to the parent.
+						   // Then it's effectively an orphan when the adoption takes place
+		cellDragData = this.cell.deepClone();
+		delete cellDragData["parent"];
+	} else {
+		cellDragData = this.cell;
+	}
+	
+	return cellDragData;
+	
 }
 
 }

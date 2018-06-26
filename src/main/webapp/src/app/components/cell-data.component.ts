@@ -35,7 +35,7 @@ import { EventService } from "../events/event.service";
 	template: `
 		<div  *ngIf="cellModel" 
 			class="card mt-2 cell-data cell-data-info">
-	        <cell-header [uri]="uri" [cellModel]="cellModel"></cell-header>
+			<cell-header [uri]="uri" [cellModel]="cellModel"></cell-header>
 			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
 			<!-- if we have a value field we should show it (readonly!) -->
 			<div class="card-body">
@@ -61,7 +61,7 @@ import { EventService } from "../events/event.service";
 				<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
 			</ul>
 		</div>
-			    `,
+				`,
 	styles:[`
 			.cell-data {}
 			.cell-data-info {}

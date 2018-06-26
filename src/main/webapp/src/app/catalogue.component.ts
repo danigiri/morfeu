@@ -34,7 +34,7 @@ import { StatusEvent } from './events/status.event';
 	moduleId: module.id,
 	selector: 'catalogue',
 	template: `
-	<div id="catalogue" class="card bg-light mt-2" *ngIf="catalogue">
+		<div id="catalogue" class="card bg-light mt-2" *ngIf="catalogue">
 			<h5 id="catalogue-name" class="card-header">{{catalogue.name}}</h5>
 			<div class="card-body">
 				<div id="catalogue-desc" class="card-title">{{catalogue.desc}}</div>
@@ -44,11 +44,11 @@ import { StatusEvent } from './events/status.event';
 						class="document-list-entry list-group-item list-group-item-action" 
 						[class.active]="d.uri === selectedDocumentURI"
 						(click)="clickOnDocument(d)">
-						<img src="assets/images/open-iconic/file.svg" alt="document"/> {{d.name}}
-					</a>					
+						<img src="{{preview(d)}}" alt="document"/> {{d.name}}
+					</a>
 				</div>
 			</div>
-	  </div>
+		</div>
 	`,
 	styles:[`
 		#catalogue {}
@@ -94,7 +94,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 	this.selectedDocumentURI = null;
 	this.events.service.publish(new StatusEvent("Fetching catalogue"));
 	this.catalogueService.get<Catalogue>(selectedCatalogueUri).subscribe(
-	        c => { 
+			c => { 
 				this.catalogue = c;
 				this.events.service.publish(new CatalogueLoadedEvent(c));
 				this.events.ok();
@@ -115,7 +115,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 
 clickOnDocument(stub: CellDocument) {
 
-    console.log("[UI] Clicked on document='"+stub.uri+"' from catalogue");
+	console.log("[UI] Clicked on document='"+stub.uri+"' from catalogue");
 	this.events.service.publish(new CellDocumentSelectionEvent(stub.uri));
 	
 }
@@ -123,9 +123,15 @@ clickOnDocument(stub: CellDocument) {
 
 markDocumentAsSelected(uri: string) {
 
-    console.log("[UI] Marking document='"+uri+"' as selected in catalogue");
+	console.log("[UI] Marking document='"+uri+"' as selected in catalogue");
 	this.selectedDocumentURI = uri;
 
+}
+
+
+private preview(d: CellDocument) {
+	//return "assets/images/open-iconic/file.svg";
+	 return d.presentation ? d.presentation : "assets/images/open-iconic/file.svg";
 }
 
 }
