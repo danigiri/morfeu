@@ -30,7 +30,7 @@ import { UXEvent } from "../events/ux.event";
 
 @Component({
 	moduleId: module.id,
-	selector: 'cell-editor',
+	selector: "cell-editor",
 	template: `
 		<ng-template let-c="close" let-d="dismiss" #editor>
 			<div id="cell-editor" class="card mt-2 modal-body">
@@ -41,27 +41,27 @@ import { UXEvent } from "../events/ux.event";
 							class="cell-editor-value form-control"
 							rows="3"
 							name="{{cell.cellModel.name}}.value"
-							attr.aria-label="{{cell.cellModel.name}}.value" 
-							attr.aria-describedby="{{cell.cellModel.desc}} value" 
+							attr.aria-label="{{cell.cellModel.name}}.value"
+							attr.aria-describedby="{{cell.cellModel.desc}} value"
 							[(ngModel)]="cell.value"></textarea>
 							<!-- create new value button -->
 							<img  *ngIf="cell.value==undefined && showValue()"
 								id="cell-editor-create-value-button"
-								class="btn btn-outline-danger float-right" 
-								src="assets/images/open-iconic/plus.svg" 
+								class="btn btn-outline-danger float-right"
+								src="assets/images/open-iconic/plus.svg"
 								(click)="createValue()"
 								/>
 							<!-- remove value button -->
 							<img  *ngIf="cell.value!=undefined && showValue()"
 								id="cell-editor-remove-value-button"
-								class="btn btn-outline-danger float-right" 
-								src="assets/images/open-iconic/circle-x.svg" 
+								class="btn btn-outline-danger float-right"
+								src="assets/images/open-iconic/circle-x.svg"
 								(click)="removeValue()"
 								/>
 
 						<ul class="list-group list-group-flush" *ngIf="cell.cellModel.attributes">
-							<attribute-data-editor *ngFor="let a of cell.cellModel.attributes; let i = index" 
-								[parentCell]="cell" 
+							<attribute-data-editor *ngFor="let a of cell.cellModel.attributes; let i = index"
+								[parentCell]="cell"
 								[cellModel]="a"
 								[index]="i"
 								></attribute-data-editor>
@@ -71,18 +71,18 @@ import { UXEvent } from "../events/ux.event";
 				</div>
 				<div class="modal-footer card-footer">
 					<button id="cell-editor-discard-button"
-							type="button" 
-							class="btn btn-outline-secondary float-left" 
+							type="button"
+							class="btn btn-outline-secondary float-left"
 							(click)="c('Discard')">Discard</button>
-					<button id="cell-editor-save-button" 
-							type="button" 
-							class="btn btn-success float-right" 
+					<button id="cell-editor-save-button"
+							type="button"
+							class="btn btn-success float-right"
 							(click)="c('Save')">Save</button>
 				</div>
 			</div>
 		</ng-template>
 		`,
-	styles:[`
+	styles: [`
 			#cell-editor {}
 			#cell-editor-discard-button {}
 			#cell-editor-save-button {}
@@ -99,7 +99,7 @@ export class CellEditorComponent  extends Widget implements OnInit {
 
 cell: Cell;
 cellBackup: Cell;
-editing: boolean = false;
+editing = false;
 
 constructor(eventService: EventService, private modalService: NgbModal) {
 	super(eventService);
@@ -108,7 +108,7 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 
 ngOnInit() {
 	this.subscribe(this.events.service.of( CellEditEvent )
-			.filter(edit => edit.cell!=undefined && !this.editing)
+			.filter(edit => edit.cell!==undefined && !this.editing)
 			.subscribe(edit => this.edit(edit.cell))
 			);
 }
@@ -125,10 +125,10 @@ private edit(cell: Cell) {
 	this.cellBackup = cell.deepClone();
 	this.cell = cell;
 
-	//this.events.service.publish(new CellActivatedEvent(this.cell));
-	this.modalService.open(this.editor).result.then((result) => this.button(result), 
+	// this.events.service.publish(new CellActivatedEvent(this.cell));
+	this.modalService.open(this.editor).result.then((result) => this.button(result),
 													(reason) => this.outside());
-	
+
 }
 
 
@@ -138,13 +138,13 @@ private showPresentation() {
 
 
 private getPresentation(): string {
-	return this.cell==undefined ? this.cell.cellModel.getPresentation() : this.cell.getPresentation();
+	return this.cell===undefined ? this.cell.cellModel.getPresentation() : this.cell.getPresentation();
 }
 
 
 private button(result: any) {
-	
-	if (result=="Save") {
+
+	if (result==="Save") {
 		console.log("[UI] Saved cell");
 		// the document is now dirty
 		this.events.service.publish(new UXEvent(UXEvent.DOCUMENT_DIRTY));
@@ -156,35 +156,37 @@ private button(result: any) {
 
 
 private outside() {
- 
+
 	console.log("[UI] Dismissed editor without saving");
 	this.rollbackChanges();
 	this.clear();
-	
+
 }
 
 
 private rollbackChanges() {
-	
-	let position = this.cell.position;
-	let parent = this.cell.parent;
+
+	const position = this.cell.position;
+	const parent = this.cell.parent;
 
 	console.log("[UI] Discard changes at position "+position);
 	parent.remove(this.cell);	  // TODO: slow but no need to change the interface for now
 	this.cellBackup.parent = undefined; // backup must be an orphan for it to be adopted
 	parent.adopt(this.cellBackup, position);
-	
+
 	// reload ?
-	//this.events.service.publish(new CellActivateEvent());
+	// this.events.service.publish(new CellActivateEvent());
 	this.events.service.publish(new CellActivatedEvent(this.cellBackup));
 
 }
 
 
 private clear() {
+
 	this.cell = undefined;
 	this.cellBackup = undefined;
 	this.editing = false;
+
 }
 
 }

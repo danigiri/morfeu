@@ -17,35 +17,35 @@
 
 import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
 
-import { FamilyMember } from './family-member.interface';
-import { Cell } from './cell.class';
-import { CellModel } from './cell-model.class';
+import { FamilyMember } from "./family-member.interface";
+import { Cell } from "./cell.class";
+import { CellModel } from "./cell-model.class";
 
-import { DropAreaComponent } from './drop-area.component';
-import { SelectableWidget } from './selectable-widget.class';
+import { DropAreaComponent } from "./drop-area.component";
+import { SelectableWidget } from "./selectable-widget.class";
 
-import { CellActivateEvent } from './events/cell-activate.event';
-import { CellActivatedEvent } from './events/cell-activated.event';
-import { CellDeactivatedEvent } from './events/cell-deactivated.event';
-import { CellDragEvent } from './events/cell-drag.event';
+import { CellActivateEvent } from "./events/cell-activate.event";
+import { CellActivatedEvent } from "./events/cell-activated.event";
+import { CellDeactivatedEvent } from "./events/cell-deactivated.event";
+import { CellDragEvent } from "./events/cell-drag.event";
 import { CellDropEvent } from "./events/cell-drop.event";
 import { CellEditEvent } from "./events/cell-edit.event";
-import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
-import { CellSelectEvent } from './events/cell-select.event';
-import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
-import { CellModelActivatedEvent } from './events/cell-model-activated.event';
-import { EventService } from './events/event.service';
+import { CellModelDeactivatedEvent } from "./events/cell-model-deactivated.event";
+import { CellSelectEvent } from "./events/cell-select.event";
+import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
+import { CellModelActivatedEvent } from "./events/cell-model-activated.event";
+import { EventService } from "./events/event.service";
 
 
 @Component({
 	moduleId: module.id,
-	selector: 'cell',
+	selector: "cell",
 	template: `
-{{cell.URI}}
+<!--{{cell.URI}}-->
 			<ng-container [ngSwitch]="true">
 
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
-					<div id="{{cell.URI}}" 
+					<div id="{{cell.URI}}"
 						class="well container-fluid show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
@@ -141,7 +141,7 @@ import { EventService } from './events/event.service';
 
 			</ng-container>
 	`,
-	styles:[`
+	styles: [`
 			.cell {}
 			.well {
 /*
@@ -273,9 +273,9 @@ constructor(eventService: EventService) {
 
 
 ngOnInit() {
-	
-	//console.log("[UI] CellComponent::ngOnInit()");
-	
+
+	// console.log("[UI] CellComponent::ngOnInit()");
+
 	// Drop a cell to a position under this cell
 	this.subscribe(this.events.service.of( CellDropEvent )
 			.filter(dc => dc.newParent && dc.newParent==this.cell)
@@ -493,11 +493,11 @@ private isEditable(): boolean {
 
 // data that is being dragged (and potentially dropped)
 private cellDragData() {
-	
+
 	let cellDragData: Cell;
-	if (this.snippet) {    // If we are cloning, we deep clone the cell and remove the parent ref
-						   // as cloning will also clone the reference to the parent.
-						   // Then it's effectively an orphan when the adoption takes place
+	if (this.snippet) {	// If we are cloning, we deep clone the cell and remove the parent ref
+						// as cloning will also clone the reference to the parent.
+						// Then it's effectively an orphan when the adoption takes place
 		cellDragData = this.cell.deepClone();
 		delete cellDragData["parent"];
 	} else {

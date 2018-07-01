@@ -205,12 +205,13 @@ public static Attributes<Cell> internalAttributesFrom(Node node, URI uri, Comple
 
 
 private static  Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellModel cellModel, Predicate<String> attributeFilter) {
-	
+
 	if (!node.hasAttributes()) {	//	** base case **
-		
+
 		return new OrderedMap<Cell>(0);
+
 	}
-	
+
 	if (cellModel.isSimple()) {
 		log.error("CellModel '{}' does not allow attributes but the elem does", cellModel.getName());
 		throw new RuntimeException("Element and model attribute mismatch", new IllegalArgumentException());

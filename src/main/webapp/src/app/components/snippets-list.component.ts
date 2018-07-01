@@ -42,7 +42,7 @@ import { EventService } from "../events/event.service";
 				[model]="normalisedModel"></snippet>
 		</div>
 	`,
-	styles:[`
+	styles: [`
 		#snippets {}
 	`]
 })
@@ -58,14 +58,14 @@ _snippets: Array<CellDocument>;						// snippets document list
 _snippetsSubject: Subject<Array<CellDocument>>;		// snippets document subject, to push new documents into
 
 protected commandKeys: string[] = ["p"];
-private snippetSelectingMode: boolean = false;
+private snippetSelectingMode = false;
 
 protected snippetDocumentSubs: Subscription;
 
-	
+
 constructor(eventService: EventService,
 			@Inject("RemoteJSONDataService") private snippetDocumentService: RemoteDataService,
-			@Inject("SnippetContentService") private snippetContentService: RemoteObjectService<Content, ContentJSON> 
+			@Inject("SnippetContentService") private snippetContentService: RemoteObjectService<Content, ContentJSON>
 			) {
 	super(eventService);
 }
@@ -107,7 +107,7 @@ private fetchSnippets() {
 // load all snippet documents which in turn will be used to fetch all snippets
 private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 
-	let uri = "/morfeu/"+snippetStub.uri;
+	const uri = "/morfeu/"+snippetStub.uri;
 	console.log("Loading snippet document %s", uri);
 	this.snippetDocumentService.get<CellDocument>(uri).subscribe(
 			snippetDoc => this.loadSnippetContent(snippetDoc, index),
@@ -121,9 +121,9 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 
 private loadSnippetContent(snippet: CellDocument, index: number) {
 
-	let snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
+	const snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
 	console.log("Loading snippet content %s", snippetURI);
-	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent:Content) => {
+	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 		// we set the document with the content, associate it with the model
 		snippet.content = snippetContent;
 		console.log("Stripping snippet content context %s", snippet.contentURI);
@@ -136,7 +136,6 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 	},
 	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() => {
-		
 		if (index<this.snippetStubs.length-1) {
 				this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
 		} else {

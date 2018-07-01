@@ -41,17 +41,17 @@ constructor(public schema: number,
 			public desc: string,
 			public cellModelURI: string,
 			public isSimple: boolean) {}
-	
+
 
 /** We associate this cell with the given model, optionally specifying a deep uri within the model */
-associateWith(model: Model, uri?:string):Cell {
+associateWith(model: Model, uri?: string): Cell {
 
 	if (uri) {
 		this.associateWith_(model.cellModels, [model.findCellModel(uri)]);	// deep uri within the model
 	} else {
 		this.associateWith_(model.cellModels, model.cellModels);	// we start at the root of the model
 	}
-	
+
 	return this;
 
 }
@@ -59,8 +59,8 @@ associateWith(model: Model, uri?:string):Cell {
 
 // remove prefix (context) from this cell, its attributes and children
 stripPrefixFromURIs(prefix: string) {
-    
-    if (this.getURI().startsWith(prefix)) {
+
+	if (this.getURI().startsWith(prefix)) {
         console.log("--> Old uri %s", this.URI);
         this.URI = this.URI.substr(prefix.length);
         console.log("--> New uri %s", this.URI);
@@ -72,7 +72,7 @@ stripPrefixFromURIs(prefix: string) {
         }
     }
     
-    return this;
+	return this;
 
 }
 
@@ -94,18 +94,18 @@ attribute(name:string):string {
 
 
 /** we look for an attribute that has representation of COL-FIELD and return its value (1 as default) */
-columnFieldValue():string {
+columnFieldValue(): string {
 
-	let value:string = "1";
-	if (this.attributes) { 
+	let value = "1";
+	if (this.attributes) {
 		let attribute:Cell = this.attributes.find(a => a.cellModel.presentation=="COL-FIELD");
 		if (attribute) {
 			value = attribute.value;
 		}
 	}
-	
+
 	return value;
-	
+
 }
 
 
@@ -124,14 +124,14 @@ setPosition(position:number):Cell {
 	// /foo(0)/bar(1)/geez(1)
 	// Neat, uh?
 
-	let oldPrefix = this.parent.getURI()+"/"+this.name+"("+this.position;
-	let newPrefix = this.parent.getURI()+"/"+this.name+"("+position;
-	
+	const oldPrefix = this.parent.getURI()+"/"+this.name+"("+this.position;
+	const newPrefix = this.parent.getURI()+"/"+this.name+"("+position;
+
 	this.URI = newPrefix+")";
 	this.position = position;
 	if (this.attributes) {
 		this.attributes = this.attributes.map(c => {
-			//c.URI = c.URI.substr(0,	 c.URI.lastIndexOf("@"));
+			// c.URI = c.URI.substr(0,	 c.URI.lastIndexOf("@"));
 			c.URI = this.URI+"@"+c.name;
 			return c;
 		});
@@ -149,31 +149,20 @@ setPosition(position:number):Cell {
 /** return a deep clone of this cell, it includes all children plus runtime information (parent ref, ...) */
 deepClone(): Cell {
 
-	let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
+	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 	let clone = CELL.fromJSON(this.toJSON()); // easy peasy cloning :)
-	
-	// let's not forget the runtime information
-	if (this.parent) {
-		clone.parent = this.parent;
-	}
-	if (this.position) {
-		clone.position = this. position;
-	}
-	if (this.cellModel) {
-		clone.cellModel = this. cellModel;
-	}
-	
-	return clone;
 
-//	  let cell:Cell = Object.create(Cell.prototype);
-//	  return Object.assign(cell, this);
+	// let's not forget the runtime information
+	clone = this.cloneRuntimeInformationInto(clone, this.parent);
+
+	return clone;
 
 }
 
 
 // no value for this cell
 removeValue() {
-	delete this['value'];
+	delete this["value"];
 }
 
 
@@ -183,8 +172,36 @@ createValue() {
 }
 
 
+// assign runtime information to the 'clone', including parenthood, position, cellmodel, and then recursively
+private cloneRuntimeInformationInto(clone: Cell, parent: Adopter): Cell {
+
+	if (parent) {
+		clone.parent = parent;
+	}
+
+	if (this.position) {
+		clone.position = this. position;
+	}
+	if (this.cellModel) {
+		clone.cellModel = this. cellModel;
+	}
+
+	// for the attributes, we go through them and we assign the runtime information to the clone's attributes
+	if (this.attributes) {
+		this.attributes.forEach((a, i) => a.cloneRuntimeInformationInto(clone.attributes[i], clone));
+	}
+	// for the children we do the same, also keeping the parent
+	if (this.children) {
+		this.children.forEach((c, i) => c.cloneRuntimeInformationInto(clone.children[i], clone));
+	}
+
+	return clone;
+
+}
+
+
 // replaces the prefix of the URI with a new one, recursively
-private replaceURIPrefix_(old:string, newPrefix:string): Cell {
+private replaceURIPrefix_(old: string, newPrefix: string): Cell {
 
 	this.URI = this.URI.replace(old, newPrefix);
 	if (this.children) {
@@ -203,10 +220,10 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 
 		cellModel = cellModels.find(cm => cm.URI===this.cellModelURI);	// current cell model level
 
-		//TODO: handle inconsistent cell that cannot find cellmodule even though the content is valid		 
-//		  if (!cellModel) {												  // cell model children maybe?
-//			  cellModel = cellModels.map(cm => this.associateWith_(cm.children)).find(cm => cm!=undefined);
-//		  }
+		//TODO: handle inconsistent cell that cannot find cellmodule even though the content is valid
+// 		  if (!cellModel) {												  // cell model children maybe?
+// 			  cellModel = cellModels.map(cm => this.associateWith_(cm.children)).find(cm => cm!=undefined);
+// 		  }
 
 		if (cellModel) {												// now attributes and cell children
 			if (this.attributes) {
@@ -247,33 +264,33 @@ getPresentation(): string {
 //// Adopter ////
 
 adopt(orphan: Cell, position: number) {
-	
+
 	// notice that we are adopting only orphan cells as we do not want this method to have side effects on
 	// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
 	// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
-	
+
 	if (orphan.parent) {
 		console.error("Adopting child that was not an orphan");
 	}
 
 	orphan.parent = this;
 	orphan.setPosition(position);	// this actually changes the URI fo the new member to the correct one
-	                                //       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
-	                                // TODO: DOUBLE CHECK FOR SNIPPET ADOPTION AS THERE IS NO CONTEXT
-	                                //       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
-	
+									//       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
+									// TODO: DOUBLE CHECK FOR SNIPPET ADOPTION AS THERE IS NO CONTEXT
+									//       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
+
 	if (!this.children) {
 		this.children = [ orphan ];
 	} else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
 		this.children.push(orphan);
 	} else {
-	
-		let newChildren:Cell[] = [];
-		let i:number = 0;
+
+		let newChildren: Cell[] = [];
+		let i = 0;
 		this.children.forEach(c => {
 			if (i<position) { //>
 				newChildren.push(c);
-			} else if (i==position) {
+			} else if (i===position) {
 				newChildren.push(orphan);
 				i++;
 				newChildren.push(c.setPosition(i));	   // set next to a a shifted position of +1
@@ -292,7 +309,7 @@ adopt(orphan: Cell, position: number) {
 remove(child:Cell) {
 
 	if (child.cellModel.isAttribute) {
-		
+
 		this.attributes =  this.attributes.filter( a => a.getURI()!=child.getURI());
 
 	} else {	// assuming child
