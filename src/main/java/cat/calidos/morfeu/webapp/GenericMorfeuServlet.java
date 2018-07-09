@@ -41,6 +41,7 @@ public class GenericMorfeuServlet extends MorfeuServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(GenericMorfeuServlet.class);
 
+
 /* (non-Javadoc)
 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +69,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 @Override
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-	String path = "POST:"+req.getPathInfo();
+	String path = req.getPathInfo();
 	Map<String, String> params = normaliseParams(req.getParameterMap());
 	params.put(RESOURCES_PREFIX, resourcesPrefix);
 	params.put(METHOD, req.getMethod());
@@ -91,6 +92,7 @@ protected void handleResponse(HttpServletResponse resp, ControlComponent control
 		String result = controlComponent.process();
 		writeTo(result, controlComponent.contentType(), resp);
 	} else {
+		log.trace("GenericMorfeuServlet::doPost {} NOT FOUND (not matched)");
 		resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
 }

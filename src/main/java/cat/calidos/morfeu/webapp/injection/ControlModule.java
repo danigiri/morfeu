@@ -46,14 +46,19 @@ protected final static Logger log = LoggerFactory.getLogger(ControlModule.class)
 // Given the input path, the path elements, the explicit parameters, look for the control and run it on the data
 @Provides @Named("Content")
 public static String process(@Named("Path") String path,
+								@Named("Method") String method,
 								Lazy<List<String>> pathElems,
 								@Named("Params") Map<String, String> params,
 								Optional<Pattern> matchedPath,
 								@Named("GET") Map<String, BiFunction<List<String>, Map<String, String>, String>> get,
 								@Named("POST") Map<String, BiFunction<List<String>, Map<String, String>, String>> post
 								) {
-	return get.get(matchedPath.orElseThrow(() -> new UnsupportedOperationException("No matched "+path)).pattern())
+	 Map<String, BiFunction<List<String>, Map<String, String>, String>> controls = method.equals(ControlComponent.GET) ? 
+			 																		get : post;
+	
+	return controls.get(matchedPath.orElseThrow(() -> new UnsupportedOperationException("No matched "+path)).pattern())
 				.apply(pathElems.get(), params);
+	
 }
 
 
@@ -72,7 +77,8 @@ public static boolean matches(Optional<Pattern> matchedPathPattern) {
 }
 
 
-// given the list of paths and controls, compile the regexp of the paths for GET
+// given the list of paths and controls, compile the regexp of the paths for the specified method
+// TODO: avoid recompiling the regexps all the time
 @Provides 
 Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> compiledControls(
 						@Named("Method") String method,
@@ -80,11 +86,13 @@ Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> compiledCont
 						@Named("POST") Lazy<Map<String, BiFunction<List<String>, Map<String, String>, String>>> post
 						) {
 
-	Map<String, BiFunction<List<String>, Map<String, String>, String>> controls =  method.equals("GET") 
+	// log.trace("Compiling path regexps for method {}", method);
+	Map<String, BiFunction<List<String>, Map<String, String>, String>> controls =  method.equals(ControlComponent.GET) 
 																					? get.get(): post.get();
 	Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> patternControls = 
 			new HashMap<Pattern, BiFunction<List<String>, Map<String, String>, String>>(controls.size());
 	controls.keySet().forEach(k -> patternControls.put(Pattern.compile(k), controls.get(k)));
+	// log.trace("Compiled path regexps ({})", patternControls.size());
 
 	return patternControls;
 

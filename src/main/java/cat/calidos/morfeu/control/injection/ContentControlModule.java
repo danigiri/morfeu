@@ -23,7 +23,6 @@ import java.util.function.BiFunction;
 
 import javax.inject.Named;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,6 @@ import dagger.multibindings.StringKey;
 
 import cat.calidos.morfeu.control.ContentGETControl;
 import cat.calidos.morfeu.control.ContentPOSTControl;
-import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.webapp.MorfeuServlet;
 
 /**
@@ -45,6 +43,7 @@ public class ContentControlModule {
 
 protected final static Logger log = LoggerFactory.getLogger(ContentControlModule.class);
 
+
 @Provides @IntoMap @Named("GET")
 @StringKey("/content/(.+)")
 public static BiFunction<List<String>, Map<String, String>, String> content() {
@@ -54,7 +53,7 @@ public static BiFunction<List<String>, Map<String, String>, String> content() {
 				String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
 				String path = pathElems.get(1);		// normalised already
 				String modelPath = params.get("model");
-				log.trace("ContentControlModule::content [{}]{}, model: {}", resourcesPrefix, path, modelPath);
+				log.trace("ContentControlModule::content GET [{}]{}, model: {}", resourcesPrefix, path, modelPath);
 
 				return new ContentGETControl(resourcesPrefix, path, modelPath).processRequest();
 
@@ -73,6 +72,7 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 		String path = pathElems.get(1);		// normalised already
 		String modelPath = params.get("model");
 		String content = params.get(MorfeuServlet.POST_VALUE);
+		log.trace("ContentControlModule::content POST [{}]{}, model: {}", resourcesPrefix, path, modelPath);
 
 		return new ContentPOSTControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();
 
