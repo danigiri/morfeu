@@ -306,16 +306,16 @@ adopt(orphan: Cell, position: number) {
 }
 
 
-remove(child:Cell) {
+remove(child: Cell) {
 
 	if (child.cellModel.isAttribute) {
 
 		this.attributes =  this.attributes.filter( a => a.getURI()!=child.getURI());
 
 	} else {	// assuming child
-		let position = child.position;
+		const position = child.position;
 		let newChildren:Cell[] = [];
-		let i:number = 0;
+		let i = 0;
 		this.children.forEach(c => {
 			if (i<position) { //>
 					newChildren.push(c);
@@ -323,7 +323,7 @@ remove(child:Cell) {
 				newChildren.push(c.setPosition(i-1));	 // set the following elems to a shifted -1 position
 			}
 			i++;
-		});	  
+		});
 		this.children = newChildren;
 	
 	} 
@@ -338,18 +338,18 @@ getURI():string {
 }
 
 
-getAdoptionName():string {
+getAdoptionName(): string {
 	return this.name;
 }
 
 
-getAdoptionURI():string {
+getAdoptionURI(): string {
 	return this.cellModelURI;
 }
 
 
 matches(e:FamilyMember):boolean {
-   return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
+   return this.getAdoptionName()===e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
 
 
@@ -363,7 +363,7 @@ canAdopt(newMember:FamilyMember):boolean {
 		return false;
 		
 	}
-	
+
 	// next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
 	// place, example:
 	//	<col>
@@ -389,10 +389,10 @@ canAdopt(newMember:FamilyMember):boolean {
 	if (this.children && this.parent && this.equals(newMember.getParent())) {
 		return true;
 	}
-	
+
 	// next, we check the allowed count
-	let matchingChildren:Cell[] = this.children.filter(c => c.matches(newMember));
-	let childCount:number = matchingChildren.length;
+	let matchingChildren: Cell[] = this.children.filter(c => c.matches(newMember));
+	const childCount = matchingChildren.length;
 	if (childCount>0) {
 		// we are not considering the problem of the childcount being less than the minimum
 		//TODO: add check: are we able to remove this cell as child?
@@ -401,7 +401,7 @@ canAdopt(newMember:FamilyMember):boolean {
 			return false;
 		}
 	}
-		
+
 	return true;	// apologies for the long method (mostly comments ^^')
 
 }
@@ -412,24 +412,24 @@ childrenCount():number {
 }
 
 
-getParent():FamilyMember {
+getParent(): FamilyMember {
 	return this.parent;
 }
 
 
-equals(m:FamilyMember) {
-	return m && this.getURI()==m.getURI();	// FIXME: at the beginning, if m is a model, it is undefined
+equals(m: FamilyMember) {
+	return m && this.getURI()===m.getURI();	// FIXME: at the beginning, if m is a model, it is undefined
 }
 
 
 //// Lifecycle ////
 
 delete() {
-	
+
 	if (this.parent) {	// sanity check
 		this.parent.remove(this);
 	}
-	
+
 }
 
 
@@ -454,21 +454,21 @@ toJSON(): CellJSON {
 
 
 	return serialisedCell;
-	
+
 }
 
 
 fromJSON(json: CellJSON|string): Cell {
 
-	if (typeof json === 'string') {
+	if (typeof json === "string") {
 
 		return JSON.parse(json, Cell.reviver);
 
 	} else {
-		
-		let CELL:Cell = Object.create(Cell.prototype); // to simulate static call
-		
-		let cell:Cell = Object.create(Cell.prototype);
+
+		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
+
+		let cell: Cell = Object.create(Cell.prototype);
 		cell = Object.assign(cell, json);
 
 		if (json.attributes) {
@@ -480,9 +480,9 @@ fromJSON(json: CellJSON|string): Cell {
 
 		// we complete the children runtime information so we have the parent reference as well as position
 		if (json.children) {
-			let i:number = 0;
+			let i = 0;
 			cell = Object.assign(cell, {children: json.children.map(c => {
-				let fullCell:Cell = CELL.fromJSON(c);
+				let fullCell: Cell = CELL.fromJSON(c);
 				fullCell.position = i++;
 				fullCell.parent = cell;
 				return fullCell;
@@ -492,7 +492,7 @@ fromJSON(json: CellJSON|string): Cell {
 		return cell;
 
 	}
-	
+
 }
 
 
@@ -509,14 +509,14 @@ static reviver(key: string, value: any): any {
 }
 
 export interface CellJSON {
-	
-schema: number,
-URI: string,
-name: string,
-desc: string,
-cellModelURI: string,
-isSimple: boolean,
-	
+
+schema: number;
+URI: string;
+name: string;
+desc: string;
+cellModelURI: string;
+isSimple: boolean;
+
 value?: string;
 attributes?: CellJSON[];
 internalAttributes?: CellJSON[];

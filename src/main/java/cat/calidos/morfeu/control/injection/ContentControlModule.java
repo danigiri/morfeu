@@ -65,7 +65,7 @@ public static BiFunction<List<String>, Map<String, String>, String> content() {
 @Provides @IntoMap @Named("POST")
 @StringKey("/content/(.+)")
 public static BiFunction<List<String>, Map<String, String>, String> postContent() {
-	
+
 	return (pathElems, params) -> {
 
 		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
@@ -77,6 +77,7 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 		return new ContentPOSTControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();
 
 	};
+
 }
 
 
