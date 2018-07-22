@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APIContentIntTest extends APITezt {
 
+
 @Test
 public void testContent() throws Exception {
 
@@ -42,6 +43,16 @@ public void testContent() throws Exception {
 	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
 	assertEquals("/children/test(0) has a wrong name", "test", doc.get("children").get(0).get("name").asText());
 
+	//  target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)
+
+	JsonNode data0 = doc.get("children").get(0).get("children").get(0).get("children").get(0).get("children").get(0);
+	assertNotNull(data0);
+	assertTrue(data0.has("attributes"));
+	
+	JsonNode number = data0.get("attributes").get(0);
+	assertEquals("number", number.get("name").asText());
+	assertEquals(42, number.get("value").asInt());
+	
 }
 
 }
