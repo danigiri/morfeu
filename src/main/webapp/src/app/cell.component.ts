@@ -15,7 +15,7 @@
  *	 limitations under the License.
  */
 
-import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from "@angular/core";
 
 import { FamilyMember } from "./family-member.interface";
 import { Cell } from "./cell.class";
@@ -260,8 +260,8 @@ export class CellComponent extends SelectableWidget implements OnInit {
 @Input() level: number;
 @Input() position: number;
 
-active: boolean = false;
-dragEnabled:boolean = false;
+active = false;
+dragEnabled = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;		// we only have one of those!!! 
@@ -285,12 +285,12 @@ ngOnInit() {
 							+dc.newPosition+")'");
 				this.adoptCellAtPosition(dc.cell, dc.newPosition)
 	}));
-	
+
 	// A cell model was deactivated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
 			.filter(d => d.cellModel && this.isCompatibleWith(d.cellModel)) // //
 			.subscribe( d => {
-				//console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
+				// console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 				this.becomeInactive(this.cell);
 	}));
 	
@@ -339,9 +339,9 @@ ngOnInit() {
 
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
-focusOn(cell:Cell) {
-	
-	//console.log("[UI] CellComponent::focusOn()");
+focusOn(cell: Cell) {
+
+	// console.log("[UI] CellComponent::focusOn()");
 	this.events.service.publish(new CellActivatedEvent(cell));
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -352,9 +352,9 @@ focusOn(cell:Cell) {
 
 
 // notify all interested in this type of cell that we do not have the focus any longer, remove highlight
-focusOff(cell:Cell) {
+focusOff(cell: Cell) {
 
-	//console.log("[UI] CellComponent::focusOff()");
+	// console.log("[UI] CellComponent::focusOff()");
 	this.becomeInactive(cell);
 	this.events.service.publish(new CellDeactivatedEvent(cell));
 
@@ -362,16 +362,16 @@ focusOff(cell:Cell) {
 
 
 // we drag outside any interesting area, we remove focus
-dragEnd(cell:Cell) {
+dragEnd(cell: Cell) {
 
 	console.log("[UI] CellComponent::dragEnd()");
-   // this.isBeingDragged = false;
+	// this.isBeingDragged = false;
 	this.focusOff(cell);
 }
 
 
 // the drop-area is sending us a cell to adopt
-adoptCellAtPosition(newCell:Cell, position:number) {
+adoptCellAtPosition(newCell: Cell, position: number) {
 
 	console.log("[UI] CellComponent::adoptCellAtPosition("+position+")");
 	// deactivate based on old location
@@ -388,7 +388,7 @@ adoptCellAtPosition(newCell:Cell, position:number) {
 // UI method to highlight the cell
 becomeActive(cell:Cell) {
 
-	//console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
+	// console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
 	this.active = true;
 	this.dragEnabled = true;
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
@@ -400,10 +400,10 @@ becomeActive(cell:Cell) {
 // UI method to no longer be highlighted
 becomeInactive(cell: Cell) {
 
-	//console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
+	// console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
 	this.active = false;
 	this.dragEnabled = false;
-	
+
 }
 
 
@@ -415,14 +415,14 @@ isCompatibleWith(element:FamilyMember): boolean {
 
 // it can be activated (for drag and drop, etc) if it's not a well
 // if it's a snippet, we can always activate it, so it can be cloned
-canBeActivated():boolean {
+canBeActivated(): boolean {
 	return !this.cell.cellModel.presentation.includes("WELL") || this.snippet;
 }
 
 
-select(position:number) {
+select(position: number) {
 
-	if (position==this.position) {
+	if (position===this.position) {
 		
 		// if we were activated we deactivate ourselves and become selectable again
 		if (this.active) {
@@ -463,8 +463,8 @@ select(position:number) {
 
 	} else if (this.cell.parent && position>=this.cell.parent.childrenCount()) {
 		console.log("[UI] CellComponent::select(out of bounds)");
-	 } else {
-		 this.clearSelection();	 // out of bounds, sorry, clear
+	} else {
+		this.clearSelection();	 // out of bounds, sorry, clear
 	}
 
 }
@@ -503,9 +503,9 @@ private cellDragData() {
 	} else {
 		cellDragData = this.cell;
 	}
-	
+
 	return cellDragData;
-	
+
 }
 
 }

@@ -16,15 +16,15 @@
 
 import { Subscription } from "rxjs";
 
-import { Widget } from './widget.class';
+import { Widget } from "./widget.class";
 
-import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
 
 
 export abstract class SelectableWidget extends Widget {
-	
-selected: boolean = false;			// are we selected?
- 
+
+selected = false;			// are we selected?
+
 protected selectionSubscription: Subscription;
 protected selectionClearSubscription: Subscription;
 
@@ -51,7 +51,7 @@ unsubscribeFromSelection() {
 		this.unsubscribe(this.selectionSubscription);
 		this.selectionSubscription = undefined;
 	}
-	
+
 }
 
 
@@ -63,12 +63,12 @@ subscribeToSelectionClear() {
 
 
 unsubscribeFromSelectionClear() {
-	
+
 	if (this.selectionClearSubscription){
 		this.unsubscribe(this.selectionClearSubscription);
 		this.selectionClearSubscription = undefined;
 	}
-	
+
 }
 
 

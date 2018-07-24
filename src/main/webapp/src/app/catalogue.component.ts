@@ -14,25 +14,25 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnInit } from '@angular/core';
-import { Subscription }	  from 'rxjs';
+import { Component, Inject, OnInit } from "@angular/core";
+import { Subscription }	from "rxjs";
 
-import { Widget } from './widget.class';
-import { Catalogue } from './catalogue.class';
+import { Widget } from "./widget.class";
+import { Catalogue } from "./catalogue.class";
 
-import { CellDocument } from './cell-document.class';
-import { RemoteDataService } from './services/remote-data.service';
+import { CellDocument } from "./cell-document.class";
+import { RemoteDataService } from "./services/remote-data.service";
 
-import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
-import { CatalogueLoadedEvent } from './events/catalogue-loaded.event';
-import { EventService } from './events/event.service';
+import { CatalogueSelectionEvent } from "./events/catalogue-selection.event";
+import { CatalogueLoadedEvent } from "./events/catalogue-loaded.event";
+import { EventService } from "./events/event.service";
 import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
 import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
-import { StatusEvent } from './events/status.event';
+import { StatusEvent } from "./events/status.event";
 
 @Component({
 	moduleId: module.id,
-	selector: 'catalogue',
+	selector: "catalogue",
 	template: `
 		<div id="catalogue" class="card bg-light mt-2" *ngIf="catalogue">
 			<h5 id="catalogue-name" class="card-header">{{catalogue.name}}</h5>
@@ -50,20 +50,20 @@ import { StatusEvent } from './events/status.event';
 			</div>
 		</div>
 	`,
-	styles:[`
+	styles: [`
 		#catalogue {}
 		#catalogue-name {}
 		#catalogue-desc {}
 		#document-list {}
 		#document-list-entry {}
 	`],
-	providers:[
+	providers: [
 	]
 })
-	
-	//`
+
+// `
 export class CatalogueComponent extends Widget implements OnInit {
-	
+
 catalogue: Catalogue;
 selectedDocumentURI: string;
 
@@ -74,9 +74,9 @@ constructor(eventService: EventService,
 
 
 ngOnInit() {
-	
+
 	console.log("DocumentComponent::ngOnInit()");
-	
+
 	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
 			selected => this.markDocumentAsSelected(selected.url)
 	));
@@ -94,7 +94,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 	this.selectedDocumentURI = null;
 	this.events.service.publish(new StatusEvent("Fetching catalogue"));
 	this.catalogueService.get<Catalogue>(selectedCatalogueUri).subscribe(
-			c => { 
+			c => {
 				this.catalogue = c;
 				this.events.service.publish(new CatalogueLoadedEvent(c));
 				this.events.ok();
@@ -106,18 +106,18 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 			// FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??
 			() => {
 				this.events.service.publish(new CellDocumentClearEvent());	// also clear document
-				this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE))
+				this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE));
 			}
 		);
-		
+
 }
- 
+
 
 clickOnDocument(stub: CellDocument) {
 
 	console.log("[UI] Clicked on document='"+stub.uri+"' from catalogue");
 	this.events.service.publish(new CellDocumentSelectionEvent(stub.uri));
-	
+
 }
 
 
@@ -130,8 +130,7 @@ markDocumentAsSelected(uri: string) {
 
 
 private preview(d: CellDocument) {
-	//return "assets/images/open-iconic/file.svg";
-	 return d.presentation ? d.presentation : "assets/images/open-iconic/file.svg";
+	return d.presentation ? d.presentation : "assets/images/open-iconic/file.svg";
 }
 
 }

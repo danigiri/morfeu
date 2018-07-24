@@ -14,43 +14,43 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from "@angular/core";
+import { Subscription } from "rxjs";
 
 
-import { CellDocument } from './cell-document.class';
-import { Cell } from './cell.class';
-import { Content, ContentJSON } from './content.class';
-import { FamilyMember } from './family-member.interface';
-import { Model } from './model.class';
+import { CellDocument } from "./cell-document.class";
+import { Cell } from "./cell.class";
+import { Content, ContentJSON } from "./content.class";
+import { FamilyMember } from "./family-member.interface";
+import { Model } from "./model.class";
 
 import { RemoteDataService } from "./services/remote-data.service";
 import { RemoteObjectService } from "./services/remote-object.service";
 import { OperationResult } from "./services/operation-result.class";
 import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
-import { CellComponent } from './cell.component';
-import { DropAreaComponent } from './drop-area.component';
+import { CellComponent } from "./cell.component";
+import { DropAreaComponent } from "./drop-area.component";
 import { KeyListenerWidget } from "./key-listener-widget.class";
 
-import { CellActivateEvent } from './events/cell-activate.event';
+import { CellActivateEvent } from "./events/cell-activate.event";
 import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
-import { CellDragEvent } from './events/cell-drag.event';
+import { CellDragEvent } from "./events/cell-drag.event";
 import { CellEditEvent } from "./events/cell-edit.event";
-import { CellSelectEvent } from './events/cell-select.event';
-import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
-import { ContentRefreshedEvent } from './events/content-refreshed.event';
-import { ContentRequestEvent } from './events/content-request.event';
-import { ContentSaveEvent } from './events/content-save.event';
-import { DropAreaSelectEvent } from './events/drop-area-select.event';
+import { CellSelectEvent } from "./events/cell-select.event";
+import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
+import { ContentRefreshedEvent } from "./events/content-refreshed.event";
+import { ContentRequestEvent } from "./events/content-request.event";
+import { ContentSaveEvent } from "./events/content-save.event";
+import { DropAreaSelectEvent } from "./events/drop-area-select.event";
 import { KeyPressedEvent } from "./events/keypressed.event";
-import { StatusEvent } from './events/status.event';
+import { StatusEvent } from "./events/status.event";
 import { EventService } from "./events/event.service";
 
 
 @Component({
 	moduleId: module.id,
-	selector: 'content',
+	selector: "content",
 	template: `
 	<div id="content" class="card" *ngIf="content">
 		<div id="content" class="card-body">
@@ -86,10 +86,10 @@ import { EventService } from "./events/event.service";
   </div>
 </div-->
 	`,
-	styles:[`
+	styles: [`
 		#content {}
 	`],
-	providers:[
+	providers: [
 	]
 })
 
@@ -104,8 +104,8 @@ protected commandKeys: string[] = ["c", "a", "d", "t", "e"];
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
 private cellSelectionClearSubscription: Subscription;
-private cellSelectingMode: boolean = false;
-private dropAreaSelectingMode: boolean = false;
+private cellSelectingMode = false;
+private dropAreaSelectingMode = false;
 
 
 constructor(eventService: EventService,
@@ -148,11 +148,11 @@ ngAfterViewInit() {
 }
 
 
-fetchContentFor(document_: CellDocument, model:Model) {
+fetchContentFor(document_: CellDocument, model: Model) {
 
 	this.events.service.publish(new StatusEvent("Fetching content"));
-	let uri = document_.contentURI;
-	let contentURI = "/morfeu/dyn/content/"+uri+"?model="+model.URI;
+	const uri = document_.contentURI;
+	const contentURI = "/morfeu/dyn/content/"+uri+"?model="+model.URI;
 	this.contentService.get(contentURI, Content).subscribe( (content:Content) => {
 		console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
 		// we associate the content with the document and the model so it al fits together
@@ -160,7 +160,7 @@ fetchContentFor(document_: CellDocument, model:Model) {
 		// as we want the model to have all references, we create a copy, as this may have
 		// an infinite recursion structure
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
-		this.model = MODEL.fromJSON(model.toJSON());	  
+		this.model = MODEL.fromJSON(model.toJSON());
 		this.model.normaliseReferences();
 		content.associateFromRoot(this.model);
 		this.displayContent(content);
@@ -169,7 +169,7 @@ fetchContentFor(document_: CellDocument, model:Model) {
 	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
 	);
-	
+
 }
 
 
@@ -213,10 +213,10 @@ saveContent(document_:CellDocument) {
 
 
 commandPressedCallback(command: string) {
-	
+
 	console.log("[UI] ContentComponent::keyPressed(%s)", command);
 	if (this.dropAreaSelectingMode) {
-		console.log("[UI] ContentComponent::selection mode deactivated");		 
+		console.log("[UI] ContentComponent::selection mode deactivated");
 		this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
 		this.dropAreaSelectingMode = false;
 	}

@@ -14,25 +14,25 @@
  *	 limitations under the License.
  */
 
-import { Adopter } from './adopter.interface';
+import { Adopter } from "./adopter.interface";
 
-import { Cell, CellJSON } from './cell.class';
-import { FamilyMember } from './family-member.interface';
-import { Model } from './model.class';
+import { Cell, CellJSON } from "./cell.class";
+import { FamilyMember } from "./family-member.interface";
+import { Model } from "./model.class";
 
-import { SerialisableToJSON } from './serialisable-to-json.interface';
+import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 
 export class Content implements Adopter, SerialisableToJSON<Content, ContentJSON> {
 	
-children?:Cell[];
+children?: Cell[];
 
 constructor(public schema: number) {}
 
 
 // associate the content cells with the corresponding cell models, starting from the root
 associateFromRoot(model: Model) {
-   this.children = this.children.map(c => c.associateWith(model));
+	this.children = this.children.map(c => c.associateWith(model));
 }
 
 
@@ -71,12 +71,12 @@ getAdoptionURI(): string {
 }
 
 
-matches(element: FamilyMember):boolean {
+matches(element: FamilyMember): boolean {
 	return false;	// content does not match with anything
 }
 
 
-canAdopt(newMember: FamilyMember):boolean {
+canAdopt(newMember: FamilyMember): boolean {
 	return this.children.some(c => c.canAdopt(newMember));
 }
 
@@ -86,12 +86,12 @@ childrenCount():number {
 }
 
 
-equals(m:FamilyMember) {
-	return this.getURI()==m.getURI();
+equals(m: FamilyMember) {
+	return this.getURI()===m.getURI();
 }
 
 
-getParent():FamilyMember {
+getParent(): FamilyMember {
 	return undefined;
 }
 
@@ -111,23 +111,23 @@ remove(child:Cell) {
 //// SerialisableToJSON ////
 
 toJSON(): ContentJSON {
-    return Object.assign({}, this, {children: this.children.map(c => c.toJSON())});
+	return Object.assign({}, this, {children: this.children.map(c => c.toJSON())});
 }
 
 
 fromJSON(json: ContentJSON|string): Content {
 
-	if (typeof json === 'string') {
+	if (typeof json === "string") {
 
 		return JSON.parse(json, Content.reviver);
 
 	} else {
-	    
-		let i:number = 0;
+
+		let i = 0;
 		let content = Object.create(Content.prototype);
 		content = Object.assign(content, json);
 		content = Object.assign(content, {children: json.children.map(c => {
-			let fullCell:Cell = Object.create(Cell.prototype).fromJSON(c);
+			let fullCell: Cell = Object.create(Cell.prototype).fromJSON(c);
 				fullCell.position = i++;
 				fullCell.parent = content;
 				return fullCell;
@@ -143,14 +143,14 @@ fromJSON(json: ContentJSON|string): Content {
 static reviver(key: string, value: any): any {
 	return key === "" ? Object.create(Content.prototype).fromJSON(value) : value;
 }
-	
+
 }
 
 
 // serialisable interface
 export interface ContentJSON {
 
-schema:number;
-children:CellJSON[];
-	
+schema: number;
+children: CellJSON[];
+
 }
