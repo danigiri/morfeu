@@ -50,14 +50,14 @@ import { UXEvent } from "../events/ux.event";
 								class="btn btn-outline-danger float-right"
 								src="assets/images/open-iconic/plus.svg"
 								(click)="createValue()"
-								/>
+							/>
 							<!-- remove value button -->
 							<img  *ngIf="cell.value!=undefined && showValue()"
 								id="cell-editor-remove-value-button"
 								class="btn btn-outline-danger float-right"
 								src="assets/images/open-iconic/circle-x.svg"
 								(click)="removeValue()"
-								/>
+							/>
 
 						<ul class="list-group list-group-flush" *ngIf="cell.cellModel.attributes">
 							<attribute-data-editor *ngFor="let a of cell.cellModel.attributes; let i = index"
@@ -67,7 +67,9 @@ import { UXEvent } from "../events/ux.event";
 								></attribute-data-editor>
 						</ul>
 					</form>
-					<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell" />
+					<img *ngIf="showPresentation()" 
+						class="card-img-bottom" src="{{getPresentation()}}" 
+						alt="Image representation of the cell" />
 				</div>
 				<div class="modal-footer card-footer">
 					<button id="cell-editor-discard-button"
@@ -188,5 +190,22 @@ private clear() {
 	this.editing = false;
 
 }
+
+
+private createValue() {
+
+	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
+	Promise.resolve(null).then(() => this.cell.createValue());
+
+}
+
+
+private removeValue() {
+
+	console.log("[UI] Removing value for '%s'", this.cell.URI);
+	Promise.resolve(null).then(() => this.cell.removeValue());
+
+}
+
 
 }

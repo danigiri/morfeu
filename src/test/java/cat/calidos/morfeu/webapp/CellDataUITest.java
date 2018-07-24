@@ -115,16 +115,16 @@ public void checkCellDataMissingAttributes() {
 	data.hover();
 	UICellData cellData = data.cellInfo().shouldAppear();
 	assertNotNull(cellData);
-	
+
 	List<UIAttributeData> attributes = cellData.attributes();
 	assertNotNull(attributes);
 	assertEquals("Wrong number of attributes of 'data',", 1, attributes.size());
-	
+
 	UIAttributeData numberAttribute = cellData.attribute("number");
 	assertEquals("Wrong name of attribut 'data@text'", "number", numberAttribute.name());
 	assertTrue("Attribute data@number should be mandatory", numberAttribute.isMandatory());
 	assertEquals("42", numberAttribute.value());
-	
+
 }
 
 

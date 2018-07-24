@@ -21,8 +21,6 @@ import static com.codeborne.selenide.Selenide.$;
 
 import java.util.Optional;
 
-import org.openqa.selenium.NoSuchElementException;
-
 import com.codeborne.selenide.SelenideElement;
 
 /**
@@ -34,9 +32,11 @@ private UIContent content;
 
 
 public UICellEditor(UIContent content) {
+
 	super($("#cell-editor"));
-	
+
 	this.content = content;
+
 }
 
 
@@ -104,7 +104,7 @@ public Optional<String> value() {
 }
 
 
-public void enterText(String value) {
+public UICellEditor enterText(String value) {
 
 	if (isCreateValueVisible()) {
 		throw new UnsupportedOperationException("Cannot set the value when text field is not visible");
@@ -113,8 +113,14 @@ public void enterText(String value) {
 	// cannot get selenide to select the element (textarea is missing in the setValue method)
 	// so we send the keys which works
 	content.pressKey("\t");
+	int l = value().get().length();
+	for (int i=0; i<l; i++) { 
+		pressBackspace(); 
+	}
 	content.pressKey(value);
 
+	return this;
+	
 }
 
 

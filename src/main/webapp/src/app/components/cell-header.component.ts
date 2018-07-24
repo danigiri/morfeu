@@ -21,20 +21,20 @@ import { CellModel } from "../cell-model.class";
 	moduleId: module.id,
 	selector: 'cell-header',
 	template: `
-			<h4 class="cell-data-header card-title card-header">
+			<h4 class="cell-header card-title card-header">
 				{{cellModel.name}}
 				[{{cellModel.minOccurs}}..<ng-container *ngIf="cellModel.maxOccurs && cellModel.maxOccurs!=-1">{{cellModel.maxOccurs}}</ng-container><ng-container *ngIf="!cellModel.maxOccurs || cellModel.maxOccurs==-1">∞</ng-container>]
 					<span *ngIf="cell!=undefined" class="cell-data-source badge badge-pill badge-secondary float-secondary float-right">CELL</span>
 					<span *ngIf="cell==undefined" class="cell-data-source badge badge-pill badge-dark float-dark float-right">MODEL</span>
 			</h4>
 			<div class="card-body">
-				<p class="cell-header-model-desc card-subtitle">{{cellModel.desc}}<p>
+				<p class="cell-header-desc card-subtitle">{{cellModel.desc}}<p>
 				<p class="cell-header-uri card-text">URI: <span class="cell-data-uri text-muted">{{uri}}</span></p>
 			</div>
 	`,
 	styles:[`
 			.cell-data-header {}
-			.cell-header-model-desc {}
+			.cell-header-desc {}
 			.cell-header-uri {}
 	`]
 })

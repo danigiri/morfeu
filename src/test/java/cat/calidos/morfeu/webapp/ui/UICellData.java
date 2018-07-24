@@ -49,17 +49,17 @@ public static void shouldNotBeVisible() {
 
 
 public String header() {
-	return element.$(".cell-data-header").text();
+	return element.$(".cell-header").text();
 }
 
 
 public String desc() {
-	return element.$(".cell-data-model-desc").text();
+	return element.$(".cell-header-desc").text();
 }
 
 
 public String URI() {
-	return element.$(".cell-data-model-uri").text();
+	return element.$(".cell-header-uri").text();
 }
 
 
@@ -88,26 +88,6 @@ public Optional<String> value() {
 	return Optional.ofNullable(element.$(".cell-data-value").getValue());
 }
 
-
-public UICellData enterText(String value) {
-
-	if (!isFromEditor()) {
-		throw new UnsupportedOperationException("Trying to edit value of without the editor");
-	}
-
-	// selenide does not like setValue
-	
-	pressKey("\t");
-	int l = value().get().length();
-	for (int i=0; i<l; i++) { 
-		pressBackspace(); 
-	}
-	pressKey(value);
-	//element.$(".cell-data-value").setValue(value);
-	
-	return this;
-
-}
 
 
 // we have * at the end of compulsory

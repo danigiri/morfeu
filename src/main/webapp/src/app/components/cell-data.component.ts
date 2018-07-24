@@ -74,7 +74,6 @@ import { EventService } from "../events/event.service";
 			.cell-data-info {}
 			.cell-data-value {}
 			.cell-data-value-field {}
-			.cell-data-model-desc {}
 			.cell-data-uri {}
 			.cell-data-source-model {}
 			.cell-data-source-cell {}
