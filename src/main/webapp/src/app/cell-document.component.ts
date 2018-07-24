@@ -32,10 +32,12 @@ import { UXEvent } from './events/ux.event';
 
 @Component({
 	moduleId: module.id,
-	selector: 'document',
+	selector: "document",
 	template: `
 	<div id="document-info" class="card mt-2" *ngIf="document">
-		<h5 id="document-name" class="card-header">{{document.name}} <span class="badge badge-primary float-right">{{document.kind}}</span></h5>
+		<h5 id="document-name" 
+			class="card-header"
+		>{{document.name}} <span class="badge badge-primary float-right">{{document.kind}}</span></h5>
 		<div class="card-body">
 				<div class="card-text">
 					<span id="document-desc">{{document.desc}}</span>
@@ -44,11 +46,13 @@ import { UXEvent } from './events/ux.event';
 				</div>
 				<!-- we have the buttons here as it makes sense from a UI perspective, but the event itself 
 					 will be handled by the content component -->
-			 <button type="button" *ngIf="document.valid"
-				 class="btn btn-success btn-lg btn-block btn-sm mt-2"
-				 [class.disabled]="saveDisabled" 
-				 (click)="saveDocument()"
-				 >SAVE</button>
+			 <button *ngIf="document.valid"
+				id="document-save"
+				type="button" 
+				class="btn btn-success btn-lg btn-block btn-sm mt-2"
+				[class.disabled]="saveDisabled"
+				(click)="saveDocument()"
+			>SAVE</button>
 			 <button type="button" *ngIf="document.valid"
 				 class="btn btn-warning btn-lg btn-block btn-sm mt-2">Restore</button>
 		</div>
@@ -59,15 +63,15 @@ import { UXEvent } from './events/ux.event';
 			#document-name {}
 			#document-desc {}
 			#document-valid {}
-	`] 
-   
+			#document-save {}
+	`]
 })
-//`
+// `
 
 export class CellDocumentComponent extends Widget implements OnInit {
 
 document: CellDocument;
-saveDisabled: boolean = true;
+saveDisabled = true;
 
 constructor(eventService: EventService,
 			@Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON> 
@@ -79,7 +83,7 @@ constructor(eventService: EventService,
 ngOnInit() {
 
 	console.log("DocumentComponent::ngOnInit()");
-	
+
 	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => {
 			this.clear();
 			this.events.ok();
@@ -89,9 +93,9 @@ ngOnInit() {
 	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
 			selected => this.loadDocument(selected.url)
 	));
-	
+
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
-	this.subscribe(this.events.service.of( UXEvent ) 
+	this.subscribe(this.events.service.of( UXEvent )
 			.filter(e => e.type==UXEvent.DOCUMENT_DIRTY)
 			.subscribe(e => this.enableSave())
 	);
@@ -101,18 +105,18 @@ ngOnInit() {
 
 loadDocument(url: string) {
 
-	//this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
+	// this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
 	this.events.service.publish(new StatusEvent("Fetching document"));
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
 	this.documentService.get("/morfeu/dyn/documents/"+url, CellDocument).subscribe(d => {
 
 				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
+				this.events.service.publish(new CellDocumentClearEvent());	// clear everything (subscriptions, etc.)
 				if (!d.hasProblem()) {	// we only publish the load if we have no issues with the doc
 					this.events.service.publish(new CellDocumentLoadedEvent(d));
 					this.display(d);
-					this.events.ok()
+					this.events.ok();
 				} else {
-					this.events.service.publish(new CellDocumentClearEvent());	// clear everything
 					// after clearing we show the problem message and the problematic document stub
 					this.problem(d.problem);   // document loaded but was problematic
 					this.document = d;		   // we still show whatever was answered back
@@ -141,7 +145,7 @@ display(d: CellDocument) {
 
 clear() {
 
-	console.log("[UI] document component clear");
+	console.log("[UI] CellDocumentComponent::clear()");
 	this.document = null;
 	this.disableSave();
 
