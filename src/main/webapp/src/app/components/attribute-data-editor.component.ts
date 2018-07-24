@@ -21,9 +21,9 @@ import { CellModel } from "../cell-model.class";
 
 @Component({
 	moduleId: module.id,
-	selector: 'attribute-data-editor',
+	selector: "attribute-data-editor",
 	template: `
-		<li class="attribute-data attribute-data-editor list-group-item" index="index">
+		<li class="attribute-data attribute-data-editor list-group-item" [attr._index]="index">
 			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
 					<span class="attribute-data-name input-group-text" 
@@ -62,6 +62,7 @@ export class AttributeDataEditorComponent {
 @Input() cellModel: CellModel;
 @Input() parentCell: Cell;
 @Input() index: number;
+
 
 //do we have a value to show?
 private hasValue_(): boolean {

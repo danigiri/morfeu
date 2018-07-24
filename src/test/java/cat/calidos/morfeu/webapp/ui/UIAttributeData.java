@@ -69,22 +69,19 @@ public boolean hasValue() {
 }
 
 
+// FIXME: this will fail if the cell has a value as well as attributes
 public UIAttributeData enterText(String value) {
 
 	if (!isEditable()) {
 		throw new UnsupportedOperationException("Cannot set the value of a non-editable field");
 	}
 	
-//	int attributeIndex = 0;
-//	try {
-//		attributeIndex = Integer.parseInt(element.attr("index"));
-//	} catch (Exception e) {}
-//	
-//	for (int i=0; i<=attributeIndex; i++) {
-//		pressKey("\t");
-//	}
+	int attributeIndex = Integer.parseInt(element.attr("_index"));
+	
+	for (int i=0; i<=attributeIndex; i++) {
+		pressKey("\t");
+	}
 	// this only works if called in order, selenide is not happy about the setValue so we're hacking it
-	pressKey("\t");
 	pressKey(value);
 	
 	//element.$(".attribute-data-value").setValue(value);

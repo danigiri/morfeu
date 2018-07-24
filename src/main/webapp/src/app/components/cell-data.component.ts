@@ -53,16 +53,18 @@ import { EventService } from "../events/event.service";
 							name="{{cellModel.name}}.value"
 							attr.aria-label="{{cellModel.name}}.value"
 							attr.aria-describedby="{{cellModel.desc}} value"
-							[(ngModel)]="cell.value"></textarea>
+							[(ngModel)]="cell.value"
+						></textarea>
 				 </form>
 			</div>
 			<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
 			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
-				<attribute-data-info *ngFor="let a of cellModel.attributes" 
+				<attribute-data-info *ngFor="let a of cellModel.attributes; let i = index"
 					[parentCell]="cell" 
 					[cellModel]="a"
 					[isFromCell]="cell!=undefined" 
 					[isFromModel]="cell==undefined"
+					[index]="i"
 				></attribute-data-info>
 				<li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
 				<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>

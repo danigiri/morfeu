@@ -21,11 +21,12 @@ import { CellModel } from "../cell-model.class";
 
 @Component({
 	moduleId: module.id,
-	selector: 'attribute-data-info',
+	selector: "attribute-data-info",
 	template: `
 		<li *ngIf="isFromModel || (isFromCell && hasValue)" 
 			class="attribute-data attribute-data-info list-group-item"
 			[class.list-group-item-secondary]="isFromModel"
+			[attr._index]="index"
 			>
 			<span class="font-weight-bold attribute-data-name"
 				[class.attribute-data-identifier]="isIdentifier()"
@@ -53,7 +54,10 @@ export class AttributeDataInfoComponent {
 @Input() isFromModel: boolean;
 @Input() parentCell?: Cell;	   // optional, only when showing information of cell (and not just a cell model)
 @Input() cellModel: CellModel;
+@Input() index: number;
+
 hasValue: boolean;
+
 
 ngOnInit() {
 	this.hasValue = this.hasValue_();
