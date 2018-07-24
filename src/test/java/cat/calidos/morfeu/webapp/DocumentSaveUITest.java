@@ -57,7 +57,6 @@ public static void teardownClass() throws InterruptedException {
 @Before
 public void setup() throws Exception {
 
-	
 	String contentPath = "test-resources/documents/document1.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	contentFile = new File(new URL(fullContentPath).getFile());
@@ -72,16 +71,18 @@ public void setup() throws Exception {
 
 @After
 public void teardown() throws Exception {
+
 	if (backupFile.exists()) {
 		// System.err.println("\t"+backupFile+" ->"+contentFile);
 		FileUtils.copyFile(backupFile, contentFile);
 	}
+
 }
 
 
 @Test
 public void documentSaveTest() throws Exception {
-	
+
 	open(appBaseURL);
 	UIDocument document = UICatalogues.openCatalogues()
 			.shouldAppear()
@@ -89,7 +90,7 @@ public void documentSaveTest() throws Exception {
 			.clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
 	content.shouldBeVisible();
-	
+
 	// now we make a modification and then save
 	UICell data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)").select().activate();
 	assertNotNull(data);

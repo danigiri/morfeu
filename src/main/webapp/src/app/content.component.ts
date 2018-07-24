@@ -194,12 +194,12 @@ clear() {
 
 
 saveContent(document_:CellDocument) {
-	
+
 	this.events.service.publish(new StatusEvent("Saving content"));
-	let postURI = "/morfeu/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
-	let content = document_.content.toJSON();
+	const postURI = "/morfeu/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
+	const content = document_.content.toJSON();
 	console.log("ContentComponent::saveContent('%s')", postURI);
-  
+
 	this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
 				console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
 				// reloading would go here

@@ -49,6 +49,15 @@ private URI contentURI;
 private String tmpPath;
 
 
+@AfterClass
+public static void teardownClass() throws InterruptedException {
+
+	Thread.sleep(5000); // wait for reboot of jetty env
+
+}
+
+
+
 @Before
 public void setup() throws Exception {
 
@@ -66,13 +75,6 @@ public void setup() throws Exception {
 
 }
 
-
-@AfterClass
-public static void teardownClass() throws InterruptedException {
-
-	Thread.sleep(5000); // wait for reboot of jetty env
-
-}
 
 @Test
 public void testValidateString() throws Exception {
