@@ -1,5 +1,5 @@
  /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -31,32 +31,39 @@ import { EventService } from "../events/event.service";
 
 @Component({
 	moduleId: module.id,
-	selector: 'cell-data',
+	selector: "cell-data",
 	template: `
 		<div  *ngIf="cellModel" 
-			class="card mt-2 cell-data cell-data-info">
+			class="card mt-2 cell-data cell-data-info"
+			[class.cell-data-source-model]="cell===undefined"
+			[class.cell-data-source-cell]="cell!==undefined"
+		>
 			<cell-header [uri]="uri" [cellModel]="cellModel"></cell-header>
-			<img *ngIf="showPresentation()" class="card-img-bottom" src="{{getPresentation()}}" alt="Image representation of the cell">
+			<img *ngIf="showPresentation()"
+				class="card-img-bottom"
+				src="{{getPresentation()}}"
+				alt="Image representation of the cell"
+			/>
 			<!-- if we have a value field we should show it (readonly!) -->
 			<div class="card-body">
 				 <form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
 						<textarea readonly
-							class="cell-data-value card-text" 
+							class="cell-data-value card-text"
 							rows="3"
 							name="{{cellModel.name}}.value"
-							attr.aria-label="{{cellModel.name}}.value" 
-							attr.aria-describedby="{{cellModel.desc}} value" 
+							attr.aria-label="{{cellModel.name}}.value"
+							attr.aria-describedby="{{cellModel.desc}} value"
 							[(ngModel)]="cell.value"></textarea>
 				 </form>
 			</div>
 			<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
 			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
 				<attribute-data-info *ngFor="let a of cellModel.attributes" 
-					[isFromCell]="cell!=undefined" 
 					[parentCell]="cell" 
 					[cellModel]="a"
+					[isFromCell]="cell!=undefined" 
 					[isFromModel]="cell==undefined"
-					></attribute-data-info>
+				></attribute-data-info>
 				<li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
 				<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
 			</ul>
@@ -69,7 +76,8 @@ import { EventService } from "../events/event.service";
 			.cell-data-value-field {}
 			.cell-data-model-desc {}
 			.cell-data-uri {}
-			.cell-data-source {}
+			.cell-data-source-model {}
+			.cell-data-source-cell {}
 	`]
 })
 
@@ -93,7 +101,7 @@ ngOnInit() {
 			.subscribe( deactivated => this.hideCellInformation()
 	));
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-			.filter( activated => activated.cellModel!=undefined)
+			.filter( activated => activated.cellModel!==undefined)
 			.subscribe( activated => this.showCellModelInformation(activated.cellModel)
 	));
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
@@ -139,7 +147,7 @@ private showPresentation() {
 
 
 private getPresentation(): string {
-	return this.cell==undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
+	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
 }
 
 
@@ -147,20 +155,5 @@ private showValue() {
 	return this.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
 }
 
-
-private createValue() {
-	
-	console.log("[UI] Create new (empty|default) value for '%s'", this.uri);
-	Promise.resolve(null).then(() => this.cell.createValue());
-	
-}
-
-
-private removeValue() {
-	
-	console.log("[UI] Removing value for '%s'", this.uri);
-	Promise.resolve(null).then(() => this.cell.removeValue());
-	
-}
 
 }

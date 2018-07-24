@@ -14,14 +14,14 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Observable } from "rxjs";
 
-import { Widget } from './widget.class';
+import { Widget } from "./widget.class";
 import { CollapsibleComponent } from "./components/collapsible.component";
 
-import { CatalogueComponent } from './catalogue.component';
-import { Catalogue } from './catalogue.class';
+import { CatalogueComponent } from "./catalogue.component";
+import { Catalogue } from "./catalogue.class";
 
 import { RemoteDataService } from './services/remote-data.service';
 
