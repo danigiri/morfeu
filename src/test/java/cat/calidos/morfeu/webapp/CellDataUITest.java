@@ -70,7 +70,7 @@ public void checkCellData() {
 	assertNotNull(cellData);
 	assertFalse("cell data from hovering on a cell should not come from the model", cellData.isFromModel());
 	assertTrue("cell data from hovering on a cell should come from the cell", cellData.isFromCell());
-	assertFalse("cell data from hovering should not be an editor", cellData.isEditor());
+	assertFalse("cell data from hovering should not be an editor", cellData.isFromEditor());
 	
 	String header = cellData.header();
 	assertTrue("Bad information cell, we did not get 'data' in the cell info header", header.contains("data"));

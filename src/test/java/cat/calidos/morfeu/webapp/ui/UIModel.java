@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIModel extends UIWidget<UIModel> {
 
-public static final String MODEL_MODE = "m";
-public static final String ACTIVATE = "a";
-public static final String NEW_CELL= "n";
+public static final String MODEL_MODE_KEY = "m";
+public static final String ACTIVATE_KEY = "a";
+public static final String NEW_CELL_KEY= "n";
 
 public UIModel() {
 	super($("#model-info"));

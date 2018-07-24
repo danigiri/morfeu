@@ -70,7 +70,7 @@ public void editCellAndSave() {
 	
 	UICellData cellEditorData = dataEditor.cellData();
 	assertNotNull(cellEditorData);
-	assertTrue("Editing the cell should show an editor", cellEditorData.isEditor());
+	assertTrue("Editing the cell should show an editor", cellEditorData.isFromEditor());
 	assertTrue("Editing the cell should show an editor with data coming from the cell", cellEditorData.isFromCell());
 	
 	attributes = cellEditorData.attributes();

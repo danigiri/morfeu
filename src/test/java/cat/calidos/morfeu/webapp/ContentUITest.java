@@ -222,7 +222,6 @@ public void dropAreasTest() {
 	test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data2(1)").hover();
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 
-	
 }
 
 

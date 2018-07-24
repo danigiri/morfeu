@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@ package cat.calidos.morfeu.utils;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.net.URI;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
 import org.junit.Test;
 
 

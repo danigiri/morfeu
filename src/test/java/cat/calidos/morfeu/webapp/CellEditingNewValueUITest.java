@@ -69,14 +69,14 @@ public void removeCellValue() {
 
 	UICellEditor stuffEditor = stuff.edit().shouldAppear();
 	assertNotNull(stuffEditor);
-	Optional<String> value = stuffEditor.getValue();
+	Optional<String> value = stuffEditor.value();
 	assertTrue(value.isPresent());
 	assertEquals("Stuff content", value.get());
 	assertFalse("Should not be able to create a value for this cell",  stuffEditor.isCreateValueVisible());
 	assertTrue("Should be able to remove value for this cell",  stuffEditor.isRemoveValueVisible());
 
 	stuffEditor.clickRemoveValue();
-	value = stuffEditor.getValue();
+	value = stuffEditor.value();
 	assertFalse(value.isPresent());
 
 }
@@ -97,13 +97,13 @@ public void addCellValue() {
 	targetDropArea.select();
 
 	// create a new stuff element through the keyboard shortcut
-	model.pressKey(UIModel.NEW_CELL);
+	model.pressKey(UIModel.NEW_CELL_KEY);
 	assertEquals("We should have 5 children after adding a new 'stuff'", 5, col.children().size());
 
 	UICell stuff = test.child("row(0)").child("col(0)").child("stuff(0)");
 	UICellEditor stuffEditor = stuff.select().activate().edit().shouldAppear();
 	assertNotNull(stuffEditor);
-	Optional<String> value = stuffEditor.getValue();
+	Optional<String> value = stuffEditor.value();
 	assertFalse(value.isPresent());
 	assertTrue("Should be able to create a value for new cell",  stuffEditor.isCreateValueVisible());
 	assertFalse("Should not be able to remove value for new cell",  stuffEditor.isRemoveValueVisible());
@@ -113,7 +113,9 @@ public void addCellValue() {
 	assertTrue("Should be able to remove value for this cell",  stuffEditor.isRemoveValueVisible());
 
 	stuffEditor.enterText("Foo bar");
-	assertEquals("Foo bar", stuffEditor.getValue().get());
+	value = stuffEditor.value();
+	assertTrue("After entering text we should be able to retrieve it", value.isPresent());
+	assertEquals("Foo bar", value.get());
 
 	//FIXME: JUST FOUND A BUG, THE SECOND TIME WE LOAD A DOCUMENT, THE CELL SELECTION SHORTCUTS DON'T WORK AS EXPECTED
 

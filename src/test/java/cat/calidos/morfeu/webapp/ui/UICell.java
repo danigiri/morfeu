@@ -156,7 +156,7 @@ public UICell select() {
 public UICell activate() {
 
 	if (this.isSelected()) {
-		content.pressKey(UIModel.ACTIVATE);
+		content.pressKey(UIModel.ACTIVATE_KEY);
 	}
 
 	return this;

@@ -76,7 +76,7 @@ public void newAfterMouseActivationOfCellModel() {
 	assertTrue("Target drop area shoud be selected after select", targetDropArea.isSelected());
 	
 	// create a new data2 element through the keyboard shortcut
-	model.pressKey(UIModel.NEW_CELL);
+	model.pressKey(UIModel.NEW_CELL_KEY);
 	assertEquals("After creating a new cell, we should have 2 children", 2, targetCol.children().size());
 	assertNotNull("Aftert creating new cell, target child 0 is data2", targetCol.child("data2(0)"));
 	assertNotNull("Before creating new cell, target child 1 is data", targetCol.child("data(1)"));
@@ -109,7 +109,7 @@ public void newAfterKeyboardActivationOfCellModel() {
 	assertTrue("Target drop area shoud be selected after select", targetDropArea.isSelected());
 
 	// create a new data2 element through the keyboard shortcut
-	model.pressKey(UIModel.NEW_CELL);
+	model.pressKey(UIModel.NEW_CELL_KEY);
 	assertEquals("After creating a new cell, we should have 2 children", 2, targetCol.children().size());
 	assertNotNull("Aftert creating new cell, target child 0 is data2", targetCol.child("data2(0)"));
 	assertNotNull("Before creating new cell, target child 1 is data", targetCol.child("data(1)"));

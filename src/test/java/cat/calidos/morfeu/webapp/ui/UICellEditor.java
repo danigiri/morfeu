@@ -21,6 +21,10 @@ import static com.codeborne.selenide.Selenide.$;
 
 import java.util.Optional;
 
+import org.openqa.selenium.NoSuchElementException;
+
+import com.codeborne.selenide.SelenideElement;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,14 +34,14 @@ private UIContent content;
 
 
 public UICellEditor(UIContent content) {
-	super($("#cell-editor .cell-data"));
+	super($("#cell-editor"));
 	
 	this.content = content;
 }
 
 
 public static void shouldNotBeVisible() {
-	$("#cell-editor .cell-data").shouldNotBe(visible);
+	$("#cell-editor").shouldNotBe(visible);
 }
 
 
@@ -59,23 +63,16 @@ public UICellEditor clickDiscard() {
 }
 
 
-public Optional<String> getValue() {
-	return $(".cell-data-value").exists() 
-			? Optional.of($(".cell-data-value").val()): Optional.empty();
-		
-}
-
-
 public boolean isRemoveValueVisible() {
 	
-	return $("#cell-data-remove-value-button").exists();
+	return $("#cell-editor-remove-value-button").exists();
 	
 }
 
 
 public UICellEditor clickRemoveValue() {
 	
-	$("#cell-data-remove-value-button").click();
+	$("#cell-editor-remove-value-button").click();
 	
 	return this;
 	
@@ -84,19 +81,27 @@ public UICellEditor clickRemoveValue() {
 
 public boolean isCreateValueVisible() {
 	
-	return $("#cell-data-create-value-button").exists();
+	return $("#cell-editor-create-value-button").exists();
 	
 }
 
 
 public UICellEditor clickCreateValue() {
 	
-	$("#cell-data-create-value-button").click();
+	$("#cell-editor-create-value-button").click();
 	
 	return this;
 	
 }
 
+
+public Optional<String> value() {
+
+		SelenideElement valueElement = element.$(".cell-editor-value");
+
+		return valueElement.exists() ? Optional.of(valueElement.getValue()) :  Optional.empty();
+
+}
 
 
 public void enterText(String value) {
@@ -114,7 +119,7 @@ public void enterText(String value) {
 
 
 public UICellData cellData() {
-	return new UICellData(element);
+	return new UICellData(element);	// cell data and cell editor are very similar
 }
 
 }

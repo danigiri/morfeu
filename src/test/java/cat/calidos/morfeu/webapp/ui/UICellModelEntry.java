@@ -90,7 +90,7 @@ public UICellModelEntry select() {
 		path.push(parentVisitor);
 		parentVisitor = parentVisitor.parent().orElse(null);
 	}
-	model.pressKey(UIModel.MODEL_MODE);
+	model.pressKey(UIModel.MODEL_MODE_KEY);
 	path.stream().forEachOrdered(cm -> model.pressKey(cm.position()+""));
 
 	return this;
@@ -101,7 +101,7 @@ public UICellModelEntry select() {
 public UICellModelEntry activate() {
 
 	if (this.isSelected()) {
-		model.pressKey(UIModel.ACTIVATE);
+		model.pressKey(UIModel.ACTIVATE_KEY);
 	}
 
 	return this;

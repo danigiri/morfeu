@@ -37,6 +37,7 @@ UICellData() {
 }
 
 
+
 public UICellData(SelenideElement e) {
 	super(e);
 }
@@ -62,8 +63,9 @@ public String URI() {
 }
 
 
+/** @return Does the data come from a cell? (always true if it's an editor), false if from a model */
 public boolean isFromCell() {
-	return element.$(".cell-data-source").getText().equals("CELL");
+	return class_().contains("cell-data-source-cell") || isFromEditor();
 }
 
 
@@ -72,8 +74,8 @@ public boolean isFromModel() {
 }
 
 
-public boolean isEditor() {
-	return class_().contains("cell-data-editor");
+public boolean isFromEditor() {
+	return element.attr("id").contains("editor");
 }
 
 
@@ -89,7 +91,7 @@ public Optional<String> value() {
 
 public UICellData enterText(String value) {
 
-	if (!isEditor()) {
+	if (!isFromEditor()) {
 		throw new UnsupportedOperationException("Trying to edit value of without the editor");
 	}
 
