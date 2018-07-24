@@ -63,4 +63,14 @@ public UIContent content() {
 	return new UIContent();
 }
 
+
+public UIDocument clickSave() {
+
+	$("#document-save").click();
+
+	return this;
+
+}
+
+
 }
