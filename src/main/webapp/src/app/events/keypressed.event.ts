@@ -19,8 +19,9 @@ export class KeyPressedEvent {
 
 constructor(public str: string, public num?: number) {}
 
+
 public isNumber(): boolean {
-	return this.num!=undefined;
+	return this.num!==undefined;
 }
 
 

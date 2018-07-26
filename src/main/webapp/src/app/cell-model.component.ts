@@ -15,21 +15,21 @@
  */
 
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core";
 import { Observable ,  Subscription } from "rxjs";
 
-import { TreeNode } from 'angular-tree-component';
+import { TreeNode } from "angular-tree-component";
 
-import { Cell } from './cell.class';
+import { Cell } from "./cell.class";
 import { CellModel } from "./cell-model.class";
 import { FamilyMember } from "./family-member.interface";
 import { SelectableWidget } from "./selectable-widget.class";
 
-import { CellActivatedEvent } from './events/cell-activated.event';
-import { CellDeactivatedEvent } from './events/cell-deactivated.event';
+import { CellActivatedEvent } from "./events/cell-activated.event";
+import { CellDeactivatedEvent } from "./events/cell-deactivated.event";
 import { CellDropEvent } from "./events/cell-drop.event";
-import { CellModelActivatedEvent } from './events/cell-model-activated.event';
-import { CellModelDeactivatedEvent } from './events/cell-model-deactivated.event';
+import { CellModelActivatedEvent } from "./events/cell-model-activated.event";
+import { CellModelDeactivatedEvent } from "./events/cell-model-deactivated.event";
 import { CellSelectEvent } from "./events/cell-select.event";
 import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
 import { NewCellFromModelEvent } from "./events/new-cell-from-model.event";
@@ -37,30 +37,30 @@ import { EventService } from "./events/event.service";
 
 @Component({
 	moduleId: module.id,
-	selector: 'cell-model',
+	selector: "cell-model",
 	template: `
-		<div id="{{node.data.id}}" 
+		<div id="{{node.data.id}}"
 			 class="cell-model-entry cell-model-level-{{node.level}} cell-model-position-{{index}}">
 			<img 
 				src={{getThumb()}} 
-				class="cell-model-thumb img-fluid" 
-				[class.cell-model-active]="active" 
+				class="cell-model-thumb img-fluid"
+				[class.cell-model-active]="active"
 				[class.cell-model-selected]="this.selected"
-				(mousedown)="clickDown()" 
+				(mousedown)="clickDown()"
 				(mouseup)="clickUp()"
-				(mouseenter)="clickDown()" 
+				(mouseenter)="clickDown()"
 				(mouseleave)="clickUp()"
 				dnd-draggable 
 				[dragEnabled]="dragEnabled"
 				(onDragEnd)="dragEnd()"
 				[dragData]="node.data.generateCell()"
-					/>
+			/>
 				<!-- -->
 			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
 		</div>
 		`,
 
-	styles:[`
+	styles: [`
 			.cell-model-entry {}
 			.cell-model-name {}
 			.cell-model-desc {}
@@ -102,8 +102,8 @@ export class CellModelComponent extends SelectableWidget implements OnInit {
 @Input() index: number;
 
 cellModel: CellModel;
-active:boolean = false;
-dragEnabled:boolean = false;
+active = false;
+dragEnabled = false;
 
 private activationSubscription: Subscription;
 private newCellSubscription: Subscription;
@@ -141,14 +141,14 @@ ngOnInit() {
 
 becomeActive(fromCell: boolean) {
 
-	//console.log("[UI] CellModelComponent::becomeActive()");
+	// console.log("[UI] CellModelComponent::becomeActive()");
 	this.active = true;
 	this.dragEnabled = this.cellModel.canGenerateNewCell();
 	if (!fromCell) {   // if we become active from a cell, we do not need to propagate the activation
 		this.events.service.publish(new CellModelActivatedEvent(this.cellModel));
 	}
 	this.subscribeToNewCellFromModel();
-	//console.log("[UI] CellModelComponent::becomeActive(dragEnabled:%s)", this.dragEnabled);
+	// console.log("[UI] CellModelComponent::becomeActive(dragEnabled:%s)", this.dragEnabled);
 
 }
 
@@ -164,7 +164,7 @@ becomeInactive(fromCell: boolean) {
 }
 
 
-select(position:number) {
+select(position: number) {
 	
 	if (position==this.index) {
 		

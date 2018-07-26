@@ -61,9 +61,9 @@ associateWith(model: Model, uri?: string): Cell {
 stripPrefixFromURIs(prefix: string) {
 
 	if (this.getURI().startsWith(prefix)) {
-        console.log("--> Old uri %s", this.URI);
-        this.URI = this.URI.substr(prefix.length);
-        console.log("--> New uri %s", this.URI);
+		// console.log("--> Old uri %s", this.URI);
+		this.URI = this.URI.substr(prefix.length);
+        // console.log("--> New uri %s", this.URI);
         if (this.attributes) {
             this.attributes = this.attributes.map(a => a.stripPrefixFromURIs(prefix));
         }
@@ -71,7 +71,7 @@ stripPrefixFromURIs(prefix: string) {
             this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
         }
     }
-    
+
 	return this;
 
 }
@@ -82,7 +82,7 @@ attribute(name:string):string {
 
 	let value:string;
 	if (this.attributes) {
-		let attribute:Cell = this.attributes.find(a => a.name==name);
+		const attribute:Cell = this.attributes.find(a => a.name===name);
 		if (attribute) {
 			value = attribute.value;
 		}

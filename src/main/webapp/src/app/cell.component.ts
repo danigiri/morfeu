@@ -41,7 +41,6 @@ import { EventService } from "./events/event.service";
 	moduleId: module.id,
 	selector: "cell",
 	template: `
-<!--{{cell.URI}}-->
 			<ng-container [ngSwitch]="true">
 
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
@@ -248,7 +247,7 @@ import { EventService } from "./events/event.service";
 			.cell-level-18 {}
 `],
 	//
-//encapsulation: ViewEncapsulation.Emulated,
+// encapsulation: ViewEncapsulation.Emulated,
 })
 // `
 
@@ -293,7 +292,7 @@ ngOnInit() {
 				// console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 				this.becomeInactive(this.cell);
 	}));
-	
+
 	// a cell model activated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
 			.filter( a => a.cellModel && this.isCompatibleWith(a.cellModel))
@@ -428,11 +427,11 @@ select(position: number) {
 		if (this.active) {
 			this.becomeInactive(this.cell);
 		}
-		
+
 		// we were waiting for a selection and we've matched the position, so we select ourselves
 		// and unsubscribe from selection as we are not eligible anymore
 		console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");
-		this.selected = true; 
+		this.selected = true;
 		this.unsubscribeFromSelection();
 		
 		// We temporarly unsubscribe from clear, send a clear event and re-subscribe

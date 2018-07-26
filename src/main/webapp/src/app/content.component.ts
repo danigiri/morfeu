@@ -208,9 +208,11 @@ saveContent(document_:CellDocument) {
 			error => this.events.problem(error.message),	 // error is of the type HttpErrorResponse
 			() => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
 	);
-	
+
 }
 
+
+//// KeyListenerWidget ////
 
 commandPressedCallback(command: string) {
 
@@ -220,7 +222,7 @@ commandPressedCallback(command: string) {
 		this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
 		this.dropAreaSelectingMode = false;
 	}
-	
+
 	switch (command) {
 		case "c":
 			// we first send a clear so all children will clear, then back to registered in first level
@@ -229,7 +231,7 @@ commandPressedCallback(command: string) {
 			this.cellSelectingMode = true;
 			this.subscribeChildrenToCellSelection();
 			break;
-		case "m":		//FIXME: this will now be called, check that it works
+		case "m":		// FIXME: this will now be called, check that it works
 
 			break;
 		case "a":
@@ -264,6 +266,7 @@ commandNotRegisteredCallback(command: string) {
 
 }
 
+
 numberPressedCallback(num: number) {
 				
 	if (this.cellSelectingMode) {
@@ -277,7 +280,7 @@ numberPressedCallback(num: number) {
    
 }
 
-
+//// KeyListenerWidget [end] ////
 
 
 private subscribeChildrenToCellSelection () {

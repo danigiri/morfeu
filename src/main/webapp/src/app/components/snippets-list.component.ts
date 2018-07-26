@@ -25,7 +25,10 @@ import { Content, ContentJSON } from "../content.class";
 import { Model } from "../model.class";
 
 import { KeyListenerWidget } from "../key-listener-widget.class";
+import { SnippetComponent } from "./snippet.component";
 
+import { CellSelectEvent } from "../events/cell-select.event";
+import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { SnippetContentRequestEvent } from "../events/snippet-content-request.event";
 import { SnippetDocumentRequestEvent } from "../events/snippet-document-request.event";
 import { StatusEvent } from "../events/status.event";
@@ -36,10 +39,13 @@ import { EventService } from "../events/event.service";
 	selector: "snippets",
 	template: `
 		<div id="snippets" class="list-group">
-			<snippet *ngFor="let snippet of snippets | async; let i=index" 
+			<snippet *ngFor="let snippet of snippets | async; let i=index"
 				class="list-group-item"
 				[snippet]="snippet"
-				[model]="normalisedModel"></snippet>
+				[model]="normalisedModel"
+				[position]="i"
+				[parent]="this"
+			></snippet>
 		</div>
 	`,
 	styles: [`
@@ -57,10 +63,12 @@ snippets: Observable<Array<CellDocument>>;			// snippets document observable, fo
 _snippets: Array<CellDocument>;						// snippets document list
 _snippetsSubject: Subject<Array<CellDocument>>;		// snippets document subject, to push new documents into
 
-protected commandKeys: string[] = ["p"];
+protected commandKeys: string[] = [];	// only numbers, other commands are handled by the content area
 private snippetSelectingMode = false;
 
 protected snippetDocumentSubs: Subscription;
+
+snippetComponents: SnippetComponent[];	// this will be populated by the snippets themselves
 
 
 constructor(eventService: EventService,
@@ -73,7 +81,8 @@ constructor(eventService: EventService,
 
 ngAfterViewInit() {
 
-	console.log("ContentComponent::ngAfterViewInit()");
+	console.log("SnippetsListComponent::ngAfterViewInit()");
+	this.snippetComponents = [];
 	Promise.resolve(null).then(() => this.fetchSnippets());
 
 }
@@ -83,12 +92,12 @@ ngAfterViewInit() {
 private fetchSnippets() {
 
 	if (this.snippetStubs.length>0) {
-		
+
 		// we copy and normalise the model as we will link it with the snippets
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
 		this.normalisedModel = MODEL.fromJSON(this.model.toJSON());
 		this.normalisedModel.normaliseReferences();
-		
+
 		// we initialise the snippet structures
 		this._snippets = [];
 		this._snippetsSubject = new Subject();
@@ -126,7 +135,7 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 		// we set the document with the content, associate it with the model
 		snippet.content = snippetContent;
-		console.log("Stripping snippet content context %s", snippet.contentURI);
+		// console.log("Stripping snippet content context %s", snippet.contentURI);
 		snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
 		snippetContent.associate(this.normalisedModel);
 
@@ -147,11 +156,68 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 }
 
 
+//// KeyListenerWidget ////
+
 commandPressedCallback(command: string) {}
 
 
-numberPressedCallback(num: number) {}
+numberPressedCallback(num: number) {
+
+	if (this.snippetSelectingMode) {
+		console.log("[UI] SnippetsListComponent::numberPressed(%i) [cellSelectingMode]", num);
+		this.events.service.publish(new CellSelectEvent(num));
+	}
 
 }
 
+
+commandNotRegisteredCallback(command: string) {
+
+	console.log("[UI] SnippetsListComponent::keyPressed(%s) not interested", command, this.snippetSelectingMode);
+	this.deactivateSnippetSelectingMode();
+
+}
+
+//// KeyListenerWidget [end] ////
+
+
+// we clear any existing selections, we subscribe our snippet children to selection and wait for numberic keypresses 
+activateSnippetSelectingMode() {
+
+	console.log("[UI] SnippetsListComponent::activateSnippetSelectingMode()");
+
+	this.snippetSelectingMode = true;
+	this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
+	this.snippetSelectingMode = true;
+	this.subscribeChildrenToCellSelection();
+	this.registerKeyPressedEvents();	// we can now receive keypresses :)
+
+}
+
+
+deactivateSnippetSelectingMode() {
+
+	this.unregisterKeyPressedEvents();
+	this.unsubscribeChildrenFromCellSelection();
+	this.snippetSelectingMode = false;
+
+}
+
+
+private subscribeChildrenToCellSelection () {
+
+	console.log("SnippetsListComponent::subscribeChildrenToCellSelection()");
+	this.unsubscribeChildrenFromCellSelection();
+	this.snippetComponents.forEach( sc => sc.subscribeToSelection() );
+}
+
+
+private unsubscribeChildrenFromCellSelection() {
+
+	console.log("SnippetsListComponent::subscribeChildrenToCellSelection()");
+	this.snippetComponents.forEach( sc => sc.unsubscribeFromSelection() );
+
+}
+
+}
 

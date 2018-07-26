@@ -14,33 +14,31 @@
  *	 limitations under the License.
  */
 
-import { Subscription } from 'rxjs';
+import { Subscription } from "rxjs";
 
 import { KeyPressedEvent } from "./events/keypressed.event";
 import { Widget } from "./widget.class";
 
-export abstract class KeyListenerWidget extends Widget {
-	
-	
+export class KeyListenerWidget extends Widget {
+
 protected commandKeys: string[] = Array();
 protected commandPressedSubscription: Subscription;
 protected numberPressedSubscription: Subscription;
-	
+
+
 registerKeyPressedEvents() {
-	
+
 	this.commandPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
 			.filter( key => key.isCommand())
 		   .subscribe( key => {
-			   if (this.commandKeys.find( c => c===key.str)!=undefined) {
+			   if (this.commandKeys.find( c => c===key.str)!==undefined) {
 				   this.commandPressedCallback(key.str);
 			   } else {
 				   this.commandNotRegisteredCallback(key.str);
 			   }
 		   })
 	);
-	
-	
-	
+
 	this.numberPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
 			.filter( key => key.isNumber())
 			.subscribe( key => this.numberPressedCallback(key.num))
@@ -49,24 +47,24 @@ registerKeyPressedEvents() {
 }
 
 /** This will be called when a key registered in commandKeys is triggered */
-abstract commandPressedCallback(command: string);
+commandPressedCallback(command: string) {}
 
 /** This will be called when a key is triggered that is not registered in commandKeys */
 commandNotRegisteredCallback(command: string) {}
 
-abstract numberPressedCallback(num: number);
+numberPressedCallback(num: number) {}
 
 
 unregisterKeyPressedEvents() {
-		
+
 		if (this.commandPressedSubscription) {
 			this.unsubscribe(this.commandPressedSubscription);
 		}
 		if (this.numberPressedSubscription) {
 			this.unsubscribe(this.numberPressedSubscription);
 		}
-		
+
 }
-	
-	
+
+
 }

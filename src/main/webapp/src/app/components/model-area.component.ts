@@ -14,13 +14,14 @@
  *	 limitations under the License.
  */
 
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 
-import { NgbTabChangeEvent } from "@ng-bootstrap/ng-bootstrap";
+import { NgbTabset, NgbTabChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 
+import { KeyListenerWidget } from "../key-listener-widget.class";
 import { ModelComponent } from "./model.component";
-import { Widget } from "../widget.class";
+import { SnippetsListComponent } from "./snippets-list.component";
 
 import { CellDocument } from "../cell-document.class";
 import { Model } from "../model.class";
@@ -28,6 +29,7 @@ import { Model } from "../model.class";
 import { CatalogueLoadedEvent } from "../events/catalogue-loaded.event";
 import { CellDocumentClearEvent } from "../events/cell-document-clear.event";
 import { CellDocumentLoadedEvent } from "../events/cell-document-loaded.event";
+import { KeyPressedEvent } from "../events/keypressed.event";
 import { ModelDisplayEvent } from "../events/model-display.event";
 import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
 import { ModelRequestEvent } from "../events/model-request.event";
@@ -39,7 +41,7 @@ import { EventService } from "../events/event.service";
 	selector: "model-area",
 	template: `
 		<div [hidden]="!isVisible()">
-		<ngb-tabset type="pills" activeId="model-tab" (tabChange)="beforeTabChange($event)">
+		<ngb-tabset type="pills" activeId="model-tab" (tabChange)="beforeTabChange($event)" #tabs="ngbTabset">
 			<ngb-tab title="Model" id="model-tab">
 				<ng-template ngbTabContent>
 					<model></model>
@@ -59,12 +61,19 @@ import { EventService } from "../events/event.service";
 	 `]
 })
 
-export class ModelAreaComponent extends Widget implements OnInit {
+export class ModelAreaComponent extends KeyListenerWidget implements OnInit {
+
+private static MODEL_TAB = "model-tab";
+private static SNIPPETS_TAB = "snippets-tab";
 
 model?: Model;
 snippets?: CellDocument[];
 
+protected commandKeys: string[] = ["m", "s"];
+
+@ViewChild("tabs") tabs: NgbTabset;
 @ViewChild(ModelComponent) private modelComponent: ModelComponent;
+@ViewChild(SnippetsListComponent) private snippetListComponent: SnippetsListComponent;
 
 private modelDisplayReadySubscription: Subscription;
 
@@ -75,27 +84,58 @@ constructor(eventService: EventService) {
 
 
 ngOnInit() {
-	
-	console.log("ModelComponent::ngOnInit()");
+
+	console.log("ModelAreaComponent::ngOnInit()");
 
 	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => this.clear()));
 
 	this.subscribe(this.events.service.of(CellDocumentLoadedEvent).subscribe(
 			loaded => this.events.service.publish(new ModelRequestEvent(loaded.document))
 	));
-	
+
 	this.subscribe(this.events.service.of(ModelLoadedEvent).subscribe(loaded => this.store(loaded.model)));
 
 	this.subscribe(this.events.service.of(CatalogueLoadedEvent).subscribe(
-	        loaded => this.snippets = loaded.catalogue.snippets
-    ));
+			loaded => this.snippets = loaded.catalogue.snippets
+	));
+
+	this.registerKeyPressedEvents();
+
 }
 
 
+//// KeyListenerWidget ////
+
+commandPressedCallback(command: string) {
+
+
+	// we select the appropriate tab, at the moment we need the user to re-issue the key again
+	switch (command) {
+	case "m":
+		if (this.tabs.activeId===ModelAreaComponent.SNIPPETS_TAB) {
+			this.tabs.select(ModelAreaComponent.MODEL_TAB);
+		}
+		break;
+	case "s":
+		console.log("[UI] ModelAreaComponent:: commandPressedCallback(%s)", command);
+		if (this.tabs.activeId===ModelAreaComponent.MODEL_TAB) {
+			this.tabs.select(ModelAreaComponent.SNIPPETS_TAB);
+		} else {
+			this.snippetListComponent.activateSnippetSelectingMode();
+		}
+		break;
+	}
+
+}
+
+//// KeyListenerWidget [end] ////
+
+
 private beforeTabChange($event: NgbTabChangeEvent) {
+
 	console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
-	if ($event.activeId=="model-tab") {
-	} else if ($event.activeId=="snippets-tab") {
+	if ($event.activeId===ModelAreaComponent.MODEL_TAB) {
+	} else if ($event.activeId===ModelAreaComponent.SNIPPETS_TAB) {
 		this.modelDisplayReadySubscription = this.subscribe(this.events.service.of(ModelDisplayReadyEvent)
 				.subscribe(loaded => this.redisplayModel()));
 	}
@@ -109,13 +149,13 @@ private isVisible(): boolean {
 
 
 private store(model: Model) {
-	
+
 	console.log("[UI] ModelAreaComponent:: store(%s)", model.URI);
 	this.model = model;
 }
 
 
-private redisplayModel() {	  
+private redisplayModel() {
 
 	console.log("[UI] ModelAreaComponent:: redisplayModel(%s), sending display event", this.model.name);
 	this.unsubscribe(this.modelDisplayReadySubscription);
@@ -126,10 +166,7 @@ private redisplayModel() {
 
 
 private clear() {
-	
 	this.model = null;
-	//this.snippet = false;
-
 }
 
 }

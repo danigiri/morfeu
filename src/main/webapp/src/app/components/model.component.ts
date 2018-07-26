@@ -14,7 +14,7 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 import { TreeComponent } from "angular-tree-component";
@@ -43,7 +43,7 @@ import { StatusEvent } from "../events/status.event";
 
 @Component({
 	moduleId: module.id,
-	selector: 'model',
+	selector: "model",
 	template: `
 	<ng-container *ngIf="model">
 			<div id="model-info" class="card">
@@ -74,12 +74,12 @@ import { StatusEvent } from "../events/status.event";
 	`]
 })
 
-export class ModelComponent extends KeyListenerWidget implements OnInit, OnDestroy {
+export class ModelComponent extends KeyListenerWidget implements OnInit, AfterViewInit, OnDestroy {
 
 model: Model;
-	
+
 protected commandKeys: string[] = ["m", "a", "n"];
-private cellModelSelectingMode: boolean = false;
+private cellModelSelectingMode = false;
 
 @ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
@@ -112,17 +112,17 @@ ngOnInit() {
 
 ngAfterViewInit() {
 
-    // we are ready to reload the model
+	// we are ready to reload the model
 	console.log("ModelComponent::ngAfterViewInit()"); 
 	Promise.resolve(null).then(() => this.events.service.publish(new ModelDisplayReadyEvent()));
 
 }
 
 
-loadModel(document:CellDocument) {
+loadModel(document: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Fetching model"));
-	let modelURI = "/morfeu/dyn/models/"+document.modelURI;
+	const modelURI = "/morfeu/dyn/models/"+document.modelURI;
 	this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
 			console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
 			this.displayModel(model);	// not firing a load event yet if not needed
@@ -132,7 +132,7 @@ loadModel(document:CellDocument) {
 			this.events.service.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
-	//TODO: check for network errors (see https://angular.io/guide/http)
+	// TODO: check for network errors (see https://angular.io/guide/http)
 	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
 	);
@@ -156,23 +156,22 @@ clearModel() {
 
 	console.log("[UI] ModelComponent::clearModel()");
 	this.unregisterKeyPressedEvents();
-//	if (this.model) {
-//		this.model.cellModels.forEach(cm => cm.deactivateEventService());
-//	}
+	//	if (this.model) {
+	//		this.model.cellModels.forEach(cm => cm.deactivateEventService());
+	//	}
 	this.model = null;
 
 }
 
 
+//// KeyListenerWidget ////
+
 commandPressedCallback(command: string) {
 
 	switch (command) {
 	case "m":
-		this.cellModelSelectingMode = true;
-		this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
-		this.cellModelSelectingMode = true;
-		this.subscribeChildrenToCellSelection();
-		break;	 
+		this.activateCellModelSelectingMode();
+		break;
 	case "a":
 		if (this.cellModelSelectingMode) {
 			this.events.service.publish(new CellModelActivatedEvent());	 // will activate the 
@@ -189,14 +188,6 @@ commandPressedCallback(command: string) {
 }
 
 
-commandNotRegisteredCallback(command: string) {
-	
-	console.log("[UI] ModelComponent::keyPressed(%s) not interested", command, this.cellModelSelectingMode);
-	this.cellModelSelectingMode = false;
-	
-}
-
-
 numberPressedCallback(num: number) {
 
 	if (this.cellModelSelectingMode) {
@@ -204,7 +195,29 @@ numberPressedCallback(num: number) {
 		console.log("[UI] ModelComponent::numberPressed(%i)", num);
 		this.events.service.publish(new CellSelectEvent(num));
 
-	} 
+	}
+
+}
+
+
+commandNotRegisteredCallback(command: string) {
+
+	console.log("[UI] ModelComponent::keyPressed(%s) not interested", command, this.cellModelSelectingMode);
+	this.cellModelSelectingMode = false;
+
+}
+
+//// KeyListenerWidget [end] ////
+
+
+activateCellModelSelectingMode() {
+
+	console.log("CellModelComponent::activateCellModelSelectingMode()");
+
+	//this.cellModelSelectingMode = true;
+	this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
+	this.cellModelSelectingMode = true;
+	this.subscribeChildrenToCellSelection();
 
 }
 
@@ -224,7 +237,7 @@ private subscribeChildrenToCellSelection () {
 }
 
 
-unsubscribeChildrenFromCellSelection() {
+private unsubscribeChildrenFromCellSelection() {
 	// breaks class-component abstraction, but there does not seem to
 	// be an easy way to do this with the tree component we're using
 	this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
