@@ -66,10 +66,10 @@ public registerKeyShortcuts() {
 	
 	console.log("KeyCaptureComponent::registerKeyShortcuts()");
 	
-	let numbers:string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+	const numbers: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 	this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed_));
    
-	let commandKeys = Array();
+	const commandKeys = Array();
 	for (let key in this.keyMap) {
 	   commandKeys.push(this.keyMap[key]); 
 	}
@@ -93,18 +93,18 @@ keyPressed_ = (event: KeyboardEvent): boolean => {
 
 	// Notice we are falling back to charcodes dues to a chromium driver/selenium/selenide bug
 	let key = (event.key) ? event.key : this.keyMap[event.charCode];
-	console.log("KeyCaptureComponent::keyPressed(%s)", key);
+	// console.log("KeyCaptureComponent::keyPressed(%s)", key);
 	this.events.service.publish(new KeyPressedEvent(key));
-	
+
 	return false;	// prevent event from bubbling
-	
+
 }
 
 
 public unregisterKeyShortcuts() {
-	
-	this.hotkeysService.remove(this.numberHotkey);	 
-	this.hotkeysService.remove(this.commandHotkey);	  
+
+	this.hotkeysService.remove(this.numberHotkey);
+	this.hotkeysService.remove(this.commandHotkey);
 
 }
 
