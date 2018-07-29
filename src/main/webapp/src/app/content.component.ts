@@ -119,7 +119,7 @@ constructor(eventService: EventService,
 ngOnInit() {
 
 	console.log("ContentComponent::ngOnInit()");
-	
+
 	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => this.clear()));
 
 	this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
@@ -127,7 +127,7 @@ ngOnInit() {
 	));
 
 	this.subscribe(this.events.service.of(ContentSaveEvent).subscribe(
-		   save => this.saveContent(save.document)
+			save => this.saveContent(save.document)
 	));
 }
 
@@ -174,12 +174,12 @@ fetchContentFor(document_: CellDocument, model: Model) {
 
 
 displayContent(content: Content) {
-	
+
 	console.log("[UI] ContentComponent::displayContent()");
 	this.content = content;
 	this.cellSelectingMode = true;
 	this.registerKeyPressedEvents();
-	
+
 }
 
 
@@ -247,11 +247,11 @@ commandPressedCallback(command: string) {
 			this.cellSelectingMode = false;
 			break;
 		case "d":
-			this.events.service.publish(new CellDragEvent());  
+			this.events.service.publish(new CellDragEvent());
 			break;
 		case "e":
 			console.log("[UI] ContentComponent::got key to edit current active cell");
-			this.events.service.publish(new CellEditEvent());  
+			this.events.service.publish(new CellEditEvent());
 			break;
 	}
 
@@ -268,7 +268,7 @@ commandNotRegisteredCallback(command: string) {
 
 
 numberPressedCallback(num: number) {
-				
+
 	if (this.cellSelectingMode) {
 		console.log("[UI] ContentComponent::numberPressed(%i) [cellSelectingMode]", num);
 		this.events.service.publish(new CellSelectEvent(num));
@@ -277,7 +277,7 @@ numberPressedCallback(num: number) {
 		this.events.service.publish(new DropAreaSelectEvent(num));
 		this.events.service.publish(new StatusEvent("Drop area selection mode", StatusEvent.DONE));
 	}
-   
+
 }
 
 //// KeyListenerWidget [end] ////
@@ -285,7 +285,7 @@ numberPressedCallback(num: number) {
 
 private subscribeChildrenToCellSelection () {
 	console.log("Content::subscribeChildrenToCellSelection()");
-	//FIXME: detect changes: https://angular.io/api/core/ViewChildren
+	// FIXME: detect changes: https://angular.io/api/core/ViewChildren
 	// the list of children views is only available ngAfterViewInit but we assume that
 	// fetching the content will have been much slower
 	// we ensure there were no previous selections, avoiding double or triple selects

@@ -27,6 +27,7 @@ import { Model } from "../model.class";
 import { KeyListenerWidget } from "../key-listener-widget.class";
 import { SnippetComponent } from "./snippet.component";
 
+import { CellActivateEvent } from "../events/cell-activate.event";
 import { CellSelectEvent } from "../events/cell-select.event";
 import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { SnippetContentRequestEvent } from "../events/snippet-content-request.event";
@@ -63,7 +64,7 @@ snippets: Observable<Array<CellDocument>>;			// snippets document observable, fo
 _snippets: Array<CellDocument>;						// snippets document list
 _snippetsSubject: Subject<Array<CellDocument>>;		// snippets document subject, to push new documents into
 
-protected commandKeys: string[] = [];	// only numbers, other commands are handled by the content area
+protected commandKeys: string[] = ["a"];	// activation
 private snippetSelectingMode = false;
 
 protected snippetDocumentSubs: Subscription;
@@ -158,7 +159,17 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 
 //// KeyListenerWidget ////
 
-commandPressedCallback(command: string) {}
+commandPressedCallback(command: string) {
+
+	switch (command) {
+		case "a":
+		if (this.snippetSelectingMode) {
+			console.log("[UI] SnippetsListComponent::activating current selection");
+			this.events.service.publish(new CellActivateEvent());
+		}
+		break;
+	}
+}
 
 
 numberPressedCallback(num: number) {
@@ -186,12 +197,16 @@ activateSnippetSelectingMode() {
 
 	console.log("[UI] SnippetsListComponent::activateSnippetSelectingMode()");
 
-	this.snippetSelectingMode = true;
-	this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions
-	this.snippetSelectingMode = true;
-	this.subscribeChildrenToCellSelection();
-	this.registerKeyPressedEvents();	// we can now receive keypresses :)
-
+	this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions, happens in any case
+	if (!this.snippetSelectingMode) {
+		this.snippetSelectingMode = true;
+		this.snippetSelectingMode = true;
+		this.subscribeChildrenToCellSelection();
+		this.registerKeyPressedEvents();	// we can now receive keypresses :)
+	} else {
+		// double toggle: we deselect the model
+		this.snippetSelectingMode = false;
+	}
 }
 
 
