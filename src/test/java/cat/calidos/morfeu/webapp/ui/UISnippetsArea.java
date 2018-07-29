@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2018 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,43 +16,44 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.codeborne.selenide.SelenideElement;
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UIContent extends UIWidget<UIContent> {
-
-public static final String SELECTION_MODE = "c";
-public static final String DROPAREA_MODE = "t";
-public static final String ACTIVATE = "a";
-public static final String DRAGNDROP = "d";
+public class UISnippetsArea extends UIWidget<UISnippetsArea> {
 
 
-public UIContent() {
-	super($("#content"));
+public static final String SNIPPETS_KEY = "s";
+public static final String ACTIVATE_KEY = "a";
+
+
+public UISnippetsArea() {
+	super($("#snippets-tab"));
 }
-
-
-public UIContent(SelenideElement e) {
-	super(e);
-}
-
 
 public static void shouldNotBeVisible() {
-	$("#content").shouldNotBe(visible);
+	$("#snippets-tab").shouldNotBe(visible);
 }
 
 
-public List<UICell> rootCells() {
-	return $$(".cell-level-0").stream().map(e -> new UICell(e, this, Optional.empty(), 0) ).collect(Collectors.toList());
+public List<UISnippetEntry> snippets() {
+	return $$(".snippet").stream().map(e -> new UISnippetEntry(e, this)).collect(Collectors.toList());
+}
+
+
+public UISnippetEntry snippet(int pos) {
+	return snippets().get(pos);
+}
+
+
+public Optional<UISnippetEntry> snippet(String name) {
+	return snippets().stream().filter(s -> s.name().equals(name)).findAny();
 }
 
 

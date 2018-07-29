@@ -193,7 +193,7 @@ clear() {
 }
 
 
-saveContent(document_:CellDocument) {
+saveContent(document_: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Saving content"));
 	const postURI = "/morfeu/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();

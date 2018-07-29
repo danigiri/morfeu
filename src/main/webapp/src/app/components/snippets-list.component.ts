@@ -192,7 +192,7 @@ commandNotRegisteredCallback(command: string) {
 //// KeyListenerWidget [end] ////
 
 
-// we clear any existing selections, we subscribe our snippet children to selection and wait for numberic keypresses 
+// we clear any existing selections, we subscribe our snippet children to selection and wait for numberic keypresses
 activateSnippetSelectingMode() {
 
 	console.log("[UI] SnippetsListComponent::activateSnippetSelectingMode()");

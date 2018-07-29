@@ -64,6 +64,20 @@ public UIContent content() {
 }
 
 
+public UISnippetsArea snippets() {
+	
+	$("#snippets-tab").click();
+	
+	// let the snippets load (asynchronously)
+	try {
+		Thread.sleep(1000);
+	} catch (InterruptedException e) {}
+	
+	return new UISnippetsArea();
+
+}
+
+
 public UIDocument clickSave() {
 
 	$("#document-save").click();
@@ -71,6 +85,7 @@ public UIDocument clickSave() {
 	return this;
 
 }
+
 
 
 }

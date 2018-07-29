@@ -78,7 +78,7 @@ public UICellModelEntry hover() {
 	thumb.hover();
 
 	return this;
-	
+
 }
 
 
@@ -105,7 +105,7 @@ public UICellModelEntry activate() {
 	}
 
 	return this;
-	
+
 }
 
 

@@ -55,7 +55,7 @@ import { EventService } from "../events/event.service";
 		</ngb-tabset>
 		</div>
 	`,
-	styles:[`
+	styles: [`
 	        #model-tab {}
 	        #snippets-tab {}
 	 `]
