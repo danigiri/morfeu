@@ -40,27 +40,26 @@ import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 
-/**
+/** Controller that validates the content and if valid, saves it
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ContentPOSTControl extends Control {
+public class ContentSaveControl extends Control {
 
-private final static Logger log = LoggerFactory.getLogger(ContentPOSTControl.class);
+private final static Logger log = LoggerFactory.getLogger(ContentSaveControl.class);
 
-private String prefix;
-private String path;
-private String destination;
-private Optional<String> transforms;
-private String modelPath;
-private String content;
+private String prefix;				// prefix where things will be saved
+private String path;				// relative destination path
+private String destination;			// final destination: saveable prefix + relative path contatenated
+private Optional<String> transforms;//
+private String modelPath;			// relative model path
+private String content;				// the content to be saved in string form
 
-private String contentSnippet;
+private String contentSnippet;		// the first few characters of the content, for logging / diagnostics
 
 private HashMap<String, String> resultMetadata;
 
 
-
-public ContentPOSTControl(String prefix, String path, String content, Optional<String> transforms, String modelPath) {
+public ContentSaveControl(String prefix, String path, String content, Optional<String> transforms, String modelPath) {
 
 	super("POST content:"+path, "templates/operation-ok.twig", "templates/operation-problem.twig");
 
@@ -81,9 +80,6 @@ public ContentPOSTControl(String prefix, String path, String content, Optional<S
 }
 
 
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.control.Control#process()
-*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Override
 protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException, 
 									FetchingException, ConfigurationException, SavingException {
@@ -108,44 +104,36 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 																			.model(modelURI)
 																			.withModelFetchedFrom(fullModelURI)
 																			.build();
-	
+
+	// validate and save, measuring the time it takes to provide some diagnostics
 	long before = System.currentTimeMillis();
 	component.validator().get().validate();
+	component.saver().get().save();
 	long now = System.currentTimeMillis();
 	resultMetadata.put("operationTime", Long.toString(now-before));
-
-	component.saver().get().save();
 	resultMetadata.put("result", "Content saved successfully");
 
 	return resultMetadata;
-	
+
 }
 
 
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.control.Control#beforeProcess()
-*//////////////////////////////////////////////////////////////////////////////
 @Override
 protected void beforeProcess() {
 	log.trace("Saving content '{}' to '[{}]{}' given model '{}'", contentSnippet, prefix, path, modelPath);
 }
 
 
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.control.Control#afterProblem(java.lang.String)
-*//////////////////////////////////////////////////////////////////////////////
 @Override
 protected void afterProblem(String problem) {
 	log.trace("Problem saving content '{}' to '[{}]{}' given model '{}'", contentSnippet, prefix, path, modelPath);
 }
 
 
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.control.Control#problemInformation()
-*//////////////////////////////////////////////////////////////////////////////
 @Override
 protected Object problemInformation() {
 	return resultMetadata;
 }
+
 
 }

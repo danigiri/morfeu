@@ -32,13 +32,14 @@ import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
-/**
+/** Controller module that provides snippets, which are not validated as they may lack context
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class SnippetsControlModule {
 
 protected final static Logger log = LoggerFactory.getLogger(SnippetsControlModule.class);
+
 
 @Provides @IntoMap @Named("GET")
 @StringKey("/snippets/(.+)")
@@ -63,5 +64,6 @@ public static BiFunction<List<String>, Map<String, String>, String> snippet() {
 public static String contentType() {
 	return ControlComponent.JSON;
 }
+
 
 }

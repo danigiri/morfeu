@@ -34,13 +34,13 @@ import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
-/**
+/** Controller module to generatie dynamic previews (SVG and TXT supported)
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class PreviewControlModule {
 
-private static final String HEADER_PARAM = "__header";
+private static final String HEADER_PARAM = "__header";	// this is used as the SVG header
 protected final static Logger log = LoggerFactory.getLogger(PreviewControlModule.class);
 
 @Provides @IntoMap @Named("GET")
@@ -83,9 +83,11 @@ private static Optional<String> extractHeaderFrom(Map<String, String> params) {
 private static Map<String, String> removeHeaderFrom(Map<String, String> params) {
 
 	Map<String, String> out = new HashMap<String, String>(params);
-	out.remove(HEADER_PARAM);	// this already checks if present
+	out.remove(HEADER_PARAM);	// this method already checks if present, and if present, it's removed
 
 	return out;
 
 }
+
+
 }

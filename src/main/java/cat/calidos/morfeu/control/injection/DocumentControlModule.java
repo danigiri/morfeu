@@ -32,7 +32,7 @@ import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
-/**
+/** Controller module to show documents in JSON format
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module

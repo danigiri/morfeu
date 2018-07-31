@@ -37,16 +37,17 @@ import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
 
-/**
+/** Generates a list of cells coming from a snippet, does not do validation as snippets may not have all the context
+*	however, it still creates a correct reference to the model from each cell
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SnippetGETControl extends Control {
 
 protected final static Logger log = LoggerFactory.getLogger(SnippetGETControl.class);
 
-private String prefix;
-private String path;
-private String modelPath;
+private String prefix;		// prefix of
+private String path;		// relative path
+private String modelPath;	// relative path of the model, not used to validate
 
 
 public SnippetGETControl(String prefix, String path, @Nullable String modelPath) {
@@ -75,7 +76,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 																.withModelFetchedFrom(fetchableModelPath)
 																.build();
 
-	snippetComponent.validator().get().validate();	// may or may not do any kind of validation
+	snippetComponent.validator().get().validate();	// may or may not do any kind of validation (actually none)
 	Composite<Cell> content = snippetComponent.content().get();
 
 	return content.asList();
@@ -99,5 +100,6 @@ protected void afterProblem(String problem) {
 protected Object problemInformation() {
 	return path;	// we show the problematic path on the template
 }
+
 
 }

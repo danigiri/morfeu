@@ -31,15 +31,15 @@ import cat.calidos.morfeu.problems.ValidationException;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelControl extends Control {
+public class ModelGETControl extends Control {
 
-protected final static Logger log = LoggerFactory.getLogger(ModelControl.class);
+protected final static Logger log = LoggerFactory.getLogger(ModelGETControl.class);
 
-private String path;
-private String prefix;
+private String path;	// relative path of the model
+private String prefix;	// orefix, to build the full fetchable path
 
 
-public ModelControl(String prefix, String path) {
+public ModelGETControl(String prefix, String path) {
 
 	super("model:"+path, "templates/model.twig", "templates/model-problem.twig");
 		

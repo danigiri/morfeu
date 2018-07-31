@@ -24,7 +24,7 @@ import cat.calidos.morfeu.webapp.injection.ControlModule;
 import dagger.BindsInstance;
 import dagger.Component;
 
-/**
+/** Component that aggregates all controlers modules, it is passed the path, method and a map of parameters
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class, 
@@ -38,9 +38,15 @@ public interface ControlComponent {
 	public static final String JSON = "application/json";
 	public static final String SVG = "image/svg+xml";
 
-	//Map<String, BiFunction<List<String>, Map<String, String>, String>> controls();
+	/**  @return return the content of the processed request as a string */
 	@Named("Content") String process();
+
+	
+	/** @return return the content type that is associated with this request */
 	@Named("Content-Type") String contentType();
+
+
+	/** @return return true if we match the path with any of the registered controller modules*/
 	boolean matches();
 
 @Component.Builder

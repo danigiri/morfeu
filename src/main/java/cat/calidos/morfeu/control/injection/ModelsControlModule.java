@@ -22,14 +22,14 @@ import java.util.function.BiFunction;
 
 import javax.inject.Named;
 
-import cat.calidos.morfeu.control.ModelControl;
+import cat.calidos.morfeu.control.ModelGETControl;
 import cat.calidos.morfeu.webapp.MorfeuServlet;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
-/**
+/** Controller module to get models as JSON
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
@@ -44,9 +44,9 @@ public static BiFunction<List<String>, Map<String, String>, String> getContent()
 
 		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
-		
-		return  new ModelControl(resourcesPrefix, path).processRequest();
-		
+
+		return  new ModelGETControl(resourcesPrefix, path).processRequest();
+
 	};
 
 }

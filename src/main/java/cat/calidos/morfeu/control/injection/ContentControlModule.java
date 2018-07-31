@@ -32,10 +32,10 @@ import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
 import cat.calidos.morfeu.control.ContentGETControl;
-import cat.calidos.morfeu.control.ContentPOSTControl;
+import cat.calidos.morfeu.control.ContentSaveControl;
 import cat.calidos.morfeu.webapp.MorfeuServlet;
 
-/**
+/** GET and POST for doucment content controller module
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
@@ -74,7 +74,7 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 		String content = params.get(MorfeuServlet.POST_VALUE);
 		log.trace("ContentControlModule::content POST [{}]{}, model: {}", resourcesPrefix, path, modelPath);
 
-		return new ContentPOSTControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();
+		return new ContentSaveControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();
 
 	};
 

@@ -33,18 +33,18 @@ import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 
 
-/**
+/** Controller to generate cell preview, generates SVG dynamically for the moment
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class PreviewGETControl extends Control {
 
 protected final static Logger log = LoggerFactory.getLogger(PreviewGETControl.class);
 
-private String prefix;
-private String path;
-private Optional<String> header;
-private boolean truncate;
-private Map<String, String> params;
+private String prefix;				// not used, only for logging
+private String path;				// not used, only for logging
+private Optional<String> header;	// header of the SVG preview image
+private boolean truncate;			// trucante the text within the SVG
+private Map<String, String> params;	// params to concateneate onto the SVG for info
 
 public PreviewGETControl(String prefix, String path, Optional<String> header, Map<String, String> params) {
 
@@ -69,11 +69,6 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 }
 
 
-
-
-/* (non-Javadoc)
-* @see cat.calidos.morfeu.control.Control#render(java.lang.String, java.lang.Object, java.lang.String)
-*//////////////////////////////////////////////////////////////////////////////
 @Override
 protected String render(String template, Object value, String problem) {
 	return value.toString();	// no need to use templates, we return the string

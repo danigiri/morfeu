@@ -27,11 +27,12 @@ import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
-/**
+/** Controller module for pinging the API, mainly for monitoring and testing
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class PingControlModule {
+
 
 @Provides @IntoMap @Named("GET")
 @StringKey("/ping/?(.+)?")
@@ -45,5 +46,6 @@ public static BiFunction<List<String>, Map<String, String>, String> contentContr
 public static String contentType() {
 	return ControlComponent.TEXT;
 }
+
 
 }

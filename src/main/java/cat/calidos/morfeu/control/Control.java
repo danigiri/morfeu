@@ -27,18 +27,26 @@ import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
-/**
+/** Main abstract controller that uses templates to generate output, has built-in error handling
 * @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+*	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public abstract class Control {
 
-protected String operation;
-private String template;
-private String problemTemplate;
+protected String operation;		// describes the operation we are doing with the controller subclass
+private String template;		// template to generate the output
+private String problemTemplate;	// template to generate the output whenever there is a problem
 
 
+/** Default constructor
+*	@param operation		operation we're doing
+*	@param template			template output for normal operations
+*	@param problemTemplate	template for problems
+*/
 public Control(String operation, String template, String problemTemplate) {
-	
+
 	this.operation = operation;
 	this.template = template;
 	this.problemTemplate = problemTemplate;
@@ -46,6 +54,12 @@ public Control(String operation, String template, String problemTemplate) {
 }
 
 
+/** Render the output using the supplied templates, should not need to override
+*	@param template	template path
+*	@param value	values from the specific controller, to be referenced from the template
+*	@param problem	problem object if nay
+*	@return the string with the rendered output
+*/
 protected String render(String template, Object value, String problem) {
 	return DaggerViewComponent.builder()
 								.withValue(value)
@@ -56,6 +70,7 @@ protected String render(String template, Object value, String problem) {
 }
 
 
+/** @return process the request, handling any problems */
 public String processRequest() {
 	
 	beforeProcess();
@@ -66,7 +81,7 @@ public String processRequest() {
 	
 	try {
 		result = process();
-		
+
 	} catch (InterruptedException e) {
 		problem = "Interrupted processing '"+operation+"' ("+e.getMessage()+")";	
 	} catch (ExecutionException e) {
@@ -94,20 +109,38 @@ public String processRequest() {
 		Object problemInformation = problemInformation(); 
 		parsedResult = render(problemTemplate, problemInformation, problem);		
 	}
-		
+
 	return parsedResult;
-	
+
 }
 
 
+/** @return process the request and return the value(s) that the template will use to show whatever
+*	@throws InterruptedException	should not happen, only if our threads are interrupetd
+*	@throws ExecutionException		generic problem
+*	@throws ValidationException		content or payload is not valid sermantically
+*	@throws ParsingException		content or payload is not syntactically valid
+*	@throws FetchingException		there was a problem when fetching needed content (I/O problems, etc.)
+*	@throws ConfigurationException	something was not configured right
+*	@throws SavingException			could not store the results of the operation
+*	@throws TransformException		the operation required some data trnasformation that could not happen
+*/
 protected abstract Object process() throws InterruptedException, ExecutionException, ValidationException, 
-									ParsingException, FetchingException,	ConfigurationException, SavingException, 
+									ParsingException, FetchingException, ConfigurationException, SavingException, 
 									TransformException;
 
+
+/** Called before processing, to make any necessary preparations, log, etc. */
 protected abstract void beforeProcess();
 
+
+/** There was a problem, do any cleanup, log
+*	@param problem textual description of the problem is provided, to add it to the problem render
+*/
 protected abstract void afterProblem(String problem);
 
+
+/**	@return extra metadata to aid in the problem output */
 protected abstract Object problemInformation();
 
 }

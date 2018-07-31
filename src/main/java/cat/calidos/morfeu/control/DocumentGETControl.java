@@ -28,7 +28,7 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
-/**
+/** Document GET controller, outputs JSON
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentGETControl extends Control {

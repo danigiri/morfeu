@@ -35,7 +35,7 @@ import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 
-/**
+/** Controller that GETs, validates and transforms content into a cell list, from original XML or YAML, given a schema
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentGETControl extends Control {
@@ -45,7 +45,7 @@ private final static Logger log = LoggerFactory.getLogger(ContentGETControl.clas
 private String prefix;
 private String path;
 private String modelPath;
-		
+
 
 public ContentGETControl(String prefix, String path, @Nullable String modelPath) {
 
@@ -62,17 +62,19 @@ public ContentGETControl(String prefix, String path, @Nullable String modelPath)
 protected Object process() throws InterruptedException, ExecutionException, ValidationException, 
 									ParsingException, FetchingException, ConfigurationException, TransformException {
 
+	// we use the prefix to build fetchable content and models whenever needed
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
 	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
 
 	ContentParserComponent contentComponent = DaggerContentParserComponent.builder()
-																		.content(uri)
-																		.fetchedContentFrom(fetchableURI)
-																		.model(modelURI)
-																		.withModelFetchedFrom(fetchableModelPath)
-																		.build();
+																			.content(uri)
+																			.fetchedContentFrom(fetchableURI)
+																			.model(modelURI)
+																			.withModelFetchedFrom(fetchableModelPath)
+																			.build();
+	// we first validate the content against the schema and then we get the cell list
 	contentComponent.validator().get().validate();
 	Composite<Cell> content = contentComponent.content().get();
 
@@ -95,12 +97,8 @@ protected void afterProblem(String problem) {
 
 @Override
 protected Object problemInformation() {
-
-	// TODO Auto-generated method stub
-	return null;
+	return null;	// not adding any other extra error context yet
 }
 
 
-
-	
 }
