@@ -28,13 +28,13 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 
 
-
-/**
+/** Cell: content element, related to a cell model
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules=CellModule.class)
 public interface CellComponent {
 
+/** @return the instance of the cell, given the DOM Node, and the supplied cell model */
 Cell createCell();
 
 @Component.Builder

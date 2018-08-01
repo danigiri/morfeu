@@ -49,14 +49,13 @@ public void testDragSnippetCell() {
 										.clickOn(0)
 										.clickOnDocumentNamed("Document 1");
 
-	
 	// let's look for the snipept we want
 	UISnippetsArea snippets = document.snippets();
 	snippets.shouldBeVisible();
-	
+
 	UISnippetEntry stuffSnippet = snippets.snippet(0);
 	assertNotNull(stuffSnippet);
-	
+
 	assertEquals("Stuff 1", stuffSnippet.name());
 
 	// now we select. activate and drag it to the drop area

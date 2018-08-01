@@ -30,12 +30,13 @@ import dagger.BindsInstance;
 import dagger.Component;
 
 
-/**
+/** Semantic model of a cell. It can be a reference to other existing cell models
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = CellModelModule.class)
 public interface CellModelComponent {
 
+/**	@return instance of the cell model, given the XSD definition data*/
 CellModel cellModel();
 
 
