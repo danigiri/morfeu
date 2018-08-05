@@ -6,7 +6,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   
   <context-param>  
     <description>Resources uri prefix (default value only for integration testing), end with '/'</description>  
-    <param-name>RESOURCES_PREFIX</param-name>  
+    <param-name>_RESOURCES_PREFIX</param-name>  
     <param-value>http://localhost:8080/morfeu/</param-value>  
   </context-param>
 
@@ -20,7 +20,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 	 	 then it will process it and enrich it in any way necessary. Usually the content will be a superset of
 	 	 the raw data. -->
 
-		<!-- Preview -->
+	<!-- Preview -->
 	<servlet>
 		<display-name>generic-servlet</display-name>
 		<servlet-name>GenericMorfeuServlet</servlet-name>

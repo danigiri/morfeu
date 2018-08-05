@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
-	<artifactId>morfeu-webapp</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>morfeu-webapp</artifactId>	
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Morfeu web application</name>
@@ -19,7 +19,7 @@
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
 		<dagger-2-version>2.16</dagger-2-version>
 		<jackson-2-version>2.9.4</jackson-2-version>
-		<jetty-version>9.4.10.RC1</jetty-version>
+		<jetty-version>9.4.12.RC1</jetty-version>
 		<jtwig-version>5.86.1.RELEASE</jtwig-version>
 		<selenide-version>4.11.1</selenide-version>
 		<selenium-version>3.11.0</selenium-version>
@@ -28,6 +28,19 @@
 	</properties>
 
 	<build>
+	
+		<resources>	<!-- skip moving node modules about -->
+			<resource>
+				<directory>src/main/typescript/dist</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/test/resources</directory>
+			</resource>
+		</resources>
+	
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -42,11 +55,24 @@
 							<version>${dagger-2-version}</version>
 						</path>
 					</annotationProcessorPaths>
-        		</configuration>
+				</configuration>
 			</plugin>
-		
+
+			<plugin>	<!-- skip moving node modules about -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>src/main/typescript/dist</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
 			<plugin>
-			    <groupId>org.eclipse.jetty</groupId>
+				<groupId>org.eclipse.jetty</groupId>
 			    <artifactId>jetty-maven-plugin</artifactId>
 			    <version>${jetty-version}</version>
 				<configuration>
@@ -60,8 +86,7 @@
 						<!-- we add this extra classpath so jetty loads templates and all jar deps like jackson and stuff -->
 						<extraClasspath>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/lib</extraClasspath>
 						<resourceBases>
-							<resourceBase>${basedir}/src/main/webapp</resourceBase><!-- eventually set  to /dist? -->
-							<resourceBase>${basedir}/src/test/resources</resourceBase>	<!-- data files for angular2 -->
+							<resourceBase>${project.build.testOutputDirectory}</resourceBase>	<!-- data files for angular2 -->
 							<!-- fallback for testing: /morfeu/target/test-classes/test-resources/.. is ok -->
 							<resourceBase>${basedir}</resourceBase>
 						</resourceBases>
@@ -81,7 +106,7 @@
 							<value>60000</value>
 						</systemProperty>
 						<systemProperty> <!-- mvn jetty:run -DRESOURCES_PREFIX=file://$(PWD)/  -->
-							<name>RESOURCES_PREFIX</name>
+							<name>_RESOURCES_PREFIX</name>
 							<value>${resources-prefix}</value>
 						</systemProperty>
 					</systemProperties>
@@ -93,15 +118,15 @@
 					<execution>	<!-- start jetty when target is integration testing -->
 					<id>start-jetty-integration-test</id>
 					<phase>pre-integration-test</phase>
-				        <goals>
-					         <goal>run</goal>
-					    </goals>
-					    <configuration>
-					        <scanIntervalSeconds>0</scanIntervalSeconds>
-						    	<daemon>true</daemon>
-						</configuration>
+					<goals>
+						<goal>run</goal>
+					</goals>
+					<configuration>
+						<scanIntervalSeconds>0</scanIntervalSeconds>
+						<daemon>true</daemon>
+					</configuration>
 					</execution>
-					<execution>	<!-- stop jetty when completed integration testing -->
+					<execution>	<!-- stop jetty when completed integration testing-->
 						<id>stop-jetty</id>
 						<phase>post-integration-test</phase>
 						<goals>
@@ -109,7 +134,7 @@
 					 	</goals>
 					 	<configuration>
 	 						<stopKey>STOP</stopKey>
-							<stopPort>${jetty-stop-port}</stopPort>			 	
+							<stopPort>${jetty-stop-port}</stopPort>
 					 	</configuration>
 					</execution>
 				</executions>
@@ -254,16 +279,17 @@
 			<version>1.3.0-alpha4</version>
 		</dependency>
 		
+		<!--  templating -->
 		<dependency>
-       		<groupId>org.jtwig</groupId>
-        	<artifactId>jtwig-core</artifactId>
-        	<version>${jtwig-version}</version>
-	    </dependency>
+			<groupId>org.jtwig</groupId>
+			<artifactId>jtwig-core</artifactId>
+			<version>${jtwig-version}</version>
+		</dependency>
 		<dependency>
-       		<groupId>org.jtwig</groupId>
-        	<artifactId>jtwig-reflection</artifactId>
-        	<version>${jtwig-version}</version>
-	    </dependency>
+			<groupId>org.jtwig</groupId>
+			<artifactId>jtwig-reflection</artifactId>
+			<version>${jtwig-version}</version>
+		</dependency>
 
 		<!-- UNIT TESTING -->
 		<dependency>
@@ -363,6 +389,7 @@
 	        <url>https://jcenter.bintray.com/</url>
 	    </repository>
 	</repositories>
+	
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -385,4 +412,4 @@
 		</developer>
 	</developers>
 </project>
-																											
+

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class APISnippetTest extends APITezt {
+public class APISnippetIntTest extends APITezt {
 
 @Test
 public void testStuffSnippet() throws Exception {
