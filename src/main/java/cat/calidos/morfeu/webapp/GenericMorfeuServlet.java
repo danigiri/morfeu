@@ -16,90 +16,83 @@
 
 package cat.calidos.morfeu.webapp;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.injection.ControlComponent;
-import cat.calidos.morfeu.control.injection.DaggerControlComponent;
-import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
+import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class GenericMorfeuServlet extends MorfeuServlet {
+public class GenericMorfeuServlet extends GenericHttpServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(GenericMorfeuServlet.class);
 
+public final static String RESOURCES_PREFIX = "__RESOURCES_PREFIX";
+protected static final String DEFAULT_RESOURCES_PREFIX = "http://localhost:8080/morfeu/";
+protected String resourcesPrefix;
 
-/* (non-Javadoc)
-* @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 @Override
-protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+public void init(ServletConfig config) throws ServletException {
 
-	String path = req.getPathInfo();
-	Map<String, String> params = normaliseParams(req.getParameterMap());
-	params.put(RESOURCES_PREFIX, resourcesPrefix);
-	params.put(METHOD, req.getMethod());
-	log.trace("GenericMorfeuServlet::doGet {}", path);
-	ControlComponent controlComponent = DaggerControlComponent.builder()
-																.withPath(path)
-																.method(DaggerControlComponent.GET)
-																.withParams(params)
-																.build();
-	handleResponse(resp, controlComponent);
-
-}
-
-
-/* (non-Javadoc)
-* @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-*//////////////////////////////////////////////////////////////////////////////
-@Override
-protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-	String path = req.getPathInfo();
-	Map<String, String> params = normaliseParams(req.getParameterMap());
-	params.put(RESOURCES_PREFIX, resourcesPrefix);
-	params.put(METHOD, req.getMethod());
-	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
-	params.put(POST_VALUE, content);
-	log.trace("GenericMorfeuServlet::doPost {}", path);
-	ControlComponent controlComponent = DaggerControlComponent.builder()
-																.withPath(path)
-																.method(DaggerControlComponent.POST)
-																.withParams(params)
-																.build();
-	handleResponse(resp, controlComponent);
-
-}
-
-
-protected void handleResponse(HttpServletResponse resp, ControlComponent controlComponent) throws IOException {
-
-	if (controlComponent.matches()) {
-		String result = controlComponent.process();
-		writeTo(result, controlComponent.contentType(), resp);
-	} else {
-		log.trace("GenericMorfeuServlet::doPost {} NOT FOUND (not matched)");
-		resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	super.init(config);
+	
+	// the hierarchy is as follows:
+	// 1) Read servlet configuration
+	// 2) Add and override with java system properties
+	// 3) Finally add an override with environment variables 
+	log.trace("Servlet config:"+configuration);
+	resourcesPrefix = configuration.getProperty(RESOURCES_PREFIX);
+	// FIXME: this is being ignored so we hardcode
+	if (resourcesPrefix==null) {
+		log.info("Not getting anything on RESOURCES_PREFIX, setting default '"+DEFAULT_RESOURCES_PREFIX+"'");
+		configuration.put(RESOURCES_PREFIX, DEFAULT_RESOURCES_PREFIX);
+		resourcesPrefix = configuration.getProperty(RESOURCES_PREFIX);
 	}
+	log.info("Final RESOURCES_PREFIX='{}'", resourcesPrefix);
+	if (!resourcesPrefix.endsWith("/")) {
+		log.warn("*** Used resources prefix does not end with '/', may have issues fetching content ***");
+	}
+
 }
 
 
-private Map<String, String> normaliseParams(Map<String, String[]> parameterMap) {
-	return parameterMap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()[0]));
+
+
+public ControlComponent getControl(String path, Map<String, String> params) {
+	return DaggerMorfeuControlComponent.builder()
+										.withPath(path)
+										.method(DaggerControlComponent.GET)
+										.withParams(params)
+										.build();
 }
+
+
+public ControlComponent putControl(String path, Map<String, String> params) {
+	return DaggerMorfeuControlComponent.builder()
+										.withPath(path)
+										.method(DaggerControlComponent.POST)
+										.withParams(params)
+										.build();
+}
+
+
+
+protected Map<String, String> processParams(Map<String, String> params) {
+
+	params.put(RESOURCES_PREFIX, resourcesPrefix);
+	
+	return params;
+}
+
+
 
 }

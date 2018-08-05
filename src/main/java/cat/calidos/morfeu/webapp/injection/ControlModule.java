@@ -30,10 +30,11 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.injection.ControlComponent;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.IntoMap;
+import dagger.multibindings.StringKey;
 
 /**
 * @author daniel giribet
@@ -55,10 +56,10 @@ public static String process(@Named("Path") String path,
 								) {
 	 Map<String, BiFunction<List<String>, Map<String, String>, String>> controls = method.equals(ControlComponent.GET) ? 
 			 																		get : post;
-	
+
 	return controls.get(matchedPath.orElseThrow(() -> new UnsupportedOperationException("No matched "+path)).pattern())
 				.apply(pathElems.get(), params);
-	
+
 }
 
 

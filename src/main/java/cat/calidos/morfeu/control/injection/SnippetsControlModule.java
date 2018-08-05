@@ -26,7 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.SnippetGETControl;
-import cat.calidos.morfeu.webapp.MorfeuServlet;
+import cat.calidos.morfeu.webapp.GenericMorfeuServlet;
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -47,7 +49,7 @@ public static BiFunction<List<String>, Map<String, String>, String> snippet() {
 
 	return (pathElems, params) -> {
 
-		String pref = params.get(MorfeuServlet.RESOURCES_PREFIX);
+		String pref = params.get(GenericMorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
 		String modelPath = params.get("model");
 		log.trace("SnippetsControlModule::snippet [{}]{}, model: {}, cell-model: {}", pref, path, modelPath);

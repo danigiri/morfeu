@@ -22,6 +22,7 @@ import java.util.function.BiFunction;
 
 import javax.inject.Named;
 
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -36,10 +37,16 @@ public class PingControlModule {
 
 @Provides @IntoMap @Named("GET")
 @StringKey("/ping/?(.+)?")
-public static BiFunction<List<String>, Map<String, String>, String> contentController() {
+public static BiFunction<List<String>, Map<String, String>, String> ping() {
 	return (pathElems, params) -> pathElems.size()>1 ? "OK "+pathElems.get(1) : "OK";
 }
 
+
+@Provides @IntoMap @Named("POST")
+@StringKey("/ping/?(.+)?")
+public static BiFunction<List<String>, Map<String, String>, String> pingPost() {
+	return ping();
+}
 
 @Provides @IntoMap @Named("Content-Type")
 @StringKey("/ping/?(.+)?")

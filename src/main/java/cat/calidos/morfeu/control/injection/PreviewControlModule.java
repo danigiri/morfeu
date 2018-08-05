@@ -28,7 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.PreviewGETControl;
-import cat.calidos.morfeu.webapp.MorfeuServlet;
+import cat.calidos.morfeu.webapp.GenericMorfeuServlet;
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -49,7 +51,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getContent()
 
 	return (pathElems, params) -> {
 
-		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+		String resourcesPrefix = params.get(GenericMorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
 		Optional<String> header = PreviewControlModule.extractHeaderFrom(params);
 		params = removeHeaderFrom(params);

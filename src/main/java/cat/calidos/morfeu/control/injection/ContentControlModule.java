@@ -33,7 +33,9 @@ import dagger.multibindings.StringKey;
 
 import cat.calidos.morfeu.control.ContentGETControl;
 import cat.calidos.morfeu.control.ContentSaveControl;
-import cat.calidos.morfeu.webapp.MorfeuServlet;
+import cat.calidos.morfeu.webapp.GenericMorfeuServlet;
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.GenericHttpServlet;
 
 /** GET and POST for doucment content controller module
 * @author daniel giribet
@@ -50,7 +52,7 @@ public static BiFunction<List<String>, Map<String, String>, String> content() {
 
 	return (pathElems, params) -> {
 
-				String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+				String resourcesPrefix = params.get(GenericMorfeuServlet.RESOURCES_PREFIX);
 				String path = pathElems.get(1);		// normalised already
 				String modelPath = params.get("model");
 				log.trace("ContentControlModule::content GET [{}]{}, model: {}", resourcesPrefix, path, modelPath);
@@ -68,10 +70,10 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 
 	return (pathElems, params) -> {
 
-		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
+		String resourcesPrefix = params.get(GenericMorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
 		String modelPath = params.get("model");
-		String content = params.get(MorfeuServlet.POST_VALUE);
+		String content = params.get(GenericHttpServlet.POST_VALUE);
 		log.trace("ContentControlModule::content POST [{}]{}, model: {}", resourcesPrefix, path, modelPath);
 
 		return new ContentSaveControl(resourcesPrefix, path, content, Optional.empty(), modelPath).processRequest();

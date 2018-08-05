@@ -3,12 +3,12 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	metadata-complete="true">
-  
-  <context-param>  
-    <description>Resources uri prefix (default value only for integration testing), end with '/'</description>  
-    <param-name>_RESOURCES_PREFIX</param-name>  
-    <param-value>http://localhost:8080/morfeu/</param-value>  
-  </context-param>
+
+	<context-param>
+		<description>Resources uri prefix (default value only for integration testing), end with '/'</description>
+		<param-name>_RESOURCES_PREFIX</param-name>
+		<param-value>http://localhost:8080/morfeu/</param-value>
+	</context-param>
 
 
 	<!-- It is important to distinguish between 'raw' content (RESOURCES_PREFIX) from data processed and by
@@ -20,7 +20,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 	 	 then it will process it and enrich it in any way necessary. Usually the content will be a superset of
 	 	 the raw data. -->
 
-	<!-- Preview -->
+	<!-- Generic request dispatcher -->
 	<servlet>
 		<display-name>generic-servlet</display-name>
 		<servlet-name>GenericMorfeuServlet</servlet-name>

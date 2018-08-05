@@ -22,6 +22,9 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

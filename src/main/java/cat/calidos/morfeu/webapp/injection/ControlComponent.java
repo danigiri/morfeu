@@ -14,22 +14,21 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.control.injection;
+package cat.calidos.morfeu.webapp.injection;
 
 import java.util.Map;
 
 import javax.inject.Named;
 
-import cat.calidos.morfeu.webapp.injection.ControlModule;
 import dagger.BindsInstance;
 import dagger.Component;
+
+import cat.calidos.morfeu.control.injection.PingControlModule;
 
 /** Component that aggregates all controlers modules, it is passed the path, method and a map of parameters
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class, 
-						ContentControlModule.class, ModelsControlModule.class, PreviewControlModule.class,
-						SnippetsControlModule.class})
+@Component(modules = {ControlModule.class, PingControlModule.class})
 public interface ControlComponent {
 
 	public static final String GET = "GET";
