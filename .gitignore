@@ -8,6 +8,6 @@
 # angular 2 stuff
 node_modules
 /.apt_generated/
-src/main/webapp/src/app/**/*.js
-src/main/webapp/src/app/**/*.js.map
-src/main/webapp/dist
+src/main/typescript/src/app/**/*.js
+src/main/typescript/src/app/**/*.js.map
+src/main/typescript/dist
