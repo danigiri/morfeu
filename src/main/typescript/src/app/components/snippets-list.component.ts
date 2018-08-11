@@ -147,10 +147,11 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 	() => {
 		if (index<this.snippetStubs.length-1) {
-				this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
+			this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
 		} else {
-				this.unsubscribe(this.snippetDocumentSubs);
-		this.events.ok();	// this means we don't see errors for that long unfortunately
+			this.events.service.publish(new StatusEvent("Fetching snippets", StatusEvent.DONE));
+			this.unsubscribe(this.snippetDocumentSubs);
+			this.events.ok();	// this means we don't see errors for that long unfortunately
 		}
 	});
 
