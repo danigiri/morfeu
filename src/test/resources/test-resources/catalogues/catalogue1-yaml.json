@@ -6,6 +6,11 @@
 		,{ "name":"Document 3 YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document3-yaml.json" }
 		]
 	,"snippets": [
-		 { "name": "Stuff", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
+		 { "name": "Stuff 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
+		,{ "name": "Data 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data.json"}
+		,{ "name": "Data 2", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data2.json"}
+		,{ "name": "Data 3", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data3.json"}
+		,{ "name": "Data 4", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data4.json"}
+		,{ "name": "Row", "kind": "complex", "uri": "target/test-classes/test-resources/snippets/row.json"}
 		]
 }
