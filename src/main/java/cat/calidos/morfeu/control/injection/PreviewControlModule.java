@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
@@ -42,8 +43,11 @@ import dagger.multibindings.StringKey;
 @Module
 public class PreviewControlModule {
 
-private static final String HEADER_PARAM = "__header";	// this is used as the SVG header
 protected final static Logger log = LoggerFactory.getLogger(PreviewControlModule.class);
+
+private static final String HEADER_PARAM = "__header";	// this is used as the SVG header
+private static final String INTERNAL_PARAM_PREFIX = "__";	// internal params start with this
+
 
 @Provides @IntoMap @Named("GET")
 @StringKey("/preview/(.+)")
@@ -54,7 +58,8 @@ public static BiFunction<List<String>, Map<String, String>, String> getContent()
 		String resourcesPrefix = params.get(GenericMorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
 		Optional<String> header = PreviewControlModule.extractHeaderFrom(params);
-		params = removeHeaderFrom(params);
+
+		params = removeInternalHeaders(params);	// remove all __* we do not want as a param
 
 		return new PreviewGETControl(resourcesPrefix, path, header, params).processRequest();
 
@@ -82,14 +87,13 @@ private static Optional<String> extractHeaderFrom(Map<String, String> params) {
 }
 
 
-private static Map<String, String> removeHeaderFrom(Map<String, String> params) {
-
-	Map<String, String> out = new HashMap<String, String>(params);
-	out.remove(HEADER_PARAM);	// this method already checks if present, and if present, it's removed
-
-	return out;
-
+private static Map<String, String> removeInternalHeaders(Map<String, String> params) {
+	return params.entrySet()
+					.stream()
+					.filter(k -> !k.getKey().startsWith(INTERNAL_PARAM_PREFIX))
+					.collect(Collectors.toMap(Map.Entry::getKey,  Map.Entry::getValue));
 }
+
 
 
 }
