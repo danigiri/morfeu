@@ -14,12 +14,15 @@
  *	 limitations under the License.
  */
 
-import { Component, AfterViewInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { Subscription } from "rxjs";
-import { isDevMode } from "@angular/core";
+import { isDevMode, Inject } from "@angular/core";
 import { Http } from "@angular/http";
 import { HttpClient } from "@angular/common/http";	// new angular 5 http client
 
+import { Configuration } from "./configuration.class";
+import { environment } from "../environments/environment";
 
 import { CatalogueListComponent } from "./catalogue-list.component";
 import { ContentComponent } from "./content.component";
@@ -51,7 +54,7 @@ import { EventService } from "./events/event.service";
 
 
 @Component({
-	selector: 'app-root',
+	selector: "app-root",
 	template: `
 		<div class="card">
 			<div class="card-body">
@@ -81,66 +84,65 @@ import { EventService } from "./events/event.service";
 	  <cell-editor></cell-editor>
 	  `,
 	providers:	  [
-				   // note that Http is injected by the HttpModule imported in the application module
-				   {provide: 'RemoteJSONDataService', 
-					   useFactory: (http:HttpClient) => (new RemoteDataService(http)), 
-					   deps: [HttpClient]
+					// note that Http is injected by the HttpModule imported in the application module
+					{provide: "RemoteJSONDataService",
+						useFactory: (http: HttpClient) => (new RemoteDataService(http)),
+						deps: [HttpClient]
 					}
-				   ,EventService
-				   ,{provide: 'CellDocumentService', 
-					   useFactory: (http:Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)), 
-					   deps: [Http]
+					, EventService
+					, {provide: "CellDocumentService",
+						useFactory: (http: Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
+						deps: [Http]
 					}
-				   ,{provide: 'ContentService', 
-					   useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)), 
-					   deps: [Http]
+					, {provide: "ContentService",
+						useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
+						deps: [Http]
 					}
-                   ,{provide: 'ModelService', 
-                       useFactory: (http:Http) => (new RemoteObjectService<Model, ModelJSON>(http)), 
-                       deps: [Http]
-                    }
-                   ,{provide: 'SnippetContentService', 
-                       useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)), 
-                       deps: [Http]
-                    }
-				   ]
+					, {provide: "ModelService",
+						useFactory: (http: Http) => (new RemoteObjectService<Model, ModelJSON>(http)),
+						deps: [Http]
+					}
+					, {provide: "SnippetContentService",
+						useFactory: (http: Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
+						deps: [Http]
+					}
+					]
 })
 
 
 export class AppComponent extends Widget implements AfterViewInit {
-   
-private cataloguesLoadedEventSubscription: Subscription;
-private catalogueLoadedEventSubscription: Subscription
 
-constructor(eventService: EventService) {
+private cataloguesLoadedEventSubscription: Subscription;
+private catalogueLoadedEventSubscription: Subscription;
+
+
+constructor(eventService: EventService, private route: ActivatedRoute) {
 	super(eventService);
 }
-
-//export function dataService = (http:Http) => {return new RemoteDataService<Model>(http)}
 
 
 // this hoock is called "after Angular initializes the component's views and child views." so everyone has
 // been able to to register their listeners to appropriate events
 ngAfterViewInit() {
-	
+
 	console.log("\t\t\t\t\t ****** APPLICATION STARTS ******");
 	console.log("AppComponent::ngAfterViewInit()");
- 
+
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	let foo = true;
+	const foo = !environment.production && false;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent)
 				.subscribe( loaded => {
 						this.unsubscribe(this.cataloguesLoadedEventSubscription);
-						let catalogue = loaded.catalogues[0].uri;
+						const catalogue = loaded.catalogues[0].uri;
 						this.events.service.publish(new CatalogueSelectionEvent(catalogue));
 				}
 		));
 		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of(CatalogueLoadedEvent )
 				.subscribe( loaded => {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
-						let document = loaded.catalogue.documents[0].uri;
+						const document = loaded.catalogue.documents[0].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
 							this.events.service.publish(new CellDocumentSelectionEvent(document))
 						);
@@ -172,9 +174,12 @@ ngAfterViewInit() {
 	// This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
 	// events can use binding properties that have been setup properly
 
-	let allCatalogues = "/morfeu/test-resources/catalogues.json";
-	Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(allCatalogues)));
-
+	// we need to subscribe to the query params to override possible configuration
+	this.route.queryParams.subscribe(params => {
+		const catalogues = Configuration.merge(params).catalogues;
+		console.log("FOO2 config - catalogues: %s", Configuration.merge(params).catalogues);
+		Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(catalogues)));
+	});
 }
 
 }

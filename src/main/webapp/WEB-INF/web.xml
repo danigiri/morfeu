@@ -6,9 +6,14 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 
 	<context-param>
 		<description>Resources uri prefix (default value only for integration testing), end with '/'</description>
-		<param-name>_RESOURCES_PREFIX</param-name>
+		<param-name>__RESOURCES_PREFIX</param-name>
 		<param-value>http://localhost:8080/morfeu/</param-value>
 	</context-param>
+	<!-- context-param>
+		<description>Proxy mode prefix</description>
+		<param-name>__PROXY</param-name>
+		<param-value>http://localhost:8090/eurinome</param-value>
+	</context-param-->
 
 
 	<!-- It is important to distinguish between 'raw' content (RESOURCES_PREFIX) from data processed and by
@@ -23,13 +28,32 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 	<!-- Generic request dispatcher -->
 	<servlet>
 		<display-name>generic-servlet</display-name>
-		<servlet-name>GenericMorfeuServlet</servlet-name>
-		<servlet-class>cat.calidos.morfeu.webapp.GenericMorfeuServlet</servlet-class>
+		<servlet-name>MorfeuServlet</servlet-name>
+		<servlet-class>cat.calidos.morfeu.control.MorfeuServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>GenericMorfeuServlet</servlet-name>
+		<servlet-name>MorfeuServlet</servlet-name>
 		<url-pattern>/dyn/*</url-pattern>
 	</servlet-mapping>
 
+	<!-- Proxy mode: at the moment it's not easily configurable -->
+	<servlet>
+		<servlet-name>proxy</servlet-name>
+		<servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
+		<init-param>
+			<param-name>targetUri</param-name>
+			<param-value>http://localhost:8090/eurinome</param-value>
+		</init-param>
+		<init-param>
+			<param-name>log</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>proxy</servlet-name>
+		<url-pattern>/proxy/*</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

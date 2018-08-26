@@ -40,8 +40,9 @@ import { StatusEvent } from "./events/status.event";
 				<div id="catalogue-desc" class="card-title">{{catalogue.desc}}</div>
 				<div id="document-list" class="list-group">
 					<a *ngFor="let d of catalogue.documents"
-						href="#" 
-						class="document-list-entry list-group-item list-group-item-action" 
+						[routerLink]="['']"
+						queryParamsHandling="merge"
+						class="document-list-entry list-group-item list-group-item-action"
 						[class.active]="d.uri === selectedDocumentURI"
 						(click)="clickOnDocument(d)">
 						<img src="{{preview(d)}}" alt="document"/> {{d.name}}
@@ -61,11 +62,11 @@ import { StatusEvent } from "./events/status.event";
 	]
 })
 
-// `
 export class CatalogueComponent extends Widget implements OnInit {
 
 catalogue: Catalogue;
 selectedDocumentURI: string;
+
 
 constructor(eventService: EventService,
 			@Inject("RemoteJSONDataService") private catalogueService: RemoteDataService ) {

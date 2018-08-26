@@ -23,19 +23,19 @@ import { CollapsibleComponent } from "./components/collapsible.component";
 import { CatalogueComponent } from "./catalogue.component";
 import { Catalogue } from "./catalogue.class";
 
-import { RemoteDataService } from './services/remote-data.service';
+import { RemoteDataService } from "./services/remote-data.service";
 
-import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
-import { CataloguesRequestEvent } from './events/catalogues-request.event';
-import { CataloguesLoadedEvent } from './events/catalogues-loaded.event';
-import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CatalogueSelectionEvent } from "./events/catalogue-selection.event";
+import { CataloguesRequestEvent } from "./events/catalogues-request.event";
+import { CataloguesLoadedEvent } from "./events/catalogues-loaded.event";
+import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
 import { StatusEvent } from "./events/status.event";
-import { EventService } from './events/event.service';
+import { EventService } from "./events/event.service";
 
 
 @Component({
 	moduleId: module.id,
-	selector: 'catalogue-list',
+	selector: "catalogue-list",
 	template: `
 	<collapsible header="Catalogues" class="mb-2"  [folded]="false">
 				<div id="catalogue-list" class="list-group2">
@@ -56,9 +56,9 @@ import { EventService } from './events/event.service';
 	providers: [
 				]
 })
-	
-export class CatalogueListComponent extends Widget {
-	
+
+export class CatalogueListComponent extends Widget implements OnInit {
+
 catalogues: Catalogue[];
 selectedCatalogueURI: string;
 
@@ -74,8 +74,8 @@ ngOnInit() {
 	console.log("StatusComponent::ngOnInit()");
 
 	this.subscribe(this.events.service.of( CataloguesRequestEvent ).subscribe( s => {
-		   console.log("-> catalogue-list component gets request event for '"+s.url+"'");
-		   this.fetchCatalogues(s.url);
+			console.log("-> catalogue-list component gets request event for '"+s.url+"'");
+			this.fetchCatalogues(s.url);
 	}));
 
 	// on catalogue selection we highlight the selected catalogue and clear the document selection
@@ -83,7 +83,7 @@ ngOnInit() {
 		console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
 		this.markCatalogueAsSelected(s.url);
 	}));
-	
+
 }
 
 
@@ -91,7 +91,7 @@ fetchCatalogues(url: string) {
 
 	this.events.service.publish(new StatusEvent("Fetching catalogues"));
 	// TODO: make this configurable and into an event
-	this.catalogueService.getAll<Catalogue>(url).subscribe(c => { 
+	this.catalogueService.getAll<Catalogue>(url).subscribe(c => {
 			this.catalogues = c;
 			this.events.service.publish(new CataloguesLoadedEvent(c));
 			this.events.ok();
@@ -99,15 +99,15 @@ fetchCatalogues(url: string) {
 		error => this.events.problem(error.message), // error is of the type HttpErrorResponse
 		() => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
 	);
-	
+
 }
 
 
 clickOnCatalogue(c: Catalogue) {
 
 	console.log("[UI] Clicked on catalogue="+c.uri);
-	this.events.service.publish(new CatalogueSelectionEvent(c.uri));	// catalogue component will pick this 
-	
+	this.events.service.publish(new CatalogueSelectionEvent(c.uri));	// catalogue component will pick this
+
 }
 
 

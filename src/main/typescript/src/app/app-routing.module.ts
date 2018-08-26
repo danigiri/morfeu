@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2016 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -14,11 +14,19 @@
  *	 limitations under the License.
  */
 
-import { Routes } from '@angular/router';
-import { CatalogueListComponent } from './catalogue-list.component';
-import { CatalogueComponent } from './catalogue.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+
+import { AppComponent } from "./app.component";
+
+
+@NgModule({
+	exports: [ RouterModule ]
+})
+
+export class AppRoutingModule {}
+
 
 export const AppRoutes: Routes = [
-  { path: 'catalogues', component: CatalogueListComponent },
-  { path: 'catalogues/:id', component: CatalogueComponent }
+	{ path: "", component: AppComponent },
 ];

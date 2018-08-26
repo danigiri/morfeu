@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -14,18 +14,21 @@
  *	 limitations under the License.
  */
 
-import { NgModule } from "@angular/core";
+import { NgModule, Injector } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { HttpClientModule } from "@angular/common/http";  // new angular 5 http client module
+import { RouterModule } from "@angular/router";
 
 import { DndModule } from "ng2-dnd";
 import { HotkeyModule } from "angular2-hotkeys";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { TreeModule } from "angular-tree-component";
+
+import { AppRoutingModule, AppRoutes } from "./app-routing.module";
 
 import { AppComponent } from "./app.component";
 import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
@@ -51,42 +54,47 @@ import { StatusComponent } from "./status.component";
 
 @NgModule({
 	imports: [
-				NgbModule.forRoot()
-				,BrowserModule
-				,BrowserAnimationsModule
-				,CommonModule
-				,DndModule.forRoot()
-				,FormsModule
-				,HttpModule
-				,HttpClientModule
-				,HotkeyModule.forRoot()
-				,TreeModule
+				AppRoutingModule
+				, BrowserModule
+				, BrowserAnimationsModule
+				, CommonModule
+				, DndModule.forRoot()
+				, FormsModule
+				, HttpModule
+				, HttpClientModule
+				, HotkeyModule.forRoot()
+				, NgbModule.forRoot()
+				, RouterModule.forRoot(
+					AppRoutes,
+					{ enableTracing: false }
+				)
+				, TreeModule
 	],
 	declarations: [
 					AppComponent
-					,AttributeDataEditorComponent
-					,AttributeDataInfoComponent
-					,CatalogueListComponent 
-					,CatalogueComponent
-					,CollapsibleComponent
-					,ContentComponent 
-					,CellComponent
-					,CellEditorComponent
-					,CellHeaderComponent
-					,CellDocumentComponent
-					,CellDataComponent
-					,CellModelComponent
-					,DropAreaComponent
-					,KeyCaptureComponent
-					,ModelAreaComponent
-					,ModelComponent
-					,ProblemComponent
-					,SnippetComponent
-					,SnippetsListComponent
-					,StatusComponent 
+					, AttributeDataEditorComponent
+					, AttributeDataInfoComponent
+					, CatalogueListComponent
+					, CatalogueComponent
+					, CollapsibleComponent
+					, ContentComponent
+					, CellComponent
+					, CellEditorComponent
+					, CellHeaderComponent
+					, CellDocumentComponent
+					, CellDataComponent
+					, CellModelComponent
+					, DropAreaComponent
+					, KeyCaptureComponent
+					, ModelAreaComponent
+					, ModelComponent
+					, ProblemComponent
+					, SnippetComponent
+					, SnippetsListComponent
+					, StatusComponent
 	],
 	providers:	[],
 	bootstrap:	[ AppComponent ]
 })
 
-export class AppModule { }
+export class AppModule {}

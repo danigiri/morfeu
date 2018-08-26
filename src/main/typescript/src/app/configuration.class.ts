@@ -14,14 +14,26 @@
  *	 limitations under the License.
  */
 
-import { enableProdMode } from "@angular/core";
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { Params, ActivatedRoute } from "@angular/router";
 
-import { AppModule } from "./app/app.module";
-import { environment } from "./environments/environment";
+import { environment } from "../environments/environment";
 
-if (environment.production) {
-	enableProdMode();
+export class Configuration {
+
+
+constructor() {}
+
+production: boolean;
+catalogues = "/morfeu/test-resources/catalogues.json";
+
+static merge(params: Params): Configuration {
+
+	let config = new Configuration();
+	config.production = params.production!==undefined ? params.production : environment.production;
+	config.catalogues = params.catalogues!==undefined ? params.catalogues : config.catalogues;
+
+	return config;
+
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+}
