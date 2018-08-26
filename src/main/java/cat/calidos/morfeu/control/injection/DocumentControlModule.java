@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.DocumentGETControl;
-import cat.calidos.morfeu.webapp.GenericMorfeuServlet;
+import cat.calidos.morfeu.control.MorfeuServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import dagger.Module;
@@ -48,7 +48,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getDocument(
 
 	return (pathElems, params) -> {
 
-		String resourcesPrefix = params.get(GenericMorfeuServlet.RESOURCES_PREFIX);
+		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
 		log.trace("DocumentControlModule::getDocument '[{}]{}'", resourcesPrefix, path);
 

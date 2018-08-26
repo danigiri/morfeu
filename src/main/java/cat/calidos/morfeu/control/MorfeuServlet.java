@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.webapp;
+package cat.calidos.morfeu.control;
 
 import java.util.Map;
 
@@ -24,16 +24,18 @@ import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
 import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
+import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
+
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class GenericMorfeuServlet extends GenericHttpServlet {
+public class MorfeuServlet extends GenericHttpServlet {
 
-protected final static Logger log = LoggerFactory.getLogger(GenericMorfeuServlet.class);
+protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
 
 public final static String RESOURCES_PREFIX = "__RESOURCES_PREFIX";
 protected static final String DEFAULT_RESOURCES_PREFIX = "http://localhost:8080/morfeu/";

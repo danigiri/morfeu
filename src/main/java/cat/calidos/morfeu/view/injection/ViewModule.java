@@ -31,7 +31,6 @@ import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.value.convert.Converter.Result;
 
 import dagger.Module;
 import dagger.Provides;
@@ -52,16 +51,16 @@ public static String render(JtwigTemplate template, JtwigModel model) {
 
 @Provides
 public Map<String, Object> values(@Named("value") Object v, @Nullable @Named("problem") String problem) {
-	
+
 	Map<String, Object> value = new HashMap<String, Object>(1);
 	if (problem!=null && problem!="") {
-		
+
 		problem = problem.replaceAll("\t|\n", " ");	// error messages may contain illegal JSON text
 		problem = problem.replaceAll("\"", "'");	// 
 		value.put("problem", problem);
 	}
 	value.put("v", v);
-	
+
 	return value;
 
 }
@@ -69,7 +68,7 @@ public Map<String, Object> values(@Named("value") Object v, @Nullable @Named("pr
 
 @Provides
 public static EnvironmentConfiguration defaultConfiguration() {
-	
+
 	return EnvironmentConfigurationBuilder.configuration()
 											.functions()
 												.add(range)

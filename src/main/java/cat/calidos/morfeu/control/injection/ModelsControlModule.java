@@ -22,8 +22,8 @@ import java.util.function.BiFunction;
 
 import javax.inject.Named;
 
+import cat.calidos.morfeu.control.MorfeuServlet;
 import cat.calidos.morfeu.control.ModelGETControl;
-import cat.calidos.morfeu.webapp.GenericMorfeuServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import dagger.Module;
@@ -44,7 +44,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getContent()
 
 	return (pathElems, params) -> {
 
-		String resourcesPrefix = params.get(GenericMorfeuServlet.RESOURCES_PREFIX);
+		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
 
 		return  new ModelGETControl(resourcesPrefix, path).processRequest();

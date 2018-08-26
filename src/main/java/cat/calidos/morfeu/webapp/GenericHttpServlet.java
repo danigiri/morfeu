@@ -67,6 +67,9 @@ public void init(ServletConfig config) throws ServletException {
 
 public abstract ControlComponent getControl(String path, Map<String, String> params);
 
+public abstract ControlComponent putControl(String path, Map<String, String> params);
+
+
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -82,9 +85,6 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	handleResponse(resp, controlComponent);
 
 }
-
-
-public abstract ControlComponent putControl(String path, Map<String, String> params);
 
 
 @Override
