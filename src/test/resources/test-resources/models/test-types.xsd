@@ -8,8 +8,7 @@
 		XML Schema types used to test the system
 		</xs:documentation>
 	</xs:annotation>
-		   
-		   
+
 	<xs:simpleType name="numberField">
 		<xs:annotation>
 			<xs:documentation>
@@ -46,6 +45,18 @@
 		</xs:annotation>
 
 		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
+	<xs:simpleType name="booleanField">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>Boolean value (true|false)</mf:desc>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+
+		<xs:restriction base="xs:boolean" />
 	</xs:simpleType>
 	
 	<xs:simpleType name="textContent">
