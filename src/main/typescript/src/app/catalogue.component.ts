@@ -40,7 +40,7 @@ import { StatusEvent } from "./events/status.event";
 				<div id="catalogue-desc" class="card-title">{{catalogue.desc}}</div>
 				<div id="document-list" class="list-group">
 					<a *ngFor="let d of catalogue.documents"
-						[routerLink]="['']"
+						routerLink="."
 						queryParamsHandling="merge"
 						class="document-list-entry list-group-item list-group-item-action"
 						[class.active]="d.uri === selectedDocumentURI"

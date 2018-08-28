@@ -40,7 +40,8 @@ import { EventService } from "./events/event.service";
 	<collapsible header="Catalogues" class="mb-2"  [folded]="false">
 				<div id="catalogue-list" class="list-group2">
 					<a *ngFor="let c of catalogues"
-						 href="#" 
+						routerLink="."
+						queryParamsHandling="merge"
 						class="catalogue-list-entry list-group-item list-group-item-action"
 						[class.active]="c.uri === selectedCatalogueURI"
 						(click)="clickOnCatalogue(c)">
