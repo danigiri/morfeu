@@ -64,10 +64,7 @@ import { StatusComponent } from "./status.component";
 				, HttpClientModule
 				, HotkeyModule.forRoot()
 				, NgbModule.forRoot()
-				, RouterModule.forRoot(
-					AppRoutes,
-					{ enableTracing: false }
-				)
+				, RouterModule.forRoot(AppRoutes, { enableTracing: false })
 				, TreeModule
 	],
 	declarations: [

@@ -14,10 +14,10 @@
  *	 limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 //import { Http } from '@angular/http';
-import { HttpClient } from '@angular/common/http';	// new angular 5 http client
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { HttpClient } from "@angular/common/http";	// new angular 5 http client
+import { Observable ,  BehaviorSubject } from "rxjs";
 
 
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead 
@@ -30,7 +30,7 @@ constructor(private http:HttpClient) {}
 
 getAll<T>(uri: string): Observable<T[]> {
 	
-	console.log("[SERVICE] RemoteDataService::getAll('%s')", uri); 
+	console.log("[SERVICE] RemoteDataService::getAll('%s')", uri);
 	//TODO: handle errors here
 	
 	return this.http.get<T[]>(uri);

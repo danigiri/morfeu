@@ -78,16 +78,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(quote)
 												.add(isMultiline)
 												.add(multiline)
-								//			.escape()
-								//			.withDefaultEngine("js")
 											.and()
-//											.parser()
-//												.syntax()
-//													.withStartCode("$(").withEndCode(")$")
-//													.withStartOutput("$[").withEndOutput("]$")
-//													.withStartComment("$#").withEndComment("#$")
-//												.and()
-//											.and()
 											.build();
 	
 }
@@ -152,27 +143,29 @@ final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
 /** iterator to list */
 final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
 
-    @Override
-    public String name() {
-        return "list";
-    }
+	@Override
+	public String name() {
 
-    @Override
-    public Object execute(FunctionRequest request) {
+		return "list";
+	}
 
-    	request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-    	@SuppressWarnings("unchecked")
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		@SuppressWarnings("unchecked")
 		Iterator<Object> iterator = (Iterator<Object>) request.get(0);
 
-    	ArrayList<Object> list = new ArrayList<Object>();
-    	while (iterator.hasNext()) {
-    		list.add(iterator.next());
-    	}
+		ArrayList<Object> list = new ArrayList<Object>();
+		while (iterator.hasNext()) {
+			list.add(iterator.next());
+		}
 
-    	return list;
-    }
-    
-};
+		return list;
+	}
+
+	};
 
 
 final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
@@ -188,9 +181,9 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 	public Object execute(FunctionRequest request) {
 
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
-		Object v = request.get(0);
-		//System.err.println(v);
-
+		request.getArguments().stream().forEachOrdered(System.err::print);
+		System.err.println();
+		
 		return new Object();
 	}
 

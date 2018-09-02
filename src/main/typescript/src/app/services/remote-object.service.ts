@@ -14,9 +14,9 @@
  *	 limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { Http } from "@angular/http";
+import { Observable ,  BehaviorSubject } from "rxjs";
 
 
 import { SerialisableToJSON } from '../serialisable-to-json.interface';
@@ -44,9 +44,9 @@ get(uri: string, type_: Constructor<T>): Observable<T> {
 
 	console.log("[SERVICE] RemoteObjectService::get("+uri+")"); 
 	//TODO: handle errors with .catch here
-	return this.http.get(uri).retryWhen(errors => errors.delay(200).take(5)
+	return this.http.get(uri) .retryWhen(errors => errors.delay(200).take(5))
 	//.concat(Observable.throw(new Error("Too many retries")))
-	).map(response => <T>createInstance(type_).fromJSON(response.text()));
+	.map(response => <T>createInstance(type_).fromJSON(response.text()));
 
 }
 

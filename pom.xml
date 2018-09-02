@@ -58,14 +58,27 @@
 				</configuration>
 			</plugin>
 
-			<plugin>	<!-- skip moving node modules about -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>	<!--  mvn package war:war install -DarchiveClasses=true -DattachClasses=true -DskipITs -DskipTests=true -Djetty.skip -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.2.2</version>
 				<configuration>
 					<webResources>
 						<resource>
-							<directory>src/main/typescript/dist</directory>
+							<directory>src/main/typescript/dist</directory> <!-- skip moving node modules about -->
 						</resource>
 					</webResources>
 					<attachClasses>true</attachClasses>	<!-- creates a jar with the classes and attaches an artifact -->
@@ -192,17 +205,17 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-		    <groupId>javax.inject</groupId>
-		    <artifactId>javax.inject</artifactId>
-		    <version>1</version>
-		   <!-- scope>provided</scope-->
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+			<!-- scope>provided</scope -->
 		</dependency>
 
 		<!-- XML Schema parsing (compatible license, see here https://xsom.java.net) -->
 		<dependency>
-		    <groupId>com.sun.xsom</groupId>
-		    <artifactId>xsom</artifactId>
-		    <version>20140925.0.0.redhat-1</version>
+			<groupId>com.sun.xsom</groupId>
+			<artifactId>xsom</artifactId>
+			<version>20140925.0.0.redhat-1</version>
 		</dependency>
 
 
@@ -290,6 +303,13 @@
 			<groupId>org.jtwig</groupId>
 			<artifactId>jtwig-reflection</artifactId>
 			<version>${jtwig-version}</version>
+		</dependency>
+
+		<!-- request proxying -->
+		<dependency>
+			<groupId>org.mitre.dsmiley.httpproxy</groupId>
+			<artifactId>smiley-http-proxy-servlet</artifactId>
+			<version>1.10</version>
 		</dependency>
 
 		<!-- UNIT TESTING -->

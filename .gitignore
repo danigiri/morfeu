@@ -12,3 +12,4 @@ src/main/typescript/src/app/**/*.js
 src/main/typescript/src/app/**/*.js.map
 src/main/typescript/dist
 .README.md.html
+*.dtwig

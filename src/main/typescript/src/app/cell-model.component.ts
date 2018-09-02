@@ -41,8 +41,8 @@ import { EventService } from "./events/event.service";
 	template: `
 		<div id="{{node.data.id}}"
 			 class="cell-model-entry cell-model-level-{{node.level}} cell-model-position-{{index}}">
-			<img 
-				src={{getThumb()}} 
+			<img
+				src={{getThumb()}}
 				class="cell-model-thumb img-fluid"
 				[class.cell-model-active]="active"
 				[class.cell-model-selected]="this.selected"
@@ -50,7 +50,7 @@ import { EventService } from "./events/event.service";
 				(mouseup)="clickUp()"
 				(mouseenter)="clickDown()"
 				(mouseleave)="clickUp()"
-				dnd-draggable 
+				dnd-draggable
 				[dragEnabled]="dragEnabled"
 				(onDragEnd)="dragEnd()"
 				[dragData]="node.data.generateCell()"
@@ -121,18 +121,18 @@ ngOnInit() {
 	// establish the relationship between the cellmodel and the component
 	this.cellModel = this.node.data as CellModel;
 	this.cellModel.component = this;
-	
+
 	this.subscribe(this.events.service.of( CellDeactivatedEvent )
 			.filter(deactivated => this.isCompatibleWith(deactivated.cell))
 			.subscribe( deactivated => {
-				//console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
+				// console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
 				this.becomeInactive(true);
 	}));
 
 	this.subscribe(this.events.service.of( CellActivatedEvent )
 			.filter(activated => this.isCompatibleWith(activated.cell))
 			.subscribe( activated => {
-				//console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
+				// console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
 				this.becomeActive(true);
 	}));
 
@@ -155,7 +155,7 @@ becomeActive(fromCell: boolean) {
 
 becomeInactive(fromCell: boolean) {
 
-	//console.log("[UI] CellModelComponent::becomeInactive()");
+	// console.log("[UI] CellModelComponent::becomeInactive()");
 	this.active = false;
 	this.dragEnabled = false;
 	this.unsubscribeToNewCellFromModel();
@@ -165,16 +165,16 @@ becomeInactive(fromCell: boolean) {
 
 
 select(position: number) {
-	
-	if (position==this.index) {
-		
+
+	if (position===this.index) {
+
 		// if we were activated we deactivate ourselves and become selectable again
 		if (this.active) {
 			this.becomeInactive(false);
 		}
 		
 		console.log("[UI] CellModelComponent::select("+this.cellModel.name+"("+this.index+"))");
-		this.selected = true; 
+		this.selected = true;
 		this.unsubscribeFromSelection();
 		// cleverly, we now subscribe to cellmodel activation events that may be triggered by shortcuts
 		this.subscribeToActivation();
@@ -221,7 +221,7 @@ unsubscribeFromSelection() {
 clickDown() {
 
 	this.becomeActive(false);
-	//this.events.service.publish(new CellModelActivatedEvent(cellModel));
+	// this.events.service.publish(new CellModelActivatedEvent(cellModel));
 
 }
 
@@ -229,7 +229,7 @@ clickDown() {
 clickUp() {
 	
 	this.becomeInactive(false);
-	//this.events.service.publish(new CellModelDeactivatedEvent(cellModel));	  
+	// this.events.service.publish(new CellModelDeactivatedEvent(cellModel));	  
 
 }
 
@@ -242,12 +242,12 @@ dragEnd() {
 }
 
 
-isCompatibleWith(element:FamilyMember): boolean {
+isCompatibleWith(element: FamilyMember): boolean {
 	return this.cellModel.matches(element);
 }
 
 
-getThumb():string {
+getThumb(): string {
 	return (this.cellModel.thumb=='DEFAULT') ? "assets/images/cell-thumb.svg" : this.cellModel.thumb;
 }
 
@@ -288,12 +288,12 @@ private subscribeToNewCellFromModel() {
 
 
 private unsubscribeToNewCellFromModel() {
-	
+
 	if (this.newCellSubscription) {
 		this.unsubscribe(this.newCellSubscription);
 		this.newCellSubscription = undefined;
 	}
-	
+
 }
 
 

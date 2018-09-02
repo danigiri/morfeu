@@ -122,7 +122,9 @@ normaliseReferencesWith(rootCellModels: CellModel[]) {
 canGenerateNewCell(): boolean {
 	// not dragging WELL-type cell models for the moment, as it is quite a complex use case, so we only allow
 	// cell models that do not have any children
-	return this.childrenCount()==0;
+	// trying to drag WELL-type cell models
+	// return this.childrenCount()==0;
+	return true;
 }
 
 
@@ -131,18 +133,18 @@ generateCell(): Cell {
 
 	const cellURI = "/"+this.getAdoptionName()+"(0)";  // this is will be changed on adoption
 	const desc = "";								   // empty description for the moment
-	let newCell:Cell = new Cell(this.schema, 
-								cellURI, 
-								this.getAdoptionName(), 
-								desc,
-								this.getAdoptionURI(), 
-								this.isSimple);
+	let newCell: Cell = new Cell(this.schema,
+									cellURI,
+									this.getAdoptionName(),
+									desc,
+									this.getAdoptionURI(),
+									this.isSimple);
 	if (this.defaultValue) {
 		newCell.value = this.defaultValue;
 	}
 
 	newCell.cellModel = this;						// we associate the cell model straightaway, easy peasy =)
- 
+
 	if (this.attributes) {							// now we set the attributes when we have defaults
 		newCell.attributes = this.attributes.filter(a => a.defaultValue)
 												.map(a => this.generateAttributeFrom(a));
@@ -165,7 +167,7 @@ findCellModel(uri: string): CellModel {
 }
 
 
-////FamilyMember ////
+//// FamilyMember ////
 
 getURI(): string {
 	return this.URI;
@@ -182,12 +184,12 @@ getAdoptionURI(): string {
 }
 
 
-matches(e:FamilyMember): boolean {
+matches(e: FamilyMember): boolean {
 	return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
 
 
-canAdopt(element:FamilyMember): boolean {
+canAdopt(element: FamilyMember): boolean {
 	return this.children.some(c => c.matches(element));
 }
 
@@ -197,8 +199,8 @@ childrenCount(): number {
 }
 
 
-getParent():FamilyMember {
-	return undefined;	//TODO: we do not need to setup the parent yet
+getParent(): FamilyMember {
+	return undefined;	// TODO: we do not need to setup the parent yet
 }
 
 
@@ -211,7 +213,7 @@ equals(m: FamilyMember) {
 
 toJSON(): CellModelJSON {
 
-	let serialisedCellModel:CellModelJSON = Object.assign({}, this);
+	let serialisedCellModel: CellModelJSON = Object.assign({}, this);
 
 	if (serialisedCellModel.identifier) {
 		serialisedCellModel.identifier = this.identifier.name;	// we serialise to the (attribute) name
@@ -275,23 +277,23 @@ static reviver(key: string, value: any): any {
 
 
 private generateAttributeFrom(attribute: CellModel): Cell {
-	
+
 	const attrURI = "/"+this.getAdoptionName()+"(0)@"+attribute.getAdoptionName(); // be changed on adoption
 	const desc = "";															  // empty description
 	const value = (attribute.defaultValue) ? attribute.defaultValue : ""; 
-	let newCell:Cell = new Cell(attribute.schema, 
-								attrURI, 
-								attribute.getAdoptionName(), 
-								desc,
-								attribute.getAdoptionURI(), 
-								attribute.isSimple);	// should always be true
+	let newCell: Cell = new Cell(attribute.schema,
+									attrURI,
+									attribute.getAdoptionName(),
+									desc,
+									attribute.getAdoptionURI(),
+									attribute.isSimple);	// should always be true
 
 	if (attribute.defaultValue) {				   // sanity check, as we only generate		   
 		newCell.value = attribute.defaultValue;	   // attributes for defaults for now
 	}
 
 	newCell.cellModel = attribute; // associate the cell model straightaway, yo! =)
- 
+
 	return newCell;
 
 }
@@ -300,24 +302,24 @@ private generateAttributeFrom(attribute: CellModel): Cell {
 // given a cell model URI, look for it in a cell model hierarchy, avoids following references
 private findCellModelWithURI(cellModels: CellModel[] | CellModel, uri: string): CellModel {
 
-	let cellModel:CellModel;
-	let pending:CellModel[] = [];
+	let cellModel: CellModel;
+	let pending: CellModel[] = [];
 	if (cellModels instanceof Array) {
 		cellModels.forEach(cm => pending.push(cm));
 	} else {
-		pending.push(cellModels)
+		pending.push(cellModels);
 	}
-	
+
 	while (!cellModel && pending.length>0) {
-		
-		let currentCellModel:CellModel = pending.pop();
+
+		let currentCellModel: CellModel = pending.pop();
 		if (currentCellModel.URI==uri) {
 			cellModel = currentCellModel;
 		} else {
 			// Only do a recursive call if current cellModel is not what we look for *and* not a reference.
 			// This is to avoid infinite loops in nested structures, a nested reference to a parent
 			// will necessarily be a reference cellModel, therefore do not add its children to be processed
-			if (!currentCellModel.isReference && currentCellModel.children) { 
+			if (!currentCellModel.isReference && currentCellModel.children) {
 				currentCellModel.children.forEach(cm => pending.push(cm));
 			}
 		}
@@ -338,7 +340,7 @@ URI: string;
 name: string;
 desc: string;
 presentation: string;
-cellPresentation: string,
+cellPresentation: string;
 thumb: string;
 isSimple: boolean;
 isReference: boolean;

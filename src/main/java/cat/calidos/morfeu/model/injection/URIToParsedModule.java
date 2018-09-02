@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -42,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -135,24 +137,29 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 							throws FetchingException, TransformException {
 
 	// get the yaml and apply the transformation from yaml to xml
-	
+
 	try {
-		
-		JsonNode yaml = mapper.readTree(fetchedRawContent);
-		Map<String, Object> values = new HashMap<String, Object>(2);
-		values.put("yaml", yaml);
-		values.put("cellmodels", model.get().get().getRootCellModels());
-		values.put("case","yaml-to-xml");
 
 		log.trace("Converting yaml to xml '{}'", uri);
+
+		JsonNode yaml = mapper.readTree(fetchedRawContent);
+		Map<String, Object> values = new HashMap<String, Object>(2);
+
+		List<CellModel> rootCellModels = model.get().get().getRootCellModels();
+		values.put("cellmodels", rootCellModels);
+		values.put("yaml", yaml);
+		values.put("case","yaml-to-xml");
+		//rootCellModels.stream().map(cm -> cm.getName()).forEach(name -> log.trace("CellModel:{}",name));
+
 		String transformedContent = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-yaml-to-xml.twig")
-			.withValue(values)
-			.build()
-			.render();
-		
+														.withTemplate("templates/transform/content-yaml-to-xml.twig")
+														.withValue(values)
+														.build()
+														.render();
+		//log.trace("Transformed yaml to xml '{}'", transformedContent);
+
 		return IOUtils.toInputStream(transformedContent, Config.DEFAULT_CHARSET);
-		
+
 	} catch (IOException e) {
 		log.error("Could not fetch yaml '{}' ({}", uri, e);
 		throw new FetchingException("Problem when fetching yaml '"+uri+"'", e);
