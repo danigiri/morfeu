@@ -1,0 +1,8 @@
+{
+	"name": "Document keyvalue YAML"
+	,"desc": "Contains key-value cells (YAML)"
+	,"kind": "yaml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/transform/keyvalues.yaml"
+	
+}

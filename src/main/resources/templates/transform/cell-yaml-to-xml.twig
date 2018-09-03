@@ -3,7 +3,7 @@
 
 	{%- if cellmodels.size()>1 -%}
 		{#- We try to find a matching cell model -#}
-	
+
 		{%- for c in cellmodels -%}
 			{%- if c.metadata.getDirectivesFor(case).contains('ATTRIBUTES-ONLY') -%}
 				{#- match by attributes or children -#}
@@ -23,7 +23,7 @@
 						{%- if yaml.has(matchname) -%}
 							{#- Matched a field in the yaml and an attribute, we assume we have a match -#}
 							{%- set found = true -%}
-							{%- include 'cell-yaml-to-xml.twig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
+							{%- include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
 						{%- endif -%}
 					{%- endfor -%}
 				{% endif %}
@@ -37,11 +37,16 @@
 		{#- cellmodels.size()==1 - We are already matched to a cell model, we start printing -#}
 		{%- if cellmodels[0].isSimple -%}
 			{%- if yaml.size>0 %}
-{{i}}<{{cellmodels[0].name}}>{{yaml.asText}}</{{cellmodels[0].name}}>
+				{#- we check if we have to print key-value pairs or just the content -#}
+				{%- if cellmodels[0].metadata.getDirectivesFor(case).contains('KEY-VALUE') %}
+{{i}}<{{cellmodels[0].name}}>{{yaml.fieldNames().next()}}: {{yaml.fields().next().getValue().asText()}}</{{cellmodels[0].name}}>
 				{%- else %}
+{{i}}<{{cellmodels[0].name}}>{{yaml.asText}}</{{cellmodels[0].name}}>
+				{%- endif -%}
+			{%- else %}
 {{i}}<{{cellmodels[0].name}}/>
 				{%- endif -%}
-{%else%}	{#- complex #}
+{% else %}	{#- complex #}
 {{i}}<{{cellmodels[0].name}}
 			{%- for a in list(cellmodels[0].metadata.getAttributesFor(case).iterator) %} {{a-}}{%- endfor -%}
 			{%- for a in cellmodels[0].asComplex.attributes.asList %} {%- if yaml.has(a.name)%} {{a.name}}={{quote(yaml.get(a.name))}}{%endif%}{%- endfor -%}
@@ -56,7 +61,7 @@
 						{%- if y==matchname -%}
 							{#- Matched a field in the yaml and a child in the model, we have a match -#}
 							{%- set found = true -%}
-							{%- include 'cell-yaml-to-xml.twig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
+							{%- include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
 						{%- endif -%}
 					{%- endfor -%}
 				{%- endfor %}
@@ -74,7 +79,7 @@
 {% elseif yaml.isArray -%}
 	{#- ___________ yaml is array _________ -#}
 	{%- for y in range(yaml.size()) -%}
-{% include 'cell-yaml-to-xml.twig' with {'yaml': yaml.get(y), 'cellmodels':cellmodels, 'i':concat(i,'\t'), 'case': case} only -%}
+{% include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml.get(y), 'cellmodels':cellmodels, 'i':concat(i,'\t'), 'case': case} only -%}
 	{%- endfor -%}
 
 {%- endif -%}

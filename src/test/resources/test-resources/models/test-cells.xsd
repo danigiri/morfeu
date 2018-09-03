@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		   xmlns:mf="http://dani.calidos.com/morfeu/metadata"
-		   >
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:mf="http://dani.calidos.com/morfeu/metadata"
+			>
 
 	<xs:include schemaLocation="test-types.xsd" />
-	
+
 	<xs:annotation>
 		<xs:documentation>
 		XML Schema types used to test the system
@@ -77,6 +77,7 @@
 			<xs:element name="data2" type="testCell" minOccurs="0" maxOccurs="2"/>
 			<xs:element name="data3" type="testIdCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data4" type="testEmptyCell" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="keyvalue" type="textField" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="size" use="required" type="colField" />

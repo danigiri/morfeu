@@ -25,6 +25,14 @@
 					<mf:thumb>assets/images/data2-thumb.svg</mf:thumb>
 					<mf:cell-presentation>/morfeu/dyn/preview/data2.svg?__header=$NAME&amp;$ATTRIBUTES</mf:cell-presentation>
 				</mf:metadata>
+				<mf:metadata uri="test/row/col/keyvalue">
+					<mf:desc>Arbitrary key:value content (for key value pairs in yaml)</mf:desc>
+					<mf:thumb>assets/images/keyvalue-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/keyvalue-cell.svg</mf:cell-presentation>
+					<mf:transform case="obj-to-yaml" type="directive">KEY-VALUE</mf:transform>
+					<mf:transform case="yaml-to-xml" type="directive">KEY-VALUE</mf:transform>
+				</mf:metadata>
+
 			</mf:extra-metadata>
 		</xs:appinfo>
 	</xs:annotation>

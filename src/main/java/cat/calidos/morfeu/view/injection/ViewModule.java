@@ -74,6 +74,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(range)
 												.add(chop)
 												.add(list)
+												.add(debn)
 												.add(deb)
 												.add(quote)
 												.add(isMultiline)
@@ -140,6 +141,7 @@ final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
     }
 };
 
+
 /** iterator to list */
 final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
 
@@ -168,6 +170,28 @@ final static SimpleJtwigFunction list = new SimpleJtwigFunction() {
 	};
 
 
+final static SimpleJtwigFunction debn = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "debn";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
+		request.getArguments().stream().forEachOrdered(System.err::print);
+		System.err.println();
+
+		return new Object();
+	}
+
+};
+
+
 final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 
 	@Override
@@ -182,8 +206,7 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
 		request.getArguments().stream().forEachOrdered(System.err::print);
-		System.err.println();
-		
+
 		return new Object();
 	}
 

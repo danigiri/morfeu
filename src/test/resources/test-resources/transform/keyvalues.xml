@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
+>
+	<row>
+		<col size="12">
+			<keyvalue>foo: bar</keyvalue>
+			<keyvalue>bar: foo</keyvalue>
+		</col>
+	</row>
+</test>

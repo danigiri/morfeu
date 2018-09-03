@@ -24,7 +24,7 @@ import org.junit.Test;
 public class TransformYAMLToContentIntTest extends TransformTezt {
 
 @Test
-public void testTransformUsintTemplateDocument1() throws Exception {
+public void testTransformUsingTemplateDocument1() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
 	String documentPath = "test-resources/documents/document1.json";
@@ -32,13 +32,13 @@ public void testTransformUsintTemplateDocument1() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	//System.err.println(transformed);
-	compareWithXML(transformed,  xmlPath);
+	compareWithXML(transformed, xmlPath);
 
 }
 
 
 @Test
-public void testTransformUsintTemplateDocument3() throws Exception {
+public void testTransformUsingTemplateDocument3() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document3.yaml";
 	String documentPath = "test-resources/documents/document3.json";
@@ -46,7 +46,21 @@ public void testTransformUsintTemplateDocument3() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	//System.err.println(transformed);
-	compareWithXML(transformed,  xmlPath);
+	compareWithXML(transformed, xmlPath);
+
+}
+
+
+@Test
+public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
+
+	String yamlPath = "target/test-classes/test-resources/transform/keyvalues.yaml";
+	String documentPath = "test-resources/documents/keyvalues-yaml.json";
+	String xmlPath = "src/test/resources/test-resources/transform/keyvalues.xml";
+
+	String transformed = transformYAMLToXML(yamlPath, documentPath);
+	System.err.println(transformed);
+	compareWithXML(transformed, xmlPath);
 
 }
 
