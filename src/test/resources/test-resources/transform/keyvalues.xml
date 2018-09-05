@@ -5,8 +5,8 @@
 >
 	<row>
 		<col size="12">
-			<keyvalue>foo: bar</keyvalue>
-			<keyvalue>bar: foo</keyvalue>
+			<keyvalue key="foo" >bar</keyvalue>
+			<keyvalue key="bar" >foo</keyvalue>
 		</col>
 	</row>
 </test>
