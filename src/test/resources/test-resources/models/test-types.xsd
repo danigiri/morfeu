@@ -71,6 +71,5 @@
 
 		<xs:restriction base="xs:string" />
 	</xs:simpleType>
-	
-	
+
 </xs:schema>

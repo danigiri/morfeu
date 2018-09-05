@@ -3,7 +3,7 @@
 
 	{%- if cellmodels.size()>1 -%}
 		{#- We try to find a matching cell model -#}
-
+	
 		{%- for c in cellmodels -%}
 			{%- if c.metadata.getDirectivesFor(case).contains('ATTRIBUTES-ONLY') -%}
 				{#- match by attributes or children -#}
@@ -37,19 +37,19 @@
 		{#- cellmodels.size()==1 - We are already matched to a cell model, we start printing -#}
 		{%- if cellmodels[0].isSimple -%}
 			{%- if yaml.size>0 %}
-				{#- we check if we have to print key-value pairs or just the content -#}
-				{%- if cellmodels[0].metadata.getDirectivesFor(case).contains('KEY-VALUE') %}
-{{i}}<{{cellmodels[0].name}}>{{yaml.fieldNames().next()}}: {{yaml.fields().next().getValue().asText()}}</{{cellmodels[0].name}}>
-				{%- else %}
 {{i}}<{{cellmodels[0].name}}>{{yaml.asText}}</{{cellmodels[0].name}}>
-				{%- endif -%}
 			{%- else %}
 {{i}}<{{cellmodels[0].name}}/>
 				{%- endif -%}
 {% else %}	{#- complex #}
 {{i}}<{{cellmodels[0].name}}
 			{%- for a in list(cellmodels[0].metadata.getAttributesFor(case).iterator) %} {{a-}}{%- endfor -%}
-			{%- for a in cellmodels[0].asComplex.attributes.asList %} {%- if yaml.has(a.name)%} {{a.name}}={{quote(yaml.get(a.name))}}{%endif%}{%- endfor -%}
+			{#- we check if we have key-value attributes or normal ones, in the case of k:v, we skip verification of the key -#}
+			{%- if cellmodels[0].metadata.getDirectivesFor(case).contains('KEY-VALUE') %} {{cellmodels[0].metadata.identifier.get}}={{quote(yaml.fieldNames().next()) -}}
+				{%- for a in cellmodels[0].asComplex.attributes.asList %}{% if a.getName()!=(cellmodels[0].metadata.identifier.get()) %} {{a.name}}={{quote(yaml.get(yaml.fieldNames().next()))}}{% endif %}{%- endfor -%}
+			{%- else -%}
+				{%- for a in cellmodels[0].asComplex.attributes.asList %} {%- if yaml.has(a.name)%} {{a.name}}={{quote(yaml.get(a.name))}}{% endif %}{%- endfor -%}
+			{%- endif -%}
 			{%- if cellmodels[0].asComplex.children.size()>0 -%}
 				>{% for y in list(yaml.fieldNames) -%} {#- THIS LOOKS LIKE THE CODE ABOVE FOR ONE CELL, WE CAN DO AN INCLUDE OF GIVEN ONE CM + FIELD NAMES, WE MATCH -#} 
 					{%- for child in cellmodels[0].asComplex.children.asList -%}
