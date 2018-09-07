@@ -66,7 +66,7 @@
 				<mf:metadata>
 					<mf:desc>Arbitrary key:value content (for key value pairs in yaml)</mf:desc>
 					<mf:thumb>assets/images/keyvalue-thumb.svg</mf:thumb>
-					<mf:presentation>assets/images/keyvalue-cell.svg</mf:presentation>
+					<mf:cell-presentation>assets/images/keyvalue-cell.svg</mf:cell-presentation>
 					<mf:transform case="obj-to-yaml" type="directive">KEY-VALUE</mf:transform>
 					<mf:transform case="yaml-to-xml" type="directive">KEY-VALUE</mf:transform>
 					<mf:identifier name="@key" />
