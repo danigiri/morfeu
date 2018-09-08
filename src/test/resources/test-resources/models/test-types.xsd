@@ -63,7 +63,7 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:metadata>
-					<mf:desc>textContent is a text area for simple content</mf:desc>
+					<mf:desc>textContent is a multiple line text area for simple content</mf:desc>
 					<mf:presentation>CELL-TEXT</mf:presentation>
 				</mf:metadata>
 			</xs:appinfo>
@@ -71,5 +71,19 @@
 
 		<xs:restriction base="xs:string" />
 	</xs:simpleType>
+
+	<xs:simpleType name="textContentOneLine">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>textContent is a text field for simple content</mf:desc>
+					<mf:presentation>CELL-TEXT-ONELINE</mf:presentation>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
 
 </xs:schema>

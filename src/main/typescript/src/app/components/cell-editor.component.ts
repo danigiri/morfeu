@@ -39,7 +39,7 @@ import { UXEvent } from "../events/ux.event";
 					<form>
 						<textarea *ngIf="cell.value!=undefined && showValue()"
 							class="cell-editor-value form-control"
-							rows="3"
+							rows="textAreaRows()"
 							name="{{cell.cellModel.name}}.value"
 							attr.aria-label="{{cell.cellModel.name}}.value"
 							attr.aria-describedby="{{cell.cellModel.desc}} value"
@@ -64,18 +64,19 @@ import { UXEvent } from "../events/ux.event";
 								[parentCell]="cell"
 								[cellModel]="a"
 								[index]="i"
-								></attribute-data-editor>
+							></attribute-data-editor>
 						</ul>
 					</form>
-					<img *ngIf="showPresentation()" 
-						class="card-img-bottom" src="{{getPresentation()}}" 
+					<img *ngIf="showPresentation()"
+						class="card-img-bottom" src="{{getPresentation()}}"
 						alt="Image representation of the cell" />
 				</div>
 				<div class="modal-footer card-footer">
 					<button id="cell-editor-discard-button"
 						type="button"
 						class="btn btn-outline-secondary float-left"
-						(click)="c('Discard')">Discard</button>
+						(click)="c('Discard')"
+					>Discard</button>
 					<button id="cell-editor-save-button"
 						type="button"
 						class="btn btn-success float-right"
@@ -120,6 +121,12 @@ ngOnInit() {
 private showValue() {
 	return this.cell.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
 }
+
+
+private textAreaRows(): number {
+	return this.cell.cellModel.presentation.includes("ONELINE") ? 1 : 3;
+}
+
 
 private edit(cell: Cell) {
 
