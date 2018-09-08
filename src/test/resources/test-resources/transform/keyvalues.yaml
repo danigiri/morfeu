@@ -6,5 +6,5 @@ rows:
       - 
         size: 12
         keyvalues:
-          - foo: bar
-          - bar: foo
+          foo: bar
+          bar: foo

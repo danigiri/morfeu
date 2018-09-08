@@ -146,18 +146,16 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	JsonNode keyvalues = yaml.get("rows").get(0).get("cols").get(0).get("keyvalues");
 	assertNotNull(keyvalues);
-	assertTrue(keyvalues.isArray());
+	assertTrue(keyvalues.isObject());
 	assertEquals(2, keyvalues.size());
 
-	JsonNode foo = keyvalues.get(0);			//rows/cols/col0/keyvalues/foo
+	JsonNode foo = keyvalues.get("foo");			//rows/cols/col0/keyvalues/foo
 	assertNotNull(foo);
-	assertTrue(foo.isObject());
-	assertEquals("bar", foo.get("foo").asText());
+	assertEquals("bar", foo.asText());
 
-	JsonNode bar = keyvalues.get(1);			//rows/cols/col0/keyvalues/bar
+	JsonNode bar = keyvalues.get("bar");			//rows/cols/col0/keyvalues/bar
 	assertNotNull(bar);
-	assertTrue(bar.isObject());
-	assertEquals("foo", bar.get("bar").asText());
+	assertEquals("foo", bar.asText());
 	
 }
 
