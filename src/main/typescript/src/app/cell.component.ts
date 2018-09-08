@@ -42,7 +42,6 @@ import { EventService } from "./events/event.service";
 	selector: "cell",
 	template: `
 			<ng-container [ngSwitch]="true">
-
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
 					<div id="{{cell.URI}}"
 						class="well container-fluid show-grid cell-level-{{level}} rounded"

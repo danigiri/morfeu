@@ -123,5 +123,42 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 }
 
 
+@Test
+public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
+
+	Document doc = produceDocumentFromPath("test-resources/documents/keyvalues-yaml.json");
+	assertNotNull(doc);
+
+	Map<String, Object> values = new HashMap<String, Object>(2);
+	values.put("cells", doc.getContent().asList());
+	values.put("model", doc.getModel());
+	
+	String transformed = DaggerViewComponent.builder()
+			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withValue(values)
+			.build()
+			.render();
+	//System.err.println(transformed);
+	
+	YAMLMapper mapper = new YAMLMapper();
+	JsonNode yaml = mapper.readTree(transformed);
+	assertNotNull(yaml);
+
+	JsonNode keyvalues = yaml.get("rows").get(0).get("cols").get(0).get("keyvalues");
+	assertNotNull(keyvalues);
+	assertTrue(keyvalues.isArray());
+	assertEquals(2, keyvalues.size());
+
+	JsonNode foo = keyvalues.get(0);			//rows/cols/col0/keyvalues/foo
+	assertNotNull(foo);
+	assertTrue(foo.isObject());
+	assertEquals("bar", foo.get("foo").asText());
+
+	JsonNode bar = keyvalues.get(1);			//rows/cols/col0/keyvalues/bar
+	assertNotNull(bar);
+	assertTrue(bar.isObject());
+	assertEquals("foo", bar.get("bar").asText());
+	
+}
 
 }
