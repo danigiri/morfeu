@@ -137,7 +137,8 @@ public void testCellModels() {
 	assertTrue(colModel.thumb().endsWith("assets/images/col-thumb.svg"));
 
 	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
-	assertEquals(6, colChildren.size());
+	int colChildrenSize = colChildren.size();
+	assertEquals("col model should have 7 children, not "+colChildrenSize, 7, colChildrenSize);
 
 	assertEquals("stuff", colChildren.get(0).name());
 	assertEquals("data", colChildren.get(1).name());

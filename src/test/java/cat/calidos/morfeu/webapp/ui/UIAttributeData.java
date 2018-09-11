@@ -69,8 +69,7 @@ public boolean hasValue() {
 }
 
 
-// FIXME: this will fail if the cell has a value as well as attributes
-public UIAttributeData enterText(String value) {
+public UIAttributeData enterTextDirect(String value) {
 
 	if (!isEditable()) {
 		throw new UnsupportedOperationException("Cannot set the value of a non-editable field");
@@ -89,5 +88,20 @@ public UIAttributeData enterText(String value) {
 	
 	return this;
 }
+
+
+public UIAttributeData enterTextNext(String value) {
+
+	if (!isEditable()) {
+		throw new UnsupportedOperationException("Cannot set the value of a non-editable field");
+	}
+	pressKey("\t");
+	pressKey(value);
+
+	return this;
+
+
+}
+
 
 }

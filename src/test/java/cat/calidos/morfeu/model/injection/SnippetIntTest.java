@@ -39,7 +39,7 @@ public class SnippetIntTest extends ModelTezt {
 @Test
 public void testSnippet() throws Exception {
 	
-	String contentPath = "test-resources/snippets/stuff1.xml";
+	String contentPath = "test-resources/snippets/stuff.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff";
 	String testAwareModelPath = testAwareFullPathFrom("test-resources/models/test-model.xsd");
@@ -63,7 +63,7 @@ public void testSnippet() throws Exception {
 	
 	CellModel stuffModel = stuff.getCellModel();
 	assertEquals("stuff", stuffModel.getName());
-	
+
 }
 
 }

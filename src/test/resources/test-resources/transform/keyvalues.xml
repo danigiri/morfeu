@@ -6,7 +6,7 @@
 	<row>
 		<col size="12">
 			<keyvalue key="foo" value="bar"/>
-			<keyvalue key="bar" value="foo &quot;content&quot; is here"/>
+			<keyvalue key="bar" value="foo"/>
 		</col>
 	</row>
 </test>

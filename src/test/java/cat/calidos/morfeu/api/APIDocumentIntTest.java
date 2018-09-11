@@ -48,7 +48,7 @@ public void testDocument() throws Exception {
 	assertEquals("First document", doc.get("desc").asText());
 	assertEquals("xml", doc.get("kind").asText());
 
-	String modelURI = pathPrefix+"models/test-model.xsd";
+	String modelURI = pathPrefix+"models/test-model.xsd?not=used";
 	assertEquals(modelURI, doc.get("modelURI").asText());
 	assertTrue("Fetchable model uri does not end correctly", doc.get("fetchableModelURI").asText().endsWith(modelURI));
 

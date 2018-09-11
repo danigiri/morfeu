@@ -67,7 +67,7 @@ public void testGlobalMetadataFromModel() throws Exception {
 	
 	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, modelURI);
 	assertNotNull("global metadata parser should not return null", globalMetadata);
-	assertEquals("global metadata should have three entries", 3, globalMetadata.size());
+	assertEquals("global metadata should have 4 entries", 4, globalMetadata.size());
 
 	URI dataURI = new URI(uri+"/test/row/col/data");
 	Metadata dataMetadata = globalMetadata.get(dataURI);	

@@ -85,8 +85,8 @@ public void editCellAndSave() {
 	assertTrue("Attribute number should be editable", number.isEditable());
 
 	// let's modify the values
-	name.enterText("foo");
-	number.enterText("66");
+	name.enterTextDirect("foo");
+	number.enterTextNext("66");
 	dataEditor.clickSave();
 
 	attributes = data.cellInfo().attributes();	// re-read attributes from the now-modified cell
@@ -118,8 +118,8 @@ public void editCellAndDismiss() {
 	UIAttributeData number = checkAttribute(attributes, "number", "42");
 	
 	// let's modify the values
-	name.enterText("foo");
-	number.enterText("66");
+	name.enterTextDirect("foo");
+	number.enterTextDirect("66");
 	
 	dataEditor.clickDiscard();
 
