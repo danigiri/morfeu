@@ -5,6 +5,7 @@
 		{ "name":"Document 1 YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document1-yaml.json" }
 		,{ "name":"Document 3 YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document3-yaml.json" }
 		,{ "name":"Document keyvalues YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/keyvalues-yaml.json" }
+		,{ "name":"Document escape YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/escape-yaml.json" }
 		]
 	,"snippets": [
 		 { "name": "Stuff 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}

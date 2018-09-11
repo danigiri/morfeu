@@ -37,7 +37,7 @@
 		{#- cellmodels.size()==1 - We are already matched to a cell model, we start printing -#}
 		{%- if cellmodels[0].isSimple -%}
 			{%- if yaml.size>0 %}
-{{i}}<{{cellmodels[0].name}}>{{yaml.asText}}</{{cellmodels[0].name}}>
+{{i}}<{{cellmodels[0].name}}>{{yaml.asText | xmlc}}</{{cellmodels[0].name}}>
 			{%- else %}
 {{i}}<{{cellmodels[0].name}}/>
 				{%- endif -%}
@@ -57,7 +57,7 @@
 
 {%- elseif yaml.isTextual -%}
 	{#- ___________ yaml is a simple text node _________ -#}
-{{i}}<{{cellmodels[0].name}}>{{yaml.asText}}</{{cellmodels[0].name}}>
+{{i}}<{{cellmodels[0].name}}>{{yaml.asText | xmlc}}</{{cellmodels[0].name}}>
 {% elseif yaml.isArray -%}
 	{#- ___________ yaml is array _________ -#}
 	{%- for y in range(yaml.size()) -%}

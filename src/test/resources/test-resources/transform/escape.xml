@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
+>
+	<row>
+		<col size="12">
+			<stuff>contains a double " quote</stuff>
+			<stuff>contains a single ' quote</stuff>
+			<stuff>contains an &amp; amp</stuff>
+		</col>
+	</row>
+</test>

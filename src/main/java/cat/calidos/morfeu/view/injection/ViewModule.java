@@ -80,6 +80,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(quote)
 												.add(isMultiline)
 												.add(multiline)
+												.add(xmlc)
 											.and()
 											.build();
 	
@@ -276,8 +277,7 @@ final static SimpleJtwigFunction isMultiline = new SimpleJtwigFunction() {
 	public Object execute(FunctionRequest request) {
 
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-		String s = request.getEnvironment().getValueEnvironment()
-							.getStringConverter().convert(request.get(0));
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
 		// System.err.println("\t\t"+s+","+s.contains("\\n"));
 
 		return s.contains("\\n");
@@ -301,13 +301,38 @@ final static SimpleJtwigFunction multiline = new SimpleJtwigFunction() {
 	public Object execute(FunctionRequest request) {
 
 		request.minimumNumberOfArguments(2).maximumNumberOfArguments(2);
-		String indent = request.getEnvironment().getValueEnvironment()
-								.getStringConverter().convert(request.get(0));
-		String s = request.getEnvironment().getValueEnvironment()
-							.getStringConverter().convert(request.get(1));
+		String indent = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(1));
 		String indentedLinefeed = "\n"+indent;
 		
 		return s.replace("\\n", indentedLinefeed);
+
+	}
+
+};
+
+
+/** returns xml content scaping & --> &amp;, < --> &gt; < --> &lt; */
+final static SimpleJtwigFunction xmlc = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "xmlc";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+
+		s = s.replace("&", "&amp;");
+		s = s.replace(">", "&gt;");
+		s = s.replace("<", "&lt;");
+
+		return s;
 
 	}
 

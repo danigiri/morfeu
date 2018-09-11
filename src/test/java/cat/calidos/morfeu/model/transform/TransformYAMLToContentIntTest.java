@@ -23,7 +23,7 @@ import org.junit.Test;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformYAMLToContentIntTest extends TransformTezt {
 
-@Test
+//@Test
 public void testTransformUsingTemplateDocument1() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
@@ -37,7 +37,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 }
 
 
-@Test
+//@Test
 public void testTransformUsingTemplateDocument3() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document3.yaml";
@@ -45,13 +45,13 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/documents/document3.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-	//System.err.println(transformed);
+//	System.err.println(transformed);
 	compareWithXML(transformed, xmlPath);
 
 }
 
 
-@Test
+//@Test
 public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/keyvalues.yaml";
@@ -59,9 +59,23 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/transform/keyvalues.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-	System.err.println(transformed);
+//	System.err.println(transformed);
 	compareWithXML(transformed, xmlPath);
 
+}
+
+
+@Test
+public void testTransformUsingTemplateEscapeDocument() throws Exception {
+
+	String yamlPath = "target/test-classes/test-resources/transform/escape.yaml";
+	String documentPath = "test-resources/documents/escape-yaml.json";
+	String xmlPath = "src/test/resources/test-resources/transform/escape.xml";
+
+	String transformed = transformYAMLToXML(yamlPath, documentPath);
+	System.err.println(transformed);
+	compareWithXML(transformed, xmlPath);
+	
 }
 
 }

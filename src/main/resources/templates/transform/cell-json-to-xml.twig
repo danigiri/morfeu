@@ -6,6 +6,6 @@
 />{% else -%}
 {{i}}<{{ name }} 	{%for a in node.internalAttributes %} {{a.name.textValue}}="{{a.value.textValue}}" {% endfor -%}
 			{%for a in node.attributes %} {{a.name.textValue}}="{{a.value.textValue}}" {% endfor -%} 
->{{value}}
+>{{value | xmlc}}
 {% for childnode in node.children %}{% include "cell-json-to-xml.twig" with {'node': childnode, 'i':concat(i,'\t')} only %}{% endfor %}
 {{i}}</{{ name }}>{% endif %}

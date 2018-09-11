@@ -1,0 +1,8 @@
+{
+	"name": "Document escape YAML"
+	,"desc": "Contains special chars (YAML)"
+	,"kind": "yaml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/transform/escape.yaml"
+	
+}

@@ -1,0 +1,11 @@
+%YAML 1.2
+---
+rows:
+  - 
+    cols:
+      - 
+        size: 12
+        stuff:
+          - contains a double " quote
+          - contains a single ' quote
+          - contains an & amp
