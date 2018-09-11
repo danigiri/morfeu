@@ -76,6 +76,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(list)
 												.add(debn)
 												.add(deb)
+												.add(break_)
 												.add(quote)
 												.add(isMultiline)
 												.add(multiline)
@@ -183,7 +184,8 @@ final static SimpleJtwigFunction debn = new SimpleJtwigFunction() {
 	public Object execute(FunctionRequest request) {
 
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
-		request.getArguments().stream().forEachOrdered(System.err::print);
+		List<Object> arguments = request.getArguments();
+		arguments.stream().forEachOrdered(System.err::print);
 		System.err.println();
 
 		return new Object();
@@ -196,7 +198,6 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 
 	@Override
 	public String name() {
-
 		return "deb";
 	}
 
@@ -205,8 +206,30 @@ final static SimpleJtwigFunction deb = new SimpleJtwigFunction() {
 	public Object execute(FunctionRequest request) {
 
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
-		request.getArguments().stream().forEachOrdered(System.err::print);
+		List<Object> arguments = request.getArguments();
+		arguments.stream().forEachOrdered(System.err::print);
 
+		return new Object();
+	}
+
+};
+
+
+final static SimpleJtwigFunction break_ = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+		return "break";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
+		List<Object> arguments = request.getArguments();
+		
+		
 		return new Object();
 	}
 

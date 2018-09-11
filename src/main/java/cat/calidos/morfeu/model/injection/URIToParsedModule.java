@@ -148,7 +148,7 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		List<CellModel> rootCellModels = model.get().get().getRootCellModels();
 		values.put("cellmodels", rootCellModels);
 		values.put("yaml", yaml);
-		values.put("case","yaml-to-xml");
+		values.put("case", "yaml-to-xml");
 		//rootCellModels.stream().map(cm -> cm.getName()).forEach(name -> log.trace("CellModel:{}",name));
 
 		String transformedContent = DaggerViewComponent.builder()
@@ -156,7 +156,7 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 														.withValue(values)
 														.build()
 														.render();
-		//log.trace("Transformed yaml to xml '{}'", transformedContent);
+		log.trace("Transformed yaml to xml '{}'", transformedContent);
 
 		return IOUtils.toInputStream(transformedContent, Config.DEFAULT_CHARSET);
 

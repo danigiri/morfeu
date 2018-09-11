@@ -86,6 +86,9 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	assertEquals(42, data0.get("number").asInt());
 	assertEquals("blahblah", data0.get("text").asText());
 
+	data0.fields().next().get
+	//data0.fields().next()
+	
 	// now we check the order of the attributes that should be the one we want (like the one in the xml)
 	// this is not supported in the dom so we will skip this test
 }
@@ -138,7 +141,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 			.withValue(values)
 			.build()
 			.render();
-	//System.err.println(transformed);
+	System.err.println(transformed);
 	
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -155,7 +158,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	JsonNode bar = keyvalues.get("bar");			//rows/cols/col0/keyvalues/bar
 	assertNotNull(bar);
-	assertEquals("foo", bar.asText());
+	assertEquals("foo \"content\" is here", bar.asText());
 	
 }
 

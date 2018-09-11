@@ -54,8 +54,8 @@ import { EventService } from "./events/event.service";
 								<drop-area *ngIf="parent" [parent]="cell" position="0"></drop-area>
 							</div>
 						</div>
-						<cell *ngFor="let c of cell.children; let i=index" 
-								[cell]="c" 
+						<cell *ngFor="let c of cell.children; let i=index"
+								[cell]="c"
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
@@ -123,16 +123,16 @@ import { EventService } from "./events/event.service";
 						<!-- TODO: check the model and the content as well (counts, etc.) -->
 						<img id="{{cell.URI}}"
 							class="cell cell-img cell-level-{{level}}"
-							 src="{{getCellPresentation()}}" 
-							 [class.cell-active]="active"
-							 [class.cell-selected]="selected"
-							 (mouseenter)="focusOn(cell)" 
-							 (mouseleave)="focusOff(cell)"
-							 dnd-draggable 
-							 [dragEnabled]="dragEnabled"
-							 (onDragEnd)="dragEnd(cell)"
-							 [dragData]="cellDragData()"
-							 />
+							src="{{getCellPresentation()}}"
+							[class.cell-active]="active"
+							[class.cell-selected]="selected"
+							(mouseenter)="focusOn(cell)" 
+							(mouseleave)="focusOff(cell)"
+							dnd-draggable
+							[dragEnabled]="dragEnabled"
+							(onDragEnd)="dragEnd(cell)"
+							[dragData]="cellDragData()"
+						/>
 						<!-- the position of the drop area is always where droped cells will go -->
 						<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 				</ng-container>

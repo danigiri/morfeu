@@ -10,7 +10,7 @@
 				{%- for a in c.asComplex.attributes.asList -%} 
 				{%- if yaml.has(a.name) -%}
 					{%- set found = true -%}
-					{%- include 'cell-yaml-to-xml.twig' with {'yaml': yaml, 'cellmodels':[c], 'i':i, 'case': case} only -%}
+					{%- include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml, 'cellmodels':[c], 'i':i, 'case': case} only -%}
 				{%- endif -%}
 				{%- endfor -%}
 				{%- if not found -%}
@@ -42,36 +42,18 @@
 {{i}}<{{cellmodels[0].name}}/>
 				{%- endif -%}
 {% else %}	{#- complex #}
-{{i}}<{{cellmodels[0].name}}
-			{%- for a in list(cellmodels[0].metadata.getAttributesFor(case).iterator) %} {{a-}}{%- endfor -%}
-			{#- we check if we have key-value attributes or normal ones, in the case of k:v, we skip verification of the key -#}
-			{%- if cellmodels[0].metadata.getDirectivesFor(case).contains('KEY-VALUE') %} {{cellmodels[0].metadata.identifier.get}}={{quote(yaml.fieldNames().next()) -}}
-				{%- for a in cellmodels[0].asComplex.attributes.asList %}{% if a.getName()!=(cellmodels[0].metadata.identifier.get()) %} {{a.name}}={{quote(yaml.get(yaml.fieldNames().next()))}}{% endif %}{%- endfor -%}
+			{# - we check if we have a collection of key values or just a complex cell -#}
+			{%- if cellmodels[0].metadata.getDirectivesFor(case).contains('KEY-VALUE') -%}
+				{%- set kvs = yaml.fields -%}
+				{%- for kvi in range(yaml.size()) -%}
+{% include 'cell-complex-yaml-to-xml.dtwig' with {'yaml': kvs.next(), 'cellmodel':cellmodels[0], 'i':i, 'case': case} only %}
+{% endfor-%}
 			{%- else -%}
-				{%- for a in cellmodels[0].asComplex.attributes.asList %} {%- if yaml.has(a.name)%} {{a.name}}={{quote(yaml.get(a.name))}}{% endif %}{%- endfor -%}
+{% include 'cell-complex-yaml-to-xml.twig' with {'yaml': yaml, 'cellmodel':cellmodels[0], 'i':i, 'case': case} only -%}
 			{%- endif -%}
-			{%- if cellmodels[0].asComplex.children.size()>0 -%}
-				>{% for y in list(yaml.fieldNames) -%} {#- THIS LOOKS LIKE THE CODE ABOVE FOR ONE CELL, WE CAN DO AN INCLUDE OF GIVEN ONE CM + FIELD NAMES, WE MATCH -#} 
-					{%- for child in cellmodels[0].asComplex.children.asList -%}
-						{%- if child.metadata.getDirectivesFor(case).contains('LISTS-NO-PLURAL') -%}
-							{%- set matchname = child.name -%}
-						{%- else -%}
-							{%- set matchname = concat(child.name, 's') -%}
-						{%- endif -%}
-						{%- if y==matchname -%}
-							{#- Matched a field in the yaml and a child in the model, we have a match -#}
-							{%- set found = true -%}
-							{%- include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
-						{%- endif -%}
-					{%- endfor -%}
-				{%- endfor %}
-{{i}}</{{cellmodels[0].name}}>
-			{%- else -%}
-				/>
-			{%- endif %}
-		{%- endif -%}
+		{%- endif -%} {#- simple or complex -#}
 
-	{%- endif -%} {#- size -#}
+	{%- endif -%} {#- size()>0 -#}
 
 {%- elseif yaml.isTextual -%}
 	{#- ___________ yaml is a simple text node _________ -#}
