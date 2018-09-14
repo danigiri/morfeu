@@ -39,6 +39,9 @@ import dagger.Provides;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+*	@author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ViewModule {
 
@@ -80,7 +83,10 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(quote)
 												.add(isMultiline)
 												.add(multiline)
+												.add(xmla)
 												.add(xmlc)
+												.add(yamlc)
+												.add(yamla)
 											.and()
 											.build();
 	
@@ -237,6 +243,7 @@ final static SimpleJtwigFunction break_ = new SimpleJtwigFunction() {
 };
 
 
+/** add double quotes around the content */
 final static SimpleJtwigFunction quote = new SimpleJtwigFunction() {
 
 	@Override
@@ -252,9 +259,7 @@ final static SimpleJtwigFunction quote = new SimpleJtwigFunction() {
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
 		String s = request.getEnvironment().getValueEnvironment()
 							.getStringConverter().convert(request.get(0));
-		if (!s.startsWith("\"") && !s.endsWith("\"")) {
-			s = "\"" + s + "\"";
-		}
+		s = (!s.startsWith("\"") && !s.endsWith("\"")) ? s = "\"" + s + "\"" : s;
 
 		return s;
 
@@ -312,6 +317,41 @@ final static SimpleJtwigFunction multiline = new SimpleJtwigFunction() {
 };
 
 
+/** returns xml attribute scaping & --> &amp;, " --> &quot; */
+final static SimpleJtwigFunction xmla = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "xmla";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+
+		s = s.replace("&", "&amp;");
+		
+		if (s.startsWith("\"") && s.endsWith("\"")) {	// these are delimiters
+			s = s.substring(1, s.length()-1);
+			s = s.replace("\\\"", "&quot;");	// yaml escaped
+			s = s.replace("\"", "&quot;");		// not yaml escaped
+			s = "\""+s+"\"";
+			
+		} else {
+			s = s.replace("\\\"", "&quot;");	// yaml escaped
+			s = s.replace("\"", "&quot;");		// not yaml escaped
+		}
+		return s;
+
+	}
+
+};
+
+
 /** returns xml content scaping & --> &amp;, < --> &gt; < --> &lt; */
 final static SimpleJtwigFunction xmlc = new SimpleJtwigFunction() {
 
@@ -338,5 +378,53 @@ final static SimpleJtwigFunction xmlc = new SimpleJtwigFunction() {
 
 };
 
+
+/** returns yaml content scaping \" --> " */
+final static SimpleJtwigFunction yamlc = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "yamlc";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+
+		s = s.replace("\\\"", "\"");
+
+		return s;
+
+	}
+
+};
+
+/** returns yaml attribute scaping \" --> ", */
+final static SimpleJtwigFunction yamla = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "yamla";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+
+		s = s.replace("\\\"", "\"");
+
+		return s;
+
+	}
+
+};
 
 }

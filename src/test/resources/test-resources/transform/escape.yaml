@@ -9,3 +9,19 @@ rows:
           - contains a double " quote
           - contains a single ' quote
           - contains an & amp
+#          - 'is quoted \' \" simply'
+#          - "is quoted ' \" doubly"
+        data:
+          - 
+            number: 4
+            text: contains a double " quote
+          - 
+            number: 5
+            text: contains a single ' quote
+          - 
+            number: 6
+            text: contains an & amp
+        keyvalues:
+          double: contains a double " quote
+          single: contains a single ' quote
+          amp: contains an & amp

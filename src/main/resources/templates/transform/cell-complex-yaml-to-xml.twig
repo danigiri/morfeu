@@ -1,10 +1,10 @@
 {{i}}<{{cellmodel.name}}
 			{%- for a in list(cellmodel.metadata.getAttributesFor(case).iterator) %} {{a-}}{%- endfor -%}
 			{#- we check if we have key-value attributes or normal ones, in the case of k:v, we skip verification of the key -#}
-			{%- if cellmodel.metadata.getDirectivesFor(case).contains('KEY-VALUE') %} {{cellmodel.metadata.identifier.get}}={{quote(yaml.getKey) -}}
-				{%- for a in cellmodel.asComplex.attributes.asList %}{% if a.name!=(cellmodel.metadata.identifier.get()) %} {{a.name}}={{quote(yaml.getValue)}}{% endif %}{%- endfor -%}
+			{%- if cellmodel.metadata.getDirectivesFor(case).contains('KEY-VALUE') %} {{cellmodel.metadata.identifier.get}}={{quote(xmla(yaml.getKey)) -}}
+				{%- for a in cellmodel.asComplex.attributes.asList %}{% if a.name!=(cellmodel.metadata.identifier.get()) %} {{a.name}}={{quote(xmla(yaml.getValue))}}{% endif %}{%- endfor -%}
 			{%- else -%}
-				{%- for a in cellmodel.asComplex.attributes.asList %} {%- if yaml.has(a.name)%} {{a.name}}={{quote(yaml.get(a.name))}}{% endif %}{%- endfor -%}
+				{%- for a in cellmodel.asComplex.attributes.asList %} {%- if yaml.has(a.name)%} {{a.name}}={{quote(xmla(yaml.get(a.name)))}}{% endif %}{%- endfor -%}
 			{%- endif -%}
 			{%- if cellmodel.asComplex.children.size()>0 -%}
 				>{% for y in list(yaml.fieldNames) -%} {#- THIS LOOKS LIKE THE CODE ABOVE FOR ONE CELL, WE CAN DO AN INCLUDE OF GIVEN ONE CM + FIELD NAMES, WE MATCH -#} 

@@ -8,6 +8,12 @@
 			<stuff>contains a double " quote</stuff>
 			<stuff>contains a single ' quote</stuff>
 			<stuff>contains an &amp; amp</stuff>
+			<data number="4" text="contains a double &quot; quote"/>
+			<data number="5" text="contains a single ' quote"/>
+			<data number="6" text="contains an &amp; amp "/>
+			<keyvalue key="double" value="contains a double &quot; quote"/>
+			<keyvalue key="single" value="contains a single ' quote"/>
+			<keyvalue key="amp" value="contains an &amp; amp"/>
 		</col>
 	</row>
 </test>
