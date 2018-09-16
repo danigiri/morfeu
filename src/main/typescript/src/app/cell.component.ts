@@ -79,7 +79,7 @@ import { EventService } from "./events/event.service";
 						(onDragEnd)="dragEnd(cell)"
 						[dragData]="cellDragData()"
 					/>
-					<div id="{{cell.URI}}" 
+					<div id="{{cell.URI}}"
 						class="row-well row show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
@@ -111,7 +111,7 @@ import { EventService } from "./events/event.service";
 						<!-- drop area here to add anything at the beginning of the column -->
 						<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
 						<cell *ngFor="let c of cell.children; let i=index" 
-								[cell]="c" 
+								[cell]="c"
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
@@ -127,7 +127,7 @@ import { EventService } from "./events/event.service";
 							src="{{getCellPresentation()}}"
 							[class.cell-active]="active"
 							[class.cell-selected]="selected"
-							(mouseenter)="focusOn(cell)" 
+							(mouseenter)="focusOn(cell)"
 							(mouseleave)="focusOff(cell)"
 							dnd-draggable
 							[dragEnabled]="dragEnabled"
@@ -144,7 +144,7 @@ import { EventService } from "./events/event.service";
 			.cell {}
 			.well {
 /*
-				 padding: 0;
+				padding: 0;
 				align-content: stretch;
  */
 				}
@@ -157,7 +157,7 @@ import { EventService } from "./events/event.service";
 				padding-left: 0;
 				max-width: 100%;
 				width: 100%;
-			 */
+				*/
 			}
 			.cell-img {
 				/*
@@ -173,17 +173,17 @@ import { EventService } from "./events/event.service";
 			.cell-active {
 				border: 3px solid #f00;
 				border-radius: 5px;
-			 }
+			}
 			.cell-selected {
 				border: 3px dashed #00f;
 				border-radius: 5px;
-			 }
-			 .cell-dragged {
-				 opacity: .2;
-			 }
-			 .drag-inactive {
-				 opacity: .1;
-			 }
+			}
+			.cell-dragged {
+				opacity: .2;
+			}
+			.drag-inactive {
+				opacity: .1;
+			}
 			.drag-active {
 				opacity: .8;
 			}
@@ -223,9 +223,9 @@ import { EventService } from "./events/event.service";
 			 .cell-col-11 {
 				 max-width: 91.6%;
 			 }
-			 .cell-col-12 {
-				 max-width: 100%;
-			 }
+			.cell-col-12 {
+				max-width: 100%;
+			}
 			.cell-level-0 {}
 			.cell-level-1 {}
 			.cell-level-2 {}

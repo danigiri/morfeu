@@ -23,8 +23,8 @@ import { CellModel } from "../cell-model.class";
 	moduleId: module.id,
 	selector: "attribute-data-editor",
 	template: `
-		<li *ngIf="hasValue_()" class="attribute-data attribute-data-editor list-group-item" [attr._index]="index">
-			<div class="input-group input-group-sm mb-3">
+		<li class="attribute-data attribute-data-editor list-group-item" [attr._index]="index">
+			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
 					<span class="attribute-data-name input-group-text"
 						[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
@@ -38,15 +38,24 @@ import { CellModel } from "../cell-model.class";
 					[(ngModel)]="this.value"
 				/>
 				<div *ngIf="cellModel.minOccurs==0" class="input-group-append">
-					<img class="btn float-right"
+					<img class="btn float-right attribute-data-delete"
 						src="assets/images/open-iconic/circle-x.svg"
 						(click)="delete()"
-						/>
+					/>
 				</div>
+			</div>
+			<div *ngIf="!hasValue_()" class="list-group-item disabled">
+				<small class="attribute-data-name">{{cellModel.name}}</small>
+				<span class="badge float-right">
+					<img class="btn float-right attribute-data-add"
+						src="assets/images/open-iconic/plus.svg"
+						(click)="add()"
+					/>
+				</span>
 			</div>
 		</li>
 	`,
-	styles:[`
+	styles: [`
 				.attribute-data {}
 				.attribute-data-editor {}
 				.attribute-data-editor-identifier {
@@ -54,6 +63,8 @@ import { CellModel } from "../cell-model.class";
 				}
 				.attribute-data-name {}
 				.attribute-data-value {}
+				.attribute-data-delete {}
+				.attribute-data-add {}
 	`]
 })
 
@@ -86,7 +97,15 @@ set value(v: string) {
 private delete() {
 
 	console.log("[UI] deleting cell attribute ", this.cellModel.name);
-	Promise.resolve(null).then(() => 
-		this.parentCell.remove(this.parentCell.attributes.find(a=> a.name===this.cellModel.name)));
+	Promise.resolve(null).then(() =>
+		this.parentCell.remove(this.parentCell.attributes.find(a => a.name===this.cellModel.name)));
 }
+
+
+// add current attribute with empty or default value
+private add() {
+	console.log("[UI] adding cell attribute ", this.cellModel.name);
+	Promise.resolve(null).then(() => this.parentCell.adopt(this.cellModel.generateCell()));
+}
+
 }

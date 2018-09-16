@@ -78,9 +78,9 @@ stripPrefixFromURIs(prefix: string) {
 
 
 /** get the attribute named this way, or return undefined if no such attribute is present */
-attribute(name:string):string {
+attribute(name: string): string {
 
-	let value:string;
+	let value: string;
 	if (this.attributes) {
 		const attribute:Cell = this.attributes.find(a => a.name===name);
 		if (attribute) {
@@ -98,7 +98,7 @@ columnFieldValue(): string {
 
 	let value = "1";
 	if (this.attributes) {
-		let attribute:Cell = this.attributes.find(a => a.cellModel.presentation=="COL-FIELD");
+		let attribute: Cell = this.attributes.find(a => a.cellModel.presentation=="COL-FIELD");
 		if (attribute) {
 			value = attribute.value;
 		}
@@ -263,44 +263,52 @@ getPresentation(): string {
 
 //// Adopter ////
 
-adopt(orphan: Cell, position: number) {
+adopt(orphan: Cell, position?: number) {
 
-	// notice that we are adopting only orphan cells as we do not want this method to have side effects on
-	// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
-	// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
 
-	if (orphan.parent) {
-		console.error("Adopting child that was not an orphan");
-	}
-
-	orphan.parent = this;
-	orphan.setPosition(position);	// this actually changes the URI fo the new member to the correct one
-									//       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
-									// TODO: DOUBLE CHECK FOR SNIPPET ADOPTION AS THERE IS NO CONTEXT
-									//       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
-
-	if (!this.children) {
-		this.children = [ orphan ];
-	} else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
-		this.children.push(orphan);
+	if (orphan.cellModel.isAttribute) {
+		this.attributes.push(orphan);
 	} else {
 
-		let newChildren: Cell[] = [];
-		let i = 0;
-		this.children.forEach(c => {
-			if (i<position) { //>
-				newChildren.push(c);
-			} else if (i===position) {
-				newChildren.push(orphan);
-				i++;
-				newChildren.push(c.setPosition(i));	   // set next to a a shifted position of +1
-			} else {
-				newChildren.push(c.setPosition(i));	   // set the rest of children
-			}
-			i++;
-		});
-		this.children = newChildren;
+		// notice that we are adopting only orphan cells as we do not want this method to have side effects on
+		// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
+		// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
+		if (orphan.parent) {
+			console.error("Adopting cell that was not an orphan!!");
+		}
+		orphan.parent = this;
+		if (!position) {
+			console.error("Adopting child without a position!!!");
+		}
 
+		orphan.setPosition(position);	// this actually changes the URI fo the new member to the correct one
+										//       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
+										// TODO: DOUBLE CHECK FOR SNIPPET ADOPTION AS THERE IS NO CONTEXT
+										//       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
+
+		if (!this.children) {
+			this.children = [ orphan ];
+		} else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
+			this.children.push(orphan);
+		} else {
+
+			let newChildren: Cell[] = [];
+			let i = 0;
+			this.children.forEach(c => {
+				if (i<position) {
+					newChildren.push(c);
+				} else if (i===position) {
+					newChildren.push(orphan);
+					i++;
+					newChildren.push(c.setPosition(i));	   // set next to a a shifted position of +1
+				} else {
+					newChildren.push(c.setPosition(i));	   // set the rest of children
+				}
+				i++;
+			});
+			this.children = newChildren;
+
+		}
 	}
 
 }
@@ -310,11 +318,11 @@ remove(child: Cell) {
 
 	if (child.cellModel.isAttribute) {
 
-		this.attributes =  this.attributes.filter( a => a.getURI()!=child.getURI());
+		this.attributes =  this.attributes.filter( a => a.getURI()!==child.getURI());
 
 	} else {	// assuming child
 		const position = child.position;
-		let newChildren:Cell[] = [];
+		let newChildren: Cell[] = [];
 		let i = 0;
 		this.children.forEach(c => {
 			if (i<position) { //>
@@ -325,8 +333,8 @@ remove(child: Cell) {
 			i++;
 		});
 		this.children = newChildren;
-	
-	} 
+
+	}
 
 }
 
@@ -361,7 +369,6 @@ canAdopt(newMember:FamilyMember):boolean {
 	// we check the model compatibility first
 	if (!this.cellModel.canAdopt(newMember)) {
 		return false;
-		
 	}
 
 	// next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
@@ -376,7 +383,7 @@ canAdopt(newMember:FamilyMember):boolean {
 	if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
 		return false;
 	}
-	
+
 	// next, we check if we have more than one element but we are in the same droppable parent which means
 	// that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
 	//	<col>
@@ -407,8 +414,8 @@ canAdopt(newMember:FamilyMember):boolean {
 }
 
 
-childrenCount():number {
-	return this.children ? this.children.length : 0;   
+childrenCount(): number {
+	return this.children ? this.children.length : 0;
 }
 
 
@@ -437,12 +444,12 @@ delete() {
 
 toJSON(): CellJSON {
 
-	let serialisedCell:CellJSON = Object.assign({}, this);
+	let serialisedCell: CellJSON = Object.assign({}, this);
 
 	// we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
 	// belong to the serialised object
-	delete serialisedCell['cellModel'];
-	delete serialisedCell['parent'];
+	delete serialisedCell["cellModel"];
+	delete serialisedCell["parent"];
 
 	// TODO: add sanity checks for reference to avoid future infinite loops 
 	if (this.attributes) {
