@@ -277,7 +277,7 @@ adopt(orphan: Cell, position?: number) {
 			console.error("Adopting cell that was not an orphan!!");
 		}
 		orphan.parent = this;
-		if (!position) {
+		if (position===undefined) {
 			console.error("Adopting child without a position!!!");
 		}
 
