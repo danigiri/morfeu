@@ -23,27 +23,28 @@ import { CellModel } from "../cell-model.class";
 	moduleId: module.id,
 	selector: "attribute-data-editor",
 	template: `
-		<li class="attribute-data attribute-data-editor list-group-item" [attr._index]="index">
-			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
+		<li *ngIf="hasValue_()" class="attribute-data attribute-data-editor list-group-item" [attr._index]="index">
+			<div class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
-					<span class="attribute-data-name input-group-text" 
+					<span class="attribute-data-name input-group-text"
 						[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
-						id="{{cellModel.name}}">{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+						id="{{cellModel.name}}"
+					>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
 				</div>
-				<input type="text" 
-					class="attribute-data-value form-control" 
-					attr.aria-label="{{cellModel.name}}" 
-					attr.aria-describedby="{{cellModel.desc}}" 
-					[(ngModel)]="this.value" 
-					/>
-				 <div *ngIf="cellModel.minOccurs==0" class="input-group-append">
-					<img class="btn btn-outline-danger float-right" 
-						src="assets/images/open-iconic/circle-x.svg" 
+				<input type="text"
+					class="attribute-data-value form-control"
+					attr.aria-label="{{cellModel.name}}"
+					attr.aria-describedby="{{cellModel.desc}}"
+					[(ngModel)]="this.value"
+				/>
+				<div *ngIf="cellModel.minOccurs==0" class="input-group-append">
+					<img class="btn float-right"
+						src="assets/images/open-iconic/circle-x.svg"
 						(click)="delete()"
 						/>
-				  </div>
+				</div>
 			</div>
-		 </li>
+		</li>
 	`,
 	styles:[`
 				.attribute-data {}
@@ -64,21 +65,21 @@ export class AttributeDataEditorComponent {
 @Input() index: number;
 
 
-//do we have a value to show?
+// do we have a value to show?
 private hasValue_(): boolean {
- return this.parentCell && this.parentCell.attributes 
-		 && this.parentCell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
+	return this.parentCell && this.parentCell.attributes
+		&& this.parentCell.attributes.find(a => a.name===this.cellModel.name)!==undefined;
 }
 
 
 get value(): string {
- return this.parentCell.attributes.find(a=> a.name==this.cellModel.name).value;
+	return this.parentCell.attributes.find(a=> a.name===this.cellModel.name).value;
 }
 
 
 set value(v: string) {
-   let attributeCell = this.parentCell.attributes.find(a => a.name==this.cellModel.name);
-   attributeCell.value = v;
+	let attributeCell = this.parentCell.attributes.find(a => a.name===this.cellModel.name);
+	attributeCell.value = v;
 }
 
 // delete current value
@@ -86,7 +87,6 @@ private delete() {
 
 	console.log("[UI] deleting cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => 
-		this.parentCell.remove(this.parentCell.attributes.find(a=> a.name==this.cellModel.name)));
-	
+		this.parentCell.remove(this.parentCell.attributes.find(a=> a.name===this.cellModel.name)));
 }
 }
