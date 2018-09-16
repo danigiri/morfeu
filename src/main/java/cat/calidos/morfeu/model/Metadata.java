@@ -40,6 +40,7 @@ private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_THUMB = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
 private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
+public static final String DEFAULT_VALUE_PREFIX = "@";
 
 private URI uri;	// pre-calculated default
 private String desc;
@@ -48,29 +49,24 @@ private String cellPresentation;
 private String thumb;
 private Optional<String> identifier;
 private Map<String, String> defaultValues;
-
 private Map<String, Set<String>> directives;
-
 private Map<String, Set<String>> attributes;
 
 
-public static final String DEFAULT_VALUE_PREFIX = "@";
-//private static String UNDEFINED = "";
-
-public Metadata(URI uri, 
-				String desc, 
-				String presentation, 
-				String cellPresentation, 
+public Metadata(URI uri,
+				String desc,
+				String presentation,
+				String cellPresentation,
 				String thumb,
 				String identifier,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes
 			) {
-	this(uri, 
-			Optional.ofNullable(desc), 
-			Optional.ofNullable(presentation), 
-			Optional.ofNullable(cellPresentation), 
+	this(uri,
+			Optional.ofNullable(desc),
+			Optional.ofNullable(presentation),
+			Optional.ofNullable(cellPresentation),
 			Optional.ofNullable(thumb),
 			Optional.ofNullable(identifier),
 			defaultValues,
@@ -79,9 +75,9 @@ public Metadata(URI uri,
 }
 
 
-public Metadata(URI uri, 
-				Optional<String> desc, 
-				Optional<String> presentation, 
+public Metadata(URI uri,
+				Optional<String> desc,
+				Optional<String> presentation,
 				Optional<String> cellPresentation,
 				Optional<String> thumb,
 				Optional<String> identifier,
@@ -148,7 +144,7 @@ public String getName() {
 
 public Set<String> getDirectivesFor(String case_) {
 	return directives.containsKey(case_) ? directives.get(case_) : EMPTY_SET;
-} 
+}
 
 
 public Map<String, Set<String>> getDirectives() {

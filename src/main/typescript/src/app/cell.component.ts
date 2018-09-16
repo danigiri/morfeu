@@ -47,7 +47,7 @@ import { EventService } from "./events/event.service";
 						class="well container-fluid show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
-					 >
+					>
 						<!-- drop area to be able to add new rows to this well -->
 						<div class="row">
 							<div class="col">
@@ -61,43 +61,44 @@ import { EventService } from "./events/event.service";
 								[position]="i"
 								[snippet]="snippet"
 						></cell>
-					 </div>
-					 <!-- TODO: we probable want a drop area here to be able to add new wells -->
+					</div>
+					<!-- TODO: we probable want a drop area here to be able to add new wells -->
 				</ng-container>
 
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'ROW-WELL'">
+					<img src="{{getCellPresentation()}}"
+						class="img-fluid"
+						[class.drag-active]="active"
+						[class.drag-inactive]="!active"
+						[class.cell-active]="active"
+						[class.cell-selected]="selected"
+						(mouseenter)="focusOn(cell)"
+						(mouseleave)="focusOff(cell)"
+						dnd-draggable
+						[dragEnabled]="dragEnabled"
+						(onDragEnd)="dragEnd(cell)"
+						[dragData]="cellDragData()"
+					/>
 					<div id="{{cell.URI}}" 
 						class="row-well row show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
 					 >
-					<!-- TODO: add an affordance here to move rows, activable and dragable -->
 						<!-- add a drop area here if we ever want to dynamically add new columns -->
-						<cell *ngFor="let c of cell.children; let i=index" 
-								[cell]="c" 
-								[parent]="cell"
-								[level]="level+1"
-								[position]="i"
-								[snippet]="snippet"
+						<cell *ngFor="let c of cell.children; let i=index"
+									[cell]="c"
+									[parent]="cell"
+									[level]="level+1"
+									[position]="i"
+									[snippet]="snippet"
 						></cell>
 					</div>
-					<img src="assets/images/drag.svg"
-						 class="img-fluid"
-						 [class.drag-active]="active"
-						 [class.drag-inactive]="!active"
-						 (mouseenter)="focusOn(cell)" 
-						 (mouseleave)="focusOff(cell)"
-						 dnd-draggable 
-						 [dragEnabled]="dragEnabled"
-						 (onDragEnd)="dragEnd(cell)"
-						 [dragData]="cellDragData()" 
-					/>
 					<!-- drop area to be able to add new row after this one -->
 					<div class="row">
 						<div class="col">
 							<drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
 						</div>
-					 </div>
+					</div>
 				</ng-container>
 
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
@@ -106,17 +107,17 @@ import { EventService } from "./events/event.service";
 						class="col-well col show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
-					 ><!--COL-{{this.cell.columnFieldValue()}}-->
-						 <!-- drop area here to add anything at the beginning of the column -->
-						 <drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
-						 <cell *ngFor="let c of cell.children; let i=index" 
+					><!--COL-{{this.cell.columnFieldValue()}}-->
+						<!-- drop area here to add anything at the beginning of the column -->
+						<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
+						<cell *ngFor="let c of cell.children; let i=index" 
 								[cell]="c" 
 								[parent]="cell"
 								[level]="level+1"
 								[position]="i"
 								[snippet]="snippet"
-						  ></cell>
-					 </div>
+						></cell>
+					</div>
 				</ng-container>
 
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL')">
@@ -262,7 +263,7 @@ active = false;
 dragEnabled = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
-@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;		// we only have one of those!!! 
+@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;		// we only have one of those!!!
 
 
 constructor(eventService: EventService) {
@@ -421,7 +422,7 @@ canBeActivated(): boolean {
 select(position: number) {
 
 	if (position===this.position) {
-		
+
 		// if we were activated we deactivate ourselves and become selectable again
 		if (this.active) {
 			this.becomeInactive(this.cell);

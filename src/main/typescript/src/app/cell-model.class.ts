@@ -77,12 +77,20 @@ setComponent(c: CellModelComponent) {
 
 
 getRawPresentation() {
-	return (this.cellPresentation=='DEFAULT') ? "assets/images/cell.svg" : this.cellPresentation;
+
+	switch (this.cellPresentation) {
+		case "DEFAULT":
+			return "assets/images/cell.svg";
+		case "ROW-WELL":
+			return "assets/images/drag.svg";
+		default:
+			return this.cellPresentation;
+	}
 }
 
 
 getPresentation() {
-	
+
 	let finalPres = this.getRawPresentation();
 
 	if (finalPres.includes("$")) {
@@ -96,17 +104,17 @@ getPresentation() {
 
 /** Mutates the cellModel so any references point to  the original cell model**/
 normaliseReferencesWith(rootCellModels: CellModel[]) {
-	
+
 	if (this.isReference) {
-		let reference:CellModel = this.findCellModelWithURI(rootCellModels, this.referenceURI);
+		const reference: CellModel = this.findCellModelWithURI(rootCellModels, this.referenceURI);
 		if (!reference) {
 			console.error("Could not find cellModel of reference cellModel:%s", this.name);
 		}
-		
+
 		// we take the philosophy of completing the cellmodel reference with the missing data (children)
 		// we keep rest of the cell model information (like the name, which can be different)
 		this.children = reference.children;
-		
+
 	} else {
 		if (this.children) {
 			this.children.forEach(c => c.normaliseReferencesWith(rootCellModels));
@@ -115,7 +123,7 @@ normaliseReferencesWith(rootCellModels: CellModel[]) {
 			this.attributes.forEach(a => a.normaliseReferencesWith(rootCellModels));
 		}
 	}
-	
+
 }
 
 

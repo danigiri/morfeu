@@ -103,6 +103,7 @@
 							<resourceBase>${project.build.testOutputDirectory}</resourceBase>	<!-- data files for angular app -->
 							<!-- fallback for testing: /morfeu/target/test-classes/test-resources/.. is ok -->
 							<resourceBase>${basedir}</resourceBase>								<!-- more data files, compatible with int tests -->
+							<resourceBase>${basedir}/src/main/typescript/src</resourceBase>		<!-- for assets/images -->
 						</resourceBases>
 						<webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
 					</webApp>

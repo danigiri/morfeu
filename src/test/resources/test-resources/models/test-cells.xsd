@@ -107,6 +107,7 @@
 					<mf:desc>rowCell desc</mf:desc>
 					<mf:presentation>ROW-WELL</mf:presentation>
 					<mf:thumb>assets/images/row-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/row-cell.svg</mf:cell-presentation>
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
