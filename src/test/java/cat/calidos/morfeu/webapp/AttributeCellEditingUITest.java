@@ -33,7 +33,7 @@ import cat.calidos.morfeu.webapp.ui.UICellData;
 import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
-/**
+/** Tests adding new attributes on a cell editor, does not bother with saving or discarding as this is tested elsewhere
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class AttributeCellEditingUITest extends UITezt {
@@ -97,11 +97,10 @@ public void addAttributeTest() {
 	
 	dataEditorCellData = dataEditor.cellData();
 	assertEquals("We have now two attributes", 2, dataEditorCellData.attributes().size()); // awesome!
-	
+
 	nonPresentAttributes = dataEditorCellData.notPresentAttributes();
 	assertEquals("We do not have any remaining non-present attributes", 0, nonPresentAttributes.size());
-	
-	
+
 }
 
 

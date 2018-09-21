@@ -35,8 +35,7 @@ public UIAttributeData(SelenideElement element, UICellData parent) {
 }
 
 
-/** @return the normalised name, without any UI embellishments or clarifications
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** @return the normalised name, without any UI embellishments or clarifications */
 public String name() {
 
 	String name = name_();
@@ -47,26 +46,32 @@ public String name() {
 
 }
 
+
+/** @return is this an optional attribute? */
 public boolean isOptional() {
 	return !isMandatory();
 }
 
 
+/** @return is this a mandatory attribute? */
 public boolean isMandatory() {
-	return name_().endsWith("*:");
+	return name_().endsWith("*:");	// non-present attributes cannot be mandatory, just saying
 }
 
 
+/** @return true if this is an editable attribute */
 public boolean isEditable() {
 	return class_().contains("attribute-data-editor");
 }
 
 
+/** @return true if it's present (as opposed to not there) */
 public boolean isPresent() {
 	return !isNotPresent();
 }
 
 
+/** @return true it it's not there and can be created */
 public boolean isNotPresent() {
 	return class_().contains("attribute-not-present");
 
