@@ -44,6 +44,19 @@ import { EventService } from "./events/event.service";
 	template: `
 			<ng-container [ngSwitch]="true">
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
+					<img src="{{getCellPresentation()}}"
+						class="img-fluid"
+						[class.drag-active]="active"
+						[class.drag-inactive]="!active"
+						[class.cell-active]="active"
+						[class.cell-selected]="selected"
+						(mouseenter)="focusOn(cell)"
+						(mouseleave)="focusOff(cell)"
+						dnd-draggable
+						[dragEnabled]="dragEnabled"
+						(onDragEnd)="dragEnd(cell)"
+						[dragData]="cellDragData()"
+					/>
 					<div id="{{cell.URI}}"
 						class="well container-fluid show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"

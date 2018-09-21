@@ -45,7 +45,7 @@
 					<mf:desc>Root cell-model desc</mf:desc>
 					<mf:presentation>WELL</mf:presentation>
 					<mf:thumb>assets/images/test-thumb.svg</mf:thumb>
-					<!-- TODO: implement mf:cell-presentation>assets/images/test-background.svg</mf:cell-presentation-->
+					<mf:cell-presentation>assets/images/test-cell.svg</mf:cell-presentation>
 					<mf:transform case="obj-to-yaml" type="directive">ATTRIBUTES-ONLY</mf:transform>
 					<mf:transform case="yaml-to-xml" type="directive">ATTRIBUTES-ONLY</mf:transform>
 					<mf:transform case="yaml-to-xml" type="attribute">xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</mf:transform>
