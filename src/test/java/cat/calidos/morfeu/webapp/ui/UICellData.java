@@ -80,8 +80,32 @@ public boolean isFromEditor() {
 
 
 public List<UIAttributeData> attributes() {
-	return element.$$(".attribute-data").stream().map( e -> new UIAttributeData(e)).collect(Collectors.toList());
+	return attributesOfClass(".attribute-data");
 }
+
+
+// we have * at the end of compulsory
+public UIAttributeData attribute(String name) {
+	return attributes().stream().filter(a -> a.name().equals(name)).findAny().get();
+}
+
+
+
+public List<UIAttributeData> notPresentAttributes() {
+
+	if (!isFromEditor()) {
+		throw new UnsupportedOperationException("Can't access not-present attributes in info view");
+	}
+
+	return attributesOfClass(".attribute-not-present");
+
+}
+
+
+public Optional<UIAttributeData> notPresentAttribute(String name) {
+	return notPresentAttributes().stream().filter(a -> a.name().equals(name)).findAny();
+}
+
 
 
 public Optional<String> value() {
@@ -89,10 +113,8 @@ public Optional<String> value() {
 }
 
 
-
-// we have * at the end of compulsory
-public UIAttributeData attribute(String name) {
-	return attributes().stream().filter(a -> a.name().equals(name)).findAny().get();
+private List<UIAttributeData> attributesOfClass(String class_) {
+	return element.$$(class_).stream().map( e -> new UIAttributeData(e, this)).collect(Collectors.toList());
 }
 
 }

@@ -38,6 +38,7 @@ public class SimpleCellEditingUITest extends UITezt {
 private UICell test;
 private UIContent content;
 
+
 @Before
 public void setup() {
 	

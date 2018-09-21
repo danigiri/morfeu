@@ -23,8 +23,12 @@ import { CellModel } from "../cell-model.class";
 	moduleId: module.id,
 	selector: "attribute-data-editor",
 	template: `
-		<li class="attribute-data attribute-data-editor list-group-item" [attr._index]="index">
-			<div *ngIf="hasValue_()" class="input-group input-group-sm mb-3">
+		<li [class.attribute-data]="isPresent()"
+			[class.attribute-not-present]="!isPresent()"
+			class="attribute-data-editor list-group-item"
+			[attr._index]="index"
+		>
+			<div *ngIf="isPresent()" class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
 					<span class="attribute-data-name input-group-text"
 						[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
@@ -44,7 +48,7 @@ import { CellModel } from "../cell-model.class";
 					/>
 				</div>
 			</div>
-			<div *ngIf="!hasValue_()" class="list-group-item disabled">
+			<div *ngIf="!isPresent()" class="list-group-item disabled">
 				<small class="attribute-data-name">{{cellModel.name}}</small>
 				<span class="badge float-right">
 					<img class="btn float-right attribute-data-add"
@@ -57,6 +61,7 @@ import { CellModel } from "../cell-model.class";
 	`,
 	styles: [`
 				.attribute-data {}
+				.attribute-not-present {}
 				.attribute-data-editor {}
 				.attribute-data-editor-identifier {
 					text-decoration: underline;
@@ -77,7 +82,7 @@ export class AttributeDataEditorComponent {
 
 
 // do we have a value to show?
-private hasValue_(): boolean {
+private isPresent(): boolean {
 	return this.parentCell && this.parentCell.attributes
 		&& this.parentCell.attributes.find(a => a.name===this.cellModel.name)!==undefined;
 }
@@ -92,6 +97,7 @@ set value(v: string) {
 	let attributeCell = this.parentCell.attributes.find(a => a.name===this.cellModel.name);
 	attributeCell.value = v;
 }
+
 
 // delete current value
 private delete() {

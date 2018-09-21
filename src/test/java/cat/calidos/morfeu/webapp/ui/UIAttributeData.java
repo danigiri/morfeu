@@ -18,13 +18,20 @@ package cat.calidos.morfeu.webapp.ui;
 
 import com.codeborne.selenide.SelenideElement;
 
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIAttributeData extends UIWidget<UIAttributeData> {
 
-public UIAttributeData(SelenideElement element) {
+private UICellData parent;
+
+
+public UIAttributeData(SelenideElement element, UICellData parent) {
+
 	super(element);
+
+	this.parent = parent;
 }
 
 
@@ -49,9 +56,22 @@ public boolean isMandatory() {
 	return name_().endsWith("*:");
 }
 
+
 public boolean isEditable() {
 	return class_().contains("attribute-data-editor");
 }
+
+
+public boolean isPresent() {
+	return !isNotPresent();
+}
+
+
+public boolean isNotPresent() {
+	return class_().contains("attribute-not-present");
+
+}
+
 
 private String name_() {
 
@@ -65,7 +85,7 @@ public String value() {
 
 
 public boolean hasValue() {
-	return class_().contains("list-group-item-secondary");	// this is brittle?
+	return element.$(".attribute-data-value").exists();	// this is brittle?
 }
 
 
@@ -100,7 +120,19 @@ public UIAttributeData enterTextNext(String value) {
 
 	return this;
 
+}
 
+
+public UIAttributeData clickOnCreate() {
+
+	if (!isNotPresent()) {
+		throw new UnsupportedOperationException("Cannot create an attribute unless it's not present");
+	}
+	
+	element.$(".attribute-data-add").click();	// we click on the add button
+	
+	return parent.attribute(this.name());		// and we now have new element, so we recreate ourselves
+	
 }
 
 
