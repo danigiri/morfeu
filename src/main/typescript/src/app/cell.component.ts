@@ -1,4 +1,5 @@
 
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -103,14 +104,14 @@ import { EventService } from "./events/event.service";
 
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
 					<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
-					<div id="{{cell.URI}}" 
+					<div id="{{cell.URI}}"
 						class="col-well col show-grid cell-level-{{level}} rounded"
 						[class.cell-active]="active"
 						[class.cell-selected]="selected"
 					><!--COL-{{this.cell.columnFieldValue()}}-->
 						<!-- drop area here to add anything at the beginning of the column -->
 						<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
-						<cell *ngFor="let c of cell.children; let i=index" 
+						<cell *ngFor="let c of cell.children; let i=index"
 								[cell]="c"
 								[parent]="cell"
 								[level]="level+1"
@@ -310,7 +311,7 @@ ngOnInit() {
 				this.focusOn(this.cell);
 	}));
 
-	// A cell different cell was activated and we are active at this moment
+	// A different cell was activated and we are active at this moment
 	this.subscribe(this.events.service.of( CellActivatedEvent )
 			.filter(a => this.active && a.cell!=this.cell)
 			.subscribe( a => {
@@ -415,7 +416,7 @@ isCompatibleWith(element:FamilyMember): boolean {
 // it can be activated (for drag and drop, etc) if it's not a well
 // if it's a snippet, we can always activate it, so it can be cloned
 canBeActivated(): boolean {
-	return !this.cell.cellModel.presentation.includes("WELL") || this.snippet;
+	return !this.cell.cellModel.presentation.includes("COL-WELL") || this.snippet;
 }
 
 
@@ -433,13 +434,13 @@ select(position: number) {
 		console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");
 		this.selected = true;
 		this.unsubscribeFromSelection();
-		
+
 		// We temporarly unsubscribe from clear, send a clear event and re-subscribe
 		// This means we are the only ones selected now (previous parent will be unselected, for instance)
 		this.unsubscribeFromSelectionClear();
 		this.events.service.publish(new CellSelectionClearEvent());
 		this.subscribeToSelectionClear();
-		
+
 		// now our children are eligible to be selected 
 		this.children.forEach(c => c.subscribeToSelection());
 
@@ -486,7 +487,7 @@ getCellPresentation() {
 
 
 private isEditable(): boolean {
-	return this.active && !this.cell.cellModel.presentation.includes("WELL");
+	return this.active && !this.cell.cellModel.presentation.includes("COL-WELL") && !this.snippet;
 }
 
 
