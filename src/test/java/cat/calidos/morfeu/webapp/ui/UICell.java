@@ -232,10 +232,23 @@ public UICellEditor edit() {
 
 	}
 	content.pressKey("e");
-	
+
 	return new UICellEditor(content);
-	
+
 }
 
+
+
+public UICellEditor editByDoubleClicking() {
+
+	if (!isActive()) {
+		throw new NoSuchElementException("Trying the to get the editor of a not active cell");
+
+	}
+	element.doubleClick();
+
+	return new UICellEditor(content);
+
+}
 
 }

@@ -1,5 +1,3 @@
-
-
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -16,11 +14,10 @@
  *	 limitations under the License.
  */
 
-import { Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from "@angular/core";
+import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
 
 import { FamilyMember } from "./family-member.interface";
 import { Cell } from "./cell.class";
-import { CellModel } from "./cell-model.class";
 
 import { DropAreaComponent } from "./drop-area.component";
 import { SelectableWidget } from "./selectable-widget.class";
@@ -147,6 +144,7 @@ import { EventService } from "./events/event.service";
 							[dragEnabled]="dragEnabled"
 							(onDragEnd)="dragEnd(cell)"
 							[dragData]="cellDragData()"
+							(dblclick)="doubleClick()"
 						/>
 						<!-- the position of the drop area is always where droped cells will go -->
 						<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
@@ -196,19 +194,19 @@ import { EventService } from "./events/event.service";
 				opacity: .2;
 			}
 			.drag-inactive {
-				opacity: .1;
+				opacity: .6;
 			}
 			.drag-active {
-				opacity: .8;
+				opacity: .9;
 			}
-			 .cell-col-1 {
-				 max-width: 8.3%;
-				 width: 8.3%;
-			 }
-			 .cell-col-2 {
-				 max-width: 16.6%;
-			 width: 16.6%;
-			 }
+			.cell-col-1 {
+				max-width: 8.3%;
+				width: 8.3%;
+			}
+			.cell-col-2 {
+				max-width: 16.6%;
+			width: 16.6%;
+			}
 			 .cell-col-3 {
 				 max-width: 25%;
 			 width: 25%;
@@ -291,12 +289,12 @@ ngOnInit() {
 
 	// Drop a cell to a position under this cell
 	this.subscribe(this.events.service.of( CellDropEvent )
-			.filter(dc => dc.newParent && dc.newParent==this.cell)
+			.filter(dc => dc.newParent && dc.newParent===this.cell)
 			.subscribe( dc => {
 				console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to	"
 							+this.cell.URI+" at position ("
 							+dc.newPosition+")'");
-				this.adoptCellAtPosition(dc.cell, dc.newPosition)
+				this.adoptCellAtPosition(dc.cell, dc.newPosition);
 	}));
 
 	// A cell model was deactivated that is compatible with this cell
@@ -326,7 +324,7 @@ ngOnInit() {
 
 	// A different cell was activated and we are active at this moment
 	this.subscribe(this.events.service.of( CellActivatedEvent )
-			.filter(a => this.active && a.cell!=this.cell)
+			.filter(a => this.active && a.cell!==this.cell)
 			.subscribe( a => {
 				console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
 				this.becomeInactive(this.cell);
@@ -399,7 +397,7 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 
 
 // UI method to highlight the cell
-becomeActive(cell:Cell) {
+becomeActive(cell: Cell) {
 
 	// console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
 	this.active = true;
@@ -421,7 +419,7 @@ becomeInactive(cell: Cell) {
 
 
 // are we compatible with this element?
-isCompatibleWith(element:FamilyMember): boolean {
+isCompatibleWith(element: FamilyMember): boolean {
 	return this.cell.matches(element);
 }
 
@@ -454,7 +452,7 @@ select(position: number) {
 		this.events.service.publish(new CellSelectionClearEvent());
 		this.subscribeToSelectionClear();
 
-		// now our children are eligible to be selected 
+		// now our children are eligible to be selected
 		this.children.forEach(c => c.subscribeToSelection());
 
 		// if we have drop areas, they are also selectable now with the appropriate key shortcut
@@ -519,6 +517,10 @@ private cellDragData() {
 
 	return cellDragData;
 
+}
+
+private doubleClick() {
+	this.events.service.publish(new CellEditEvent(this.cell));
 }
 
 }

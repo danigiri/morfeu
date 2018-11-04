@@ -92,7 +92,7 @@ public void editCellAndSave() {
 	attributes = data.cellInfo().attributes();	// re-read attributes from the now-modified cell
 	name = checkAttribute(attributes, "text", "foo");
 	number = checkAttribute(attributes, "number", "66");
-	
+
 }
 
 
@@ -129,6 +129,27 @@ public void editCellAndDismiss() {
 	name = checkAttribute(attributes, "text", "blahblah");		// boom, magically restored
 	number = checkAttribute(attributes, "number", "42");
 	
+}
+
+
+@Test
+public void editCellByDoubleClick() {
+
+	UICell data = test.child("row(0)").child("col(0)").child("data(0)").select().activate();
+	assertNotNull(data);
+	List<UIAttributeData> attributes = data.cellInfo().attributes();
+	checkAttribute(attributes, "text", "blahblah");
+	checkAttribute(attributes, "number", "42");
+
+	UICellEditor.shouldNotBeVisible();
+
+	UICellEditor dataEditor = data.editByDoubleClicking();
+	assertNotNull(dataEditor);
+	UICellData cellEditorData = dataEditor.shouldAppear().cellData();
+	assertNotNull(cellEditorData);
+
+	dataEditor.clickDiscard();
+
 }
 
 
