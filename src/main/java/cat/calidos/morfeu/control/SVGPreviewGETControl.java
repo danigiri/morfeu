@@ -36,9 +36,9 @@ import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 /** Controller to generate cell preview, generates SVG dynamically for the moment
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class PreviewGETControl extends Control {
+public class SVGPreviewGETControl extends Control {
 
-protected final static Logger log = LoggerFactory.getLogger(PreviewGETControl.class);
+protected final static Logger log = LoggerFactory.getLogger(SVGPreviewGETControl.class);
 
 private String prefix;				// not used, only for logging
 private String path;				// not used, only for logging
@@ -46,7 +46,7 @@ private Optional<String> header;	// header of the SVG preview image
 private boolean truncate;			// trucante the text within the SVG
 private Map<String, String> params;	// params to concateneate onto the SVG for info
 
-public PreviewGETControl(String prefix, String path, Optional<String> header, Map<String, String> params) {
+public SVGPreviewGETControl(String prefix, String path, Optional<String> header, Map<String, String> params) {
 
 		super("preview", "", "");
 

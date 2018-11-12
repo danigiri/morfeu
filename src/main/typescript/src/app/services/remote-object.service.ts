@@ -19,7 +19,7 @@ import { Http } from "@angular/http";
 import { Observable ,  BehaviorSubject } from "rxjs";
 
 
-import { SerialisableToJSON } from '../serialisable-to-json.interface';
+import { SerialisableToJSON } from "../serialisable-to-json.interface";
 
 /** This class leverages the SerialisableJSON interface so we can invoke the method to conver to a rich
 *	object with its expected methods from a JSON-formatted string
@@ -28,7 +28,7 @@ import { SerialisableToJSON } from '../serialisable-to-json.interface';
 export class RemoteObjectService<T extends SerialisableToJSON<T, J>, J> {
 
 
-constructor(private http:Http) {}
+constructor(private http: Http) {}
 
 // with an array this will not work
 //getAll(uri: string, type_: Constructor<T>): Observable<T[]> {
@@ -43,9 +43,9 @@ constructor(private http:Http) {}
 get(uri: string, type_: Constructor<T>): Observable<T> {
 
 	console.log("[SERVICE] RemoteObjectService::get("+uri+")"); 
-	//TODO: handle errors with .catch here
+	// TODO: handle errors with .catch her
 	return this.http.get(uri) .retryWhen(errors => errors.delay(200).take(5))
-	//.concat(Observable.throw(new Error("Too many retries")))
+	// .concat(Observable.throw(new Error("Too many retries")))
 	.map(response => <T>createInstance(type_).fromJSON(response.text()));
 
 }

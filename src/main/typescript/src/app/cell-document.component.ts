@@ -14,41 +14,41 @@
  *	 limitations under the License.
  */
 
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Subscription }	  from 'rxjs';
+import { Component, Inject, OnInit } from "@angular/core";
 
-import { CellDocument, CellDocumentJSON } from './cell-document.class';
-import { Widget } from './widget.class';
-import { RemoteObjectService } from './services/remote-object.service';
+import { CellDocument, CellDocumentJSON } from "./cell-document.class";
+import { Widget } from "./widget.class";
+import { RemoteObjectService } from "./services/remote-object.service";
 
-import { EventService } from './events/event.service';
-import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { EventService } from "./events/event.service";
+import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
 import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
-import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
-import { ContentSaveEvent } from './events/content-save.event';
-import { ModelRequestEvent } from './events/model-request.event';
-import { StatusEvent } from './events/status.event';
-import { UXEvent } from './events/ux.event';
+import { CellDocumentLoadedEvent } from "./events/cell-document-loaded.event";
+import { ContentSaveEvent } from "./events/content-save.event";
+import { StatusEvent } from "./events/status.event";
+import { UXEvent } from "./events/ux.event";
 
 @Component({
 	moduleId: module.id,
 	selector: "document",
 	template: `
 	<div id="document-info" class="card mt-2" *ngIf="document">
-		<h5 id="document-name" 
+		<h5 id="document-name"
 			class="card-header"
 		>{{document.name}} <span class="badge badge-primary float-right">{{document.kind}}</span></h5>
 		<div class="card-body">
 				<div class="card-text">
 					<span id="document-desc">{{document.desc}}</span>
-					<span id="document-valid" *ngIf="document.valid" class="badge badge-pill badge-success float-right">VALID</span>
-					<span id="document-valid" *ngIf="!document.valid" class="badge badge-pill badge-danger float-right">NON VALID</span>
+					<span id="document-valid" *ngIf="document.valid" class="badge badge-pill badge-success float-right"
+					>VALID</span>
+					<span id="document-valid" *ngIf="!document.valid" class="badge badge-pill badge-danger float-right"
+					>NON VALID</span>
 				</div>
-				<!-- we have the buttons here as it makes sense from a UI perspective, but the event itself 
+				<!-- we have the buttons here as it makes sense from a UI perspective, but the event itself
 					 will be handled by the content component -->
 			 <button *ngIf="document.valid"
 				id="document-save"
-				type="button" 
+				type="button"
 				class="btn btn-success btn-lg btn-block btn-sm mt-2"
 				[class.disabled]="saveDisabled"
 				(click)="saveDocument()"
@@ -58,7 +58,7 @@ import { UXEvent } from './events/ux.event';
 		</div>
 	</div>
 	`,
-	styles:[`
+	styles: [`
 			#document-info {}
 			#document-name {}
 			#document-desc {}
@@ -74,7 +74,7 @@ document: CellDocument;
 saveDisabled = true;
 
 constructor(eventService: EventService,
-			@Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON> 
+			@Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON>
 			) {
 	super(eventService);
 }
@@ -96,7 +96,7 @@ ngOnInit() {
 
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
 	this.subscribe(this.events.service.of( UXEvent )
-			.filter(e => e.type==UXEvent.DOCUMENT_DIRTY)
+			.filter(e => e.type===UXEvent.DOCUMENT_DIRTY)
 			.subscribe(e => this.enableSave())
 	);
 
@@ -170,10 +170,10 @@ saveDocument() {
 }
 
 private problem(message: String) {
-	
+
 	console.log("[UI] CellDocumentComponent::problem()");
 	this.events.problem(message);
-	
+
 }
 
 }

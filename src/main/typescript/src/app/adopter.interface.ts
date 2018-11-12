@@ -14,7 +14,7 @@
  *	 limitations under the License.
  */
 
-import { Cell } from './cell.class';
+import { Cell } from "./cell.class";
 import { FamilyMember } from './family-member.interface';
 
 

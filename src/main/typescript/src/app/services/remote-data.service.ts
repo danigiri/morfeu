@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -13,11 +13,9 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
 import { Injectable } from "@angular/core";
-//import { Http } from '@angular/http';
 import { HttpClient } from "@angular/common/http";	// new angular 5 http client
-import { Observable ,  BehaviorSubject } from "rxjs";
+import { Observable , BehaviorSubject } from "rxjs";
 
 
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead 
@@ -26,13 +24,13 @@ import { Observable ,  BehaviorSubject } from "rxjs";
 export class RemoteDataService {
 
 
-constructor(private http:HttpClient) {}
+constructor(private http: HttpClient) {}
 
 getAll<T>(uri: string): Observable<T[]> {
-	
+
 	console.log("[SERVICE] RemoteDataService::getAll('%s')", uri);
-	//TODO: handle errors here
-	
+	// TODO: handle errors here
+
 	return this.http.get<T[]>(uri);
 
 }
@@ -41,7 +39,7 @@ getAll<T>(uri: string): Observable<T[]> {
 get<T>(uri: string): Observable<T> {
 
 	console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
-	//TODO: handle errors with .catch here
+	// TODO: handle errors with .catch here
 	
 	return this.http.get<T>(uri).retryWhen(errors => errors.delay(200).take(5)
 	//.concat(Observable.throw(new Error("Too many retries")))
@@ -53,7 +51,7 @@ get<T>(uri: string): Observable<T> {
 post<T>(uri: string, content: any): Observable<T> {
 	
 	console.log("[SERVICE] RemoteDataService::post('%s')", uri);
-	//TODO: handle errors here
+	// TODO: handle errors here
 	
 	return this.http.post<T>(uri, content);
 	
