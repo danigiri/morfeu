@@ -12,9 +12,7 @@ import { Component, Input } from "@angular/core";
 			</div>
 	`,
 	styles: [`
-			.cell-data-header {}
-			.cell-header-desc {}
-			.cell-header-uri {}
+
 	`]
 })
 

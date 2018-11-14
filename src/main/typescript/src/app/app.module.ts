@@ -30,7 +30,7 @@ import { TreeModule } from "angular-tree-component";
 
 import { AppRoutingModule, AppRoutes } from "./app-routing.module";
 
-import { RootComponent } from "./components/root.component";
+import { AppComponent } from "./components/app.component";
 import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
 import { AttributeDataInfoComponent } from "./components/attribute-data-info.component";
 import { CatalogueListComponent } from "./catalogue-list.component";
@@ -67,11 +67,10 @@ import { SafePipe } from './pipes/safe.pipe';
 				, HttpClientModule
 				, HotkeyModule.forRoot()
 				, NgbModule.forRoot()
-				, RouterModule.forRoot(AppRoutes, { enableTracing: true })
 				, TreeModule
 	],
 	declarations: [
-					RootComponent
+					AppComponent
 					, AttributeDataEditorComponent
 					, AttributeDataInfoComponent
 					, CatalogueListComponent
@@ -97,7 +96,7 @@ import { SafePipe } from './pipes/safe.pipe';
 					, StatusComponent 
 	],
 	providers:	[],
-	bootstrap:	[ RootComponent ]
+	bootstrap:	[ AppComponent ]
 })
 
 export class AppModule {}

@@ -9,7 +9,7 @@ import { Component } from "@angular/core";
 })
 
 
-export class RootComponent {}
+export class AppComponent {}
 
 /*
  *	  Copyright 2018 Daniel Giribet

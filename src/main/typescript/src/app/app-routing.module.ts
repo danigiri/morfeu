@@ -21,15 +21,16 @@ import { MainComponent } from "./components/main.component";
 import { PreviewComponent } from "./components/preview.component";
 
 
+export const AppRoutes: Routes = [
+									{ path: "preview", component: PreviewComponent }
+									,{ path: "", component: MainComponent }
+									];
+
+
 @NgModule({
+	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: false }) ],
 	exports: [ RouterModule ]
 })
 
 export class AppRoutingModule {}
 
-
-export const AppRoutes: Routes = [
-	{ path: "preview", component: PreviewComponent }
-	,{ path: "", component: MainComponent }
-	
-];
