@@ -1,19 +1,3 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
-
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { Subscription } from "rxjs";
@@ -21,40 +5,41 @@ import { isDevMode, Inject } from "@angular/core";
 import { Http } from "@angular/http";
 import { HttpClient } from "@angular/common/http";	// new angular 5 http client
 
-import { Configuration } from "./configuration.class";
-import { environment } from "../environments/environment";
+import { Configuration } from "../configuration.class";
+import { environment } from "../../environments/environment";
 
-import { CatalogueListComponent } from "./catalogue-list.component";
-import { ContentComponent } from "./content.component";
-import { CellDocumentComponent } from "./cell-document.component";
-import { ProblemComponent } from "./problem.component";
-import { StatusComponent } from "./status.component";
-import { RemoteDataService } from "./services/remote-data.service";
-import { RemoteObjectService } from "./services/remote-object.service";
+import { CatalogueListComponent } from "../catalogue-list.component";
+import { ContentComponent } from "../content.component";
+import { CellDocumentComponent } from "../cell-document.component";
+import { ProblemComponent } from "../problem.component";
+import { StatusComponent } from "../status.component";
+import { RemoteDataService } from "../services/remote-data.service";
+import { RemoteObjectService } from "../services/remote-object.service";
 
-import { Model, ModelJSON } from "./model.class";
-import { Catalogue } from "./catalogue.class";
-import { CellDocument, CellDocumentJSON } from "./cell-document.class";
-import { Content, ContentJSON } from "./content.class";
+import { Model, ModelJSON } from "../model.class";
+import { Catalogue } from "../catalogue.class";
+import { CellDocument, CellDocumentJSON } from "../cell-document.class";
+import { Content, ContentJSON } from "../content.class";
 
-import { Widget } from "./widget.class";
+import { Widget } from "../widget.class";
 
-import { CellActivateEvent } from "./events/cell-activate.event";
-import { CataloguesRequestEvent } from "./events/catalogues-request.event";
-import { CataloguesLoadedEvent } from "./events/catalogues-loaded.event";
-import { CatalogueLoadedEvent } from "./events/catalogue-loaded.event";
-import { CatalogueSelectionEvent } from "./events/catalogue-selection.event";
-import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
-import { CellDocumentLoadedEvent } from "./events/cell-document-loaded.event";
-import { CellSelectEvent } from "./events/cell-select.event";
-import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
-import { ContentRefreshedEvent } from "./events/content-refreshed.event";
-import { ModelLoadedEvent } from "./events/model-loaded.event";
-import { EventService } from "./events/event.service";
+import { CellActivateEvent } from "../events/cell-activate.event";
+import { CataloguesRequestEvent } from "../events/catalogues-request.event";
+import { CataloguesLoadedEvent } from "../events/catalogues-loaded.event";
+import { CatalogueLoadedEvent } from "../events/catalogue-loaded.event";
+import { CatalogueSelectionEvent } from "../events/catalogue-selection.event";
+import { CellDocumentSelectionEvent } from "../events/cell-document-selection.event";
+import { CellDocumentLoadedEvent } from "../events/cell-document-loaded.event";
+import { CellSelectEvent } from "../events/cell-select.event";
+import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
+import { ContentRefreshedEvent } from "../events/content-refreshed.event";
+import { ModelLoadedEvent } from "../events/model-loaded.event";
+import { EventService } from "../events/event.service";
 
 
 @Component({
-	selector: "app-root",
+	moduleId: module.id,
+	selector: "app-main",
 	template: `
 		<div class="card">
 			<div class="card-body">
@@ -110,7 +95,7 @@ import { EventService } from "./events/event.service";
 })
 
 
-export class AppComponent extends Widget implements AfterViewInit {
+export class MainComponent extends Widget implements AfterViewInit {
 
 private cataloguesLoadedEventSubscription: Subscription;
 private catalogueLoadedEventSubscription: Subscription;
@@ -129,7 +114,7 @@ ngAfterViewInit() {
 	console.log("AppComponent::ngAfterViewInit()");
 
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	const foo = !environment.production && false;
+	const foo = !environment.production && true;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent)
@@ -180,7 +165,24 @@ ngAfterViewInit() {
 		console.log("FOO2 config - catalogues: %s", Configuration.merge(params).catalogues);
 		Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(catalogues)));
 	});
+
 }
 
 }
+
+/*
+ *	  Copyright 2018 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */
 

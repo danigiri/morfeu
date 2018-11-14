@@ -30,7 +30,7 @@ import { TreeModule } from "angular-tree-component";
 
 import { AppRoutingModule, AppRoutes } from "./app-routing.module";
 
-import { AppComponent } from "./app.component";
+import { RootComponent } from "./components/root.component";
 import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
 import { AttributeDataInfoComponent } from "./components/attribute-data-info.component";
 import { CatalogueListComponent } from "./catalogue-list.component";
@@ -45,12 +45,15 @@ import { CellModelComponent } from "./cell-model.component";
 import { CellDataComponent } from "./components/cell-data.component";
 import { DropAreaComponent } from "./drop-area.component";
 import { KeyCaptureComponent } from "./components/key-capture.component";
+import { MainComponent } from "./components/main.component";
 import { ModelAreaComponent } from "./components/model-area.component";
 import { ModelComponent } from "./components/model.component";
+import { PreviewComponent } from "./components/preview.component";
 import { ProblemComponent } from "./problem.component";
 import { SnippetComponent } from "./components/snippet.component";
 import { SnippetsListComponent } from "./components/snippets-list.component";
 import { StatusComponent } from "./status.component";
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
 	imports: [
@@ -64,11 +67,11 @@ import { StatusComponent } from "./status.component";
 				, HttpClientModule
 				, HotkeyModule.forRoot()
 				, NgbModule.forRoot()
-				, RouterModule.forRoot(AppRoutes, { enableTracing: false })
+				, RouterModule.forRoot(AppRoutes, { enableTracing: true })
 				, TreeModule
 	],
 	declarations: [
-					AppComponent
+					RootComponent
 					, AttributeDataEditorComponent
 					, AttributeDataInfoComponent
 					, CatalogueListComponent
@@ -83,15 +86,18 @@ import { StatusComponent } from "./status.component";
 					, CellModelComponent
 					, DropAreaComponent
 					, KeyCaptureComponent
+					, MainComponent
 					, ModelAreaComponent
 					, ModelComponent
+					, PreviewComponent
 					, ProblemComponent
+					, SafePipe
 					, SnippetComponent
 					, SnippetsListComponent
-					, StatusComponent
+					, StatusComponent 
 	],
 	providers:	[],
-	bootstrap:	[ AppComponent ]
+	bootstrap:	[ RootComponent ]
 })
 
 export class AppModule {}

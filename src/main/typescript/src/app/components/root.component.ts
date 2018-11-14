@@ -1,3 +1,16 @@
+
+import { Component } from "@angular/core";
+
+@Component({
+	selector: 'app-root',
+	template: `<router-outlet></router-outlet>`,
+	styles: [`
+	`]
+})
+
+
+export class RootComponent {}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,23 +26,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-
-import { MainComponent } from "./components/main.component";
-import { PreviewComponent } from "./components/preview.component";
-
-
-@NgModule({
-	exports: [ RouterModule ]
-})
-
-export class AppRoutingModule {}
-
-
-export const AppRoutes: Routes = [
-	{ path: "preview", component: PreviewComponent }
-	,{ path: "", component: MainComponent }
-	
-];

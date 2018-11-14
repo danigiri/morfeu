@@ -1,3 +1,25 @@
+
+import { Component, Input } from "@angular/core";
+
+@Component({
+	moduleId: module.id,
+	selector: 'preview',
+	template: `
+			<div class="card">
+				<div class="card-body">
+					<h1 class="card-title">PREVIEW</h1>
+				</div>
+			</div>
+	`,
+	styles: [`
+			.cell-data-header {}
+			.cell-header-desc {}
+			.cell-header-uri {}
+	`]
+})
+
+export class PreviewComponent {}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,23 +35,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-
-import { MainComponent } from "./components/main.component";
-import { PreviewComponent } from "./components/preview.component";
-
-
-@NgModule({
-	exports: [ RouterModule ]
-})
-
-export class AppRoutingModule {}
-
-
-export const AppRoutes: Routes = [
-	{ path: "preview", component: PreviewComponent }
-	,{ path: "", component: MainComponent }
-	
-];
