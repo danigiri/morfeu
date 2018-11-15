@@ -1,3 +1,23 @@
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+
+import { MainComponent } from "./components/main.component";
+import { PreviewComponent } from "./components/preview.component";
+
+
+export const AppRoutes: Routes = [
+									{ path: "preview/:id", component: PreviewComponent }
+									,{ path: "", component: MainComponent }
+									];
+
+
+@NgModule({
+	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: false }) ],
+	exports: [ RouterModule ]
+})
+
+export class AppRoutingModule {}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,24 +33,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-
-import { MainComponent } from "./components/main.component";
-import { PreviewComponent } from "./components/preview.component";
-
-
-export const AppRoutes: Routes = [
-									{ path: "preview", component: PreviewComponent }
-									,{ path: "", component: MainComponent }
-									];
-
-
-@NgModule({
-	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: false }) ],
-	exports: [ RouterModule ]
-})
-
-export class AppRoutingModule {}
-

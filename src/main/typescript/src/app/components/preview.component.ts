@@ -1,22 +1,52 @@
+// PREVIEW . COMPONENT . TS
 
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
+
+import { ActivatedRoute, ParamMap } from "@angular/router";
+
+import { Observable } from "rxjs";
+import { switchMap } from 'rxjs/operators';
 
 @Component({
 	moduleId: module.id,
 	selector: 'preview',
 	template: `
 			<div class="card">
-				<div class="card-body">
-					<h1 class="card-title">PREVIEW</h1>
+				<div class="card-body" [style.background-color]="('#'+color) | safe: 'style'">
+					<h2 class="card-title">{{id_}}</h2>
 				</div>
 			</div>
-	`,
-	styles: [`
-
-	`]
+	`
 })
 
-export class PreviewComponent {}
+export class PreviewComponent implements OnInit {
+
+static readonly colorRegExp = new RegExp("^[0-9a-fA-F]{6}$");
+
+id_: string;
+color: string = "ffff00";
+
+
+constructor(private route: ActivatedRoute) {}
+
+
+ngOnInit() {
+
+	this.route.paramMap.subscribe(params => { 
+		this.id_ = params.get("id");
+		if (params.has("color")) {
+			let colorCandidate = params.get("color");
+			if (PreviewComponent.colorRegExp.test(colorCandidate)) {
+				this.color = colorCandidate;
+				console.info("color="+this.color);
+			}
+		}
+	});
+
+}
+
+
+}
 
 /*
  *	  Copyright 2018 Daniel Giribet

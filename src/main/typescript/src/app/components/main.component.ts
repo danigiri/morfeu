@@ -1,3 +1,5 @@
+// MAIN . COMPONENT . TS
+
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { Subscription } from "rxjs";

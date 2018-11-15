@@ -43,8 +43,20 @@
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
-
 		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
+	<xs:simpleType name="colorField">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>hexadecimal color field (rrggbb)</mf:desc>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{6}"/>
+		</xs:restriction>
 	</xs:simpleType>
 
 	<xs:simpleType name="booleanField">
