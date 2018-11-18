@@ -60,6 +60,7 @@ private static final String METADATA = "";	// empty at the moment
 private static final String DESC_FIELD = "mf:desc";
 private static final String PRESENTATION_FIELD = "mf:presentation";
 private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
+private static final String CELL_PRESENTATION_TYPE = "mf:cell-presentation@type";
 private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
 private static final String IDENTIFIER_FIELD = "mf:identifier@name";
@@ -84,11 +85,11 @@ public static Metadata provideMetadata(URI uri,
 										Map<String, String> defaultValues,
 										@Named("Directives") Map<String, Set<String>> directives,
 										@Named("Attributes") Map<String, Set<String>> attributes) {
-	return new Metadata(uri, 
-						desc, 
-						presentation, 
-						cellPresentation, 
-						thumb, 
+	return new Metadata(uri,
+						desc,
+						presentation,
+						cellPresentation,
+						thumb,
 						identifier, 
 						defaultValues, 
 						directives, 
@@ -98,8 +99,8 @@ public static Metadata provideMetadata(URI uri,
 
 @Provides
 public static URI uri(@Nullable XSAnnotation annotation,
-					    @Nullable @Named("ParentURI") URI parentURI,
-					    @Named("DefaultURI") Lazy<URI> defaultURI) {
+						@Nullable @Named("ParentURI") URI parentURI,
+						@Named("DefaultURI") Lazy<URI> defaultURI) {
 	
 	Optional<String> uriValue = annotationTaggedAs(annotation, URI_FIELD);
 	URI uri = null;
@@ -132,13 +133,13 @@ public static URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
 	try {
 		String uriVal = parentURI!=null ? parentURI.toString()+"/"+DEFAULT_URI+METADATA : DEFAULT_URI+METADATA;
 		uri = DaggerURIComponent.builder()
-				.from(uriVal)
-				.builder()
-				.uri()
-				.get();
+									.from(uriVal)
+									.builder()
+									.uri()
+									.get();
 	} catch (Exception e) {
 		// DEFAULT URI SHOULD NOT FAIL
-		log.error("Really? Default URI for metadata fails - epic fail");		
+		log.error("Really? Default URI for metadata fails - epic fail");
 	}
 	
 	return uri;
@@ -254,10 +255,10 @@ private static Map<String, Set<String>> groupSerializeTagsByCaseFilterBy(String 
 	// first we get all the serialize tags of the given type
 	Stream<Node> attributeNodes = nodeValues.stream()
 									.filter(Node::hasAttributes)
-									.filter(nv -> { 
-													Node typeNode = nv.getAttributes().getNamedItem(TRANSFORM_TYPE_ATTR);
-													return typeNode!=null 
-															&& typeNode.getTextContent().equals(type);
+									.filter(nv -> {
+													Node typeNode = nv.getAttributes()
+																		.getNamedItem(TRANSFORM_TYPE_ATTR);
+													return typeNode!=null && typeNode.getTextContent().equals(type);
 									});
 
 	// next we group them by cases

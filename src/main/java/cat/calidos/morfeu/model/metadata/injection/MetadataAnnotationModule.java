@@ -40,7 +40,7 @@ public class MetadataAnnotationModule {
 
 protected final static Logger log = LoggerFactory.getLogger(MetadataAnnotationModule.class);
 
-		
+
 @Provides
 List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) {
 	
@@ -64,9 +64,9 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) 
 		}
 		String nodeName = currentNode.getNodeName();
 		if (nodeName.equals(tag)) {
-			if (attributeIndex==-1) {
+			if (attributeIndex==-1) {		// looking for plain node and its value
 				content.add(currentNode);
-			} else {
+			} else {						// looking for node but setting attribute
 				Node value = currentNode.getAttributes().getNamedItem(tagExpr.substring(attributeIndex+1));
 				if (value!=null) {	// if attribute does not actually exist in the metadata we don't add
 					content.add(value);

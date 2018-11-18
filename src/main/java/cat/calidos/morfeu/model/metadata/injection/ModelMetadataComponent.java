@@ -28,8 +28,9 @@ import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
 
-/**
-* @author daniel giribet
+/** This component is used to fetch the metadata for a cell model, needs the annotation as well as the location in the
+* 	cell model hierarchy.
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules={ModelMetadataModule.class})
 public interface ModelMetadataComponent {

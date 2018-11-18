@@ -243,7 +243,7 @@ public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String def
 
 // attributes of the current cell model
 @Provides
-public static Attributes<CellModel> attributesOf(XSElementDecl elem, 
+public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 													Type t,
 													URI u,
 													Metadata metadata,
@@ -393,10 +393,10 @@ public static Metadata metadata(XSElementDecl elem,
 
 	// we get the metadata from the current cell model, this will have the highest priority
 	Metadata meta = DaggerModelMetadataComponent.builder()
-			.from(elem.getAnnotation())
-			.withParentURI(uri)
-			.build()
-			.value();
+													.from(elem.getAnnotation())
+													.withParentURI(uri)
+													.build()
+													.value();
 
 	//fallback from merging global(if available) and type
 	Metadata typeMetadata = t.getMetadata();
@@ -440,10 +440,10 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 	
 			
 	Metadata attributeMetadata = DaggerModelMetadataComponent.builder()
-			.from(xsAttributeDecl.getAnnotation())
-			.withParentURI(attributeURI)
-			.build()
-			.value();
+																.from(xsAttributeDecl.getAnnotation())
+																.withParentURI(attributeURI)
+																.build()
+																.value();
 	
 	attributeMetadata = Metadata.merge(attributeURI, attributeMetadata, type.getMetadata());
 	
@@ -466,15 +466,15 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 //	} else {
 		
 	// attributes have the presentation of the corresponding type
-	return new BasicCellModel(attributeURI, 
-								   name, 
-								   attributeMetadata.getDesc(), 
-								   type, 
-								   minOccurs,
-								   ATTRIBUTE_MAX,
-								   true,					// is an attribute
-								   defaultValue,
-								   attributeMetadata);
+	return new BasicCellModel(attributeURI,
+								name, 
+								attributeMetadata.getDesc(), 
+								type, 
+								minOccurs,
+								ATTRIBUTE_MAX,
+								true,					// is an attribute
+								defaultValue,
+								attributeMetadata);
 //	}
 
 	

@@ -34,8 +34,7 @@ import cat.calidos.morfeu.model.Metadata;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-/** Extra metadata that cannot be embedded in the cell model definitions due to being a reference or other
-* 	problems
+/** Extra metadata that cannot be embedded in the cell model definitions due to being a reference or other problems
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule(includes=MetadataAnnotationModule.class)
