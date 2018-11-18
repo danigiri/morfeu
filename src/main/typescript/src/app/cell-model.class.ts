@@ -1,18 +1,4 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
+// CELL-MODEL . CLASS . TS
 
 import { Cell } from "./cell.class";
 import { FamilyMember } from "./family-member.interface";
@@ -29,7 +15,8 @@ import { CellModelComponent } from "./cell-model.component";
 export class CellModel implements NameValue, FamilyMember {
 
 static readonly DEFAULT_EMPTY_VALUE = "";
-	
+public static readonly DEFAULT_PRESENTATION_TYPE = "IMG";
+
 id: string;
 isExpanded: boolean;
 
@@ -49,6 +36,7 @@ constructor(public schema: number,
 			public desc: string, 
 			public presentation: string,
 			public cellPresentation: string,
+			public cellPresentationType: string,
 			public thumb: string,
 			public isSimple: boolean, 
 			public type_: CellType,
@@ -78,6 +66,9 @@ setComponent(c: CellModelComponent) {
 
 getRawPresentation() {
 
+	// TODO: handle HTML presentation
+	// TODO: for proper separation of concerns, these values should be in the component and also configurable
+	
 	switch (this.cellPresentation) {
 		case "DEFAULT":
 			return "assets/images/cell.svg";
@@ -86,6 +77,7 @@ getRawPresentation() {
 		default:
 			return this.cellPresentation;
 	}
+
 }
 
 
@@ -94,11 +86,16 @@ getPresentation() {
 	let finalPres = this.getRawPresentation();
 
 	if (finalPres.includes("$")) {
-			finalPres = PresentationParser.expand(finalPres, "$NAME", this.name);
+			finalPres = PresentationParser.expand(finalPres, "$_NAME", this.name);
 	}
 
 	return finalPres;
 
+}
+
+
+getPresentationType() {
+	return this.cellPresentationType;
 }
 
 
@@ -349,6 +346,7 @@ name: string;
 desc: string;
 presentation: string;
 cellPresentation: string;
+cellPresentationType: string;
 thumb: string;
 isSimple: boolean;
 isReference: boolean;
@@ -365,4 +363,18 @@ referenceURI?: string;
 
 }
 
-
+/*
+ *	  Copyright 2018 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */

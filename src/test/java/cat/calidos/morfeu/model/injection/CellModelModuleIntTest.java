@@ -215,7 +215,7 @@ public void testAttributesDefaultValues() {
 	
 	HashMap<String, String> defaultValues = new HashMap<String, String>(1);
 	defaultValues.put("@text", "foo");
-	Metadata cellMetadata = new Metadata(null, "desc", "pres", "cellpres", "thumb", null, defaultValues, null, null);
+	Metadata cellMetadata = new Metadata(null, "desc", "pres", "cellpres", "IMG", "thumb", null, defaultValues, null, null);
 	//when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
 	
 	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, cellMetadata, globals);
@@ -249,7 +249,7 @@ public void testChildrenOf() {
 
 @Test
 public void testGetDefaultTypeName() throws Exception {
-	
+
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	assertEquals("test-type", CellModelModule.getDefaultTypeName(elem));
 
@@ -257,7 +257,7 @@ public void testGetDefaultTypeName() throws Exception {
 
 
 private void checkComplexCellModel(CellModel test, String name, String desc, String typeName, String uri) {
-	
+
 	assertNotNull(test);
 	assertEquals(name, test.getName());
 	assertEquals(desc, test.getDesc());

@@ -73,7 +73,7 @@ public void setup() throws Exception {
 	Map<String, String> emptyDefaultValues = new HashMap<String, String>(0);
 	Map<String, Set<String>> directives = new HashMap<String, Set<String>>(0);
 	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(0);
-	emptyMedatada = new Metadata(null, "desc", "PRESENTATION", "CELL-PRESENTATION", "THUMB", null, emptyDefaultValues, directives, attributes);
+	emptyMedatada = new Metadata(null, "desc", "PRESENTATION", "CELL-PRESENTATION", "IMG", "THUMB", null, emptyDefaultValues, directives, attributes);
 
 }
 
@@ -88,6 +88,7 @@ public void testRootAnonymousType() throws Exception {
 	assertEquals("cell-model-name", type.getName());
 	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
 	assertEquals("CELL-PRESENTATION", type.getMetadata().getCellPresentation());
+	assertEquals("IMG", type.getMetadata().getCellPresentationType());
 	assertEquals("THUMB", type.getMetadata().getThumb());
 	assertFalse(type.isSimple());
 	

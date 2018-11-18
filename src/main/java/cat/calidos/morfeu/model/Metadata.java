@@ -40,12 +40,14 @@ private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_THUMB = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
 private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
+private static final String DEFAULT_CELL_PRESENTATION_TYPE = "IMG";
 public static final String DEFAULT_VALUE_PREFIX = "@";
 
 private URI uri;	// pre-calculated default
 private String desc;
 private String presentation;
 private String cellPresentation;
+private String cellPresentationType;
 private String thumb;
 private Optional<String> identifier;
 private Map<String, String> defaultValues;
@@ -57,6 +59,7 @@ public Metadata(URI uri,
 				String desc,
 				String presentation,
 				String cellPresentation,
+				String cellPresentationType,
 				String thumb,
 				String identifier,
 				Map<String, String> defaultValues,
@@ -67,6 +70,7 @@ public Metadata(URI uri,
 			Optional.ofNullable(desc),
 			Optional.ofNullable(presentation),
 			Optional.ofNullable(cellPresentation),
+			Optional.ofNullable(cellPresentationType),
 			Optional.ofNullable(thumb),
 			Optional.ofNullable(identifier),
 			defaultValues,
@@ -79,6 +83,7 @@ public Metadata(URI uri,
 				Optional<String> desc,
 				Optional<String> presentation,
 				Optional<String> cellPresentation,
+				Optional<String> cellPresentationType,
 				Optional<String> thumb,
 				Optional<String> identifier,
 				Map<String, String> defaultValues,
@@ -89,6 +94,7 @@ public Metadata(URI uri,
 	this.desc = desc.orElse(DEFAULT_DESC);
 	this.presentation = presentation.orElse(DEFAULT_PRESENTATION);
 	this.cellPresentation = cellPresentation.orElse(DEFAULT_CELL_PRESENTATION);
+	this.cellPresentationType = cellPresentationType.orElse(DEFAULT_CELL_PRESENTATION_TYPE);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	this.identifier = identifier;
 	this.defaultValues = defaultValues;
@@ -110,6 +116,11 @@ public String getPresentation() {
 
 public String getCellPresentation() {
 	return cellPresentation;
+}
+
+
+public String getCellPresentationType() {
+	return cellPresentationType;
 }
 
 
@@ -154,7 +165,7 @@ public Map<String, Set<String>> getDirectives() {
 
 public Set<String> getAttributesFor(String case_) {
 	return attributes.containsKey(case_) ? attributes.get(case_) : EMPTY_SET;
-} 
+}
 
 
 public Map<String, Set<String>> getAttributes() {
@@ -174,6 +185,13 @@ public String toString() {
 }
 
 
+/** Merge the more priority metadata instance and the less priority one, priority values have precedence, defaults will
+* 	overriden by the less priority.
+*	@param u new uri
+*	@param morePriority higher priority metadata instance
+*	@param lessPriority less priority metadata
+*	@return new instance with the merge
+*/
 public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority) {
 	
 	String desc = morePriority.getDesc();
@@ -183,6 +201,9 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	String cellPresentation = morePriority.getCellPresentation();
 	cellPresentation = cellPresentation.equals(DEFAULT_CELL_PRESENTATION) 
 						? lessPriority.getCellPresentation() : cellPresentation;
+	String cellPresentationType = morePriority.getCellPresentationType();
+	cellPresentationType = cellPresentationType.equals(DEFAULT_CELL_PRESENTATION_TYPE) 
+							? lessPriority.getCellPresentationType() : cellPresentationType;
 	String thumb = morePriority.getThumb();
 	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
 	
@@ -195,7 +216,16 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
 	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
 	
-	return new Metadata(u, desc, presentation, cellPresentation, thumb, identifier, newDefaultValues, directives, attributes);
+	return new Metadata(u, 
+						desc, 
+						presentation, 
+						cellPresentation, 
+						cellPresentationType, 
+						thumb, 
+						identifier, 
+						newDefaultValues, 
+						directives, 
+						attributes);
 	
 }
 

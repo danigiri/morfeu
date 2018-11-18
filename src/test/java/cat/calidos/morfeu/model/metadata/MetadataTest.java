@@ -52,7 +52,16 @@ public void setup() throws Exception {
 	directivesA2.add("directive-A2");
 	directives.put("directives2", directivesA2);
 	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(1);
-	Metadata priorityMetadata = new Metadata(priorityURI, "descA", "A", "ACP", "DEFAULT", "idA", priorityDefaultValues, directives, attributes);
+	Metadata priorityMetadata = new Metadata(priorityURI, 
+												"descA",
+												"A", 
+												"ACP", 
+												"IMG", 
+												"DEFAULT", 
+												"idA", 
+												priorityDefaultValues, 
+												directives, 
+												attributes);
 
 	URI metadataURI = new URI("priority.xsd");
 	HashMap<String, String> metadataDefaultValues = new HashMap<String, String>(2);
@@ -63,7 +72,16 @@ public void setup() throws Exception {
 	directivesB.add("directive-B");
 	directives.put("directives", directivesB);
 	Map<String, Set<String>> attributes2 = new HashMap<String, Set<String>>(0);
-	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "THUMB", "idB", metadataDefaultValues, directives, attributes2);
+	Metadata metadata = new Metadata(metadataURI, 
+										"descB", 
+										"B", 
+										"BCP", 
+										"BCPTYPE", 
+										"THUMB", 
+										"idB", 
+										metadataDefaultValues, 
+										directives, 
+										attributes2);
 
 	mergedURI = new URI("foo.xsd");
 	merged = Metadata.merge(mergedURI, priorityMetadata, metadata);
@@ -78,6 +96,7 @@ public void testMergeMetadataBasic() {
 	assertEquals("descA", merged.getDesc());
 	assertEquals("A", merged.getPresentation());
 	assertEquals("ACP", merged.getCellPresentation());
+	assertEquals("BCPTYPE", merged.getCellPresentationType());
 	assertEquals("THUMB", merged.getThumb());
 
 	assertTrue(merged.getIdentifier().isPresent());

@@ -250,10 +250,15 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 getPresentation(): string {
 
 	let finalPres = this.cellModel.getRawPresentation();
-
 	if (finalPres.includes("$")) {
-			finalPres = PresentationParser.expand(finalPres, "$NAME", this.name);
-			finalPres = PresentationParser.expand(finalPres, "$ATTRIBUTES", this.attributes);
+
+			// expand special variables, both the name and the attributes as GET params
+			finalPres = PresentationParser.expand(finalPres, "$_NAME", this.name);
+			finalPres = PresentationParser.expand(finalPres, "$_ATTRIBUTES", this.attributes);
+
+			// the rest will be cell attributes as ${var}
+			finalPres = PresentationParser.expandVariables(finalPres, this.attributes);
+
 	}
 
 	return finalPres;

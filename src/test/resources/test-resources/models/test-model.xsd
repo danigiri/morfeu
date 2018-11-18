@@ -23,7 +23,7 @@
 				<mf:metadata uri="test/row/col/data2">
 					<mf:desc>Globally provided description of 'data2'</mf:desc>
 					<mf:thumb>assets/images/data2-thumb.svg</mf:thumb>
-					<mf:cell-presentation>/morfeu/dyn/preview/data2.svg?__header=$NAME&amp;$ATTRIBUTES</mf:cell-presentation>
+					<mf:cell-presentation>/morfeu/dyn/preview/data2.svg?__header=$_NAME&amp;$_ATTRIBUTES</mf:cell-presentation>
 				</mf:metadata>
 				<mf:metadata uri="test/row/col/keyvalue">
 					<mf:desc>Arbitrary key:value content (for key value pairs in yaml)</mf:desc>

@@ -4,6 +4,7 @@ import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from "@a
 
 import { FamilyMember } from "./family-member.interface";
 import { Cell } from "./cell.class";
+import { CellModel } from "./cell-model.class";
 
 import { DropAreaComponent } from "./drop-area.component";
 import { SelectableWidget } from "./selectable-widget.class";
@@ -119,7 +120,7 @@ import { EventService } from "./events/event.service";
 
 				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL')">
 						<!-- TODO: check the model and the content as well (counts, etc.) -->
-						<img id="{{cell.URI}}"
+						<img id="{{cell.URI}}" *ngIf="cellPresentationIsDefault()"
 							class="cell cell-img cell-level-{{level}}"
 							src="{{getCellPresentation()}}"
 							[class.cell-active]="active"
@@ -132,6 +133,20 @@ import { EventService } from "./events/event.service";
 							[dragData]="cellDragData()"
 							(dblclick)="doubleClick()"
 						/>
+						<!-- TODO: add innerhtml type this to inner html? -->
+						<iframe *ngIf="!cellPresentationIsDefault()" 
+							[src]="getCellPresentation() | safe: 'resourceUrl'"
+							[class.cell-active]="active"
+							[class.cell-selected]="selected"
+							(mouseenter)="focusOn(cell)"
+							(mouseleave)="focusOff(cell)"
+							dnd-draggable
+							[dragEnabled]="dragEnabled"
+							(onDragEnd)="dragEnd(cell)"
+							[dragData]="cellDragData()"
+							(dblclick)="doubleClick()"
+							
+						></iframe>
 						<!-- the position of the drop area is always where droped cells will go -->
 						<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 				</ng-container>
@@ -477,6 +492,10 @@ subscribeToSelection() {
 
 }
 
+
+cellPresentationIsDefault(): boolean {
+	return this.cell.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+}
 
 getCellPresentation() {
 	return this.cell.getPresentation();

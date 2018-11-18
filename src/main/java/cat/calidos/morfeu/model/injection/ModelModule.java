@@ -113,7 +113,7 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
 	Iterator<XSElementDecl> iterator = schemaSet.iterateElementDecls();
 	iterator.forEachRemaining(elem -> {
 										XSParticle part = elem.getType().asComplexType().getContentType().asParticle();
-										CellModel cellModel = buildCellModel(elem, 
+										CellModel cellModel = buildCellModel(elem,
 																			part,
 																			u,
 																			processedTypes,

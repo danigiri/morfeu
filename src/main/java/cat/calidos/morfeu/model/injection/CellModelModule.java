@@ -402,7 +402,7 @@ public static Metadata metadata(XSElementDecl elem,
 	Metadata typeMetadata = t.getMetadata();
 	Metadata fallback = (globalMetadata!=null  && globalMetadata.containsKey(uri)) ?
 							Metadata.merge(uri, globalMetadata.get(uri), typeMetadata) : typeMetadata;
-							
+
 	// then we merge the current cell model metadata with the fallback 
 	meta = Metadata.merge(uri, meta, fallback);
 	

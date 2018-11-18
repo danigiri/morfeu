@@ -60,7 +60,7 @@ private static final String METADATA = "";	// empty at the moment
 private static final String DESC_FIELD = "mf:desc";
 private static final String PRESENTATION_FIELD = "mf:presentation";
 private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
-private static final String CELL_PRESENTATION_TYPE = "mf:cell-presentation@type";
+private static final String CELL_PRESENTATION_TYPE_FIELD = "mf:cell-presentation@type";
 private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
 private static final String IDENTIFIER_FIELD = "mf:identifier@name";
@@ -80,6 +80,7 @@ public static Metadata provideMetadata(URI uri,
 										@Named("desc") Optional<String> desc,
 										@Named("presentation") Optional<String> presentation,
 										@Named("cellPresentation") Optional<String> cellPresentation,
+										@Named("cellPresentationType") Optional<String> cellPresentationType,
 										@Named("thumb") Optional<String> thumb,
 										@Named("identifier") Optional<String> identifier,
 										Map<String, String> defaultValues,
@@ -89,6 +90,7 @@ public static Metadata provideMetadata(URI uri,
 						desc,
 						presentation,
 						cellPresentation,
+						cellPresentationType,
 						thumb,
 						identifier, 
 						defaultValues, 
@@ -128,7 +130,7 @@ public static URI uri(@Nullable XSAnnotation annotation,
 // we derive the URI from the parent
 @Provides @Named("DefaultURI")
 public static URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
-	
+
 	URI uri = null;
 	try {
 		String uriVal = parentURI!=null ? parentURI.toString()+"/"+DEFAULT_URI+METADATA : DEFAULT_URI+METADATA;
@@ -162,6 +164,11 @@ public static Optional<String> presentation(@Nullable XSAnnotation annotation) {
 @Provides @Named("cellPresentation")
 public static Optional<String> cellPresentation(@Nullable XSAnnotation annotation) {
 	return annotationTaggedAs(annotation, CELL_PRESENTATION_FIELD);
+}
+
+
+@Provides @Named("cellPresentationType") Optional<String> cellPresentationType(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, CELL_PRESENTATION_TYPE_FIELD);
 }
 
 
