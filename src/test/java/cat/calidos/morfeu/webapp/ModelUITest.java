@@ -91,7 +91,7 @@ public void documentWithNonValidModelIsSelected() {
 	model.shouldAppear();
 
 	// click on a different document model should change (for instance an problematic doc)
-	catalogue.clickOnDocumentNamed("Document with non-valid model").model();
+	catalogue.clickOnDocumentNamed("Document with non-valid model");
 	model.shouldDisappear();
 
 }
@@ -101,11 +101,11 @@ public void documentWithNonValidModelIsSelected() {
 public void testCellModels() {
 
 	UIModel model = UICatalogues.openCatalogues()
-				 					.shouldAppear()
-				 					.clickOn(0)
-				 					.clickOnDocumentNamed("Document 1")
-				 					.model()
-				 					.shouldAppear();
+									.shouldAppear()
+									.clickOn(0)
+									.clickOnDocumentNamed("Document 1")
+									.model()
+									.shouldAppear();
 
 	List<UICellModelEntry> rootCellModels = model.rootCellModels();
 	assertEquals(1, rootCellModels.size());
