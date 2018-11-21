@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// CELL DRAG UI TEST . JAVA
 
 package cat.calidos.morfeu.webapp;
 
@@ -38,7 +24,7 @@ public void setup() {
 }
 
 
-@Test
+//@Test
 public void testDragCell() {
 	
 	UIContent content = UICatalogues.openCatalogues()
@@ -74,8 +60,8 @@ public void testDragCell() {
 }
 
 
-@Test
-public void testDragCellSoOtherCellsChangeTheirURIs( ) {
+//@Test
+public void testDragCellSoOtherCellsChangeTheirURIs() {
 	
 	
 	UIContent content = UICatalogues.openCatalogues()
@@ -133,4 +119,82 @@ public void testDragCellSoOtherCellsChangeTheirURIs( ) {
 }
 
 
+@Test
+public void testDragCFromLast() {
+
+	// BUG: if we drag from the last position two times , the element gets duplicated instead of dragged
+	// Start:
+	// data
+	// data2
+	//
+	// Next:
+	// <-------\
+	// data    |
+	// data2 --/
+	//
+	// Put it back:
+	// data2 --\
+	// data    |
+	// <-------/
+	//
+	// And again:
+	// <-------\
+	// data    |
+	// data2 --/
+	//
+	// This ends up with:
+	// data2
+	// data
+	// data2
+	// We need to be careful here, as we're moving elements at the end of the children list, so the destination position
+	// changes while we're moving the cell, as the children list has one less element while the drag happens
+	// In effect, the position is position-1 (the children count while the dragged cell is in 'the air' and an orphan)
+	
+	UIContent content = UICatalogues.openCatalogues()
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1")
+										.content();
+	content.shouldBeVisible();
+
+	// source col has two children: data and data2
+	UICell col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)");
+	assertEquals(2, col.children().size());
+	
+	// Next:
+	UICell data2 = col.child("data2(1)");
+	data2.dragTo(col.dropArea(0));
+	assertEquals("Target column should still have two children after drag", 2, col.children().size());
+
+	// Put it back
+	data2 = col.child("data2(0)");
+	data2.dragTo(col.dropArea(2));
+	assertEquals("Target column should still have two children after 2nd drag", 2, col.children().size());
+
+	// And again:
+	col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)");
+	data2 = col.child("data2(1)");
+	data2.dragTo(col.dropArea(0));
+	assertEquals("Target column should still have two children after 3rd drag", 2, col.children().size());
+
 }
+
+
+}
+
+/*
+ *    Copyright 2018 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+

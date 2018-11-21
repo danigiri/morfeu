@@ -65,8 +65,7 @@ import { UXEvent } from "./events/ux.event";
 					border-radius: 5px;
 				}
 			`],
-	providers:[
-	]
+	providers:[]
 })
 
 

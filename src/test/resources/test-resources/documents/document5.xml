@@ -5,9 +5,9 @@
 >
 	<row>
 		<col size="12">
-			<data3 text="identifier 1" number="1"/>
+			<data3 text="identifier 1" color="ff1100"/>
 			<data3 text="identifier 2" />
-			<data3 text="identifier 3" number="1"/>
+			<data3 text="identifier 3" color="1100ff"/>
 		</col>
 	</row>
 </test>
