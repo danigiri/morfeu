@@ -42,6 +42,7 @@ private UIContent content;
 private Optional<UICell> parent;
 private int level;
 
+
 public UICell(SelenideElement element, UIContent content, Optional<UICell> parent, int level) {
 
 	super(element);
@@ -52,14 +53,17 @@ public UICell(SelenideElement element, UIContent content, Optional<UICell> paren
 	
 }
 
+
 /** id is where we store the cell URI*/
 public String id() {
 	return element.attr("id");
 }
 
+
 public int level() {
 	return this.level;
 }
+
 
 public Optional<UICell> parent() {
 	return this.parent;
@@ -88,7 +92,7 @@ public List<UIDropArea> dropAreas() {
 	for (UIDropArea da: dropAreas) {
 		da.setPosition(i++);
 	}
-	
+
 	return dropAreas;
 
 }
@@ -167,6 +171,7 @@ public UICell activate() {
 public boolean isCell() {
 	return class_().contains("cell-img");
 }
+
 
 public boolean isWell() {
 	

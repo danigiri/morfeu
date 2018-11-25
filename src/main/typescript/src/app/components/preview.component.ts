@@ -12,11 +12,15 @@ import { switchMap } from 'rxjs/operators';
 	selector: 'preview',
 	template: `
 			<div class="card">
-				<div class="card-body" [style.background-color]="('#'+color) | safe: 'style'">
-					<h2 class="card-title">{{id_}}</h2>
+				<div class="card-body html-preview" [style.background-color]="('#'+color) | safe: 'style'">
+					<h2 class="card-title html-preview-title">{{id_}}</h2>
 				</div>
 			</div>
-	`
+	`,
+		styles: [`
+		.html-preview {}
+		.html-preview-title {}
+	`]
 })
 
 export class PreviewComponent implements OnInit {
