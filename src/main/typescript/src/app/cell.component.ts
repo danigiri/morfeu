@@ -145,7 +145,6 @@ import { EventService } from "./events/event.service";
 							(onDragEnd)="dragEnd(cell)"
 							[dragData]="cellDragData()"
 							(dblclick)="doubleClick()"
-							
 						></iframe>
 						<!-- the position of the drop area is always where droped cells will go -->
 						<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
@@ -178,6 +177,7 @@ import { EventService } from "./events/event.service";
 				height: auto;
 				*/
 				border: 3px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
+				border-radius: 5px;
 			}
 			.show-grid	{
 				background-color: rgba(200, 200, 200, .05);
@@ -239,25 +239,7 @@ import { EventService } from "./events/event.service";
 			.cell-col-12 {
 				max-width: 100%;
 			}
-			.cell-level-0 {}
-			.cell-level-1 {}
-			.cell-level-2 {}
-			.cell-level-3 {}
-			.cell-level-4 {}
-			.cell-level-5 {}
-			.cell-level-6 {}
-			.cell-level-7 {}
-			.cell-level-8 {}
-			.cell-level-9 {}
-			.cell-level-10 {}
-			.cell-level-11 {}
-			.cell-level-12 {}
-			.cell-level-13 {}
-			.cell-level-14 {}
-			.cell-level-15 {}
-			.cell-level-16 {}
-			.cell-level-17 {}
-			.cell-level-18 {}
+
 `],
 	//
 // encapsulation: ViewEncapsulation.Emulated,
