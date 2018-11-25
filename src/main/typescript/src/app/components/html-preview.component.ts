@@ -1,4 +1,4 @@
-// PREVIEW . COMPONENT . TS
+// HTML-PREVIEW . COMPONENT . TS
 
 import { Component, Input, OnInit } from "@angular/core";
 
@@ -9,7 +9,7 @@ import { switchMap } from 'rxjs/operators';
 
 @Component({
 	moduleId: module.id,
-	selector: 'preview',
+	selector: 'html-preview',
 	template: `
 			<div class="card">
 				<div class="card-body html-preview" [style.background-color]="('#'+color) | safe: 'style'">
@@ -23,7 +23,7 @@ import { switchMap } from 'rxjs/operators';
 	`]
 })
 
-export class PreviewComponent implements OnInit {
+export class HTMLPreviewComponent implements OnInit {
 
 static readonly colorRegExp = new RegExp("^[0-9a-fA-F]{6}$");
 
@@ -40,9 +40,8 @@ ngOnInit() {
 		this.id_ = params.get("id");
 		if (params.has("color")) {
 			let colorCandidate = params.get("color");
-			if (PreviewComponent.colorRegExp.test(colorCandidate)) {
+			if (HTMLPreviewComponent.colorRegExp.test(colorCandidate)) {
 				this.color = colorCandidate;
-				console.info("color="+this.color);
 			}
 		}
 	});

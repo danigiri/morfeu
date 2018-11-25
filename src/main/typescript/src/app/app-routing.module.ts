@@ -1,12 +1,14 @@
+// APP-ROUTING . MODULE . TS
+
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { MainComponent } from "./components/main.component";
-import { PreviewComponent } from "./components/preview.component";
+import { HTMLPreviewComponent } from "./components/html-preview.component";
 
 
 export const AppRoutes: Routes = [
-									{ path: "preview/:id", component: PreviewComponent }
+									{ path: "preview/:id", component: HTMLPreviewComponent }
 									,{ path: "", component: MainComponent }
 									];
 

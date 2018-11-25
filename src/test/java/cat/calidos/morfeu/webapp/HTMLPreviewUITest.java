@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.HTMLPreview;
 
-/**
+/** Load one HTML preview independently and just check the values
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class HTMLPreviewUITest extends UITezt {
@@ -20,10 +20,10 @@ public class HTMLPreviewUITest extends UITezt {
 public void testPreview() {
 
 	open(appBaseURL+"preview/identifier 1;color=ff1100");
-	
+
 	HTMLPreview preview = new HTMLPreview();
 	preview.shouldAppear();
-	
+
 	assertEquals("identifier 1", preview.title());
 	assertEquals("#ff1100", preview.color());
 

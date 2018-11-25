@@ -48,14 +48,14 @@ import { EventService } from "../events/event.service";
 				<h1 class="card-title">Morfeu application</h1>
 				<hotkeys-cheatsheet></hotkeys-cheatsheet>
 				<div class="container-fluid">
-					  <div class="row">
+					<div class="row">
 						<div class="col-3">
 							<catalogue-list></catalogue-list>
 							<document></document>
 						</div>
 						<div class="col">
 							<content></content>
-					 </div>
+						</div>
 						<div class="col-3">
 							<model-area></model-area>
 							<cell-data></cell-data>
