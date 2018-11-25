@@ -10,7 +10,7 @@ import { HttpClient } from "@angular/common/http";	// new angular 5 http client
 import { Configuration } from "../configuration.class";
 import { environment } from "../../environments/environment";
 
-import { CatalogueListComponent } from "../catalogue-list.component";
+import { CatalogueListComponent } from "./catalogue-list.component";
 import { ContentComponent } from "../content.component";
 import { CellDocumentComponent } from "../cell-document.component";
 import { ProblemComponent } from "../problem.component";
@@ -59,17 +59,17 @@ import { EventService } from "../events/event.service";
 						<div class="col-3">
 							<model-area></model-area>
 							<cell-data></cell-data>
-						</div>
-				  </div>
-				  </div>
-			  <div class="container-fluid">
-					<status></status>
-					<problem></problem>
-		 </div>
-	  </div>
-	  <key-capture></key-capture>
-	  <cell-editor></cell-editor>
-	  `,
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid">
+				<status></status>
+				<problem></problem>
+			</div>
+		</div>
+		<key-capture></key-capture>
+		<cell-editor></cell-editor>
+	`,
 	providers:	  [
 					// note that Http is injected by the HttpModule imported in the application module
 					{provide: "RemoteJSONDataService",

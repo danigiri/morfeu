@@ -491,11 +491,12 @@ subscribeToSelection() {
 
 }
 
-
+//
 cellPresentationIsDefault(): boolean {
 	return this.cell.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
+//
 getCellPresentation() {
 	return this.cell.getPresentation();
 }

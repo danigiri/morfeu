@@ -33,7 +33,7 @@ import { AppRoutingModule, AppRoutes } from "./app-routing.module";
 import { AppComponent } from "./components/app.component";
 import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
 import { AttributeDataInfoComponent } from "./components/attribute-data-info.component";
-import { CatalogueListComponent } from "./catalogue-list.component";
+import { CatalogueListComponent } from "./components/catalogue-list.component";
 import { CatalogueComponent } from "./catalogue.component";
 import { CollapsibleComponent } from "./components/collapsible.component";
 import { ContentComponent } from "./content.component";
@@ -49,6 +49,7 @@ import { MainComponent } from "./components/main.component";
 import { ModelAreaComponent } from "./components/model-area.component";
 import { ModelComponent } from "./components/model.component";
 import { HTMLPreviewComponent } from "./components/html-preview.component";
+import { CellPreviewComponent } from './components/cell-preview.component';
 import { ProblemComponent } from "./problem.component";
 import { SnippetComponent } from "./components/snippet.component";
 import { SnippetsListComponent } from "./components/snippets-list.component";
@@ -83,6 +84,7 @@ import { SafePipe } from './pipes/safe.pipe';
 					, CellDocumentComponent
 					, CellDataComponent
 					, CellModelComponent
+					, CellPreviewComponent
 					, DropAreaComponent
 					, HTMLPreviewComponent
 					, KeyCaptureComponent
