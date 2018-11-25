@@ -24,7 +24,7 @@ public void setup() {
 }
 
 
-//@Test
+@Test
 public void testDragCell() {
 	
 	UIContent content = UICatalogues.openCatalogues()
@@ -60,7 +60,7 @@ public void testDragCell() {
 }
 
 
-//@Test
+@Test
 public void testDragCellSoOtherCellsChangeTheirURIs() {
 	
 	
@@ -120,7 +120,7 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 
 
 @Test
-public void testDragCFromLast() {
+public void testDragCellFromLast() {
 
 	// BUG: if we drag from the last position two times , the element gets duplicated instead of dragged
 	// Start:

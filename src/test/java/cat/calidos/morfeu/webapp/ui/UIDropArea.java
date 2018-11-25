@@ -72,9 +72,14 @@ public UICell dropHere(UICell cell) {
 	
 	this.select();
 	content.pressKey(UIContent.DRAGNDROP);
-		
-	return parent.child(position);
-
+	
+	// if we have dropped at the end, the position is off by one
+	int childrenCount = parent.children().size();
+	if (position>=childrenCount) {
+		return parent.child(childrenCount-1);
+	} else {
+		return parent.child(position);
+	}
 }
 
 
