@@ -10,7 +10,8 @@ import { CellModel } from "../cell-model.class";
 	selector: "presentation",
 	template: `
 		<ng-container *ngIf="cell && draggable">
-			<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
+			<img *ngIf="cellPresentationIsIMG()"
+				id="{{cell.URI}}"
 				class="cell cell-img cell-level-{{level}}"
 				src="{{getCellPresentation()}}"
 				[class.cell-active]="active"
@@ -25,6 +26,7 @@ import { CellModel } from "../cell-model.class";
 			/>
 			<!-- TODO: add innerhtml type? -->
 			<iframe *ngIf="!cellPresentationIsIMG()" 
+				id="{{cell.URI}}"
 				[src]="getCellPresentation() | safe: 'resourceUrl'"
 				[class.cell-active]="active"
 				[class.cell-selected]="selected"
@@ -66,7 +68,7 @@ import { CellModel } from "../cell-model.class";
 
 export class PresentationComponent {
 
-// are we draggable or are we just showing the presentation?
+// are we draggable or are we just showing the presentation? MOVE THE DRAGGABLE LOGIC TO THE UPPER COMPONENT
 @Input() draggable: boolean = false;
 
 // if showing a cell with values within a cell structure (then we have the cell and 
