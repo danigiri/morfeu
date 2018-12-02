@@ -1,271 +1,36 @@
 // CELL . COMPONENT . TS
 
-
 import {filter} from 'rxjs/operators';
 import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
 
-import { FamilyMember } from "./family-member.interface";
-import { Cell } from "./cell.class";
-import { CellModel } from "./cell-model.class";
+import { FamilyMember } from "../family-member.interface";
+import { Cell } from "../cell.class";
+import { CellModel } from "../cell-model.class";
 
-import { DropAreaComponent } from "./drop-area.component";
-import { SelectableWidget } from "./selectable-widget.class";
+import { DropAreaComponent } from "../drop-area.component";
+import { SelectableWidget } from "../selectable-widget.class";
 
-import { CellActivateEvent } from "./events/cell-activate.event";
-import { CellActivatedEvent } from "./events/cell-activated.event";
-import { CellDeactivatedEvent } from "./events/cell-deactivated.event";
-import { CellDragEvent } from "./events/cell-drag.event";
-import { CellDropEvent } from "./events/cell-drop.event";
-import { CellEditEvent } from "./events/cell-edit.event";
-import { CellModelDeactivatedEvent } from "./events/cell-model-deactivated.event";
-import { CellSelectEvent } from "./events/cell-select.event";
-import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
-import { CellModelActivatedEvent } from "./events/cell-model-activated.event";
-import { EventService } from "./events/event.service";
+import { CellActivateEvent } from "../events/cell-activate.event";
+import { CellActivatedEvent } from "../events/cell-activated.event";
+import { CellDeactivatedEvent } from "../events/cell-deactivated.event";
+import { CellDragEvent } from "../events/cell-drag.event";
+import { CellDropEvent } from "../events/cell-drop.event";
+import { CellEditEvent } from "../events/cell-edit.event";
+import { CellModelDeactivatedEvent } from "../events/cell-model-deactivated.event";
+import { CellSelectEvent } from "../events/cell-select.event";
+import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
+import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
+import { EventService } from "../events/event.service";
 
 
 @Component({
 	moduleId: module.id,
 	selector: "cell",
-	template: `
-			<ng-container [ngSwitch]="true">
-				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
-					<img src="{{getCellPresentation()}}"
-						class="img-fluid"
-						[class.drag-active]="active"
-						[class.drag-inactive]="!active"
-						[class.cell-active]="active"
-						[class.cell-selected]="selected"
-						(mouseenter)="focusOn(cell)"
-						(mouseleave)="focusOff(cell)"
-						dnd-draggable
-						[dragEnabled]="dragEnabled"
-						(onDragEnd)="dragEnd(cell)"
-						[dragData]="cellDragData()"
-					/>
-					<div id="{{cell.URI}}"
-						class="well container-fluid show-grid cell-level-{{level}} rounded"
-						[class.cell-active]="active"
-						[class.cell-selected]="selected"
-					>
-						<!-- drop area to be able to add new rows to this well -->
-						<div class="row">
-							<div class="col">
-								<drop-area *ngIf="parent" [parent]="cell" position="0"></drop-area>
-							</div>
-						</div>
-						<cell *ngFor="let c of cell.children; let i=index"
-								[cell]="c"
-								[parent]="cell"
-								[level]="level+1"
-								[position]="i"
-								[snippet]="snippet"
-						></cell>
-					</div>
-					<!-- TODO: we probable want a drop area here to be able to add new wells -->
-				</ng-container>
-
-				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'ROW-WELL'">
-					<img src="{{getCellPresentation()}}"
-						class="img-fluid"
-						[class.drag-active]="active"
-						[class.drag-inactive]="!active"
-						[class.cell-active]="active"
-						[class.cell-selected]="selected"
-						(mouseenter)="focusOn(cell)"
-						(mouseleave)="focusOff(cell)"
-						dnd-draggable
-						[dragEnabled]="dragEnabled"
-						(onDragEnd)="dragEnd(cell)"
-						[dragData]="cellDragData()"
-					/>
-					<div id="{{cell.URI}}"
-						class="row-well row show-grid cell-level-{{level}} rounded"
-						[class.cell-active]="active"
-						[class.cell-selected]="selected"
-					 >
-						<!-- add a drop area here if we ever want to dynamically add new columns -->
-						<cell *ngFor="let c of cell.children; let i=index"
-									[cell]="c"
-									[parent]="cell"
-									[level]="level+1"
-									[position]="i"
-									[snippet]="snippet"
-						></cell>
-					</div>
-					<!-- drop area to be able to add new row after this one -->
-					<div class="row">
-						<div class="col">
-							<drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
-						</div>
-					</div>
-				</ng-container>
-
-				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
-					<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
-					<div id="{{cell.URI}}"
-						class="col-well col show-grid cell-level-{{level}} rounded"
-						[class.cell-active]="active"
-						[class.cell-selected]="selected"
-					><!--COL-{{this.cell.columnFieldValue()}}-->
-						<!-- drop area here to add anything at the beginning of the column -->
-						<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
-						<cell *ngFor="let c of cell.children; let i=index"
-								[cell]="c"
-								[parent]="cell"
-								[level]="level+1"
-								[position]="i"
-								[snippet]="snippet"
-						></cell>
-					</div>
-				</ng-container>
-
-				<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL')">
-						<!-- TODO: check the model and the content as well (counts, etc.) -->
-						<img id="{{cell.URI}}" *ngIf="cellPresentationIsDefault()"
-							class="cell cell-img cell-level-{{level}}"
-							src="{{getCellPresentation()}}"
-							[class.cell-active]="active"
-							[class.cell-selected]="selected"
-							(mouseenter)="focusOn(cell)"
-							(mouseleave)="focusOff(cell)"
-							dnd-draggable
-							[dragEnabled]="dragEnabled"
-							(onDragEnd)="dragEnd(cell)"
-							[dragData]="cellDragData()"
-							(dblclick)="doubleClick()"
-						/>
-						<!-- TODO: add innerhtml type this to inner html? -->
-						<iframe *ngIf="!cellPresentationIsDefault()" 
-							[src]="getCellPresentation() | safe: 'resourceUrl'"
-							[class.cell-active]="active"
-							[class.cell-selected]="selected"
-							(mouseenter)="focusOn(cell)"
-							(mouseleave)="focusOff(cell)"
-							dnd-draggable
-							[dragEnabled]="dragEnabled"
-							(onDragEnd)="dragEnd(cell)"
-							[dragData]="cellDragData()"
-							(dblclick)="doubleClick()"
-						></iframe>
-						<!-- the position of the drop area is always where droped cells will go -->
-						<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
-				</ng-container>
-
-			</ng-container>
-	`,
-	styles: [`
-			.cell {}
-			.well {
-/*
-				padding: 0;
-				align-content: stretch;
- */
-				}
-			.row-well {
-				background-color: rgba(255, 0, 0, .05);
-			}
-			.col-well {
-				/*
-				padding-right: 0;
-				padding-left: 0;
-				max-width: 100%;
-				width: 100%;
-				*/
-			}
-			.cell-img {
-				/*
-				width: 100%;
-				height: auto;
-				*/
-				border: 3px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
-				border-radius: 5px;
-			}
-			.show-grid	{
-				background-color: rgba(200, 200, 200, .05);
-				border: 3px solid #c8c8c8;
-			}
-			.cell-active {
-				border: 3px solid #f00;
-				border-radius: 5px;
-			}
-			.cell-selected {
-				border: 3px dashed #00f;
-				border-radius: 5px;
-			}
-			.cell-dragged {
-				opacity: .2;
-			}
-			.drag-inactive {
-				opacity: .6;
-			}
-			.drag-active {
-				opacity: .9;
-			}
-			.cell-col-1 {
-				max-width: 8.3%;
-				width: 8.3%;
-			}
-			.cell-col-2 {
-				max-width: 16.6%;
-			width: 16.6%;
-			}
-			.cell-col-3 {
-				 max-width: 25%;
-			width: 25%;
-			}
-			.cell-col-4 {
-				max-width: 33%;
-				width: 33%;
-			}
-			.cell-col-6 {
-				max-width: 41.6%;
-				width: 41.6%;
-			}
-			.cell-col-7 {
-				max-width: 58.3%;
-				width: 58.3%;
-			}
-			.cell-col-8 {
-				width: 66%;
-			 }
-			 .cell-col-9 {
-				 max-width: 75%;
-			 }
-			 .cell-col-10 {
-				 max-width: 75%;
-			 }
-			 .cell-col-11 {
-				 max-width: 91.6%;
-			 }
-			.cell-col-12 {
-				max-width: 100%;
-			}
-			.cell-level-0 {}
-			.cell-level-1 {}
-			.cell-level-2 {}
-			.cell-level-3 {}
-			.cell-level-4 {}
-			.cell-level-5 {}
-			.cell-level-6 {}
-			.cell-level-7 {}
-			.cell-level-8 {}
-			.cell-level-9 {}
-			.cell-level-10 {}
-			.cell-level-11 {}
-			.cell-level-12 {}
-			.cell-level-13 {}
-			.cell-level-14 {}
-			.cell-level-15 {}
-			.cell-level-16 {}
-			.cell-level-17 {}
-			.cell-level-18 {}
-
-`],
+	templateUrl: "./cell.component.html",
+	styleUrls: ["./cell.component.css", "./presentation.css"]
 	//
 // encapsulation: ViewEncapsulation.Emulated,
 })
-// `
 
 export class CellComponent extends SelectableWidget implements OnInit {
 
@@ -512,12 +277,12 @@ subscribeToSelection() {
 
 }
 
-//
-cellPresentationIsDefault(): boolean {
+
+private cellPresentationIsIMG(): boolean {
 	return this.cell.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
-//
+
 getCellPresentation() {
 	return this.cell.getPresentation();
 }
@@ -566,4 +331,3 @@ private doubleClick() {
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-

@@ -20,7 +20,7 @@ import { CellDocument } from "../cell-document.class";
 import { Content } from "../content.class";
 import { Model } from "../model.class";
 
-import { CellComponent } from "../cell.component";
+import { CellComponent } from "./cell.component";
 import { SelectableWidget } from "../selectable-widget.class";
 import { SnippetsListComponent } from "./snippets-list.component";
 

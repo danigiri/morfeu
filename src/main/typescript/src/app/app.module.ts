@@ -37,7 +37,7 @@ import { CatalogueListComponent } from "./components/catalogue-list.component";
 import { CatalogueComponent } from "./catalogue.component";
 import { CollapsibleComponent } from "./components/collapsible.component";
 import { ContentComponent } from "./content.component";
-import { CellComponent } from "./cell.component";
+import { CellComponent } from "./components/cell.component";
 import { CellEditorComponent } from "./components/cell-editor.component";
 import { CellHeaderComponent } from "./components/cell-header.component";
 import { CellDocumentComponent } from "./cell-document.component";

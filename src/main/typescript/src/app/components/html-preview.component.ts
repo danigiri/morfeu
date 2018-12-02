@@ -13,7 +13,7 @@ import { switchMap } from 'rxjs/operators';
 	template: `
 			<div class="card">
 				<div class="card-body html-preview" [style.background-color]="('#'+color) | safe: 'style'">
-					<h2 class="card-title html-preview-title">{{id_}}</h2>
+					<h4 class="card-title html-preview-title">{{id_}}</h4>
 				</div>
 			</div>
 	`,

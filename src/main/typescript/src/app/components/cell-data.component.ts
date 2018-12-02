@@ -26,7 +26,7 @@ import { EventService } from "../events/event.service";
 			[class.cell-data-source-cell]="cell!==undefined"
 		>
 			<cell-header [uri]="uri" [cellModel]="cellModel"></cell-header>
-			<img *ngIf="showPresentation()"
+			<img *ngIf="showPresentation() && cellPresentationIsIMG()"
 				class="card-img-bottom"
 				src="{{getPresentation()}}"
 				alt="Image representation of the cell"
@@ -121,11 +121,18 @@ private hideCellInformation() {
 
 	this.cellModel = undefined;
 	this.cell = undefined; // not strictly needed, but for completeness and to avoid any future side-effects
+
 }
 
 
 private remainingAttributes() {
 	return this.cellModel.attributes ? this.cellModel.attributes.length - this.cell.attributes.length : 0;
+}
+
+
+// TODO: this is duplicated code, should refactor
+private cellPresentationIsIMG(): boolean {
+	return this.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
 
