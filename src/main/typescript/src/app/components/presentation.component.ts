@@ -1,4 +1,4 @@
-// PRESENTATION . COMPONENT . TS
+// PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
 import { Component, Input } from "@angular/core";
 
@@ -76,6 +76,9 @@ export class PresentationComponent {
 @Input() level?: number;
 
 @Input() cellModel?: CellModel;
+
+@Input() active = false;
+@Input() selected = false;
 
 
 /** do we present the cell with the default (IMG) presentation? */

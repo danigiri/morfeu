@@ -208,24 +208,24 @@ import { EventService } from "./events/event.service";
 				max-width: 16.6%;
 			width: 16.6%;
 			}
-			 .cell-col-3 {
+			.cell-col-3 {
 				 max-width: 25%;
-			 width: 25%;
-			 }
-			 .cell-col-4 {
-			 max-width: 33%;
-			 width: 33%;
-			 }
-			 .cell-col-6 {
-				 max-width: 41.6%;
-			 width: 41.6%;
-			 }
-			 .cell-col-7 {
-				 max-width: 58.3%;
-			 width: 58.3%;
-			 }
-			 .cell-col-8 {
-				 width: 66%;
+			width: 25%;
+			}
+			.cell-col-4 {
+				max-width: 33%;
+				width: 33%;
+			}
+			.cell-col-6 {
+				max-width: 41.6%;
+				width: 41.6%;
+			}
+			.cell-col-7 {
+				max-width: 58.3%;
+				width: 58.3%;
+			}
+			.cell-col-8 {
+				width: 66%;
 			 }
 			 .cell-col-9 {
 				 max-width: 75%;
@@ -239,6 +239,25 @@ import { EventService } from "./events/event.service";
 			.cell-col-12 {
 				max-width: 100%;
 			}
+			.cell-level-0 {}
+			.cell-level-1 {}
+			.cell-level-2 {}
+			.cell-level-3 {}
+			.cell-level-4 {}
+			.cell-level-5 {}
+			.cell-level-6 {}
+			.cell-level-7 {}
+			.cell-level-8 {}
+			.cell-level-9 {}
+			.cell-level-10 {}
+			.cell-level-11 {}
+			.cell-level-12 {}
+			.cell-level-13 {}
+			.cell-level-14 {}
+			.cell-level-15 {}
+			.cell-level-16 {}
+			.cell-level-17 {}
+			.cell-level-18 {}
 
 `],
 	//
