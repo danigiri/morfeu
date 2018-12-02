@@ -15,6 +15,8 @@
  */
 
 
+import {filter} from 'rxjs/operators';
+
 import { Component, Input, OnInit } from "@angular/core";
 import { Observable ,  Subscription } from "rxjs";
 
@@ -122,15 +124,15 @@ ngOnInit() {
 	this.cellModel = this.node.data as CellModel;
 	this.cellModel.component = this;
 
-	this.subscribe(this.events.service.of( CellDeactivatedEvent )
-			.filter(deactivated => this.isCompatibleWith(deactivated.cell))
+	this.subscribe(this.events.service.of( CellDeactivatedEvent ).pipe(
+			filter(deactivated => this.isCompatibleWith(deactivated.cell)))
 			.subscribe( deactivated => {
 				// console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
 				this.becomeInactive(true);
 	}));
 
-	this.subscribe(this.events.service.of( CellActivatedEvent )
-			.filter(activated => this.isCompatibleWith(activated.cell))
+	this.subscribe(this.events.service.of( CellActivatedEvent ).pipe(
+			filter(activated => this.isCompatibleWith(activated.cell)))
 			.subscribe( activated => {
 				// console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
 				this.becomeActive(true);
@@ -255,8 +257,8 @@ getThumb(): string {
 private subscribeToActivation() {
 	
 	console.log("[UI] CellModelComponent::subscribeToActivation("+this.cellModel.name+")");
-	this.activationSubscription = this.subscribe(this.events.service.of( CellModelActivatedEvent )
-			.filter( activated => activated.cellModel==undefined && this.selected)	 // no cell model
+	this.activationSubscription = this.subscribe(this.events.service.of( CellModelActivatedEvent ).pipe(
+			filter( activated => activated.cellModel==undefined && this.selected))	 // no cell model
 			.subscribe( activated => this.becomeActive(false) )
 	);
 

@@ -1,5 +1,7 @@
 // CELL . COMPONENT . TS
 
+
+import {filter} from 'rxjs/operators';
 import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
 
 import { FamilyMember } from "./family-member.interface";
@@ -290,8 +292,8 @@ ngOnInit() {
 	// console.log("[UI] CellComponent::ngOnInit()");
 
 	// Drop a cell to a position under this cell
-	this.subscribe(this.events.service.of( CellDropEvent )
-			.filter(dc => dc.newParent && dc.newParent===this.cell)
+	this.subscribe(this.events.service.of( CellDropEvent ).pipe(
+			filter(dc => dc.newParent && dc.newParent===this.cell))
 			.subscribe( dc => {
 				console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to	"
 							+this.cell.URI+" at position ("
@@ -300,24 +302,24 @@ ngOnInit() {
 	}));
 
 	// A cell model was deactivated that is compatible with this cell
-	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-			.filter(d => d.cellModel && this.isCompatibleWith(d.cellModel)) // //
+	this.subscribe(this.events.service.of( CellModelDeactivatedEvent ).pipe(
+			filter(d => d.cellModel && this.isCompatibleWith(d.cellModel))) // //
 			.subscribe( d => {
 				// console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 				this.becomeInactive(this.cell);
 	}));
 
 	// a cell model activated that is compatible with this cell
-	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-			.filter( a => a.cellModel && this.isCompatibleWith(a.cellModel))
+	this.subscribe(this.events.service.of( CellModelActivatedEvent ).pipe(
+			filter( a => a.cellModel && this.isCompatibleWith(a.cellModel)))
 			.subscribe( a => {
 				console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
 				this.becomeActive(this.cell);
 	}));
 
 	// an outsider component (like a keyboard shortcut) wants to activate this selected cell
-	this.subscribe(this.events.service.of( CellActivateEvent )
-			.filter(a => this.selected && this.canBeActivated())
+	this.subscribe(this.events.service.of( CellActivateEvent ).pipe(
+			filter(a => this.selected && this.canBeActivated()))
 			.subscribe( a => {
 				console.log("-> cell comp gets cell activate event and proceeds to focus :)");
 				// FIXMWE: this allows for multiple activations when conflicting with rollover
@@ -325,24 +327,24 @@ ngOnInit() {
 	}));
 
 	// A different cell was activated and we are active at this moment
-	this.subscribe(this.events.service.of( CellActivatedEvent )
-			.filter(a => this.active && a.cell!==this.cell)
+	this.subscribe(this.events.service.of( CellActivatedEvent ).pipe(
+			filter(a => this.active && a.cell!==this.cell))
 			.subscribe( a => {
 				console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
 				this.becomeInactive(this.cell);
 	}));
 
 	// External component (like a keyboard shortcut) wants to drag this cell somewhere
-	this.subscribe(this.events.service.of( CellDragEvent )
-			.filter(a => this.active)
+	this.subscribe(this.events.service.of( CellDragEvent ).pipe(
+			filter(a => this.active))
 			.subscribe( a => {
 				console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
 				this.events.service.publish(new CellDropEvent(this.cell));
 	}));
 
 	// Want to edit this cell
-	this.subscribe(this.events.service.of( CellEditEvent )
-				.filter(edit => !edit.cell && this.isEditable())
+	this.subscribe(this.events.service.of( CellEditEvent ).pipe(
+				filter(edit => !edit.cell && this.isEditable()))
 				.subscribe( edit => {
 					console.log("-> cell comp gets cell edit event and will try to edit :)");
 					this.events.service.publish(new CellEditEvent(this.cell));

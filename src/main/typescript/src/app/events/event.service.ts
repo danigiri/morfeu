@@ -5,8 +5,10 @@
 */
 
 
+import {map, filter} from 'rxjs/operators';
+
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs/Rx";
+import { Observable, Subject } from "rxjs";
 
 
 interface Event {
@@ -43,7 +45,7 @@ public of<T>(eventType: { new(...args: any[]): T }): Observable<T> {
 	const channel_ = (<any>eventType).name;
 	// console.log("\tSubscribing to event "+channel_);
 
-	return this.event$.filter(m => m.channel.startsWith(channel_, 0)).map(m => m.data);
+	return this.event$.pipe(filter(m => m.channel.startsWith(channel_, 0)),map(m => m.data),);
 
 }
 

@@ -1,3 +1,5 @@
+
+import {take, delay, retryWhen} from 'rxjs/operators';
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -41,9 +43,9 @@ get<T>(uri: string): Observable<T> {
 	console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
 	// TODO: handle errors with .catch here
 	
-	return this.http.get<T>(uri).retryWhen(errors => errors.delay(200).take(5)
+	return this.http.get<T>(uri).pipe(retryWhen(errors => errors.pipe(delay(200),take(5),)
 	//.concat(Observable.throw(new Error("Too many retries")))
-	);
+	));
 
 }
 

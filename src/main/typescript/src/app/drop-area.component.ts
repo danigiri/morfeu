@@ -15,6 +15,8 @@
  */
 
 
+import {filter} from 'rxjs/operators';
+
 import { Component, Input, OnInit } from "@angular/core"; 
 
 import { FamilyMember } from "./family-member.interface";
@@ -123,8 +125,8 @@ ngOnInit() {
 				}
 	}));
 	
-	this.subscribe(this.events.service.of( CellDropEvent )
-			.filter(cd => this.selected && cd.newParent==undefined)
+	this.subscribe(this.events.service.of( CellDropEvent ).pipe(
+			filter(cd => this.selected && cd.newParent==undefined))
 			.subscribe( cd => {
 				console.log("-> drop comp gets cell drop event from '"+cd.cell.name+"'");
 				this.performDropHere(cd.cell, this.parent, this.position);

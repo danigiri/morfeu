@@ -14,6 +14,8 @@
  *	 limitations under the License.
  */
 
+
+import {filter} from 'rxjs/operators';
 import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
 
 import { NgbModal, ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
@@ -111,8 +113,8 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 
 
 ngOnInit() {
-	this.subscribe(this.events.service.of( CellEditEvent )
-			.filter(edit => edit.cell!==undefined && !this.editing)
+	this.subscribe(this.events.service.of( CellEditEvent ).pipe(
+			filter(edit => edit.cell!==undefined && !this.editing))
 			.subscribe(edit => this.edit(edit.cell))
 			);
 }

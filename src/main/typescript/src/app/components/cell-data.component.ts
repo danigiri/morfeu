@@ -1,5 +1,7 @@
 // CELL-DATA . COMPONENT . TS
 
+
+import {filter} from 'rxjs/operators';
 import { Component, Input, OnInit } from "@angular/core";
 
 import { Cell } from "../cell.class";
@@ -86,8 +88,8 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellDeactivatedEvent )
 			.subscribe( deactivated => this.hideCellInformation()
 	));
-	this.subscribe(this.events.service.of( CellModelActivatedEvent )
-			.filter( activated => activated.cellModel!==undefined)
+	this.subscribe(this.events.service.of( CellModelActivatedEvent ).pipe(
+			filter( activated => activated.cellModel!==undefined))
 			.subscribe( activated => this.showCellModelInformation(activated.cellModel)
 	));
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )

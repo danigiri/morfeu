@@ -14,6 +14,8 @@
  *	 limitations under the License.
  */
 
+
+import {filter} from 'rxjs/operators';
 import { Subscription } from "rxjs";
 
 import { KeyPressedEvent } from "./events/keypressed.event";
@@ -28,8 +30,8 @@ protected numberPressedSubscription: Subscription;
 
 registerKeyPressedEvents() {
 
-	this.commandPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
-			.filter( key => key.isCommand())
+	this.commandPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent ).pipe(
+			filter( key => key.isCommand()))
 		   .subscribe( key => {
 			   if (this.commandKeys.find( c => c===key.str)!==undefined) {
 				   this.commandPressedCallback(key.str);
@@ -39,8 +41,8 @@ registerKeyPressedEvents() {
 		   })
 	);
 
-	this.numberPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent )
-			.filter( key => key.isNumber())
+	this.numberPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent ).pipe(
+			filter( key => key.isNumber()))
 			.subscribe( key => this.numberPressedCallback(key.num))
 	);
 

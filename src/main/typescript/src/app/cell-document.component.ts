@@ -14,6 +14,8 @@
  *	 limitations under the License.
  */
 
+
+import {filter} from 'rxjs/operators';
 import { Component, Inject, OnInit } from "@angular/core";
 
 import { CellDocument, CellDocumentJSON } from "./cell-document.class";
@@ -95,8 +97,8 @@ ngOnInit() {
 	));
 
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
-	this.subscribe(this.events.service.of( UXEvent )
-			.filter(e => e.type===UXEvent.DOCUMENT_DIRTY)
+	this.subscribe(this.events.service.of( UXEvent ).pipe(
+			filter(e => e.type===UXEvent.DOCUMENT_DIRTY))
 			.subscribe(e => this.enableSave())
 	);
 

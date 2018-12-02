@@ -14,6 +14,8 @@
  *	 limitations under the License.
  */
 
+
+import {filter} from 'rxjs/operators';
 import { Component, Input, OnInit } from "@angular/core";
 
 import { Widget } from "../widget.class";
@@ -89,9 +91,9 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 	
-	this.subscribe(this.events.service.of( UXEvent ) 
-			.filter( e => e.type==UXEvent.TOGGLE_COLLAPSABLE)
-			.filter( e => e.payload && (e.payload==="*" || e.payload===this.id_))
+	this.subscribe(this.events.service.of( UXEvent ).pipe( 
+			filter( e => e.type==UXEvent.TOGGLE_COLLAPSABLE),
+			filter( e => e.payload && (e.payload==="*" || e.payload===this.id_)),)
 			.subscribe( e => this.toggle() ));
 
 }

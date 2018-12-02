@@ -14,6 +14,8 @@
  *	 limitations under the License.
  */
 
+
+import {take, delay, map, retryWhen} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
 import { Observable ,  BehaviorSubject } from "rxjs";
@@ -44,9 +46,9 @@ get(uri: string, type_: Constructor<T>): Observable<T> {
 
 	console.log("[SERVICE] RemoteObjectService::get("+uri+")"); 
 	// TODO: handle errors with .catch her
-	return this.http.get(uri) .retryWhen(errors => errors.delay(200).take(5))
+	return this.http.get(uri).pipe( retryWhen(errors => errors.pipe(delay(200),take(5),)),
 	// .concat(Observable.throw(new Error("Too many retries")))
-	.map(response => <T>createInstance(type_).fromJSON(response.text()));
+	map(response => <T>createInstance(type_).fromJSON(response.text())),);
 
 }
 

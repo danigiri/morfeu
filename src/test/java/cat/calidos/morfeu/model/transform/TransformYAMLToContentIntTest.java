@@ -73,7 +73,7 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/transform/escape.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-	//System.err.println(transformed);
+	System.err.println(transformed);
 	compareWithXML(transformed, xmlPath);
 
 }
