@@ -1,14 +1,18 @@
-.cell-img {
-	/*
-	width: 100%;
-	height: auto;
-	*/
+.well-img {
 	border: 3px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
 	border-radius: 5px;
+}
+.cell-img {
+	border: 3px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
+	border-radius: 5px;
+}
+.cell-img-size {
+	width: 100%;
+	min-width: 50px;
 }
 .cell-html {
 /*
 	display: block;
-    */
     width: 50%;
+    */
 }

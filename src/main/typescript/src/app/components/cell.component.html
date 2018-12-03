@@ -1,7 +1,7 @@
 <ng-container [ngSwitch]="true">
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
 		<img src="{{getCellPresentation()}}"
-			class="img-fluid"
+			class="well-img img-fluid"
 			[class.drag-active]="active"
 			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
@@ -37,7 +37,7 @@
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'ROW-WELL'">
 		<img src="{{getCellPresentation()}}"
-			class="img-fluid"
+			class="well-img img-fluid"
 			[class.drag-active]="active"
 			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
@@ -96,7 +96,7 @@
 				[class.cell-img]="!active && !selected"
 				[class.cell-active]="active"
 				[class.cell-selected]="selected"
-				class="cell cell-level-{{level}}"
+				class="cell cell-img-size cell-level-{{level}}"
 				src="{{getCellPresentation()}}"
 				(mouseenter)="focusOn(cell)"
 				(mouseleave)="focusOff(cell)"
@@ -108,7 +108,7 @@
 			/>
 			<!-- TODO: add innerhtml type this to inner html? -->
 			<iframe *ngIf="!cellPresentationIsIMG()"
-				class="cell-html"
+				class="cell cell-html"
 				[src]="getCellPresentation() | safe: 'resourceUrl'"
 				[class.cell-active]="active"
 				[class.cell-selected]="selected"
