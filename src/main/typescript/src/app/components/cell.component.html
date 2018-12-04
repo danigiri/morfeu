@@ -106,9 +106,10 @@
 				[dragData]="cellDragData()"
 				(dblclick)="doubleClick()"
 			/>
-			<!-- TODO: add innerhtml type this to inner html? -->
 			<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
 				class="cell cell-img-size cell-level-{{level}}"
+				[class.cell-active]="active"
+				[class.cell-selected]="selected"
 				(mouseenter)="focusOn(cell)"
 				(mouseleave)="focusOff(cell)"
 				dnd-draggable
@@ -117,13 +118,11 @@
 				[dragData]="cellDragData()"
 				(dblclick)="doubleClick()"
 			>
-			<!-- TODO: change into an image to make it more elegant -->
+			<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->
 				<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
 				<iframe 
 					class="cell cell-html"
 					[src]="getCellPresentation() | safe: 'resourceUrl'"
-					[class.cell-active]="active"
-					[class.cell-selected]="selected"
 				></iframe>
 			</div>
 			<!-- the position of the drop area is always where droped cells will go -->
