@@ -1,20 +1,18 @@
 // CELL-DATA . COMPONENT . TS
 
-
-import {filter} from 'rxjs/operators';
 import { Component, Input, OnInit } from "@angular/core";
+import { filter } from 'rxjs/operators';
 
 import { Cell } from "../cell.class";
 import { CellModel } from "../cell-model.class";
 
-import { Widget } from "../widget.class";
 
 import { CellActivatedEvent } from "../events/cell-activated.event";
 import { CellDeactivatedEvent } from "../events/cell-deactivated.event";
 import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
 import { CellModelDeactivatedEvent } from "../events/cell-model-deactivated.event";
-import { EventService } from "../events/event.service";
-
+import { EventListener } from "../events/event-listener.class";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,
@@ -61,22 +59,23 @@ import { EventService } from "../events/event.service";
 			</ul>
 		</div>
 				`,
-	styles:[`
-			.cell-data {}
-			.cell-data-info {}
-			.cell-data-value {}
-			.cell-data-value-field {}
-			.cell-data-uri {}
-			.cell-data-source-model {}
-			.cell-data-source-cell {}
+	styles: [`
+				.cell-data {}
+				.cell-data-info {}
+				.cell-data-value {}
+				.cell-data-value-field {}
+				.cell-data-uri {}
+				.cell-data-source-model {}
+				.cell-data-source-cell {}
 	`]
 })
 
-export class CellDataComponent extends Widget implements OnInit {
+export class CellDataComponent extends EventListener implements OnInit {
 
 @Input() uri: string;
 @Input() cell: Cell;
 @Input() cellModel: CellModel;
+
 
 constructor(eventService: EventService) {
 	super(eventService);

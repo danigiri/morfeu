@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  */
 
 
-import { EventService } from './event.service';
-import { ProblemEvent } from './problem.event';
+import { EventService } from "../services/event.service";
+import { ProblemEvent } from "./problem.event";
 
 export class Events {
 
+
 constructor(public service: EventService) {}
+
 
 public problem(p: any) {
 	
@@ -29,10 +31,12 @@ public problem(p: any) {
 	
 }
 
+
 public ok() {
 	
 	this.service.publish(new ProblemEvent(null));
 
 }
-   
+
+
 }

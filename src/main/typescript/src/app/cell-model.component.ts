@@ -35,7 +35,7 @@ import { CellModelDeactivatedEvent } from "./events/cell-model-deactivated.event
 import { CellSelectEvent } from "./events/cell-select.event";
 import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
 import { NewCellFromModelEvent } from "./events/new-cell-from-model.event";
-import { EventService } from "./events/event.service";
+import { EventService } from "./services/event.service";
 
 @Component({
 	moduleId: module.id,

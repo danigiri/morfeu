@@ -1,28 +1,15 @@
-// UX . EVENT . TS
+// CONFIGURATION - LOADED . EVENT . TS
 
-export class UXEvent {
+import { Configuration } from "../configuration.class";
 
-public static DOCUMENT_DIRTY: number = 100;
-public static TOGGLE_COLLAPSABLE: number = 200;
-
-
-constructor(public type: number, public payload?: any) {}
+export class ConfigurationLoadedEvent {
 
 
-public toString = () : string => {
+constructor(public configuration: Configuration) {}
 
-	let message: string;
 
-	switch (this.type) {
-		case UXEvent.DOCUMENT_DIRTY:
-			message = "DOCUMENT_DIRTY";
-			break;
-		default:
-			message = "UNKNOWN";
-			break;
-	}
-	return "UXEvent:{'"+message+"'}";
-
+public toString = (): string => {
+	return "ConfigurationLoaded:{"+this.configuration+"}";
 }
 
 

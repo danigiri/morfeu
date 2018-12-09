@@ -1,3 +1,5 @@
+// CELL - HEADER . COMPONENT . TS
+
 import { Component, Input } from "@angular/core";
 import { CellModel } from "../cell-model.class";
 

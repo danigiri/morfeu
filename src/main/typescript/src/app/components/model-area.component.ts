@@ -34,7 +34,7 @@ import { ModelDisplayEvent } from "../events/model-display.event";
 import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
 import { ModelRequestEvent } from "../events/model-request.event";
 import { ModelLoadedEvent } from "../events/model-loaded.event";
-import { EventService } from "../events/event.service";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,

@@ -1,5 +1,5 @@
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 
 import { Subscription } from "rxjs";
 
-import { Widget } from "./widget.class";
-
 import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
+import { EventListener } from "./events/event-listener.class";
 
 
-export abstract class SelectableWidget extends Widget {
+export abstract class SelectableWidget extends EventListener {
 
 selected = false;			// are we selected?
 

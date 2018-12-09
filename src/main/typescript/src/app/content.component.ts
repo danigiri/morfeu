@@ -31,7 +31,7 @@ import { ContentSaveEvent } from "./events/content-save.event";
 import { DropAreaSelectEvent } from "./events/drop-area-select.event";
 import { KeyPressedEvent } from "./events/keypressed.event";
 import { StatusEvent } from "./events/status.event";
-import { EventService } from "./events/event.service";
+import { EventService } from "./services/event.service";
 
 
 @Component({

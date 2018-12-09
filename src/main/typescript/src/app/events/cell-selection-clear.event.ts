@@ -1,5 +1,17 @@
+// CELL - SELECTION - CLEAR . EVENT . TS
+
+export class CellSelectionClearEvent {
+
+
+public toString = (): string => {
+	return "CellSelectionClearEvent:{}";
+}
+
+
+}
+
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -13,14 +25,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class CellSelectionClearEvent {
-
-constructor() {}
-
-
-public toString = (): string => {
-	return "CellSelectionClearEvent:{}";
-}
-
-}

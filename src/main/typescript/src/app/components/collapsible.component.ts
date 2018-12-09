@@ -18,9 +18,8 @@
 import {filter} from 'rxjs/operators';
 import { Component, Input, OnInit } from "@angular/core";
 
-import { Widget } from "../widget.class";
-
-import { EventService } from "../events/event.service";
+import { EventListener } from "../events/event-listener.class";
+import { EventService } from "../services/event.service";
 import { UXEvent } from "../events/ux.event";
 
 
@@ -72,7 +71,7 @@ import { UXEvent } from "../events/ux.event";
 					]
 })
 
-export class CollapsibleComponent extends Widget {
+export class CollapsibleComponent extends EventListener {
 
 @Input() id_: string;
 @Input() header: string;

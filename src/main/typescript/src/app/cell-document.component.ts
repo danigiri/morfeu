@@ -1,34 +1,19 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
-
+// CELL - DOCUMENT . COMPONENT . TS
 
 import {filter} from 'rxjs/operators';
 import { Component, Inject, OnInit } from "@angular/core";
 
 import { CellDocument, CellDocumentJSON } from "./cell-document.class";
-import { Widget } from "./widget.class";
 import { RemoteObjectService } from "./services/remote-object.service";
 
-import { EventService } from "./events/event.service";
 import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
 import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
 import { CellDocumentLoadedEvent } from "./events/cell-document-loaded.event";
 import { ContentSaveEvent } from "./events/content-save.event";
 import { StatusEvent } from "./events/status.event";
 import { UXEvent } from "./events/ux.event";
+import { EventListener } from "./events/event-listener.class";
+import { EventService } from "./services/event.service";
 
 @Component({
 	moduleId: module.id,
@@ -70,7 +55,7 @@ import { UXEvent } from "./events/ux.event";
 })
 // `
 
-export class CellDocumentComponent extends Widget implements OnInit {
+export class CellDocumentComponent extends EventListener implements OnInit {
 
 document: CellDocument;
 saveDisabled = true;
@@ -179,3 +164,19 @@ private problem(message: String) {
 }
 
 }
+
+/*
+ *	  Copyright 2018 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */

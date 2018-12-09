@@ -23,9 +23,8 @@ import { Catalogue } from "../catalogue.class";
 import { CellDocument, CellDocumentJSON } from "../cell-document.class";
 import { Content, ContentJSON } from "../content.class";
 
-import { Widget } from "../widget.class";
-
 import { CellActivateEvent } from "../events/cell-activate.event";
+import { ConfigurationLoadedEvent } from "../events/configuration-loaded.event";
 import { CataloguesRequestEvent } from "../events/catalogues-request.event";
 import { CataloguesLoadedEvent } from "../events/catalogues-loaded.event";
 import { CatalogueLoadedEvent } from "../events/catalogue-loaded.event";
@@ -36,8 +35,8 @@ import { CellSelectEvent } from "../events/cell-select.event";
 import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { ContentRefreshedEvent } from "../events/content-refreshed.event";
 import { ModelLoadedEvent } from "../events/model-loaded.event";
-import { EventService } from "../events/event.service";
-
+import { EventListener } from "../events/event-listener.class";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,
@@ -70,34 +69,33 @@ import { EventService } from "../events/event.service";
 		<key-capture></key-capture>
 		<cell-editor></cell-editor>
 	`,
-	providers:	  [
-					// note that Http is injected by the HttpModule imported in the application module
-					{provide: "RemoteJSONDataService",
-						useFactory: (http: HttpClient) => (new RemoteDataService(http)),
-						deps: [HttpClient]
-					}
-					, EventService
-					, {provide: "CellDocumentService",
-						useFactory: (http: Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
-						deps: [Http]
-					}
-					, {provide: "ContentService",
-						useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
-						deps: [Http]
-					}
-					, {provide: "ModelService",
-						useFactory: (http: Http) => (new RemoteObjectService<Model, ModelJSON>(http)),
-						deps: [Http]
-					}
-					, {provide: "SnippetContentService",
-						useFactory: (http: Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
-						deps: [Http]
-					}
-					]
+	providers: [
+				// note that Http is injected by the HttpModule imported in the application module
+				{provide: "RemoteJSONDataService",
+					useFactory: (http: HttpClient) => (new RemoteDataService(http)),
+					deps: [HttpClient]
+				}
+				, EventService
+				, {provide: "CellDocumentService",
+					useFactory: (http: Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
+					deps: [Http]
+				}
+				, {provide: "ContentService",
+					useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
+					deps: [Http]
+				}
+				, {provide: "ModelService",
+					useFactory: (http: Http) => (new RemoteObjectService<Model, ModelJSON>(http)),
+					deps: [Http]
+				}
+				, {provide: "SnippetContentService",
+					useFactory: (http: Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
+					deps: [Http]
+				}
+	]
 })
 
-
-export class MainComponent extends Widget implements AfterViewInit {
+export class MainComponent extends EventListener implements AfterViewInit {
 
 private cataloguesLoadedEventSubscription: Subscription;
 private catalogueLoadedEventSubscription: Subscription;
@@ -112,39 +110,39 @@ constructor(eventService: EventService, private route: ActivatedRoute) {
 // been able to to register their listeners to appropriate events
 ngAfterViewInit() {
 
-	console.log("\t\t\t\t\t ****** APPLICATION STARTS ******");
-	console.log("AppComponent::ngAfterViewInit()");
+	console.info("\t\t\t\t\t ****** APPLICATION STARTS ******");
+	console.debug("AppComponent::ngAfterViewInit()");
 
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	const foo = !environment.production && false;
+	const foo = !environment.production && true;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
-		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent)
-				.subscribe( loaded => {
+		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent).subscribe( 
+				loaded => {
 						this.unsubscribe(this.cataloguesLoadedEventSubscription);
 						const catalogue = loaded.catalogues[0].uri;
 						this.events.service.publish(new CatalogueSelectionEvent(catalogue));
 				}
 		));
-		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of(CatalogueLoadedEvent )
-				.subscribe( loaded => {
+		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of(CatalogueLoadedEvent).subscribe(
+				loaded => {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
-						const document = loaded.catalogue.documents[0].uri;
+						const document = loaded.catalogue.documents[4].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
 							this.events.service.publish(new CellDocumentSelectionEvent(document))
 						);
-			}
+				}
 		));
-		this.subscribe(this.events.service.of(ContentRefreshedEvent).subscribe(
-				_ => {
+//		this.subscribe(this.events.service.of(ContentRefreshedEvent).subscribe(
+//				_ => {
 					//this.events.service.publish(new CellSelectionClearEvent());
 //					this.events.service.publish(new CellSelectEvent(0));
 //					this.events.service.publish(new CellSelectEvent(0));
 //					this.events.service.publish(new CellSelectEvent(0));
 //					this.events.service.publish(new CellSelectEvent(0));
 //					this.events.service.publish(new CellActivateEvent());
-				} 
-		));
+//				} 
+//		));
 
 	}
 	
@@ -154,19 +152,27 @@ ngAfterViewInit() {
 	// the problem here is that we have created components with specific data bindings (for instance the
 	// animation state of the status bar, which is setup to be hidden) and the load event will change some of
 	// them. The changes will happen after the lifecycle stage of (re)setting data-bound input properties of
-	// components) and will end up in an inconsistent state when verified. Therefore we're scheduling this to 
-	// be fired asynchronously in a micro-event that runs after the data-binding verification step
+	// components) and will end up in an inconsistent state when verified. Therefore we're scheduling the request event 
+	// to be fired asynchronously in a micro-event that runs after the data-binding verification step.
 	// Also see https://angular.io/guide/lifecycle-hooks
 	// 
 	// This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
 	// events can use binding properties that have been setup properly
 
+	this.subscribe(this.events.service.of(ConfigurationLoadedEvent).subscribe(
+			loaded => Promise.resolve(null).then(() => 
+			this.events.service.publish(new CataloguesRequestEvent(loaded.configuration.catalogues))
+												)
+	));
+
 	// we need to subscribe to the query params to override possible configuration
-	this.route.queryParams.subscribe(params => {
-		const catalogues = Configuration.merge(params).catalogues;
-		console.log("FOO2 config - catalogues: %s", Configuration.merge(params).catalogues);
-		Promise.resolve(null).then(() => this.events.service.publish(new CataloguesRequestEvent(catalogues)));
-	});
+	this.route.queryParams.subscribe(
+			params => {
+				const configuration = Configuration.merge(params);
+				console.debug("Configuration loaded, firing config loaded bootstrapping event");
+				this.events.service.publish(new ConfigurationLoadedEvent(configuration))
+			}
+	);
 
 }
 

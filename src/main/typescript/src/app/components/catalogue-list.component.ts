@@ -17,7 +17,6 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { Widget } from "../widget.class";
 import { CollapsibleComponent } from "./collapsible.component";
 
 import { CatalogueComponent } from "../catalogue.component";
@@ -30,7 +29,8 @@ import { CataloguesRequestEvent } from "../events/catalogues-request.event";
 import { CataloguesLoadedEvent } from "../events/catalogues-loaded.event";
 import { CellDocumentSelectionEvent } from "../events/cell-document-selection.event";
 import { StatusEvent } from "../events/status.event";
-import { EventService } from "../events/event.service";
+import { EventListener } from "../events/event-listener.class";
+import { EventService } from "../services/event.service";
 
 
 @Component({
@@ -58,7 +58,7 @@ import { EventService } from "../events/event.service";
 				]
 })
 
-export class CatalogueListComponent extends Widget implements OnInit {
+export class CatalogueListComponent extends EventListener implements OnInit {
 
 catalogues: Catalogue[];
 selectedCatalogueURI: string;

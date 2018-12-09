@@ -1,23 +1,8 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
+// CATALOGUE . COMPONENT . TS
 
 import { Component, Inject, OnInit } from "@angular/core";
 import { Subscription }	from "rxjs";
 
-import { Widget } from "./widget.class";
 import { Catalogue } from "./catalogue.class";
 
 import { CellDocument } from "./cell-document.class";
@@ -25,10 +10,11 @@ import { RemoteDataService } from "./services/remote-data.service";
 
 import { CatalogueSelectionEvent } from "./events/catalogue-selection.event";
 import { CatalogueLoadedEvent } from "./events/catalogue-loaded.event";
-import { EventService } from "./events/event.service";
 import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
 import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
 import { StatusEvent } from "./events/status.event";
+import { EventListener } from "./events/event-listener.class";
+import { EventService } from "./services/event.service";
 
 @Component({
 	moduleId: module.id,
@@ -62,7 +48,7 @@ import { StatusEvent } from "./events/status.event";
 	]
 })
 
-export class CatalogueComponent extends Widget implements OnInit {
+export class CatalogueComponent extends EventListener implements OnInit {
 
 catalogue: Catalogue;
 selectedDocumentURI: string;
@@ -134,4 +120,21 @@ private preview(d: CellDocument) {
 	return d.presentation ? d.presentation : "assets/images/open-iconic/file.svg";
 }
 
+
 }
+
+/*
+ *	  Copyright 2018 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */

@@ -1,5 +1,21 @@
+// CELL - SELECT . EVENT . TS
+
+// import { SelectableWidget } from "../selectable-widget.class";
+
+export class CellSelectEvent {
+
+constructor(public position: number) {}
+
+
+public toString = (): string => {
+	return "CellSelectEvent:{position:"+this.position+"}";
+}
+
+
+}
+
 /*
- *	  Copyright 2017 Daniel Giribet
+ *	  Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
@@ -13,16 +29,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-// import { SelectableWidget } from "../selectable-widget.class";
-
-export class CellSelectEvent {
-
-constructor(public position: number) {}
-
-
-public toString = (): string => {
-	return "CellSelectEvent:{position:"+this.position+"}";
-}
-
-}

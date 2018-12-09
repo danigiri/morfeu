@@ -32,7 +32,6 @@ import { CellSelectEvent } from "../events/cell-select.event";
 import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
 import { ContentRequestEvent } from "../events/content-request.event";
-import { EventService } from "../events/event.service";
 import { KeyPressedEvent } from "../events/keypressed.event";
 import { ModelLoadedEvent } from "../events/model-loaded.event";
 import { ModelDisplayEvent } from "../events/model-display.event";
@@ -40,6 +39,7 @@ import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
 import { ModelRequestEvent } from "../events/model-request.event";
 import { NewCellFromModelEvent } from "../events/new-cell-from-model.event";
 import { StatusEvent } from "../events/status.event";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,

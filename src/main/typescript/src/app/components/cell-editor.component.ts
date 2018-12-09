@@ -8,13 +8,12 @@ import { NgbModal, ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 import { Cell } from "../cell.class";
 import { CellModel } from "../cell-model.class";
 
-import { Widget } from "../widget.class";
-
 import { CellActivateEvent } from "../events/cell-activate.event";
 import { CellActivatedEvent } from "../events/cell-activated.event";
 import { CellEditEvent } from "../events/cell-edit.event";
-import { EventService } from "../events/event.service";
+import { EventListener } from "../events/event-listener.class";
 import { UXEvent } from "../events/ux.event";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,
@@ -87,7 +86,7 @@ import { UXEvent } from "../events/ux.event";
 })
 
 
-export class CellEditorComponent extends Widget implements OnInit {
+export class CellEditorComponent extends EventListener implements OnInit {
 
 @ViewChild("editor") editor: ElementRef;
 

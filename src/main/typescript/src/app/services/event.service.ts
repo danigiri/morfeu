@@ -4,8 +4,7 @@
 *  Added support for subtypes of events
 */
 
-
-import {map, filter} from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
@@ -33,9 +32,6 @@ public publish<T>(event: T, subtype?: string): void {
 	// console.log("\tSending event "+channel_+" -> ("+event.toString()+")");
 	this.event$.next({ channel: channel_, data: event });
 
-
-	// we could send the event to the server here
-
 }
 
 
@@ -45,7 +41,7 @@ public of<T>(eventType: { new(...args: any[]): T }): Observable<T> {
 	const channel_ = (<any>eventType).name;
 	// console.log("\tSubscribing to event "+channel_);
 
-	return this.event$.pipe(filter(m => m.channel.startsWith(channel_, 0)),map(m => m.data),);
+	return this.event$.pipe(filter(m => m.channel.startsWith(channel_, 0)), map(m => m.data));
 
 }
 

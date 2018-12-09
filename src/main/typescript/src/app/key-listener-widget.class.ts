@@ -19,9 +19,9 @@ import {filter} from 'rxjs/operators';
 import { Subscription } from "rxjs";
 
 import { KeyPressedEvent } from "./events/keypressed.event";
-import { Widget } from "./widget.class";
+import { EventListener } from "./events/event-listener.class";
 
-export class KeyListenerWidget extends Widget {
+export class KeyListenerWidget extends EventListener {
 
 protected commandKeys: string[] = Array();
 protected commandPressedSubscription: Subscription;

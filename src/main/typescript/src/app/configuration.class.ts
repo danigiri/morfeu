@@ -20,17 +20,17 @@ import { environment } from "../environments/environment";
 
 export class Configuration {
 
-
-constructor() {}
-
 production: boolean;
 catalogues = "/morfeu/test-resources/catalogues.json";
+events = "/morfeu/events/";
+
 
 static merge(params: Params): Configuration {
 
 	let config = new Configuration();
 	config.production = params.production!==undefined ? params.production : environment.production;
 	config.catalogues = params.catalogues!==undefined ? params.catalogues : config.catalogues;
+	config.events = params.events!==undefined ? params.events : config.events;
 
 	return config;
 

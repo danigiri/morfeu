@@ -31,7 +31,7 @@ import { CellModelActivatedEvent } from "./events/cell-model-activated.event";
 import { CellModelDeactivatedEvent } from "./events/cell-model-deactivated.event";
 import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
 import { DropAreaSelectEvent } from "./events/drop-area-select.event";
-import { EventService } from "./events/event.service";
+import { EventService } from "./services/event.service";
 import { UXEvent } from "./events/ux.event";
 
 @Component({

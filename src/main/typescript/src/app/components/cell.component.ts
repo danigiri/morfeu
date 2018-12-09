@@ -20,7 +20,7 @@ import { CellModelDeactivatedEvent } from "../events/cell-model-deactivated.even
 import { CellSelectEvent } from "../events/cell-select.event";
 import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
-import { EventService } from "../events/event.service";
+import { EventService } from "../services/event.service";
 
 
 @Component({

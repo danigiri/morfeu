@@ -33,7 +33,7 @@ import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { SnippetContentRequestEvent } from "../events/snippet-content-request.event";
 import { SnippetDocumentRequestEvent } from "../events/snippet-document-request.event";
 import { StatusEvent } from "../events/status.event";
-import { EventService } from "../events/event.service";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,

@@ -19,10 +19,9 @@ import { Component, Inject, Input, OnInit, OnDestroy } from "@angular/core";
 
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 
-import { Widget } from '../widget.class';
-
 import { KeyPressedEvent } from "../events/keypressed.event";
-import { EventService } from "../events/event.service";
+import { EventListener } from "../events/event-listener.class";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,
@@ -32,7 +31,7 @@ import { EventService } from "../events/event.service";
 	`
 })
 
-export class KeyCaptureComponent extends Widget implements OnInit, OnDestroy  {
+export class KeyCaptureComponent extends EventListener implements OnInit, OnDestroy  {
 
 public readonly ALL_KEYS: string[] = ["'", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l","m", 
 									  "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];

@@ -25,7 +25,7 @@ import { SelectableWidget } from "../selectable-widget.class";
 import { SnippetsListComponent } from "./snippets-list.component";
 
 import { CellSelectEvent } from "../events/cell-select.event";
-import { EventService } from "../events/event.service";
+import { EventService } from "../services/event.service";
 
 @Component({
 	moduleId: module.id,

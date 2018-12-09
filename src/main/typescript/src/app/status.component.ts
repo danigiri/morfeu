@@ -18,7 +18,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { trigger, state, style, animate, transition } from "@angular/animations";
 
-import { EventService } from "./events/event.service";
+import { EventService } from "./services/event.service";
 import { StatusEvent } from "./events/status.event";
 
 @Component({
@@ -241,6 +241,7 @@ private addToPendingStatuses(status: StatusEvent) {
 }
 
 
+// TODO: move to event listener
 ngOnDestroy() {
 	this.eventSubscription.unsubscribe();
 }
