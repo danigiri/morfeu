@@ -31,6 +31,9 @@ import { EventService } from "../events/event.service";
 				src="{{getPresentation()}}"
 				alt="Image representation of the cell"
 			/>
+			<presentation *ngIf="showPresentation() && !cellPresentationIsIMG()" 
+				[cell]="cell" [cellModel]="cellModel"
+			></presentation>
 			<!-- if we have a value field we should show it (readonly!) -->
 			<div class="card-body">
 				<form *ngIf="cell!=undefined && cell.value!=undefined && showValue()">
@@ -132,7 +135,11 @@ private remainingAttributes() {
 
 // TODO: this is duplicated code, should refactor
 private cellPresentationIsIMG(): boolean {
-	return this.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+
+	let cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
+	
+	return cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+
 }
 
 

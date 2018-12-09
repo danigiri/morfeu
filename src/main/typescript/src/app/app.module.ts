@@ -49,7 +49,7 @@ import { MainComponent } from "./components/main.component";
 import { ModelAreaComponent } from "./components/model-area.component";
 import { ModelComponent } from "./components/model.component";
 import { HTMLPreviewComponent } from "./components/html-preview.component";
-// import { PresentationComponent } from "./components/presentation.component";
+import { PresentationComponent } from "./components/presentation.component";
 import { ProblemComponent } from "./problem.component";
 import { SnippetComponent } from "./components/snippet.component";
 import { SnippetsListComponent } from "./components/snippets-list.component";
@@ -90,7 +90,7 @@ import { SafePipe } from './pipes/safe.pipe';
 					, MainComponent
 					, ModelAreaComponent
 					, ModelComponent
-					// , PresentationComponent
+					, PresentationComponent
 					, ProblemComponent
 					, SafePipe
 					, SnippetComponent

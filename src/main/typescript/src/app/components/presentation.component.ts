@@ -10,11 +10,9 @@ import { CellModel } from "../cell-model.class";
 	selector: "presentation",
 	template: `
 		<!-- TODO: add inner html type? -->
-		<iframe *ngIf="!cellPresentationIsIMG()" 
-					class="cell cell-html"
-					[src]="getCellPresentation() | safe: 'resourceUrl'"
-					[class.cell-active]="active"
-					[class.cell-selected]="selected"
+		<iframe
+			class="cell cell-html"
+			[src]="getPresentation() | safe: 'resourceUrl'"
 		></iframe>
 	`,
 	styles:[`
@@ -24,27 +22,23 @@ import { CellModel } from "../cell-model.class";
 
 export class PresentationComponent {
 
-// are we draggable or are we just showing the presentation? MOVE THE DRAGGABLE LOGIC TO THE UPPER COMPONENT
-@Input() draggable: boolean = false;
-
-// if showing a cell with values within a cell structure (then we have the cell and 
+// if showing a cell with values or we are showing a cellmodel
 @Input() cell?: Cell;
-@Input() level?: number;
-
 @Input() cellModel?: CellModel;
-
-@Input() active = false;
-@Input() selected = false;
 
 
 /** do we present the cell with the default (IMG) presentation? */
 private cellPresentationIsIMG(): boolean {
-	return this.cell.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+
+	let cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
+	
+	return cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+
 }
 
 
-private getCellPresentation() {
-	return this.cell.getPresentation();
+private getPresentation(): string {
+	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
 }
 
 

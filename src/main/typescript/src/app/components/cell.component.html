@@ -120,10 +120,11 @@
 			>
 			<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->
 				<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
-				<iframe 
+				<!-- iframe 
 					class="cell cell-html"
 					[src]="getCellPresentation() | safe: 'resourceUrl'"
-				></iframe>
+				></iframe-->
+				<presentation *ngIf="!cellPresentationIsIMG()" [cell]="cell" ></presentation>
 			</div>
 			<!-- the position of the drop area is always where droped cells will go -->
 			<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>

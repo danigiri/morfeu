@@ -1,19 +1,4 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
-
+// CELL - EDITOR . COMPONENT . TS
 
 import {filter} from 'rxjs/operators';
 import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
@@ -21,6 +6,7 @@ import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
 import { NgbModal, ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 
 import { Cell } from "../cell.class";
+import { CellModel } from "../cell-model.class";
 
 import { Widget } from "../widget.class";
 
@@ -69,9 +55,11 @@ import { UXEvent } from "../events/ux.event";
 							></attribute-data-editor>
 						</ul>
 					</form>
-					<img *ngIf="showPresentation()"
+					<!-- presentation goes here -->
+					<img *ngIf="showPresentation() && cellPresentationIsIMG()"
 						class="card-img-bottom" src="{{getPresentation()}}"
 						alt="Image representation of the cell" />
+					<presentation *ngIf="showPresentation() && !cellPresentationIsIMG()" [cell]="cell" ></presentation>
 				</div>
 				<div class="modal-footer card-footer">
 					<button id="cell-editor-discard-button"
@@ -99,7 +87,7 @@ import { UXEvent } from "../events/ux.event";
 })
 
 
-export class CellEditorComponent  extends Widget implements OnInit {
+export class CellEditorComponent extends Widget implements OnInit {
 
 @ViewChild("editor") editor: ElementRef;
 
@@ -141,6 +129,12 @@ private edit(cell: Cell) {
 	this.modalService.open(this.editor).result.then((result) => this.button(result),
 													(reason) => this.outside());
 
+}
+
+
+//TODO: this is duplicated code, should refactor
+private cellPresentationIsIMG(): boolean {
+	return this.cell.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
 
@@ -219,3 +213,19 @@ private removeValue() {
 
 
 }
+
+/*
+ *	  Copyright 2018 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */
