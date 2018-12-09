@@ -16,12 +16,13 @@
 
 
 import { EventService } from "../services/event.service";
+import { RemoteEventService } from "../services/remote-event.service";
 import { ProblemEvent } from "./problem.event";
 
 export class Events {
 
 
-constructor(public service: EventService) {}
+constructor(public service: EventService, public remote?: RemoteEventService) {}
 
 
 public problem(p: any) {

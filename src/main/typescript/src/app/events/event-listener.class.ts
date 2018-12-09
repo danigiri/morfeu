@@ -4,6 +4,7 @@ import { OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 
 import { EventService } from "../services/event.service";
+import { RemoteEventService } from "../services/remote-event.service";
 import { Events } from "./events.class";
 
 
@@ -12,9 +13,9 @@ export class EventListener implements OnDestroy {
 protected events: Events;
 private subscriptions: Subscription[];
 
-constructor(private eventService: EventService) {
+constructor(private eventService: EventService, private remoteEventService?: RemoteEventService) {
 
-	this.events = new Events(eventService);
+	this.events = new Events(eventService, remoteEventService);
 	this.subscriptions = [];
 
 }

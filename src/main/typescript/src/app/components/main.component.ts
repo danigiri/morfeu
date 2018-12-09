@@ -37,6 +37,7 @@ import { ContentRefreshedEvent } from "../events/content-refreshed.event";
 import { ModelLoadedEvent } from "../events/model-loaded.event";
 import { EventListener } from "../events/event-listener.class";
 import { EventService } from "../services/event.service";
+import { RemoteEventService } from "../services/remote-event.service";
 
 @Component({
 	moduleId: module.id,
@@ -88,6 +89,7 @@ import { EventService } from "../services/event.service";
 					useFactory: (http: Http) => (new RemoteObjectService<Model, ModelJSON>(http)),
 					deps: [Http]
 				}
+				, RemoteEventService
 				, {provide: "SnippetContentService",
 					useFactory: (http: Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
 					deps: [Http]
@@ -101,8 +103,8 @@ private cataloguesLoadedEventSubscription: Subscription;
 private catalogueLoadedEventSubscription: Subscription;
 
 
-constructor(eventService: EventService, private route: ActivatedRoute) {
-	super(eventService);
+constructor(eventService: EventService, remoteEventservice: RemoteEventService, private route: ActivatedRoute) {
+	super(eventService, remoteEventservice);
 }
 
 
@@ -127,9 +129,9 @@ ngAfterViewInit() {
 		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of(CatalogueLoadedEvent).subscribe(
 				loaded => {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
-						const document = loaded.catalogue.documents[4].uri;
+						const document = loaded.catalogue.documents[0].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
-							this.events.service.publish(new CellDocumentSelectionEvent(document))
+							this.events.remote.publish(new CellDocumentSelectionEvent(document))
 						);
 				}
 		));
@@ -170,7 +172,7 @@ ngAfterViewInit() {
 			params => {
 				const configuration = Configuration.merge(params);
 				console.debug("Configuration loaded, firing config loaded bootstrapping event");
-				this.events.service.publish(new ConfigurationLoadedEvent(configuration))
+				this.events.service.publish(new ConfigurationLoadedEvent(configuration));
 			}
 	);
 

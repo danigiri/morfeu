@@ -86,7 +86,7 @@ private cellModelSelectingMode = false;
 constructor(eventService: EventService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
 	super(eventService);
-   // super(eventService, hotkeysService);
+	// super(eventService, hotkeysService);
 }
 
 

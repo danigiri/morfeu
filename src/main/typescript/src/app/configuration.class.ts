@@ -22,7 +22,7 @@ export class Configuration {
 
 production: boolean;
 catalogues = "/morfeu/test-resources/catalogues.json";
-events = "/morfeu/events/";
+events = "/morfeu/dyn/events";
 
 
 static merge(params: Params): Configuration {

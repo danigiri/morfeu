@@ -21,7 +21,7 @@ export class CellDocumentSelectionEvent {
 constructor(public url: string) {}
 
 public toString = (): string => {
-	return "CellDocumentSelectionEvent:{url:'"+this.url+"'}";
+	return "CellDocumentSelectionEvent?url="+this.url;
 }
 
 }

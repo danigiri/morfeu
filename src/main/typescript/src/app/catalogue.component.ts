@@ -15,6 +15,8 @@ import { CellDocumentSelectionEvent } from "./events/cell-document-selection.eve
 import { StatusEvent } from "./events/status.event";
 import { EventListener } from "./events/event-listener.class";
 import { EventService } from "./services/event.service";
+import { RemoteEventService } from "./services/remote-event.service";
+
 
 @Component({
 	moduleId: module.id,
@@ -55,8 +57,9 @@ selectedDocumentURI: string;
 
 
 constructor(eventService: EventService,
+			remoteEventService: RemoteEventService,
 			@Inject("RemoteJSONDataService") private catalogueService: RemoteDataService ) {
-	super(eventService);
+	super(eventService, remoteEventService);
 }
 
 
@@ -103,7 +106,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 clickOnDocument(stub: CellDocument) {
 
 	console.log("[UI] Clicked on document='"+stub.uri+"' from catalogue");
-	this.events.service.publish(new CellDocumentSelectionEvent(stub.uri));
+	this.events.remote.publish(new CellDocumentSelectionEvent(stub.uri));
 
 }
 

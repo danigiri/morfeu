@@ -156,12 +156,14 @@ saveDocument() {
 
 }
 
+
 private problem(message: String) {
 
 	console.log("[UI] CellDocumentComponent::problem()");
 	this.events.problem(message);
 
 }
+
 
 }
 

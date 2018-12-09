@@ -27,7 +27,7 @@ import dagger.Component;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class, 
 		ContentControlModule.class, ModelsControlModule.class, SVGPreviewControlModule.class,
-		SnippetsControlModule.class})
+		SnippetsControlModule.class, ClientEventControlModule.class})
 public interface MorfeuControlComponent extends ControlComponent {
 
 

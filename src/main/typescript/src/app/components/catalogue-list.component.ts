@@ -74,16 +74,20 @@ ngOnInit() {
 
 	console.log("StatusComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of( CataloguesRequestEvent ).subscribe( s => {
-			console.log("-> catalogue-list component gets request event for '"+s.url+"'");
-			this.fetchCatalogues(s.url);
-	}));
+	this.subscribe(this.events.service.of( CataloguesRequestEvent ).subscribe( 
+			s => {
+				console.log("-> catalogue-list component gets request event for '"+s.url+"'");
+				this.fetchCatalogues(s.url);
+			}
+	));
 
 	// on catalogue selection we highlight the selected catalogue and clear the document selection
-	this.subscribe(this.events.service.of( CatalogueSelectionEvent ).subscribe( s => {
-		console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
-		this.markCatalogueAsSelected(s.url);
-	}));
+	this.subscribe(this.events.service.of( CatalogueSelectionEvent ).subscribe(
+			s => {
+				console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
+				this.markCatalogueAsSelected(s.url);
+			}
+	));
 
 }
 
@@ -92,13 +96,14 @@ fetchCatalogues(url: string) {
 
 	this.events.service.publish(new StatusEvent("Fetching catalogues"));
 	// TODO: make this configurable and into an event
-	this.catalogueService.getAll<Catalogue>(url).subscribe(c => {
-			this.catalogues = c;
-			this.events.service.publish(new CataloguesLoadedEvent(c));
-			this.events.ok();
-		},
-		error => this.events.problem(error.message), // error is of the type HttpErrorResponse
-		() => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
+	this.catalogueService.getAll<Catalogue>(url).subscribe(
+			c => {
+				this.catalogues = c;
+				this.events.service.publish(new CataloguesLoadedEvent(c));
+				this.events.ok();
+			},
+			error => this.events.problem(error.message), // error is of the type HttpErrorResponse
+			() => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
 	);
 
 }
