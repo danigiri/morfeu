@@ -5,7 +5,6 @@ package cat.calidos.morfeu.control.injection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
