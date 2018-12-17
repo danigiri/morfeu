@@ -85,9 +85,9 @@ public void documentSaveTest() throws Exception {
 
 	open(appBaseURL);
 	UIDocument document = UICatalogues.openCatalogues()
-			.shouldAppear()
-			.clickOn(0)
-			.clickOnDocumentNamed("Document 1");
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
 	content.shouldBeVisible();
 

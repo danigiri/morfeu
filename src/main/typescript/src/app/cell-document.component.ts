@@ -14,6 +14,7 @@ import { StatusEvent } from "./events/status.event";
 import { UXEvent } from "./events/ux.event";
 import { EventListener } from "./events/event-listener.class";
 import { EventService } from "./services/event.service";
+import { RemoteEventService } from "./services/remote-event.service";
 
 @Component({
 	moduleId: module.id,
@@ -61,9 +62,10 @@ document: CellDocument;
 saveDisabled = true;
 
 constructor(eventService: EventService,
+			remoteEventService: RemoteEventService,
 			@Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON>
 			) {
-	super(eventService);
+	super(eventService, remoteEventService);
 }
 
 
@@ -98,7 +100,7 @@ loadDocument(url: string) {
 	this.documentService.get("/morfeu/dyn/documents/"+url, CellDocument).subscribe(d => {
 
 				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
-				this.events.service.publish(new CellDocumentClearEvent());	// clear everything (subscriptions, etc.)
+				this.events.remote.publish(new CellDocumentClearEvent());	// clear everything (subscriptions, etc.)
 				if (!d.hasProblem()) {	// we only publish the load if we have no issues with the doc
 					this.events.service.publish(new CellDocumentLoadedEvent(d));
 					this.display(d);
@@ -112,7 +114,7 @@ loadDocument(url: string) {
 			error => {
 				console.log("DocumentComponent::loadDocument() itself got an error");
 				this.problem(error.message);	 // error is of the type HttpErrorResponse
-				this.events.service.publish(new CellDocumentClearEvent());	// also clear document
+				this.events.remote.publish(new CellDocumentClearEvent());	// also clear document
 				this.document = null;			 // we have no document loaded at all, so no show here
 			},
 			() => this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))

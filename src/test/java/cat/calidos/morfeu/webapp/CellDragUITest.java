@@ -28,10 +28,10 @@ public void setup() {
 public void testDragCell() {
 	
 	UIContent content = UICatalogues.openCatalogues()
-									.shouldAppear()
-									.clickOn(0)
-									.clickOnDocumentNamed("Document 1")
-									.content();
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1")
+										.content();
 	content.shouldBeVisible();
 	
 	UICell test = content.rootCells().get(0);
@@ -65,10 +65,10 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 	
 	
 	UIContent content = UICatalogues.openCatalogues()
-									.shouldAppear()
-									.clickOn(0)
-									.clickOnDocumentNamed("Document 2")
-									.content();
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 2")
+										.content();
 	content.shouldBeVisible();
 	
 	// we drag the first cell to the parent row, to trigger quite a different set of URI changes

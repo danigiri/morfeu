@@ -57,9 +57,8 @@ selectedDocumentURI: string;
 
 
 constructor(eventService: EventService,
-			remoteEventService: RemoteEventService,
 			@Inject("RemoteJSONDataService") private catalogueService: RemoteDataService ) {
-	super(eventService, remoteEventService);
+	super(eventService);
 }
 
 

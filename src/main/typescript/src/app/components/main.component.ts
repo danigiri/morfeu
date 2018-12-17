@@ -103,8 +103,8 @@ private cataloguesLoadedEventSubscription: Subscription;
 private catalogueLoadedEventSubscription: Subscription;
 
 
-constructor(eventService: EventService, remoteEventservice: RemoteEventService, private route: ActivatedRoute) {
-	super(eventService, remoteEventservice);
+constructor(eventService: EventService, private route: ActivatedRoute) {
+	super(eventService);
 }
 
 
@@ -131,7 +131,7 @@ ngAfterViewInit() {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
 						const document = loaded.catalogue.documents[0].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
-							this.events.remote.publish(new CellDocumentSelectionEvent(document))
+							this.events.service.publish(new CellDocumentSelectionEvent(document))
 						);
 				}
 		));
@@ -177,6 +177,7 @@ ngAfterViewInit() {
 	);
 
 }
+
 
 }
 

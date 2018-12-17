@@ -32,7 +32,7 @@ import { DropAreaSelectEvent } from "./events/drop-area-select.event";
 import { KeyPressedEvent } from "./events/keypressed.event";
 import { StatusEvent } from "./events/status.event";
 import { EventService } from "./services/event.service";
-
+import { RemoteEventService } from "./services/remote-event.service";
 
 @Component({
 	moduleId: module.id,
@@ -95,6 +95,7 @@ private dropAreaSelectingMode = false;
 
 
 constructor(eventService: EventService,
+			remoteEventService: RemoteEventService,
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("RemoteJSONDataService") private contentSaverService: RemoteDataService
 			) {
@@ -153,7 +154,7 @@ fetchContentFor(document_: CellDocument, model: Model) {
 		this.events.ok();
 	},
 	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
-	() =>	  this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
+	() =>	 this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
 	);
 
 }

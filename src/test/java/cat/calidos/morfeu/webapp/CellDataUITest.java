@@ -45,10 +45,10 @@ public void setup() {
 	
 	open(appBaseURL);
 	UIContent content = UICatalogues.openCatalogues()
-			.shouldAppear()
-			.clickOn(0)
-			.clickOnDocumentNamed("Document 1")
-			.content();
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1")
+										.content();
 	content.shouldBeVisible();
 	test = content.rootCells().get(0);
 

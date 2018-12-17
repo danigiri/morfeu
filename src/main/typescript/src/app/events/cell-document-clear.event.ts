@@ -1,3 +1,18 @@
+// CELL DOCUMENT CLEAR . EVENT . TS
+
+export class CellDocumentClearEvent {
+
+
+constructor() {}
+
+
+public toString = (): string => {
+	return "CellDocumentClearEvent";
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,9 +28,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class CellDocumentClearEvent {
-
-constructor() {}
-
-}

@@ -80,7 +80,7 @@ public void newAfterMouseActivationOfCellModel() {
 	assertEquals("After creating a new cell, we should have 2 children", 2, targetCol.children().size());
 	assertNotNull("Aftert creating new cell, target child 0 is data2", targetCol.child("data2(0)"));
 	assertNotNull("Before creating new cell, target child 1 is data", targetCol.child("data(1)"));
-	
+
 }
 
 

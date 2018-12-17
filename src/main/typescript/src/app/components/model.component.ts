@@ -40,6 +40,7 @@ import { ModelRequestEvent } from "../events/model-request.event";
 import { NewCellFromModelEvent } from "../events/new-cell-from-model.event";
 import { StatusEvent } from "../events/status.event";
 import { EventService } from "../services/event.service";
+import { RemoteEventService } from "../services/remote-event.service";
 
 @Component({
 	moduleId: module.id,
@@ -84,8 +85,9 @@ private cellModelSelectingMode = false;
 @ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
 constructor(eventService: EventService,
+			remoteEventService: RemoteEventService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
-	super(eventService);
+	super(eventService, remoteEventService);
 	// super(eventService, hotkeysService);
 }
 
@@ -129,7 +131,7 @@ loadModel(document: CellDocument) {
 			document.model = model;	 // associating the document with the recently loaded model
 			// now that we have loaded the model we can safely load the content (as both are related
 			this.events.service.publish(new ModelLoadedEvent(model));
-			this.events.service.publish(new ContentRequestEvent(document, model));
+			this.events.remote.publish(new ContentRequestEvent(document, model));
 			this.events.ok();
 	},
 	// TODO: check for network errors (see https://angular.io/guide/http)

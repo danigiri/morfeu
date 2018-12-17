@@ -44,40 +44,40 @@ public void setup() {
 
 @Test
 public void modelTest() {
-	
+
 	UICatalogues catalogues = UICatalogues.openCatalogues();
 	catalogues.shouldAppear();
 	UIModel.shouldNotBeVisible();
-	
+
 	UICatalogue catalogue = catalogues.clickOn(0);
 	catalogue.shouldAppear();
 	UIModel.shouldNotBeVisible();
-	
+
 	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
-	
+
 	assertEquals("Model: test-model.xsd", model.name());
 	assertEquals("Description of test model", model.desc());
-	
+
 }
 
 
 @Test
 public void modelDisappearsOnClickingOtherCatalogue() {	
-	
+
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue catalogue = catalogues.clickOn(0);
 
 	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
-	
+
 	// click on a different catalogue model should disappear
 	catalogues.clickOn(1);
 	model.shouldDisappear();
-	
+
 	catalogue = catalogues.clickOn(0);
 	UIModel.shouldNotBeVisible();
-	
+
 }
 
 
@@ -109,7 +109,7 @@ public void testCellModels() {
 
 	List<UICellModelEntry> rootCellModels = model.rootCellModels();
 	assertEquals(1, rootCellModels.size());
-	
+
 	UICellModelEntry testModelEntry = rootCellModels.get(0);				// TEST
 	assertEquals("test", testModelEntry.name());
 	//assertEquals("Root cell-model desc", testModelEntry.desc());
@@ -146,7 +146,6 @@ public void testCellModels() {
 	assertEquals("data2", data2.name());
 	assertTrue(data2.thumb().endsWith("assets/images/data2-thumb.svg"));
 
-	
 }
 
 }
