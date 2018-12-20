@@ -7,7 +7,7 @@ import { isDevMode, Inject } from "@angular/core";
 import { Http } from "@angular/http";
 import { HttpClient } from "@angular/common/http";	// new angular 5 http client
 
-import { Configuration } from "../configuration.class";
+import { Configuration } from "../config/configuration.class";
 import { environment } from "../../environments/environment";
 
 import { CatalogueListComponent } from "./catalogue-list.component";
@@ -170,7 +170,7 @@ ngAfterViewInit() {
 	// we need to subscribe to the query params to override possible configuration
 	this.route.queryParams.subscribe(
 			params => {
-				const configuration = Configuration.merge(params);
+				const configuration = Configuration.from(params);
 				console.debug("Configuration loaded, firing config loaded bootstrapping event");
 				this.events.service.publish(new ConfigurationLoadedEvent(configuration));
 			}

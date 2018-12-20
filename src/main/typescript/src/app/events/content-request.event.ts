@@ -24,7 +24,7 @@ constructor(public document: CellDocument, public model: Model) {}
 
 
 public toString = (): string => {
-	return "ContentRequestEvent";
+	return "ContentRequestEvent"; 
 }
 
 
