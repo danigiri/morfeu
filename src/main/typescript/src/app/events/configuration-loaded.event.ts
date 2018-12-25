@@ -1,6 +1,6 @@
 // CONFIGURATION - LOADED . EVENT . TS
 
-import { Configuration } from "../configuration.class";
+import { Configuration } from "../config/configuration.class";
 
 export class ConfigurationLoadedEvent {
 

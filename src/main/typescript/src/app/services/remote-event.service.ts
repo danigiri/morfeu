@@ -4,7 +4,7 @@
 import { Inject, Injectable, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 
-import { Configuration } from "../configuration.class";
+import { Configuration } from "../config/configuration.class";
 
 import { RemoteDataService } from "../services/remote-data.service";
 
@@ -47,7 +47,7 @@ publish<T>(event: T, subtype?: string): void {
 
 	this.eventService.publish(event, subtype);
 
-	let eventURL = this.configuration.events+"/"+event
+	let eventURL = this.configuration.remoteEvents+"/"+event
 	
 	// we iterate through our attributes
 	

@@ -76,15 +76,16 @@ import { RemoteEventService } from "../services/remote-event.service";
 					useFactory: (http: HttpClient) => (new RemoteDataService(http)),
 					deps: [HttpClient]
 				}
-				, EventService
 				, {provide: "CellDocumentService",
 					useFactory: (http: Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
 					deps: [Http]
 				}
+				, Configuration
 				, {provide: "ContentService",
 					useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
 					deps: [Http]
 				}
+				, EventService
 				, {provide: "ModelService",
 					useFactory: (http: Http) => (new RemoteObjectService<Model, ModelJSON>(http)),
 					deps: [Http]
@@ -103,7 +104,7 @@ private cataloguesLoadedEventSubscription: Subscription;
 private catalogueLoadedEventSubscription: Subscription;
 
 
-constructor(eventService: EventService, private route: ActivatedRoute) {
+constructor(eventService: EventService, private route: ActivatedRoute, private config: Configuration) {
 	super(eventService);
 }
 
@@ -162,17 +163,25 @@ ngAfterViewInit() {
 	// events can use binding properties that have been setup properly
 
 	this.subscribe(this.events.service.of(ConfigurationLoadedEvent).subscribe(
-			loaded => Promise.resolve(null).then(() => 
-			this.events.service.publish(new CataloguesRequestEvent(loaded.configuration.catalogues))
-												)
+			loaded => {
+				this.config = loaded.configuration;
+				Promise.resolve(null)
+						.then(() => this.events.service
+												.publish(new CataloguesRequestEvent(loaded.configuration.catalogues)));
+			}
 	));
 
 	// we need to subscribe to the query params to override possible configuration
 	this.route.queryParams.subscribe(
 			params => {
-				const configuration = Configuration.from(params);
-				console.debug("Configuration loaded, firing config loaded bootstrapping event");
-				this.events.service.publish(new ConfigurationLoadedEvent(configuration));
+				if (params.config && params.config!==undefined) {
+					console.debug("Configuration to be bootstrapped from config url '%s'", params.config);
+					this.config.loadRemoteConfigFrom(params.config);
+				} else {
+					let merged = Configuration.from(params);
+					console.debug("Configuration bootstrapped from defaults, firing config loaded event");
+					this.events.service.publish(new ConfigurationLoadedEvent(merged));
+				}
 			}
 	);
 

@@ -7,38 +7,45 @@ import { environment } from "../../environments/environment";
 
 import { RemoteDataService } from "../services/remote-data.service";
 
-export class Configuration {
+import { ConfigurationLoadedEvent } from "../events/configuration-loaded.event";
+import { EventListener } from "../events/event-listener.class";
+import { EventService } from "../services/event.service";
 
+export class Configuration extends EventListener {
+
+config: "default";
 production: boolean = true;
 catalogues = "/morfeu/test-resources/catalogues.json";
-events = "/morfeu/dyn/events";
+remoteEvents = "/morfeu/dyn/events";
 
-constructor(params?: Params, @Inject("RemoteJSONDataService") private configService?: RemoteDataService ) {}
+
+constructor(eventService?: EventService, @Inject("RemoteJSONDataService") private configService?: RemoteDataService ) {
+	super(eventService);
+}
 
 
 loadRemoteConfigFrom(url: string) {
 	
 	console.debug("Loading configuration from '%s'", url);
-//	this.configService.get<ConfigJSON>(url).subscribe(
-//			c => return c;
-//			error => {
-//				console.error();
-//				return new Configuration();	// return the default
-//			},
-//			() =>
-//	);
-	
+	this.configService.get<ConfigJSON>(url).subscribe(
+			c => {},
+			error => {
+				console.error("Could not read the configuration url '%s'", url);
+				this.events.service.publish(new ConfigurationLoadedEvent(new Configuration()));
+			},
+			() => {}
+	);
+
 	
 }
 
-merge() {}
 
 static from(params: Params): Configuration {
 
 	let config = new Configuration();
 	config.production = params.production!==undefined ? params.production : environment.production;
 	config.catalogues = params.catalogues!==undefined ? params.catalogues : config.catalogues;
-	config.events = params.events!==undefined ? params.events : config.events;
+	config.remoteEvents = params.remoteEvents!==undefined ? params.remoteEvents : config.remoteEvents;
 
 	return config;
 
@@ -51,6 +58,7 @@ static from(params: Params): Configuration {
 export class ConfigJSON {
 
 schema: number;
+config?: string;
 production: boolean;
 catalogues?: string;
 events?: string;
