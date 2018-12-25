@@ -7,7 +7,7 @@ import { isDevMode, Inject } from "@angular/core";
 import { Http } from "@angular/http";
 import { HttpClient } from "@angular/common/http";	// new angular 5 http client
 
-import { Configuration } from "../config/configuration.class";
+import { Configuration, ConfigJSON } from "../config/configuration.class";
 import { environment } from "../../environments/environment";
 
 import { CatalogueListComponent } from "./catalogue-list.component";
@@ -78,6 +78,10 @@ import { RemoteEventService } from "../services/remote-event.service";
 				}
 				, {provide: "CellDocumentService",
 					useFactory: (http: Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
+					deps: [Http]
+				}
+				, {provide: "ConfigurationService",
+					useFactory: (http: Http) => (new RemoteObjectService<Configuration, ConfigJSON>(http)),
 					deps: [Http]
 				}
 				, Configuration
@@ -176,9 +180,9 @@ ngAfterViewInit() {
 			params => {
 				if (params.config && params.config!==undefined) {
 					console.debug("Configuration to be bootstrapped from config url '%s'", params.config);
-					this.config.loadRemoteConfigFrom(params.config);
+					this.config.loadConfigFrom(params.config);
 				} else {
-					let merged = Configuration.from(params);
+					let merged = this.config.overwriteWithParams(params);
 					console.debug("Configuration bootstrapped from defaults, firing config loaded event");
 					this.events.service.publish(new ConfigurationLoadedEvent(merged));
 				}

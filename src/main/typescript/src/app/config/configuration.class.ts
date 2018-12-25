@@ -5,63 +5,103 @@ import { Params, ActivatedRoute } from "@angular/router";
 
 import { environment } from "../../environments/environment";
 
-import { RemoteDataService } from "../services/remote-data.service";
+import { RemoteObjectService } from "../services/remote-object.service";
+import { SerialisableToJSON } from "../serialisable-to-json.interface";
 
 import { ConfigurationLoadedEvent } from "../events/configuration-loaded.event";
 import { EventListener } from "../events/event-listener.class";
 import { EventService } from "../services/event.service";
 
-export class Configuration extends EventListener {
+export class Configuration extends EventListener implements SerialisableToJSON<Configuration, ConfigJSON>{
 
 config: "default";
-production: boolean = true;
+production: boolean = environment.production;
 catalogues = "/morfeu/test-resources/catalogues.json";
 remoteEvents = "/morfeu/dyn/events";
 
 
-constructor(eventService?: EventService, @Inject("RemoteJSONDataService") private configService?: RemoteDataService ) {
+constructor(eventService: EventService, 
+		@Inject("ConfigurationService") private configService: RemoteObjectService<Configuration, ConfigJSON>) {
 	super(eventService);
 }
 
 
-loadRemoteConfigFrom(url: string) {
+loadConfigFrom(url: string) {
 	
 	console.debug("Loading configuration from '%s'", url);
-	this.configService.get<ConfigJSON>(url).subscribe(
-			c => {},
-			error => {
-				console.error("Could not read the configuration url '%s'", url);
-				this.events.service.publish(new ConfigurationLoadedEvent(new Configuration()));
+	this.configService.get(url, Configuration).subscribe(
+			c => {
+				
+				
 			},
-			() => {}
+			error => console.error("Could not read the configuration url '%s', using defaults", url),
+			() => this.events.service.publish(new ConfigurationLoadedEvent(this))
 	);
 
 	
 }
 
 
-static from(params: Params): Configuration {
+overwriteWithParams(params: Params) {
 
-	let config = new Configuration();
-	config.production = params.production!==undefined ? params.production : environment.production;
-	config.catalogues = params.catalogues!==undefined ? params.catalogues : config.catalogues;
-	config.remoteEvents = params.remoteEvents!==undefined ? params.remoteEvents : config.remoteEvents;
+	this.production = params.production!==undefined ? params.production : environment.production;
+	this.catalogues = params.catalogues!==undefined ? params.catalogues : this.catalogues;
+	this.remoteEvents = params.remoteEvents!==undefined ? params.remoteEvents : this.remoteEvents;
 
-	return config;
+	return this;
 
+}
+
+
+overwriteWithConfig(config: Configuration) {
+
+	this.production = config.production!==undefined ? config.production : this.production;
+	this.catalogues = config.catalogues!==undefined ? config.catalogues : this.catalogues;
+	this.remoteEvents = config.remoteEvents!==undefined ? config.remoteEvents : this.remoteEvents;
+
+	return this;
+
+}
+
+////SerialisableToJSON ////
+
+toJSON(): ConfigJSON {
+	return Object.assign({}, this);
+}
+
+
+fromJSON(json: ConfigJSON|string): Configuration {
+	
+	if (typeof json === "string") {
+
+		return JSON.parse(json, Configuration.reviver);
+		
+	} else {
+	
+		let config = Object.create(Configuration.prototype);
+		config = Object.assign(config, json);
+	
+		return config;
+		
+	}
+	
+}
+
+
+static reviver(key: string, value: any): any {
+	return key === "" ? Object.create(Configuration.prototype).fromJSON(value) : value;
 }
 
 
 }
 
+//serialisable interface
+export interface ConfigJSON {
 
-export class ConfigJSON {
-
-schema: number;
 config?: string;
 production: boolean;
 catalogues?: string;
-events?: string;
+remoteEvent?: string;
 
 }
 
