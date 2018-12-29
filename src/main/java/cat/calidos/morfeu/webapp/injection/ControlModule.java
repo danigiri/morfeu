@@ -65,7 +65,7 @@ public static String process(@Named("Path") String path,
 
 // return the specified content type (it could be that we have a match but no content type is defined)
 @Provides @Named("Content-Type")
-public static String contentType(@Named("Content-Type") Map<String, String> contentTypes, 
+public static String contentType(@Named("Content-Type") Map<String, String> contentTypes,
 									Optional<Pattern> matchedPath) {
 	return matchedPath.isPresent() ? contentTypes.getOrDefault(matchedPath.get().pattern(), ControlComponent.TEXT) : ControlComponent.TEXT;
 }
@@ -127,6 +127,14 @@ List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPath
 
 	return pathElems;
 
+}
+
+
+// provides content type default map
+@Provides @IntoMap @Named("Content-Type")
+@StringKey("(NEVERtoBEm4tCHED3241234")
+public static String contentTypeDefaultMap() {
+	return ControlComponent.TEXT;
 }
 
 
