@@ -36,6 +36,12 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 		<servlet-name>MorfeuServlet</servlet-name>
 		<url-pattern>/dyn/*</url-pattern>
 	</servlet-mapping>
+	
+	<listener>
+		<listener-class>cat.calidos.morfeu.control.MorfeuServletListener</listener-class>
+	</listener>
+	
+	
 
 	<!-- Proxy mode: at the moment it's not easily configurable -->
 	<servlet>

@@ -67,13 +67,12 @@ public void init(ServletConfig config) throws ServletException {
 }
 
 
-
-
 public ControlComponent getControl(String path, Map<String, String> params) {
 	return DaggerMorfeuControlComponent.builder()
 										.withPath(path)
 										.method(DaggerControlComponent.GET)
 										.withParams(params)
+										.andContext(context)
 										.build();
 }
 
@@ -83,6 +82,7 @@ public ControlComponent putControl(String path, Map<String, String> params) {
 										.withPath(path)
 										.method(DaggerControlComponent.POST)
 										.withParams(params)
+										.andContext(context)
 										.build();
 }
 

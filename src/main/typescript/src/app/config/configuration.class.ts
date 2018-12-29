@@ -30,10 +30,7 @@ loadConfigFrom(url: string) {
 	
 	console.debug("Loading configuration from '%s'", url);
 	this.configService.get(url, Configuration).subscribe(
-			c => {
-				
-				
-			},
+			loaded => this.overwriteWithConfig(loaded),
 			error => console.error("Could not read the configuration url '%s', using defaults", url),
 			() => this.events.service.publish(new ConfigurationLoadedEvent(this))
 	);
@@ -101,7 +98,7 @@ export interface ConfigJSON {
 config?: string;
 production: boolean;
 catalogues?: string;
-remoteEvent?: string;
+remoteEvents?: string;
 
 }
 

@@ -21,6 +21,11 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import javax.inject.Named;
+import javax.servlet.ServletContext;
+
+import org.openjdk.tools.sjavac.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import dagger.Module;
@@ -34,7 +39,9 @@ import dagger.multibindings.StringKey;
 @Module
 public class PingControlModule {
 
+protected final static Logger log = LoggerFactory.getLogger(PingControlModule.class);
 
+		
 @Provides @IntoMap @Named("GET")
 @StringKey("/ping/?(.+)?")
 public static BiFunction<List<String>, Map<String, String>, String> ping() {
@@ -42,16 +49,23 @@ public static BiFunction<List<String>, Map<String, String>, String> ping() {
 }
 
 
+@Provides @IntoMap @Named("GET")
+@StringKey("/counter/?(reset)?")
+public static BiFunction<List<String>, Map<String, String>, String> counter(ServletContext context) {
+	return (pathElems, params) -> {
+
+		Integer counter = (Integer)context.getAttribute("counter");
+		context.setAttribute("counter", ++counter);
+
+		return counter.toString();
+
+	};
+}
+
 @Provides @IntoMap @Named("POST")
 @StringKey("/ping/?(.+)?")
 public static BiFunction<List<String>, Map<String, String>, String> pingPost() {
 	return ping();
-}
-
-@Provides @IntoMap @Named("Content-Type")
-@StringKey("/ping/?(.+)?")
-public static String contentType() {
-	return ControlComponent.TEXT;
 }
 
 

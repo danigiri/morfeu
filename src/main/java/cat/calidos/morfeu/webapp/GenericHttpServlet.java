@@ -23,6 +23,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +49,9 @@ public static final String METHOD = "__METHOD";
 public static final String POST_VALUE = "__POST";
 
 protected Properties configuration;
+protected ServletContext context;
 protected String defaultContentType = "application/json";
+
 
 
 @Override
@@ -57,10 +60,12 @@ public void init(ServletConfig config) throws ServletException {
 	super.init(config);
 
 	//TODO: check if there is a more dagger friendly way of doing this
+	ServletConfig servletConfig = this.getServletConfig();
 	configuration = DaggerServletConfigComponent.builder()
-													.servletConfig(this.getServletConfig())
+													.servletConfig(servletConfig)
 													.build()
 													.getProperties();
+	context = servletConfig.getServletContext();
 
 }
 
@@ -81,7 +86,6 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	params = processParams(params);
 
 	ControlComponent controlComponent = getControl(path, params);
-	
 	handleResponse(resp, controlComponent);
 
 }
@@ -156,9 +160,10 @@ protected void handleResponse(HttpServletResponse resp, ControlComponent control
 		String result = controlComponent.process();
 		writeTo(result, controlComponent.contentType(), resp);
 	} else {
-		log.trace("GenericMorfeuServlet::doPost {} NOT FOUND (not matched)");
+		log.error("GenericMorfeuServlet::doPost {} NOT FOUND (not matched)");
 		resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
+
 }
 
 
