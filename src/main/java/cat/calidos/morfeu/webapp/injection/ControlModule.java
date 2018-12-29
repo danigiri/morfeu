@@ -55,7 +55,7 @@ public static String process(@Named("Path") String path,
 								@Named("POST") Map<String, BiFunction<List<String>, Map<String, String>, String>> post
 								) {
 	 Map<String, BiFunction<List<String>, Map<String, String>, String>> controls = method.equals(ControlComponent.GET) ? 
-			 																		get : post;
+																					get : post;
 
 	return controls.get(matchedPath.orElseThrow(() -> new UnsupportedOperationException("No matched "+path)).pattern())
 				.apply(pathElems.get(), params);
@@ -63,18 +63,18 @@ public static String process(@Named("Path") String path,
 }
 
 
-// return the specified content type
+// return the specified content type (it could be that we have a match but no content type is defined)
 @Provides @Named("Content-Type")
 public static String contentType(@Named("Content-Type") Map<String, String> contentTypes, 
 									Optional<Pattern> matchedPath) {
-	return matchedPath.isPresent() ? contentTypes.get(matchedPath.get().pattern()) : ControlComponent.TEXT;
+	return matchedPath.isPresent() ? contentTypes.getOrDefault(matchedPath.get().pattern(), ControlComponent.TEXT) : ControlComponent.TEXT;
 }
 
 
 // Do we match the input path with any of the controls? 
 @Provides
-public static boolean matches(Optional<Pattern> matchedPathPattern) {
-	return matchedPathPattern.isPresent();
+public static boolean matches(Optional<Pattern> matchedPath) {
+	return matchedPath.isPresent();
 }
 
 
