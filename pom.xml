@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
 	<artifactId>morfeu-webapp</artifactId>	
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Morfeu web application</name>
@@ -154,43 +154,43 @@
 					</execution>
 				</executions>
 			</plugin>
-	      <plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.21.0</version>
-        		<configuration>
-	          		<excludes>	<!-- no UI/integration tests in unit testing -->
-	            		<exclude>**/*IntTest*</exclude>
-	            		<exclude>**/*UITest*</exclude>
-	          		</excludes>
+				<configuration>
+					<excludes>	<!-- no UI/integration tests in unit testing -->
+						<exclude>**/*IntTest*</exclude>
+						<exclude>**/*UITest*</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-failsafe-plugin</artifactId>
-		        <version>2.21.0</version>
-		        <configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.21.0</version>
+				<configuration>
 					<systemPropertyVariables>
 						<TMP_FOLDER>${project.build.directory}/integration-tests-tmp</TMP_FOLDER>
 					</systemPropertyVariables>
-		        </configuration>
-		        <executions>
-		          <execution>
-		            <goals>
-		              <goal>integration-test</goal>
-		              <goal>verify</goal>
-		            </goals>
-					<configuration>
-						<includes>
-		            		<include>**/*IntTest*</include>
-	    		       		<include>**/*UITest*</include>
-						</includes>
-					</configuration>
-		          </execution>
-		        </executions>
-	      </plugin>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*IntTest*</include>
+								<include>**/*UITest*</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
-		
+
 	</build>
 	<dependencies>
 		<!-- DEPENDENCY INJECTION -->

@@ -1,10 +1,10 @@
-// PRESENTATION-PARSER . CLASS . TS
+// VARIABLE-PARSER . CLASS . TS
 
 import { NameValue } from "./name-value.interface";
 
-export class PresentationParser {
+export class VariableParser {
 	
-/** perform parameter expansion */
+/** perform variable expansion */
 static expand(str: string, variable: string, data: string|NameValue[]): string {
 
 	if (data==null || data==undefined) {
@@ -47,7 +47,7 @@ static expandVariables(str: string, data: NameValue[]): string {
 			let name = out.substring(varStart+2, varEnd);
 			let dataEntry = data.find( a => a.name===name);
 			let value = dataEntry!==undefined && dataEntry.value ? dataEntry.value : "";	// watch value not defined!
-			out = PresentationParser.expand(out, "${"+name+"}", value);
+			out = VariableParser.expand(out, "${"+name+"}", value);
 			varStart = out.indexOf("${", varStart);
 		}
 

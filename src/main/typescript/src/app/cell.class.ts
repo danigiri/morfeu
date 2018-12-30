@@ -21,7 +21,7 @@ import { CellModel } from "./cell-model.class";
 import { Model } from "./model.class";
 import { NameValue } from "./name-value.interface";
 
-import { PresentationParser } from "./presentation-parser.class";
+import { VariableParser } from "./variable-parser.class";
 import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 
@@ -253,11 +253,11 @@ getPresentation(): string {
 	if (finalPres.includes("$")) {
 
 			// expand special variables, both the name and the attributes as GET params
-			finalPres = PresentationParser.expand(finalPres, "$_NAME", this.name);
-			finalPres = PresentationParser.expand(finalPres, "$_ATTRIBUTES", this.attributes);
+			finalPres = VariableParser.expand(finalPres, "$_NAME", this.name);
+			finalPres = VariableParser.expand(finalPres, "$_ATTRIBUTES", this.attributes);
 
 			// the rest will be cell attributes as ${var}
-			finalPres = PresentationParser.expandVariables(finalPres, this.attributes);
+			finalPres = VariableParser.expandVariables(finalPres, this.attributes);
 
 	}
 

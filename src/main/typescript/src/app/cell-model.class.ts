@@ -5,7 +5,7 @@ import { FamilyMember } from "./family-member.interface";
 import { NameValue } from "./name-value.interface";
 import { CellType } from "./cell-type.class";
 
-import { PresentationParser } from "./presentation-parser.class";
+import { VariableParser } from "./variable-parser.class";
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
@@ -86,7 +86,7 @@ getPresentation() {
 	let finalPres = this.getRawPresentation();
 
 	if (finalPres.includes("$")) {
-			finalPres = PresentationParser.expand(finalPres, "$_NAME", this.name);
+			finalPres = VariableParser.expand(finalPres, "$_NAME", this.name);
 	}
 
 	return finalPres;

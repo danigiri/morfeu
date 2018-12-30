@@ -1,3 +1,21 @@
+// CONTENT - REQUEST . EVENT . TS
+
+import { CellDocument } from "../cell-document.class";
+import { Model } from "../model.class";
+
+export class ContentRequestEvent {
+
+
+constructor(public document: CellDocument, public model: Model) {}
+
+
+public toString = (): string => {
+	return "ContentRequestEvent?doc="+this.document.contentURI; 
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,19 +31,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
-
-export class ContentRequestEvent {
-
-
-constructor(public document: CellDocument, public model: Model) {}
-
-
-public toString = (): string => {
-	return "ContentRequestEvent"; 
-}
-
-
-}

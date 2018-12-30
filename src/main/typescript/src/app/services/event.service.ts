@@ -1,7 +1,6 @@
 /* Credit for original idea should go to
 *  http://www.processinginfinity.com/weblog/2016/08/18/MessageBus-Pattern-in-Angular2-TypeScript
 *  As there is no license on the site we should be ok.
-*  Added support for subtypes of events
 */
 
 import { map, filter } from 'rxjs/operators';
