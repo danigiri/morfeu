@@ -10,6 +10,7 @@
 .cell-img-size {
 	width: 100%;
 	min-width: 50px;
+	/* max-height: 10em; */
 }
 .cell-html {
 /*

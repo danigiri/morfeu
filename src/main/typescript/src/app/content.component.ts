@@ -95,7 +95,6 @@ private dropAreaSelectingMode = false;
 
 
 constructor(eventService: EventService,
-			remoteEventService: RemoteEventService,
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("RemoteJSONDataService") private contentSaverService: RemoteDataService
 			) {

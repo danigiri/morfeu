@@ -43,7 +43,7 @@ import { EventService } from "../services/event.service";
 						routerLink="."
 						queryParamsHandling="merge"
 						class="catalogue-list-entry list-group-item list-group-item-action"
-						[class.active]="c.uri === selectedCatalogueURI"
+						[class.active]="c.uri===selectedCatalogueURI"
 						(click)="clickOnCatalogue(c)">
 					<img src="assets/images/open-iconic/folder.svg" alt="catalogue"/> {{c.name}}</a>
 				</div>
