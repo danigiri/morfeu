@@ -1,18 +1,4 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
+// SNIPPETS - LIST . COMPONENT . TS
 
 import { Component, AfterViewInit, Inject, Input, OnInit } from "@angular/core";
 import { Observable, Subject, Subscription } from "rxjs";
@@ -132,7 +118,7 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 private loadSnippetContent(snippet: CellDocument, index: number) {
 
 	const snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
-	console.log("Loading snippet content %s", snippetURI);
+	console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
 	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 		// we set the document with the content, associate it with the model
 		snippet.content = snippetContent;
@@ -237,3 +223,18 @@ private unsubscribeChildrenFromCellSelection() {
 
 }
 
+/*
+ *	  Copyright 2019 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */

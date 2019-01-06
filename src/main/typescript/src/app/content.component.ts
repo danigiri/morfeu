@@ -139,6 +139,7 @@ fetchContentFor(document_: CellDocument, model: Model) {
 	this.events.service.publish(new StatusEvent("Fetching content"));
 	const uri = document_.contentURI;
 	const contentURI = "/morfeu/dyn/content/"+uri+"?model="+model.URI;
+	console.debug("ContentComponent::fetchContent() About to fetch content from '%s'", contentURI);
 	this.contentService.get(contentURI, Content).subscribe( (content:Content) => {
 		console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
 		// we associate the content with the document and the model so it al fits together
