@@ -96,14 +96,15 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 													.withValue(json)
 													.build()
 													.render();
+	log.info(">>> Saving content to '{} <<<", outputURI);
  
 	ContentSaverParserComponent component = DaggerContentSaverParserComponent.builder()
-																			.from(transformedContent)
-																			.to(outputURI)
-																			.having(uri)
-																			.model(modelURI)
-																			.withModelFetchedFrom(fullModelURI)
-																			.build();
+																				.from(transformedContent)
+																				.to(outputURI)
+																				.having(uri)
+																				.model(modelURI)
+																				.withModelFetchedFrom(fullModelURI)
+																				.build();
 
 	// validate and save, measuring the time it takes to provide some diagnostics
 	long before = System.currentTimeMillis();

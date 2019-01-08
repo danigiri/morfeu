@@ -44,7 +44,7 @@ import { UXEvent } from "./events/ux.event";
 				 [class.drop-area-selected]="selected"
 				 dnd-droppable
 				 [dropEnabled]="active"
-				 (onDropSuccess)="dropSuccess($event)"				 
+				 (onDropSuccess)="dropSuccess($event)"
 				 ><small>{{position}}</small></div>
 		`,
 	styles:[`
