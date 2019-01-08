@@ -81,8 +81,8 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) th
 
 		// we want to close right now so we fetch all the content and close the input stream
 		InputStream content = client.execute(request)
-					 .getEntity()
-					 .getContent();
+									 .getEntity()
+									 .getContent();
 
 		return IOUtils.toBufferedInputStream(content);
 

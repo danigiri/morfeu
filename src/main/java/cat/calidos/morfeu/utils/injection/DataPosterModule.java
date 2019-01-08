@@ -2,6 +2,7 @@
 
 package cat.calidos.morfeu.utils.injection;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -32,18 +33,28 @@ protected final static Logger log = LoggerFactory.getLogger(DataPosterModule.cla
 
 
 @Produces
-InputStream postHttpData(CloseableHttpClient client, HttpPost request) {
+InputStream postHttpData(CloseableHttpClient client, HttpPost request) throws PostingException {
 	
-	log.trace("Posting http data to {}", request.getURI());
+	log.trace("Posting http data [{} bytes] to {}", request.getEntity().getContentLength(), request.getURI());
 
-	// we want to close right now so we fetch all the content and close the input stream
+	try {
+		// we want to close right now so we fetch all the content and close the input stream
 			InputStream content = client.execute(request)
-						 .getEntity()
-						 .getContent();
-
+										 .getEntity()
+										 .getContent();
 			return IOUtils.toBufferedInputStream(content);
-	
-	return null;
+
+		} catch (Exception e) {
+			throw new PostingException("Problem posting http data", e);
+		} finally {
+			if (client!=null) {
+				try {
+					client.close();
+				} catch (IOException e) {
+					throw new PostingException("Problem closing client when posting http data", e);
+				}
+		}
+	}
 	
 }
 
