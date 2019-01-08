@@ -21,8 +21,7 @@ import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
@@ -34,21 +33,15 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Composite;
-import cat.calidos.morfeu.model.Model;
-import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.model.XSDValidator;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.OrderedMap;
@@ -78,6 +71,7 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
 		if (!matchedCellModel.isPresent()) {
 			log.error("Could not match content node '{}' with any cellmodel even tough content is valid", name);
+			log.debug("CellModels: {}", cellModels.stream().map(cm -> cm.getName()).collect(Collectors.toList()));
 			throw new RuntimeException("Node and model mismatch", new NullPointerException());
 		}
 

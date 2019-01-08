@@ -1,32 +1,37 @@
-// DATA FETCHER COMPONENT . JAVA
+// DATA POSTER COMPONENT . JAVA
 
 package cat.calidos.morfeu.utils.injection;
 
 import java.io.InputStream;
 import java.net.URI;
-
-import javax.inject.Named;
+import java.util.Map;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.PostingException;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
+/**
+*	@author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionComponent(modules = {DataPosterModule.class, ListeningExecutorServiceModule.class})
+public interface DataPosterComponent {
 
-@ProductionComponent(modules = {DataFetcherModule.class, ListeningExecutorServiceModule.class})
-public interface DataFetcherComponent {
 
-ListenableFuture<InputStream> fetchData() throws FetchingException;
+ListenableFuture<InputStream> postData() throws PostingException;
 
 
 @ProductionComponent.Builder
 interface Builder {
+	
 	@BindsInstance Builder forURI(URI u);
 	@BindsInstance Builder withClient(CloseableHttpClient c);
-	DataFetcherComponent build();
+	@BindsInstance Builder andData(Map<String, String> data);
+	DataPosterComponent build();
+
 }
 
 }

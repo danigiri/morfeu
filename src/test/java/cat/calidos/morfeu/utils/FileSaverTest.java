@@ -42,7 +42,7 @@ public void testSave() throws Exception {
 	}
 	file.deleteOnExit();
 	String contentWritten = "foo";
-	FileSaver saver = new FileSaver(path, contentWritten);
+	LocalSaver saver = new LocalSaver(path, contentWritten);
 	saver.save();
 	File file2 = new File(path);
 	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);
@@ -60,12 +60,12 @@ public void testBackup() throws Exception {
 	String path = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
 
 	String contentWritten = "foo";
-	FileSaver saver = new FileSaver(path, contentWritten);
+	LocalSaver saver = new LocalSaver(path, contentWritten);
 	saver.save();
 	
-	saver = new FileSaver(path, "foo2");
+	saver = new LocalSaver(path, "foo2");
 	saver.save();									 // this creates a backup with content 'foo'
-	File file2 = new File(path+FileSaver.BACKUP_EXTENSION);
+	File file2 = new File(path+LocalSaver.BACKUP_EXTENSION);
 	assertTrue("File saver did not create a backup file", file2.exists());
 	
 	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);

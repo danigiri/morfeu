@@ -55,12 +55,6 @@ protected final static Logger log = LoggerFactory.getLogger(DataFetcherModule.cl
 
 
 @Produces
-public HttpGet produceRequest(URI uri) {
-	return new HttpGet(uri);
-}
-
-
-@Produces
 public ListenableFuture<InputStream> fetchData(URI uri,  
 							 @Named("httpData") Producer<InputStream> httpData, 
 							 @Named("fileData") Producer<InputStream> fileData ) 
@@ -73,20 +67,24 @@ public ListenableFuture<InputStream> fetchData(URI uri,
 }
 
 
+@Produces
+public HttpGet produceRequest(URI uri) {
+	return new HttpGet(uri);
+}
+
+
 @Produces @Named("httpData")
 public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) throws FetchingException {
 
+	log.trace("Fetching http data from {}", request.getURI());
 	try {
-		 
-		log.trace("Fetching http data from {}", request.getURI());
+
 		// we want to close right now so we fetch all the content and close the input stream
 		InputStream content = client.execute(request)
 					 .getEntity()
 					 .getContent();
-		
-			InputStream fetchedData = IOUtils.toBufferedInputStream(content);
-			
-			return fetchedData;
+
+		return IOUtils.toBufferedInputStream(content);
 
 	} catch (Exception e) {
 		throw new FetchingException("Problem fetching http data", e);

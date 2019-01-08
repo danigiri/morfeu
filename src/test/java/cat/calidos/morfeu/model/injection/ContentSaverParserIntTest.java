@@ -35,7 +35,7 @@ import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.utils.FileSaver;
+import cat.calidos.morfeu.utils.LocalSaver;
 
 /**
 * @author daniel giribet
@@ -141,7 +141,7 @@ public void testSaveToXML() throws Exception {
 	String outputPath = temporaryOutputFilePath();
 	URI outputURI = new URI("file://"+outputPath);
 
-	FileSaver saver = DaggerContentSaverParserComponent.builder()
+	LocalSaver saver = DaggerContentSaverParserComponent.builder()
 														.from(content)
 														.to(outputURI)
 														.having(contentURI)
@@ -172,7 +172,7 @@ public void testSaveToYAML() throws Exception {
 	String outputPath = temporaryOutputFilePath()+".yaml";
 	URI outputURI = new URI("file://"+outputPath);
 
-	FileSaver saver = DaggerContentSaverParserComponent.builder()
+	LocalSaver saver = DaggerContentSaverParserComponent.builder()
 														.from(content)
 														.to(outputURI)
 														.having(contentURI)

@@ -37,6 +37,7 @@
 .drag-active {
 	opacity: .9;
 }
+/*
 .cell-col-1 {
 	max-width: 8.3%;
 	width: 8.3%;
@@ -76,6 +77,7 @@ width: 25%;
 .cell-col-12 {
 	max-width: 100%;
 }
+*/
 .cell-level-0 {}
 .cell-level-1 {}
 .cell-level-2 {}
