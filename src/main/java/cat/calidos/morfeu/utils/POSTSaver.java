@@ -1,9 +1,12 @@
 package cat.calidos.morfeu.utils;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
@@ -23,16 +26,20 @@ public class POSTSaver implements Saver {
 
 protected final static Logger log = LoggerFactory.getLogger(POSTSaver.class);
 
+private URI destination;
 private DataPosterComponent poster;
+
+private String response;
 
 
 public POSTSaver(CloseableHttpClient client, URI destination, Map<String, String> content) {
 
-	poster = DaggerDataPosterComponent.builder()
-										.forURI(destination)
-										.withClient(client)
-										.andData(content)
-										.build();
+	this.destination = destination;
+	this.poster = DaggerDataPosterComponent.builder()
+											.forURI(destination)
+											.withClient(client)
+											.andData(content)
+											.build();
 }
 
 
@@ -40,13 +47,18 @@ public POSTSaver(CloseableHttpClient client, URI destination, Map<String, String
 public void save() throws SavingException {
 
 	try {
-		poster.postData().get();
+		InputStream responseInputStream = poster.postData().get();
+		response = IOUtils.toString(responseInputStream, Config.DEFAULT_CHARSET);
 	} catch (Exception e) {
-		throw new SavingException("", e);
+		throw new SavingException("Problem when posting save data to "+destination, e);
 	}
 
 }
 
+
+public Optional<String> getResponse() {
+	return Optional.ofNullable(response);
+}
 
 }
 

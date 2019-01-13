@@ -62,15 +62,15 @@ public void testBackup() throws Exception {
 	String contentWritten = "foo";
 	LocalSaver saver = new LocalSaver(path, contentWritten);
 	saver.save();
-	
+
 	saver = new LocalSaver(path, "foo2");
 	saver.save();									 // this creates a backup with content 'foo'
 	File file2 = new File(path+LocalSaver.BACKUP_EXTENSION);
 	assertTrue("File saver did not create a backup file", file2.exists());
-	
+
 	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);
 	assertEquals("Backup file did not have original content", contentWritten, contentRead);
-	
+
 }
 
 }

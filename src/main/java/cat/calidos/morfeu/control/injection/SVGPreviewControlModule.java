@@ -46,7 +46,6 @@ public class SVGPreviewControlModule {
 protected final static Logger log = LoggerFactory.getLogger(SVGPreviewControlModule.class);
 
 private static final String HEADER_PARAM = "__header";	// this is used as the SVG header
-private static final String INTERNAL_PARAM_PREFIX = "__";	// internal params start with this
 
 
 @Provides @IntoMap @Named("GET")
@@ -59,7 +58,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getContent()
 		String path = pathElems.get(1);		// normalised already
 		Optional<String> header = SVGPreviewControlModule.extractHeaderFrom(params);
 
-		params = removeInternalHeaders(params);	// remove all __* we do not want as a param
+		params = GenericHttpServlet.removeInternalHeaders(params);	// remove all __* we do not want as a param
 
 		return new SVGPreviewGETControl(resourcesPrefix, path, header, params).processRequest();
 
@@ -87,12 +86,6 @@ private static Optional<String> extractHeaderFrom(Map<String, String> params) {
 }
 
 
-private static Map<String, String> removeInternalHeaders(Map<String, String> params) {
-	return params.entrySet()
-					.stream()
-					.filter(k -> !k.getKey().startsWith(INTERNAL_PARAM_PREFIX))
-					.collect(Collectors.toMap(Map.Entry::getKey,  Map.Entry::getValue));
-}
 
 
 

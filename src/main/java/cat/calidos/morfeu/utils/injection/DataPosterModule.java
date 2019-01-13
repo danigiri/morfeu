@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -59,7 +60,7 @@ InputStream postHttpData(CloseableHttpClient client, HttpPost request) throws Po
 
 
 @Produces
-HttpPost request(URI uri, UrlEncodedFormEntity entity) {
+HttpPost request(URI uri, HttpEntity entity) {
 
 	HttpPost request = new HttpPost(uri);
 	request.setEntity(entity);
@@ -70,14 +71,8 @@ HttpPost request(URI uri, UrlEncodedFormEntity entity) {
 
 
 @Produces
-UrlEncodedFormEntity entity(List <NameValuePair> nameValueParis) throws PostingException {
-
-	try {
-		return new UrlEncodedFormEntity(nameValueParis);
-	} catch (UnsupportedEncodingException e) {
-		throw new PostingException("Had issues encoding name value pairs for POST data", e);
-	}
-
+HttpEntity entity(List <NameValuePair> nameValueParis) {
+	return EntityBuilder.create().setParameters(nameValueParis).build();
 }
 
 

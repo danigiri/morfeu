@@ -22,7 +22,7 @@ import cat.calidos.morfeu.utils.LocalSaver;
 import cat.calidos.morfeu.utils.POSTSaver;
 import cat.calidos.morfeu.utils.Saver;
 
-/** (We include the http client so the http post saver can be created
+/** (We include the http client so the http post saver can be created)
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule(includes=HttpClientModule.class)
@@ -55,7 +55,6 @@ public static LocalSaver fileSaver(@Named("DestinationPath") String path, @Named
 
 @Produces @Named("DestinationPath")
 public static String destinationPathFrom(@Named("DestinationContentURI") URI u) {
-	
 
 	String uriString = u.toString();
 	String path = uriString.substring("file://".length(), uriString.length());
@@ -67,19 +66,20 @@ public static String destinationPathFrom(@Named("DestinationContentURI") URI u) 
 
 
 @Produces
-public static POSTSaver postSaver(@Named("DestinationContentURI") URI u, 
-									Map<String, String> contentMap, 
+public static POSTSaver postSaver(@Named("DestinationContentURI") URI u,
+									Map<String, String> contentMap,
 									CloseableHttpClient client) {
 	return new POSTSaver(client, u, contentMap);
 }
 
 
 @Produces
-public static Map<String, String> contentMap(@Named("DestinationContentURI") URI u, @Named("EffectiveContent") String content) {
+public static Map<String, String> contentMap(@Named("DestinationContentURI") URI u,
+												@Named("EffectiveContent") String content) {
 	// by convention, we send two variables
 
 	Map<String, String> contentMap = new HashMap<String, String>(2);
-	contentMap.put("uri", u);
+	contentMap.put("uri", u.toString());
 	contentMap.put("content", content);
 
 	return contentMap;

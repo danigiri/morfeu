@@ -45,6 +45,7 @@ public abstract class GenericHttpServlet extends HttpServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(GenericHttpServlet.class);
 
+public static final String INTERNAL_PARAM_PREFIX = "__";	// internal params start with this
 public static final String METHOD = "__METHOD";
 public static final String POST_VALUE = "__POST";
 
@@ -169,6 +170,14 @@ protected void handleResponse(HttpServletResponse resp, ControlComponent control
 
 protected Map<String, String> normaliseParams(Map<String, String[]> parameterMap) {
 	return parameterMap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()[0]));
+}
+
+
+public static Map<String, String> removeInternalHeaders(Map<String, String> params) {
+	return params.entrySet()
+					.stream()
+					.filter(k -> !k.getKey().startsWith(INTERNAL_PARAM_PREFIX))
+					.collect(Collectors.toMap(Map.Entry::getKey,  Map.Entry::getValue));
 }
 
 
