@@ -80,10 +80,8 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) th
 	try {
 
 		// we want to close right now so we fetch all the content and close the input stream
-		InputStream content = client.execute(request)
-									 .getEntity()
-									 .getContent();
-
+		InputStream content = client.execute(request).getEntity().getContent();
+		
 		return IOUtils.toBufferedInputStream(content);
 
 	} catch (Exception e) {
@@ -103,9 +101,9 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) th
 
 @Produces @Named("fileData")
 public InputStream fetchFileData(URI uri) throws FetchingException {
-	
+
 	try {
-		
+
 		log.trace("Fetching local data from {}",uri);
 	
 		return FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));

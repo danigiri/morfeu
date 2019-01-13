@@ -1,13 +1,19 @@
 package cat.calidos.morfeu.utils;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.PostingException;
 import cat.calidos.morfeu.problems.SavingException;
+import cat.calidos.morfeu.utils.injection.DaggerDataPosterComponent;
+import cat.calidos.morfeu.utils.injection.DataPosterComponent;
 
 
 /**
@@ -17,20 +23,27 @@ public class POSTSaver implements Saver {
 
 protected final static Logger log = LoggerFactory.getLogger(POSTSaver.class);
 
-private URI destination;
+private DataPosterComponent poster;
 
 
-public POSTSaver(URI destination, String content, CloseableHttpClient client, HttpPost post) {
+public POSTSaver(CloseableHttpClient client, URI destination, Map<String, String> content) {
 
-	this.destination = destination;
-
+	poster = DaggerDataPosterComponent.builder()
+										.forURI(destination)
+										.withClient(client)
+										.andData(content)
+										.build();
 }
 
 
 @Override
 public void save() throws SavingException {
 
-	// TODO Auto-generated method stub
+	try {
+		poster.postData().get();
+	} catch (Exception e) {
+		throw new SavingException("", e);
+	}
 
 }
 

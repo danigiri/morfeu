@@ -39,9 +39,8 @@ InputStream postHttpData(CloseableHttpClient client, HttpPost request) throws Po
 
 	try {
 		// we want to close right now so we fetch all the content and close the input stream
-			InputStream content = client.execute(request)
-										 .getEntity()
-										 .getContent();
+			InputStream content = client.execute(request).getEntity().getContent();
+
 			return IOUtils.toBufferedInputStream(content);
 
 		} catch (Exception e) {
@@ -55,13 +54,13 @@ InputStream postHttpData(CloseableHttpClient client, HttpPost request) throws Po
 				}
 		}
 	}
-	
+
 }
 
 
 @Produces
 HttpPost request(URI uri, UrlEncodedFormEntity entity) {
-	
+
 	HttpPost request = new HttpPost(uri);
 	request.setEntity(entity);
 

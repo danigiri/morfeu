@@ -34,6 +34,7 @@ import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.LocalSaver;
 import cat.calidos.morfeu.utils.Saver;
 import cat.calidos.morfeu.utils.injection.SaverModule;
+import cat.calidos.morfeu.utils.injection.HttpClientModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;

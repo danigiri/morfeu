@@ -4,10 +4,16 @@
 package cat.calidos.morfeu.utils.injection;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Named;
-import javax.inject.Provider;
 
+import dagger.producers.Producer;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
+
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,13 +21,11 @@ import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.utils.LocalSaver;
 import cat.calidos.morfeu.utils.POSTSaver;
 import cat.calidos.morfeu.utils.Saver;
-import dagger.producers.ProducerModule;
-import dagger.producers.Produces;
 
-/**
+/** (We include the http client so the http post saver can be created
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule
+@ProducerModule(includes=HttpClientModule.class)
 public class SaverModule {
 
 protected final static Logger log = LoggerFactory.getLogger(SaverModule.class);
@@ -29,9 +33,17 @@ protected final static Logger log = LoggerFactory.getLogger(SaverModule.class);
 
 @Produces
 public static Saver saver(@Named("DestinationContentURI") URI u, 
-							Provider<LocalSaver> fileSaverProvider,
-							Provider<POSTSaver> postSaverProvider) {
-	return u.getScheme().startsWith("file://") ? fileSaverProvider.get() : postSaverProvider.get();
+							Producer<LocalSaver> fileSaverProducer,
+							Producer<POSTSaver> postSaverProducer) throws SavingException {
+
+	log.debug("Trying to save to uri {}", u);
+	
+	try {
+		return u.getScheme().startsWith("file://") ? fileSaverProducer.get().get() : postSaverProducer.get().get();
+	} catch (Exception e) {
+		throw new SavingException("Could not provide an appropriate saver for '"+u+"'", e);
+	}
+
 }
 
 
@@ -42,7 +54,7 @@ public static LocalSaver fileSaver(@Named("DestinationPath") String path, @Named
 
 
 @Produces @Named("DestinationPath")
-public static String destinationPathFrom(@Named("DestinationContentURI") URI u) throws SavingException {
+public static String destinationPathFrom(@Named("DestinationContentURI") URI u) {
 	
 
 	String uriString = u.toString();
@@ -55,8 +67,23 @@ public static String destinationPathFrom(@Named("DestinationContentURI") URI u) 
 
 
 @Produces
-public static POSTSaver postSaver(@Named("DestinationContentURI") URI u, @Named("EffectiveContent") String content) {
-	return new POSTSaver(u, content);
+public static POSTSaver postSaver(@Named("DestinationContentURI") URI u, 
+									Map<String, String> contentMap, 
+									CloseableHttpClient client) {
+	return new POSTSaver(client, u, contentMap);
+}
+
+
+@Produces
+public static Map<String, String> contentMap(@Named("DestinationContentURI") URI u, @Named("EffectiveContent") String content) {
+	// by convention, we send two variables
+
+	Map<String, String> contentMap = new HashMap<String, String>(2);
+	contentMap.put("uri", u);
+	contentMap.put("content", content);
+
+	return contentMap;
+
 }
 
 
