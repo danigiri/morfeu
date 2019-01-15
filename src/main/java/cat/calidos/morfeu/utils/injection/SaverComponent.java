@@ -1,34 +1,34 @@
-// DATA FETCHER COMPONENT . JAVA
+// SAVER COMPONENT . JAVA
 
 package cat.calidos.morfeu.utils.injection;
 
-import java.io.InputStream;
 import java.net.URI;
 
 import javax.inject.Named;
 
-import org.apache.http.impl.client.CloseableHttpClient;
-
 import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.problems.FetchingException;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
+import cat.calidos.morfeu.problems.SavingException;
+import cat.calidos.morfeu.utils.Saver;
 
-@ProductionComponent(modules = {DataFetcherModule.class, ListeningExecutorServiceModule.class})
-public interface DataFetcherComponent {
+/** Component to save as-is without any parsing
+*	@author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionComponent(modules = {SaverModule.class, ListeningExecutorServiceModule.class})
+public interface SaverComponent {
 
-ListenableFuture<InputStream> fetchData() throws FetchingException;
-
+ListenableFuture<Saver> saver() throws SavingException;
 
 @ProductionComponent.Builder
 interface Builder {
 
-	@BindsInstance Builder forURI(URI u);
-	@BindsInstance Builder withClient(CloseableHttpClient c);
+	@BindsInstance Builder content(@Named("EffectiveContent") String content);
+	@BindsInstance Builder toURI(@Named("DestinationContentURI") URI u);
 
-	DataFetcherComponent build();
+	SaverComponent build();
 
 }
 

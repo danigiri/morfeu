@@ -12,7 +12,6 @@ import javax.servlet.ServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ public void init(FilterConfig filterConfig) throws ServletException {
 @Override
 public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
-	
+
 	log.trace("---- REQUEST {} ----", request);
 	chain.doFilter(request, response);
 
@@ -38,11 +37,8 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
 
 @Override
-public void destroy() {
+public void destroy() {}
 
-	// TODO Auto-generated method stub
-
-}
 
 }
 

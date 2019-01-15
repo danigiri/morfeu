@@ -39,7 +39,6 @@ public void testPostToPing() throws Exception {
 
 }
 
-
 /*
  *    Copyright 2019 Daniel Giribet
  *

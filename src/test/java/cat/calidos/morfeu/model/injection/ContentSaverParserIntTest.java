@@ -36,6 +36,7 @@ import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.LocalSaver;
+import cat.calidos.morfeu.utils.Saver;
 
 /**
 * @author daniel giribet
@@ -141,15 +142,15 @@ public void testSaveToXML() throws Exception {
 	String outputPath = temporaryOutputFilePath();
 	URI outputURI = new URI("file://"+outputPath);
 
-	LocalSaver saver = DaggerContentSaverParserComponent.builder()
-														.from(content)
-														.to(outputURI)
-														.having(contentURI)
-														.model(modelURI)
-														.withModelFetchedFrom(modelFetchableURI)
-														.build()
-														.saver()
-														.get();
+	Saver saver = DaggerContentSaverParserComponent.builder()
+													.from(content)
+													.to(outputURI)
+													.having(contentURI)
+													.model(modelURI)
+													.withModelFetchedFrom(modelFetchableURI)
+													.build()
+													.saver()
+													.get();
 	saver.save();
 	File savedFile = new File(outputPath);
 	assertTrue("Saver component did not create a file", savedFile.exists());
@@ -172,15 +173,15 @@ public void testSaveToYAML() throws Exception {
 	String outputPath = temporaryOutputFilePath()+".yaml";
 	URI outputURI = new URI("file://"+outputPath);
 
-	LocalSaver saver = DaggerContentSaverParserComponent.builder()
-														.from(content)
-														.to(outputURI)
-														.having(contentURI)
-														.model(modelURI)
-														.withModelFetchedFrom(modelFetchableURI)
-														.build()
-														.saver()
-														.get();
+	Saver saver = DaggerContentSaverParserComponent.builder()
+													.from(content)
+													.to(outputURI)
+													.having(contentURI)
+													.model(modelURI)
+													.withModelFetchedFrom(modelFetchableURI)
+													.build()
+													.saver()
+													.get();
 	saver.save();
 	File savedFile = new File(outputPath);
 	assertTrue("Saver component did not create a file", savedFile.exists());

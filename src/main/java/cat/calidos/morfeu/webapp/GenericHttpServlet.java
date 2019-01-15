@@ -48,6 +48,8 @@ protected final static Logger log = LoggerFactory.getLogger(GenericHttpServlet.c
 public static final String INTERNAL_PARAM_PREFIX = "__";	// internal params start with this
 public static final String METHOD = "__METHOD";
 public static final String POST_VALUE = "__POST";
+public static final String __CONFIG = "__CONFIG";
+
 
 protected Properties configuration;
 protected ServletContext context;
@@ -60,18 +62,20 @@ public void init(ServletConfig config) throws ServletException {
 	
 	super.init(config);
 
-	//TODO: check if there is a more dagger friendly way of doing this
+	//TODO: add the servlet init params as part of the config so a proper merge can be done
 	ServletConfig servletConfig = this.getServletConfig();
 	configuration = DaggerServletConfigComponent.builder()
 													.servletConfig(servletConfig)
 													.build()
 													.getProperties();
 	context = servletConfig.getServletContext();
+	context.setAttribute(__CONFIG, configuration);
 
 }
 
 
 public abstract ControlComponent getControl(String path, Map<String, String> params);
+
 
 public abstract ControlComponent putControl(String path, Map<String, String> params);
 

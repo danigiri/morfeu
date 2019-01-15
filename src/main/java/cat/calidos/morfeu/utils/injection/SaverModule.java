@@ -36,10 +36,11 @@ public static Saver saver(@Named("DestinationContentURI") URI u,
 							Producer<LocalSaver> fileSaverProducer,
 							Producer<POSTSaver> postSaverProducer) throws SavingException {
 
-	log.debug("Trying to save to uri {}", u);
+	String scheme = u.getScheme();
+	log.debug("Trying to save to uri {} with scheme {}", u, scheme);
 	
 	try {
-		return u.getScheme().startsWith("file://") ? fileSaverProducer.get().get() : postSaverProducer.get().get();
+		return scheme.startsWith("file") ? fileSaverProducer.get().get() : postSaverProducer.get().get();
 	} catch (Exception e) {
 		throw new SavingException("Could not provide an appropriate saver for '"+u+"'", e);
 	}
@@ -76,7 +77,7 @@ public static POSTSaver postSaver(@Named("DestinationContentURI") URI u,
 @Produces
 public static Map<String, String> contentMap(@Named("DestinationContentURI") URI u,
 												@Named("EffectiveContent") String content) {
-	// by convention, we send two variables
+	// by convention, we send two variables, though that can be easily changed
 
 	Map<String, String> contentMap = new HashMap<String, String>(2);
 	contentMap.put("uri", u.toString());
