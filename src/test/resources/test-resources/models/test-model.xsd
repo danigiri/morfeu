@@ -57,7 +57,7 @@
 			<xs:sequence>
 				<xs:choice minOccurs="0" maxOccurs="unbounded">
 					<!-- no need to define serialize metadata as we will use the default (append 's') -->
-                    <xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="text" type="textField" />

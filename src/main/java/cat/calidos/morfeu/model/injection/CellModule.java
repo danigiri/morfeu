@@ -257,7 +257,7 @@ private static CellModel findChildWithName(ComplexCellModel cellModel, String ch
 												.findFirst();
 	if (!matchedChild.isPresent()) {
 		log.warn("Elem '{}' could not match any children of '{}'", childName, cellModel.getName());
-		throw new RuntimeException("Node and model mismatch ("+childName+")", new IllegalArgumentException());
+		throw new RuntimeException("Node and model mismatch ("+childName+")");
 	}
 
 	return matchedChild.get();
@@ -289,7 +289,7 @@ private static CellModel findAttributeWithName(ComplexCellModel cellModel, Strin
 		if (!(attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:"))) {
 
 			log.error("Elem '{}' could not match any attribute of '{}'", attributeName, cellModel.getName());
-			throw new RuntimeException("Node and model attribute mismatch", new IllegalArgumentException());
+			throw new RuntimeException("Node and model attribute mismatch ("+attributeName+" not found)");
 		}
 	}
 

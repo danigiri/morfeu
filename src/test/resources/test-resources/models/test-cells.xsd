@@ -33,6 +33,7 @@
 					<mf:desc>testIdCell desc (one field identifier)</mf:desc>
 					<mf:thumb>assets/images/data3-thumb.svg</mf:thumb>
 					<mf:cell-presentation type="HTML">/preview/${text};color=${color}</mf:cell-presentation>
+					<mf:default-value name="@text">Default value</mf:default-value>
 					<mf:default-value name="@number">000011</mf:default-value>
 					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
 					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>

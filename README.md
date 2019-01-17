@@ -24,7 +24,7 @@ cd src/main/typescript && npm install && npm start
 
 ### Demo
 
-[![Introduction to Morfeu fundamentals](http://img.youtube.com/vi/yjCPwHbjsVA/0.jpg)](http://www.youtube.com/watch?v=yjCPwHbjsVA "Morfeu introduction")
+[![Introduction to Morfeu fundamentals](http://img.youtube.com/vi/yjCPwHbjsVA/0.jpg)](https://youtu.be/jiqDp8Wzsjs "Morfeu introduction")
 
 In this short video we showcase a Morfeu editing session with a simple YAML-based API.
 
