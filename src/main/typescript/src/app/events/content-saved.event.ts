@@ -1,12 +1,17 @@
-// CONTENT - SAVE . EVENT . TS
+// CONTENT - SAVED . EVENT . TS
 
 import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
 
+export class ContentSavedEvent {
 
-export class ContentSaveEvent {
 
 constructor(public document: CellDocument) {}
+
+
+public toString = (): string => {
+	return "ContentSavedEvent?doc="+this.document.contentURI; 
+}
+
 
 }
 

@@ -1,4 +1,3 @@
-%YAML 1.2
 ---
 {% for cell in v.cells -%}
 {%-include "cell-to-yaml.dtwig" with {'cell': cell, 'case':'obj-to-yaml', 'indent': ''} only -%}

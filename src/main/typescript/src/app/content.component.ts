@@ -28,6 +28,7 @@ import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
 import { ContentRefreshedEvent } from "./events/content-refreshed.event";
 import { ContentRequestEvent } from "./events/content-request.event";
 import { ContentSaveEvent } from "./events/content-save.event";
+import { ContentSavedEvent } from "./events/content-saved.event";
 import { DropAreaSelectEvent } from "./events/drop-area-select.event";
 import { KeyPressedEvent } from "./events/keypressed.event";
 import { StatusEvent } from "./events/status.event";
@@ -95,10 +96,11 @@ private dropAreaSelectingMode = false;
 
 
 constructor(eventService: EventService,
+			remoteEventService: RemoteEventService,
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("RemoteJSONDataService") private contentSaverService: RemoteDataService
 			) {
-	super(eventService);
+	super(eventService, remoteEventService);
 }
 
 
@@ -189,8 +191,10 @@ saveContent(document_: CellDocument) {
 
 	this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
 				console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
-				// reloading would go here
+				// reloading would go here if we needed any kind of refresh
 				//this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
+				// we send a remote event so the backend knows we've modified the content
+				this.events.remote.publish(new ContentSavedEvent(document_));
 			},
 			error => this.events.problem(error.message),	 // error is of the type HttpErrorResponse
 			() => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
