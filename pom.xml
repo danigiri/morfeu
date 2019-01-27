@@ -21,8 +21,8 @@
 		<jackson-2-version>2.9.7</jackson-2-version>
 		<jetty-version>9.4.12.RC1</jetty-version>
 		<jtwig-version>5.86.1.RELEASE</jtwig-version>
-		<selenide-version>4.11.1</selenide-version>
-		<selenium-version>3.11.0</selenium-version>
+		<selenide-version>5.1.0</selenide-version>
+		<selenium-version>3.141.59</selenium-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
