@@ -113,7 +113,20 @@ public T pressBackspace() {
 	Actions actions = new Actions(driver);
 	actions.sendKeys(Keys.BACK_SPACE);
 	actions.build().perform();
-	
+
+	return (T) this;
+
+}
+
+
+@SuppressWarnings("unchecked")
+public T pressTAB() {
+
+	WebDriver driver = element.getWrappedDriver();
+	Actions actions = new Actions(driver);
+	actions.sendKeys(Keys.TAB);
+	actions.build().perform();
+
 	return (T) this;
 
 }

@@ -112,7 +112,7 @@ public UICellEditor enterText(String value) {
 
 	// cannot get selenide to select the element (textarea is missing in the setValue method)
 	// so we send the keys which works
-	content.pressKey("\t");
+	// content.pressTAB(); (do not seem to need it in the latest selenium and selenide versions
 	int l = value().get().length();
 	for (int i=0; i<l; i++) { 
 		pressBackspace(); 
