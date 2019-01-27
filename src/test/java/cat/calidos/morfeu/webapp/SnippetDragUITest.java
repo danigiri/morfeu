@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// SNIPPET DRAG UI TEST . JAVA
 
 package cat.calidos.morfeu.webapp;
 
@@ -23,13 +9,11 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 
 import org.junit.Test;
-import org.openqa.selenium.support.ui.Sleeper;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UIDocument;
 import cat.calidos.morfeu.webapp.ui.UIDropArea;
-import cat.calidos.morfeu.webapp.ui.UIModel;
 import cat.calidos.morfeu.webapp.ui.UISnippetEntry;
 import cat.calidos.morfeu.webapp.ui.UISnippetsArea;
 
@@ -43,7 +27,7 @@ public class SnippetDragUITest extends UITezt {
 public void testDragSnippetCell() { 
 
 	open(appBaseURL);
-		
+
 	UIDocument document = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)
@@ -61,26 +45,26 @@ public void testDragSnippetCell() {
 	// now we select. activate and drag it to the drop area
 	stuffSnippet.select();
 	assertTrue("Snippet is not selected after selection", stuffSnippet.isSelected());
-	
+
 	UICell stuff = stuffSnippet.children().get(0);
 	assertNotNull(stuff);
+
 	stuffSnippet.pressKey("0");	// this is a hack to select the first cell on the snippet
 	assertTrue(stuff.isSelected());
-	
+
 	stuff.activate();
 	assertTrue(stuff.isActive());
-	
+
 	UICell targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals("Initially we should have one child", 1, targetCol.children().size());
 	UIDropArea targetDropArea = targetCol.dropArea(1);
-	targetDropArea.select();
-	targetDropArea.dropHere(stuff);
-	
+	targetDropArea.select(); 
+	targetDropArea.dropHere(stuff);	// this does the select 
+
 	targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
-	assertEquals("After snippet we should have two children", 2, targetCol.children().size());
-	
+
 	UICell stuffFromSnippet = targetCol.child("stuff(1)");
-	Optional<String> value = stuffFromSnippet.hover().cellInfo().value();
+	Optional<String> value = stuffFromSnippet.select().activate().cellInfo().value();
 	assertTrue("Snippet created 'stuff' should have a value", value.isPresent());
 	assertEquals("Stuff content", value.get());
 	
@@ -88,3 +72,20 @@ public void testDragSnippetCell() {
 
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
