@@ -66,10 +66,15 @@ public int position() {
 /** @return cell just dropped at new position */
 public UICell dropHere(UICell cell) {
 
-	// we will use keyboard shorcuts to select the target destination
-	cell.select();
-	content.pressKey(UIContent.ACTIVATE);
+	// select and activate if needed
+	if (!cell.isSelected() && !cell.isActive()) {
+		cell.select();
+	}
+	if (!cell.isActive()) {
+		content.pressKey(UIContent.ACTIVATE);
+	}
 	
+	// we will use keyboard shorcuts to select the target destination
 	this.select();
 	content.pressKey(UIContent.DRAGNDROP);
 	
@@ -80,6 +85,7 @@ public UICell dropHere(UICell cell) {
 	} else {
 		return parent.child(position);
 	}
+
 }
 
 
