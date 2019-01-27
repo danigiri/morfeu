@@ -112,6 +112,8 @@ public void addCellValue() {
 	assertFalse("Should not be able to create a value again",  stuffEditor.isCreateValueVisible());
 	assertTrue("Should be able to remove value for this cell",  stuffEditor.isRemoveValueVisible());
 
+	// we are creating a new value, so the focus is not there by default, let's try to set it
+	stuffEditor.pressTAB();
 	stuffEditor.enterText("Foo bar");
 	value = stuffEditor.value();
 	assertTrue("After entering text we should be able to retrieve it", value.isPresent());
