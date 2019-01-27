@@ -26,6 +26,7 @@ public class CellEditingUITest extends UITezt {
 private UICell test;
 private UIContent content;
 
+
 @Before
 public void setup() {
 
@@ -111,10 +112,11 @@ public void editCellAndDismiss() {
 
 	dataEditor.clickDiscard();
 
-	data.select();
-	data.activate();
+	// we refetch it as using the previous instance was problematic
+	data = test.child("row(0)").child("col(0)").child("data(0)");
+	data.select().activate();
 	attributes = data.cellInfo().attributes();				// re-read attributes from the now-modified cell
-	text = checkAttribute(attributes, "text", "blahblah");		// boom, magically restored
+	text = checkAttribute(attributes, "text", "blahblah");	// boom, magically restored
 	number = checkAttribute(attributes, "number", "42");
 
 }
