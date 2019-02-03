@@ -122,7 +122,6 @@ public UICell child(int pos) {
 
 
 
-
 public UICell dragTo(UIDropArea target) {
 	return target.dropHere(this);
 }
@@ -165,6 +164,57 @@ public UICell activate() {
 
 	return this;
 	
+}
+
+
+public UICellEditor edit() {
+
+	if (!isActive()) {
+		throw new NoSuchElementException("Trying the to get the editor of a not active cell");
+
+	}
+	content.pressKey("e");
+
+	return new UICellEditor(content);
+
+}
+
+
+/** edit this cell by double clicking on it */
+public UICellEditor editByDoubleClicking() {
+
+	if (!isActive()) {
+		throw new NoSuchElementException("Trying the to get the editor of a not active cell");
+
+	}
+	element.doubleClick();
+
+	return new UICellEditor(content);
+
+}
+
+
+/** delete this cell */
+public void remove() {
+
+	if (isActive() || isSelected()) {
+		pressKey("R");
+	} else {
+		throw new IllegalStateException("Cannot remove something not selected or active");
+	}
+
+}
+
+
+public UICellData cellInfo() {
+
+	if (!isActive()) {
+		throw new NoSuchElementException("Trying the to get the info of a not active cell");
+
+	}
+
+	return new UICellData();	// at the moment there is only one info
+
 }
 
 
@@ -215,45 +265,6 @@ public boolean isActive() {
 
 public boolean isSelected() {
 	return class_().contains(SELECTED);
-}
-
-
-public UICellData cellInfo() {
-	
-	if (!isActive()) {
-		throw new NoSuchElementException("Trying the to get the info of a not active cell");
-
-	}
-	
-	return new UICellData();	// at the moment there is only one info
-
-}
-
-
-public UICellEditor edit() {
-
-	if (!isActive()) {
-		throw new NoSuchElementException("Trying the to get the editor of a not active cell");
-
-	}
-	content.pressKey("e");
-
-	return new UICellEditor(content);
-
-}
-
-
-
-public UICellEditor editByDoubleClicking() {
-
-	if (!isActive()) {
-		throw new NoSuchElementException("Trying the to get the editor of a not active cell");
-
-	}
-	element.doubleClick();
-
-	return new UICellEditor(content);
-
 }
 
 }
