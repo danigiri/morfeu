@@ -17,6 +17,7 @@ import { CellDragEvent } from "../events/cell-drag.event";
 import { CellDropEvent } from "../events/cell-drop.event";
 import { CellEditEvent } from "../events/cell-edit.event";
 import { CellModelDeactivatedEvent } from "../events/cell-model-deactivated.event";
+import { CellRemoveEvent } from "../events/cell-remove.event";
 import { CellSelectEvent } from "../events/cell-select.event";
 import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
@@ -58,63 +59,82 @@ ngOnInit() {
 
 	// Drop a cell to a position under this cell
 	this.subscribe(this.events.service.of( CellDropEvent ).pipe(
-			filter(dc => dc.newParent && dc.newParent===this.cell))
-			.subscribe( dc => {
+				filter(dc => dc.newParent && dc.newParent===this.cell)
+			).subscribe( dc => {
 				console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to	"
 							+this.cell.URI+" at position ("
 							+dc.newPosition+")'");
 				this.adoptCellAtPosition(dc.cell, dc.newPosition);
-	}));
+			})
+	);
 
 	// A cell model was deactivated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent ).pipe(
-			filter(d => d.cellModel && this.isCompatibleWith(d.cellModel))) // //
-			.subscribe( d => {
+				filter(d => d.cellModel && this.isCompatibleWith(d.cellModel))
+			).subscribe( d => {
 				// console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 				this.becomeInactive(this.cell);
-	}));
+			})
+	);
 
 	// a cell model activated that is compatible with this cell
 	this.subscribe(this.events.service.of( CellModelActivatedEvent ).pipe(
-			filter( a => a.cellModel && this.isCompatibleWith(a.cellModel)))
-			.subscribe( a => {
+				filter( a => a.cellModel && this.isCompatibleWith(a.cellModel))
+			).subscribe( a => {
 				console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
 				this.becomeActive(this.cell);
-	}));
+			})
+	);
 
 	// an outsider component (like a keyboard shortcut) wants to activate this selected cell
 	this.subscribe(this.events.service.of( CellActivateEvent ).pipe(
-			filter(a => this.selected && this.canBeActivated()))
-			.subscribe( a => {
+				filter(a => this.selected && this.canBeActivated())
+			).subscribe( a => {
 				console.log("-> cell comp gets cell activate event and proceeds to focus :)");
 				// FIXMWE: this allows for multiple activations when conflicting with rollover
 				this.focusOn(this.cell);
-	}));
+			})
+	);
 
 	// A different cell was activated and we are active at this moment
 	this.subscribe(this.events.service.of( CellActivatedEvent ).pipe(
-			filter(a => this.active && a.cell!==this.cell))
-			.subscribe( a => {
+				filter(a => this.active && a.cell!==this.cell)
+			).subscribe( a => {
 				console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
 				this.becomeInactive(this.cell);
-	}));
+			})
+	);
 
 	// External component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.subscribe(this.events.service.of( CellDragEvent ).pipe(
-			filter(a => this.active))
-			.subscribe( a => {
+				filter(a => this.active)
+			).subscribe( a => {
 				console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
 				this.events.service.publish(new CellDropEvent(this.cell));
-	}));
+			})
+	);
 
 	// Want to edit this cell
 	this.subscribe(this.events.service.of( CellEditEvent ).pipe(
-				filter(edit => !edit.cell && this.isEditable()))
-				.subscribe( edit => {
+					filter(edit => !edit.cell && this.isEditable())
+				).subscribe( edit => {
 					console.log("-> cell comp gets cell edit event and will try to edit :)");
 					this.events.service.publish(new CellEditEvent(this.cell));
-		}));
+				})
+	);
 
+	// Want to remove this cell
+	this.subscribe(this.events.service.of( CellRemoveEvent ).pipe(
+					filter(remove => !remove.cell && (this.active || this.selected))
+				).subscribe( remove => {
+					console.log("-> cell comp gets cell remove event and will get removed");
+					// we could re-issue an event with the specific cell to be removed if needed
+					//this.events.service.publish(new CellRemoveEvent(this.cell));
+					this.remove();
+				})
+	);
+	
+	
 }
 
 
@@ -290,6 +310,16 @@ getCellPresentation() {
 
 private isEditable(): boolean {
 	return this.active && !this.cell.cellModel.presentation.includes("COL-WELL") && !this.snippet;
+}
+
+
+private remove() {
+
+	let parent = this.cell.parent;
+	if (parent) {
+		parent.remove(this.cell);
+	}
+
 }
 
 

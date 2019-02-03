@@ -1,15 +1,17 @@
-// CELL - EDIT . EVENT . TS
+// CELL - REMOVE . EVENT . TS
 
 import { Cell } from "../cell.class";
 
-export class CellEditEvent {
+export class CellRemoveEvent {
+
 
 constructor(public cell?: Cell) {}
 
 
 public toString = (): string => {
-	return "CellEditEvent:{cell:"+this.cell.URI+"}";
+	return "CellRemoveEvent:{cell:"+this.cell.URI+"}";
 }
+
 
 }
 

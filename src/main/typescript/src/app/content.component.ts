@@ -23,6 +23,7 @@ import { CellActivateEvent } from "./events/cell-activate.event";
 import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
 import { CellDragEvent } from "./events/cell-drag.event";
 import { CellEditEvent } from "./events/cell-edit.event";
+import { CellRemoveEvent } from "./events/cell-remove.event";
 import { CellSelectEvent } from "./events/cell-select.event";
 import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
 import { ContentRefreshedEvent } from "./events/content-refreshed.event";
@@ -86,7 +87,7 @@ export class ContentComponent extends KeyListenerWidget implements OnInit, After
 content: Content;
 model: Model;
 
-protected commandKeys: string[] = ["c", "a", "d", "t", "e"];
+protected commandKeys: string[] = ["c", "a", "d", "t", "e", "R"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
@@ -244,6 +245,10 @@ commandPressedCallback(command: string) {
 			console.log("[UI] ContentComponent::got key to edit current active cell");
 			this.events.service.publish(new CellEditEvent());
 			break;
+		case "R":
+			console.log("[UI] ContentComponent::got key to remove current selected or active cell (if any)");
+			this.events.service.publish(new CellRemoveEvent());
+			break;
 	}
 
 }
@@ -289,10 +294,11 @@ private unsubscribeChildrenFromCellSelection () {
 	this.childrenCellComponents.forEach(c => c.unsubscribeFromSelection());
 }
 
+
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2019 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
