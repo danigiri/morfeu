@@ -4,6 +4,7 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -17,16 +18,27 @@ public class CellRemoveUITest extends UITezt {
 
 
 
-@Test
-public void editCellAndSave() {
+private UIContent content;
+
+
+@Before
+public void setup() {
 
 	open(appBaseURL);
-	UIContent content = UICatalogues.openCatalogues()
-										.shouldAppear()
-										.clickOn(0)
-										.clickOnDocumentNamed("Document 1")
-										.content();
+	content = UICatalogues.openCatalogues()
+							.shouldAppear()
+							.clickOn(0)
+							.clickOnDocumentNamed("Document 1")
+							.content();
+
+}
+
+
+@Test
+public void removeAfterSelection() {
+
 	content.shouldBeVisible();
+
 	UICell test = content.rootCells().get(0);
 
 	UICell col = test.child("row(0)").child("col(0)");
@@ -35,6 +47,23 @@ public void editCellAndSave() {
 	assertNotNull(data);
 
 	data.select().remove();
+	assertEquals("Should have no children after removing", 0, col.children().size());
+
+}
+
+
+@Test
+public void removeAfterActivation() {
+
+	content.shouldBeVisible();
+	UICell test = content.rootCells().get(0);
+
+	UICell col = test.child("row(0)").child("col(0)");
+	assertEquals("Should have one child", 1, col.children().size());
+	UICell data = col.child("data(0)");
+	assertNotNull(data);
+
+	data.select().activate().remove();	// should also work
 	assertEquals("Should have no children after removing", 0, col.children().size());
 
 }
