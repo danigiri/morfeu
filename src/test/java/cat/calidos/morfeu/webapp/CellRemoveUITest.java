@@ -11,7 +11,7 @@ import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
-/**
+/** Testing cell removal
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellRemoveUITest extends UITezt {

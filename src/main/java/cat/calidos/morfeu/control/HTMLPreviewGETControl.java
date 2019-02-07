@@ -28,7 +28,7 @@ import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 
 
-/**
+/** Placeholder for HTML preview
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class HTMLPreviewGETControl extends Control {

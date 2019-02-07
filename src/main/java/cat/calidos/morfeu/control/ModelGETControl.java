@@ -28,7 +28,7 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
 
-/**
+/** Controller to get the model
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelGETControl extends Control {
@@ -55,12 +55,8 @@ protected Object process()
 
 	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
-	return DaggerModelComponent.builder()
-									.identifiedBy(uri)
-									.fromFetchable(fetchableURI)
-									.build()
-									.model()
-									.get();
+	
+	return DaggerModelComponent.builder().identifiedBy(uri).fromFetchable(fetchableURI).build().model().get();
 
 }
 

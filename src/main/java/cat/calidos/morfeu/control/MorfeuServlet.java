@@ -30,7 +30,7 @@ import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
 
 
-/**
+/** Generic morfeu filter, will load the configuration and invoke the controller with the request 
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuServlet extends GenericHttpServlet {
@@ -87,14 +87,13 @@ public ControlComponent putControl(String path, Map<String, String> params) {
 }
 
 
-
 protected Map<String, String> processParams(Map<String, String> params) {
 
 	params.put(RESOURCES_PREFIX, resourcesPrefix);
-	
-	return params;
-}
 
+	return params;
+
+}
 
 
 }

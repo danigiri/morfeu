@@ -12,12 +12,14 @@ import javax.servlet.ServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
+/** Placeholder for request filter if we need it
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuRequestFilter implements Filter {
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuRequestFilter.class);
+
+
 @Override
 public void init(FilterConfig filterConfig) throws ServletException {
 

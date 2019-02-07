@@ -20,6 +20,7 @@ public toString = (): string => {
 	return "KeyPressedEvent:{ key:"+this.str+( (this.num) ? ", num:"+this.num : "" )+"}";
 }
 
+
 }
 
 /*

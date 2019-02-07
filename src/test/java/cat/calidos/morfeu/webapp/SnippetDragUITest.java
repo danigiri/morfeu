@@ -2,7 +2,6 @@
 
 package cat.calidos.morfeu.webapp;
 
-
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.Assert.*;
 
@@ -58,8 +57,8 @@ public void testDragSnippetCell() {
 	UICell targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals("Initially we should have one child", 1, targetCol.children().size());
 	UIDropArea targetDropArea = targetCol.dropArea(1);
-	targetDropArea.select(); 
-	targetDropArea.dropHere(stuff);	// this does the select 
+	targetDropArea.select();
+	targetDropArea.dropHere(stuff);
 
 	targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
 
@@ -67,7 +66,7 @@ public void testDragSnippetCell() {
 	Optional<String> value = stuffFromSnippet.select().activate().cellInfo().value();
 	assertTrue("Snippet created 'stuff' should have a value", value.isPresent());
 	assertEquals("Stuff content", value.get());
-	
+
 }
 
 

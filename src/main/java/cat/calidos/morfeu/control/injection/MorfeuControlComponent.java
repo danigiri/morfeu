@@ -1,5 +1,29 @@
+// MORFEU CONTROL COMPONENT . JAVA
+
+package cat.calidos.morfeu.control.injection;
+
+
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.injection.ControlModule;
+import dagger.Component;
+
+
+/** This is where we register al the controllers that will handle our requests
+*	@author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class,
+		ContentControlModule.class, ModelsControlModule.class, SVGPreviewControlModule.class,
+		SnippetsControlModule.class, ClientEventControlModule.class})
+public interface MorfeuControlComponent extends ControlComponent {
+
+
+@Component.Builder
+interface Builder extends ControlComponent.Builder {}
+
+}
+
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -13,25 +37,3 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-package cat.calidos.morfeu.control.injection;
-
-
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
-import cat.calidos.morfeu.webapp.injection.ControlModule;
-import dagger.Component;
-
-
-/**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class, 
-		ContentControlModule.class, ModelsControlModule.class, SVGPreviewControlModule.class,
-		SnippetsControlModule.class, ClientEventControlModule.class})
-public interface MorfeuControlComponent extends ControlComponent {
-
-
-@Component.Builder
-interface Builder extends ControlComponent.Builder {}
-
-}

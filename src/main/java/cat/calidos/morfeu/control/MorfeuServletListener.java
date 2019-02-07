@@ -1,3 +1,5 @@
+// MORFEU SERVLET LISTENER . JAVA
+
 package cat.calidos.morfeu.control;
 
 import javax.servlet.ServletContextEvent;
@@ -7,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
+/** Servlet context initialisation callbacks
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuServletListener implements ServletContextListener {
@@ -33,7 +35,7 @@ public void contextDestroyed(ServletContextEvent sce) {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

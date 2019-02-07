@@ -1,4 +1,4 @@
-// PING CONTROL MODULE . JAVa
+// PING CONTROL MODULE . JAVA
 
 package cat.calidos.morfeu.control.injection;
 
@@ -28,7 +28,7 @@ public class PingControlModule {
 
 protected final static Logger log = LoggerFactory.getLogger(PingControlModule.class);
 
-		
+
 @Provides @IntoMap @Named("GET")
 @StringKey("/ping/?(.+)?")
 public static BiFunction<List<String>, Map<String, String>, String> ping() {
@@ -60,7 +60,7 @@ public static BiFunction<List<String>, Map<String, String>, String> pingPost() {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

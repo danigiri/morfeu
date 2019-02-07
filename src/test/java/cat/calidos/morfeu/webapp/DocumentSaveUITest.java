@@ -37,7 +37,7 @@ import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 import cat.calidos.morfeu.webapp.ui.UIDocument;
 
-/**
+/** Testing of document saving
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentSaveUITest extends UITezt {
@@ -123,5 +123,6 @@ public void documentSaveTest() throws Exception {
 	assertEquals("Saving the document does not modify its content", "66", cellData.attribute("number").value());
 
 }
+
 
 }

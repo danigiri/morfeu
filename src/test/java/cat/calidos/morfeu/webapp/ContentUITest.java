@@ -49,20 +49,17 @@ public void setup() {
 public void contentTestAppearingAndDisappearing() {
 
 	UIContent.shouldNotBeVisible();
-	
+
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
-	
 	UIContent.shouldNotBeVisible();
-	
+
 	UICatalogue catalogue = catalogues.clickOn(0);
 	UIContent content = catalogue.clickOnDocumentNamed("Document 1").content();
-	
 	content.shouldBeVisible();
-	
+
 	catalogue.clickOnDocumentNamed("Document with non-valid content");
-	
 	content.shouldDisappear();
-	
+
 }
 
 
@@ -114,7 +111,7 @@ public void contentTest() {
 public void relationshipFromContentToModelTest() {
 
 	String document1URI = "target/test-classes/test-resources/documents/document1.xml";
-	
+
 	UIDocument document = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)
@@ -154,9 +151,9 @@ public void relationshipFromContentToModelTest() {
 public void relationshipFromModelToContentTest() {
 	
 	UIDocument document = UICatalogues.openCatalogues()
-			.shouldAppear()
-			.clickOn(0)
-			.clickOnDocumentNamed("Document 1");
+										.shouldAppear()
+										.clickOn(0)
+										.clickOnDocumentNamed("Document 1");
 	
 	UIContent content = document.content();
 	content.shouldBeVisible();
