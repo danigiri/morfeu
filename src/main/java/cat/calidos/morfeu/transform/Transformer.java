@@ -6,9 +6,10 @@ package cat.calidos.morfeu.transform;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Transformer<T, O> {
 
-private Context<Processor<T, O>, O> context;
+private Context<T, O> context;
 
-public void Transformer(Context<Processor<T, O>, O> startingContext) {
+
+public void Transformer(Context<T, O> startingContext) {
 	this.context = startingContext;
 }
 
@@ -16,12 +17,20 @@ public void Transformer(Context<Processor<T, O>, O> startingContext) {
 public O process() {
 
 	while (!context.empty()) {
-		//T current = context.pop();
-		
+		Processor<T, O> current = context.pop();
+
 	}
 
 	return context.output();
 
+}
+
+
+@Override
+public String toString() {
+
+	// TODO Auto-generated method stub
+	return super.toString();
 }
 
 
