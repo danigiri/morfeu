@@ -55,9 +55,11 @@ protected void compareWithXML(String content, String path) {
 							.ignoreComments()
 							.ignoreWhitespace()
 							.build();
-	
+
 	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
+
 }
+
 
 protected String transformYAMLToXML(String yamlPath, String documentPath) throws Exception {
 
@@ -74,10 +76,10 @@ protected String transformYAMLToXML(String yamlPath, String documentPath) throws
 	values.put("case","yaml-to-xml");
 	
 	return DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-yaml-to-xml.twig")
-			.withValue(values)
-			.build()
-			.render();
+								.withTemplate("templates/transform/content-yaml-to-xml.twig")
+								.withValue(values)
+								.build()
+								.render();
 	// sed -E 's/\$(.+)?\$/\$\1\$ $(- set zzzz = deb("\1") -)$/g'
 
 }

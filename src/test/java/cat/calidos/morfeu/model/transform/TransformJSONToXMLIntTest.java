@@ -54,10 +54,10 @@ public void testTransformUsingTemplate() throws Exception {
 	assertNotNull(json);
 
 	String transformed = DaggerViewComponent.builder()
-											.withTemplate("templates/transform/content-json-to-xml.twig")
-											.withValue(json)
-											.build()
-											.render();
+												.withTemplate("templates/transform/content-json-to-xml.twig")
+												.withValue(json)
+												.build()
+												.render();
 	//System.err.println(transformed);
 	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
 
@@ -70,16 +70,16 @@ public void testTransform() throws Exception {
 	String transforms = "string-to-json,content-to-xml";
 	
 	Transform<String, String> transform = DaggerTransformComponent.builder()
-																.transforms(transforms)
-																.build()
-																.transformation()
-																.get();
+																	.transforms(transforms)
+																	.build()
+																	.transformation()
+																	.get();
 	
 	
 	String transformed = transform.apply(content);
 	//System.err.println(transformed);
 	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
-	
+
 }
 
 }

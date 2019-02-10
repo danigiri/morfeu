@@ -24,7 +24,6 @@ import org.junit.Test;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.problems.InternalException;
 
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,9 +31,10 @@ public class CompositeTest {
 
 private Composite<String> composite;
 
+
 @Before
 public void setup() {
-	
+
 //TODO: put in a module somewhere
 	this.composite = new OrderedMap<String>();
 }
@@ -63,20 +63,20 @@ public void testChildren() {
 	
 	assertEquals("bar", composite.child(0));
 	assertEquals("bar3", composite.child(1));
-		
+
 	assertEquals(2, composite.clear().size());
 	assertTrue(composite.asList().isEmpty());
 	assertEquals(0, composite.size());
-	
+
 }
 
 
 @Test(expected=InternalException.class)
 public void testBadGet() {
-	
+
 	assertTrue(composite.addChild("foo", "bar"));
 	composite.child(1);
-	
+
 }
 
 

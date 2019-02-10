@@ -30,7 +30,6 @@
 					<mf:thumb>assets/images/keyvalue-thumb.svg</mf:thumb>
 					<mf:cell-presentation>assets/images/keyvalue-cell.svg</mf:cell-presentation>
 				</mf:metadata>
-
 			</mf:extra-metadata>
 		</xs:appinfo>
 	</xs:annotation>

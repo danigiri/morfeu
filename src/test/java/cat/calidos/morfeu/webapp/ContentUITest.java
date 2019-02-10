@@ -154,7 +154,7 @@ public void relationshipFromModelToContentTest() {
 										.shouldAppear()
 										.clickOn(0)
 										.clickOnDocumentNamed("Document 1");
-	
+
 	UIContent content = document.content();
 	content.shouldBeVisible();
 	UICell test = content.rootCells().get(0);
