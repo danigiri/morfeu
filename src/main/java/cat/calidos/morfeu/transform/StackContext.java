@@ -8,6 +8,8 @@ import java.util.Stack;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class StackContext<T> implements Context<T, String> {
 
+private static final int MAX_LINE_LENGTH = 39; // +1 for the final '|'
+
 private Stack<Processor<T,String>> stack = new Stack<Processor<T,String>>();
 private StringBuffer output = new StringBuffer();
 
@@ -56,6 +58,31 @@ public Processor<T,String> pop() throws EmptyStackException{
 @Override
 public Processor<T,String> push(Processor<T,String> item) {
 	return stack.push(item);
+}
+
+
+@Override
+public String toString() {
+
+	StringBuffer out = new StringBuffer();
+	int height = stack.size();
+
+	out.append("\n");
+	out.append("⊏--------------------------------------⊐\n");
+	for (int i=0; i<height; i++) {
+		String stackLine = "|"+stack.elementAt(height-i-1);	// reverse
+		stackLine = stackLine.substring(0, Math.min(stackLine.length(), MAX_LINE_LENGTH));
+		out.append(stackLine);
+		// we add padding if needed
+		for (int p=stackLine.length(); p<MAX_LINE_LENGTH; p++) {
+			out.append(" ");
+		}
+		out.append("|\n");
+	}
+	out.append("⊏--------------------------------------⊐\n");
+
+	return out.toString();
+
 }
 
 

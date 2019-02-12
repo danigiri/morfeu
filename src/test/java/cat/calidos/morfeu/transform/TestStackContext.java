@@ -9,13 +9,10 @@ import java.util.EmptyStackException;
 import org.junit.Before;
 import org.junit.Test;
 
-import cat.calidos.morfeu.problems.InternalException;
-
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TestStackContext {
-
 
 private StackContext<String> context;
 
@@ -78,6 +75,24 @@ public void testOutputAppend() {
 }
 
 
+@Test
+public void testToString() {
+
+	context.push(new IdentityProcessor("foo"));
+	context.push(new IdentityProcessor("barx"));
+	context.push(new IdentityProcessor("tooLong-0123456789123456789123456789123456789123456789"));
+	context.push(new IdentityProcessor("bar"));
+	String expected = 	"\n"+
+						"⊏--------------------------------------⊐\n"+
+						"|bar                                   |\n"+
+						"|tooLong-012345678912345678912345678912|\n"+
+						"|barx                                  |\n"+
+						"|foo                                   |\n"+
+						"⊏--------------------------------------⊐\n";
+	assertEquals(expected, context.toString());
+
+}
+
 private class IdentityProcessor implements Processor<String, String> {
 
 String input;
@@ -91,6 +106,7 @@ public Context<String, String> generateNewContext(Context<String, String> oldCon
 	return oldContext;
 }
 
+
 @Override
 public String input() {
 	return input;
@@ -101,6 +117,13 @@ public String input() {
 public String output() {
 	return input;
 }
+
+@Override
+public String toString() {
+	return output();
+}
+
+
 }
 
 }
