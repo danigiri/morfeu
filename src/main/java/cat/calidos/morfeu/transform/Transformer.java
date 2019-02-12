@@ -9,7 +9,7 @@ public class Transformer<T, O> {
 private Context<T, O> context;
 
 
-public void Transformer(Context<T, O> startingContext) {
+public Transformer(Context<T, O> startingContext) {
 	this.context = startingContext;
 }
 
@@ -18,7 +18,8 @@ public O process() {
 
 	while (!context.empty()) {
 		Processor<T, O> current = context.pop();
-
+		context.appendToOutput(current.output());
+		context = current.generateNewContext(context);
 	}
 
 	return context.output();
