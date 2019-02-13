@@ -1,41 +1,56 @@
 package cat.calidos.morfeu.transform;
 
+import com.fasterxml.jackson.databind.JsonNode;
 
-/** Generic traversal and transformation algorithm
+/** Base class that processes Content json nodes and outputs them to XML
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Transformer<T, O> {
+public class ContentJSONToXMLProcessor implements Processor<JsonNode, String> {
 
-private Context<T, O> context;
+private String prefix;
+private JsonNode node;
 
 
-public Transformer(Context<T, O> startingContext) {
-	this.context = startingContext;
+public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
+	
+	this.prefix = prefix;
+	this.node = node;
+	
 }
 
 
-public O process() {
+@Override
+public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> oldContext) {
 
-	while (!context.empty()) {
-		Processor<T, O> current = context.pop();
-		context.appendToOutput(current.output());
-		context = current.generateNewContext(context);
-	}
-
-	return context.output();
+	// add to stack the </termination> if needed
+	
+	return oldContext;
 
 }
 
 
 @Override
-public String toString() {
+public JsonNode input() {
 
 	// TODO Auto-generated method stub
-	return super.toString();
+	return null;
 }
 
 
+@Override
+public String output() {
+	
+	StringBuffer content = new StringBuffer();
+	
+	String name = node.get("name").asText();
+	String value = node.get("name").asText();
+	
+	return prefix+content.toString();
+
 }
+
+}
+
 
 /*
  *    Copyright 2019 Daniel Giribet
