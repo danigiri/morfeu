@@ -23,7 +23,6 @@ import java.util.function.Predicate;
 
 import javax.inject.Named;
 import javax.inject.Provider;
-import javax.xml.stream.events.Characters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +34,7 @@ import org.w3c.dom.Text;
 
 import dagger.Module;
 import dagger.Provides;
+
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;

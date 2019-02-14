@@ -7,15 +7,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentJSONToXMLProcessor implements Processor<JsonNode, String> {
 
-private String prefix;
+
+	private String prefix;
 private JsonNode node;
 
 
 public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
-	
+
 	this.prefix = prefix;
 	this.node = node;
-	
+
 }
 
 
@@ -31,26 +32,23 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 
 @Override
 public JsonNode input() {
-
-	// TODO Auto-generated method stub
-	return null;
+	return node;
 }
 
 
 @Override
 public String output() {
-	
+
 	StringBuffer content = new StringBuffer();
-	
+
 	String name = node.get("name").asText();
 	String value = node.get("name").asText();
-	
+
 	return prefix+content.toString();
 
 }
 
 }
-
 
 /*
  *    Copyright 2019 Daniel Giribet
