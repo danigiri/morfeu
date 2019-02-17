@@ -8,10 +8,13 @@ import java.util.Stack;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class StackContext<T> implements Context<T, String> {
 
-private static final int MAX_LINE_LENGTH = 39; // +1 for the final '|'
+private static final int MAX_LINE_LENGTH = 49; // +1 for the final '|'
 
 private Stack<Processor<T,String>> stack = new Stack<Processor<T,String>>();
 private StringBuffer output = new StringBuffer();
+
+
+
 
 
 @Override
@@ -68,7 +71,7 @@ public String toString() {
 	int height = stack.size();
 
 	out.append("\n");
-	out.append("⊏--------------------------------------⊐\n");
+	out.append("⊏------------------------------------------------⊐\n");
 	for (int i=0; i<height; i++) {
 		String stackLine = "|"+stack.elementAt(height-i-1);	// reverse
 		stackLine = stackLine.substring(0, Math.min(stackLine.length(), MAX_LINE_LENGTH));
@@ -79,7 +82,7 @@ public String toString() {
 		}
 		out.append("|\n");
 	}
-	out.append("⊏--------------------------------------⊐\n");
+	out.append("⊏------------------------------------------------⊐\n");
 
 	return out.toString();
 

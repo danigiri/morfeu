@@ -80,15 +80,15 @@ public void testToString() {
 
 	context.push(new IdentityProcessor("foo"));
 	context.push(new IdentityProcessor("barx"));
-	context.push(new IdentityProcessor("tooLong-0123456789123456789123456789123456789123456789"));
+	context.push(new IdentityProcessor("tooLong-01234567890123456789012345678901234567890123456789"));
 	context.push(new IdentityProcessor("bar"));
 	String expected = 	"\n"+
-						"⊏--------------------------------------⊐\n"+
-						"|bar                                   |\n"+
-						"|tooLong-012345678912345678912345678912|\n"+
-						"|barx                                  |\n"+
-						"|foo                                   |\n"+
-						"⊏--------------------------------------⊐\n";
+						"⊏------------------------------------------------⊐\n"+
+						"|bar                                             |\n"+
+						"|tooLong-0123456789012345678901234567890123456789|\n"+
+						"|barx                                            |\n"+
+						"|foo                                             |\n"+
+						"⊏------------------------------------------------⊐\n";
 	assertEquals(expected, context.toString());
 
 }

@@ -6,7 +6,11 @@ package cat.calidos.morfeu.transform;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public interface Processor<T, O> {
 
-public Context<T, O> generateNewContext(Context<T, O> oldContext);
+
+default public Context<T, O> generateNewContext(Context<T, O> oldContext) { 
+	return oldContext; 
+}
+
 
 public T input();
 

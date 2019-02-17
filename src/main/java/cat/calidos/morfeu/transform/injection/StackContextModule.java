@@ -1,37 +1,24 @@
-// VIEW COMPONENT INT TEST . JAVA
+package cat.calidos.morfeu.transform.injection;
 
-package cat.calidos.morfeu.view;
-
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-
-import org.junit.Test;
-
-import cat.calidos.morfeu.view.injection.DaggerViewComponent;
-import cat.calidos.morfeu.view.injection.ViewComponent;
+import cat.calidos.morfeu.transform.StackContext;
+import dagger.Module;
+import dagger.Provides;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ViewComponentIntTest {
+@Module
+public abstract class StackContextModule<T> {
 
 
-@Test
-public void testInlineTemplate() {
-
-	HashMap<String, Object> values = new HashMap<String, Object>(1);
-	values.put("foo", "bar");	
-	String templ = "value={{ v.foo }}";
-
-	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("").build();
-
-	assertEquals("value=bar", view.render());
-
+@Provides
+public StackContext<T> newStack() {
+	return new StackContext<T>();
 }
 
 
 }
+
 
 /*
  *    Copyright 2019 Daniel Giribet

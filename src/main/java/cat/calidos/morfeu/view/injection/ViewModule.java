@@ -151,14 +151,14 @@ final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
         return "chop";
     }
 
-    @Override
-    public Object execute(FunctionRequest request) {
+	@Override
+	public Object execute(FunctionRequest request) {
 
     		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
     		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
-    		
+
     		return s.substring(0, s.length()-1);
-    }
+	}
 
 };
 

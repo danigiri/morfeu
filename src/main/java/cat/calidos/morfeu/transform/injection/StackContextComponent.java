@@ -1,41 +1,20 @@
-package cat.calidos.morfeu.transform;
+package cat.calidos.morfeu.transform.injection;
 
+import com.fasterxml.jackson.databind.JsonNode;
 
-/** Generic traversal and transformation algorithm
+import cat.calidos.morfeu.transform.StackContext;
+import dagger.Component;
+
+/**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Transformer<T, O> {
+@Component(modules={JsonNodeStackContextModule.class})
+public interface StackContextComponent {
 
-private Context<T, O> context;
-
-
-public Transformer(Context<T, O> startingContext) {
-	this.context = startingContext;
-}
-
-
-public O process() {
-
-	while (!context.empty()) {
-		Processor<T, O> current = context.pop();
-		context.appendToOutput(current.output());
-		context = current.generateNewContext(context);
-	}
-
-	return context.output();
+StackContext<JsonNode> emptyContext();
 
 }
 
-
-@Override
-public String toString() {
-
-	// TODO Auto-generated method stub
-	return super.toString();
-}
-
-
-}
 
 /*
  *    Copyright 2019 Daniel Giribet

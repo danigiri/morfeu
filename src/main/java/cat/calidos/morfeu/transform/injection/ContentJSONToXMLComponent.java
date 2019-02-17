@@ -1,18 +1,27 @@
 package cat.calidos.morfeu.transform.injection;
 
+import javax.inject.Named;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import cat.calidos.morfeu.transform.Processor;
+import dagger.BindsInstance;
 import dagger.Component;
 
-@Component(modules={ ContentJSONToXMLProcessorModule.class})
-public interface ContentJSONToXMLProcessorComponent {
+@Component(modules={ContentJSONToXMLModule.class})
+public interface ContentJSONToXMLComponent {
 
-
-
+@Named("begin")	Processor<JsonNode, String> processor();
+@Named("end")	Processor<JsonNode, String> processorSlash();
 
 
 @Component.Builder
 interface Builder {
 
-	ContentJSONToXMLProcessorComponent builder();
+	@BindsInstance Builder fromNode(JsonNode node);
+	@BindsInstance Builder withPrefix(String pref);
+
+	ContentJSONToXMLComponent builder();
 
 }
 

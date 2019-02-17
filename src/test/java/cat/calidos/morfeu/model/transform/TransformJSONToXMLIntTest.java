@@ -19,6 +19,7 @@ package cat.calidos.morfeu.model.transform;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -27,6 +28,11 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.transform.injection.DaggerTransformComponent;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.transform.Converter;
+import cat.calidos.morfeu.transform.StackContext;
+import cat.calidos.morfeu.transform.injection.DaggerContentJSONToXMLComponent;
+import cat.calidos.morfeu.transform.injection.DaggerStackContextComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -68,18 +74,44 @@ public void testTransformUsingTemplate() throws Exception {
 public void testTransform() throws Exception {
 
 	String transforms = "string-to-json,content-to-xml";
-	
+
 	Transform<String, String> transform = DaggerTransformComponent.builder()
 																	.transforms(transforms)
 																	.build()
 																	.transformation()
 																	.get();
-	
-	
+
 	String transformed = transform.apply(content);
 	//System.err.println(transformed);
 	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
 
+}
+
+
+
+@Test
+public void testConverter() throws Exception {
+
+	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
+	assertNotNull(json);
+
+	String startingPrefix = "";
+	StackContext<JsonNode> context = DaggerStackContextComponent.create().emptyContext();
+	JsonNode children = json.get("children");
+	// FIXME: we need to use dagger here
+	children.forEach(c -> context.push(DaggerContentJSONToXMLComponent.builder()
+																		.fromNode(c)
+																		.withPrefix(startingPrefix)
+																		.builder()
+																		.processor())
+	);
+
+	Converter<JsonNode, String> converter = new Converter<JsonNode, String>(context);
+	String transformed = converter.process();
+
+	//System.err.println(transformed);
+	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	
 }
 
 }

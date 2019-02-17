@@ -1,21 +1,36 @@
 package cat.calidos.morfeu.transform;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import com.fasterxml.jackson.databind.JsonNode;
+
+import cat.calidos.morfeu.transform.injection.DaggerContentJSONToXMLComponent;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
+import cat.calidos.morfeu.view.injection.ViewComponent;
 
 /** Base class that processes Content json nodes and outputs them to XML
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentJSONToXMLProcessor implements Processor<JsonNode, String> {
 
+private static final String CHILDREN_FIELD = "children";
 
-	private String prefix;
+private String prefix;
 private JsonNode node;
+private boolean hasChildren;
 
 
 public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
 
 	this.prefix = prefix;
 	this.node = node;
+	if (node.has(CHILDREN_FIELD)) {
+		this.hasChildren = node.get(CHILDREN_FIELD).isArray() && node.get(CHILDREN_FIELD).size()>0;
+	} else {
+		this.hasChildren = false;
+	}
 
 }
 
@@ -23,9 +38,29 @@ public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
 @Override
 public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> oldContext) {
 
-	// add to stack the </termination> if needed
-	
-	return oldContext;
+	Context<JsonNode, String> newContext = oldContext;
+
+	// now we push the children if there are any
+	if (hasChildren) {
+		newContext.push(DaggerContentJSONToXMLComponent.builder()
+														.fromNode(node)
+														.withPrefix(prefix)
+														.builder()
+														.processorSlash()
+		);
+		String newPrefix = "\t"+prefix;
+		JsonNode children = node.get(CHILDREN_FIELD);
+		LinkedList<Processor<JsonNode, String>> childrenList = new LinkedList<Processor<JsonNode, String>>();
+		children.forEach(c -> childrenList.addFirst(DaggerContentJSONToXMLComponent.builder()
+																				.fromNode(c)
+																				.withPrefix(newPrefix)
+																				.builder()
+																				.processor())
+		);
+		childrenList.forEach(newContext::push);
+	}
+
+	return newContext;
 
 }
 
@@ -39,14 +74,49 @@ public JsonNode input() {
 @Override
 public String output() {
 
-	StringBuffer content = new StringBuffer();
 
 	String name = node.get("name").asText();
-	String value = node.get("name").asText();
+	boolean hasValue = node.has("value");
+	String value = hasValue ? node.get("value").asText() : "";
+	HashMap<String, Object> values = new HashMap<String, Object>(4);
+	values.put("name", name);
+	values.put("value", value);
+	values.put("pref", prefix);
+	values.put("node", node);
 
-	return prefix+content.toString();
+	String template = null;
+	if (!hasChildren && !hasValue) {
+		template = "{{v.pref}}<{{v.name -}} "+
+					"{%- for a in v.node.internalAttributes " +
+					"	%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% " +
+					"endfor -%}" + 
+					"{%for a in v.node.attributes " +
+					"	%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% " +
+					"endfor -%} />\n";
+	} else {
+		template = "{{v.pref}}<{{v.name -}} "+
+				"{%- for a in v.node.internalAttributes "
+					+ "%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% "
+				+ "endfor -%}" + 
+				"{%for a in v.node.attributes "
+					+ "%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% "
+					+ "endfor -%} >" + (hasValue ? "{{value | xmlc}}" : "\n");
+	}
+
+	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(template).andProblem("").build();
+	String render = view.render();
+
+	return render;
 
 }
+
+
+@Override
+public String toString() {
+	return output();
+}
+
+
 
 }
 

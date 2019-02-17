@@ -1,16 +1,36 @@
 package cat.calidos.morfeu.transform.injection;
 
+import javax.inject.Named;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import dagger.Module;
+import dagger.Provides;
+
+import cat.calidos.morfeu.transform.ContentJSONToXMLProcessor;
+import cat.calidos.morfeu.transform.ContentJSONToXMLProcessorSlash;
+import cat.calidos.morfeu.transform.Processor;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class ContentJSONToXMLProcessorModule {
+public class ContentJSONToXMLModule {
+
+
+@Provides @Named("begin")
+Processor<JsonNode, String> processor(String pref, JsonNode node) {
+	return new ContentJSONToXMLProcessor(pref, node);
+}
+
+
+@Provides @Named("end")
+Processor<JsonNode, String> processorSlash(String pref, JsonNode node) {
+	return new ContentJSONToXMLProcessorSlash(pref, node);
+}
 
 
 }
-
 
 /*
  *    Copyright 2019 Daniel Giribet
