@@ -17,9 +17,9 @@
 		<jetty-context-path>/morfeu</jetty-context-path>
 		<webapp-prefix>http://localhost:${jetty-http-port}${jetty-context-path}/</webapp-prefix>
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
-		<dagger-2-version>2.16</dagger-2-version>
-		<jackson-2-version>2.9.7</jackson-2-version>
-		<jetty-version>9.4.12.RC1</jetty-version>
+		<dagger-2-version>2.21</dagger-2-version>
+		<jackson-2-version>2.9.8</jackson-2-version>
+		<jetty-version>9.4.14.v20181114</jetty-version>
 		<jtwig-version>5.86.1.RELEASE</jtwig-version>
 		<selenide-version>5.1.0</selenide-version>
 		<selenium-version>3.141.59</selenium-version>
