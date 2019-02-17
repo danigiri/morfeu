@@ -50,7 +50,7 @@ public void testTransformJSONToYAML() throws Exception {
 	values.put("model", doc.getModel());
 
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();

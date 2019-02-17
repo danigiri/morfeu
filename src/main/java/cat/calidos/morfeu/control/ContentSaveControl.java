@@ -92,7 +92,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	
 	String transformedContent = DaggerViewComponent.builder()
-													.withTemplate("templates/transform/content-json-to-xml.twig")
+													.withTemplatePath("templates/transform/content-json-to-xml.twig")
 													.withValue(json)
 													.build()
 													.render();

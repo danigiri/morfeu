@@ -45,7 +45,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();
@@ -96,7 +96,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();
@@ -126,7 +126,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();
@@ -161,7 +161,7 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();
@@ -191,7 +191,7 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();
@@ -228,7 +228,7 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();

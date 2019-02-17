@@ -63,7 +63,7 @@ public void testTransformJSONToXML() throws Exception {
 	assertNotNull(json);
 
 	String transformed = DaggerViewComponent.builder()
-											.withTemplate("templates/transform/content-json-to-xml.twig")
+											.withTemplatePath("templates/transform/content-json-to-xml.twig")
 											.withValue(json)
 											.build()
 											.render();
@@ -84,7 +84,7 @@ public void testTransformJSONToYAML() throws Exception {
 	values.put("model", doc.getModel());
 
 	String transformed = DaggerViewComponent.builder()
-			.withTemplate("templates/transform/content-to-yaml.twig")
+			.withTemplatePath("templates/transform/content-to-yaml.twig")
 			.withValue(values)
 			.build()
 			.render();

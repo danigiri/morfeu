@@ -63,7 +63,7 @@ public Control(String operation, String template, String problemTemplate) {
 protected String render(String template, Object value, String problem) {
 	return DaggerViewComponent.builder()
 								.withValue(value)
-								.withTemplate(template)
+								.withTemplatePath(template)
 								.andProblem(problem)
 								.build()
 								.render();

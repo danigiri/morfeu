@@ -89,14 +89,25 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(yamla)
 											.and()
 											.build();
-	
+
 }
 
 
 @Provides
-public static JtwigTemplate produceTemplate(@Named("templatePath") String path, EnvironmentConfiguration config) {
-	return JtwigTemplate.classpathTemplate(path, config);
+public static JtwigTemplate produceTemplate(@Nullable @Named("templatePath") String path,
+											@Nullable @Named("template") String template,
+											EnvironmentConfiguration config) {
+
+	if (path==null && template==null) {
+		throw new NullPointerException("Cannot produce a template without a path or template value");
+	}
+
+	return path!=null ? JtwigTemplate.classpathTemplate(path, config) : JtwigTemplate.inlineTemplate(template, config);
+
 }
+
+
+
 
 
 @Provides
@@ -107,15 +118,15 @@ public static JtwigModel produceJTwigModel(Map<String, Object> values) {
 
 final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
 
-    @Override
-    public String name() {
-        return "range";
-    }
+	@Override
+	public String name() {
+		return "range";
+	}
 
-    @Override
-    public Object execute(FunctionRequest request) {
+	@Override
+	public Object execute(FunctionRequest request) {
 
-    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+			request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
     		int n = request.getEnvironment()
     						.getValueEnvironment()
     						.getNumberConverter()
@@ -128,7 +139,8 @@ final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
     		} 
 
     		return range;
-    }
+	}
+
 };
 
 /** remove last char */
@@ -147,6 +159,7 @@ final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
     		
     		return s.substring(0, s.length()-1);
     }
+
 };
 
 
@@ -235,9 +248,9 @@ final static SimpleJtwigFunction break_ = new SimpleJtwigFunction() {
 
 		request.minimumNumberOfArguments(1).maximumNumberOfArguments(10);
 		List<Object> arguments = request.getArguments();
-		
-		
+
 		return new Object();
+
 	}
 
 };

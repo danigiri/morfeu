@@ -76,7 +76,7 @@ protected String transformYAMLToXML(String yamlPath, String documentPath) throws
 	values.put("case","yaml-to-xml");
 	
 	return DaggerViewComponent.builder()
-								.withTemplate("templates/transform/content-yaml-to-xml.twig")
+								.withTemplatePath("templates/transform/content-yaml-to-xml.twig")
 								.withValue(values)
 								.build()
 								.render();

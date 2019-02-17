@@ -54,7 +54,7 @@ public void testTransformUsingTemplate() throws Exception {
 	assertNotNull(json);
 
 	String transformed = DaggerViewComponent.builder()
-												.withTemplate("templates/transform/content-json-to-xml.twig")
+												.withTemplatePath("templates/transform/content-json-to-xml.twig")
 												.withValue(json)
 												.build()
 												.render();

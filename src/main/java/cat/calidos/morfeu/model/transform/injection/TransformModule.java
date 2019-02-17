@@ -81,7 +81,7 @@ Map<String, Transform<String, String>> stringToStringTransforms() {
 	
 	HashMap<String, Transform<Object, String>> map = new HashMap<String, Transform<Object, String>>(1);
 	map.put("content-to-xml", (json) -> DaggerViewComponent.builder()
-										.withTemplate("templates/transform/content-json-to-xml.twig")
+										.withTemplatePath("templates/transform/content-json-to-xml.twig")
 										.withValue(json)
 										.build()
 										.render()

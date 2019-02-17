@@ -1,38 +1,38 @@
-// VIEW COMPONENT . JAVA
+package cat.calidos.morfeu.view;
 
-package cat.calidos.morfeu.view.injection;
+import static org.junit.Assert.*;
 
-import javax.annotation.Nullable;
-import javax.inject.Named;
+import java.util.HashMap;
 
-import dagger.BindsInstance;
-import dagger.Component;
+import org.junit.Test;
+
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
+import cat.calidos.morfeu.view.injection.ViewComponent;
 
 /**
-* @author daniel giribet
+*	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = ViewModule.class)
-public interface ViewComponent {
-
-String render();
+public class ViewComponentIntTest {
 
 
-@Component.Builder
-interface Builder {
+@Test
+public void testInlineTemplate() {
 
-	@BindsInstance Builder withValue(@Named("value") Object v);
-	@BindsInstance Builder withTemplatePath(@Nullable @Named("templatePath") String p);
-	@BindsInstance Builder withTemplate(@Nullable @Named("template") String p);
-	@BindsInstance Builder andProblem(@Nullable @Named("problem") String p);
+	HashMap<String, Object> values = new HashMap<String, Object>(1);
+	values.put("foo", "bar");	
+	String templ = "value={{ v.foo }}";
 
-	ViewComponent build();
+	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("").build();
+
+	assertEquals("value=bar", view.render());
 
 }
 
+
 }
+
 
 /*
-
  *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,3 +47,4 @@ interface Builder {
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+

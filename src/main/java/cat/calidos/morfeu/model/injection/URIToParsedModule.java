@@ -152,7 +152,7 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		//rootCellModels.stream().map(cm -> cm.getName()).forEach(name -> log.trace("CellModel:{}",name));
 
 		String transformedContent = DaggerViewComponent.builder()
-														.withTemplate("templates/transform/content-yaml-to-xml.twig")
+														.withTemplatePath("templates/transform/content-yaml-to-xml.twig")
 														.withValue(values)
 														.build()
 														.render();
