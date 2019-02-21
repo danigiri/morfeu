@@ -49,7 +49,7 @@ public void streamChainTest() {
 	// while ops left to be done
 	UnaryOperator<String> identity3 = (s) -> s;
 	UnaryOperator<String> replace3 = (s) -> s.replace("1", "2");
-	
+
 		// while string do compose..
 	Function<String, String> stringComposite = identity3.compose(replace3);
 	// if ned to change, apply and then switch modes

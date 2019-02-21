@@ -1,25 +1,10 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// TRANSFORM JSON TO XML INT TEST . JAVA
 
 package cat.calidos.morfeu.model.transform;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -28,11 +13,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.transform.injection.DaggerTransformComponent;
-import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.transform.Converter;
-import cat.calidos.morfeu.transform.StackContext;
-import cat.calidos.morfeu.transform.injection.DaggerContentJSONToXMLComponent;
-import cat.calidos.morfeu.transform.injection.DaggerStackContextComponent;
+import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -95,19 +76,7 @@ public void testConverter() throws Exception {
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	assertNotNull(json);
 
-	String startingPrefix = "";
-	StackContext<JsonNode> context = DaggerStackContextComponent.create().emptyContext();
-	JsonNode children = json.get("children");
-	// FIXME: we need to use dagger here
-	children.forEach(c -> context.push(DaggerContentJSONToXMLComponent.builder()
-																		.fromNode(c)
-																		.withPrefix(startingPrefix)
-																		.builder()
-																		.processor())
-	);
-
-	Converter<JsonNode, String> converter = new Converter<JsonNode, String>(context);
-	String transformed = converter.process();
+	String transformed = DaggerContentConverterComponent.builder().from(json).builder().xml();
 
 	//System.err.println(transformed);
 	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
@@ -115,3 +84,19 @@ public void testConverter() throws Exception {
 }
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

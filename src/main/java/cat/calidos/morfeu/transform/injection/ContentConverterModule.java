@@ -1,17 +1,40 @@
 package cat.calidos.morfeu.transform.injection;
 
+import javax.inject.Named;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
+import dagger.Module;
+import dagger.Provides;
+import cat.calidos.morfeu.transform.Converter;
 import cat.calidos.morfeu.transform.StackContext;
-import dagger.Component;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules={JsonNodeStackContextModule.class})
-public interface StackContextComponent {
+@Module
+public class ContentConverterModule {
 
-StackContext<JsonNode> emptyContext();
+@Provides
+String xml(Converter<JsonNode, String> converter) {
+	return converter.process();
+}
+
+
+@Provides
+Converter<JsonNode, String> converter(@Named("PopulatedContext") StackContext<JsonNode> context) {
+	return new Converter<JsonNode, String>(context);
+}
+
+
+@Provides @Named("PopulatedContext")
+StackContext<JsonNode> populatedContext(StackContext<JsonNode> context, JsonNode json) {
+
+	context.push(DaggerContentJSONToXMLComponent.builder().fromNode(json).withPrefix("").builder().processor());
+
+	return context;
+
+}
 
 }
 

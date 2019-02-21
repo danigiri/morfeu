@@ -1,7 +1,7 @@
 package cat.calidos.morfeu.transform;
 
 
-/** Generic traversal and transformation algorithm
+/** Generic traversal and transformation algorithm, used to convert form one type T to another O
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Converter<T, O> {
@@ -15,6 +15,7 @@ public Converter(Context<T, O> startingContext) {
 }
 
 
+/**	@return return the processed T context */
 public O process() {
 
 	while (!context.empty()) {

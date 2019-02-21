@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// CONTENT SAVE CONTROL . JAVA
 
 package cat.calidos.morfeu.control;
 
@@ -20,8 +6,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-
-import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +19,7 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -88,16 +73,12 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	URI outputURI = DaggerURIComponent.builder().from(destination).builder().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
 	URI fullModelURI = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
-	
+
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
-	
-	String transformedContent = DaggerViewComponent.builder()
-													.withTemplatePath("templates/transform/content-json-to-xml.twig")
-													.withValue(json)
-													.build()
-													.render();
+
+	String transformedContent = DaggerContentConverterComponent.builder().from(json).builder().xml();
 	log.info(">>> Saving content to '{} <<<", outputURI);
- 
+
 	ContentSaverParserComponent component = DaggerContentSaverParserComponent.builder()
 																				.from(transformedContent)
 																				.to(outputURI)
@@ -138,3 +119,19 @@ protected Object problemInformation() {
 
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

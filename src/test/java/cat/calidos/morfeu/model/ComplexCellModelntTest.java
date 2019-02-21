@@ -33,11 +33,11 @@ public class ComplexCellModelntTest extends ModelTezt {
 
 @Test
 public void testSimpleToComplex() throws Exception {
-	
+
 	String path = "target/test-classes/test-resources/models/test-model.xsd";
 	URI modelURI = new URI(path);
 	BasicCellModel cellModel = complexCellModelFrom(modelURI, "test");
-	
+
 	assertTrue(cellModel.isComplex());
 	ComplexCellModel extractedCellModel = ComplexCellModel.from(cellModel);
 	assertNotNull(extractedCellModel);

@@ -15,6 +15,8 @@ import cat.calidos.morfeu.view.injection.ViewComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentJSONToXMLProcessor implements Processor<JsonNode, String> {
 
+private static final String NAME_FIELD = "name";
+
 private static final String CHILDREN_FIELD = "children";
 
 private String prefix;
@@ -42,22 +44,25 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 
 	// now we push the children if there are any
 	if (hasChildren) {
-		newContext.push(DaggerContentJSONToXMLComponent.builder()
-														.fromNode(node)
-														.withPrefix(prefix)
-														.builder()
-														.processorSlash()
-		);
+		
+		if (node.has(NAME_FIELD)) {	// if it's an empty node we don't push a slash processor
+			newContext.push(DaggerContentJSONToXMLComponent.builder()
+															.fromNode(node)
+															.withPrefix(prefix)
+															.builder()
+															.processorSlash()
+			);
+		}
 		String newPrefix = "\t"+prefix;
 		JsonNode children = node.get(CHILDREN_FIELD);
 		LinkedList<Processor<JsonNode, String>> childrenList = new LinkedList<Processor<JsonNode, String>>();
-		children.forEach(c -> childrenList.addFirst(DaggerContentJSONToXMLComponent.builder()
-																				.fromNode(c)
-																				.withPrefix(newPrefix)
-																				.builder()
-																				.processor())
+		children.forEach(c -> childrenList.addFirst(DaggerContentJSONToXMLComponent.builder()	// add at beginning
+																					.fromNode(c)
+																					.withPrefix(newPrefix)
+																					.builder()
+																					.processor())
 		);
-		childrenList.forEach(newContext::push);
+		childrenList.forEach(newContext::push);	// now this is in the correct order
 	}
 
 	return newContext;
@@ -74,37 +79,41 @@ public JsonNode input() {
 @Override
 public String output() {
 
+	// if we don't have a name it means that it's a json node that has no XML representation (like the empty root)
+	
+	String render = "";
+	if (node.has(NAME_FIELD)) {
+		String name = node.get(NAME_FIELD).asText();
+		boolean hasValue = node.has("value");
+		String value = hasValue ? node.get("value").asText() : "";
+		HashMap<String, Object> values = new HashMap<String, Object>(4);
+		values.put(NAME_FIELD, name);
+		values.put("value", value);
+		values.put("pref", prefix);
+		values.put("node", node);
+	
+		String template = null;
+		if (!hasChildren && !hasValue) {
+			template = "{{v.pref}}<{{v.name -}} "+
+						"{%- for a in v.node.internalAttributes " +
+						"	%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% " +
+						"endfor -%}" + 
+						"{%for a in v.node.attributes " +
+						"	%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% " +
+						"endfor -%} />\n";
+		} else {
+			template = "{{v.pref}}<{{v.name -}} "+
+					"{%- for a in v.node.internalAttributes "
+						+ "%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% "
+					+ "endfor -%}" + 
+					"{%for a in v.node.attributes "
+						+ "%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% "
+						+ "endfor -%} >" + (hasValue ? "{{value | xmlc}}" : "\n");
+		}
 
-	String name = node.get("name").asText();
-	boolean hasValue = node.has("value");
-	String value = hasValue ? node.get("value").asText() : "";
-	HashMap<String, Object> values = new HashMap<String, Object>(4);
-	values.put("name", name);
-	values.put("value", value);
-	values.put("pref", prefix);
-	values.put("node", node);
-
-	String template = null;
-	if (!hasChildren && !hasValue) {
-		template = "{{v.pref}}<{{v.name -}} "+
-					"{%- for a in v.node.internalAttributes " +
-					"	%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% " +
-					"endfor -%}" + 
-					"{%for a in v.node.attributes " +
-					"	%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% " +
-					"endfor -%} />\n";
-	} else {
-		template = "{{v.pref}}<{{v.name -}} "+
-				"{%- for a in v.node.internalAttributes "
-					+ "%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% "
-				+ "endfor -%}" + 
-				"{%for a in v.node.attributes "
-					+ "%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% "
-					+ "endfor -%} >" + (hasValue ? "{{value | xmlc}}" : "\n");
+		ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(template).andProblem("").build();
+		render = view.render();
 	}
-
-	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(template).andProblem("").build();
-	String render = view.render();
 
 	return render;
 
