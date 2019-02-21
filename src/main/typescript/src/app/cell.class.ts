@@ -49,14 +49,14 @@ stripPrefixFromURIs(prefix: string) {
 	if (this.getURI().startsWith(prefix)) {
 		// console.log("--> Old uri %s", this.URI);
 		this.URI = this.URI.substr(prefix.length);
-        // console.log("--> New uri %s", this.URI);
-        if (this.attributes) {
+		// console.log("--> New uri %s", this.URI);
+		if (this.attributes) {
             this.attributes = this.attributes.map(a => a.stripPrefixFromURIs(prefix));
-        }
+		}
         if (this.children) {
             this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
         }
-    }
+	}
 
 	return this;
 

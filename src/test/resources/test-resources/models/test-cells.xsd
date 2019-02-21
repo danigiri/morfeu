@@ -78,6 +78,26 @@
 		<xs:attribute name="value" type="textField" />
 	</xs:complexType>
 
+	<!--  drill down well testing, it has a set of rows but they are not presented -->
+	<xs:complexType name="holderWell">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>Holder well that hides its contents</mf:desc>
+					<mf:presentation>CELL-WELL</mf:presentation>
+					<mf:thumb>assets/images/holder-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/holder-cell.svg</mf:cell-presentation>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="text" type="textField" />
+	</xs:complexType>
+
 	<xs:complexType name="colCell">
 		<xs:annotation>
 			<xs:appinfo>
@@ -96,6 +116,7 @@
 			<xs:element name="data3" type="testIdCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="data4" type="testEmptyCell" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="keyvalue" type="keyValueCell" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="holderWell" type="holderWell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="size" use="required" type="colField" />

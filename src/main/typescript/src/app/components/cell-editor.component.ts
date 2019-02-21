@@ -101,9 +101,9 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 
 ngOnInit() {
 	this.subscribe(this.events.service.of( CellEditEvent ).pipe(
-			filter(edit => edit.cell!==undefined && !this.editing))
-			.subscribe(edit => this.edit(edit.cell))
-			);
+				filter(edit => edit.cell!==undefined && !this.editing)
+			).subscribe(edit => this.edit(edit.cell))
+	);
 }
 
 
@@ -119,14 +119,18 @@ private textAreaRows(): number {
 
 private edit(cell: Cell) {
 
-	console.log("[UI] Discard changes at position "+cell.position);
+	console.log("[UI] Edit at position %s [%s]", cell.position, cell.cellModel.presentation);
 	this.editing = true;
 	this.cellBackup = cell.deepClone();
 	this.cell = cell;
 
-	// this.events.service.publish(new CellActivatedEvent(this.cell));
-	this.modalService.open(this.editor).result.then((result) => this.button(result),
-													(reason) => this.outside());
+	// if we are not a CELL-WELL we can edit directly
+
+	if (cell.cellModel.presentation!=="CELL-WELL") {
+		this.modalService.open(this.editor).result.then((result) => this.button(result), (reason) => this.outside());
+	} else {
+		console.debug("We're editing a cell-well");
+	}
 
 }
 
