@@ -12,6 +12,9 @@ import { SerialisableToJSON } from "./serialisable-to-json.interface";
 export class Content implements Adopter, SerialisableToJSON<Content, ContentJSON> {
 	
 children?: Cell[];
+adoptionName: string = "";
+adoptionURI: string = "/";
+
 
 constructor(public schema: number) {}
 
@@ -24,20 +27,34 @@ associateFromRoot(model: Model) {
 
 //associate the content cells with the corresponding cell models, starting from the cell model uri of each
 associate(model: Model) {
-    this.children = this.children.map(c => c.associateWith(model, c.cellModelURI));
+	this.children = this.children.map(c => c.associateWith(model, c.cellModelURI));
 }
 
 
 // mutate the content so this prefix is stripped from all content URIs, useful for snippet documents
 stripPrefixFromURIs(prefix: string) {
-    
-    //if (this.getURI().startsWith(prefix)) {   // not used until we add uri support to content
-    this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
-    //}
-    
-    return this;
-    
+
+	//if (this.getURI().startsWith(prefix)) {   // not used until we add uri support to content
+	this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
+	//}
+
+	return this;
+
 }
+
+
+/** Create a content instance  from a cell fragment, useful to edit bits of the content */
+static fromCell(cell: Cell): Content {
+
+	let contentFragment = new Content(0);
+	contentFragment.children = [cell];
+	contentFragment.adoptionName = cell.getAdoptionName();
+	contentFragment.adoptionURI = cell.getAdoptionURI();
+
+	return contentFragment;
+
+}
+
 
 //// FamilyMember ////
 
@@ -48,12 +65,12 @@ getURI(): string {
 
 // part of the drag and drop scaffolding, we return true if this cell can be one of the root cells
 getAdoptionName(): string {
-	return "";
+	return this.adoptionName;
 }
 
 
 getAdoptionURI(): string {
-	return "/";
+	return this.adoptionURI;
 }
 
 
@@ -142,7 +159,7 @@ children: CellJSON[];
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2019 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

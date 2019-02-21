@@ -129,7 +129,9 @@ private edit(cell: Cell) {
 	if (cell.cellModel.presentation!=="CELL-WELL") {
 		this.modalService.open(this.editor).result.then((result) => this.button(result), (reason) => this.outside());
 	} else {
-		console.debug("We're editing a cell-well");
+		console.debug("We're editing a cell-well so need to load a fragment of the content");
+		// NEED TO CREATE A CONTENT FRAGMENT DISPLAY EVENT HERE
+		// CONTENT NEEDS TO BE ADDED TO A STACK SO CANCELS CAN BE DONE, ETC
 	}
 
 }

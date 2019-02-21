@@ -1,17 +1,11 @@
-// CONTENT - REQUEST . EVENT . TS
+// CONTENT - FRAGMENT - DISPLAY EVENT . TS
 
-import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
+import { Cell } from "../cell.class";
 
-export class ContentRequestEvent {
-
-
-constructor(public document: CellDocument, public model: Model) {}
+export class ContentFragmentDisplayEvent {
 
 
-public toString = (): string => {
-	return "ContentRequestEvent?doc="+this.document.contentURI; 
-}
+constructor(public cell: Cell) {}
 
 
 }
