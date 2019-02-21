@@ -30,23 +30,6 @@ public void setup() throws Exception {
 
 	File inputFile = new File("target/test-classes/test-resources/transform/document1-as-view.json");
 	content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
-	
-}
-
-
-@Test
-public void testTransformUsingTemplate() throws Exception {
-
-	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
-	assertNotNull(json);
-
-	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-json-to-xml.twig")
-												.withValue(json)
-												.build()
-												.render();
-	//System.err.println(transformed);
-	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
 
 }
 
@@ -80,7 +63,7 @@ public void testConverter() throws Exception {
 
 	//System.err.println(transformed);
 	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
-	
+
 }
 
 }

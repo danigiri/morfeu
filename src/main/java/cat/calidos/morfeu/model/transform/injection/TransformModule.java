@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import cat.calidos.morfeu.model.transform.Transform;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import dagger.Module;
@@ -78,15 +79,10 @@ Map<String, Transform<String, String>> stringToStringTransforms() {
 
 
 @Produces Map<String, Transform<Object, String>> objectToStringTransforms() {
-	
+
 	HashMap<String, Transform<Object, String>> map = new HashMap<String, Transform<Object, String>>(1);
-	map.put("content-to-xml", (json) -> DaggerViewComponent.builder()
-										.withTemplatePath("templates/transform/content-json-to-xml.twig")
-										.withValue(json)
-										.build()
-										.render()
-	);
-	
+	map.put("content-to-xml", (json) -> DaggerContentConverterComponent.builder().from((JsonNode)json).builder().xml());
+
 	return map;
 }
 

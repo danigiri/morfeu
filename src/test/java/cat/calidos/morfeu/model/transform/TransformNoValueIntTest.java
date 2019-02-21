@@ -35,6 +35,7 @@ import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -58,16 +59,11 @@ public void setup() throws Exception {
 @Test
 public void testTransformJSONToXML() throws Exception {
 
-	
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	assertNotNull(json);
 
-	String transformed = DaggerViewComponent.builder()
-											.withTemplatePath("templates/transform/content-json-to-xml.twig")
-											.withValue(json)
-											.build()
-											.render();
-	//System.err.println(transformed);
+	String transformed = DaggerContentConverterComponent.builder().from(json).builder().xml();
+	System.err.println(transformed);
 	compareWithXML(transformed, "target/test-classes/test-resources/documents/document4.xml");
 
 }

@@ -44,7 +44,7 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 
 	// now we push the children if there are any
 	if (hasChildren) {
-		
+
 		if (node.has(NAME_FIELD)) {	// if it's an empty node we don't push a slash processor
 			newContext.push(DaggerContentJSONToXMLComponent.builder()
 															.fromNode(node)
@@ -80,7 +80,7 @@ public JsonNode input() {
 public String output() {
 
 	// if we don't have a name it means that it's a json node that has no XML representation (like the empty root)
-	
+
 	String render = "";
 	if (node.has(NAME_FIELD)) {
 		String name = node.get(NAME_FIELD).asText();
