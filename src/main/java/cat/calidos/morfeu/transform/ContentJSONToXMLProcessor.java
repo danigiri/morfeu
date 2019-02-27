@@ -54,7 +54,7 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 			);
 		}
 		String newPrefix = "\t"+prefix;
-		JsonNode children = node.get(CHILDREN_FIELD);
+		JsonNode children = node.get(CHILDREN_FIELD);	// adding directly to the context will mean reverse order
 		LinkedList<Processor<JsonNode, String>> childrenList = new LinkedList<Processor<JsonNode, String>>();
 		children.forEach(c -> childrenList.addFirst(DaggerContentJSONToXMLComponent.builder()	// add at beginning
 																					.fromNode(c)
