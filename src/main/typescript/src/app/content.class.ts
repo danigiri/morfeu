@@ -10,13 +10,21 @@ import { SerialisableToJSON } from "./serialisable-to-json.interface";
 
 
 export class Content implements Adopter, SerialisableToJSON<Content, ContentJSON> {
-	
+
+cell?: Cell;
 children?: Cell[];
 adoptionName: string = "";
 adoptionURI: string = "/";
 
 
-constructor(public schema: number) {}
+constructor(public schema: number, cell?: Cell) {
+
+	if (cell) {
+		this.cell = cell;
+		this.schema = cell.schema;
+	}
+
+}
 
 
 // associate the content cells with the corresponding cell models, starting from the root
@@ -56,6 +64,21 @@ static fromCell(cell: Cell): Content {
 }
 
 
+
+/** Create a content instance  from a list of cell fragments, useful to edit bits of the content */
+static fromCellChildren(cell: Cell): Content {
+
+	let contentFragment = new Content(0);
+	contentFragment.children = cell.children;
+	contentFragment.adoptionName = cell.getAdoptionName();
+	contentFragment.adoptionURI = cell.getAdoptionURI();
+
+	return contentFragment;
+
+}
+
+
+
 //// FamilyMember ////
 
 getURI(): string {
@@ -80,7 +103,8 @@ matches(element: FamilyMember): boolean {
 
 
 canAdopt(newMember: FamilyMember): boolean {
-	return this.children.some(c => c.canAdopt(newMember));
+// FIXME: BUG this is probably wrong, need to check the  current node and not it's children 
+	return this.children ? this.children.some(c => c.canAdopt(newMember)) : false;
 }
 
 

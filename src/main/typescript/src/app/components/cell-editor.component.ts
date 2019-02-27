@@ -11,6 +11,7 @@ import { CellModel } from "../cell-model.class";
 import { CellActivateEvent } from "../events/cell-activate.event";
 import { CellActivatedEvent } from "../events/cell-activated.event";
 import { CellEditEvent } from "../events/cell-edit.event";
+import { ContentFragmentDisplayEvent } from "../events/content-fragment-display.event";
 import { EventListener } from "../events/event-listener.class";
 import { UXEvent } from "../events/ux.event";
 import { EventService } from "../services/event.service";
@@ -120,18 +121,17 @@ private textAreaRows(): number {
 private edit(cell: Cell) {
 
 	console.log("[UI] Edit at position %s [%s]", cell.position, cell.cellModel.presentation);
-	this.editing = true;
-	this.cellBackup = cell.deepClone();
-	this.cell = cell;
 
 	// if we are not a CELL-WELL we can edit directly
 
 	if (cell.cellModel.presentation!=="CELL-WELL") {
+		this.editing = true;
+		this.cellBackup = cell.deepClone();
+		this.cell = cell;
 		this.modalService.open(this.editor).result.then((result) => this.button(result), (reason) => this.outside());
 	} else {
 		console.debug("We're editing a cell-well so need to load a fragment of the content");
-		// NEED TO CREATE A CONTENT FRAGMENT DISPLAY EVENT HERE
-		// CONTENT NEEDS TO BE ADDED TO A STACK SO CANCELS CAN BE DONE, ETC
+		this.events.service.publish(new ContentFragmentDisplayEvent(cell));
 	}
 
 }
