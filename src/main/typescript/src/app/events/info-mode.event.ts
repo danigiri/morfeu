@@ -1,14 +1,14 @@
-// CATALOGUE - LOADED EVENT . TS
+// INFO - MODE EVENT . TS
 
 import { Catalogue } from "../catalogue.class";
 
-export class CatalogueLoadedEvent {
+export class InfoModeEvent {
 
-constructor(public catalogue: Catalogue) {}
+constructor(public active: boolean) {}
 
 
 public toString = (): string => {
-	return "CatalogueLoadedEvent:{catalogue:'"+this.catalogue.name+"'}";
+	return "InfoModeEvent:{active:'"+this.active+"'}";
 }
 
 }

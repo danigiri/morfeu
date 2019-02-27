@@ -1,19 +1,4 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
-
+// DROP - AREA . COMPONENT . TS
 
 import {filter} from 'rxjs/operators';
 
@@ -31,6 +16,7 @@ import { CellModelActivatedEvent } from "./events/cell-model-activated.event";
 import { CellModelDeactivatedEvent } from "./events/cell-model-deactivated.event";
 import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
 import { DropAreaSelectEvent } from "./events/drop-area-select.event";
+import { InfoModeEvent } from "./events/info-mode.event";
 import { EventService } from "./services/event.service";
 import { UXEvent } from "./events/ux.event";
 
@@ -38,14 +24,15 @@ import { UXEvent } from "./events/ux.event";
 	moduleId: module.id,
 	selector: "drop-area",
 	template: `
-			<div class="drop-area" 
-				 [class.drop-area-active]="active && !selected" 
-				 [class.drop-area-inactive]="!active"
-				 [class.drop-area-selected]="selected"
-				 dnd-droppable
-				 [dropEnabled]="active"
-				 (onDropSuccess)="dropSuccess($event)"
-				 ><small>{{position}}</small></div>
+			<div 	class="drop-area" 
+					[class.drop-area-active]="active && !selected" 
+					[class.drop-area-inactive]="!active"
+					[class.drop-area-selected]="selected"
+					[class.drop-area-info]="info"
+					dnd-droppable
+					[dropEnabled]="active"
+					 (onDropSuccess)="dropSuccess($event)"
+			><small>{{position}}</small><small *ngIf="info">[active={{active}}, selected={{selected}}]</small></div>
 		`,
 	styles:[`
 				.drop-area {
@@ -63,11 +50,19 @@ import { UXEvent } from "./events/ux.event";
 					opacity: 0.01;
 				}
 				.drop-area-selected {
-					border: 3px dashed #00f;
+					padding-top: 0px;
+					padding-bottom: 0px;
+					border: 2px dashed #00f;
 					border-radius: 5px;
 				}
-			`],
-	providers:[]
+				.drop-area-info {
+					padding-top: 0px;
+					padding-bottom: 0px;
+					border: 2px dashed #444444;
+					border-radius: 5px;
+					opacity: 0.8;
+				}
+			`]
 })
 
 
@@ -78,12 +73,10 @@ export class DropAreaComponent extends SelectableWidget implements OnInit {
 
 active: boolean = false;
 selected: boolean = false;			// are we selected?
-
+info: boolean = false;
 
 constructor(eventService: EventService) {
-
-	super(eventService);   
-
+	super(eventService);
 }
 
 
@@ -116,7 +109,7 @@ ngOnInit() {
 					this.becomeInactive();
 				}
 	}));
-	
+
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
 			.subscribe( a => {
 				if (a.cellModel && this.matchesCellmodel(a.cellModel)) {
@@ -124,21 +117,23 @@ ngOnInit() {
 					this.becomeActive();
 				}
 	}));
-	
+
 	this.subscribe(this.events.service.of( CellDropEvent ).pipe(
 			filter(cd => this.selected && cd.newParent==undefined))
 			.subscribe( cd => {
 				console.log("-> drop comp gets cell drop event from '"+cd.cell.name+"'");
 				this.performDropHere(cd.cell, this.parent, this.position);
 	}));
-	
+
+	this.subscribe(this.events.service.of( InfoModeEvent ).subscribe( mode => this.info = mode.active));
+
 }
 
 
 select(position:number) {
-	
+
 	if (this.active && position==this.position) {
-		
+
 		console.log("[UI] DropAreaComponent::select("+this.parent.getURI()+"["+this.position+"])");
 		this.selected = true;
 		this.unsubscribeFromSelection();
@@ -148,13 +143,13 @@ select(position:number) {
 		this.unsubscribeFromSelectionClear();
 		this.events.service.publish(new CellSelectionClearEvent());
 		this.subscribeToSelectionClear();
-		
+
 	} else if (this.parent && position>=this.parent.childrenCount()) {
 		console.log("[UI] DropAreaComponent::select(out of bounds)");
 	} else {
 		this.clearSelection();	// out of bounds, sorry, clear
 	}
-	
+
 }
 
 
@@ -185,6 +180,7 @@ matchesCell(cell:Cell): boolean {
 
 
 matchesCellmodel(cellModel:CellModel):boolean {
+	console.debug("matching with %s, this.parent="+(this.parent&& true)+",canAdopt="+this.parent && this.parent.canAdopt(cellModel), cellModel.getAdoptionName());
 	return this.parent && this.parent.canAdopt(cellModel);
 }
 
@@ -198,12 +194,30 @@ dropSuccess($event: any) {
 
 
 performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
-	
+
 	console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
 	this.events.service.publish(new CellDropEvent(cell, this.parent, this.position));
 	// the document is now dirty
 	this.events.service.publish(new UXEvent(UXEvent.DOCUMENT_DIRTY));
-	
-}
 
 }
+
+
+}
+
+/*
+ *	  Copyright 2019 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */
+ 
