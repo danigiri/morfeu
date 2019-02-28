@@ -174,13 +174,13 @@ becomeActive() {
 }
 
 
-matchesCell(cell:Cell): boolean {
+matchesCell(cell: Cell): boolean {
 	return this.parent && this.parent.canAdopt(cell);
 }
 
 
-matchesCellmodel(cellModel:CellModel):boolean {
-	console.debug("matching with %s, this.parent="+(this.parent&& true)+",canAdopt="+this.parent && this.parent.canAdopt(cellModel), cellModel.getAdoptionName());
+matchesCellmodel(cellModel: CellModel): boolean {
+	//console.debug("matching with %s, this.parent="+(this.parent&& true)+",canAdopt="+this.parent && this.parent.canAdopt(cellModel), cellModel.getAdoptionName());
 	return this.parent && this.parent.canAdopt(cellModel);
 }
 

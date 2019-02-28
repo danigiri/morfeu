@@ -127,7 +127,7 @@ normaliseReferencesWith(rootCellModels: CellModel[]) {
 canGenerateNewCell(): boolean {
 	// not dragging WELL-type cell models for the moment, as it is quite a complex use case, so we only allow
 	// cell models that do not have any children
-	// trying to drag WELL-type cell models
+	// (now trying to drag WELL-type cell models)
 	// return this.childrenCount()==0;
 	return true;
 }

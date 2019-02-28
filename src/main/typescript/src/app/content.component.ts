@@ -52,7 +52,7 @@ import { RemoteEventService } from "./services/remote-event.service";
 				[cell]="cell" [level]="0" 
 				[position]="i"
 				></cell>
-			<!-- TODO: static checks using the moel and not what's already present (cells) -->
+			<!-- TODO: static checks using the model and not what's already present (cells) -->
 		</div>
 		<!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
 		<ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->
@@ -196,7 +196,7 @@ displayContentFragment(cell: Cell) {
 	console.debug("[UI] ContentComponent::displayContentFragment()");
 
 
-	let c = Content.fromCellChildren(cell);
+	let c = new Content(cell.schema, cell);
 	this.displayContent(c);
 
 }

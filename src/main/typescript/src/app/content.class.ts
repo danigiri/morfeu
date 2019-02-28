@@ -16,12 +16,19 @@ children?: Cell[];
 adoptionName: string = "";
 adoptionURI: string = "/";
 
-
+/**
+	@argument schema: schema number
+	@argument cell?: cell that holds this content, relevant for cell fragments when drilling down
+*/
 constructor(public schema: number, cell?: Cell) {
 
+	// this can be a stepstone for empty cells at the root and getting rid of the content object
 	if (cell) {
+		console.debug("Creating content from cell %s", cell.getAdoptionName());
 		this.cell = cell;
 		this.schema = cell.schema;
+		this.adoptionName = cell.getAdoptionName();
+		this.adoptionURI = cell.getAdoptionURI();
 	}
 
 }
@@ -51,34 +58,6 @@ stripPrefixFromURIs(prefix: string) {
 }
 
 
-/** Create a content instance  from a cell fragment, useful to edit bits of the content */
-static fromCell(cell: Cell): Content {
-
-	let contentFragment = new Content(0);
-	contentFragment.children = [cell];
-	contentFragment.adoptionName = cell.getAdoptionName();
-	contentFragment.adoptionURI = cell.getAdoptionURI();
-
-	return contentFragment;
-
-}
-
-
-
-/** Create a content instance  from a list of cell fragments, useful to edit bits of the content */
-static fromCellChildren(cell: Cell): Content {
-
-	let contentFragment = new Content(0);
-	contentFragment.children = cell.children;
-	contentFragment.adoptionName = cell.getAdoptionName();
-	contentFragment.adoptionURI = cell.getAdoptionURI();
-
-	return contentFragment;
-
-}
-
-
-
 //// FamilyMember ////
 
 getURI(): string {
@@ -103,13 +82,28 @@ matches(element: FamilyMember): boolean {
 
 
 canAdopt(newMember: FamilyMember): boolean {
-// FIXME: BUG this is probably wrong, need to check the  current node and not it's children 
-	return this.children ? this.children.some(c => c.canAdopt(newMember)) : false;
+
+	if (this.cell) {
+
+		return this.cell.canAdopt(newMember);
+
+	} else {
+
+		// FIXME: BUG this is probably wrong, need to check the  current node and not it's children
+		return this.children ? this.children.some(c => c.canAdopt(newMember)) : false;
+
+	}
 }
 
 
-childrenCount():number {
-	return this.children ? this.children.length : 0;
+childrenCount(): number {
+
+	if (this.cell) {
+		return this.cell.childrenCount();
+	} else {
+		return this.children ? this.children.length : 0;
+	}
+
 }
 
 
@@ -119,31 +113,46 @@ equals(m: FamilyMember) {
 
 
 getParent(): FamilyMember {
-	return undefined;
+	return this.cell ? this.cell.getParent() : undefined;
 }
 
 
 //// Adopter ////
 
-adopt(orphan:Cell, position:number) {
-	//TODO: to be implemented
+adopt(orphan: Cell, position: number) {
+
+	if (this.cell) {
+		this.cell.adopt(orphan, position);
+	} else {
+		//TODO: to be implemented when there is no cell
+		console.error("Method not implemented");
+	}
+
 }
 
 
-remove(child:Cell) {
-	//TODO: to be implemented
+remove(child: Cell) {
+
+	if (this.cell) {
+		this.cell.remove(child);
+	} else {
+		//TODO: to be implemented when there is no cell
+		console.error("Method not implemented");
+	}
 }
 
 
 //// SerialisableToJSON ////
 
 toJSON(): ContentJSON {
+	// not implementing the cell fragment option as it's not applicable yet
 	return Object.assign({}, this, {children: this.children.map(c => c.toJSON())});
 }
 
 
 fromJSON(json: ContentJSON|string): Content {
 
+	// not implementing the cell fragment option as it's not applicable yet
 	if (typeof json === "string") {
 
 		return JSON.parse(json, Content.reviver);

@@ -76,6 +76,7 @@ findCellModel(uri: string): CellModel {
     return foundCellModels[0];
 }
 
+
 adopt(newMember:Cell, position:number) {}
 
 
@@ -118,7 +119,7 @@ name: string;
 desc: string;
 valid: boolean;
 cellModels: CellModelJSON[];
-	
+
 }
 
 /*
