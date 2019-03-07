@@ -65,7 +65,7 @@ public void testParseModel() throws Exception {
 	assertEquals("", model.getMetadata().getThumb());	// testing values of root node
 	assertFalse("Root node should never be simple", model.isSimple());
 	assertTrue("Root node should always be complex", model.isComplex());
-	
+
 	Composite<CellModel> rootCellModels = model.children();
 	assertNotNull(rootCellModels);
 	assertEquals(1, rootCellModels.size());

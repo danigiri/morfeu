@@ -12,7 +12,6 @@ import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.util.DomAnnotationParserFactory;

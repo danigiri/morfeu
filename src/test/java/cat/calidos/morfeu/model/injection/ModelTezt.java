@@ -46,12 +46,7 @@ throws InterruptedException, ExecutionException, ParsingException, FetchingExcep
 	String doc1Path = testAwareFullPathFrom(path);
 	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
 
-	DocumentComponent docComponent = DaggerDocumentComponent.builder()
-										.from(uri)
-										.withPrefix("")
-										.build();
-
-	return docComponent.document().get();
+	return DaggerDocumentComponent.builder().from(uri).withPrefix("").build().document().get();
 
 }
 
