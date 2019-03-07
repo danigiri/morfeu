@@ -84,7 +84,7 @@ public void testRootAnonymousType() throws Exception {
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.buildType(modelURI, "cell-model-name", xsType,emptyMedatada);
+	Type type = TypeModule.type(modelURI, "cell-model-name", xsType, emptyMedatada);
 	assertEquals("cell-model-name", type.getName());
 	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
 	assertEquals("CELL-PRESENTATION", type.getMetadata().getCellPresentation());
@@ -136,7 +136,7 @@ public void testRootAnonymousType() throws Exception {
 public void testTextSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "textField");
-	Type type = TypeModule.buildType(modelURI, "not used default", xsType, emptyMedatada);
+	Type type = TypeModule.type(modelURI, "not used default", xsType, emptyMedatada);
 	assertEquals("textField", type.getName());
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
@@ -152,7 +152,7 @@ public void testTextSimpleType() {
 public void testIntegerSimpleType() {
 	
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "numberField");
-	Type type = TypeModule.buildType(modelURI, "not used default", xsType, emptyMedatada);
+	Type type = TypeModule.type(modelURI, "not used default", xsType, emptyMedatada);
 	assertEquals("numberField", type.getName());
 	assertTrue(type.isSimple());
 	
@@ -163,14 +163,25 @@ public void testIntegerSimpleType() {
 
 @Test
 public void testColFieldSimpleType() {
-	
+
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colField");
-	Type type = TypeModule.buildType(modelURI, "not used default", xsType, emptyMedatada);
+	Type type = TypeModule.type(modelURI, "not used default", xsType, emptyMedatada);
 	assertEquals("colField", type.getName());
 	assertTrue(type.isSimple());
-		
+
 	// notice that we are not writing a full validation as XML Schema will do this for us
 	validateInteger(type);
+
+}
+
+
+@Test
+public void testEmptyType() {
+	
+	Type type = TypeModule.emptyType(modelURI, "defaultName");
+	assertEquals("defaultName", type.getName());
+	assertFalse(type.isSimple());
+	assertNull(type.getMetadata());
 	
 }
 

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
+import javax.inject.Named;
 
 import org.w3c.dom.Node;
 
@@ -42,7 +43,7 @@ interface Builder {
 
 	@BindsInstance Builder from(@Nullable XSAnnotation annotation); 
 	@BindsInstance Builder andTag(String tag);
-	
+
 	MetadataAnnotationComponent build();
 
 }

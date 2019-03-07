@@ -1,18 +1,4 @@
-/*
- *    Copyright 2017 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// TYPE MODULE . JAVA
 
 package cat.calidos.morfeu.model.injection;
 
@@ -20,7 +6,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +21,12 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 
+import dagger.Module;
+import dagger.Provides;
+
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
-import dagger.Module;
-import dagger.Provides;
 
 /**
 * @author daniel giribet
@@ -48,30 +37,38 @@ public class TypeModule {
 protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 
 @Provides
-public static Type buildType(URI uri,
-							 String defaultName, 
-							 XSType xsType, 
-							 Metadata metadata) {
-	
+public static Type type(@Named("EffectiveURI") URI uri,
+						String defaultName, 
+						@Nullable XSType xsType, 
+						Metadata metadata) {
+
 	// if it's a local type we use the cell model name
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
 	boolean global = xsType.isGlobal();
-	
+
 	return new Type(uri, name, xsType, global, metadata);
-	
+
 }
 
 
-@Provides
-URI uri(XSType xsType) {
-	
-	URI u = null;
-	try {
-		//TODO: build a real URI that can be accessed in the future
-		Locator locator = xsType.getLocator();
-		u = new URI(locator.getSystemId());
-	} catch (URISyntaxException e) {
-		log.error("What the heck, locator-based URI of element '{}' is not valid ", xsType.getName());
+@Provides @Named("Empty")
+public static Type emptyType(@Named("EffectiveURI") URI uri, String defaultName) {
+	return new Type(uri, defaultName);
+}
+
+
+@Provides @Named("EffectiveURI")
+URI uri(@Nullable XSType xsType, @Nullable URI uri) {
+
+
+	URI u = uri;	// if not overwritten by our caller (when uri!=null, we try to extract it from the typee
+	if (u==null) {
+		try {
+			Locator locator = xsType.getLocator();
+			u = new URI(locator.getSystemId());
+		} catch (URISyntaxException e) {
+			log.error("What the heck, locator-based URI of element '{}' is not valid ", xsType.getName());
+		}
 	}
 	
 	return u;
@@ -80,13 +77,8 @@ URI uri(XSType xsType) {
 
 
 @Provides
-public static Metadata metadata(XSType xsType, URI uri) {
-	
-	return DaggerModelMetadataComponent.builder()
-		.from(xsType.getAnnotation())
-		.withParentURI(uri)
-		.build()
-		.value();
+public static Metadata metadata(@Nullable XSType xsType, @Named("EffectiveURI") URI uri) {
+	return DaggerModelMetadataComponent.builder().from(xsType.getAnnotation()).withParentURI(uri).build().value();
 }
 
 
@@ -102,7 +94,20 @@ public static Metadata metadata(XSType xsType, URI uri) {
 // get the attributes
 //Collection<? extends XSAttributeUse> attributeUses = complexType.getAttributeUses();
 
-
-
-
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

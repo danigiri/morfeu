@@ -1,29 +1,14 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// MODEL MODULE . JAVA
 
 package cat.calidos.morfeu.model.injection;
 
 import java.io.FileNotFoundException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -35,7 +20,6 @@ import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.impl.util.SchemaTreeTraverser;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 import dagger.producers.ProducerModule;
@@ -45,29 +29,35 @@ import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 import cat.calidos.morfeu.model.metadata.injection.GlobalModelMetadataModule;
+import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.OrderedMap;
 import cat.calidos.morfeu.utils.injection.RemoteModule;
 
 
-/**
+/** A model is just a specialised cellmodel at the root, may have additional metadata
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule(includes={ModelParserModule.class, GlobalModelMetadataModule.class})
 public class ModelModule extends RemoteModule {
 
+public static final String ROOT_NAME = "<ROOT>";
 
 // here we're using the model uri as it will be used to populate internal uri of cell models and it's a neat 
 // representation
 @Produces
-public static Model produceModel(@Named("ModelURI") URI u,
-								@Named("desc") String desc,
-								@Named("FetchableModelURI") URI fetchableURI,
-								XSSchemaSet schemaSet, 
-								@Named("RootCellModels") List<CellModel> rootTypes) {
-	return new Model(u, desc, fetchableURI, schemaSet, rootTypes);
+public static Model model(@Named("ModelURI") URI u,
+							@Named("desc") String desc,
+							Type type,
+							Metadata metadata,
+							Attributes<CellModel> attributes,
+							XSSchemaSet schemaSet,
+							@Named("RootCellModels") Composite<CellModel> rootCellModels) {
+	return new Model(u, ROOT_NAME, desc, type, 1, 1, metadata, Optional.empty(), attributes, schemaSet, rootCellModels);
 }
 
 
@@ -93,33 +83,29 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 	}
 	
 	return schemaSet;
-	
+
 }
 
 
 @Produces @Named("RootCellModels")
-public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
-												@Named("ModelURI") URI u,
-												Map<URI, Metadata> globalMetadata) {
+public static Composite<CellModel> rootCellModels(XSSchemaSet schemaSet,
+													@Named("ModelURI") URI u,
+													Map<URI, Metadata> globalMetadata) {
 
-	SchemaTreeTraverser traverser = new SchemaTreeTraverser();
-	traverser.visit(schemaSet);
-	//SchemaTreeModel model = traverser.getModel();
-	
-	ArrayList<CellModel> rootCellModels = new ArrayList<CellModel>();
+	Composite<CellModel> rootCellModels = new OrderedMap<CellModel>(schemaSet.getSchemaSize());
 	Set<Type> processedTypes = new HashSet<Type>();
 	Map<String, CellModel> globals = new HashMap<String, CellModel>();
-	
-	Iterator<XSElementDecl> iterator = schemaSet.iterateElementDecls();
-	iterator.forEachRemaining(elem -> {
-										XSParticle part = elem.getType().asComplexType().getContentType().asParticle();
-										CellModel cellModel = buildCellModel(elem,
+
+	Iterator<XSElementDecl> elems = schemaSet.iterateElementDecls();
+	elems.forEachRemaining(elem -> {
+									XSParticle part = elem.getType().asComplexType().getContentType().asParticle();
+									CellModel cellModel = buildCellModel(elem,
 																			part,
 																			u,
 																			processedTypes,
 																			globals,
 																			globalMetadata);
-										rootCellModels.add(cellModel);
+									rootCellModels.addChild(cellModel.getName(), cellModel);
 									}
 	);
 
@@ -129,18 +115,36 @@ public static List<CellModel> buildRootCellModels(XSSchemaSet schemaSet,
 
 
 @Produces @Named("desc")
-public static String descriptionFromSchemaAnnotation(XSAnnotation annotation) {
+public static String description(Metadata metadata) {
+	return metadata.getDesc();
+}
+
+
+@Produces
+public static Type type(@Named("ModelURI") URI u) {	// empty type for the model as it's only virtual
+	return DaggerTypeComponent.builder().withDefaultName(ROOT_NAME).andURI(u).build().emptyType();
+}
+
+
+@Produces
+public static Metadata metadata(@Named("ModelURI") URI u, XSAnnotation annotation) {
 	return DaggerModelMetadataComponent.builder()
 										.from(annotation)
+										.withParentURI(u)
 										.build()
-										.value()
-										.getDesc();	
+										.value();
 }
 
 
 @Produces
 public static XSAnnotation annotationFrom(XSSchemaSet schemaSet) {
 	return schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
+}
+
+
+@Produces
+public static Attributes<CellModel> attributes() {
+	return new OrderedMap<CellModel>(0);
 }
 
 
@@ -162,4 +166,22 @@ private static CellModel buildCellModel(XSElementDecl elem,
 									.cellModel();
 }
 
+
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+

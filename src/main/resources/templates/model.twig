@@ -1,14 +1,7 @@
 {
-	"schema" : 0
-	,"URI": "{{v.URI}}"
-	,"name": "{{v.Name}}"
-	,"desc": "{{v.Desc}}"
-	,"valid": true
+	{% include "cell-model.twig" with {'cm': v} only %}
+	,"valid": {% if defined(problem) %}false{% else %}true{% endif %}
 	{% if defined(problem) %}
 		,"problem": "{{ problem }}"
 	{% endif %}
-	
-	,"cellModels": [{% for cellModel in v.rootCellModels %}
-			{% include "cell-model.twig" with {'cm': cellModel} only %} {% if (loop.last) %} {%else%},,{%endif%}
-		{% endfor %}]
 }

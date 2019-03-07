@@ -47,7 +47,7 @@ private ComplexCellModel testCellModel;
 
 @Before
 public void setup() throws Exception {
-	
+
 	String contentPath = "target/test-classes/test-resources/documents/document1.xml";
 	contentURI = new URI(contentPath);
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd";

@@ -26,7 +26,7 @@ import dagger.producers.ProductionComponent;
 /** This is at the moment only used for testing, as SchemaParserModule is included directly as a dependency
 * 	(Eclipse gets confused about this one, so moving it from the test location to here)
 * @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ModelParserModule.class, ListeningExecutorServiceModule.class})
 public interface ModelParserComponent {
 

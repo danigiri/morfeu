@@ -56,6 +56,14 @@ public OrderedMap(int initialCapacity) {
 
 }
 
+public  OrderedMap(String name, T value) {
+
+	this(1);
+
+	this.addAttribute(name, value);
+
+}
+
 
 @Override
 public boolean hasChildren() {
@@ -183,6 +191,12 @@ private T get(String name, String what) throws InternalException {
 	} else {
 		throw new InternalException("Cannot get '"+what+"' named '"+name+"'");
 	}
+}
+
+
+@Override
+public Stream<T> stream() {
+	return values.values().stream();
 }
 
 

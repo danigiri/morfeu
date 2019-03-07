@@ -1,4 +1,4 @@
-{
+
 	"schema": 0
 	,"URI": "{{cm.URI}}"
 	,"name": "{{cm.Name}}"
@@ -36,12 +36,12 @@
 	{% endif %}	
 	{% if cm.isComplex %}
 		,"attributes": [{% for a in cm.asComplex.attributes.asList %}
-				{% include "cell-model.twig" with {'cm': a} only %} {% if (loop.last) %} {%else%},{%endif%}
+				{ {% include "cell-model.twig" with {'cm': a} only %} } {% if (loop.last) %} {%else%},{%endif%} 
 			{% endfor %}]
 		{% if not (cm.isReference) %}
 			,"children": [{% for c in cm.asComplex.children.asList %}
-							{% include "cell-model.twig" with {'cm': c} only %} {% if (loop.last) %} {%else%},{%endif%}
+							{ {% include "cell-model.twig" with {'cm': c} only %} } {% if (loop.last) %} {%else%},{%endif%}
 						{% endfor %}]
 		{% endif %}
 	{% endif %}
-}
+

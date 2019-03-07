@@ -1,5 +1,43 @@
+// TYPE COMPONENT . JAVA
+
+package cat.calidos.morfeu.model.injection;
+
+import java.net.URI;
+
+import javax.annotation.Nullable;
+import javax.inject.Named;
+
+import com.sun.xml.xsom.XSType;
+
+import dagger.BindsInstance;
+import dagger.Component;
+
+import cat.calidos.morfeu.model.Type;
+
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Component(modules=TypeModule.class)
+public interface TypeComponent {
+
+Type type();
+@Named("Empty") Type emptyType();
+
+@Component.Builder
+interface Builder {
+
+	@BindsInstance Builder withXSType(@Nullable XSType xsType);
+	@BindsInstance Builder withDefaultName(String name);
+	@BindsInstance Builder andURI(@Nullable URI uri); // when we do not have an XSType to extract the uri from
+
+	TypeComponent build();
+
+}
+
+}
+
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -13,29 +51,3 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-package cat.calidos.morfeu.model.injection;
-
-import com.sun.xml.xsom.XSType;
-
-import cat.calidos.morfeu.model.Type;
-import dagger.BindsInstance;
-import dagger.Component;
-
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=TypeModule.class)
-public interface TypeComponent {
-
-Type type();
-
-@Component.Builder
-interface Builder {
-
-	@BindsInstance Builder withXSType(XSType xsType);
-	@BindsInstance Builder withDefaultName(String name);
-	
-	TypeComponent build();
-}
-}

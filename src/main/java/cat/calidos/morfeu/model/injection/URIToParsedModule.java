@@ -145,7 +145,7 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		JsonNode yaml = mapper.readTree(fetchedRawContent);
 		Map<String, Object> values = new HashMap<String, Object>(2);
 
-		List<CellModel> rootCellModels = model.get().get().getRootCellModels();
+		List<CellModel> rootCellModels = model.get().get().children().asList();
 		values.put("cellmodels", rootCellModels);
 		values.put("yaml", yaml);
 		values.put("case", "yaml-to-xml");

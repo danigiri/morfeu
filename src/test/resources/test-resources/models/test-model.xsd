@@ -5,6 +5,9 @@
 	<xs:annotation>
 		<xs:appinfo>
 			<mf:desc>Description of test model</mf:desc>
+			<mf:presentation>ROOT</mf:presentation>	<!-- metadata for the root model, not needed -->
+			<mf:thumb></mf:thumb>
+			<mf:cell-presentation></mf:cell-presentation>
 			<mf:extra-metadata>
 				<mf:metadata uri="test/row/col/stuff">
 					<mf:desc>Large body of text</mf:desc>

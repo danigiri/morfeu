@@ -59,7 +59,7 @@ protected final static Logger log = LoggerFactory.getLogger(ContentParserModule.
 @Produces
 public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 												@Named("ContentNodes") LinkedList<Node> nodes,
-												@Named("CellModels") List<CellModel> cellModels) // <- CellModelsFilter
+												@Named("CellModels") Composite<CellModel> cellModels) // <- CellModelsFilter
 								throws ParsingException {
 	
 	//FIXME: this is a quite repetitive from cellmodule, not following DRY	

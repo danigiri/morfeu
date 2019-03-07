@@ -39,7 +39,7 @@ public ComplexCellModel(URI u,
 						int maxOccurs, 
 						Metadata meta, 
 						Optional<String> defaultValue,
-						Attributes<CellModel> attributes, 
+						Attributes<CellModel> attributes,
 						Composite<CellModel> children) {
 
 	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, meta);

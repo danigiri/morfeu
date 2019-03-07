@@ -30,6 +30,7 @@ import org.junit.Test;
 import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -55,14 +56,20 @@ public void setup () throws Exception {
 
 @Test
 public void testParseModel() throws Exception {
-	
+
 	assertEquals(modelURI, model.getURI());
 	assertEquals("Description of test model", model.getDesc());
+	assertEquals("<ROOT>", model.getType().getName());
+	assertEquals("ROOT", model.getMetadata().getPresentation());	// testing values of root node
+	assertEquals("", model.getMetadata().getCellPresentation());	// testing values of root node
+	assertEquals("", model.getMetadata().getThumb());	// testing values of root node
+	assertFalse("Root node should never be simple", model.isSimple());
+	assertTrue("Root node should always be complex", model.isComplex());
 	
-	List<CellModel> rootCellModels = model.getRootCellModels();
+	Composite<CellModel> rootCellModels = model.children();
 	assertNotNull(rootCellModels);
 	assertEquals(1, rootCellModels.size());
-	CellModel test = rootCellModels.get(0);
+	CellModel test = rootCellModels.child(0);
 	assertEquals("test", test.getName());
 	assertEquals("test-type", test.getType().getName());
 
@@ -72,15 +79,15 @@ public void testParseModel() throws Exception {
 @Test
 public void testGlobalMetadata() {
 
-	ComplexCellModel col = model.getRootCellModels()
-								.get(0)
-								.asComplex()
-								.children()
-								.child("row")
-								.asComplex()
-								.children()
-								.child("col")
-								.asComplex();
+	ComplexCellModel col = model.children()
+									.child(0)
+									.asComplex()
+									.children()
+									.child("row")
+									.asComplex()
+									.children()
+									.child("col")
+									.asComplex();
 
 	CellModel data2 = col.children().child("data2");
 	assertEquals("Globally provided description of 'data2'", data2.getMetadata().getDesc());
@@ -96,15 +103,15 @@ public void testGlobalMetadata() {
 @Test
 public void testMetadataDirectives() {
 	
-	ComplexCellModel col = model.getRootCellModels()
-			.get(0)
-			.asComplex()
-			.children()
-			.child("row")
-			.asComplex()
-			.children()
-			.child("col")
-			.asComplex();
+	ComplexCellModel col = model.children()
+									.child(0)
+									.asComplex()
+									.children()
+									.child("row")
+									.asComplex()
+									.children()
+									.child("col")
+									.asComplex();
 
 	Metadata meta = col.children().child("data").getMetadata();
 	Map<String, Set<String>> directives = meta.getDirectives();

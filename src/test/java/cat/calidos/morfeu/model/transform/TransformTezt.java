@@ -72,7 +72,7 @@ protected String transformYAMLToXML(String yamlPath, String documentPath) throws
 	assertNotNull(doc);
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("yaml", yaml);
-	values.put("cellmodels", doc.getModel().getRootCellModels());
+	values.put("cellmodels", doc.getModel().children());
 	values.put("case","yaml-to-xml");
 	
 	return DaggerViewComponent.builder()

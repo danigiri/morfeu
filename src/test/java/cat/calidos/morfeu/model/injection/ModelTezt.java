@@ -1,19 +1,4 @@
-/*
- *    Copyright 2017 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-
+// MODEL TEZT . JAVA
 package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
@@ -31,8 +16,10 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
 
+import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
+import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
@@ -69,17 +56,19 @@ throws InterruptedException, ExecutionException, ParsingException, FetchingExcep
 }
 
 
-protected Model parseModelFrom(URI u) throws ConfigurationException, 
-											 InterruptedException, 
-											 ExecutionException, ParsingException, FetchingException {
-		
+protected Model parseModelFrom(URI u) throws ConfigurationException, InterruptedException, ExecutionException, 
+											ParsingException, FetchingException {
+
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
+	Metadata metadata = ModelModule.metadata(u, annotation);
+	String desc = ModelModule.description(metadata);
+	Type type = DaggerTypeComponent.builder().withDefaultName(ModelModule.ROOT_NAME).andURI(u).build().emptyType();
+	Attributes<CellModel> attributes = ModelModule.attributes();
 	Map<URI, Metadata> globalModelMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, u);
-	List<CellModel> rootCellModels = ModelModule.buildRootCellModels(schemaSet, u, globalModelMetadata);
-	String desc = ModelModule.descriptionFromSchemaAnnotation(annotation);
-	
-	return ModelModule.produceModel(u, desc, u, schemaSet, rootCellModels);
+	Composite<CellModel> rootCellModels = ModelModule.rootCellModels(schemaSet, u, globalModelMetadata);
+
+	return ModelModule.model(u, desc, type, metadata, attributes, schemaSet, rootCellModels);
 
 }
 
@@ -127,11 +116,28 @@ protected XSSchemaSet parseSchemaFrom(URI uri)
 protected Type provideElementType(XSElementDecl elem) {
 
 	return DaggerTypeComponent.builder()	//awfully convenient to inject the dependencies, ok on integration tests
-			.withDefaultName("default-type-name")
-			.withXSType(elem.getType())
-			.build()
-			.type();
+								.withDefaultName("default-type-name")
+								.withXSType(elem.getType())
+								.build()
+								.type();
 
 }
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
