@@ -33,20 +33,19 @@ public static Composite<CellModel> filterCellModels(@Named("RootCellModels") Com
 
 	if (cellModelFilter.isPresent()) {
 		URI filter = cellModelFilter.get();
-		
 		log.trace("*** Looking for cell model filter "+filter);
-		
-		CellModel cellModel = cellModels.stream().map(cm -> lookForCellModel(cm,filter))
-													.findFirst()
-													.get()
-													.orElseThrow(() ->  new ParsingException("Wrong filter "+filter));
+		CellModel cellModel = cellModels.stream()
+											.map(cm -> lookForCellModel(cm,filter))
+											.findFirst()
+											.get()
+											.orElseThrow(() ->  new ParsingException("Wrong filter "+filter));
 	
 		return new OrderedMap<CellModel>(cellModel.getName(), cellModel);
 	
 	} else {
 
 		return cellModels;
-		
+
 	}
 
 }
@@ -62,7 +61,7 @@ private static Optional<CellModel> lookForCellModel(CellModel cellModel, URI fil
 
 	if (cellModel.getURI().equals(filter)) {
 		found = Optional.of(cellModel);
-	} else if (cellModel.isSimple()) {
+	} else if (cellModel.isSimple() || cellModel.isReference()) {	// guard against references to avoid infinite loops
 		found = Optional.empty();
 	} else {
 
