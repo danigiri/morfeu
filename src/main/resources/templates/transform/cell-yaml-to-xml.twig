@@ -10,7 +10,7 @@
 				{%- for a in c.asComplex.attributes.asList -%} 
 				{%- if yaml.has(a.name) -%}
 					{%- set found = true -%}
-					{%- include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml, 'cellmodels':[c], 'i':i, 'case': case} only -%}
+					{%- include 'cell-yaml-to-xml.twig' with {'yaml': yaml, 'cellmodels':[c], 'i':i, 'case': case} only -%}
 				{%- endif -%}
 				{%- endfor -%}
 				{%- if not found -%}
@@ -23,7 +23,7 @@
 						{%- if yaml.has(matchname) -%}
 							{#- Matched a field in the yaml and an attribute, we assume we have a match -#}
 							{%- set found = true -%}
-							{%- include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
+							{%- include 'cell-yaml-to-xml.twig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
 						{%- endif -%}
 					{%- endfor -%}
 				{% endif %}
@@ -46,7 +46,7 @@
 			{%- if cellmodels[0].metadata.getDirectivesFor(case).contains('KEY-VALUE') -%}
 				{%- set kvs = yaml.fields -%}
 				{%- for kvi in range(yaml.size()) -%}
-{% include 'cell-complex-yaml-to-xml.dtwig' with {'yaml': kvs.next(), 'cellmodel':cellmodels[0], 'i':i, 'case': case} only %}
+{% include 'cell-complex-yaml-to-xml.twig' with {'yaml': kvs.next(), 'cellmodel':cellmodels[0], 'i':i, 'case': case} only %}
 {% endfor-%}
 			{%- else -%}
 {% include 'cell-complex-yaml-to-xml.twig' with {'yaml': yaml, 'cellmodel':cellmodels[0], 'i':i, 'case': case} only -%}
@@ -61,7 +61,7 @@
 {% elseif yaml.isArray -%}
 	{#- ___________ yaml is array _________ -#}
 	{%- for y in range(yaml.size()) -%}
-{% include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml.get(y), 'cellmodels':cellmodels, 'i':concat(i,'\t'), 'case': case} only -%}
+{% include 'cell-yaml-to-xml.twig' with {'yaml': yaml.get(y), 'cellmodels':cellmodels, 'i':concat(i,'\t'), 'case': case} only -%}
 	{%- endfor -%}
 
 {%- endif -%}

@@ -62,7 +62,7 @@ public void testRenderSVGHeader() throws Exception {
 private NodeList readFromSVG(String svg, String xpath) throws Exception {
 
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-	builderFactory.setValidating(false);	// no need to validate, just parse
+	builderFactory.setValidating(false);		// no need to validate, just parse
 	DocumentBuilder builder = builderFactory.newDocumentBuilder();
 	InputSource svgSource = new InputSource(new StringReader(svg));
 	Document xmlDocument = builder.parse(svgSource);
