@@ -93,6 +93,7 @@ canAdopt(newMember: FamilyMember): boolean {
 		return this.children ? this.children.some(c => c.canAdopt(newMember)) : false;
 
 	}
+
 }
 
 

@@ -163,7 +163,6 @@ subscribeToSelection() {
 }
 
 
-
 becomeInactive() {
 	this.active = false;
 }
@@ -183,7 +182,6 @@ matchesCellmodel(cellModel: CellModel): boolean {
 	//console.debug("matching with %s, this.parent="+(this.parent&& true)+",canAdopt="+this.parent && this.parent.canAdopt(cellModel), cellModel.getAdoptionName());
 	return this.parent && this.parent.canAdopt(cellModel);
 }
-
 
 
 /** we drop here as we are only droppeable if we are active, and that's model validated */
