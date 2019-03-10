@@ -33,9 +33,9 @@ constructor(public schema: number,
 associateWith(model: Model, uri?: string): Cell {
 
 	if (uri) {
-		this.associateWith_(model.cellModels, [model.findCellModel(uri)]);	// deep uri within the model
+		this.associateWith_(model.children, [model.findCellModel(uri)]);	// deep uri within the model
 	} else {
-		this.associateWith_(model.cellModels, model.cellModels);	// we start at the root of the model
+		this.associateWith_(model.children, model.children);	// we start at the root of the model
 	}
 
 	return this;

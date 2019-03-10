@@ -2,88 +2,70 @@
 
 import { FamilyMember } from './family-member.interface';
 import { Cell } from './cell.class';
+import { CellType } from "./cell-type.class";
 import { CellModel, CellModelJSON } from './cell-model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
-export class Model implements FamilyMember, SerialisableToJSON<Model, ModelJSON> {
-
-public cellModels: CellModel[];
+export class Model extends CellModel implements SerialisableToJSON<Model, ModelJSON> {
 
 
 constructor(public schema: number, 
-			public URI:string,
+			public URI: string, 
 			public name: string, 
 			public desc: string, 
-			public valid: boolean) {
-	this.cellModels = [];
+			public presentation: string,
+			public cellPresentation: string,
+			public cellPresentationType: string,
+			public thumb: string,
+			public isSimple: boolean, 
+			public type_: CellType,
+			public minOccurs: number,
+			public valid: boolean,
+			public problem?: string,
+			public isAttribute?: boolean,
+			public maxOccurs?: number,
+			public defaultValue?: string,
+			public identifier?: CellModel
+			) {
+	super(schema,
+			URI, 
+			name, 
+			desc, 
+			presentation, 
+			cellPresentation, 
+			cellPresentationType, 
+			thumb, 
+			isSimple, 
+			type_,
+			minOccurs,
+			isAttribute,
+			maxOccurs,
+			defaultValue,
+			identifier);
 }
-
 
 /** All cell models will point to references **/
 normaliseReferences() {
-    this.cellModels.forEach(cm => cm.normaliseReferencesWith(this.cellModels));
-}
-
-
-//// FamilyMember ////
-
-getURI():string {
-	return this.URI;
-}
-
-
-getAdoptionName():string {
-	return this.name;
-}
-
-
-getAdoptionURI():string {
-	return this.URI;
-}
-
-
-matches(element:FamilyMember):boolean {
-	return false;
-}
-
-
-canAdopt(element: FamilyMember): boolean {
-	return this.cellModels.some(c => c.matches(element));	
-}
-
-
-childrenCount(): number {
-	return this.cellModels.length;
-}
-
-
-getParent(): FamilyMember {
-	return undefined;
-}
-
-
-equals(m: FamilyMember) {
-	return this.getURI()==m.getURI();
+    this.children.forEach(cm => cm.normaliseReferencesWith(this.children));
 }
 
 
 // given a cell model URI, look for it in a cell model hierarchy, avoids following references
 findCellModel(uri: string): CellModel {
-    let foundCellModels = this.cellModels.map(cm => cm.findCellModel(uri)).filter(cm => cm!=undefined);
-    if (foundCellModels.length==0) {
-        console.error("Incorrect cell model reference %s", uri);
-    }
-    return foundCellModels[0];
+
+	let foundCellModels = this.children.map(cm => cm.findCellModel(uri)).filter(cm => cm!=undefined);
+	if (foundCellModels.length==0) {
+		console.error("Incorrect cell model reference %s", uri);
+	}
+	return foundCellModels[0];
+
 }
-
-
-adopt(newMember:Cell, position:number) {}
 
 
 //// SerialisableToJSON ////
 // check out this excellent post http://choly.ca/post/typescript-json/ to find out how to deserialize objects
 toJSON(): ModelJSON {
-	return Object.assign({}, this, {cellModels: this.cellModels.map(cm =>cm.toJSON()) });
+	return Object.assign({}, this, {cellModels: this.children.map(cm => cm.toJSON()) });
 }
 
 
@@ -97,7 +79,7 @@ fromJSON(json: ModelJSON|string): Model {
 
 		let model = Object.create(Model.prototype);
 
-		return Object.assign(model, json, {cellModels: json.cellModels.map( cm => CellModel.fromJSON(cm))});
+		return Object.assign(model, json, {cellModels: json.children.map( cm => CellModel.fromJSON(cm))});
 
 	}
 
@@ -111,14 +93,10 @@ static reviver(key: string, value: any): any {
 }
 
 
-export interface ModelJSON {
+export interface ModelJSON extends CellModelJSON {
 
-schema: number;
-URI: string;
-name: string;
-desc: string;
 valid: boolean;
-cellModels: CellModelJSON[];
+problem?: string;
 
 }
 
