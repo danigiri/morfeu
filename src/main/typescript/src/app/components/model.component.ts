@@ -1,18 +1,4 @@
-/*
- *	  Copyright 2018 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */
+// MODEL . COMPONENT . TS
 
 import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 
@@ -48,14 +34,14 @@ import { RemoteEventService } from "../services/remote-event.service";
 	template: `
 	<ng-container *ngIf="model">
 			<div id="model-info" class="card">
-				<h5 id="model-name" class="card-header">Model: {{model.name}}</h5>
+				<h5 id="model-name" class="card-header">Model at: ...{{displayName}}</h5>
 				<div class="card-body">
 					  <div id="model-desc" class="card-title">{{model.desc}}</div>
 					<!-- non-intuitively, the nodes binding expects an array and not a root node-->
 					<!-- we use direct binding as opposed to events for the moment -->
 					<div id="model-cell-models" class="">
 						<tree-root
-							[nodes]="model.cellModels">
+							[nodes]="model.children">
 							<ng-template #treeNodeTemplate let-node let-index="index">
 							   <cell-model [node]="node" [index]="index"></cell-model>
 							</ng-template>
@@ -78,6 +64,7 @@ import { RemoteEventService } from "../services/remote-event.service";
 export class ModelComponent extends KeyListenerWidget implements OnInit, AfterViewInit, OnDestroy {
 
 model: Model;
+displayName: string;
 
 protected commandKeys: string[] = ["m", "a", "n"];
 private cellModelSelectingMode = false;
@@ -147,6 +134,9 @@ displayModel(m: Model) {
 	console.log("[UI] ModelComponent::displayModel("+m.name+")");
 //	let i = 0;
 //	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
+
+	let uri = m.getURI();
+	this.displayName = uri.substring(uri.lastIndexOf("/"), uri.length);
 	this.model = m;
 	this.registerKeyPressedEvents();
 	console.log("[UI] ModelComponent::displayModel [end]");
@@ -254,3 +244,19 @@ ngOnDestroy() {
 }
 
 }
+
+/*
+ *	  Copyright 2019 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */

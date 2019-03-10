@@ -79,7 +79,7 @@ fromJSON(json: ModelJSON|string): Model {
 
 		let model = Object.create(Model.prototype);
 
-		return Object.assign(model, json, {cellModels: json.children.map( cm => CellModel.fromJSON(cm))});
+		return Object.assign(model, json, {children: json.children.map( cm => CellModel.fromJSON(cm))});
 
 	}
 
