@@ -184,8 +184,8 @@ getAdoptionName(): string {
 }
 
 
-getAdoptionURI(): string {
-	return this.URI;
+getAdoptionURI(): string {	// we try to work out using a reference (works for model but not for snippets)
+	return !this.isReference ? this.URI : this.referenceURI;
 }
 
 
@@ -267,10 +267,11 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 		} else {
 			cellModel = Object.assign(cellModel, {children: []});  // empty as the Tree class requires it
 		}
-	
+
 		return cellModel;
 
 	}
+
 }
 
 

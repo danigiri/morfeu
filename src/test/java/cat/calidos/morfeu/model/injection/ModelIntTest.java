@@ -45,7 +45,7 @@ public void testParseModel() throws Exception {
 
 	assertEquals(modelURI, model.getURI());
 	assertEquals("Description of test model", model.getDesc());
-	assertEquals("<ROOT>", model.getType().getName());
+	assertEquals("", model.getType().getName());
 	assertEquals("ROOT", model.getMetadata().getPresentation());	// testing values of root node
 	assertEquals("", model.getMetadata().getCellPresentation());	// testing values of root node
 	assertEquals("", model.getMetadata().getThumb());	// testing values of root node

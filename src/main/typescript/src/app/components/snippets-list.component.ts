@@ -122,7 +122,7 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 		// we set the document with the content, associate it with the model
 		snippet.content = snippetContent;
-		// console.log("Stripping snippet content context %s", snippet.contentURI);
+		console.debug("Stripping snippet content context %s", snippet.contentURI);
 		snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
 		snippetContent.associate(this.normalisedModel);
 

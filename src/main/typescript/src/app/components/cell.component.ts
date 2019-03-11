@@ -211,6 +211,8 @@ becomeActive(cell: Cell) {
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
 	this.events.service.publish(new CellSelectionClearEvent());
 
+	console.debug(">%s, %s", this.cell.getAdoptionName(), this.cell.getAdoptionURI());
+
 }
 
 

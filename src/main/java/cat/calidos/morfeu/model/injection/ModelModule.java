@@ -45,7 +45,7 @@ import cat.calidos.morfeu.utils.injection.RemoteModule;
 @ProducerModule(includes={ModelParserModule.class, GlobalModelMetadataModule.class})
 public class ModelModule extends RemoteModule {
 
-public static final String ROOT_NAME = "<ROOT>";
+public static final String ROOT_NAME = "";
 
 // here we're using the model uri as it will be used to populate internal uri of cell models and it's a neat 
 // representation

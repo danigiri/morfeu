@@ -47,15 +47,15 @@ associateWith(model: Model, uri?: string): Cell {
 stripPrefixFromURIs(prefix: string) {
 
 	if (this.getURI().startsWith(prefix)) {
-		// console.log("--> Old uri %s", this.URI);
+		// console.debug("--> Old uri %s", this.URI);
 		this.URI = this.URI.substr(prefix.length);
-		// console.log("--> New uri %s", this.URI);
+		// console.debug("--> New uri %s", this.URI);
 		if (this.attributes) {
-            this.attributes = this.attributes.map(a => a.stripPrefixFromURIs(prefix));
+			this.attributes = this.attributes.map(a => a.stripPrefixFromURIs(prefix));
 		}
-        if (this.children) {
-            this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
-        }
+		if (this.children) {
+			this.children = this.children.map(c => c.stripPrefixFromURIs(prefix));
+		}
 	}
 
 	return this;
@@ -388,8 +388,8 @@ canAdopt(newMember: FamilyMember): boolean {
 		return true;
 	}
 
-	// next, we check the allowed count
-	let matchingChildren: Cell[] = this.children.filter(c => c.matches(newMember));
+	// next, we check the allowed count (if we have no children we assume zero so we should be able to add)
+	let matchingChildren: Cell[] = this.children ? this.children.filter(c => c.matches(newMember)) : [];
 	const childCount = matchingChildren.length;
 	if (childCount>0) {
 		// we are not considering the problem of the childcount being less than the minimum

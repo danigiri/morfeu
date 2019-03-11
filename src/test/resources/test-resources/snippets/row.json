@@ -2,8 +2,7 @@
 	"name": "Row 6,6"
 	,"desc": "Row with two 6,6 columns"
 	,"kind": "complex"
-	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/row"
-	,"presentation": "assets/images/snippet-row6,6.svg"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row"
 	,"skipValidation": true
 	,"contentURI": "target/test-classes/test-resources/snippets/row.xml"
 }

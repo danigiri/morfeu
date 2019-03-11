@@ -28,7 +28,6 @@ import { UXEvent } from "./events/ux.event";
 					[class.drop-area-active]="active && !selected" 
 					[class.drop-area-inactive]="!active"
 					[class.drop-area-selected]="selected"
-					[class.drop-area-info]="info"
 					dnd-droppable
 					[dropEnabled]="active"
 					 (onDropSuccess)="dropSuccess($event)"
