@@ -28,6 +28,7 @@ import { UXEvent } from "./events/ux.event";
 					[class.drop-area-active]="active && !selected" 
 					[class.drop-area-inactive]="!active"
 					[class.drop-area-selected]="selected"
+					[class.drop-area-info]="info"
 					dnd-droppable
 					[dropEnabled]="active"
 					 (onDropSuccess)="dropSuccess($event)"
@@ -55,10 +56,9 @@ import { UXEvent } from "./events/ux.event";
 					border-radius: 5px;
 				}
 				.drop-area-info {
-					padding-top: 0px;
-					padding-bottom: 0px;
-					border: 2px dashed #444444;
-					border-radius: 5px;
+					padding-top: 2px;
+					padding-bottom: 2px;
+					background-color: #eaeaea;
 					opacity: 0.8;
 				}
 			`]
