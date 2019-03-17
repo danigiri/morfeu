@@ -1,30 +1,16 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// API CONTENT TRANSFORM INT . TEST
 
 package cat.calidos.morfeu.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.InputStream;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import cat.calidos.morfeu.model.Document;
 
 /**
 * @author daniel giribet
@@ -43,7 +29,11 @@ public void testDocument1YAMLTransform() throws Exception {
 	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
 	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
 
-	JsonNode test = doc.get("children").get(0);				// /test(0)
+	JsonNode root = doc.get("children").get(0);					// <root node>
+	assertNotNull(root);
+	assertEquals("Root node has a wrong name", Document.ROOT_NAME, root.get("name").asText());
+	
+	JsonNode test = root.get("children").get(0);				// /test(0)
 	assertEquals("/children/test(0) has a wrong name", "test", test.get("name").asText());
 
 	JsonNode testInternalAttributes = test.get("internalAttributes");
@@ -62,4 +52,21 @@ public void testDocument1YAMLTransform() throws Exception {
 
 }
 
+
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
