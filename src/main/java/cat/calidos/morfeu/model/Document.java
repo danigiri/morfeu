@@ -1,23 +1,10 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// DOCUMENT . JAVA
 
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,7 +14,9 @@ import cat.calidos.morfeu.problems.ValidationException;
 /** TODO: check if document extends cell or not
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Document extends Cell implements Validable {
+public class Document extends ComplexCell implements Validable {
+
+public static final String ROOT_NAME = "";
 
 protected String kind;
 protected URI prefix;
@@ -35,32 +24,33 @@ protected URI modelURI;
 protected URI fetchableModelURI;
 protected URI contentURI;
 protected URI fetchableContentURI;
-protected Composite<Cell> content;
-protected Model model;
+protected Model model;			// it's the same as the cellmodel of the root empty node
 protected Validable validator;
 protected boolean isValid = false;
 protected boolean skipValidation = false;
 
+
 public Document(URI u) {
-	super(u);
+	super(u, "Empty doc", "No desc", Optional.empty(), null, null, null, null);
 }
+
 
 public Document(URI u, String name, String desc) {
-	super(u, name, desc);
+	super(u, name, desc, Optional.empty(), null, null, null, null);
 }
 
 
-public Document(String name, String desc, String kind, URI prefix, URI uri, URI modelUri, URI docUri, Model m) 
+public Document(String name, String desc, String kind, URI prefix, URI uri, URI modelUri, URI docUri, Model model) 
 		throws URISyntaxException {
-	
-	super(uri, name, desc);
+
+	super(uri, name, desc, Optional.empty(), model, null, null, null);	// no children, attributes when created
 
 	this.prefix = prefix;	// this may be moved to the supperclass
 	this.kind = kind;
 	this.uri = uri;
 	setModelURI(modelUri);
 	setContentURI(docUri);
-	this.model = m;
+	this.model = model;
 
 }
 
@@ -178,16 +168,6 @@ public void skipValidation(boolean skip) {
 }
 
 
-public Composite<Cell> getContent() {
-	return content;
-}
-
-public void setContent(Composite<Cell> content) {
-
-	this.content = content;
-	
-}
-
 public Model getModel() {
 	return model;
 }
@@ -198,8 +178,33 @@ public void setModel(Model model) {
 }
 
 
+public void setContent(Composite<Cell> content) {
+
+	this.children = content;
+
+}
+
+
 public void setValidator(Validable validator) {
 	this.validator = validator;
 } 
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
+

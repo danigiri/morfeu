@@ -1,5 +1,5 @@
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -63,8 +63,8 @@ public static Cell provideCell(Node node,
 								@Named("SimpleInstance") Provider<Cell> providerCell, 
 								@Named("ComplexInstance") Provider<ComplexCell> providerComplexCell) {
 
-	// we are only complex if we have a complex cell model and we're an element
-	if (model.isComplex() && node instanceof Element) {
+	// we are only complex if we have a complex cell model and we're an element (or a document root)
+	if (model.isComplex() && (node instanceof Element || node instanceof org.w3c.dom.Document)) {
 
 		return providerComplexCell.get();
 
@@ -92,7 +92,7 @@ public static ComplexCell buildComplexCellFrom(URI u,
 												@Named("desc") String desc, 
 												@Named("value") Optional<String> value, 
 												CellModel cm,
-												Composite<Cell> children,
+												@Named("CellChildren") Composite<Cell> children,
 												Attributes<Cell> attributes,
 												@Named("InternalAttributes") Attributes<Cell> internalAttributes) {
 	return new ComplexCell(u, name, desc, value, cm, children, attributes, internalAttributes);
@@ -147,10 +147,12 @@ protected static ComplexCellModel effectiveCellModel(CellModel cellModel) {
 
 
 // bear in mind we can do element() instead of node if we need it, as it holds type information
-@Provides
+@Provides @Named("CellChildren")
 public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel cellModel) {
+
+	log.trace("Getting children from node={}, uri={}, cellModel={}", node.getNodeName(), uri, cellModel.getURI());
 	
- 	if (!node.hasChildNodes()) {	// base case, save some memory on the list
+	if (!node.hasChildNodes()) {	// base case, save some memory on the list
 	
 		return new OrderedMap<Cell>(0);	
 
@@ -160,9 +162,16 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 	Composite<Cell> children = new OrderedMap<Cell>(node.getChildNodes().getLength());
 	int nodeIndex = 0;
 	// this works for now, but some day it will come back with a vengeance :)
-	NodeList nodeList = ((Element)node).getElementsByTagName("*");	//TODO: use node and detect text as values as this gives you all descendants
+	NodeList nodeList;
+	if (node instanceof Element) {
+		nodeList = ((Element)node).getElementsByTagName("*"); //TODO: use node and detect text as values as this gives you all descendants
+	} else if (node instanceof org.w3c.dom.Document) {
+		nodeList = ((org.w3c.dom.Document)node).getChildNodes();
+	} else {
+		throw new ClassCastException("Was sent a node that was not an element or not a document");
+	}
 	for (int i=0; i<nodeList.getLength(); i++) {					// or use normalise (SLOW CODE!)
-		
+
 		Element childElem = (Element) nodeList.item(i);	// We know it's element but this is not guaranteed not to change
 		if (childElem.getParentNode()==node) {			// Only handle the current element children!!! (SLOW!)
 			String childName = childElem.getTagName();
@@ -221,7 +230,7 @@ private static  Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellM
 	OrderedMap<Cell> attributes = new OrderedMap<Cell>(node.getAttributes().getLength());
 	NamedNodeMap elemAttributes = node.getAttributes();	// TODO: notice this is not ordered like the input ^^'
 	for (int i=0; i<elemAttributes.getLength(); i++) {
-		
+
 		Node attribute = elemAttributes.item(i);
 		String attributeName = attribute.getNodeName();
 		URI childURI = cellURI(uri, cellModel, ATTRIBUTE_PREFIX+attributeName);

@@ -11,6 +11,7 @@ import org.junit.Test;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
 import cat.calidos.morfeu.problems.ValidationException;
@@ -85,17 +86,23 @@ public void testProduceContent() throws Exception {
 															.get();
 	assertNotNull(content);
 	assertEquals(1, content.size());
-	
-	Cell rootNode = content.child("test(0)");
+
+	// empty root node
+	Cell rootNode = content.child(0);
 	assertNotNull(rootNode);
-	assertEquals("test", rootNode.getName());
+	assertEquals(Document.ROOT_NAME, rootNode.getName());
 	assertTrue(rootNode.isComplex());
 	
-	ComplexCell rootComplexNode = rootNode.asComplex();
-	assertNotNull(rootComplexNode);
-	assertEquals(1, rootComplexNode.children().size());
-	assertEquals("row", rootComplexNode.children().child(0).getName());
-	
+	Cell testNode = rootNode.asComplex().children().child("test(0)");
+	assertNotNull(testNode);
+	assertEquals("test", testNode.getName());
+	assertTrue(testNode.isComplex());
+
+	ComplexCell testComplexNode = testNode.asComplex();
+	assertNotNull(testComplexNode);
+	assertEquals(1, testComplexNode.children().size());
+	assertEquals("row", testComplexNode.children().child(0).getName());
+
 }
 
 }

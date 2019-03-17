@@ -11,9 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.utils.OrderedMap;
 import dagger.BindsOptionalOf;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
@@ -26,25 +25,27 @@ public abstract class CellModelsFilterModule {
 
 protected final static Logger log = LoggerFactory.getLogger(CellModelsFilterModule.class);
 
+
 // it may be that we want to match content with a cell model deep down the hierarchy
-@Produces @Named("CellModels") 
-public static Composite<CellModel> filterCellModels(@Named("RootCellModels") Composite<CellModel> cellModels, 
+@Produces @Named("CellModel") 
+public static CellModel filterCellModels(Model model, 
 									@Named("CellModelFilter") Optional<URI> cellModelFilter) throws ParsingException  {
 
+	// if there is a filter we want to look for it in the model hierarchy
 	if (cellModelFilter.isPresent()) {
 		URI filter = cellModelFilter.get();
 		log.trace("*** Looking for cell model filter "+filter);
-		CellModel cellModel = cellModels.stream()
-											.map(cm -> lookForCellModel(cm,filter))
-											.findFirst()
-											.get()
-											.orElseThrow(() ->  new ParsingException("Wrong filter "+filter));
-	
-		return new OrderedMap<CellModel>(cellModel.getName(), cellModel);
-	
+		CellModel cellModel = model.children().stream()
+												.map(cm -> lookForCellModel(cm,filter))
+												.findFirst()
+												.get()
+												.orElseThrow(() ->  new ParsingException("Wrong filter "+filter));
+
+		return cellModel;
+
 	} else {
 
-		return cellModels;
+		return model;
 
 	}
 
@@ -56,7 +57,7 @@ public static Composite<CellModel> filterCellModels(@Named("RootCellModels") Com
 
 
 private static Optional<CellModel> lookForCellModel(CellModel cellModel, URI filter) {
-	
+
 	Optional<CellModel> found;
 
 	if (cellModel.getURI().equals(filter)) {
@@ -75,10 +76,12 @@ private static Optional<CellModel> lookForCellModel(CellModel cellModel, URI fil
 							.filter(f -> f.isPresent())
 							.findAny()	// return Optional<Optional<CellModel>>
 							.orElse(Optional.empty());
-	}
 	
+	}
+
 	return found;
 }
+
 
 }
 

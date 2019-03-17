@@ -1,3 +1,5 @@
+// DOCUMENT INT TEST . JAVA
+
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
@@ -31,9 +33,9 @@ public void testProduceCompleteDocument() throws Exception {
 
 	DocumentTest.testDocument1(doc);
 
-	Composite<Cell> content = doc.getContent();
+	Composite<Cell> content = doc.asComplex().children();
 	assertNotNull(content);
-	
+
 }
 
 

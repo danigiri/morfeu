@@ -42,6 +42,7 @@ import org.xml.sax.SAXException;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Composite;
+import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.OrderedMap;
@@ -56,66 +57,40 @@ public class ContentParserModule {
 
 protected final static Logger log = LoggerFactory.getLogger(ContentParserModule.class);
 
+
 @Produces
 public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
-												@Named("ContentNodes") LinkedList<Node> nodes,
-												@Named("CellModels") Composite<CellModel> cellModels) // <- CellModelsFilter
+												@Named("ContentNode") Node node,
+												@Named("CellModel") CellModel cellModel,
+												@Named("CellModelFilter") Optional<URI> cellModelFilter)
 								throws ParsingException {
 	
 	//FIXME: this is a quite repetitive from cellmodule, not following DRY	
-	Composite<Cell> contentCells = new OrderedMap<Cell>(nodes.size());
-	int cellIndex = 0;
-	for (Node node : nodes) {
-		
-		String name = node.getNodeName();
-		Optional<CellModel> matchedCellModel = cellModels.stream().filter(cm -> cm.getName().equals(name)).findFirst();
-		if (!matchedCellModel.isPresent()) {
-			log.error("Could not match content node '{}' with any cellmodel even tough content is valid", name);
-			log.debug("CellModels: {}", cellModels.stream().map(cm -> cm.getName()).collect(Collectors.toList()));
-			throw new RuntimeException("Node and model mismatch", new NullPointerException());
-		}
+	Composite<Cell> contentCells = new OrderedMap<Cell>();
 
-		CellModel cellModel = matchedCellModel.get();
-		URI cellURI;
-		String indexedName = name+"("+cellIndex+")";
-		String proposedCellURI = uri+"/"+indexedName;
-		try {
-			cellURI = new URI(proposedCellURI);
-		} catch (URISyntaxException e) {
-			log.error("Could not build URI of root content node '{}'", name);
-			throw new RuntimeException("Node and model mismatch", new NullPointerException());
-		}
 
-		Cell cell = DaggerCellComponent.builder()
-										.withURI(cellURI)
+	Cell cell = DaggerCellComponent.builder()
+										.withURI(uri)
 										.fromNode(node)
 										.withCellModel(cellModel)
 										.builder()
 										.createCell();
-		contentCells.addChild(indexedName, cell);
-		cellIndex++;
+	if (!cellModelFilter.isPresent()) {	// we have a root node which is this cell, which is an empty root cell
+		cell.setName(Document.ROOT_NAME);
+		contentCells.addChild(cell.getName(), cell);
+	} else {							// in this case we have a filter, which means we have a list of children
+		cell.asComplex().children().stream().forEachOrdered(c -> contentCells.addChild(c.getName(), c));;
+	}
 
-	};
-	
 	return contentCells;
 
 }
 
 
-@Produces @Named("ContentNodes")
-public static LinkedList<Node> contentRootNodes(org.w3c.dom.Document xmldoc) {
-
-	// TODO: test root node attributes and value as cells
-	LinkedList<Node> pendingNodes = new LinkedList<Node>();
-
-	// TODO: we may be doing the list in reverse
-	Node rootNode = xmldoc.getFirstChild();
-	while (rootNode!=null) {
-		pendingNodes.add(rootNode);
-		rootNode = rootNode.getNextSibling();
-	}
-
-	return pendingNodes;
+@Produces @Named("ContentNode")
+public static Node contentRootNode(org.w3c.dom.Document xmldoc) {
+	return xmldoc;
+	//return xmldoc.getFirstChild();
 }
 
 

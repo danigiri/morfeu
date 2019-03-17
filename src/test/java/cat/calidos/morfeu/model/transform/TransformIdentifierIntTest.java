@@ -46,7 +46,7 @@ public void testTransformJSONToYAML() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", doc.getContent().asList());
+	values.put("cells", doc.children().asList());
 	values.put("model", doc.getModel());
 
 	String transformed = DaggerViewComponent.builder()
