@@ -46,7 +46,7 @@ interface Builder {
 
 	@BindsInstance Builder from(URI u);
 	@BindsInstance Builder withPrefix(@Named("Prefix") String p);
-	
+
 	DocumentComponent build();
 
 }

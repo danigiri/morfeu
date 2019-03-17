@@ -5,7 +5,6 @@ package cat.calidos.morfeu.model;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.junit.Test;
 
