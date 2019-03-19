@@ -195,9 +195,8 @@ displayContentFragment(cell: Cell) {
 
 	console.debug("[UI] ContentComponent::displayContentFragment()");
 
-
-	let c = new Content(cell.schema, cell);
-	this.displayContent(c);
+	let content = Content.fromCell(cell);
+	this.displayContent(content);
 
 }
 

@@ -77,20 +77,21 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 										.createCell();
 	if (!cellModelFilter.isPresent()) {	// we have a root node which is this cell, which is an empty root cell
 		cell.setName(Document.ROOT_NAME);
-		contentCells.addChild(cell.getName(), cell);
-	} else {							// in this case we have a filter, which means we have a list of children
-		cell.asComplex().children().stream().forEachOrdered(c -> contentCells.addChild(c.getName(), c));;
 	}
+	contentCells.addChild(cell.getName(), cell);
 
 	return contentCells;
 
 }
 
 
+// in this case, if we don't have a filter we return the whole document as, the cell structure in this case will contain
+// an empty cell at the root to hold everything together
+// If we have a filter, we are returning directly the first node as we do not have an empty cell node at the root
 @Produces @Named("ContentNode")
-public static Node contentRootNode(org.w3c.dom.Document xmldoc) {
-	return xmldoc;
-	//return xmldoc.getFirstChild();
+public static Node contentRootNode(org.w3c.dom.Document xmldoc, 
+									@Named("CellModelFilter") Optional<URI> cellModelFilter) {
+	return cellModelFilter.isPresent() ? xmldoc.getFirstChild() : xmldoc;
 }
 
 

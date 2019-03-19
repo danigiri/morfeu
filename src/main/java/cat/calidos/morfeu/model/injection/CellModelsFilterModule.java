@@ -60,7 +60,7 @@ private static Optional<CellModel> lookForCellModel(CellModel cellModel, URI fil
 
 	Optional<CellModel> found;
 
-	if (cellModel.getURI().equals(filter)) {
+ 	if (cellModel.getURI().equals(filter)) {
 		found = Optional.of(cellModel);
 	} else if (cellModel.isSimple() || cellModel.isReference()) {	// guard against references to avoid infinite loops
 		found = Optional.empty();
@@ -68,7 +68,7 @@ private static Optional<CellModel> lookForCellModel(CellModel cellModel, URI fil
 
 		// do a recursive search, for each child do a recursive call and unfold the optional if found in the children
 		// if no children have it, the last filter will not find match anything so we return a plain empty
-		return cellModel.asComplex()
+		found = cellModel.asComplex()
 							.children()
 							.asList()
 							.stream()
