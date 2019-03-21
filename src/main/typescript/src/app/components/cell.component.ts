@@ -35,7 +35,7 @@ import { EventService } from "../services/event.service";
 
 export class CellComponent extends SelectableWidget implements OnInit {
 
-@Input() parent: FamilyMember;
+@Input() parent?: FamilyMember;	// may not have a parent if we are a snippet
 @Input() cell: Cell;
 @Input() snippet?: boolean;
 @Input() level: number;

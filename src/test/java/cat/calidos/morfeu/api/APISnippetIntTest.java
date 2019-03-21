@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-/**
+/** Testing fetting snippet content trough the API
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APISnippetIntTest extends APITezt {
@@ -25,10 +25,11 @@ public void testStuffSnippet() throws Exception {
 	InputStream content = fetchRemoteInputStreamFrom(uri);
 	assertNotNull(content);
 
-	JsonNode doc = parseJson(content);
-	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
-	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
-	assertEquals("/children/stuff(0) has a wrong name", "stuff", doc.get("children").get(0).get("name").asText());
+	JsonNode stuff = parseJson(content);
+	assertEquals("Wrong document schema", 0, stuff.get("schema").asInt());
+	assertTrue("Stuff snippet should just have the content cell directly", stuff.isContainerNode());
+	assertEquals("/stuff has a wrong name", "stuff", stuff.get("name").asText());
+	assertEquals("/stuff has wrong content", "Stuff content", stuff.get("value").asText());
 
 }
 
@@ -43,10 +44,10 @@ public void testData2Snippet() throws Exception {
 	InputStream content = fetchRemoteInputStreamFrom(uri);
 	assertNotNull(content);
 
-	JsonNode doc = parseJson(content);
-	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
-	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
-	assertEquals("/children/data2(0) has a wrong name", "data2", doc.get("children").get(0).get("name").asText());
+	JsonNode data2 = parseJson(content);
+	assertEquals("Wrong document schema", 0, data2.get("schema").asInt());
+	assertTrue("Data2 snippet should just have the content cell directly", data2.isContainerNode());
+	assertEquals("/children/data2(0) has a wrong name", "data2", data2.get("name").asText());
 
 }
 

@@ -21,13 +21,13 @@ import { EventService } from "../services/event.service";
 			[attr._position]="position"
 			[class.snippet-selected]="selected"
 		>
-			<div class="d-flex justify-content-between"
-			>
+			<div class="d-flex justify-content-between">
 				<h5 class="mb-1 snippet-name">{{snippet.name}}</h5>
-				<cell *ngFor="let cell of snippet.content.children; let i=index" 
-					[parent]="snippet.content"
-					[cell]="cell" [level]="0"
-					[position]="i"
+				<!-- at the moment, snippets only contain one node-->
+				<cell 
+					[cell]="snippet.content" 
+					[level]="0"
+					[position]="0"
 					[snippet]="true"
 				></cell>
 			</div>

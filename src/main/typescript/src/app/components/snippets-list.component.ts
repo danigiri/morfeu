@@ -124,7 +124,8 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 		snippet.content = snippetContent;
 		console.debug("Stripping snippet content context %s", snippet.contentURI);
 		snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
-		snippetContent.associate(this.normalisedModel);
+		console.debug("Associating snippet content with model");
+		snippet.content.associate(this.normalisedModel);
 
 		// we have the content, so we can push the snippet document so it can de displayed
 		this._snippets.push(snippet);

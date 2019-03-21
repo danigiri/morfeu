@@ -12,8 +12,6 @@ import { SerialisableToJSON } from "./serialisable-to-json.interface";
 export class Content extends Cell implements SerialisableToJSON<Content, ContentJSON> {
 
 
-
-
 // associate the content cells with the corresponding cell models, starting from the root
 associateFromRoot(model: Model) {
 	this.children = this.children.map(c => c.associateWith(model));
@@ -22,7 +20,7 @@ associateFromRoot(model: Model) {
 
 //associate the content cells with the corresponding cell models, starting from the cell model uri of each
 associate(model: Model) {
-	this.children = this.children.map(c => c.associateWith(model, c.cellModelURI));
+	this.associateWith(model, this.cellModelURI);
 }
 
 
