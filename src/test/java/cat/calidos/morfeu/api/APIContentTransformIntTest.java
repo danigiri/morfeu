@@ -25,13 +25,11 @@ public void testDocument1YAMLTransform() throws Exception {
 	InputStream content = fetchRemoteInputStreamFrom("content/"+pathPrefix+"transform/document1.yaml?model="+model);
 	assertNotNull(content);
 
-	JsonNode doc = parseJson(content);
-	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
-	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
-
-	JsonNode root = doc.get("children").get(0);					// <root node>
+	JsonNode root = parseJson(content);							// <root node>
 	assertNotNull(root);
+	assertEquals("Wrong document schema", 0, root.get("schema").asInt());
 	assertEquals("Root node has a wrong name", Document.ROOT_NAME, root.get("name").asText());
+	assertTrue("/children is not an array and it should be", root.get("children").isArray());
 	
 	JsonNode test = root.get("children").get(0);				// /test(0)
 	assertEquals("/children/test(0) has a wrong name", "test", test.get("name").asText());
