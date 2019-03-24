@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// MODEL UI TEST . JAVA
 
 package cat.calidos.morfeu.webapp;
 
@@ -56,7 +42,7 @@ public void modelTest() {
 	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
 
-	assertEquals("Model: test-model.xsd", model.name());
+	assertEquals("Model at: .../test-model.xsd", model.name());
 	assertEquals("Description of test model", model.desc());
 
 }
@@ -138,7 +124,7 @@ public void testCellModels() {
 
 	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
 	int colChildrenSize = colChildren.size();
-	assertEquals("col model should have 7 children, not "+colChildrenSize, 7, colChildrenSize);
+	assertEquals("col model should have 8 children, not "+colChildrenSize, 8, colChildrenSize);
 
 	assertEquals("stuff", colChildren.get(0).name());
 	assertEquals("data", colChildren.get(1).name());
@@ -149,3 +135,19 @@ public void testCellModels() {
 }
 
 }
+
+/*
+ *    Copyright 2018 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
