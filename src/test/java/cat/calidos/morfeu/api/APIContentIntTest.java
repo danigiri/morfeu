@@ -26,14 +26,11 @@ public void testContent() throws Exception {
 	InputStream content = fetchRemoteInputStreamFrom("content/"+pathPrefix+"documents/document1.xml?model="+model);
 	assertNotNull(content);
 
-	JsonNode doc = parseJson(content);
-	assertEquals("Wrong document schema", 0, doc.get("schema").asInt());
-	assertTrue("/children is not an array and it should be", doc.get("children").isArray());
-
-	JsonNode root = doc.get("children").get(0);
+	JsonNode root = parseJson(content);
 	assertNotNull(root);
+	assertEquals("Wrong document schema", 0, root.get("schema").asInt());
 	assertEquals(Document.ROOT_NAME, root.get("name").asText());
-
+	assertTrue("/children is not an array and it should be", root.get("children").isArray());
 	assertEquals("/children/test(0) has a wrong name", "test", root.get("children").get(0).get("name").asText());
 
 	//  target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0) 
