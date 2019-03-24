@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// CONTENT SAVER PARSER INT TEST . JAVA
 
 package cat.calidos.morfeu.model.injection;
 
@@ -35,7 +21,6 @@ import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.utils.LocalSaver;
 import cat.calidos.morfeu.utils.Saver;
 
 /**
@@ -99,7 +84,7 @@ public void testValidateString() throws Exception {
 	assertNotNull(rootCells);
 
 	assertEquals("Wrong size of content root from 'content saver parser' parsed XML string", 1, rootCells.size());
-	Cell test = rootCells.child("test(0)");
+	Cell test = rootCells.child(0).asComplex().children().child("test(0)"); // skip virtual root
 	assertEquals("Wrong root node name from 'content saver parser' parsed XML string", "test", test.getName());
 
 }
@@ -188,6 +173,7 @@ public void testSaveToYAML() throws Exception {
 	savedFile.deleteOnExit();
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
+	//System.err.println(writtenContent);
 
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(writtenContent);
@@ -210,3 +196,19 @@ private String temporaryOutputFilePath() {
 
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

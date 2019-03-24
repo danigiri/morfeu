@@ -7,20 +7,16 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
@@ -61,8 +57,8 @@ public void testTransformJSONToYAML() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/document4.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", doc.asComplex().children().asList());
+	Map<String, Object> values = new HashMap<String, Object>(2);	//UGLY:  we skip the virtual root
+	values.put("cells", doc.asComplex().children().child(0).asComplex().children().asList());
 	values.put("model", doc.getModel());
 
 	String transformed = DaggerViewComponent.builder()

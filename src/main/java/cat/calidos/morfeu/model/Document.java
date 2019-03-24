@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
-/** TODO: check if document extends cell or not
+/** 
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Document extends ComplexCell implements Validable {

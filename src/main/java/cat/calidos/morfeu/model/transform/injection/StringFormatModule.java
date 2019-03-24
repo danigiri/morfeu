@@ -74,7 +74,7 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 public static String transformedYAMLToXML(Composite<Cell> contentRootCells, Model model) {
 	
 	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", contentRootCells.asList());
+	values.put("cells", contentRootCells.child(0).asComplex().children().asList());	// skip virtual root
 	values.put("model", model);
 	
 	return DaggerViewComponent.builder()
