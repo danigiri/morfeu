@@ -1,6 +1,6 @@
 <ng-container [ngSwitch]="true">
-	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'WELL'">
-		<img src="{{getCellPresentation()}}"
+	<ng-container *ngSwitchCase="cell.cellModel && (cell.cellModel.presentation === 'WELL' || isFragment)">
+		<img *ngIf="!isFragment" src="{{getCellPresentation()}}"
 			class="well-img img-fluid"
 			[class.drag-active]="active"
 			[class.drag-inactive]="!active"
@@ -90,40 +90,40 @@
 		</div>
 	</ng-container>
 
-	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL')">
-			<!-- TODO: check the model and the content as well (counts, etc.) -->
-			<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
-				[class.cell-img]="!active && !selected"
-				[class.cell-active]="active"
-				[class.cell-selected]="selected"
-				class="cell cell-img-size img-fluid cell-level-{{level}}"
-				src="{{getCellPresentation()}}"
-				(mouseenter)="focusOn(cell)"
-				(mouseleave)="focusOff(cell)"
-				dnd-draggable
-				[dragEnabled]="dragEnabled"
-				(onDragEnd)="dragEnd(cell)"
-				[dragData]="cellDragData()"
-				(dblclick)="doubleClick()"
-			/>
-			<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
-				class="cell cell-img-size cell-level-{{level}}"
-				[class.cell-active]="active"
-				[class.cell-selected]="selected"
-				(mouseenter)="focusOn(cell)"
-				(mouseleave)="focusOff(cell)"
-				dnd-draggable
-				[dragEnabled]="dragEnabled"
-				(onDragEnd)="dragEnd(cell)"
-				[dragData]="cellDragData()"
-				(dblclick)="doubleClick()"
-			>
-			<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->
-				<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
-				<presentation *ngIf="!cellPresentationIsIMG()" [cell]="cell" ></presentation>
-			</div>
-			<!-- the position of the drop area is always where droped cells will go -->
-			<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
+	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
+		<!-- TODO: check the model and the content as well (counts, etc.) -->
+		<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
+			[class.cell-img]="!active && !selected"
+			[class.cell-active]="active"
+			[class.cell-selected]="selected"
+			class="cell cell-img-size img-fluid cell-level-{{level}}"
+			src="{{getCellPresentation()}}"
+			(mouseenter)="focusOn(cell)"
+			(mouseleave)="focusOff(cell)"
+			dnd-draggable
+			[dragEnabled]="dragEnabled"
+			(onDragEnd)="dragEnd(cell)"
+			[dragData]="cellDragData()"
+			(dblclick)="doubleClick()"
+		/>
+		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
+			class="cell cell-img-size cell-level-{{level}}"
+			[class.cell-active]="active"
+			[class.cell-selected]="selected"
+			(mouseenter)="focusOn(cell)"
+			(mouseleave)="focusOff(cell)"
+			dnd-draggable
+			[dragEnabled]="dragEnabled"
+			(onDragEnd)="dragEnd(cell)"
+			[dragData]="cellDragData()"
+			(dblclick)="doubleClick()"
+		>
+		<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->
+			<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
+			<presentation *ngIf="!cellPresentationIsIMG()" [cell]="cell" ></presentation>
+		</div>
+		<!-- the position of the drop area is always where droped cells will go -->
+		<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 	</ng-container>
 
 </ng-container>

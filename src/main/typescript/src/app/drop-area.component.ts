@@ -74,15 +74,16 @@ active: boolean = false;
 selected: boolean = false;			// are we selected?
 info: boolean = false;
 
+
 constructor(eventService: EventService) {
 	super(eventService);
 }
 
 
 ngOnInit() {
-	
-	//console.log("DropAreaComponent::ngOnInit()");
-	
+
+	//console.debug("DropAreaComponent::ngOnInit()");
+
 	// we check for null of parent as we're not getting the binding set at the beginning for some reason
 	// IDEA: we could use the function of the drop enabled (gets cell as input) though it's less interactive
 	this.subscribe(this.events.service.of( CellDeactivatedEvent )
@@ -96,7 +97,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellActivatedEvent )
 			.subscribe( activated => {
 				if (this.parent && this.parent.canAdopt(activated.cell)) {
-					//console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
+					// console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
 					this.becomeActive();
 				}
 	}));
@@ -112,7 +113,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellModelActivatedEvent )
 			.subscribe( a => {
 				if (a.cellModel && this.matchesCellmodel(a.cellModel)) {
-					//console.log("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
+					// console.debug("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
 					this.becomeActive();
 				}
 	}));

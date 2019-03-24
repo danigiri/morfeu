@@ -1,6 +1,6 @@
 // CONTENT . COMPONENT . TS
 
-import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from "@angular/core";
+import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { Subscription } from "rxjs";
 
 import Stack from "ts-data.stack";
@@ -45,13 +45,29 @@ import { RemoteEventService } from "./services/remote-event.service";
 	template: `
 	<div id="content" class="card" *ngIf="content">
 		<div id="content" class="card-body" [class.content-info]="info">
-			<small *ngIf="info">[childrenCount={{content.childrenCount()}}]</small>
-			<drop-area [parent]="content" [position]="0"></drop-area> <!-- FIXME: this should activate and it doesn't -->
-			<cell *ngFor="let cell of content.children; let i=index" 
-				[parent]="content" 
-				[cell]="cell" [level]="0" 
-				[position]="i"
+			<small *ngIf="info"><strong>{{content.name}}</strong>:[<em>childrenCount={{content.childrenCount()}}</em>]</small>
+			<ng-container *ngIf="!isFragment">
+				<div class="row">
+					<div class="col">
+						<drop-area [parent]="content" [position]="0"></drop-area>
+					</div>
+				</div>
+				<cell *ngFor="let cell of content.children; let i=index" 
+					[parent]="content" 
+					[cell]="cell" [level]="0" 
+					[position]="i"
 				></cell>
+			</ng-container>
+			<ng-container *ngIf="isFragment">
+				<small *ngIf="info">[FRAGMENT]</small>
+				<cell 
+					[parent]="content.parent" 
+					[cell]="content" [level]="0" 
+					[position]="0"
+					[isFragment]="true"
+			></cell>
+			</ng-container>
+
 			<!-- TODO: static checks using the model and not what's already present (cells) -->
 		</div>
 		<!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
@@ -92,10 +108,12 @@ export class ContentComponent extends KeyListenerWidget implements OnInit, After
 
 content: Content;
 contentStack: Stack<Content> = new Stack<Content>();
+cellStack: Stack<Cell> = new Stack<Cell>();
 model: Model;
 info = false;
+isFragment = false;
 
-protected commandKeys: string[] = ["c", "a", "d", "t", "e", "R", "i"];
+protected commandKeys: string[] = ["c", "a", "d", "t", "e", "R", "i", "u"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
@@ -138,7 +156,7 @@ ngOnInit() {
 // we make sure we subscribe to new elements if we are waiting for selections at root level
 ngAfterViewInit() {
 
-	console.log("ContentComponent::ngAfterViewInit()")
+	console.debug("ContentComponent::ngAfterViewInit()")
 	this.childrenCellComponents.changes.subscribe(c => {
 		if (this.cellSelectingMode) {
 			this.subscribeChildrenToCellSelection();
@@ -182,8 +200,8 @@ displayContent(content: Content) {
 
 	console.debug("[UI] ContentComponent::displayContent()");
 
+	this.isFragment = false;
 	this.content = content;
-	this.contentStack.push(content);
 	this.cellSelectingMode = true;
 	this.registerKeyPressedEvents();
 
@@ -193,10 +211,46 @@ displayContent(content: Content) {
 // we display a cell as a fragment of content, for drill-down editing
 displayContentFragment(cell: Cell) {
 
-	console.debug("[UI] ContentComponent::displayContentFragment()");
+	console.debug("[UI] ContentComponent::displayContentFragment(%s)", cell.getURI());
 
-	let content = Content.fromCell(cell);
-	this.displayContent(content);
+	// we need to clear the content, allow the UI to refresh to nothing 
+	Promise.resolve(null).then(d => {
+		console.debug("[UI] ContentComponent::displayContentFragment()[Promise with new content]]");
+
+		this.contentStack.push(this.content);
+		this.content = null;
+
+		this.cellStack.push(cell);
+		let cellClone = cell.deepClone();
+		let content = Content.fromCell(cellClone);
+		this.content = content;
+		this.isFragment = true;
+
+		this.cellSelectingMode = true;
+	});
+
+}
+
+
+unstackContentFromFragment(save: boolean) {
+
+	Promise.resolve(null).then(d => {
+		if (!this.cellStack.isEmpty()) {
+			let fragmentCell = this.cellStack.pop();
+
+			// TODO: create a replace method as this is duplicate code ****************************
+			const position = fragmentCell.position;
+			const parent = fragmentCell.parent;
+			parent.remove(fragmentCell);	  // TODO: slow but no need to change the interface for now
+			this.content.parent = undefined; // backup must be an orphan for it to be adopted
+			parent.adopt(this.content, position);
+
+			this.content = null;
+
+			// need to find the previous cell to apply changes
+			Promise.resolve(null).then(d => this.displayContent(this.contentStack.pop()));
+		}
+	});
 
 }
 
@@ -208,7 +262,7 @@ clear() {
 	this.cellSelectingMode = false;
 	this.unregisterKeyPressedEvents();
 	this.content = null;
-	this.contentStack.pop();
+	this.isFragment = false;
 
 }
 
@@ -284,6 +338,10 @@ commandPressedCallback(command: string) {
 			this.info = !this.info;
 			this.events.service.publish(new InfoModeEvent(this.info));
 			break;
+		case "u":
+			console.debug("[UI] ContentComponent::unstacking content");
+		 	this.unstackContentFromFragment(true);	// we save the changes
+		break;
 	}
 
 }

@@ -38,6 +38,7 @@ export class CellComponent extends SelectableWidget implements OnInit {
 @Input() parent?: FamilyMember;	// may not have a parent if we are a snippet
 @Input() cell: Cell;
 @Input() snippet?: boolean;
+@Input() isFragment?: boolean;
 @Input() level: number;
 @Input() position: number;
 
@@ -211,7 +212,7 @@ becomeActive(cell: Cell) {
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
 	this.events.service.publish(new CellSelectionClearEvent());
 
-	console.debug(">%s, %s", this.cell.getAdoptionName(), this.cell.getAdoptionURI());
+	console.debug("[becomeActive]>%s, %s", this.cell.getAdoptionName(), this.cell.getAdoptionURI());
 
 }
 

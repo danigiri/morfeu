@@ -32,7 +32,7 @@ import { EventService } from "../services/event.service";
 				></cell>
 			</div>
 		</a>
-`,
+	`,
 	styles: [`
 	        .snippet {
 	            /* border: 3px dashed #f00; */
