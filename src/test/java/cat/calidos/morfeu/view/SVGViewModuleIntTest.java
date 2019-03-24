@@ -1,3 +1,5 @@
+// SVG VIEW MODULE INT TEST . JAVA
+
 package cat.calidos.morfeu.view;
 
 import static org.junit.Assert.*;
@@ -24,7 +26,7 @@ import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SVGViewModuleIntTest {
 
-
+// FIXME: skip when there is no network or either avoid fetching remote resources
 @Test
 public void testRenderSVGTruncate() throws Exception {
 

@@ -41,19 +41,20 @@ protected final static Logger log = LoggerFactory.getLogger(DocumentModule.class
 
 @Produces
 public static Document produceDocument(@Named("NormalisedDocument") Document doc, 
-											  Provider<ModelSubcomponent.Builder> modelComponentProvider,
-											  Provider<ContentParserSubcomponent.Builder> contentParserComponentProvider) throws ExecutionException {
+										Provider<ModelSubcomponent.Builder> modelComponentProvider,
+										Provider<ContentParserSubcomponent.Builder> contentParserComponentProvider) 
+												throws ExecutionException {
 
 	// FIXME: what exception should we throw here?
 	Model model;
 	try {
-		
-		 model = modelComponentProvider.get().builder().model().get();
-		 doc.setModel(model);		 
-		 ContentParserSubcomponent contentParser = contentParserComponentProvider.get().builder();
-		 doc.setValidator(contentParser.validator().get());
-		 doc.validate();	// if this does not throw an exception, it means content is valid
-		 doc.setContent(contentParser.content().get());
+
+		model = modelComponentProvider.get().builder().model().get();
+		doc.setModel(model);
+		ContentParserSubcomponent contentParser = contentParserComponentProvider.get().builder();
+		doc.setValidator(contentParser.validator().get());
+		doc.validate();	// if this does not throw an exception, it means content is valid
+		doc.setContent(contentParser.content().get());
 
 	} catch (Exception e) {
 		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);
@@ -68,7 +69,7 @@ public static Document produceDocument(@Named("NormalisedDocument") Document doc
 public static InputStream fetchDocumentJSON(URI uri, CloseableHttpClient client) throws FetchingException {
 
 	try {
-		
+
 		return fetchRemoteStream(uri, client).get();
 
 	} catch (InterruptedException | ExecutionException e) {

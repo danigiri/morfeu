@@ -43,8 +43,8 @@ public class ModelTezt extends Tezt {
 protected Document produceDocumentFromPath(String path)
 throws InterruptedException, ExecutionException, ParsingException, FetchingException, ValidationException {
 
-	String doc1Path = testAwareFullPathFrom(path);
-	URI uri = DaggerURIComponent.builder().from(doc1Path).builder().uri().get();
+	String docPath = testAwareFullPathFrom(path);
+	URI uri = DaggerURIComponent.builder().from(docPath).builder().uri().get();
 
 	return DaggerDocumentComponent.builder().from(uri).withPrefix("").build().document().get();
 

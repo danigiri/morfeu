@@ -126,11 +126,11 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplatePath("templates/transform/content-to-yaml.twig")
-			.withValue(values)
-			.build()
-			.render();
-//	System.err.println(transformed);
+												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withValue(values)
+												.build()
+												.render();
+	System.err.println(transformed);
 	
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -259,13 +259,13 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 
 
 private Map<String, Object> valueMap(Document doc) {
-	
+
 	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", doc.asComplex().children().asList());
+	values.put("cells", doc.asComplex().children().child(0).asComplex().children().asList());	// skip root node
 	values.put("model", doc.getModel());
-	
+
 	return values;
-	
+
 }
 
 
