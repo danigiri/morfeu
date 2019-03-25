@@ -254,7 +254,9 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 		}
 
 		// handle the identifier if we have one defined, so we turn it into a reference to the attribute
-		if (cellModel.identifier) {
+		// we only do it when the identifier refers to a string, so if it's already been referenced we do not
+		// overwrite the reference
+		if (cellModel.identifier && typeof cellModel.identifier === 'string' ) {
 			cellModel.identifier = cellModel.attributes.find(a => a.name==cellModel.identifier);
 			if (cellModel.identifier==undefined) {
 				console.error("Wrong identifier reference in %s", cellModel.name);
