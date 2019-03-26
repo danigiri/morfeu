@@ -343,12 +343,12 @@ getAdoptionName(): string {
 
 
 getAdoptionURI(): string {
-	return this.cellModelURI;
+	return this.cellModel.getAdoptionURI();	// it could be that our model is a reference so we need the adoption uri
 }
 
 
 matches(e: FamilyMember): boolean {
-	return this.getAdoptionName()===e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
+	return this.getAdoptionName()===e.getAdoptionName() && this.getAdoptionURI()===e.getAdoptionURI();
 }
 
 

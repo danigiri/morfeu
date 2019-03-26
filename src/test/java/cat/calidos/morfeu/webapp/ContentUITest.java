@@ -152,7 +152,8 @@ public void relationshipFromModelToContentTest() {
 	assertTrue(test.dropArea(0).isActive());
 
 	// we highlight data2, on this column there are two of them so no drop areas are active
-	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2").hover();
+	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2");
+	data2Model.hover();
 	assertTrue(data2Model.isActive());
 	List<UIDropArea> dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").dropAreas();
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
