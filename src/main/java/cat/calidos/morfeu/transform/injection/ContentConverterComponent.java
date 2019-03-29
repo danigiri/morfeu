@@ -1,4 +1,5 @@
 // CONTENT CONVERTER COMPONENT . JAVA
+
 package cat.calidos.morfeu.transform.injection;
 
 import com.fasterxml.jackson.databind.JsonNode;

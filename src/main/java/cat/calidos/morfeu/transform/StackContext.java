@@ -14,9 +14,6 @@ private Stack<Processor<T,String>> stack = new Stack<Processor<T,String>>();
 private StringBuffer output = new StringBuffer();
 
 
-
-
-
 @Override
 public boolean empty() {
 	return stack.empty();

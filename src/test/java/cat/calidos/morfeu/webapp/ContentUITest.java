@@ -135,7 +135,7 @@ public void relationshipFromContentToModelTest() {
 
 @Test
 public void relationshipFromModelToContentTest() {
-	
+
 	UIDocument document = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)
@@ -161,7 +161,7 @@ public void relationshipFromModelToContentTest() {
 	// on the other one, there is only one data2, so there is room for 1 more, all drop areas active on that column
 	dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").dropAreas();
 	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
-	
+
 }
 
 

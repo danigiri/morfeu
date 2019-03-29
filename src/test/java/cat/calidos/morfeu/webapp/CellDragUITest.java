@@ -2,11 +2,12 @@
 
 package cat.calidos.morfeu.webapp;
 
+import static com.codeborne.selenide.Selenide.open;
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Selenide.open;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
