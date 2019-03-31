@@ -51,7 +51,7 @@ public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotat
 	
 	// an XSAnnotation is just a wrapper for any kind of object, in this case a Node, so we give it that
 	return extraMetadataNodes.stream()
-			.map(m -> DaggerModelMetadataComponent.build().from(new XSAnnotation() {
+			.map(m -> DaggerModelMetadataComponent.builder().from(new XSAnnotation() {
 
 													@Override
 													public Object setAnnotation(Object o) {

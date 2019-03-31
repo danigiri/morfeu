@@ -20,7 +20,7 @@ interface Builder {
 
 	@BindsInstance Builder from(JsonNode json);
 
-	ContentConverterComponent builder();
+	ContentConverterComponent build();
 
 }
 

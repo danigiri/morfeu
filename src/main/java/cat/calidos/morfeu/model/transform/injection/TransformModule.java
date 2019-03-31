@@ -81,7 +81,7 @@ Map<String, Transform<String, String>> stringToStringTransforms() {
 @Produces Map<String, Transform<Object, String>> objectToStringTransforms() {
 
 	HashMap<String, Transform<Object, String>> map = new HashMap<String, Transform<Object, String>>(1);
-	map.put("content-to-xml", (json) -> DaggerContentConverterComponent.builder().from((JsonNode)json).builder().xml());
+	map.put("content-to-xml", (json) -> DaggerContentConverterComponent.builder().from((JsonNode)json).build().xml());
 
 	return map;
 }
