@@ -2,14 +2,28 @@
 
 package cat.calidos.morfeu.model.transform;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+
+import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.utils.Config;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformYAMLToContentIntTest extends TransformTezt {
 
-//@Test
+@Test
 public void testTransformUsingTemplateDocument1() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
@@ -23,7 +37,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 }
 
 
-//@Test
+@Test
 public void testTransformUsingTemplateDocument3() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document3.yaml";
@@ -59,11 +73,29 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/transform/escape.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-	System.err.println(transformed);
+	//System.err.println(transformed);
 	compareWithXML(transformed, xmlPath);
 
 }
 
+
+@Test
+public void testTransformUsingConverter() throws Exception {
+	
+	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
+	String documentPath = "test-resources/documents/document1.json";
+	String xmlPath = "src/test/resources/test-resources/documents/document1.xml";
+	
+	YAMLMapper mapper = new YAMLMapper();
+	File inputFile = new File(yamlPath);
+	String content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
+	JsonNode yaml = mapper.readTree(content);
+
+	Document doc = produceDocumentFromPath(documentPath);
+	assertNotNull(doc);
+
+
+}
 
 }
 

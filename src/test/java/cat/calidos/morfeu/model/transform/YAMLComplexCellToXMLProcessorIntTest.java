@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,9 @@ import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.injection.ModelTezt;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
+import cat.calidos.morfeu.transform.StringProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
+import cat.calidos.morfeu.transform.injection.DaggerYAMLCellToXMLProcessorComponent;
 
 /**
 *	@author daniel giribet
@@ -39,7 +42,6 @@ public void setup() throws Exception {
 }
 
 
-
 @Test
 public void testIdentifier() throws Exception {
 
@@ -50,13 +52,40 @@ public void testIdentifier() throws Exception {
 	String yaml = 	"text: identifier\n"+
 					"color: 00ff00\n";
 	JsonNode yamlNode = mapper.readTree(yaml);
-	
 	JsonNodeCellModel nodeCellModel = new JsonNodeCellModel(yamlNode, data3);
+
 	YAMLComplexCellToXMLProcessor processor = new YAMLComplexCellToXMLProcessor("\t", "yaml-to-xml", nodeCellModel);
-	System.err.println(processor.output());
+	assertEquals("	<data3 text=\"identifier\" color=\"00ff00\"/>\n", processor.output());
 
 }
 
+
+@Test
+public void testData2() throws Exception {
+
+	ComplexCellModel col = test.children().child("row").asComplex().children().child("col").asComplex();
+	ComplexCellModel data2 = test.children().child("row").asComplex().children().child("col").asComplex().children().child("data2").asComplex();
+
+	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+	String yaml = 	"data2:\n" + 
+					"  - \n" + 
+					"    number: 42\n" + 
+					"    text: blahblah\n" + 
+					"  - \n" + 
+					"    number: 42\n" + 
+					"    text: blahblah";
+	JsonNode yamlNode = mapper.readTree(yaml);
+	List<StringProcessor<JsonNodeCellModel>> processors = DaggerYAMLCellToXMLProcessorComponent.builder()
+											.withPrefix("")
+											.fromNode(yamlNode)
+											.parentCellModel(col)
+											.givenCase("yaml-to-xml")
+											.build()
+											.processors();
+
+	assertEquals(2, processors.size());
+	
+}
 
 }
 

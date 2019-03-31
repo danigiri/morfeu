@@ -86,6 +86,7 @@ List<StringProcessor<JsonNodeCellModel>> processors(String pref,
 		for (int i=0;i<node.size();i++) {
 			processors.add(DaggerYAMLCellToXMLProcessorComponent.builder()
 																	.withPrefix("\t"+pref)
+																	.fromNode(node.get(i))
 																	.parentCellModel(parentCellModel)
 																	.givenCase(case_)
 																	.build()
