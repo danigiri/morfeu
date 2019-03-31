@@ -1,22 +1,11 @@
-package cat.calidos.morfeu.transform;
+package cat.calidos.morfeu.transform.injection;
 
+import cat.calidos.morfeu.transform.JsonNodeCellModel;
 
-/** A transformation processor, given context of type <T,O>
+/**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Processor<T, O> {
-
-
-default public Context<T, O> generateNewContext(Context<T, O> oldContext) { 
-	return oldContext; 
-}
-
-
-public T input();
-
-
-public O output();
-
+public class JsonNodeCellModelStackContextModule extends StackContextModule<JsonNodeCellModel> {
 
 }
 

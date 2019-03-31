@@ -1,22 +1,30 @@
 package cat.calidos.morfeu.transform;
 
 
-/** A transformation processor, given context of type <T,O>
+/**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Processor<T, O> {
+public abstract class StringProcessor<T> implements Processor<T, String> {
+
+private String prefix;
 
 
-default public Context<T, O> generateNewContext(Context<T, O> oldContext) { 
-	return oldContext; 
+StringProcessor(String prefix) {
+	this.prefix = prefix;
 }
 
 
-public T input();
+
+@Override
+public String output() {
+	return prefix;
+}
 
 
-public O output();
-
+@Override
+public String toString() {
+	return output();
+}
 
 }
 

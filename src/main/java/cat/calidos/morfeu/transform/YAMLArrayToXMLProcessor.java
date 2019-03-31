@@ -1,21 +1,43 @@
 package cat.calidos.morfeu.transform;
 
 
-/** A transformation processor, given context of type <T,O>
+/**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Processor<T, O> {
+public class YAMLArrayToXMLProcessor extends StringProcessor<JsonNodeCellModel> {
 
+private JsonNodeCellModel nodeCellModel;
 
-default public Context<T, O> generateNewContext(Context<T, O> oldContext) { 
-	return oldContext; 
+YAMLArrayToXMLProcessor(String prefix, JsonNodeCellModel nodeCellModel) {
+
+	super(prefix);
+
+	this.nodeCellModel = nodeCellModel;
+
 }
 
 
-public T input();
+@Override
+public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCellModel, String> oldContext) {
+
+	// TODO Auto-generated method stub
+	return super.generateNewContext(oldContext);
+}
 
 
-public O output();
+@Override
+public JsonNodeCellModel input() {
+
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public String output() {
+
+	// TODO Auto-generated method stub
+	return null;
+}
 
 
 }

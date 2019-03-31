@@ -1,21 +1,41 @@
 package cat.calidos.morfeu.transform;
 
+import com.fasterxml.jackson.databind.JsonNode;
 
-/** A transformation processor, given context of type <T,O>
+import cat.calidos.morfeu.model.CellModel;
+
+/**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public interface Processor<T, O> {
+public class JsonNodeCellModel {
 
 
-default public Context<T, O> generateNewContext(Context<T, O> oldContext) { 
-	return oldContext; 
+private JsonNode node;
+private CellModel cellModel;
+
+public JsonNodeCellModel(JsonNode node, CellModel cellModel) {
+
+	this.node = node;
+	this.cellModel = cellModel;
+	
+}
+
+public JsonNode node() {
+	return node;
+}
+
+public CellModel cellModel() {
+	return cellModel;
 }
 
 
-public T input();
+@Override
+public String toString() {
+	return "<"+node.asText()+","+cellModel.getName()+">";
+}
 
 
-public O output();
+
 
 
 }
