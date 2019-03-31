@@ -1,20 +1,15 @@
 package cat.calidos.morfeu.transform;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import org.openqa.selenium.json.Json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
+import cat.calidos.morfeu.transform.injection.DaggerYAMLCellToXMLProcessorComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
@@ -24,6 +19,7 @@ public class YAMLComplexCellToXMLProcessor extends StringProcessor<JsonNodeCellM
 
 private String case_;
 private JsonNodeCellModel nodeCellModel;
+private boolean hasChildren;
 
 
 public YAMLComplexCellToXMLProcessor(String prefix, String case_, JsonNodeCellModel nodeCellModel) {
@@ -32,6 +28,7 @@ public YAMLComplexCellToXMLProcessor(String prefix, String case_, JsonNodeCellMo
 
 	this.case_ = case_;
 	this.nodeCellModel = nodeCellModel;
+	this.hasChildren = nodeCellModel.cellModel().asComplex().children().size()>0;
 
 }
 
@@ -39,6 +36,38 @@ public YAMLComplexCellToXMLProcessor(String prefix, String case_, JsonNodeCellMo
 @Override
 public JsonNodeCellModel input() {
 	return nodeCellModel;
+}
+
+
+
+
+@Override
+public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCellModel, String> oldContext) {
+
+	Context<JsonNodeCellModel, String> context = oldContext;
+	
+	if (hasChildren) {
+		context.push(DaggerYAMLCellToXMLProcessorComponent.builder()
+															.withPrefix(prefix)
+															.fromNode(nodeCellModel.node())
+															.cellModel(nodeCellModel.cellModel())
+															.givenCase(case_)
+															.build()
+															.processorSlash());
+	}
+	
+	// now we push the children and we're done
+	
+	DaggerYAMLCellToXMLProcessorComponent.builder()
+											.withPrefix(prefix)
+											.givenCase(case_)
+											.parentCellModel(nodeCellModel.cellModel().asComplex())
+											.build()
+											.processors()
+											.forEach(context::push);
+	
+	return context;
+	
 }
 
 
@@ -53,23 +82,21 @@ public String output() {
 
 	values.put("cm", cellModel);
 	values.put("yaml", node);
+	values.put("hasChildren", hasChildren);
 
 	List<String> caseAttributes = metadata.getAttributesFor(case_).stream().collect(Collectors.toList());
 	values.put("caseAttr", caseAttributes);
 
-	// check if there is an attribute that is an identifier
+	List<CellModel> attributeNames = cellModel.attributes().asList();
+	List<String> attr = attributeNames.stream().map(a -> a.getName()).filter(node::has).collect(Collectors.toList());
+
+	// check if there is an attribute that is an identifier, add it separately and skip it from the list
 	boolean hasIdentifier = metadata.getIdentifier().isPresent();
 	values.put("hasIdentifier", hasIdentifier);
 	String identifier = hasIdentifier ? metadata.getIdentifier().get() : "";
 	if (hasIdentifier) {
 		values.put("identifier", identifier);
 		values.put("identifierValue", node.get(identifier).asText());	// double check
-	}
-
-	// now we check the rest of the attributes
-	List<CellModel> attributeNames = cellModel.attributes().asList();
-	List<String> attr = attributeNames.stream().map(a -> a.getName()).filter(node::has).collect(Collectors.toList());
-	if (hasIdentifier) {	// we skip the identifier
 		attr = attr.stream().filter(a -> !a.equals(identifier)).collect(Collectors.toList());
 	}
 	values.put("attr", attr);
@@ -78,7 +105,7 @@ public String output() {
 						"{% for a in v.caseAttr %} {{a}}{% endfor %}"+
 						"{% if  v.hasIdentifier %} {{v.identifier}}={{quote(xmla(v.identifierValue))}}{% endif %}"+
 						"{% for a in v.attr %} {{a}}={{quote(xmla(v.yaml.get(a)))}}{% endfor %}" +
-						"{% if cellmodel.asComplex.children.size()>0 %}" +
+						"{% if v.hasChildren %}" +
 						">\n"+
 						"{% else %}"+
 						"/>\n"+

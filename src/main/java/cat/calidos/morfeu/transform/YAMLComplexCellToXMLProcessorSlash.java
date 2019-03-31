@@ -9,7 +9,7 @@ public class YAMLComplexCellToXMLProcessorSlash extends StringProcessor<JsonNode
 private JsonNodeCellModel nodeCellModel;
 
 
-YAMLComplexCellToXMLProcessorSlash(String prefix, JsonNodeCellModel nodeCellModel) {
+public YAMLComplexCellToXMLProcessorSlash(String prefix, JsonNodeCellModel nodeCellModel) {
 
 	super(prefix);
 

@@ -6,7 +6,7 @@ package cat.calidos.morfeu.transform;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public abstract class StringProcessor<T> implements Processor<T, String> {
 
-private String prefix;
+protected String prefix;
 
 
 StringProcessor(String prefix) {

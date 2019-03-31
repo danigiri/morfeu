@@ -17,7 +17,7 @@
 						{%- if y==matchname -%}
 							{#- Matched a field in the yaml and a child in the model, we have a match -#}
 							{%- set found = true -%}
-							{%- include 'cell-yaml-to-xml.dtwig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
+							{%- include 'cell-yaml-to-xml.twig' with {'yaml': yaml.get(matchname), 'cellmodels':[child], 'i':i, 'case': case} only -%}
 						{%- endif -%}
 					{%- endfor -%}
 				{%- endfor %}

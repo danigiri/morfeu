@@ -42,6 +42,9 @@ public static String DEFAULT_PRESENTATION = "CELL";
 private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
 private static final String DEFAULT_CELL_PRESENTATION_TYPE = "IMG";
 public static final String DEFAULT_VALUE_PREFIX = "@";
+public static final String ATTRIBUTES_ONLY = "ATTRIBUTES-ONLY";	// directive to signal this cm serialises only attribs
+public static final String LISTS_NO_PLURAL = "LISTS-NO-PLURAL";	// directive that a list is not pluralised (default)
+public static final String KEY_VALUE = "KEY-VALUE";				// directive that specifyies that it's a key-value
 
 private URI uri;	// pre-calculated default
 private String desc;
