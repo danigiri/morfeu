@@ -18,13 +18,13 @@ import cat.calidos.morfeu.transform.Processor;
 public class ContentJSONToXMLModule {
 
 
-@Provides @Named("begin")
+@Provides @Named("Begin")
 Processor<JsonNode, String> processor(String pref, JsonNode node) {
 	return new ContentJSONToXMLProcessor(pref, node);
 }
 
 
-@Provides @Named("end")
+@Provides @Named("End")
 Processor<JsonNode, String> processorSlash(String pref, JsonNode node) {
 	return new ContentJSONToXMLProcessorSlash(pref, node);
 }

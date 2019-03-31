@@ -11,8 +11,8 @@ import dagger.Component;
 @Component(modules={ContentJSONToXMLModule.class})
 public interface ContentJSONToXMLComponent {
 
-@Named("begin")	Processor<JsonNode, String> processor();
-@Named("end")	Processor<JsonNode, String> processorSlash();
+@Named("Begin")	Processor<JsonNode, String> processor();
+@Named("End")	Processor<JsonNode, String> processorSlash();
 
 
 @Component.Builder
@@ -21,7 +21,7 @@ interface Builder {
 	@BindsInstance Builder fromNode(JsonNode node);
 	@BindsInstance Builder withPrefix(String pref);
 
-	ContentJSONToXMLComponent builder();
+	ContentJSONToXMLComponent build();
 
 }
 

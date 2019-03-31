@@ -1,6 +1,7 @@
+// CONTENT JSON TO XML PROCESSOR . JAVA
+
 package cat.calidos.morfeu.transform;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -49,7 +50,7 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 			newContext.push(DaggerContentJSONToXMLComponent.builder()
 															.fromNode(node)
 															.withPrefix(prefix)
-															.builder()
+															.build()
 															.processorSlash()
 			);
 		}
@@ -59,7 +60,7 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 		children.forEach(c -> childrenList.addFirst(DaggerContentJSONToXMLComponent.builder()	// add at beginning
 																					.fromNode(c)
 																					.withPrefix(newPrefix)
-																					.builder()
+																					.build()
 																					.processor())
 		);
 		childrenList.forEach(newContext::push);	// now this is in the correct order

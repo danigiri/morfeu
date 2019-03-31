@@ -73,7 +73,7 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 										.withURI(uri)
 										.fromNode(node)
 										.withCellModel(cellModel)
-										.builder()
+										.build()
 										.createCell();
 	if (!cellModelFilter.isPresent()) {	// we have a root node which is this cell, which is an empty root cell
 		cell.setName(Document.ROOT_NAME);

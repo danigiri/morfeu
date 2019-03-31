@@ -182,7 +182,7 @@ public static Composite<Cell> childrenFrom(Node node, URI uri, ComplexCellModel 
 													.withURI(childURI)
 													.fromNode(childElem)
 													.withCellModel(childCellModel)
-													.builder()
+													.build()
 													.createCell();
 
 			children.addChild(childIndexedName, childCell);
@@ -243,7 +243,7 @@ private static  Attributes<Cell> attributesFrom(Node node, URI uri, ComplexCellM
 														.withURI(childURI)
 														.fromNode(attribute)
 														.withCellModel(attributeCellModel)
-														.builder()
+														.build()
 														.createCell();
 			attributes.addChild(attributeName, attributeCell); 
 			//System.err.println("\t\ta["+i+"]:"+attributeName+":"+attributeCell.getValue());
