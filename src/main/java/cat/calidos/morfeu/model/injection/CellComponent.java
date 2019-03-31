@@ -28,7 +28,7 @@ interface Builder {
 	@BindsInstance Builder withURI(URI u);
 	@BindsInstance Builder fromNode(Node node);
 	@BindsInstance Builder withCellModel(CellModel cm);
-	CellComponent builder();
+	CellComponent build();
 }
 
 }
