@@ -59,7 +59,7 @@ public void testConverter() throws Exception {
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	assertNotNull(json);
 
-	String transformed = DaggerContentConverterComponent.builder().from(json).builder().xml();
+	String transformed = DaggerContentConverterComponent.builder().from(json).build().xml();
 
 	//System.err.println(transformed);
 	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
