@@ -18,7 +18,7 @@ import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
-import cat.calidos.morfeu.transform.StringProcessor;
+import cat.calidos.morfeu.transform.PrefixProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessorSlash;
 import cat.calidos.morfeu.transform.YAMLTextualToXMLProcessor;
@@ -31,13 +31,13 @@ public class YAMLComplexCellToXMLProcessorModule {
 
 
 @Provides
-List<StringProcessor<JsonNodeCellModel>> processors(String pref,
-												@Named("Case") String case_,
-												JsonNode node,
-												@Nullable CellModel cellModel,
-												@Named("Parent") @Nullable ComplexCellModel parentCellModel) {
+List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
+															@Named("Case") String case_,
+															JsonNode node,
+															@Nullable CellModel cellModel,
+															@Named("Parent") @Nullable ComplexCellModel parentCellModel) {
 
-	List<StringProcessor<JsonNodeCellModel>> processors = new LinkedList<StringProcessor<JsonNodeCellModel>>();
+	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 	
 	if (cellModel==null && parentCellModel==null) {
 			throw new NullPointerException("cannot get cell model of the processor without either parent or cell model");
@@ -101,7 +101,7 @@ List<StringProcessor<JsonNodeCellModel>> processors(String pref,
 
 
 @Provides
-StringProcessor<JsonNodeCellModel> processorSlash(String pref, JsonNode node, @Nullable CellModel cellModel) {
+PrefixProcessor<JsonNodeCellModel, String> processorSlash(String pref, JsonNode node, @Nullable CellModel cellModel) {
 
 	if (cellModel==null) {
 		throw new NullPointerException("Cannot create a slash processor without the node");
@@ -126,7 +126,7 @@ private YAMLComplexCellToXMLProcessor generateComplexProcessor(String pref,
 }
 
 
-private List<StringProcessor<JsonNodeCellModel>> generateChildrenProcessors(String pref, 
+private List<PrefixProcessor<JsonNodeCellModel, String>> generateChildrenProcessors(String pref, 
 																			String case_, JsonNode node,
 																			ComplexCellModel parentCellModel) {
 	return parentCellModel.children()

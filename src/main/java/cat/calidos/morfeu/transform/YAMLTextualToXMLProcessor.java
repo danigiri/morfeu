@@ -7,7 +7,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 /**	This creates a simple xml text node witjout any attributes <foo>bar</foo>
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class YAMLTextualToXMLProcessor  extends StringProcessor<JsonNodeCellModel> {
+public class YAMLTextualToXMLProcessor  extends PrefixProcessor<JsonNodeCellModel, String> {
 
 private JsonNodeCellModel nodeCellModel;
 

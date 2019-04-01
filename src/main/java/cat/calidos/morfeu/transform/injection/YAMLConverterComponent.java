@@ -1,29 +1,27 @@
-package cat.calidos.morfeu.transform;
+package cat.calidos.morfeu.transform.injection;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import cat.calidos.morfeu.model.Model;
+import dagger.BindsInstance;
+import dagger.Component;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public abstract class StringProcessor<T> implements Processor<T, String> {
+@Component(modules={YAMLConverterModule.class, JsonNodeCellModelStackContextModule.class})
+public interface YAMLConverterComponent {
 
-protected String prefix;
+public String xml();
 
+@Component.Builder
+interface Builder {
 
-StringProcessor(String prefix) {
-	this.prefix = prefix;
-}
+	@BindsInstance Builder from(JsonNode yaml);
+	@BindsInstance Builder given(Model model);
 
+	YAMLConverterComponent build();
 
-
-@Override
-public String output() {
-	return prefix;
-}
-
-
-@Override
-public String toString() {
-	return output();
 }
 
 }

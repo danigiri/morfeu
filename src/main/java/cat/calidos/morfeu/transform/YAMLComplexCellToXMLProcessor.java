@@ -15,7 +15,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class YAMLComplexCellToXMLProcessor extends StringProcessor<JsonNodeCellModel> {
+public class YAMLComplexCellToXMLProcessor extends PrefixProcessor<JsonNodeCellModel, String> {
 
 private String case_;
 private JsonNodeCellModel nodeCellModel;

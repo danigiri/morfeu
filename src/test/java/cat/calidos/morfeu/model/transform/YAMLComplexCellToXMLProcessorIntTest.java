@@ -19,7 +19,7 @@ import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.injection.ModelTezt;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
-import cat.calidos.morfeu.transform.StringProcessor;
+import cat.calidos.morfeu.transform.PrefixProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
 import cat.calidos.morfeu.transform.injection.DaggerYAMLCellToXMLProcessorComponent;
 
@@ -75,7 +75,7 @@ public void testData2() throws Exception {
 					"    number: 42\n" + 
 					"    text: blahblah";
 	JsonNode yamlNode = mapper.readTree(yaml);
-	List<StringProcessor<JsonNodeCellModel>> processors = DaggerYAMLCellToXMLProcessorComponent.builder()
+	List<PrefixProcessor<JsonNodeCellModel, String>> processors = DaggerYAMLCellToXMLProcessorComponent.builder()
 											.withPrefix("")
 											.fromNode(yamlNode)
 											.parentCellModel(col)

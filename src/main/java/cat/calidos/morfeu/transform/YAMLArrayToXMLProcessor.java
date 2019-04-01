@@ -4,7 +4,7 @@ package cat.calidos.morfeu.transform;
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class YAMLArrayToXMLProcessor extends StringProcessor<JsonNodeCellModel> {
+public class YAMLArrayToXMLProcessor extends PrefixProcessor<JsonNodeCellModel, String> {
 
 private JsonNodeCellModel nodeCellModel;
 

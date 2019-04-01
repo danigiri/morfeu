@@ -1,14 +1,32 @@
-package cat.calidos.morfeu.transform.injection;
+package cat.calidos.morfeu.transform;
 
-import dagger.Module;
-
-import cat.calidos.morfeu.transform.JsonNodeCellModel;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class JsonNodeCellModelStackContextModule extends StackContextModule<JsonNodeCellModel> {}
+public abstract class PrefixProcessor<T, S> implements Processor<T, S> {
+
+protected S prefix;
+
+
+PrefixProcessor(S prefix) {
+	this.prefix = prefix;
+}
+
+
+
+@Override
+public S output() {
+	return prefix;
+}
+
+
+@Override
+public String toString() {
+	return output().toString();
+}
+
+}
 
 
 /*

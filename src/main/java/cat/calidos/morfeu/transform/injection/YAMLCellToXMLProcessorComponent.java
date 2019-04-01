@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
-import cat.calidos.morfeu.transform.StringProcessor;
+import cat.calidos.morfeu.transform.PrefixProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessorSlash;
 import cat.calidos.morfeu.transform.injection.ContentJSONToXMLComponent.Builder;
@@ -24,8 +24,8 @@ import dagger.Component;
 @Component(modules=YAMLComplexCellToXMLProcessorModule.class)
 public interface YAMLCellToXMLProcessorComponent {
 
-List<StringProcessor<JsonNodeCellModel>> processors();				// we return a list of children from the node
-StringProcessor<JsonNodeCellModel> processorSlash();// we return slash from the node
+List<PrefixProcessor<JsonNodeCellModel, String>> processors();				// we return a list of children from the node
+PrefixProcessor<JsonNodeCellModel, String> processorSlash();// we return slash from the node
 
 @Component.Builder
 interface Builder {
