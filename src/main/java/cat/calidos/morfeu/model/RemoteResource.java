@@ -16,6 +16,8 @@ protected String desc;
 RemoteResource(URI u) {
 	this.uri = u;
 }
+
+
 RemoteResource(URI u, String name, String desc) {
 	
 	this(u);
@@ -34,9 +36,13 @@ public URI getURI() {
 public String getName() {
 	return name;
 }
+
+
 public String getDesc() {
 	return desc;
 }
+
+
 @JsonProperty("name")
 public void setName(String name) {
 	this.name = name;

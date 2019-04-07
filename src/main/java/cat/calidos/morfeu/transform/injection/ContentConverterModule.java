@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import dagger.Module;
 import dagger.Provides;
+
 import cat.calidos.morfeu.transform.Converter;
 import cat.calidos.morfeu.transform.StackContext;
 

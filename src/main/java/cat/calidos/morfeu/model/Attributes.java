@@ -30,6 +30,8 @@ boolean hasAttribute(String name);
 
 List<T> asList();
 
+public Stream<T> stream();
+
 int size();
 
 T attribute(int i);

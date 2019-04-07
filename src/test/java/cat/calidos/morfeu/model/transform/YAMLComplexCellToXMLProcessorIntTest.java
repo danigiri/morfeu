@@ -3,10 +3,12 @@ package cat.calidos.morfeu.model.transform;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,6 +16,7 @@ import org.mockito.Mock;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
@@ -22,6 +25,7 @@ import cat.calidos.morfeu.transform.JsonNodeCellModel;
 import cat.calidos.morfeu.transform.PrefixProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
 import cat.calidos.morfeu.transform.injection.DaggerYAMLCellToXMLProcessorComponent;
+import cat.calidos.morfeu.utils.Config;
 
 /**
 *	@author daniel giribet
@@ -60,7 +64,7 @@ public void testIdentifier() throws Exception {
 }
 
 
-@Test
+//@Test
 public void testData2() throws Exception {
 
 	ComplexCellModel col = test.children().child("row").asComplex().children().child("col").asComplex();
@@ -86,6 +90,7 @@ public void testData2() throws Exception {
 	assertEquals(2, processors.size());
 	
 }
+
 
 }
 
