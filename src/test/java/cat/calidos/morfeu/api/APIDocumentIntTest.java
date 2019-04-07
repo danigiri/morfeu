@@ -20,17 +20,10 @@ import static org.junit.Assert.*;
 
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cat.calidos.morfeu.utils.Tezt;
- 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

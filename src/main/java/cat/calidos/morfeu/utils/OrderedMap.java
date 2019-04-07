@@ -139,6 +139,13 @@ public List<T> asList() {
 }
 
 
+
+@Override
+public Stream<T> stream() {
+	return asList().stream();
+}
+
+
 @Override
 public T child(int i) {
 	return get(i, CHILD);
@@ -173,6 +180,12 @@ public String toString() {
 }
 
 
+//@Override
+//public Stream<T> stream() {
+//	return values.values().stream();
+//}
+
+
 private T get(int i, String what) throws InternalException {
 
 	int size = keys.size();
@@ -191,12 +204,6 @@ private T get(String name, String what) throws InternalException {
 	} else {
 		throw new InternalException("Cannot get '"+what+"' named '"+name+"'");
 	}
-}
-
-
-@Override
-public Stream<T> stream() {
-	return values.values().stream();
 }
 
 

@@ -1,16 +1,21 @@
 // MODEL TEZT . JAVA
 package cat.calidos.morfeu.model.injection;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
@@ -29,6 +34,7 @@ import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
+import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Tezt;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
@@ -117,6 +123,19 @@ protected Type provideElementType(XSElementDecl elem) {
 								.type();
 
 }
+
+
+protected JsonNode readYAMLFrom(String path) throws Exception {
+	
+	YAMLMapper mapper = new YAMLMapper();
+	File inputFile = new File(path);
+	String content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
+	JsonNode yaml = mapper.readTree(content);
+
+	return yaml;
+	
+}
+
 
 }
 

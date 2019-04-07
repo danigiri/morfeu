@@ -4,6 +4,8 @@ import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.transform.Converter;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
@@ -30,15 +32,29 @@ Converter<JsonNodeCellModel, String> converter(@Named("PopulatedContext") StackC
 @Provides @Named("PopulatedContext")
 StackContext<JsonNodeCellModel> populatedContext(StackContext<JsonNodeCellModel> context,
 													JsonNode yaml, 
-													Model model) {
+													CellModel model) {
 
-	DaggerYAMLCellToXMLProcessorComponent.builder()
-											.fromNode(yaml)
-											.givenCase("yaml-to-xml")
-											.parentCellModel(model)
-											.build()
-											.processors()
-											.forEach(context::push);
+	// we iteratively add all elements, skipping the root node as our algorithm is happy with that
+//	yaml.fields().forEachRemaining(f -> DaggerYAMLCellToXMLProcessorComponent.builder()
+//																				.fromNode(f.getValue())
+//																				.givenCase("yaml-to-xml")
+//																				.parentCellModel(model)
+//																				.withPrefix("")
+//																				.build()
+//																				.processors()
+//																				.forEach(context::push));
+
+	model.asComplex()
+			.children()
+			.stream()
+			.forEach(cm -> DaggerYAMLCellToXMLProcessorComponent.builder()
+																	.fromNode(yaml)
+																	.givenCase("yaml-to-xml")
+																	.cellModel(cm)
+																	.withPrefix("")
+																	.build()
+																	.processors()
+																	.forEach(context::push));
 
 	return context;
 

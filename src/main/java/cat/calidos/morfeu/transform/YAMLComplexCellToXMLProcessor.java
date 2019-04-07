@@ -60,8 +60,9 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 	
 	DaggerYAMLCellToXMLProcessorComponent.builder()
 											.withPrefix(prefix)
+											.fromNode(nodeCellModel.node())
 											.givenCase(case_)
-											.parentCellModel(nodeCellModel.cellModel().asComplex())
+											.cellModel(nodeCellModel.cellModel().asComplex())
 											.build()
 											.processors()
 											.forEach(context::push);

@@ -2,6 +2,7 @@ package cat.calidos.morfeu.transform.injection;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Model;
 import dagger.BindsInstance;
 import dagger.Component;
@@ -18,7 +19,7 @@ public String xml();
 interface Builder {
 
 	@BindsInstance Builder from(JsonNode yaml);
-	@BindsInstance Builder given(Model model);
+	@BindsInstance Builder given(CellModel model);
 
 	YAMLConverterComponent build();
 

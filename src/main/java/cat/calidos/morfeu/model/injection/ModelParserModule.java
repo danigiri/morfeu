@@ -16,13 +16,13 @@ import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
-import cat.calidos.morfeu.problems.ConfigurationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+
+import cat.calidos.morfeu.problems.ConfigurationException;
 
 /**
 * @author daniel giribet
@@ -40,31 +40,31 @@ public static SAXParserFactory produceSAXParserFactory() throws ConfigurationExc
 	//TODO: double-check which parser to use that implements security like we want
 	SAXParserFactory factory = SAXParserFactory.newInstance();
 	factory.setNamespaceAware(true);
-    try {
-    	// TODO: checkout how to ensure we can load includes but only from the same origin and stuff
-    	factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+	try {
+		// TODO: checkout how to ensure we can load includes but only from the same origin and stuff
+		factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 	} catch (SAXNotRecognizedException | SAXNotSupportedException | ParserConfigurationException e) {
 		throw new ConfigurationException("Problem building schema parser", e);
 	}
 
-    return factory;
+	return factory;
 
 }
 
 
 @Produces
 public static XSOMParser produceSchemaParser(SAXParserFactory factory, 
-											 ErrorHandler parserErrorHandler, 
-											 AnnotationParserFactory annotationParserFactory) {
-	
+												ErrorHandler parserErrorHandler, 
+												AnnotationParserFactory annotationParserFactory) {
+
 	log.trace("[Producing XSOMParser] with custom error handler and annotation parser");
 
     XSOMParser parser = new XSOMParser(factory);
     parser.setErrorHandler(parserErrorHandler);
     parser.setAnnotationParser(annotationParserFactory);
-    
+
     return parser;
-    
+
 }
 
 

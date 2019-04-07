@@ -161,10 +161,10 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplatePath("templates/transform/content-to-yaml.twig")
-			.withValue(values)
-			.build()
-			.render();
+												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withValue(values)
+												.build()
+												.render();
 	//System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();
@@ -191,10 +191,10 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplatePath("templates/transform/content-to-yaml.twig")
-			.withValue(values)
-			.build()
-			.render();
+												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withValue(values)
+												.build()
+												.render();
 	//System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();
@@ -228,10 +228,10 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplatePath("templates/transform/content-to-yaml.twig")
-			.withValue(values)
-			.build()
-			.render();
+												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withValue(values)
+												.build()
+												.render();
 	//System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();

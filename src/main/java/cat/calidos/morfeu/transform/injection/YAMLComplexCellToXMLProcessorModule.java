@@ -35,7 +35,7 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 															@Named("Case") String case_,
 															JsonNode node,
 															@Nullable CellModel cellModel,
-															@Named("Parent") @Nullable ComplexCellModel parentCellModel) {
+															@Named("Parent") @Nullable CellModel parentCellModel) {
 
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 	
@@ -48,13 +48,17 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 		if (cellModel==null) {	// we have go through the children and generate processors
 	
 			// are we in attributes only?
-			Optional<CellModel> guess = parentCellModel.children()
-														.stream()
-														.filter(cm -> cm.getMetadata()
-																			.getDirectivesFor(case_)
-																			.contains(Metadata.ATTRIBUTES_ONLY))
-														.filter(cm -> node.has(cm.getName()))
-														.findAny();
+
+			Optional<CellModel> guess = Optional.empty();
+			if (parentCellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.ATTRIBUTES_ONLY)) {
+				guess = parentCellModel.asComplex().children().stream().filter(cm -> cm.asComplex()
+																				.attributes()
+																				.stream()
+																				.filter(a -> node.has(a.getName()))
+																				.findAny()
+																				.isPresent()
+																		).findAny();
+			}
 			if (guess.isPresent()) {
 				// if we are in attributes only mode we generate only one processor with the correct guess
 				processors.add(generateComplexProcessor(pref, case_, node, guess.get()));
@@ -128,8 +132,9 @@ private YAMLComplexCellToXMLProcessor generateComplexProcessor(String pref,
 
 private List<PrefixProcessor<JsonNodeCellModel, String>> generateChildrenProcessors(String pref, 
 																			String case_, JsonNode node,
-																			ComplexCellModel parentCellModel) {
-	return parentCellModel.children()
+																			CellModel parentCellModel) {
+	return parentCellModel.asComplex()
+							.children()
 							.stream()
 							.filter(cm -> node.has(matchName(cm, case_)))
 							.map(cm -> generateComplexProcessor(pref, case_, node, cm))

@@ -146,11 +146,13 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		Map<String, Object> values = new HashMap<String, Object>(2);
 
 		List<CellModel> rootCellModels = model.get().get().children().asList();
-		values.put("cellmodels", rootCellModels);
-		values.put("yaml", yaml);
+		values.put("cellmodels", rootCellModels);	// as the yaml does not have a root virtual node we
+		values.put("yaml", yaml);					// start from the list of cell models and not its empty root node
 		values.put("case", "yaml-to-xml");
 		//rootCellModels.stream().map(cm -> cm.getName()).forEach(name -> log.trace("CellModel:{}",name));
 
+		
+		// WE PUT THE TRANSFORMER HERE //
 		String transformedContent = DaggerViewComponent.builder()
 														.withTemplatePath("templates/transform/content-yaml-to-xml.twig")
 														.withValue(values)

@@ -63,10 +63,7 @@ protected void compareWithXML(String content, String path) {
 
 protected String transformYAMLToXML(String yamlPath, String documentPath) throws Exception {
 
-	YAMLMapper mapper = new YAMLMapper();
-	File inputFile = new File(yamlPath);
-	String content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
-	JsonNode yaml = mapper.readTree(content);
+	JsonNode yaml = readYAMLFrom(yamlPath);
 
 	Document doc = produceDocumentFromPath(documentPath);
 	assertNotNull(doc);

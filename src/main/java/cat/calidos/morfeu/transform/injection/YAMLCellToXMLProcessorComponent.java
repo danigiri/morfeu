@@ -34,7 +34,7 @@ interface Builder {
 	@BindsInstance Builder givenCase(@Named("Case") String case_);
 	@BindsInstance Builder fromNode(JsonNode node);	// either a parent or a plain node (for the slash generation)
 	@BindsInstance Builder cellModel(@Nullable CellModel cellModel);
-	@BindsInstance Builder parentCellModel(@Named("Parent") @Nullable ComplexCellModel parentCellmodel);
+	@BindsInstance Builder parentCellModel(@Named("Parent") @Nullable CellModel parentCellmodel);
 	
 	YAMLCellToXMLProcessorComponent build();
 

@@ -79,21 +79,14 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 }
 
 
-@Test
+//@Test
 public void testTransformUsingConverter() throws Exception {
 	
-	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
 	String documentPath = "test-resources/documents/document1.json";
+	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
 	String xmlPath = "src/test/resources/test-resources/documents/document1.xml";
 	
-	YAMLMapper mapper = new YAMLMapper();
-	File inputFile = new File(yamlPath);
-	String content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
-	JsonNode yaml = mapper.readTree(content);
-
-	Document doc = produceDocumentFromPath(documentPath);
-	assertNotNull(doc);
-
+	JsonNode yaml = readYAMLFrom(yamlPath);
 
 }
 
