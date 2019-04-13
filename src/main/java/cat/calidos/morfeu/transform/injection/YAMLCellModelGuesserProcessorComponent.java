@@ -7,25 +7,21 @@ import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
 import cat.calidos.morfeu.transform.PrefixProcessor;
-import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
-import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessorSlash;
-import cat.calidos.morfeu.transform.injection.ContentJSONToXMLComponent.Builder;
+import cat.calidos.morfeu.transform.injection.YAMLCellToXMLProcessorComponent.Builder;
 import dagger.BindsInstance;
-import dagger.BindsOptionalOf;
 import dagger.Component;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=YAMLCellToXMLProcessorModule.class)
-public interface YAMLCellToXMLProcessorComponent {
+@Component(modules={YAMLCellModelGuesserProcessorModule.class})
+public interface YAMLCellModelGuesserProcessorComponent {
 
-List<PrefixProcessor<JsonNodeCellModel, String>> processors();				// we return a list of children from the node
-PrefixProcessor<JsonNodeCellModel, String> processorSlash();// we return slash from the node
+
+List<PrefixProcessor<JsonNodeCellModel, String>> processors();
 
 @Component.Builder
 interface Builder {
@@ -33,13 +29,14 @@ interface Builder {
 	@BindsInstance Builder withPrefix(String pref);
 	@BindsInstance Builder givenCase(@Named("Case") String case_);
 	@BindsInstance Builder fromNode(JsonNode node);	// either a parent or a plain node (for the slash generation)
-	@BindsInstance Builder cellModel(CellModel cellModel);
-	
-	YAMLCellToXMLProcessorComponent build();
+	@BindsInstance Builder parentCellModel(ComplexCellModel parentCellmodel);
 
+	
+	YAMLCellModelGuesserProcessorComponent build();
+	
 }
 
-} 
+}
 
 
 /*

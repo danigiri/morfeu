@@ -27,60 +27,31 @@ import cat.calidos.morfeu.transform.YAMLTextualToXMLProcessor;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class YAMLComplexCellToXMLProcessorModule {
+public class YAMLCellToXMLProcessorModule {
 
 
 @Provides
 List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 															@Named("Case") String case_,
 															JsonNode node,
-															@Nullable CellModel cellModel,
-															@Named("Parent") @Nullable CellModel parentCellModel) {
-
+															CellModel cellModel) {
+	
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
+	if (node.isObject()) {
 	
-	if (cellModel==null && parentCellModel==null) {
-			throw new NullPointerException("cannot get cell model of the processor without either parent or cell model");
-	}
-
-	if (node.isObject()) {														//// OBJECT ////
-
-		if (cellModel==null) {	// we have go through the children and generate processors
-	
-			// are we in attributes only?
-
-			Optional<CellModel> guess = Optional.empty();
-			if (parentCellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.ATTRIBUTES_ONLY)) {
-				guess = parentCellModel.asComplex().children().stream().filter(cm -> cm.asComplex()
-																				.attributes()
-																				.stream()
-																				.filter(a -> node.has(a.getName()))
-																				.findAny()
-																				.isPresent()
-																		).findAny();
-			}
-			if (guess.isPresent()) {
-				// if we are in attributes only mode we generate only one processor with the correct guess
-				processors.add(generateComplexProcessor(pref, case_, node, guess.get()));
-			} else {
-				// we have a list of children, we match and generate a list
-				processors = generateChildrenProcessors(pref, case_, node, parentCellModel);
-			}
-		} else {				// we know the cell model
-			if (cellModel.isSimple()) {						// .. and it's a simple one
-				processors.add(generateTextualProcessor(pref, node, cellModel));
-			} else {										// it's a complex one
-				if (cellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.KEY_VALUE)) {
-					Iterator<Entry<String, JsonNode>> fields = node.fields();
-					while (fields.hasNext()) {
-						processors.add(generateComplexProcessor(pref, case_, fields.next().getValue(), cellModel));
-					}
-				} else {	// just a complex known cell
-					processors.add(generateComplexProcessor(pref, case_, node, cellModel));
+			// we know the cell model
+		if (cellModel.isSimple()) {						// .. and it's a simple one
+			processors.add(generateTextualProcessor(pref, node, cellModel));
+		} else {										// it's a complex one
+			if (cellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.KEY_VALUE)) {
+				Iterator<Entry<String, JsonNode>> fields = node.fields();
+				while (fields.hasNext()) {
+					processors.add(generateComplexProcessor(pref, case_, fields.next().getValue(), cellModel));
 				}
+			} else {	// just a complex known cell
+				processors.add(generateComplexProcessor(pref, case_, node, cellModel));
 			}
 		}
-
 
 	} else if (node.isTextual()) {	// we know the cell model here				//// TEXTUAL ////
 
@@ -88,10 +59,10 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 
 	} else if (node.isArray()) {												//// ARRAY ////
 		for (int i=0;i<node.size();i++) {
-			processors.add(DaggerYAMLCellToXMLProcessorComponent.builder()
+			processors.add(DaggerYAMLCellModelGuesserProcessorComponent.builder()
 																	.withPrefix("\t"+pref)
 																	.fromNode(node.get(i))
-																	.parentCellModel(parentCellModel)
+																	.parentCellModel(cellModel.asComplex())
 																	.givenCase(case_)
 																	.build()
 																	.processors()
@@ -105,7 +76,7 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 
 
 @Provides
-PrefixProcessor<JsonNodeCellModel, String> processorSlash(String pref, JsonNode node, @Nullable CellModel cellModel) {
+PrefixProcessor<JsonNodeCellModel, String> processorSlash(String pref, JsonNode node, CellModel cellModel) {
 
 	if (cellModel==null) {
 		throw new NullPointerException("Cannot create a slash processor without the node");

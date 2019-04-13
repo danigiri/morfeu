@@ -35,26 +35,15 @@ StackContext<JsonNodeCellModel> populatedContext(StackContext<JsonNodeCellModel>
 													CellModel model) {
 
 	// we iteratively add all elements, skipping the root node as our algorithm is happy with that
-//	yaml.fields().forEachRemaining(f -> DaggerYAMLCellToXMLProcessorComponent.builder()
-//																				.fromNode(f.getValue())
-//																				.givenCase("yaml-to-xml")
-//																				.parentCellModel(model)
-//																				.withPrefix("")
-//																				.build()
-//																				.processors()
-//																				.forEach(context::push));
 
-	model.asComplex()
-			.children()
-			.stream()
-			.forEach(cm -> DaggerYAMLCellToXMLProcessorComponent.builder()
-																	.fromNode(yaml)
-																	.givenCase("yaml-to-xml")
-																	.cellModel(cm)
-																	.withPrefix("")
-																	.build()
-																	.processors()
-																	.forEach(context::push));
+	DaggerYAMLCellModelGuesserProcessorComponent.builder()
+													.fromNode(yaml)
+													.givenCase("yaml-to-xml")
+													.parentCellModel(model.asComplex())
+													.withPrefix("")
+													.build()
+													.processors()
+													.forEach(context::push);
 
 	return context;
 

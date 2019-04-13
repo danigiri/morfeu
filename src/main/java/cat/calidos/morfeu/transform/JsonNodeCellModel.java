@@ -13,16 +13,19 @@ public class JsonNodeCellModel {
 private JsonNode node;
 private CellModel cellModel;
 
+
 public JsonNodeCellModel(JsonNode node, CellModel cellModel) {
 
 	this.node = node;
 	this.cellModel = cellModel;
-	
+
 }
+
 
 public JsonNode node() {
 	return node;
 }
+
 
 public CellModel cellModel() {
 	return cellModel;
@@ -33,9 +36,6 @@ public CellModel cellModel() {
 public String toString() {
 	return "<"+node.asText()+","+cellModel.getName()+">";
 }
-
-
-
 
 
 }

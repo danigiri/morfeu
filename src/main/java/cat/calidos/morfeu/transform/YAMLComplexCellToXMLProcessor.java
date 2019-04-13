@@ -54,21 +54,11 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 															.givenCase(case_)
 															.build()
 															.processorSlash());
+
 	}
-	
-	// now we push the children and we're done
-	
-	DaggerYAMLCellToXMLProcessorComponent.builder()
-											.withPrefix(prefix)
-											.fromNode(nodeCellModel.node())
-											.givenCase(case_)
-											.cellModel(nodeCellModel.cellModel().asComplex())
-											.build()
-											.processors()
-											.forEach(context::push);
-	
+
 	return context;
-	
+
 }
 
 

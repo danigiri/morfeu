@@ -9,7 +9,7 @@ public abstract class PrefixProcessor<T, S> implements Processor<T, S> {
 protected S prefix;
 
 
-PrefixProcessor(S prefix) {
+protected PrefixProcessor(S prefix) {
 	this.prefix = prefix;
 }
 

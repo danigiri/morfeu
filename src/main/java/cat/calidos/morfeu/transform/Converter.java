@@ -33,13 +33,13 @@ public O process() {
 public String toString() {
 
 	StringBuffer out = new StringBuffer();
-	out.append("⊏------------------------------------------------⊐\n");
+	out.append("⊏-  context.output: -----------------------------⊐\n");
 	out.append(context.output().toString());
-	out.append("⊏------------------------------------------------⊐\n");
+	out.append("⊏- current --------------------------------------⊐\n");
 	out.append("*");
 	out.append(current!=null ? current.toString() : "<null>");
 	out.append("*\n");
-	out.append("⊏------------------------------------------------⊐\n");
+	out.append("⊏- context: -------------------------------------⊐\n");
 	out.append(context.toString());
 	return out.toString();
 }
