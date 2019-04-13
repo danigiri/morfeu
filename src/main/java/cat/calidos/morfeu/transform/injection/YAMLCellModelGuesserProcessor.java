@@ -59,10 +59,11 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 	} else {
 
 	}
-	
+
 	processors.forEach(context::push);
-	
+
 	return context;
+
 }
 
 

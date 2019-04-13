@@ -45,14 +45,13 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 		if (node.isObject()) {
 			processors.add(generateComplexProcessor(pref, case_, node, cellModel));
 		} else if (node.isArray()) {
-			
+			node.elements().forEachRemaining(e -> processors.add(generateComplexProcessor(pref, case_, e, cellModel)));
 		} else if (node.isTextual()) {
 			// error
 		} else {
 			// error
 		}
 	}
-	
 
 	return processors;
 

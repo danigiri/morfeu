@@ -8,6 +8,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.Document;
@@ -23,15 +25,19 @@ public class YAMLConverterIntTest extends ModelTezt {
 @Test
 public void testYAMLConverter() throws Exception {
 	
-	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
 	String docPath = "test-resources/documents/document1.json";
-	String xmlPath = "src/test/resources/test-resources/documents/document1.xml";
-	JsonNode yaml = readYAMLFrom(yamlPath);
 
 	Document doc = produceDocumentFromPath(docPath);
 	assertNotNull(doc);
 
-	String transformed = DaggerYAMLConverterComponent.builder().from(yaml).given(doc.getModel()).build().xml();
+	String yaml = 	"rows:\n" + 
+					"  - \n" + 
+					"    cols:\n" + 
+					"      - \n" + 
+					"        size: 4\n";
+	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+			JsonNode node = mapper.readTree(yaml);
+	String transformed = DaggerYAMLConverterComponent.builder().from(node).given(doc.getModel()).build().xml();
 	assertNotNull(transformed);
 	System.err.println(transformed);
 

@@ -1,6 +1,7 @@
 package cat.calidos.morfeu.transform;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
+import cat.calidos.morfeu.transform.injection.DaggerYAMLCellModelGuesserProcessorComponent;
 import cat.calidos.morfeu.transform.injection.DaggerYAMLCellToXMLProcessorComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
@@ -45,17 +47,39 @@ public JsonNodeCellModel input() {
 public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCellModel, String> oldContext) {
 
 	Context<JsonNodeCellModel, String> context = oldContext;
+	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 	
+	CellModel cellModel = nodeCellModel.cellModel();
 	if (hasChildren) {
 		context.push(DaggerYAMLCellToXMLProcessorComponent.builder()
 															.withPrefix(prefix)
-															.fromNode(nodeCellModel.node())
-															.cellModel(nodeCellModel.cellModel())
 															.givenCase(case_)
+															.fromNode(nodeCellModel.node())
+															.cellModel(cellModel)
 															.build()
 															.processorSlash());
 
 	}
+
+	// now we have to generate some guesses
+	if (cellModel.isSimple()) {	//// SIMPLE CELL MODEL	////
+		
+	} else {									//// COMPLEX CELL MODEL	////
+
+		ComplexCellModel complex = cellModel.asComplex();
+		nodeCellModel.node()
+						.elements()
+						.forEachRemaining(e -> DaggerYAMLCellModelGuesserProcessorComponent.builder()
+																							.withPrefix("\t"+prefix)
+																							.givenCase(case_)
+																							.fromNode(e)
+																							.parentCellModel(complex)
+																							.build()
+																							.processors()
+																							.forEach(processors::add));
+	}
+
+	processors.forEach(context::push);
 
 	return context;
 
