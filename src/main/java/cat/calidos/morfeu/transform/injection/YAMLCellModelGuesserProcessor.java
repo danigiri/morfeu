@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.CellModel;
+import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.transform.Context;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
@@ -41,63 +42,24 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 
 	JsonNode node = nodeCellmodel.node();
-	CellModel parentCellModel = nodeCellmodel.cellModel();
-	
-	Optional<CellModel> guess = Optional.empty();
-	if (parentCellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.ATTRIBUTES_ONLY)) {
-		guess = parentCellModel.asComplex().children().stream().filter(cm -> cm.asComplex()
-																		.attributes()
-																		.stream()
-																		.filter(a -> node.has(matchName(a, case_)))
-																		.findAny()
-																		.isPresent()
-																).findAny();
-		if (guess.isPresent()) {
-			// correct guess by attribute
-			DaggerYAMLCellToXMLProcessorComponent.builder()
-													.withPrefix(prefix)
-													.givenCase(case_)
-													.fromNode(node)
-													.cellModel(guess.get())
-													.build()
-													.processors()
-													.forEach(processors::add);
-	
-		} else {
-			// we have a list of children, create a list of guesses for them
-			List<CellModel> matchedChildren = parentCellModel.asComplex()
-																.children()
-																.stream()
-																.filter(c -> node.has(matchName(c, case_)))
-																.collect(Collectors.toList());
-			if (matchedChildren.size()>0) {
-				matchedChildren.forEach(c -> DaggerYAMLCellToXMLProcessorComponent.builder()
-																					.withPrefix(prefix)
-																					.givenCase(case_)
-																					.fromNode(node.get(matchName(c, case_)))
-																					.cellModel(c.asComplex())
-																					.build()
-																					.processors()
-																					.forEach(processors::add));
-			}
-		}
-	} else {	// found no match, do a guess recursively (FIXME: this will break with multiple 1st level nodes)
-			parentCellModel.asComplex()
-							.children()
-							.stream()
-							.forEach(c -> DaggerYAMLCellModelGuesserProcessorComponent.builder()
-																						.withPrefix(prefix)
-																						.givenCase(case_)
-																						.fromNode(node)
-																						.parentCellModel(c.asComplex())
-																						.build()
-																						.processors()
-																						.forEach(processors::add));
-		}
-		
+	ComplexCellModel parentCellModel = nodeCellmodel.cellModel().asComplex();
+	if (parentCellModel.children().size()==1) {
+		// trivial case, there is only one child so now we know which one to use
+
+		CellModel child = parentCellModel.children().child(0);
+		DaggerYAMLCellToXMLProcessorComponent.builder()
+												.withPrefix(prefix)
+												.givenCase(case_)
+												.cellModel(child)
+												.fromNode(node)
+												.build()
+												.processors()
+												.forEach(processors::add);
+
+	} else {
 
 	}
-
+	
 	processors.forEach(context::push);
 	
 	return context;
@@ -111,7 +73,7 @@ public JsonNodeCellModel input() {
 
 
 public String output() {
-	return prefix+"<!-- GUESS: parentCellModel='"+nodeCellmodel.cellModel().getName()+"'  -->";
+	return prefix; //+"<!-- GUESS: parentCellModel='"+nodeCellmodel.cellModel().getName()+"'  -->";
 }
 
 

@@ -35,40 +35,24 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 															@Named("Case") String case_,
 															JsonNode node,
 															CellModel cellModel) {
-	
+
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
-	if (node.isObject()) {
-	
-			// we know the cell model
-		if (cellModel.isSimple()) {						// .. and it's a simple one
-			processors.add(generateTextualProcessor(pref, node, cellModel));
-		} else {										// it's a complex one
-			if (cellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.KEY_VALUE)) {
-				Iterator<Entry<String, JsonNode>> fields = node.fields();
-				while (fields.hasNext()) {
-					processors.add(generateComplexProcessor(pref, case_, fields.next().getValue(), cellModel));
-				}
-			} else {	// just a complex known cell
-				processors.add(generateComplexProcessor(pref, case_, node, cellModel));
-			}
-		}
 
-	} else if (node.isTextual()) {	// we know the cell model here				//// TEXTUAL ////
-
-		processors.add(generateTextualProcessor(pref, node, cellModel));
-
-	} else if (node.isArray()) {												//// ARRAY ////
-		for (int i=0;i<node.size();i++) {
-			processors.add(DaggerYAMLCellModelGuesserProcessorComponent.builder()
-																	.withPrefix("\t"+pref)
-																	.fromNode(node.get(i))
-																	.parentCellModel(cellModel.asComplex())
-																	.givenCase(case_)
-																	.build()
-																	.processors()
-																	.get(0));
+	if (cellModel.isSimple()) {		//// SIMPLE CELL MODEL	////
+		
+	} else {						//// COMPLEX CELL MODEL ////
+		
+		if (node.isObject()) {
+			processors.add(generateComplexProcessor(pref, case_, node, cellModel));
+		} else if (node.isArray()) {
+			
+		} else if (node.isTextual()) {
+			// error
+		} else {
+			// error
 		}
 	}
+	
 
 	return processors;
 

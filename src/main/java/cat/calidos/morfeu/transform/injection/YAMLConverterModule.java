@@ -24,10 +24,12 @@ public String xml(Converter<JsonNodeCellModel, String> converter) {
 	return converter.process();
 }
 
+
 @Provides
 Converter<JsonNodeCellModel, String> converter(@Named("PopulatedContext") StackContext<JsonNodeCellModel> context) {
 	return new Converter<JsonNodeCellModel, String>(context);
 }
+
 
 @Provides @Named("PopulatedContext")
 StackContext<JsonNodeCellModel> populatedContext(StackContext<JsonNodeCellModel> context,
