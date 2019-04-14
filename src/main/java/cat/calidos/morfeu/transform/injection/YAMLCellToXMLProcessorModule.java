@@ -34,7 +34,11 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 
 	if (cellModel.isSimple()) {		//// SIMPLE CELL MODEL	////
-		
+		if (node.isTextual()) {
+			processors.add(generateTextualProcessor(pref, node, cellModel));
+		} else if (node.isArray()) {	// we have a list of textuals
+			node.elements().forEachRemaining(e -> processors.add(generateTextualProcessor(pref, e, cellModel)));
+		}
 	} else {						//// COMPLEX CELL MODEL ////
 		
 		if (node.isObject()) {
@@ -43,9 +47,9 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 			node.elements().forEachRemaining(e -> processors.add(generateComplexProcessor(pref, case_, e, cellModel)));
 			
 		} else if (node.isTextual()) {
-			// error
+			// throw exception here
 		} else {
-			// error
+			// throw exception here
 		}
 	}
 

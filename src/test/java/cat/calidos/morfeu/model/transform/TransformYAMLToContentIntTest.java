@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 
 /**
@@ -79,15 +80,19 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 }
 
 
-//@Test
+@Test
 public void testTransformUsingConverter() throws Exception {
 	
 	String documentPath = "test-resources/documents/document1.json";
 	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
 	String xmlPath = "src/test/resources/test-resources/documents/document1.xml";
-	
-	JsonNode yaml = readYAMLFrom(yamlPath);
+	Document doc = produceDocumentFromPath(documentPath);
 
+	JsonNode yaml = readYAMLFrom(yamlPath);
+	String transformed = DaggerYAMLConverterComponent.builder().from(yaml).given(doc.getModel()).build().xml();
+	
+	compareWithXMLFile(transformed, xmlPath);
+	
 }
 
 }

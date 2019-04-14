@@ -33,7 +33,7 @@ public String output() {
 	values.put("cm", nodeCellModel.cellModel());
 	values.put("yaml", nodeCellModel.node());
 	String template = "";
-	if (nodeCellModel.node().size()>0) {
+	if (!nodeCellModel.node().asText().isEmpty()) {
 		template = "<{{v.cm.name}}>{{v.yaml.asText | xmlc}}</{{v.cm.name}}>\n";
 	} else {
 		template = "<{{v.cm.name}}/>\n";	// null or empty?
