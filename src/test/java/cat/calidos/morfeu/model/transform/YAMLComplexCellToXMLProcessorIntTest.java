@@ -82,7 +82,7 @@ public void testData2() throws Exception {
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = DaggerYAMLCellToXMLProcessorComponent.builder()
 											.withPrefix("")
 											.fromNode(yamlNode)
-											.parentCellModel(col)
+											.cellModel(col)
 											.givenCase("yaml-to-xml")
 											.build()
 											.processors();

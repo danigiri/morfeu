@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.transform.injection;
+package cat.calidos.morfeu.transform;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +20,7 @@ private String case_;	// <identifier>="<key>"
 private String identifierValue;
 private JsonNodeCellModel nodeCellModel;
 
+
 public YAMLKeyValueToXMLProcessor(String prefix, String case_, String identifierValue, JsonNodeCellModel nodeCellModel) {
 
 	super(prefix);
@@ -30,10 +31,12 @@ public YAMLKeyValueToXMLProcessor(String prefix, String case_, String identifier
 
 }
 
+
 @Override
 public JsonNodeCellModel input() {
 	return nodeCellModel;
 }
+
 
 @Override
 public String output() {

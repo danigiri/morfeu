@@ -17,6 +17,7 @@ import cat.calidos.morfeu.transform.JsonNodeCellModel;
 import cat.calidos.morfeu.transform.PrefixProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
 import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessorSlash;
+import cat.calidos.morfeu.transform.YAMLKeyValueToXMLProcessor;
 import cat.calidos.morfeu.transform.YAMLTextualToXMLProcessor;
 
 /**
@@ -35,15 +36,16 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 
 	if (cellModel.isSimple()) {		//// SIMPLE CELL MODEL	////
+
 		if (node.isTextual()) {
 			processors.add(generateTextualProcessor(pref, node, cellModel));
 		} else if (node.isArray()) {	// we have a list of textuals
 			node.elements().forEachRemaining(e -> processors.add(generateTextualProcessor(pref, e, cellModel)));
 		}
+
 	} else {						//// COMPLEX CELL MODEL ////
-		
+
 		if (node.isObject()) {
-			
 			// we check if we are a key value node {"key1": "v1", "key2": "v2"} or a normal object 
 			if (cellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.KEY_VALUE)) {
 				node.fields()
@@ -53,12 +55,12 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 			}
 		} else if (node.isArray()) {
 			node.elements().forEachRemaining(e -> processors.add(generateComplexProcessor(pref, case_, e, cellModel)));
-			
 		} else if (node.isTextual()) {
 			// throw exception here
 		} else {
 			// throw exception here
 		}
+
 	}
 
 	return processors;
@@ -97,16 +99,12 @@ private YAMLKeyValueToXMLProcessor generateKeyValueProcessor(String pref,
 																Entry<String, JsonNode> kv, 
 																CellModel cellModel) {
 
-	String identifier = cellModel.getMetadata().getIdentifier().get();
-	
-	return new YAMLKeyValueToXMLProcessor(pref, identifier,  kv.getKey(), new JsonNodeCellModel(kv.getValue(), cellModel));
+	String id = cellModel.getMetadata().getIdentifier().get();
+
+	return new YAMLKeyValueToXMLProcessor(pref, id, kv.getKey(), new JsonNodeCellModel(kv.getValue(), cellModel));
+
 }
 
-
-private String matchName(CellModel model, String case_) {
-	return model.getMetadata().getDirectivesFor(case_).contains(Metadata.LISTS_NO_PLURAL)
-			? model.getName() : model.getName()+"s";
-}
 
 }
 
