@@ -21,6 +21,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.injection.ModelTezt;
+import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
@@ -68,21 +69,11 @@ protected void compareWithXML(String content, String expected) {
 
 protected String transformYAMLToXML(String yamlPath, String documentPath) throws Exception {
 
-	JsonNode yaml = readYAMLFrom(yamlPath);
-
 	Document doc = produceDocumentFromPath(documentPath);
-	assertNotNull(doc);
-	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("yaml", yaml);
-	values.put("cellmodels", doc.getModel().children().asList());
-	values.put("case","yaml-to-xml");
+	JsonNode yaml = readYAMLFrom(yamlPath);
+	String transformed = DaggerYAMLConverterComponent.builder().from(yaml).given(doc.getModel()).build().xml();
 
-	return DaggerViewComponent.builder()
-								.withTemplatePath("templates/transform/content-yaml-to-xml.twig")
-								.withValue(values)
-								.build()
-								.render();
-	// sed -E 's/\$(.+)?\$/\$\1\$ $(- set zzzz = deb("\1") -)$/g'
+	return transformed;
 
 }
 

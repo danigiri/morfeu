@@ -2,6 +2,7 @@ package cat.calidos.morfeu.transform.injection;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.inject.Named;
@@ -42,7 +43,14 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 	} else {						//// COMPLEX CELL MODEL ////
 		
 		if (node.isObject()) {
-			processors.add(generateComplexProcessor(pref, case_, node, cellModel));
+			
+			// we check if we are a key value node {"key1": "v1", "key2": "v2"} or a normal object 
+			if (cellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.KEY_VALUE)) {
+				node.fields()
+						.forEachRemaining(f -> processors.add(generateKeyValueProcessor(pref, case_, f, cellModel)));	
+			} else {
+				processors.add(generateComplexProcessor(pref, case_, node, cellModel));
+			}
 		} else if (node.isArray()) {
 			node.elements().forEachRemaining(e -> processors.add(generateComplexProcessor(pref, case_, e, cellModel)));
 			
@@ -71,11 +79,6 @@ PrefixProcessor<JsonNodeCellModel, String> processorSlash(String pref, JsonNode 
 }
 
 
-private YAMLTextualToXMLProcessor generateTextualProcessor(String pref, JsonNode node, CellModel cellModel) {
-	return new YAMLTextualToXMLProcessor(pref, new JsonNodeCellModel(node, cellModel));
-}
-
-
 private YAMLComplexCellToXMLProcessor generateComplexProcessor(String pref,
 																String case_,
 																JsonNode node,
@@ -84,15 +87,19 @@ private YAMLComplexCellToXMLProcessor generateComplexProcessor(String pref,
 }
 
 
-private List<PrefixProcessor<JsonNodeCellModel, String>> generateChildrenProcessors(String pref, 
-																			String case_, JsonNode node,
-																			CellModel parentCellModel) {
-	return parentCellModel.asComplex()
-							.children()
-							.stream()
-							.filter(cm -> node.has(matchName(cm, case_)))
-							.map(cm -> generateComplexProcessor(pref, case_, node, cm))
-							.collect(Collectors.toList());
+private YAMLTextualToXMLProcessor generateTextualProcessor(String pref, JsonNode node, CellModel cellModel) {
+	return new YAMLTextualToXMLProcessor(pref, new JsonNodeCellModel(node, cellModel));
+}
+
+
+private YAMLKeyValueToXMLProcessor generateKeyValueProcessor(String pref, 
+																String case_,
+																Entry<String, JsonNode> kv, 
+																CellModel cellModel) {
+
+	String identifier = cellModel.getMetadata().getIdentifier().get();
+	
+	return new YAMLKeyValueToXMLProcessor(pref, identifier,  kv.getKey(), new JsonNodeCellModel(kv.getValue(), cellModel));
 }
 
 

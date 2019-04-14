@@ -2,22 +2,9 @@
 
 package cat.calidos.morfeu.model.transform;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-
-import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
-import cat.calidos.morfeu.utils.Config;
 
 /**
 * @author daniel giribet
@@ -32,6 +19,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/documents/document1.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
+	assertNotNull(transformed);
 	//System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
@@ -46,13 +34,14 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/documents/document3.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
+	assertNotNull(transformed);
 //	System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
 }
 
 
-//@Test
+@Test
 public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/keyvalues.yaml";
@@ -60,7 +49,8 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/transform/keyvalues.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-//	System.err.println(transformed);
+	assertNotNull(transformed);
+	//System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
 }
@@ -74,26 +64,12 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 	String xmlPath = "src/test/resources/test-resources/transform/escape.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
+	assertNotNull(transformed);
 	//System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
 }
 
-
-@Test
-public void testTransformUsingConverter() throws Exception {
-	
-	String documentPath = "test-resources/documents/document1.json";
-	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
-	String xmlPath = "src/test/resources/test-resources/documents/document1.xml";
-	Document doc = produceDocumentFromPath(documentPath);
-
-	JsonNode yaml = readYAMLFrom(yamlPath);
-	String transformed = DaggerYAMLConverterComponent.builder().from(yaml).given(doc.getModel()).build().xml();
-	
-	compareWithXMLFile(transformed, xmlPath);
-	
-}
 
 }
 

@@ -48,6 +48,7 @@ import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
+import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
@@ -131,8 +132,8 @@ public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI ur
 
 @Produces @Named("FetchedTransformedContent")
 public static InputStream fetchedTransformedContent(@Named("FetchableContentURI") URI uri,
-													@Named("FetchedRawContent") InputStream fetchedRawContent, 
-													YAMLMapper mapper, 
+													@Named("FetchedRawContent") InputStream fetchedRawContent,
+													YAMLMapper mapper,
 													Producer<Model> model) 
 							throws FetchingException, TransformException {
 
@@ -143,24 +144,11 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		log.trace("Converting yaml to xml '{}'", uri);
 
 		JsonNode yaml = mapper.readTree(fetchedRawContent);
-		Map<String, Object> values = new HashMap<String, Object>(2);
-
-		List<CellModel> rootCellModels = model.get().get().children().asList();
-		values.put("cellmodels", rootCellModels);	// as the yaml does not have a root virtual node we
-		values.put("yaml", yaml);					// start from the list of cell models and not its empty root node
-		values.put("case", "yaml-to-xml");
-		//rootCellModels.stream().map(cm -> cm.getName()).forEach(name -> log.trace("CellModel:{}",name));
-
+		String xml = DaggerYAMLConverterComponent.builder().from(yaml).given(model.get().get()).build().xml();
 		
-		// WE PUT THE TRANSFORMER HERE //
-		String transformedContent = DaggerViewComponent.builder()
-														.withTemplatePath("templates/transform/content-yaml-to-xml.twig")
-														.withValue(values)
-														.build()
-														.render();
-		log.trace("Transformed yaml to xml '{}'", transformedContent);
+		log.trace("Transformed yaml to xml '{}'", xml);
 
-		return IOUtils.toInputStream(transformedContent, Config.DEFAULT_CHARSET);
+		return IOUtils.toInputStream(xml, Config.DEFAULT_CHARSET);
 
 	} catch (IOException e) {
 		log.error("Could not fetch yaml '{}' ({}", uri, e);

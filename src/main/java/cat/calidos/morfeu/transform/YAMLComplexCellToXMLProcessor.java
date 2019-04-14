@@ -42,8 +42,6 @@ public JsonNodeCellModel input() {
 }
 
 
-
-
 @Override
 public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCellModel, String> oldContext) {
 
@@ -105,7 +103,7 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 @Override
 public String output() {
 
-	HashMap<String, Object> values = new HashMap<String, Object>(3);
+	HashMap<String, Object> values = new HashMap<String, Object>(7);
 	
 	ComplexCellModel cellModel = nodeCellModel.cellModel().asComplex();
 	Metadata metadata = cellModel.getMetadata();
@@ -127,7 +125,8 @@ public String output() {
 	String identifier = hasIdentifier ? metadata.getIdentifier().get() : "";
 	if (hasIdentifier) {
 		values.put("identifier", identifier);
-		values.put("identifierValue", node.get(identifier).asText());	// double check
+		String value = node.get(identifier).asText();
+		values.put("identifierValue", value);
 		attr = attr.stream().filter(a -> !a.equals(identifier)).collect(Collectors.toList());
 	}
 	values.put("attr", attr);
@@ -154,10 +153,7 @@ public String output() {
 }
 
 
-
-
 }
-
 
 /*
  *    Copyright 2019 Daniel Giribet
