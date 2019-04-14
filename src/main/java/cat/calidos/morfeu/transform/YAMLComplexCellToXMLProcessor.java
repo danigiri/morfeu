@@ -30,7 +30,7 @@ public YAMLComplexCellToXMLProcessor(String prefix, String case_, JsonNodeCellMo
 
 	this.case_ = case_;
 	this.nodeCellModel = nodeCellModel;
-	this.hasChildren = nodeCellModel.cellModel().asComplex().children().size()>0;
+	this.hasChildren = nodeCellModel.cellModel().asComplex().children().size()>0 && nodeCellModel.node().elements().hasNext();
 
 }
 
@@ -50,36 +50,39 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 	
 	CellModel cellModel = nodeCellModel.cellModel();
+	JsonNode node = nodeCellModel.node();
 	if (hasChildren) {
 		context.push(DaggerYAMLCellToXMLProcessorComponent.builder()
 															.withPrefix(prefix)
 															.givenCase(case_)
-															.fromNode(nodeCellModel.node())
+															.fromNode(node)
 															.cellModel(cellModel)
 															.build()
 															.processorSlash());
 
-	}
 
-	// now we have to generate some guesses
-	if (cellModel.isSimple()) {	//// SIMPLE CELL MODEL	////
+		// now we have to generate the guesses
+		if (cellModel.isSimple()) {	//// SIMPLE CELL MODEL	////
+			
+		} else {					//// COMPLEX CELL MODEL	////
 		
-	} else {									//// COMPLEX CELL MODEL	////
+			ComplexCellModel complex = cellModel.asComplex();
+			node.elements()	// this adds extra nodes we don't need
+				.forEachRemaining(e -> {
+						System.err.println(e.getNodeType());
+						DaggerYAMLCellModelGuesserProcessorComponent.builder()
+																		.withPrefix("\t"+prefix)
+																		.givenCase(case_)
+																		.fromNode(e)
+																		.parentCellModel(complex)
+																		.build()
+																		.processors()
+																		.forEach(processors::add);
+				});
+		}
 
-		ComplexCellModel complex = cellModel.asComplex();
-		nodeCellModel.node()
-						.elements()
-						.forEachRemaining(e -> DaggerYAMLCellModelGuesserProcessorComponent.builder()
-																							.withPrefix("\t"+prefix)
-																							.givenCase(case_)
-																							.fromNode(e)
-																							.parentCellModel(complex)
-																							.build()
-																							.processors()
-																							.forEach(processors::add));
+		processors.forEach(context::push);
 	}
-
-	processors.forEach(context::push);
 
 	return context;
 

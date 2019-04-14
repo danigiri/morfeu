@@ -47,7 +47,7 @@ public void testTransform() throws Exception {
 
 	String transformed = transform.apply(content);
 	//System.err.println(transformed);
-	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	compareWithXMLFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
 
 }
 
@@ -62,7 +62,7 @@ public void testConverter() throws Exception {
 	String transformed = DaggerContentConverterComponent.builder().from(json).build().xml();
 
 	//System.err.println(transformed);
-	compareWithXML(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	compareWithXMLFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
 
 }
 

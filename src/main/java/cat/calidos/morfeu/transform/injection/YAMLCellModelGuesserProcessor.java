@@ -57,7 +57,8 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 												.forEach(processors::add);
 
 	} else {
-
+		// we have to do some creative matching here
+		//parentCellModel
 	}
 
 	processors.forEach(context::push);

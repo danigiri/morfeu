@@ -43,7 +43,8 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformTezt extends ModelTezt {
 
-protected void compareWithXML(String content, String path) {
+
+protected void compareWithXMLFile(String content, String path) {
 
 	Source transformedSource = Input.fromString(content).build();
 	
@@ -59,6 +60,24 @@ protected void compareWithXML(String content, String path) {
 	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
 
 }
+
+
+protected void compareWithXML(String content, String expected) {
+
+	Source transformedSource = Input.fromString(content).build();
+	
+	Source originalSource = Input.fromString(expected).build();
+
+	Diff diff = DiffBuilder.compare(originalSource)
+							.withTest(transformedSource)
+							.ignoreComments()
+							.ignoreWhitespace()
+							.build();
+
+	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
+
+}
+
 
 
 protected String transformYAMLToXML(String yamlPath, String documentPath) throws Exception {

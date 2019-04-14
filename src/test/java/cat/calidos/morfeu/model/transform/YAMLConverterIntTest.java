@@ -19,12 +19,12 @@ import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class YAMLConverterIntTest extends ModelTezt {
+public class YAMLConverterIntTest extends TransformTezt {
 
 
-@Test
-public void testYAMLConverter() throws Exception {
-	
+//@Test
+public void testYAMLConverterRowCol() throws Exception {
+
 	String docPath = "test-resources/documents/document1.json";
 
 	Document doc = produceDocumentFromPath(docPath);
@@ -39,10 +39,56 @@ public void testYAMLConverter() throws Exception {
 			JsonNode node = mapper.readTree(yaml);
 	String transformed = DaggerYAMLConverterComponent.builder().from(node).given(doc.getModel()).build().xml();
 	assertNotNull(transformed);
-	System.err.println(transformed);
+	//System.err.println(transformed);
+
+	String xml =	"<test xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\" " +
+						"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 
+					"	<row>\n" + 
+					"		<col size=\"4\">\n" + 
+					"		</col>\n" + 
+					"	</row>\n" +
+					"</test>";
+
+	compareWithXML(transformed, xml);
+
+}
 
 
-}	
+
+@Test
+public void testYAMLConverterRowCols() throws Exception {
+
+	String docPath = "test-resources/documents/document1.json";
+
+	Document doc = produceDocumentFromPath(docPath);
+	assertNotNull(doc);
+
+	String yaml = 	"rows:\n" + 
+					"  - \n" + 
+					"    cols:\n" + 
+					"      - \n" + 
+					"        size: 6\n"+
+					"      - \n" + 
+					"        size: 6\n";
+	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+			JsonNode node = mapper.readTree(yaml);
+	String transformed = DaggerYAMLConverterComponent.builder().from(node).given(doc.getModel()).build().xml();
+	assertNotNull(transformed);
+	//System.err.println(transformed);
+
+	String xml =	"<test xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\" " +
+						"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 
+					"	<row>\n" + 
+					"		<col size=\"6\">\n" + 
+					"		</col>\n" + 
+					"		<col size=\"6\">\n" + 
+					"		</col>\n" + 
+					"	</row>\n" + 
+					"</test>";	
+
+	compareWithXML(transformed, xml);
+
+}
 
 
 }

@@ -46,7 +46,7 @@ public void testTransformJSONToXML() throws Exception {
 
 	String transformed = DaggerContentConverterComponent.builder().from(json).build().xml();
 	System.err.println(transformed);
-	compareWithXML(transformed, "target/test-classes/test-resources/documents/document4.xml");
+	compareWithXMLFile(transformed, "target/test-classes/test-resources/documents/document4.xml");
 
 }
 
@@ -100,7 +100,7 @@ public void testTransformYAMLToXML() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	//System.err.println(transformed);
-	compareWithXML(transformed,  xmlPath);
+	compareWithXMLFile(transformed,  xmlPath);
 
 }
 

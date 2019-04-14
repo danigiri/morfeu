@@ -32,7 +32,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	//System.err.println(transformed);
-	compareWithXML(transformed, xmlPath);
+	compareWithXMLFile(transformed, xmlPath);
 
 }
 
@@ -46,7 +46,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 //	System.err.println(transformed);
-	compareWithXML(transformed, xmlPath);
+	compareWithXMLFile(transformed, xmlPath);
 
 }
 
@@ -60,7 +60,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 //	System.err.println(transformed);
-	compareWithXML(transformed, xmlPath);
+	compareWithXMLFile(transformed, xmlPath);
 
 }
 
@@ -74,7 +74,7 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	//System.err.println(transformed);
-	compareWithXML(transformed, xmlPath);
+	compareWithXMLFile(transformed, xmlPath);
 
 }
 
