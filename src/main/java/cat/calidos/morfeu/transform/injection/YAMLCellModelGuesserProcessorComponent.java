@@ -28,7 +28,8 @@ interface Builder {
 
 	@BindsInstance Builder withPrefix(String pref);
 	@BindsInstance Builder givenCase(@Named("Case") String case_);
-	@BindsInstance Builder fromNode(JsonNode node);	// either a parent or a plain node (for the slash generation)
+	@BindsInstance Builder name(@Nullable @Named("name") String name);
+	@BindsInstance Builder fromNode(JsonNode node);
 	@BindsInstance Builder parentCellModel(ComplexCellModel parentCellmodel);
 
 	

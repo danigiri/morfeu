@@ -1,13 +1,9 @@
 package cat.calidos.morfeu.transform.injection;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +11,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import dagger.Module;
 import dagger.Provides;
 import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
 import cat.calidos.morfeu.transform.PrefixProcessor;
@@ -46,6 +41,7 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 			processors.add(generateComplexProcessor(pref, case_, node, cellModel));
 		} else if (node.isArray()) {
 			node.elements().forEachRemaining(e -> processors.add(generateComplexProcessor(pref, case_, e, cellModel)));
+			
 		} else if (node.isTextual()) {
 			// error
 		} else {

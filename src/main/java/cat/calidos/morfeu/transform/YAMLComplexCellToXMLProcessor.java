@@ -1,5 +1,6 @@
 package cat.calidos.morfeu.transform;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,20 +68,32 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 		} else {					//// COMPLEX CELL MODEL	////
 		
 			ComplexCellModel complex = cellModel.asComplex();
-			node.elements()	// this adds extra nodes we don't need
-				.forEachRemaining(e -> {
-						System.err.println(e.getNodeType());
-						DaggerYAMLCellModelGuesserProcessorComponent.builder()
-																		.withPrefix("\t"+prefix)
-																		.givenCase(case_)
-																		.fromNode(e)
-																		.parentCellModel(complex)
-																		.build()
-																		.processors()
-																		.forEach(processors::add);
-				});
+			if (node.isArray()) {
+				for (int i=0; i<node.size(); i++) {
+					System.err.println(node.get(i).getNodeType());
+					DaggerYAMLCellModelGuesserProcessorComponent.builder()
+																	.withPrefix("\t"+prefix)
+																	.givenCase(case_)
+																	.fromNode(node.get(i))
+																	.parentCellModel(complex)
+																	.build()
+																	.processors()
+																	.forEach(processors::add);
+				}
+			} else if (node.isObject()) {
+				node.fields().forEachRemaining(f ->
+				DaggerYAMLCellModelGuesserProcessorComponent.builder()
+																.withPrefix("\t"+prefix)
+																.givenCase(case_)
+																.name(f.getKey())
+																.fromNode(f.getValue())
+																.parentCellModel(complex)
+																.build()
+																.processors()
+																.forEach(processors::add));
+			}
 		}
-
+		Collections.reverse(processors);	// we are a stack we want reverse order
 		processors.forEach(context::push);
 	}
 
