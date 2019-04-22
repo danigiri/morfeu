@@ -84,6 +84,35 @@ public void testProduceContent() throws Exception {
 															.build()
 															.content()
 															.get();
+	testDocument1Content(content);
+
+}
+
+
+@Test
+public void testProduceJSONContent() throws Exception {
+
+	String contentPath = "test-resources/transform/document1-json-content.json";
+	String fullContentPath = testAwareFullPathFrom(contentPath);
+	String modelPath = "test-resources/models/test-model.xsd";
+	String testAwareModelPath = testAwareFullPathFrom(modelPath);
+
+	Composite<Cell> content = DaggerContentParserComponent.builder()
+															.content(new URI(contentPath))
+															.fetchedContentFrom(new URI(fullContentPath))
+															.model(new URI(modelPath))
+															.withModelFetchedFrom(new URI(testAwareModelPath))
+															.build()
+															.content()
+															.get();
+	testDocument1Content(content);
+
+	
+}
+
+
+private void testDocument1Content(Composite<Cell> content) {
+
 	assertNotNull(content);
 	assertEquals(1, content.size());
 
@@ -102,8 +131,8 @@ public void testProduceContent() throws Exception {
 	assertNotNull(testComplexNode);
 	assertEquals(1, testComplexNode.children().size());
 	assertEquals("row", testComplexNode.children().child(0).getName());
-
 }
+
 
 }
 
