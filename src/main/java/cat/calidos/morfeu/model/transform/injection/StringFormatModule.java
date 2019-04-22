@@ -78,10 +78,10 @@ public static String transformedYAMLToXML(Composite<Cell> contentRootCells, Mode
 	values.put("model", model);
 	
 	return DaggerViewComponent.builder()
-			.withTemplatePath("templates/transform/content-to-yaml.twig")
-			.withValue(values)
-			.build()
-			.render();
+								.withTemplatePath("templates/transform/content-to-yaml.twig")
+								.withValue(values)
+								.build()
+								.render();
 }
 
 

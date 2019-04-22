@@ -62,9 +62,9 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 
 		// now we have to generate the guesses
 		if (cellModel.isSimple()) {	//// SIMPLE CELL MODEL	////
-			
+
 		} else {					//// COMPLEX CELL MODEL	////
-		
+
 			ComplexCellModel complex = cellModel.asComplex();
 			if (node.isArray()) {
 				for (int i=0; i<node.size(); i++) {

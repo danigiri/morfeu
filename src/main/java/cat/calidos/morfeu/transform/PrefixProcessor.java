@@ -1,5 +1,6 @@
-package cat.calidos.morfeu.transform;
+// PREFIX PROCESSOR . JAVA
 
+package cat.calidos.morfeu.transform;
 
 /**
 *	@author daniel giribet
