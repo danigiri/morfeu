@@ -37,10 +37,12 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 
 	if (cellModel.isSimple()) {		//// SIMPLE CELL MODEL	////
 
-		if (node.isTextual()) {
+		if (node.isTextual() || node.isObject()) {	// isObject: we probably have an [empty] object
 			processors.add(generateTextualProcessor(pref, node, cellModel));
 		} else if (node.isArray()) {	// we have a list of textuals
 			node.elements().forEachRemaining(e -> processors.add(generateTextualProcessor(pref, e, cellModel)));
+		} else {
+			throw new IllegalStateException("Unhandled guess state of simple cell model");
 		}
 
 	} else {						//// COMPLEX CELL MODEL ////
@@ -56,9 +58,9 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 		} else if (node.isArray()) {
 			node.elements().forEachRemaining(e -> processors.add(generateComplexProcessor(pref, case_, e, cellModel)));
 		} else if (node.isTextual()) {
-			// throw exception here
+			throw new IllegalStateException("Unhandled guess state of complex cell model [textual]");
 		} else {
-			// throw exception here
+			throw new IllegalStateException("Unhandled guess state of simple cell model [else]");
 		}
 
 	}
