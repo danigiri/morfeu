@@ -32,8 +32,6 @@ import cat.calidos.morfeu.utils.Config;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class YAMLComplexCellToXMLProcessorIntTest extends ModelTezt {
 
-
-
 private ComplexCellModel test;
 
 
@@ -42,7 +40,7 @@ public void setup() throws Exception {
 
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	test = cellModelFrom(modelURI, "test").asComplex();
-	
+
 }
 
 
@@ -80,12 +78,12 @@ public void testData2() throws Exception {
 					"    text: blahblah";
 	JsonNode yamlNode = mapper.readTree(yaml);
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = DaggerYAMLCellToXMLProcessorComponent.builder()
-											.withPrefix("")
-											.fromNode(yamlNode)
-											.cellModel(col)
-											.givenCase("yaml-to-xml")
-											.build()
-											.processors();
+																							.withPrefix("")
+																							.fromNode(yamlNode)
+																							.cellModel(col)
+																							.givenCase("yaml-to-xml")
+																							.build()
+																							.processors();
 
 	assertEquals(2, processors.size());
 

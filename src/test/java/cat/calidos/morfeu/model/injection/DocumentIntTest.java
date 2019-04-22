@@ -86,9 +86,9 @@ public void testNonValidModelDocument() throws Exception {
 		Throwable rootCause = MorfeuUtils.findRootCauseFrom(e);
 		assertEquals(ParsingException.class, rootCause.getClass());
 		assertTrue(rootCause.getMessage().contains("undefined"));
-		
+
 	}
-	
+
 }
 
 

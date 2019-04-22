@@ -45,10 +45,10 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-			.withTemplatePath("templates/transform/content-to-yaml.twig")
-			.withValue(values)
-			.build()
-			.render();
+												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withValue(values)
+												.build()
+												.render();
 	//System.err.println(transformed);
 	
 	YAMLMapper mapper = new YAMLMapper();
@@ -96,10 +96,10 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	Map<String, Object> values = valueMap(doc);
 
 	String transformed = DaggerViewComponent.builder()
-			.withTemplatePath("templates/transform/content-to-yaml.twig")
-			.withValue(values)
-			.build()
-			.render();
+												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withValue(values)
+												.build()
+												.render();
 	//System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();

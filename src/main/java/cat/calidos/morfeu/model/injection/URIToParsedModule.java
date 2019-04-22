@@ -17,6 +17,7 @@
 package cat.calidos.morfeu.model.injection;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import dagger.producers.Producer;
@@ -27,13 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Named;
-import javax.inject.Provider;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.apache.commons.io.FileUtils;
@@ -43,14 +40,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
 import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 * @author daniel giribet
@@ -59,6 +54,8 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 @ProducerModule
 public class URIToParsedModule {
 
+private static final String JSON_EXTENSION = "json";
+private static final String YAML_EXTENSION = "yaml";
 protected final static Logger log = LoggerFactory.getLogger(URIToParsedModule.class);
 		
 //notice this is a DOM Document and not a morfeu document
@@ -83,29 +80,28 @@ public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db,
 
 
 @Produces @Named("FetchedEffectiveContent") 
-InputStream fetchedContentReady(@Named("FetchableContentURI") URI uri, 
+InputStream fetchedContentReady(@Named("Filename") String filename,
+								@Named("FetchableContentURI") URI uri,
 								@Named("FetchedRawContent") Producer<InputStream> rawContentProvider,
 								@Named("FetchedTransformedContent") Producer<InputStream> transformedContentProvider
 								) throws FetchingException {
 
 	// if uri ends with yaml, we transform it from yaml to xml, otherwise we just fetch it raw, assuming xml
 
-	String name = FilenameUtils.getName(uri.getPath());
+	InputStream effectiveContent;
 
 	try {
-		if (name.endsWith("yaml")) {
-		
-				return transformedContentProvider.get().get();
-		
+		if (filename.endsWith(YAML_EXTENSION) || filename.endsWith(JSON_EXTENSION)) {
+			effectiveContent = transformedContentProvider.get().get();
 		} else  {
-	
-			return rawContentProvider.get().get();
-		
+			effectiveContent =  rawContentProvider.get().get();
 		}
 	} catch (InterruptedException | ExecutionException e) {
 		log.error("Could not complete executing fetch of '{}' ({}", uri, e);
 		throw new FetchingException("Problem executing fetch '"+uri+"'", e);
 	}
+
+	return effectiveContent;
 
 }
 
@@ -114,7 +110,7 @@ InputStream fetchedContentReady(@Named("FetchableContentURI") URI uri,
 public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI uri) throws FetchingException {
 
 	// if uri is absolute we retrieve it, otherwise we assume it's a local relative file
-	
+
 	try {
 		if (uri.isAbsolute()) {
 			log.info("Fetching absolute content uri '{}' to parse", uri);
@@ -133,7 +129,9 @@ public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI ur
 @Produces @Named("FetchedTransformedContent")
 public static InputStream fetchedTransformedContent(@Named("FetchableContentURI") URI uri,
 													@Named("FetchedRawContent") InputStream fetchedRawContent,
-													YAMLMapper mapper,
+													@Named("IsYAML") boolean isYAML,
+													Producer<ObjectMapper> mapperJSON,
+													Producer<YAMLMapper> mapperYAML,
 													Producer<Model> model) 
 							throws FetchingException, TransformException {
 
@@ -142,10 +140,10 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 	try {
 
 		log.trace("Converting yaml to xml '{}'", uri);
-
+		ObjectMapper mapper = isYAML ? mapperYAML.get().get() : mapperJSON.get().get();
 		JsonNode yaml = mapper.readTree(fetchedRawContent);
 		String xml = DaggerYAMLConverterComponent.builder().from(yaml).given(model.get().get()).build().xml();
-		
+
 		log.trace("Transformed yaml to xml '{}'", xml);
 
 		return IOUtils.toInputStream(xml, Config.DEFAULT_CHARSET);
@@ -158,6 +156,17 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		throw new TransformException("Problem when transforming yaml to xml '"+uri+"'", e);
 	}
 
+}
+
+
+@Produces @Named("Filename")
+String filename(@Named("FetchableContentURI") URI uri) {
+	return FilenameUtils.getName(uri.getPath());
+}
+
+@Produces @Named("IsYAML")
+boolean isYAML(@Named("Filename") String filename) {
+	return filename.endsWith(YAML_EXTENSION);
 }
 
 
