@@ -49,7 +49,7 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 			// we check if we are a key value node {"key1": "v1", "key2": "v2"} or a normal object 
 			if (cellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.KEY_VALUE)) {
 				node.fields()
-						.forEachRemaining(f -> processors.add(generateKeyValueProcessor(pref, case_, f, cellModel)));	
+						.forEachRemaining(f -> processors.add(generateKeyValueProcessor(pref, case_, f, cellModel)));
 			} else {
 				processors.add(generateComplexProcessor(pref, case_, node, cellModel));
 			}

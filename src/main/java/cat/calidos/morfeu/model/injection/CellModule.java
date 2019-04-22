@@ -55,7 +55,7 @@ protected final static Logger log = LoggerFactory.getLogger(CellModule.class);
 private static final String ATTRIBUTE_PREFIX = "@";
 private static final String DEFAULT_DESC = "";
 private static final String DEFAULT_VALUE = "";
-	
+
 
 @Provides
 public static Cell provideCell(Node node,
