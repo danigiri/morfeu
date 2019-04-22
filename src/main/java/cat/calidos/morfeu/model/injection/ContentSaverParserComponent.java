@@ -17,10 +17,9 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.problems.TransformException;
-import cat.calidos.morfeu.utils.LocalSaver;
 import cat.calidos.morfeu.utils.Saver;
 import cat.calidos.morfeu.utils.injection.SaverModule;
-import cat.calidos.morfeu.utils.injection.HttpClientModule;
+import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
@@ -29,7 +28,7 @@ import dagger.producers.ProductionComponent;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, StringToParsedModule.class, StringFormatModule.class,
-								SaverModule.class, ModelModule.class, ValidatorModule.class,
+								MapperModule.class, SaverModule.class, ModelModule.class, ValidatorModule.class,
 								CellModelsFilterModule.class, ListeningExecutorServiceModule.class})
 public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
 

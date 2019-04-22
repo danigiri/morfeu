@@ -24,7 +24,7 @@ import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
-import cat.calidos.morfeu.utils.injection.JSONMapperModule;
+import cat.calidos.morfeu.utils.injection.MapperModule;
 
 /**
 * @author daniel giribet
@@ -136,7 +136,7 @@ private Document parseRelativeLocation(String location) throws ParsingException,
 	String absoluteLocation = this.getClass().getClassLoader().getResource(location).toString();
 	URI uri = new URI(absoluteLocation);
 	InputStream stream = FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
-	ObjectMapper mapper = JSONMapperModule.produceJSONObjectMapper();
+	ObjectMapper mapper = MapperModule.jsonMapper();
 	Document document = DocumentModule.parseDocument(uri, stream, mapper);
 
 	return document;

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
@@ -28,17 +29,24 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class JSONMapperModule {
+public class MapperModule {
 
-protected final static Logger log = LoggerFactory.getLogger(JSONMapperModule.class);
+protected final static Logger log = LoggerFactory.getLogger(MapperModule.class);
 
 
 @Produces
-public static ObjectMapper produceJSONObjectMapper() {
+public static ObjectMapper jsonMapper() {
 
 	log.trace("[Producing ObjectMapper]");
 	return new ObjectMapper();	//TODO: check if it is necessary to 'provide' default constructor objects in Dagger2
 
 }
+
+
+@Produces
+YAMLMapper yamlMapper() {
+	return new YAMLMapper();
+}
+
 
 }

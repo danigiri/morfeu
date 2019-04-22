@@ -13,7 +13,7 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.injection.HttpClientModule;
-import cat.calidos.morfeu.utils.injection.JSONMapperModule;
+import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
@@ -21,7 +21,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, JSONMapperModule.class, 
+@ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, MapperModule.class, 
 								DefaultModelURIModule.class, ListeningExecutorServiceModule.class})
 public interface DocumentComponent {
 

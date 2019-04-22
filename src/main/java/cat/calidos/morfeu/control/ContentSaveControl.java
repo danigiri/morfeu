@@ -22,7 +22,6 @@ import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
-import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 
 /** Controller that validates the content and if valid, saves it

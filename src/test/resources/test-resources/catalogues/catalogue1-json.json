@@ -3,9 +3,9 @@
 	,"desc": "First Catalogue with JSON format"
 	,"documents": [
 		{ "name":"Document 1 JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/document1-json.json" }
-		,{ "name":"Document 3 YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/document3-yaml.json" }
-		,{ "name":"Document keyvalues YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/keyvalues-yaml.json" }
-		,{ "name":"Document escape YAML", "kind": "yaml", "uri":"target/test-classes/test-resources/documents/escape-yaml.json" }
+		,{ "name":"Document 3 JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/document3-json.json" }
+		,{ "name":"Document keyvalues JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/keyvalues-json.json" }
+		,{ "name":"Document escape JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/escape-yaml.json" }
 		]
 	,"snippets": [
 		 { "name": "Stuff 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}

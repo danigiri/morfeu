@@ -5,6 +5,7 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 import org.apache.commons.io.FileUtils;
@@ -14,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import cat.calidos.morfeu.model.Cell;
@@ -148,7 +150,7 @@ public void testSaveToXML() throws Exception {
 			savedFile.delete();
 		}
 	}
-	
+
 }
 
 
@@ -176,15 +178,37 @@ public void testSaveToYAML() throws Exception {
 	//System.err.println(writtenContent);
 
 	YAMLMapper mapper = new YAMLMapper();
-	JsonNode yaml = mapper.readTree(writtenContent);
-	assertNotNull(yaml);
-	assertTrue(yaml.isObject());
-	assertTrue(yaml.has("rows"));
+	checkContent(writtenContent, mapper);
 
-	JsonNode rows = yaml.get("rows");			//rows
-	assertNotNull(rows);
-	assertTrue(rows.isArray());
-	assertEquals(1, rows.size());
+}
+
+
+
+@Test
+public void testSaveToJSON() throws Exception {
+
+	String outputPath = temporaryOutputFilePath()+".json";
+	URI outputURI = new URI("file://"+outputPath);
+
+	Saver saver = DaggerContentSaverParserComponent.builder()
+													.from(content)
+													.to(outputURI)
+													.having(contentURI)
+													.model(modelURI)
+													.withModelFetchedFrom(modelFetchableURI)
+													.build()
+													.saver()
+													.get();
+	saver.save();
+	File savedFile = new File(outputPath);
+	assertTrue("Saver component did not create a file", savedFile.exists());
+	savedFile.deleteOnExit();
+
+	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
+	//System.err.println(writtenContent);
+
+	ObjectMapper mapper = new ObjectMapper();
+	checkContent(writtenContent, mapper);
 
 }
 
@@ -192,6 +216,30 @@ public void testSaveToYAML() throws Exception {
 private String temporaryOutputFilePath() {
 
 	return tmpPath+"/filesaver-test-"+System.currentTimeMillis()+".txt";
+}
+
+
+
+private void checkContent(String writtenContent, ObjectMapper mapper) throws IOException {
+
+	JsonNode node = mapper.readTree(writtenContent);
+	assertNotNull(node);
+	assertTrue(node.isObject());
+	assertTrue(node.has("rows"));
+
+	JsonNode rows = node.get("rows");			//rows
+	assertNotNull(rows);
+	assertTrue(rows.isArray());
+	assertEquals(1, rows.size());
+
+	JsonNode cols = rows.get(0).get("cols");
+	assertNotNull(cols);
+	assertTrue(cols.isArray());
+
+	JsonNode col0Size = cols.get(0).get("size");
+	assertNotNull(col0Size);
+	assertEquals(4, col0Size.asInt());
+
 }
 
 

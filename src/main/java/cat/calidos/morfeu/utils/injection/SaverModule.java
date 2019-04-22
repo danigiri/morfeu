@@ -38,7 +38,7 @@ public static Saver saver(@Named("DestinationContentURI") URI u,
 
 	String scheme = u.getScheme();
 	log.debug("Trying to save to uri {} with scheme {}", u, scheme);
-	
+
 	try {
 		return scheme.startsWith("file") ? fileSaverProducer.get().get() : postSaverProducer.get().get();
 	} catch (Exception e) {

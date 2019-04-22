@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.utils.injection.JSONMapperModule;
+import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
@@ -31,7 +31,7 @@ import dagger.producers.ProductionComponent;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, JSONMapperModule.class, 
+@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 
 								ModelModule.class, CellModelsFilterModule.class, ValidatorModule.class,
 								ListeningExecutorServiceModule.class})
 public interface ContentParserTeztComponent {

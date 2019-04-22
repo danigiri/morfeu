@@ -4,7 +4,7 @@ Morfeu is an application to manage multiple APIs represented as [YAML](http://ya
 
 YAML-based APIs are commonly used in many domains to represent complex API configurations, and Morfeu makes it easier for users to engage and experiment with those APIs. [Eurinome](https://github.com/danigiri/eurinome) is a sister project that applies the Morfeu concept to the Kubernetes ecosystem using Helm.
 
-Morfeu is flexible and can work with any YAML or XML API once a schema is for that API is created and added to the system.
+Morfeu is flexible and can work with any YAML, JSON or XML API once a schema is for that API is created and added to the system.
 
 It is licensed under the Apache 2 open-source license and is under heavy development.
 
@@ -49,7 +49,7 @@ Often, organisations that expose a rich API that is showing naturally end up dev
 
 This problem is compounded when the underlying systems interact between themselves. It is even more complex to create all-encompassing or modular UIs that handle APIs created by different teams, crossing domain and organisational boundaries.
 
-Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML and XML-based APIs (JSON or other formats can be added).
+Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure).
 
 
 ## Concepts
@@ -103,7 +103,7 @@ Daniel Giribet - Twitter: [@danielgiri](https://twitter.com/danielgiri)
 
 ## License
 
-> Copyright 2018 Daniel Giribet
+> Copyright 2019 Daniel Giribet
 >
 > Licensed under the Apache License, Version 2.0 (the "License");
 > you may not use this file except in compliance with the License.

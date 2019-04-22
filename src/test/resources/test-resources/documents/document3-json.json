@@ -1,0 +1,8 @@
+{
+	"name": "Document 3 YAML"
+	,"desc": "Third document (YAML)"
+	,"kind": "yaml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/transform/document3-json-content.json"
+	
+}

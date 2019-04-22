@@ -1,0 +1,15 @@
+{
+	"rows": [
+		{
+			"cols": [
+				{
+					"size": 12,
+					"keyvalues": {
+						"foo": "bar",
+						"bar": "foo"
+					}
+				}
+			]
+		}
+	]
+}

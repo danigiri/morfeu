@@ -170,9 +170,4 @@ boolean isYAML(@Named("Filename") String filename) {
 }
 
 
-@Produces
-YAMLMapper yamlMapper() {
-	return new YAMLMapper();
-}
-
 }

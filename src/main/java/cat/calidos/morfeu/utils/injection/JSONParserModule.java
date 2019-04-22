@@ -30,7 +30,7 @@ import dagger.producers.Produces;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(includes=JSONMapperModule.class)
+@ProducerModule(includes=MapperModule.class)
 public class JSONParserModule {
 
 protected final static Logger log = LoggerFactory.getLogger(JSONParserModule.class);
