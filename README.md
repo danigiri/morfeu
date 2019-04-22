@@ -38,7 +38,11 @@ Morfeu includes a fair number of unit and integration tests. Launch the followin
 
     mvn test failsafe:integration-test -Dit.test='*IntTest' -Dapp-url='http://localhost:3000/'
 
-This will run unit tests, integration tests and also browser UI tests using Selenium. As there is a fairly large number of them this will take some time.
+This will run unit tests and general integration tests (see next command for UI ones). As there is a fairly large number of them this will take some time.
+
+To launch UI Selenium integration tests you can do:
+
+    mvn test failsafe:integration-test -Dit.test='*IntTest' -Dapp-url='http://localhost:3000/'
 
 
 ## Rationale
