@@ -29,7 +29,7 @@
 			{%- endif -%}
 			{%- if c.isComplex -%}{# FIXME: we do not assume it's a list if maxOccurs is==1 #}
 {%- include "cell-start-to-yaml.twig" with {'c': c, 'indent': ilist} only -%}
-{%include "cell-to-yaml.dtwig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -%}
+{%include "cell-to-yaml.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  '), 'hidename':true} only -%}
 			{%- else -%}
 				{#- ____________ simple content case ____________ -#}
 				{%- include "cell-simple-to-yaml.twig" with {'cell': c, 'indent': i} only -%}
