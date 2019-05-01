@@ -46,6 +46,11 @@ public static URI makeAbsoluteURIIfNeeded(URI prefix, URI uri) throws ParsingExc
 }
 
 
+public static Map<String, Object> paramMap() {
+	return new HashMap<String, Object>(0);
+}
+
+
 public static Map<String, Object> paramMap(Object... params) {
 
 	int length = params.length;
@@ -61,6 +66,23 @@ public static Map<String, Object> paramMap(Object... params) {
 			throw new ClassCastException("Param name "+i+" is not a string");
 		}
 		map.put((String)name, params[i+1]);
+	}
+
+	return map;
+
+}
+
+public static Map<String, String> paramStringMap(String... params) {
+
+	int length = params.length;
+	if (length%2!=0) {
+		throw new ArrayIndexOutOfBoundsException("Need even parameters to build a param map");
+	}
+
+	HashMap<String, String> map = new HashMap<String, String>(length<<2);
+
+	for (int i=0; i<length; i=i+2) {
+		map.put(params[i], params[i+1]);
 	}
 
 	return map;

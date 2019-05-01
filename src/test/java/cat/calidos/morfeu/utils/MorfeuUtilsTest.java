@@ -17,7 +17,36 @@ public void paramMapTest() {
 
 	Map<String, Object> map = MorfeuUtils.paramMap("foo", Collections.EMPTY_LIST, "bar", "more stuff");
 	assertNotNull(map);
+	assertEquals(2, map.size());
+	assertTrue(map.containsKey("foo"));
+	assertEquals(Collections.EMPTY_LIST, map.get("foo"));
+	assertTrue(map.containsKey("bar"));
+	assertEquals("more stuff", map.get("bar"));
+
+}
+
+
+@Test
+public void emptyParamMapTest() {
 	
+	Map<String, Object> map = MorfeuUtils.paramMap();
+	assertNotNull(map);
+	assertEquals(0, map.size());
+	
+}
+
+
+@Test
+public void paramStringMapTest() {
+
+	Map<String, String> map = MorfeuUtils.paramStringMap("foo", "x", "bar", "more stuff");
+	assertNotNull(map);
+	assertEquals(2, map.size());
+	assertTrue(map.containsKey("foo"));
+	assertEquals("x", map.get("foo"));
+	assertTrue(map.containsKey("bar"));
+	assertEquals("more stuff", map.get("bar"));
+
 }
 
 }
