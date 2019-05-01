@@ -1,23 +1,11 @@
-/*
- *    Copyright 2017 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// MORFEU UTILS . JAVA
 
 package cat.calidos.morfeu.utils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import cat.calidos.morfeu.problems.ParsingException;
@@ -58,5 +46,41 @@ public static URI makeAbsoluteURIIfNeeded(URI prefix, URI uri) throws ParsingExc
 }
 
 
+public static Map<String, Object> paramMap(Object... params) {
+
+	int length = params.length;
+	if (length%2!=0) {
+		throw new ArrayIndexOutOfBoundsException("Need even parameters to build a param map");
+	}
+
+	HashMap<String, Object> map = new HashMap<String, Object>(length<<2);
+
+	for (int i=0; i<length; i=i+2) {
+		Object name = params[i];
+		if (!(name instanceof String)) {
+			throw new ClassCastException("Param name "+i+" is not a string");
+		}
+		map.put((String)name, params[i+1]);
+	}
+
+	return map;
 
 }
+
+}
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
