@@ -49,8 +49,6 @@
 		<url-pattern>/*</url-pattern> 
 	</filter-mapping-->
 
-
-	<!-- Proxy mode: at the moment it's not easily configurable -->
 	<servlet>
 		<servlet-name>proxy</servlet-name>
 		<servlet-class>cat.calidos.morfeu.proxy.MorfeuProxyServlet</servlet-class>
