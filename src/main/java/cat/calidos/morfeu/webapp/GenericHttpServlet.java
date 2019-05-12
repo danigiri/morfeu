@@ -64,10 +64,7 @@ public void init(ServletConfig config) throws ServletException {
 
 	//TODO: add the servlet init params as part of the config so a proper merge can be done
 	ServletConfig servletConfig = this.getServletConfig();
-	configuration = DaggerServletConfigComponent.builder()
-													.servletConfig(servletConfig)
-													.build()
-													.getProperties();
+	configuration = DaggerServletConfigComponent.builder().servletConfig(servletConfig).build().getProperties();
 	context = servletConfig.getServletContext();
 	context.setAttribute(__CONFIG, configuration);
 
@@ -83,14 +80,7 @@ public abstract ControlComponent putControl(String path, Map<String, String> par
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-	String path = req.getPathInfo();
-	log.trace("GenericMorfeuServlet::doGet {}", path);
-	
-	Map<String, String> params = normaliseParams(req.getParameterMap());
-	params.put(METHOD, req.getMethod());
-	params = processParams(params);
-
-	ControlComponent controlComponent = getControl(path, params);
+	ControlComponent controlComponent = generateGetControlComponent(req);
 	handleResponse(resp, controlComponent);
 
 }
@@ -99,16 +89,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 @Override
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-	String path = req.getPathInfo();
-	log.trace("GenericMorfeuServlet::doPost {}", path);
-	
-	Map<String, String> params = normaliseParams(req.getParameterMap());
-	params.put(METHOD, req.getMethod());
-	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
-	params.put(POST_VALUE, content);
-	params = processParams(params);
-	
-	ControlComponent controlComponent = putControl(path, params);
+	ControlComponent controlComponent = generatePostControlComponent(req);
 	handleResponse(resp, controlComponent);
 
 }
@@ -182,6 +163,36 @@ public static Map<String, String> removeInternalHeaders(Map<String, String> para
 					.stream()
 					.filter(k -> !k.getKey().startsWith(INTERNAL_PARAM_PREFIX))
 					.collect(Collectors.toMap(Map.Entry::getKey,  Map.Entry::getValue));
+}
+
+
+private ControlComponent generateGetControlComponent(HttpServletRequest req) {
+
+	String path = req.getPathInfo();
+	log.trace("GenericHttpServlet::doGet {}", path);
+	
+	Map<String, String> params = normaliseParams(req.getParameterMap());
+	params.put(METHOD, req.getMethod());
+	params = processParams(params);
+
+	ControlComponent controlComponent = getControl(path, params);
+	return controlComponent;
+}
+
+
+private ControlComponent generatePostControlComponent(HttpServletRequest req) throws IOException {
+
+	String path = req.getPathInfo();
+	log.trace("GenericHttpServlet::doPost {}", path);
+	
+	Map<String, String> params = normaliseParams(req.getParameterMap());
+	params.put(METHOD, req.getMethod());
+	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
+	params.put(POST_VALUE, content);
+	params = processParams(params);
+	
+	ControlComponent controlComponent = putControl(path, params);
+	return controlComponent;
 }
 
 

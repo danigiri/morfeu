@@ -15,6 +15,18 @@
 		<param-name>__PROXY_PREFIX</param-name>
 		<param-value>http://localhost:8090/eurinome</param-value>
 	</context-param>
+	<context-param>
+		<description>Async servlet number of threads</description>
+		<param-name>__ASYNC_CONTEXT_QUEUE</param-name>
+		<param-value>7</param-value>
+	</context-param>
+	<context-param>
+		<description>Async servlet timeout (milliseconds)</description>
+		<param-name>__ASYNC_TIMEOUT</param-name>
+		<param-value>5000</param-value>
+	</context-param>
+
+
 	<!-- context-param> <description>Proxy mode prefix</description> <param-name>__PROXY</param-name> <param-value>http://localhost:8090/eurinome</param-value> 
 		</context-param -->
 
@@ -29,6 +41,7 @@
 		<display-name>generic-servlet</display-name>
 		<servlet-name>MorfeuServlet</servlet-name>
 		<servlet-class>cat.calidos.morfeu.control.MorfeuServlet</servlet-class>
+		<async-supported>true</async-supported>
 	</servlet>
 
 	<servlet-mapping>
