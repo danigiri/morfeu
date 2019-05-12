@@ -10,6 +10,11 @@
 		<param-name>__RESOURCES_PREFIX</param-name>
 		<param-value>http://localhost:8080/morfeu/</param-value>
 	</context-param>
+	<context-param>
+		<description>Proxy uri prefix</description>
+		<param-name>__PROXY_PREFIX</param-name>
+		<param-value>http://localhost:8090/eurinome</param-value>
+	</context-param>
 	<!-- context-param> <description>Proxy mode prefix</description> <param-name>__PROXY</param-name> <param-value>http://localhost:8090/eurinome</param-value> 
 		</context-param -->
 
@@ -48,10 +53,10 @@
 	<!-- Proxy mode: at the moment it's not easily configurable -->
 	<servlet>
 		<servlet-name>proxy</servlet-name>
-		<servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
+		<servlet-class>cat.calidos.morfeu.proxy.MorfeuProxyServlet</servlet-class>
 		<init-param>
 			<param-name>targetUri</param-name>
-			<param-value>http://localhost:8090/eurinome</param-value>
+			<param-value>${__PROXY_PREFIX}</param-value>
 		</init-param>
 		<init-param>
 			<param-name>log</param-name>
