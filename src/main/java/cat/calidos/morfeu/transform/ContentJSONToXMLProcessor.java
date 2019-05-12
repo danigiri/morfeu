@@ -4,10 +4,14 @@ package cat.calidos.morfeu.transform;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+
+import org.openqa.selenium.logging.NeedsLocalLogs;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.transform.injection.DaggerContentJSONToXMLComponent;
+import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import cat.calidos.morfeu.view.injection.ViewComponent;
 
@@ -23,6 +27,10 @@ private static final String CHILDREN_FIELD = "children";
 private String prefix;
 private JsonNode node;
 private boolean hasChildren;
+private boolean needToRender;
+
+private boolean hasValue;
+private String value;
 
 
 public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
@@ -35,6 +43,12 @@ public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
 		this.hasChildren = false;
 	}
 
+	hasValue = node.has("value");
+	value = hasValue ? node.get("value").asText() : "";
+	
+	// if no name field or it's empty means that it's a node that has no XML representation (like the empty root)
+	this.needToRender = node.has(NAME_FIELD) && node.get(NAME_FIELD).asText().length()>0;
+
 }
 
 
@@ -43,17 +57,20 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 
 	Context<JsonNode, String> newContext = oldContext;
 
+	// if we have children or value and we're not the root (empty) node, we need to add a slash
+	if ((hasChildren || hasValue) && needToRender) {
+		// if we have a value we do not add a prefix to the slash so we don't implicitly add the prefix to the value
+		String appliedPrefix = hasValue ? "" : prefix;
+		newContext.push(DaggerContentJSONToXMLComponent.builder()
+														.fromNode(node)
+														.withPrefix(appliedPrefix)
+														.build()
+														.processorSlash());
+
+	}
+
 	// now we push the children if there are any
 	if (hasChildren) {
-
-		if (node.has(NAME_FIELD)) {	// if it's an empty node we don't push a slash processor
-			newContext.push(DaggerContentJSONToXMLComponent.builder()
-															.fromNode(node)
-															.withPrefix(prefix)
-															.build()
-															.processorSlash()
-			);
-		}
 		String newPrefix = "\t"+prefix;
 		JsonNode children = node.get(CHILDREN_FIELD);	// adding directly to the context will mean reverse order
 		LinkedList<Processor<JsonNode, String>> childrenList = new LinkedList<Processor<JsonNode, String>>();
@@ -80,18 +97,10 @@ public JsonNode input() {
 @Override
 public String output() {
 
-	// if we don't have a name it means that it's a json node that has no XML representation (like the empty root)
-
 	String render = "";
-	if (node.has(NAME_FIELD)) {
+	if (needToRender) {
 		String name = node.get(NAME_FIELD).asText();
-		boolean hasValue = node.has("value");
-		String value = hasValue ? node.get("value").asText() : "";
-		HashMap<String, Object> values = new HashMap<String, Object>(4);
-		values.put(NAME_FIELD, name);
-		values.put("value", value);
-		values.put("pref", prefix);
-		values.put("node", node);
+		Map<String, Object> v = MorfeuUtils.paramMap(NAME_FIELD, name, "value", value, "pref", prefix, "node", node);
 	
 		String template = null;
 		if (!hasChildren && !hasValue) {
@@ -109,10 +118,10 @@ public String output() {
 					+ "endfor -%}" + 
 					"{%for a in v.node.attributes "
 						+ "%} {{a.name.textValue}}=\"{{a.value.textValue}}\" {% "
-						+ "endfor -%} >" + (hasValue ? "{{value | xmlc}}" : "\n");
+						+ "endfor -%} >" + (hasValue ? "{{v.value | xmlc}}" : "\n");
 		}
 
-		ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(template).andProblem("").build();
+		ViewComponent view = DaggerViewComponent.builder().withValue(v).withTemplate(template).andProblem("").build();
 		render = view.render();
 	}
 
