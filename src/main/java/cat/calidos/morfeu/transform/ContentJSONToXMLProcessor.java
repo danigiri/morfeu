@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.openqa.selenium.logging.NeedsLocalLogs;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.transform.injection.DaggerContentJSONToXMLComponent;
