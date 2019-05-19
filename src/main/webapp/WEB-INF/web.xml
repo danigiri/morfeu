@@ -16,11 +16,6 @@
 		<param-value>http://localhost:8090/eurinome</param-value>
 	</context-param>
 	<context-param>
-		<description>Async servlet number of threads</description>
-		<param-name>__ASYNC_CONTEXT_QUEUE</param-name>
-		<param-value>7</param-value>
-	</context-param>
-	<context-param>
 		<description>Async servlet timeout (milliseconds)</description>
 		<param-name>__ASYNC_TIMEOUT</param-name>
 		<param-value>5000</param-value>

@@ -8,9 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,15 +17,16 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.MorfeuServletListener;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public abstract class GenericAsyncHttpServlet extends GenericHttpServlet {
 
-
 protected final static Logger log = LoggerFactory.getLogger(GenericAsyncHttpServlet.class);
 
+private static final String ORIGINAL_PATH_INFO = "ORIGINAL_PATH_INFO";	// async handling modifies the path info
 private static final int DEFAULT_TIMEOUT = 5000;
 
 private LinkedBlockingQueue<AsyncContext> queue;
@@ -38,54 +37,89 @@ public void init(ServletConfig config) throws ServletException {
 
 	super.init(config);
 	
-	queue = (LinkedBlockingQueue<AsyncContext>)context.getAttribute(MorfeuServletListener.ASYNC_CONTEXT_QUEUE);
+	queue = (LinkedBlockingQueue<AsyncContext>) context.getAttribute(MorfeuServletListener.ASYNC_CONTEXT_QUEUE);
 	String timeoutStr = (String)context.getAttribute(MorfeuServletListener.ASYNC_TIMEOUT);
-
+	
 	try {
-		this.timeout = Integer.parseInt(timeoutStr);
+		timeout = Integer.parseInt(timeoutStr);
 	} catch (Exception e) {
 		log.warn("Invalid timeout configuration ({} is not an integer), using {}", timeoutStr, DEFAULT_TIMEOUT);
-		this.timeout = DEFAULT_TIMEOUT;
+		timeout = DEFAULT_TIMEOUT;
 	}
+	log.info("Using async servlet request handler timeout {}", timeout);
 
 	final ExecutorService executorService = ListeningExecutorServiceModule.executor;
-	executorService.execute(new Runnable() {
-
-			public void run() {
-				while (true) {
-					try {
-						final AsyncContext asyncCtx = queue.take();
-						executorService.execute(new Runnable() {
-
-							public void run() {
-								ServletRequest req = asyncCtx.getRequest();
-								HttpServletResponse resp = (HttpServletResponse)asyncCtx.getResponse();
-
-								// find out if we are get or post here
-								
-								asyncCtx.complete();
-							}
-						});
-
-					} catch (InterruptedException e) {
-					}
-
-				}
-			}
-		});
+	log.info("Starting async handler in executor");
+	executorService.execute(new AsyncRequestHandler(executorService, log));
 	
 }
 
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	
+
 	AsyncContext asyncCtx = req.startAsync(req, resp); 
 	asyncCtx.setTimeout(timeout);
+	// async context handling modifies the path info, and adds back the servlet prefix, which makes
+	// matching to fail, this is weird behaviour so we store the original path info for retrieval later
+	req.setAttribute(ORIGINAL_PATH_INFO, req.getPathInfo());
+	log.trace("Handling async request {}", req.getPathInfo());
 	queue.add(asyncCtx);
+
 }
 
 @Override
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	doGet(req, resp);
+}
+
+private final class AsyncRequestHandler implements Runnable {
+
+private final ExecutorService executorService;
+private final Logger log;
+
+
+private AsyncRequestHandler(ExecutorService executorService, Logger log) {
+
+	this.executorService = executorService;
+	this.log = log;
+
+}
+
+
+public void run() {
+	while (true) {
+		try {
+			final AsyncContext asyncCtx = queue.take();
+			executorService.execute(new Runnable() {
+
+				public void run() {
+					HttpServletRequest req = (HttpServletRequest) asyncCtx.getRequest();
+					HttpServletResponse resp = (HttpServletResponse) asyncCtx.getResponse();
+
+					// find out if we are get or post here to call the appropriate handler
+					String method = req.getMethod();
+					// we retrieve the original path info that async context has mangled
+					String pathInfo = (String) req.getAttribute(ORIGINAL_PATH_INFO);
+					ControlComponent controlComponent;
+					log.trace("Handling async request {} ({})", pathInfo, req.getMethod());
+					if (method.equalsIgnoreCase("POST")) {
+						controlComponent = generatePostControlComponent(req, pathInfo);
+					} else {
+						controlComponent = generateGetControlComponent(req, pathInfo);
+					}
+					log.trace("Control component generated is {}", controlComponent.getClass());
+					handleResponse(resp, controlComponent);
+					asyncCtx.complete();
+				}
+			});
+
+		} catch (InterruptedException e) {
+			log.error("Runnabler servlet async handler interrupted {}", e.getMessage());
+		}
+
+	}
+}
 }
 
 

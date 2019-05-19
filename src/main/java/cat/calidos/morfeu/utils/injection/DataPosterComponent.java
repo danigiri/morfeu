@@ -26,7 +26,7 @@ ListenableFuture<InputStream> postData() throws PostingException;
 
 @ProductionComponent.Builder
 interface Builder {
-	
+
 	@BindsInstance Builder forURI(URI u);
 	@BindsInstance Builder withClient(CloseableHttpClient c);
 	@BindsInstance Builder andData(Map<String, String> data);

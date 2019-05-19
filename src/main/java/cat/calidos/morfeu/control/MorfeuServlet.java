@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
+import cat.calidos.morfeu.webapp.GenericAsyncHttpServlet;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
@@ -19,7 +20,7 @@ import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
 /** Generic morfeu filter, will load the configuration and invoke the controller with the request 
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class MorfeuServlet extends GenericHttpServlet {
+public class MorfeuServlet extends GenericAsyncHttpServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
 
@@ -32,7 +33,7 @@ protected String resourcesPrefix;
 public void init(ServletConfig config) throws ServletException {
 
 	super.init(config);
-	
+
 	// the hierarchy is as follows:
 	// 1) Read servlet configuration
 	// 2) Add and override with java system properties
@@ -49,6 +50,7 @@ public void init(ServletConfig config) throws ServletException {
 	if (!resourcesPrefix.endsWith("/")) {
 		log.warn("*** Used resources prefix does not end with '/', may have issues fetching content ***");
 	}
+
 
 }
 

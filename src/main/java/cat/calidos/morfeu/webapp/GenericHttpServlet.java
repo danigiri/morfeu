@@ -117,7 +117,7 @@ protected String normalisedPathFrom(HttpServletRequest req) {
 }
 
 
-protected void writeTo(String content, String contentType, HttpServletResponse resp) throws IOException {
+protected void writeTo(String content, String contentType, HttpServletResponse resp) {
 
 	// to simulate slowness
 //	try {
@@ -127,20 +127,27 @@ protected void writeTo(String content, String contentType, HttpServletResponse r
 //		e.printStackTrace();
 //	}
 	resp.setContentType(contentType);
-	PrintWriter out = resp.getWriter();
-	out.print(content);
-	out.close();
+	PrintWriter out;
+	try {
+		out = resp.getWriter();
+		out.print(content);
+		out.close();
+	} catch (IOException e) {
+		String msg = "Could not write response in servlet code, cannot recover from this";
+		log.error(msg, e);
+		throw new RuntimeException(msg, e);
+	}
 
 }
 
 
-protected void writeTo(String content, HttpServletResponse resp) throws IOException {
+protected void writeTo(String content, HttpServletResponse resp) {
 	writeTo(content, defaultContentType, resp);
 }
 
 
 
-protected void handleResponse(HttpServletResponse resp, ControlComponent controlComponent) throws IOException {
+public void handleResponse(HttpServletResponse resp, ControlComponent controlComponent) {
 
 	if (controlComponent.matches()) {
 		String result = controlComponent.process();
@@ -166,9 +173,9 @@ public static Map<String, String> removeInternalHeaders(Map<String, String> para
 }
 
 
-private ControlComponent generateGetControlComponent(HttpServletRequest req) {
+public ControlComponent generateGetControlComponent(HttpServletRequest req, String pathInfo) {
 
-	String path = req.getPathInfo();
+	String path = pathInfo;
 	log.trace("GenericHttpServlet::doGet {}", path);
 	
 	Map<String, String> params = normaliseParams(req.getParameterMap());
@@ -176,23 +183,32 @@ private ControlComponent generateGetControlComponent(HttpServletRequest req) {
 	params = processParams(params);
 
 	ControlComponent controlComponent = getControl(path, params);
+
 	return controlComponent;
+
 }
 
 
-private ControlComponent generatePostControlComponent(HttpServletRequest req) throws IOException {
+public ControlComponent generatePostControlComponent(HttpServletRequest req, String pathInfo) {
 
-	String path = req.getPathInfo();
+	String path = pathInfo;
 	log.trace("GenericHttpServlet::doPost {}", path);
 	
 	Map<String, String> params = normaliseParams(req.getParameterMap());
 	params.put(METHOD, req.getMethod());
-	String content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
+	String content = "";
+	try {
+		content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
+	} catch (IOException e) {
+		log.error("Could not read input stream in POST servlet code, using empty input", e);
+	}
 	params.put(POST_VALUE, content);
 	params = processParams(params);
 	
 	ControlComponent controlComponent = putControl(path, params);
+
 	return controlComponent;
+
 }
 
 

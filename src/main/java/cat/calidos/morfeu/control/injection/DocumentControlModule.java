@@ -28,6 +28,7 @@ public class DocumentControlModule {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentControlModule.class);
 
+
 @Provides @IntoMap @Named("GET")
 @StringKey("/documents/(.+)")
 public static BiFunction<List<String>, Map<String, String>, String> getDocument() {
