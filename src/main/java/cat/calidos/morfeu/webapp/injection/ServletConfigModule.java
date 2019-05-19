@@ -1,3 +1,47 @@
+// SERVLET CONFIG MODULE . JAVA
+
+package cat.calidos.morfeu.webapp.injection;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.stream.StreamSupport;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+
+import dagger.Module;
+import dagger.Provides;
+
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Module
+public class ServletConfigModule {
+
+@Provides
+public static Properties getProperties(ServletConfig c) {
+
+	Properties p = new Properties();
+	Collections.list(c.getInitParameterNames()).forEach(name -> p.setProperty(name, c.getInitParameter(name)));
+
+	ServletContext context = c.getServletContext();
+	Iterable<String> iterable = () -> context.getAttributeNames().asIterator();
+	StreamSupport.stream(iterable.spliterator(), false)
+					.filter(a -> context.getAttribute(a) instanceof String)
+					.forEach(a -> p.setProperty(a, (String)context.getAttribute(a)));
+
+	p.putAll(System.getProperties());
+	p.putAll(System.getenv());
+
+	//p.propertyNames().asIterator().forEachRemaining(null);;
+	
+	return p;
+
+}
+
+}
+
 /*
  *    Copyright 2016 Daniel Giribet
  *
@@ -13,36 +57,3 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-package cat.calidos.morfeu.webapp.injection;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.servlet.ServletConfig;
-
-import dagger.Module;
-import dagger.Provides;
-
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class ServletConfigModule {
-
-@Provides
-public static Properties getProperties(ServletConfig c) {
-	
-	Properties p = new Properties();
-	Collections.list(c.getInitParameterNames())
-		.forEach(name -> p.setProperty(name, c.getInitParameter(name)));
-	
-	p.putAll(System.getProperties());
-	p.putAll(System.getenv());
-	
-	return p;
-
-}
-
-}

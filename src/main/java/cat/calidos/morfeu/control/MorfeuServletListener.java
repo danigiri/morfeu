@@ -5,11 +5,14 @@ package cat.calidos.morfeu.control;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.servlet.AsyncContext;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import cat.calidos.morfeu.webapp.GenericAsyncHttpServlet;
 
 
 /** Servlet context initialisation callbacks
@@ -19,9 +22,6 @@ public class MorfeuServletListener implements ServletContextListener {
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuServletListener.class);
 
-public static final String ASYNC_CONTEXT_QUEUE = "ASYNC_CONTEXT_QUEUE";
-public static final String ASYNC_TIMEOUT = "ASYNC_TIMEOUT";
-
 private final LinkedBlockingQueue<AsyncContext> contextQueue = new LinkedBlockingQueue<AsyncContext>();
 
 
@@ -29,8 +29,9 @@ private final LinkedBlockingQueue<AsyncContext> contextQueue = new LinkedBlockin
 public void contextInitialized(ServletContextEvent sce) {
 
 	log.info("------ Servlet context initialized ------");
-	sce.getServletContext().setAttribute("counter", (Integer)0);
-	sce.getServletContext().setAttribute(ASYNC_CONTEXT_QUEUE, contextQueue);
+	ServletContext ctxt = sce.getServletContext();
+	ctxt.setAttribute("counter", (Integer)0);
+	ctxt.setAttribute(GenericAsyncHttpServlet.ASYNC_CONTEXT_QUEUE, contextQueue);
 }
 
 
@@ -38,7 +39,8 @@ public void contextInitialized(ServletContextEvent sce) {
 public void contextDestroyed(ServletContextEvent sce) {
 
 	log.info("------ Servlet context initialized  -----");
-	((LinkedBlockingQueue<AsyncContext>)sce.getServletContext().getAttribute(ASYNC_CONTEXT_QUEUE)).clear();
+	ServletContext ctxt = sce.getServletContext();
+	((LinkedBlockingQueue<AsyncContext>)ctxt.getAttribute(GenericAsyncHttpServlet.ASYNC_CONTEXT_QUEUE)).clear();
 
 }
 

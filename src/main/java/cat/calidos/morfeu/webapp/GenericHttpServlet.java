@@ -63,9 +63,8 @@ public void init(ServletConfig config) throws ServletException {
 	super.init(config);
 
 	//TODO: add the servlet init params as part of the config so a proper merge can be done
-	ServletConfig servletConfig = this.getServletConfig();
-	configuration = DaggerServletConfigComponent.builder().servletConfig(servletConfig).build().getProperties();
-	context = servletConfig.getServletContext();
+	configuration = DaggerServletConfigComponent.builder().servletConfig(config).build().getProperties();
+	context = config.getServletContext();
 	context.setAttribute(__CONFIG, configuration);
 
 }

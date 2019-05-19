@@ -28,6 +28,8 @@ protected final static Logger log = LoggerFactory.getLogger(GenericAsyncHttpServ
 
 private static final String ORIGINAL_PATH_INFO = "ORIGINAL_PATH_INFO";	// async handling modifies the path info
 private static final int DEFAULT_TIMEOUT = 5000;
+public static final String ASYNC_CONTEXT_QUEUE = "ASYNC_CONTEXT_QUEUE";
+public static final String ASYNC_TIMEOUT = "__ASYNC_TIMEOUT";
 
 private LinkedBlockingQueue<AsyncContext> queue;
 private int timeout;
@@ -36,10 +38,9 @@ private int timeout;
 public void init(ServletConfig config) throws ServletException {
 
 	super.init(config);
-	
-	queue = (LinkedBlockingQueue<AsyncContext>) context.getAttribute(MorfeuServletListener.ASYNC_CONTEXT_QUEUE);
-	String timeoutStr = (String)context.getAttribute(MorfeuServletListener.ASYNC_TIMEOUT);
-	
+
+	queue = (LinkedBlockingQueue<AsyncContext>) context.getAttribute(ASYNC_CONTEXT_QUEUE);
+	String timeoutStr = configuration.getProperty(ASYNC_TIMEOUT);
 	try {
 		timeout = Integer.parseInt(timeoutStr);
 	} catch (Exception e) {
@@ -51,7 +52,7 @@ public void init(ServletConfig config) throws ServletException {
 	final ExecutorService executorService = ListeningExecutorServiceModule.executor;
 	log.info("Starting async handler in executor");
 	executorService.execute(new AsyncRequestHandler(executorService, log));
-	
+
 }
 
 @Override
