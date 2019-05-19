@@ -1,4 +1,5 @@
 <ng-container [ngSwitch]="true">
+<!-- check for ROOT here -->
 	<ng-container *ngSwitchCase="cell.cellModel && (cell.cellModel.presentation === 'WELL' || isFragment)">
 		<img *ngIf="!isFragment" src="{{getCellPresentation()}}"
 			class="well-img img-fluid"

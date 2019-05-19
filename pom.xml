@@ -320,6 +320,18 @@
 			<version>1.11</version>
 		</dependency>
 
+		<!-- process execution -->
+		<dependency>
+			<groupId>org.zeroturnaround</groupId>
+			<artifactId>zt-exec</artifactId>
+			<version>1.10</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.zeroturnaround</groupId>
+		    <artifactId>zt-process-killer</artifactId>
+		    <version>1.9</version>
+		</dependency>
+
 		<!-- UNIT TESTING -->
 		<dependency>
 			<groupId>junit</groupId>
