@@ -27,6 +27,7 @@ import cat.calidos.morfeu.utils.Tezt;
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UIProblem;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
 * @author daniel giribet
@@ -52,6 +53,7 @@ public static void setUpClass() throws Exception {
 
 	appBaseURL = defineSystemVariable(URL_PROPERTY, DEFAULT_URL);
 
+	WebDriverManager.chromedriver().setup();	// setups the chrome driver
 
 	ChromeOptions chromeOptions = new ChromeOptions();
 	//chromeOptions.addArguments("--log-level=3");
