@@ -56,22 +56,22 @@ public void init(ServletConfig config) throws ServletException {
 
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	
 
 	AsyncContext asyncCtx = req.startAsync(req, resp); 
 	asyncCtx.setTimeout(timeout);
 	// async context handling modifies the path info, and adds back the servlet prefix, which makes
 	// matching to fail, this is weird behaviour so we store the original path info for retrieval later
 	req.setAttribute(ORIGINAL_PATH_INFO, req.getPathInfo());
-	log.trace("Handling async request {}", req.getPathInfo());
 	queue.add(asyncCtx);
 
 }
+
 
 @Override
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	doGet(req, resp);
 }
+
 
 private final class AsyncRequestHandler implements Runnable {
 
@@ -99,7 +99,7 @@ public void run() {
 
 					// find out if we are get or post here to call the appropriate handler
 					String method = req.getMethod();
-					// we retrieve the original path info that async context has mangled
+					// we retrieve the original path info that async context has mangled and use that instead
 					String pathInfo = (String) req.getAttribute(ORIGINAL_PATH_INFO);
 					ControlComponent controlComponent;
 					log.trace("Handling async request {} ({})", pathInfo, req.getMethod());
@@ -108,7 +108,6 @@ public void run() {
 					} else {
 						controlComponent = generateGetControlComponent(req, pathInfo);
 					}
-					log.trace("Control component generated is {}", controlComponent.getClass());
 					handleResponse(resp, controlComponent);
 					asyncCtx.complete();
 				}
@@ -120,12 +119,11 @@ public void run() {
 
 	}
 }
+
+
 }
 
-
-
 }
-
 
 /*
  *    Copyright 2019 Daniel Giribet

@@ -80,7 +80,7 @@ public abstract ControlComponent putControl(String path, Map<String, String> par
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-	ControlComponent controlComponent = generateGetControlComponent(req);
+	ControlComponent controlComponent = generateGetControlComponent(req, req.getPathInfo());
 	handleResponse(resp, controlComponent);
 
 }
@@ -89,7 +89,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 @Override
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-	ControlComponent controlComponent = generatePostControlComponent(req);
+	ControlComponent controlComponent = generatePostControlComponent(req, req.getPathInfo());
 	handleResponse(resp, controlComponent);
 
 }
