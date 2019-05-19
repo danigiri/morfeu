@@ -8,9 +8,11 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,12 +28,15 @@ public class ConfigModuleTest {
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 @Mock ServletConfig servletConfig;
+@Mock ServletContext servletContext;
 
 @Test
 public void testProvideConfigWithServletConfig() {
 
 		Enumeration<String> names = Collections.enumeration(Arrays.asList("a","b","c"));
 		when(servletConfig.getInitParameterNames()).thenReturn(names);
+		when(servletContext.getAttributeNames()).thenReturn(Collections.enumeration(Collections.emptyList()));
+		when(servletConfig.getServletContext()).thenReturn(servletContext);
 		when(servletConfig.getInitParameter("a")).thenReturn("A");
 		when(servletConfig.getInitParameter("b")).thenReturn("B");
 		when(servletConfig.getInitParameter("c")).thenReturn("C");
