@@ -1,13 +1,17 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import { Component } from "@angular/core";
+import { TestRoutingModule } from './test-routing.module';
 
-@Component({
-	selector: 'app-root',
-	template: `<router-outlet></router-outlet>`
+@NgModule({
+	declarations: [],
+	imports: [
+		CommonModule,
+		TestRoutingModule
+	]
 })
 
-
-export class AppComponent {}
+export class TestModule {}
 
 /*
  *	  Copyright 2019 Daniel Giribet

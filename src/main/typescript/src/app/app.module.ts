@@ -1,46 +1,48 @@
 // APP . MODULE . TS
 
-import { NgModule, Injector } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { HttpModule } from "@angular/http";
-import { HttpClientModule } from "@angular/common/http";  // new angular 5 http client module
-import { RouterModule } from "@angular/router";
+import { NgModule, Injector } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';  // new angular 5 http client module
+import { RouterModule } from '@angular/router';
 
-import { DndModule } from "ng2-dnd";
-import { HotkeyModule } from "angular2-hotkeys";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { TreeModule } from "angular-tree-component";
+import { DndModule } from 'ng2-dnd';
+import { HotkeyModule } from 'angular2-hotkeys';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TreeModule } from 'angular-tree-component';
 
-import { AppRoutingModule, AppRoutes } from "./app-routing.module";
+import { AppRoutingModule, AppRoutes } from './app-routing.module';
 
-import { AppComponent } from "./components/app.component";
-import { AttributeDataEditorComponent } from "./components/attribute-data-editor.component";
-import { AttributeDataInfoComponent } from "./components/attribute-data-info.component";
-import { CatalogueListComponent } from "./components/catalogue-list.component";
-import { CatalogueComponent } from "./catalogue.component";
-import { CollapsibleComponent } from "./components/collapsible.component";
-import { ContentComponent } from "./content.component";
-import { CellComponent } from "./components/cell.component";
-import { CellEditorComponent } from "./components/cell-editor.component";
-import { CellHeaderComponent } from "./components/cell-header.component";
-import { CellDocumentComponent } from "./cell-document.component";
-import { CellModelComponent } from "./cell-model.component";
-import { CellDataComponent } from "./components/cell-data.component";
-import { DropAreaComponent } from "./drop-area.component";
-import { KeyCaptureComponent } from "./components/key-capture.component";
-import { MainComponent } from "./components/main.component";
-import { ModelAreaComponent } from "./components/model-area.component";
-import { ModelComponent } from "./components/model.component";
-import { HTMLPreviewComponent } from "./components/html-preview.component";
-import { PresentationComponent } from "./components/presentation.component";
-import { ProblemComponent } from "./problem.component";
-import { SnippetComponent } from "./components/snippet.component";
-import { SnippetsListComponent } from "./components/snippets-list.component";
-import { StatusComponent } from "./status.component";
 import { SafePipe } from './pipes/safe.pipe';
+
+import { AppComponent } from './components/app.component';
+import { AttributeDataEditorComponent } from './components/attribute-data-editor.component';
+import { AttributeDataInfoComponent } from './components/attribute-data-info.component';
+import { CatalogueListComponent } from './components/catalogue-list.component';
+import { CatalogueComponent } from './catalogue.component';
+import { CollapsibleComponent } from './components/collapsible.component';
+import { ContentComponent } from './content.component';
+import { CellComponent } from './components/cell.component';
+import { CellEditorComponent } from './components/cell-editor.component';
+import { CellHeaderComponent } from './components/cell-header.component';
+import { CellDocumentComponent } from './cell-document.component';
+import { CellModelComponent } from './cell-model.component';
+import { CellDataComponent } from './components/cell-data.component';
+import { DropAreaComponent } from './drop-area.component';
+import { HTMLPreviewComponent } from './preview/html-preview.component';
+import { KeyCaptureComponent } from './components/key-capture.component';
+import { MainComponent } from './components/main.component';
+import { ModelAreaComponent } from './components/model-area.component';
+import { ModelComponent } from './components/model.component';
+import { PresentationComponent } from './components/presentation.component';
+import { ProblemComponent } from './problem.component';
+import { SnippetComponent } from './components/snippet.component';
+import { SnippetsListComponent } from './components/snippets-list.component';
+import { StatusComponent } from './status.component';
+
 
 @NgModule({
 	imports: [
@@ -78,10 +80,10 @@ import { SafePipe } from './pipes/safe.pipe';
 					, ModelComponent
 					, PresentationComponent
 					, ProblemComponent
-					, SafePipe
 					, SnippetComponent
 					, SnippetsListComponent
 					, StatusComponent 
+					, SafePipe
 	],
 	providers:	[],
 	bootstrap:	[ AppComponent ]

@@ -1,20 +1,20 @@
 // APP-ROUTING . MODULE . TS
 
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
-import { MainComponent } from "./components/main.component";
-import { HTMLPreviewComponent } from "./components/html-preview.component";
-
+import { MainComponent } from './components/main.component';
+import { HTMLPreviewComponent } from './preview/html-preview.component';
 
 export const AppRoutes: Routes = [
-									{ path: "preview/:id", component: HTMLPreviewComponent }
-									,{ path: "", component: MainComponent }
+//									{ path: 'preview/:id', loadChildren: './preview/preview.module#PreviewModule' }
+									{ path: 'preview/:id', component: HTMLPreviewComponent}
+									,{ path: '', component: MainComponent }
 									];
 
 
 @NgModule({
-	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: false }) ],
+	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: true }) ],
 	exports: [ RouterModule ]
 })
 

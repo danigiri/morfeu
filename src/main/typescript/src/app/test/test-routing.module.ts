@@ -1,13 +1,14 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
-import { Component } from "@angular/core";
+const routes: Routes = [];
 
-@Component({
-	selector: 'app-root',
-	template: `<router-outlet></router-outlet>`
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
 
-
-export class AppComponent {}
+export class TestRoutingModule { }
 
 /*
  *	  Copyright 2019 Daniel Giribet
