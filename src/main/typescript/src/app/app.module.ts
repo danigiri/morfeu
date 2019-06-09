@@ -34,7 +34,7 @@ import { CellDataComponent } from './components/cell-data.component';
 import { DropAreaComponent } from './drop-area.component';
 import { HTMLPreviewComponent } from './preview/html-preview.component';
 import { KeyCaptureComponent } from './components/key-capture.component';
-import { MainComponent } from './components/main.component';
+import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
 import { PresentationComponent } from './components/presentation.component';

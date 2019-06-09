@@ -1,43 +1,43 @@
 // MAIN . COMPONENT . TS
 
-import { ActivatedRoute } from "@angular/router";
-import { Component, OnInit, AfterViewInit } from "@angular/core";
-import { Subscription } from "rxjs";
-import { isDevMode, Inject } from "@angular/core";
-import { Http } from "@angular/http";
-import { HttpClient } from "@angular/common/http";	// new angular 5 http client
+import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { isDevMode, Inject } from '@angular/core';
+import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';	// new angular 5 http client
 
-import { Configuration, ConfigJSON } from "../config/configuration.class";
-import { environment } from "../../environments/environment";
+import { Configuration, ConfigJSON } from './config/configuration.class';
+import { environment } from '../environments/environment';
 
-import { CatalogueListComponent } from "./catalogue-list.component";
-import { ContentComponent } from "../content.component";
-import { CellDocumentComponent } from "../cell-document.component";
-import { ProblemComponent } from "../problem.component";
-import { StatusComponent } from "../status.component";
-import { RemoteDataService } from "../services/remote-data.service";
-import { RemoteObjectService } from "../services/remote-object.service";
+import { CatalogueListComponent } from './components/catalogue-list.component';
+import { ContentComponent } from './content.component';
+import { CellDocumentComponent } from './cell-document.component';
+import { ProblemComponent } from './problem.component';
+import { StatusComponent } from './status.component';
+import { RemoteDataService } from './services/remote-data.service';
+import { RemoteObjectService } from './services/remote-object.service';
 
-import { Model, ModelJSON } from "../model.class";
-import { Catalogue } from "../catalogue.class";
-import { CellDocument, CellDocumentJSON } from "../cell-document.class";
-import { Content, ContentJSON } from "../content.class";
+import { Model, ModelJSON } from './model.class';
+import { Catalogue } from './catalogue.class';
+import { CellDocument, CellDocumentJSON } from './cell-document.class';
+import { Content, ContentJSON } from './content.class';
 
-import { CellActivateEvent } from "../events/cell-activate.event";
-import { ConfigurationLoadedEvent } from "../events/configuration-loaded.event";
-import { CataloguesRequestEvent } from "../events/catalogues-request.event";
-import { CataloguesLoadedEvent } from "../events/catalogues-loaded.event";
-import { CatalogueLoadedEvent } from "../events/catalogue-loaded.event";
-import { CatalogueSelectionEvent } from "../events/catalogue-selection.event";
-import { CellDocumentSelectionEvent } from "../events/cell-document-selection.event";
-import { CellDocumentLoadedEvent } from "../events/cell-document-loaded.event";
-import { CellSelectEvent } from "../events/cell-select.event";
-import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
-import { ContentRefreshedEvent } from "../events/content-refreshed.event";
-import { ModelLoadedEvent } from "../events/model-loaded.event";
-import { EventListener } from "../events/event-listener.class";
-import { EventService } from "../services/event.service";
-import { RemoteEventService } from "../services/remote-event.service";
+import { CellActivateEvent } from './events/cell-activate.event';
+import { ConfigurationLoadedEvent } from './events/configuration-loaded.event';
+import { CataloguesRequestEvent } from './events/catalogues-request.event';
+import { CataloguesLoadedEvent } from './events/catalogues-loaded.event';
+import { CatalogueLoadedEvent } from './events/catalogue-loaded.event';
+import { CatalogueSelectionEvent } from './events/catalogue-selection.event';
+import { CellDocumentSelectionEvent } from './events/cell-document-selection.event';
+import { CellDocumentLoadedEvent } from './events/cell-document-loaded.event';
+import { CellSelectEvent } from './events/cell-select.event';
+import { CellSelectionClearEvent } from './events/cell-selection-clear.event';
+import { ContentRefreshedEvent } from './events/content-refreshed.event';
+import { ModelLoadedEvent } from './events/model-loaded.event';
+import { EventListener } from './events/event-listener.class';
+import { EventService } from './services/event.service';
+import { RemoteEventService } from './services/remote-event.service';
 
 @Component({
 	moduleId: module.id,

@@ -3,20 +3,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MainComponent } from './components/main.component';
+import { MainComponent } from './main.component';
 
 export const AppRoutes: Routes = [
-									{ path: 'preview/:id', 
-										loadChildren: () => import('./preview/preview.module')
-																.then(mod => mod.PreviewModule)
-										}
-									,{ path: '', component: MainComponent }
+									{ path: '', component: MainComponent }
+									,{ path: 'preview/:id', loadChildren: () => import('./preview/preview.module')
+																					.then(mod => mod.PreviewModule) }
+									,{ path: 'test', loadChildren: () => import('./testing/testing.module')
+																			.then(mod => mod.TestingModule) }
 									];
-//									{ path: 'preview/:id', component: HTMLPreviewComponent}
-
 
 @NgModule({
-	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: true }) ],
+	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: false }) ],
 	exports: [ RouterModule ]
 })
 
