@@ -1,3 +1,4 @@
+// PREVIEW . MODULE . TS
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -9,12 +10,12 @@ import { HTMLPreviewComponent } from './html-preview.component';
 
 @NgModule({
 	imports: [
-				CommonModule
-				, PipesModule
-				, PreviewRoutingModule
+				CommonModule,
+				PipesModule,
+				PreviewRoutingModule
 	],
 	declarations: [
-					HTMLPreviewComponent
+					HTMLPreviewComponent,
 					],
 })
 

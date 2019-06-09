@@ -1,18 +1,13 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
-import { InnerHTMLPreviewTestComponent } from '../preview/test/innerhtml-preview-test.component';
-
-const routes: Routes = [
-							{ path: 'innerhtml-preview-test', component: InnerHTMLPreviewTestComponent }
-];
-
-@NgModule({
-	imports: [RouterModule.forChild(routes)],
-	exports: [RouterModule]
+@Component({
+	selector: 'innerhtml-preview-test',
+	template: ``
 })
 
-export class TestingRoutingModule {}
+export class InnerHTMLPreviewTestComponent {
+
+}
 
 /*
  *	  Copyright 2019 Daniel Giribet
