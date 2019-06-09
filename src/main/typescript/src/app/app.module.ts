@@ -16,7 +16,7 @@ import { TreeModule } from 'angular-tree-component';
 
 import { AppRoutingModule, AppRoutes } from './app-routing.module';
 
-import { SafePipe } from './pipes/safe.pipe';
+import { PipesModule } from './pipes/pipes.module';
 
 import { AppComponent } from './components/app.component';
 import { AttributeDataEditorComponent } from './components/attribute-data-editor.component';
@@ -56,6 +56,7 @@ import { StatusComponent } from './status.component';
 				, HttpClientModule
 				, HotkeyModule.forRoot()
 				, NgbModule.forRoot()
+				, PipesModule
 				, TreeModule
 	],
 	declarations: [
@@ -73,7 +74,6 @@ import { StatusComponent } from './status.component';
 					, CellDataComponent
 					, CellModelComponent
 					, DropAreaComponent
-					, HTMLPreviewComponent
 					, KeyCaptureComponent
 					, MainComponent
 					, ModelAreaComponent
@@ -83,7 +83,6 @@ import { StatusComponent } from './status.component';
 					, SnippetComponent
 					, SnippetsListComponent
 					, StatusComponent 
-					, SafePipe
 	],
 	providers:	[],
 	bootstrap:	[ AppComponent ]

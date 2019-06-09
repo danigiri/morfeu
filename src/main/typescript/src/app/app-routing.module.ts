@@ -4,13 +4,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MainComponent } from './components/main.component';
-import { HTMLPreviewComponent } from './preview/html-preview.component';
 
 export const AppRoutes: Routes = [
-//									{ path: 'preview/:id', loadChildren: './preview/preview.module#PreviewModule' }
-									{ path: 'preview/:id', component: HTMLPreviewComponent}
+									{ path: 'preview/:id', 
+										loadChildren: () => import('./preview/preview.module')
+																.then(mod => mod.PreviewModule)
+										}
 									,{ path: '', component: MainComponent }
 									];
+//									{ path: 'preview/:id', component: HTMLPreviewComponent}
 
 
 @NgModule({
@@ -21,7 +23,7 @@ export const AppRoutes: Routes = [
 export class AppRoutingModule {}
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2019 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

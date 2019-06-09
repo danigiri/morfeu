@@ -1,3 +1,16 @@
+
+import { enableProdMode } from "@angular/core";
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+
+import { AppModule } from "./app/app.module";
+import { environment } from "./environments/environment";
+
+if (environment.production) {
+	enableProdMode();
+}
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,15 +26,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { enableProdMode } from "@angular/core";
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-
-import { AppModule } from "./app/app.module";
-import { environment } from "./environments/environment";
-
-if (environment.production) {
-	enableProdMode();
-}
-
-platformBrowserDynamic().bootstrapModule(AppModule);

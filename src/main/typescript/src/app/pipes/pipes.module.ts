@@ -1,24 +1,15 @@
+// PIPES . MODULE . TS
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-import { PipesModule } from '../pipes/pipes.module';
-
-import { PreviewRoutingModule } from './preview-routing.module';
-import { HTMLPreviewComponent } from './html-preview.component';
+import { SafePipe } from './safe.pipe';
 
 @NgModule({
-	imports: [
-				CommonModule
-				, PipesModule
-				, PreviewRoutingModule
-	],
-	declarations: [
-					HTMLPreviewComponent
-					],
+	declarations: [ SafePipe ],
+	exports: [ SafePipe ]
 })
 
-export class PreviewModule {}
+export class PipesModule {}
 
 /*
  *    Copyright 2019 Daniel Giribet
