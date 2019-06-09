@@ -18,7 +18,7 @@ import { AppRoutingModule, AppRoutes } from './app-routing.module';
 
 import { PipesModule } from './pipes/pipes.module';
 
-import { AppComponent } from './components/app.component';
+import { AppComponent } from './app.component';
 import { AttributeDataEditorComponent } from './components/attribute-data-editor.component';
 import { AttributeDataInfoComponent } from './components/attribute-data-info.component';
 import { CatalogueListComponent } from './components/catalogue-list.component';
@@ -37,12 +37,11 @@ import { KeyCaptureComponent } from './components/key-capture.component';
 import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
-import { PresentationComponent } from './components/presentation.component';
+import { PresentationComponent } from './components/presentation/presentation.component';
 import { ProblemComponent } from './problem.component';
 import { SnippetComponent } from './components/snippet.component';
 import { SnippetsListComponent } from './components/snippets-list.component';
 import { StatusComponent } from './status.component';
-
 
 @NgModule({
 	imports: [

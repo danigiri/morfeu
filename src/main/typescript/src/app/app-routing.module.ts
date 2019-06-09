@@ -6,11 +6,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
 
 export const AppRoutes: Routes = [
-									{ path: '', component: MainComponent }
-									,{ path: 'preview/:id', loadChildren: () => import('./preview/preview.module')
-																					.then(mod => mod.PreviewModule) }
-									,{ path: 'test', loadChildren: () => import('./testing/testing.module')
-																			.then(mod => mod.TestingModule) }
+									{path: '', component: MainComponent },
+									{path: 'preview/:id', loadChildren: () => import('./preview/preview.module')
+																					.then(mod => mod.PreviewModule)},
+									{path: 'test', loadChildren: () => import('./test/test.module')
+																			.then(mod => mod.TestModule)}
 									];
 
 @NgModule({
