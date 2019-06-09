@@ -2,8 +2,8 @@
 
 import { Component, Input, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 
-import { Cell } from "../cell.class";
-import { CellModel } from "../cell-model.class";
+import { Cell } from "../../cell.class";
+import { CellModel } from "../../cell-model.class";
 
 @Component({
 	moduleId: module.id,
@@ -14,7 +14,8 @@ import { CellModel } from "../cell-model.class";
 			class="cell cell-html"
 			[src]="getPresentation() | safe: 'resourceUrl' "
 		></iframe>
-		
+		<ng-container [ngSwitch]="true">
+		</ng-container>
 	`,
 })
 // sets the ui to be too slow as the iframe blocks rendering

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { PipesModule } from '../pipes/pipes.module';
 
 import { PreviewRoutingModule } from './preview-routing.module';
+
 import { HTMLPreviewComponent } from './html-preview.component';
 
 @NgModule({
