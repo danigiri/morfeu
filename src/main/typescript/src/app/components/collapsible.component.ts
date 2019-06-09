@@ -28,7 +28,7 @@ import { UXEvent } from "../events/ux.event";
 	selector: 'collapsible',
 	template: `
 		<!-- TODO: have header be a template and not an attribute, so we can have more than text -->
-		<div id="{{id_}}" class="card {{class}}">
+		<div id="{{id_}}" class="card">
 			<ng-container [ngSwitch]="headerSize">
 				<ng-container *ngSwitchCase="1">
 					 <h1 class="card-header {{headerClass}}">{{header}}</h1>

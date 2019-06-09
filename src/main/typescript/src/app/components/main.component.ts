@@ -168,6 +168,8 @@ ngAfterViewInit() {
 
 	this.subscribe(this.events.service.of(ConfigurationLoadedEvent).subscribe(
 			loaded => {
+				console.log("Configuration loaded, we're about to request catalogue load");
+				console.log("loaded.configuration.catalogues=%s", loaded.configuration.catalogues);
 				this.config = loaded.configuration;
 				Promise.resolve(null)
 						.then(() => this.events.service
@@ -179,11 +181,11 @@ ngAfterViewInit() {
 	this.route.queryParams.subscribe(
 			params => {
 				if (params.config && params.config!==undefined) {
-					console.debug("Configuration to be bootstrapped from config url '%s'", params.config);
+					console.log("Configuration to be bootstrapped from config url '%s'", params.config);
 					this.config.loadConfigFrom(params.config);
 				} else {
 					let merged = this.config.overwriteWithParams(params);
-					console.debug("Configuration bootstrapped from defaults, firing config loaded event");
+					console.log("Configuration bootstrapped from defaults, firing config loaded event");
 					this.events.service.publish(new ConfigurationLoadedEvent(merged));
 				}
 			}

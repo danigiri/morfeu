@@ -52,7 +52,7 @@ private cellPresentationIsIMG(): boolean {
 }
 
 
-private getPresentation(): string {
+getPresentation(): string {
 	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
 }
 

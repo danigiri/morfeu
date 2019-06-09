@@ -27,7 +27,7 @@ constructor(eventService: EventService,
 
 
 loadConfigFrom(url: string) {
-	
+
 	console.debug("Loading configuration from '%s'", url);
 	this.configService.get(url, Configuration).subscribe(
 			loaded => this.overwriteWithConfig(loaded),
@@ -35,7 +35,6 @@ loadConfigFrom(url: string) {
 			() => this.events.service.publish(new ConfigurationLoadedEvent(this))
 	);
 
-	
 }
 
 

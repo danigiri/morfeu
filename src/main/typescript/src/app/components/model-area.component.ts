@@ -117,7 +117,7 @@ commandPressedCallback(command: string) {
 //// KeyListenerWidget [end] ////
 
 
-private beforeTabChange($event: NgbTabChangeEvent) {
+beforeTabChange($event: NgbTabChangeEvent) {
 
 	console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
 	if ($event.activeId===ModelAreaComponent.MODEL_TAB) {
@@ -129,7 +129,7 @@ private beforeTabChange($event: NgbTabChangeEvent) {
 }
 
 
-private isVisible(): boolean {
+isVisible(): boolean {
 	return this.model!=undefined && this.model!=null;
 }
 
