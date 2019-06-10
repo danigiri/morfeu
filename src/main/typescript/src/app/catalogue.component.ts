@@ -58,7 +58,7 @@ selectedDocumentURI: string;
 
 constructor(eventService: EventService,
 			remoteEventService: RemoteEventService,
-			@Inject("RemoteJSONDataService") private catalogueService: RemoteDataService ) {
+			@Inject("RemoteJSONDataService") private catalogueService: RemoteDataService) {
 	super(eventService, remoteEventService);
 }
 
@@ -98,7 +98,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 				this.events.service.publish(new CellDocumentClearEvent());	// also clear document
 				this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE));
 			}
-		);
+	);
 
 }
 
