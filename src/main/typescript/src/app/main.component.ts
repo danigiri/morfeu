@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { isDevMode, Inject } from '@angular/core';
-import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';	// new angular 5 http client
 
 import { Configuration, ConfigJSON } from './config/configuration.class';
@@ -77,27 +76,27 @@ import { RemoteEventService } from './services/remote-event.service';
 					deps: [HttpClient]
 				}
 				, {provide: "CellDocumentService",
-					useFactory: (http: Http) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
-					deps: [Http]
+					useFactory: (http: HttpClient) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
+					deps: [HttpClient]
 				}
 				, {provide: "ConfigurationService",
-					useFactory: (http: Http) => (new RemoteObjectService<Configuration, ConfigJSON>(http)),
-					deps: [Http]
+					useFactory: (http: HttpClient) => (new RemoteObjectService<Configuration, ConfigJSON>(http)),
+					deps: [HttpClient]
 				}
 				, Configuration
 				, {provide: "ContentService",
-					useFactory: (http:Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
-					deps: [Http]
+					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
+					deps: [HttpClient]
 				}
 				, EventService
 				, {provide: "ModelService",
-					useFactory: (http: Http) => (new RemoteObjectService<Model, ModelJSON>(http)),
-					deps: [Http]
+					useFactory: (http: HttpClient) => (new RemoteObjectService<Model, ModelJSON>(http)),
+					deps: [HttpClient]
 				}
 				, RemoteEventService
 				, {provide: "SnippetContentService",
-					useFactory: (http: Http) => (new RemoteObjectService<Content, ContentJSON>(http)),
-					deps: [Http]
+					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
+					deps: [HttpClient]
 				}
 	]
 })

@@ -28,9 +28,8 @@ import { EventService } from "../services/event.service";
 	moduleId: module.id,
 	selector: "cell",
 	templateUrl: "./cell.component.html",
-	styleUrls: ["./cell.component.css", "./presentation.css"]
-	//
-// encapsulation: ViewEncapsulation.Emulated,
+	styleUrls: ["./cell.component.css", "./presentation/presentation.css"]
+	// encapsulation: ViewEncapsulation.Emulated,
 })
 
 export class CellComponent extends SelectableWidget implements OnInit {
@@ -46,7 +45,7 @@ active = false;
 dragEnabled = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
-@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;		// we only have one of those!!!
+@ViewChild(DropAreaComponent, {static: false}) dropArea: DropAreaComponent;	// we only have one of those!!!
 
 
 constructor(eventService: EventService) {

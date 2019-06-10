@@ -89,7 +89,7 @@ import { EventService } from "../services/event.service";
 
 export class CellEditorComponent extends EventListener implements OnInit {
 
-@ViewChild("editor") editor: ElementRef;
+@ViewChild("editor", {static: false}) editor: ElementRef;
 
 cell: Cell;
 cellBackup: Cell;

@@ -57,9 +57,9 @@ snippets?: CellDocument[];
 
 protected commandKeys: string[] = ["m", "s"];
 
-@ViewChild("tabs") tabs: NgbTabset;
-@ViewChild(ModelComponent) private modelComponent: ModelComponent;
-@ViewChild(SnippetsListComponent) private snippetListComponent: SnippetsListComponent;
+@ViewChild("tabs", {static: false}) tabs: NgbTabset;
+@ViewChild(ModelComponent, {static: false}) private modelComponent: ModelComponent;
+@ViewChild(SnippetsListComponent, {static: false}) private snippetListComponent: SnippetsListComponent;
 
 private modelDisplayReadySubscription: Subscription;
 
