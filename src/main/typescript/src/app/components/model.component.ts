@@ -71,6 +71,7 @@ private cellModelSelectingMode = false;
 
 @ViewChild(TreeComponent, {static: false}) private cellModelComponentsRoot: TreeComponent;
 
+
 constructor(eventService: EventService,
 			remoteEventService: RemoteEventService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
@@ -80,9 +81,9 @@ constructor(eventService: EventService,
 
 
 ngOnInit() {
-	
+
 	console.log("ModelComponent::ngOnInit()"); 
-	
+
 	// if we are in a tab area this is redundant, as the parent will remove us from the component tree
 	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(selected => this.clearModel()));
 

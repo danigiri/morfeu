@@ -32,26 +32,19 @@ export class RemoteObjectService<T extends SerialisableToJSON<T, J>, J> {
 
 constructor(private http: HttpClient) {}
 
-// with an array this will not work
-//getAll(uri: string, type_: Constructor<T>): Observable<T[]> {
-//	  
-//	  console.log("[SERVICE] RemoteObjectService::getAll("+uri+")"); 
-//	  //TODO: handle errors with .catch here
-//	  return this.http.get(uri).map(response => <T[]>response.json());
-//
-//}
 
 /** we have to explicitly pass the class we're expecting */
 get(uri: string, type_: Constructor<T>): Observable<T> {
 
 	console.log("[SERVICE] RemoteObjectService::get("+uri+")"); 
 	// TODO: handle errors with .catch her
-	return this.http.get(uri, { observe: 'response' })
-						.pipe( retryWhen(errors => errors.pipe(delay(200),take(5),)),
+	return this.http.get<J>(uri)//, { observe: 'response' })
+						.pipe(	retryWhen(errors => errors.pipe(delay(200),take(5),)),
 	// .concat(Observable.throw(new Error("Too many retries")))
-								map(response => <T>createInstance(type_).fromJSON(response.body)),);
-z
+								map(response => <T>createInstance(type_).fromJSON(response)),);
+
 }
+
 
 }
 

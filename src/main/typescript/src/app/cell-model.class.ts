@@ -236,7 +236,7 @@ toJSON(): CellModelJSON {
 }
 
 
-static fromJSON(json: CellModelJSON|string): CellModel {
+static fromJSON(json: CellModelJSON): CellModel {
 
 	if (typeof json === 'string') {
 

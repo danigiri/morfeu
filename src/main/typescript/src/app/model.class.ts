@@ -69,19 +69,11 @@ toJSON(): ModelJSON {
 }
 
 
-fromJSON(json: ModelJSON|string): Model {
+fromJSON(json: ModelJSON): Model {
 
-	if (typeof json === 'string') {
+	let model = Object.create(Model.prototype);
 
-		return JSON.parse(json, Model.reviver);
-
-	} else {
-
-		let model = Object.create(Model.prototype);
-
-		return Object.assign(model, json, {children: json.children.map( cm => CellModel.fromJSON(cm))});
-
-	}
+	return Object.assign(model, json, {children: json.children.map( cm => CellModel.fromJSON(cm))});
 
 }
 

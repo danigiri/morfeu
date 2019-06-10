@@ -45,7 +45,7 @@ export class SnippetsListComponent extends KeyListenerWidget implements AfterVie
 @Input() model: Model;
 @Input() snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
-private normalisedModel: Model;
+normalisedModel: Model;
 snippets: Observable<Array<CellDocument>>;			// snippets document observable, for async display
 _snippets: Array<CellDocument>;						// snippets document list
 _snippetsSubject: Subject<Array<CellDocument>>;		// snippets document subject, to push new documents into

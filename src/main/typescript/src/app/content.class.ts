@@ -42,22 +42,15 @@ toJSON(): ContentJSON {
 }
 
 
-fromJSON(json: ContentJSON|string): Content {
+fromJSON(json: ContentJSON): Content {
 
 	// not implementing the cell fragment option as it's not applicable yet
-	if (typeof json === "string") {
 
-		return JSON.parse(json, Content.reviver);
+	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
+	const cell = CELL.fromJSON(json); 
+	let content = Content.fromCell(cell);
 
-	} else {
-
-		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
-		let cell = CELL.fromJSON(json); 
-		let content = Content.fromCell(cell);
-
-		return content;
-
-	}
+	return content;
 
 }
 

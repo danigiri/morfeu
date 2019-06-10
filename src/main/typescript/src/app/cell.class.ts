@@ -132,6 +132,9 @@ setPosition(position:number):Cell {
 }
 
 
+replaceWith(replacement: Cell) {} // PLEASE IMPLEMENT
+
+
 /** return a deep clone of this cell, it includes all children plus runtime information (parent ref, ...) */
 deepClone(): Cell {
 
@@ -456,40 +459,32 @@ toJSON(): CellJSON {
 }
 
 
-fromJSON(json: CellJSON|string): Cell {
+fromJSON(json: CellJSON): Cell {
 
-	if (typeof json === "string") {
+	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 
-		return JSON.parse(json, Cell.reviver);
+	let cell: Cell = Object.create(Cell.prototype);
+	cell = Object.assign(cell, json);
 
-	} else {
-
-		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
-
-		let cell: Cell = Object.create(Cell.prototype);
-		cell = Object.assign(cell, json);
-
-		if (json.attributes) {
-			cell = Object.assign(cell, {attributes: json.attributes.map(a => CELL.fromJSON(a))});
-		}
-		if (json.internalAttributes) {
-			cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => CELL.fromJSON(a))});
-		}
-
-		// we complete the children runtime information so we have the parent reference as well as position
-		if (json.children) {
-			let i = 0;
-			cell = Object.assign(cell, {children: json.children.map(c => {
-				let fullCell: Cell = CELL.fromJSON(c);
-				fullCell.position = i++;
-				fullCell.parent = cell;
-				return fullCell;
-			})});
-		}
-
-		return cell;
-
+	if (json.attributes) {
+		cell = Object.assign(cell, {attributes: json.attributes.map(a => CELL.fromJSON(a))});
 	}
+	if (json.internalAttributes) {
+		cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => CELL.fromJSON(a))});
+	}
+
+	// we complete the children runtime information so we have the parent reference as well as position
+	if (json.children) {
+		let i = 0;
+		cell = Object.assign(cell, {children: json.children.map(c => {
+			let fullCell: Cell = CELL.fromJSON(c);
+			fullCell.position = i++;
+			fullCell.parent = cell;
+			return fullCell;
+		})});
+	}
+
+	return cell;
 
 }
 
