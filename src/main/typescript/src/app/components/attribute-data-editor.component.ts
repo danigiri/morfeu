@@ -34,7 +34,7 @@ import { CellModel } from "../cell-model.class";
 					/>
 				</div>
 			</div>
-			<div *ngIf="!isPresent()" class="list-group-item disabled">
+			<div *ngIf="!isPresent()" class="list-group-item">
 				<small class="attribute-data-name">{{cellModel.name}}</small>
 				<span class="badge float-right">
 					<img class="btn float-right attribute-data-add"

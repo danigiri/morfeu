@@ -40,7 +40,7 @@ import { EventService } from "../services/event.service";
 								(click)="createValue()"
 							/>
 							<!-- remove value button -->
-							<img  *ngIf="cell.value!=undefined && showValue()"
+							<img *ngIf="cell.value!=undefined && showValue()"
 								id="cell-editor-remove-value-button"
 								class="btn btn-outline-danger float-right"
 								src="assets/images/open-iconic/circle-x.svg"
@@ -153,7 +153,7 @@ private getPresentation(): string {
 }
 
 
-private button(result: any) {
+private button(result: string) {
 
 	if (result==="Save") {
 		console.log("[UI] Saved cell");
