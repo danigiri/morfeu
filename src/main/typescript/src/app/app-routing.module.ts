@@ -6,11 +6,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
 
 export const AppRoutes: Routes = [
-									{path: '', component: MainComponent },
+									{path: '', component: MainComponent},
 									{path: 'preview/:id', loadChildren: () => import('./preview/preview.module')
-																					.then(mod => mod.PreviewModule)},
+																					.then(mod => mod.PreviewModule),
+									},
 									{path: 'test', loadChildren: () => import('./test/test.module')
-																			.then(mod => mod.TestModule)}
+																			.then(mod => mod.TestModule)
+									}
 									];
 
 @NgModule({

@@ -87,13 +87,9 @@ import { RemoteEventService } from './services/remote-event.service';
 				, {provide: "ContentService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
 					deps: [HttpClient]
-				}
-				, EventService
-				, {provide: "ModelService",
-					useFactory: (http: HttpClient) => (new RemoteObjectService<Model, ModelJSON>(http)),
-					deps: [HttpClient]
-				}
-				, RemoteEventService
+				},
+				EventService,
+				RemoteEventService
 				, {provide: "SnippetContentService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
 					deps: [HttpClient]

@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';  // new angular 5 http client module
 import { RouterModule } from '@angular/router';
 
@@ -14,8 +13,8 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TreeModule } from 'angular-tree-component';
 
+import {ComponentsModule} from './components/components.module';
 import { AppRoutingModule, AppRoutes } from './app-routing.module';
-
 import { PipesModule } from './pipes/pipes.module';
 
 import { AppComponent } from './app.component';
@@ -37,7 +36,6 @@ import { KeyCaptureComponent } from './components/key-capture.component';
 import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
-import { PresentationComponent } from './components/presentation/presentation.component';
 import { ProblemComponent } from './problem.component';
 import { SnippetComponent } from './components/snippet.component';
 import { SnippetsListComponent } from './components/snippets-list.component';
@@ -45,13 +43,13 @@ import { StatusComponent } from './status.component';
 
 @NgModule({
 	imports: [
-				AppRoutingModule
-				, BrowserModule
-				, BrowserAnimationsModule
-				, CommonModule
-				, DndModule.forRoot()
+				AppRoutingModule,
+				BrowserModule,
+				BrowserAnimationsModule,
+				CommonModule,
+				ComponentsModule,
+				DndModule.forRoot()
 				, FormsModule
-				, HttpModule
 				, HttpClientModule
 				, HotkeyModule.forRoot()
 				, NgbModule.forRoot()
@@ -77,14 +75,12 @@ import { StatusComponent } from './status.component';
 					, MainComponent
 					, ModelAreaComponent
 					, ModelComponent
-					, PresentationComponent
 					, ProblemComponent
 					, SnippetComponent
 					, SnippetsListComponent
 					, StatusComponent 
 	],
-	providers:	[],
-	bootstrap:	[ AppComponent ]
+	bootstrap:	[AppComponent]
 })
 
 export class AppModule {}

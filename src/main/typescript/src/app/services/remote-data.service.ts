@@ -1,8 +1,8 @@
 
 import { take, delay, retryWhen } from 'rxjs/operators';
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";	// new angular 5 http client
-import { Observable , BehaviorSubject } from "rxjs";
+import { HttpClient, HttpErrorResponse} from "@angular/common/http";
+import { Observable , BehaviorSubject } from 'rxjs';
 
 
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead */
@@ -33,6 +33,15 @@ get<T>(uri: string): Observable<T> {
 }
 
 
+getText(uri: string): Observable<String> {
+
+	console.log("[SERVICE] RemoteDataService::getText('%s')", uri);
+
+	return this.http.get(uri, {responseType: 'text'}).pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
+	//.catch((err: HttpErrorResponse) => this.handleError(err.error));
+}
+
+
 post<T>(uri: string, content: any): Observable<T> {
 
 	console.log("[SERVICE] RemoteDataService::post('%s')", uri);
@@ -41,6 +50,22 @@ post<T>(uri: string, content: any): Observable<T> {
 	return this.http.post<T>(uri, content);
 
 }
+
+
+/*private handleError(error: HttpErrorResponse) {
+  if (error.error instanceof ErrorEvent) {
+    // A client-side or network error occurred. Handle it accordingly.
+    console.error('An error occurred:', error.error.message);
+  } else {
+    // The backend returned an unsuccessful response code.
+    // The response body may contain clues as to what went wrong,
+    console.error(
+      `Backend returned code ${error.status}, ` +
+      `body was: ${error.error}`);
+  }
+	return "Error";
+};
+*/
 
 
 }

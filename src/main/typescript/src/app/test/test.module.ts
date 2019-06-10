@@ -1,11 +1,14 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TestRoutingModule } from './test-routing.module';
+import {ComponentsModule} from '../components/components.module';
+import {TestRoutingModule} from './test-routing.module';
 
 @NgModule({
 	declarations: [],
 	imports: [
+		ComponentsModule,
 		CommonModule,
 		TestRoutingModule
 	]

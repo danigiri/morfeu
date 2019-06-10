@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.regex.Pattern;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,6 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.MorfeuServlet;
 import cat.calidos.morfeu.control.SVGPreviewGETControl;
+import cat.calidos.morfeu.utils.MorfeuUtils;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 
@@ -26,35 +29,68 @@ import cat.calidos.morfeu.webapp.GenericHttpServlet;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class SVGPreviewControlModule {
+public class PreviewControlModule {
 
-protected final static Logger log = LoggerFactory.getLogger(SVGPreviewControlModule.class);
+protected final static Logger log = LoggerFactory.getLogger(PreviewControlModule.class);
 
 private static final String HEADER_PARAM = "__header";	// this is used as the SVG header
+private static final Pattern colorRegexp = Pattern.compile("^[0-9a-fA-F]{6}$");
 
 
 @Provides @IntoMap @Named("GET")
-@StringKey("/preview/(.+)")
-public static BiFunction<List<String>, Map<String, String>, String> getContent() {
+@StringKey("/preview/svg/(.+)")
+public static BiFunction<List<String>, Map<String, String>, String> getContentSVG() {
 
 	return (pathElems, params) -> {
 
 		String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1);		// normalised already
-		Optional<String> header = SVGPreviewControlModule.extractHeaderFrom(params);
+		Optional<String> header = PreviewControlModule.extractHeaderFrom(params);
 
 		params = GenericHttpServlet.removeInternalHeaders(params);	// remove all __* we do not want as a param
 
 		return new SVGPreviewGETControl(resourcesPrefix, path, header, params).processRequest();
 
 	};
+
+}
+
+
+@Provides @IntoMap @Named("GET")
+@StringKey("/preview/html/(.+)")
+public static BiFunction<List<String>, Map<String, String>, String> getContentHTML() {
+
+	return (pathElems, params) -> {
+
+		String template = "<div class=\"card\">\n" + 
+				"				<div class=\"card-body html-preview\" style=\"background-color: #{{v.color}}\">\n" + 
+				"					<h4 class=\"card-title html-preview-title\">{{v.path}}</h4>\n" + 
+				"				</div>\n" + 
+				"			</div>";
+
+		String path = pathElems.get(1);		// normalised already
+		String color = params.get("color");
+		color = color!=null && colorRegexp.matcher(color).matches() ? color : "ff0000";
+		Map<String, String> values = MorfeuUtils.paramStringMap("path", path, "color", color);
+
+		return DaggerViewComponent.builder().withTemplate(template).withValue(values).build().render();
+
+	};
+
 }
 
 
 @Provides @IntoMap @Named("Content-Type")
-@StringKey("/preview/(.+)")
-public static String contentType(@Named("Path") String path) {
-	return path.endsWith("svg") ? ControlComponent.SVG : ControlComponent.TEXT;
+@StringKey("/preview/svg/(.+)")
+public static String contentTypeSVG(@Named("Path") String path) {
+	return ControlComponent.SVG;
+}
+
+
+@Provides @IntoMap @Named("Content-Type")
+@StringKey("/preview/html/(.+)")
+public static String contentTypeHTML(@Named("Path") String path) {
+	return ControlComponent.TEXT;
 }
 
 

@@ -12,7 +12,7 @@ import dagger.Component;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = {ControlModule.class, PingControlModule.class, DocumentControlModule.class,
-		ContentControlModule.class, ModelsControlModule.class, SVGPreviewControlModule.class,
+		ContentControlModule.class, ModelsControlModule.class, PreviewControlModule.class,
 		SnippetsControlModule.class, ClientEventControlModule.class})
 public interface MorfeuControlComponent extends ControlComponent {
 

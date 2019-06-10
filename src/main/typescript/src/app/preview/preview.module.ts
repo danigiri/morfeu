@@ -1,13 +1,14 @@
 // PREVIEW . MODULE . TS
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { PipesModule } from '../pipes/pipes.module';
+import {PipesModule} from '../pipes/pipes.module';
 
-import { PreviewRoutingModule } from './preview-routing.module';
+import {PreviewRoutingModule} from './preview-routing.module';
 
-import { HTMLPreviewComponent } from './html-preview.component';
+import {HTMLPreviewComponent} from './html-preview.component';
+import {PresentationComponent } from '../components/presentation/presentation.component';
 
 @NgModule({
 	imports: [

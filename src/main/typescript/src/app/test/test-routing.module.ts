@@ -1,15 +1,22 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
+import {ComponentsModule} from '../components/components.module';
 import {PresentationTestComponent} from '../components/presentation/presentation-test.component';
 
 const routes: Routes = [
-						{path: 'presentation-test', component:  PresentationTestComponent}
+						{path: 'presentation-test', component: PresentationTestComponent}
 ];
 
 @NgModule({
-	imports: [RouterModule.forChild(routes)],
-	exports: [RouterModule]
+	imports: [
+				ComponentsModule,
+				CommonModule,
+				RouterModule.forChild(routes)
+				],
+	exports: [RouterModule],
+	declarations: [PresentationTestComponent]
 })
 
 export class TestRoutingModule { }

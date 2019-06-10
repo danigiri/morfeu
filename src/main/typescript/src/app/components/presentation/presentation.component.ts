@@ -1,27 +1,32 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
-import { Component, Input, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import {AfterViewInit, Component, Inject, Input, OnChanges} from '@angular/core';
+import {Observable, Subject, Subscription } from 'rxjs';
 
-import { Cell } from "../../cell.class";
-import { CellModel } from "../../cell-model.class";
+import {RemoteDataService} from '../../services/remote-data.service';
+
+import {Cell} from '../../cell.class';
+import {CellModel} from '../../cell-model.class';
 
 @Component({
 	moduleId: module.id,
 	selector: "presentation",
 	template: `
 		<!-- TODO: add inner html type? -->
-		<iframe
+		<iframe *ngIf="this.getPresentationType()==='IFRAME'"
 			class="cell cell-html"
 			[src]="getPresentation() | safe: 'resourceUrl' "
 		></iframe>
-		<ng-container [ngSwitch]="true">
-		</ng-container>
+		<div class="cell cell-html" *ngIf="this.getPresentationType()==='HTML'">
+			<div [innerHTML]="innerHTML$ | async | safe: 'html'"></div>
+		</div>
+		
 	`,
 })
 // sets the ui to be too slow as the iframe blocks rendering
 //	changeDetection: ChangeDetectionStrategy.OnPush
 
-export class PresentationComponent { //} implements OnDestroy {
+export class PresentationComponent implements AfterViewInit, OnChanges { //} implements OnDestroy {
 
 //private interval: NodeJS.Timer;
 
@@ -29,31 +34,34 @@ export class PresentationComponent { //} implements OnDestroy {
 @Input() cell?: Cell;
 @Input() cellModel?: CellModel;
 
-constructor(private ref: ChangeDetectorRef) {
+presentation: String;
+innerHTML$?: Observable<String>;
 
-// TODO: DETACH FROM CHANGE DETECTION,  AFTER EDITING A FIELD, DO DETECT CHANGES 
-//	ref.detach();
-//	this.interval = setInterval(() => { this.ref.detectChanges(); }, 1000);
+constructor(@Inject("RemoteDataService") private presentationService: RemoteDataService) {}
 
-}
-
-/*
-ngOnDestroy() {
-	clearInterval(this.interval);
-}
-*/
-
-/** do we present the cell with the default (IMG) presentation? */
-private cellPresentationIsIMG(): boolean {
-
-	let cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
+ngAfterViewInit() {
+	const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
 	
-	return cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+	console.debug('Getting presentation from %s', presentationURL);
+	this.presentationService.getText(presentationURL).subscribe(
+			p => {
+				Promise.resolve(null).then(() => this.innerHTML$ = new Observable((obs) => { obs.next(p); obs.complete();}));
+			},
+			error => {}
+	);
+}
+
+ngOnChanges() {}
+
+private getPresentationType(): string {
+
+	const cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
+
+	return cellModel.getPresentationType();
 
 }
 
-
-getPresentation(): string {
+private getPresentation(): string {
 	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
 }
 
