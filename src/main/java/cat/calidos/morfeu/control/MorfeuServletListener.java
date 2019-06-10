@@ -32,6 +32,7 @@ public void contextInitialized(ServletContextEvent sce) {
 	ServletContext ctxt = sce.getServletContext();
 	ctxt.setAttribute("counter", (Integer)0);
 	ctxt.setAttribute(GenericAsyncHttpServlet.ASYNC_CONTEXT_QUEUE, contextQueue);
+
 }
 
 
@@ -40,7 +41,13 @@ public void contextDestroyed(ServletContextEvent sce) {
 
 	log.info("------ Servlet context initialized  -----");
 	ServletContext ctxt = sce.getServletContext();
-	((LinkedBlockingQueue<AsyncContext>)ctxt.getAttribute(GenericAsyncHttpServlet.ASYNC_CONTEXT_QUEUE)).clear();
+	if (ctxt!=null) {
+		LinkedBlockingQueue<AsyncContext> queue = (LinkedBlockingQueue<AsyncContext>)ctxt
+															.getAttribute(GenericAsyncHttpServlet.ASYNC_CONTEXT_QUEUE);
+		if (queue!=null) {
+			queue.clear();
+		}
+	}
 
 }
 
