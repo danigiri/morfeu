@@ -30,7 +30,7 @@ static fromCell(cell: Cell): Content {
 	content = Object.assign(content, cell);
 
 	return content;
-	
+
 }
 
 
@@ -48,7 +48,7 @@ fromJSON(json: ContentJSON): Content {
 
 	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 	const cell = CELL.fromJSON(json); 
-	let content = Content.fromCell(cell);
+	const content = Content.fromCell(cell);
 
 	return content;
 
@@ -59,8 +59,8 @@ static reviver(key: string, value: any): any {
 	return key === "" ? Object.create(Content.prototype).fromJSON(value) : value;
 }
 
-}
 
+}
 
 // serialisable interface
 export interface ContentJSON extends CellJSON {}

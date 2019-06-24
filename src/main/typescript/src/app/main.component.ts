@@ -74,23 +74,23 @@ import { RemoteEventService } from './services/remote-event.service';
 				{provide: "RemoteJSONDataService",
 					useFactory: (http: HttpClient) => (new RemoteDataService(http)),
 					deps: [HttpClient]
-				}
-				, {provide: "CellDocumentService",
+				},
+				{provide: "CellDocumentService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<CellDocument, CellDocumentJSON>(http)),
 					deps: [HttpClient]
-				}
-				, {provide: "ConfigurationService",
+				},
+				{provide: "ConfigurationService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<Configuration, ConfigJSON>(http)),
 					deps: [HttpClient]
-				}
-				, Configuration
-				, {provide: "ContentService",
+				},
+				Configuration,
+				{provide: "ContentService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
 					deps: [HttpClient]
 				},
 				EventService,
-				RemoteEventService
-				, {provide: "SnippetContentService",
+				RemoteEventService,
+				{provide: "SnippetContentService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
 					deps: [HttpClient]
 				}

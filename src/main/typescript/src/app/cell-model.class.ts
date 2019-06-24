@@ -320,7 +320,7 @@ private findCellModelWithURI(cellModels: CellModel[] | CellModel, uri: string): 
 
 	while (!cellModel && pending.length>0) {
 
-		let currentCellModel: CellModel = pending.pop();
+		const currentCellModel: CellModel = pending.pop();
 		if (currentCellModel.URI==uri) {
 			cellModel = currentCellModel;
 		} else {
