@@ -1,20 +1,20 @@
 // CELL - DOCUMENT . COMPONENT . TS
 
 import {filter} from 'rxjs/operators';
-import { Component, Inject, OnInit } from "@angular/core";
+import {Component, Inject, OnInit} from '@angular/core';
 
-import { CellDocument, CellDocumentJSON } from "./cell-document.class";
-import { RemoteObjectService } from "./services/remote-object.service";
+import { CellDocument, CellDocumentJSON } from '../cell-document.class';
+import { RemoteObjectService } from '../services/remote-object.service';
 
-import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
-import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
-import { CellDocumentLoadedEvent } from "./events/cell-document-loaded.event";
-import { ContentSaveEvent } from "./events/content-save.event";
-import { StatusEvent } from "./events/status.event";
-import { UXEvent } from "./events/ux.event";
-import { EventListener } from "./events/event-listener.class";
-import { EventService } from "./services/event.service";
-import { RemoteEventService } from "./services/remote-event.service";
+import { CellDocumentSelectionEvent } from '../events/cell-document-selection.event';
+import { CellDocumentClearEvent } from '../events/cell-document-clear.event';
+import { CellDocumentLoadedEvent } from '../events/cell-document-loaded.event';
+import { ContentSaveEvent } from '../events/content-save.event';
+import { StatusEvent } from '../events/status.event';
+import { UXEvent } from '../events/ux.event';
+import { EventListener } from '../events/event-listener.class';
+import { EventService } from '../services/event.service';
+import { RemoteEventService } from '../services/remote-event.service';
 
 @Component({
 	moduleId: module.id,

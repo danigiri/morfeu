@@ -1,10 +1,10 @@
 // STATUS . COMPONENT . TS
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription } from "rxjs";
-import { trigger, state, style, animate, transition } from "@angular/animations";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { EventService } from "./services/event.service";
-import { StatusEvent } from "./events/status.event";
+import { EventService } from '../services/event.service';
+import { StatusEvent } from '../events/status.event';
 
 @Component({
 	moduleId: module.id,
@@ -43,7 +43,7 @@ private readonly ANIMATING_IN = 1;
 private readonly SHOWN = 2;
 private readonly ANIMATING_OUT = 3;
 
-visibility = "hidden";
+visibility = 'hidden';
 state = this.HIDDEN;
 statuses: StatusEvent[];		// what is shown
 pendingStatuses: StatusEvent[]; // what is pending to be shown given that statuses is full
@@ -63,6 +63,7 @@ ngOnInit() {
 	});
 
 }
+
 
 protected newStatusReceived(s: StatusEvent) {
 
@@ -94,6 +95,7 @@ protected newStatusReceived(s: StatusEvent) {
 			break;
 	}
 }
+
 
 protected addStatus(newStatus: StatusEvent) {
 
@@ -177,7 +179,7 @@ protected newStatusesAfterCleanup(): StatusEvent[] {
 private showAnimation() {
 
 	// console.log("\t StatusComponent::showAnimation() starts --> ANIMATING_IN");
-	this.visibility = "shown";
+	this.visibility = 'shown';
 	this.state = this.ANIMATING_IN;
 
 }
@@ -187,7 +189,7 @@ private showAnimation() {
 private hideAnimation() {
 
 	// console.log("\t StatusComponent::hideAnimation() starts --> ANIMATING_OUT");
-	this.visibility = "hidden";
+	this.visibility = 'hidden';
 	this.state = this.ANIMATING_OUT;
 
 }
@@ -230,6 +232,7 @@ private addToPendingStatuses(status: StatusEvent) {
 ngOnDestroy() {
 	this.eventSubscription.unsubscribe();
 }
+
 
 }
 

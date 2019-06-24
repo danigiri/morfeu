@@ -10,10 +10,10 @@ import { Configuration, ConfigJSON } from './config/configuration.class';
 import { environment } from '../environments/environment';
 
 import { CatalogueListComponent } from './components/catalogue-list.component';
-import { ContentComponent } from './content.component';
-import { CellDocumentComponent } from './cell-document.component';
-import { ProblemComponent } from './problem.component';
-import { StatusComponent } from './status.component';
+import { ContentComponent } from './components/content.component';
+import { CellDocumentComponent } from './components/cell-document.component';
+import { ProblemComponent } from './components/problem.component';
+import { StatusComponent } from './components/status.component';
 import { RemoteDataService } from './services/remote-data.service';
 import { RemoteObjectService } from './services/remote-object.service';
 

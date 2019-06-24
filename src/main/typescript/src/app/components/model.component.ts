@@ -1,11 +1,11 @@
 // MODEL . COMPONENT . TS
 
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
 
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 import { TreeComponent } from "angular-tree-component";
 
-import { CellModelComponent } from "../cell-model.component";
+import {CellModelComponent} from "./cell-model.component";
 
 import { CellModel } from "../cell-model.class";
 import { Model, ModelJSON } from "../model.class";

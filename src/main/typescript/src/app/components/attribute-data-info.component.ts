@@ -1,18 +1,4 @@
-/*
-*	  Copyright 2018 Daniel Giribet
-*
-*	 Licensed under the Apache License, Version 2.0 (the "License");
-*	 you may not use this file except in compliance with the License.
-*	 You may obtain a copy of the License at
-*
-*		 http://www.apache.org/licenses/LICENSE-2.0
-*
-*	 Unless required by applicable law or agreed to in writing, software
-*	 distributed under the License is distributed on an "AS IS" BASIS,
-*	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*	 See the License for the specific language governing permissions and
-*	 limitations under the License.
-*/
+// ATTRIBUTE - DATA - INFO . COMPONENT . TS
 
 import { Component, Input, OnInit } from "@angular/core";
 
@@ -53,7 +39,7 @@ export class AttributeDataInfoComponent {
 @Input() isFromCell: boolean;	 // if it's form a cell and we have no value we skip this attribute
 @Input() isFromModel: boolean;
 @Input() parentCell?: Cell;	   // optional, only when showing information of cell (and not just a cell model)
-@Input() cellModel: CellModel;
+@Input() cellModel: CellModel;	// always there
 @Input() index: number;
 
 hasValue: boolean;
@@ -91,4 +77,21 @@ getDesc(): string {
 			? this.cellModel.desc : this.cellModel.type_.desc;
 }
 
+
 }
+
+/*
+*	  Copyright 2018 Daniel Giribet
+*
+*	 Licensed under the Apache License, Version 2.0 (the "License");
+*	 you may not use this file except in compliance with the License.
+*	 You may obtain a copy of the License at
+*
+*		 http://www.apache.org/licenses/LICENSE-2.0
+*
+*	 Unless required by applicable law or agreed to in writing, software
+*	 distributed under the License is distributed on an "AS IS" BASIS,
+*	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*	 See the License for the specific language governing permissions and
+*	 limitations under the License.
+*/

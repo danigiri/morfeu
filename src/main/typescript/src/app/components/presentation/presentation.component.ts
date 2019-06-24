@@ -1,6 +1,6 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
-import {AfterViewInit, Component, Inject, Input, OnChanges} from '@angular/core';
+import {AfterViewInit, Component, Inject, Input, OnChanges, SimpleChanges, SimpleChange} from '@angular/core';
 import {Observable, Subject, Subscription } from 'rxjs';
 
 import {RemoteDataService} from '../../services/remote-data.service';
@@ -26,7 +26,7 @@ import {CellModel} from '../../cell-model.class';
 // sets the ui to be too slow as the iframe blocks rendering
 //	changeDetection: ChangeDetectionStrategy.OnPush
 
-export class PresentationComponent implements AfterViewInit, OnChanges { //} implements OnDestroy {
+export class PresentationComponent implements AfterViewInit {//}, OnChanges { //} implements OnDestroy {
 
 //private interval: NodeJS.Timer;
 
@@ -51,7 +51,10 @@ ngAfterViewInit() {
 	);
 }
 
-ngOnChanges() {}
+/*ngOnChanges(changes: SimpleChanges) {
+	console.debug("changes", changes);
+}*/
+
 
 private getPresentationType(): string {
 

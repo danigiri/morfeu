@@ -1,23 +1,23 @@
 // CATALOGUE LIST . COMPONENT . TS
 
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { CollapsibleComponent } from "./collapsible.component";
+import { CollapsibleComponent } from './collapsible.component';
 
-import { CatalogueComponent } from "../catalogue.component";
-import { Catalogue } from "../catalogue.class";
+import { CatalogueComponent } from './catalogue.component';
+import { Catalogue } from '../catalogue.class';
 
-import { RemoteDataService } from "../services/remote-data.service";
+import { RemoteDataService } from '../services/remote-data.service';
 
-import { CatalogueSelectionEvent } from "../events/catalogue-selection.event";
-import { CataloguesRequestEvent } from "../events/catalogues-request.event";
-import { CataloguesLoadedEvent } from "../events/catalogues-loaded.event";
-import { CellDocumentSelectionEvent } from "../events/cell-document-selection.event";
-import { StatusEvent } from "../events/status.event";
-import { EventListener } from "../events/event-listener.class";
-import { EventService } from "../services/event.service";
-import { Configuration } from "../config/configuration.class";
+import { CatalogueSelectionEvent } from '../events/catalogue-selection.event';
+import { CataloguesRequestEvent } from '../events/catalogues-request.event';
+import { CataloguesLoadedEvent } from '../events/catalogues-loaded.event';
+import { CellDocumentSelectionEvent } from '../events/cell-document-selection.event';
+import { StatusEvent } from '../events/status.event';
+import { EventListener } from '../events/event-listener.class';
+import { EventService } from '../services/event.service';
+import { Configuration } from '../config/configuration.class';
 
 
 @Component({

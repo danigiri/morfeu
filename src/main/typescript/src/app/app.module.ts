@@ -21,25 +21,25 @@ import { AppComponent } from './app.component';
 import { AttributeDataEditorComponent } from './components/attribute-data-editor.component';
 import { AttributeDataInfoComponent } from './components/attribute-data-info.component';
 import { CatalogueListComponent } from './components/catalogue-list.component';
-import { CatalogueComponent } from './catalogue.component';
+import { CatalogueComponent } from './components/catalogue.component';
 import { CollapsibleComponent } from './components/collapsible.component';
-import { ContentComponent } from './content.component';
+import { ContentComponent } from './components/content.component';
 import { CellComponent } from './components/cell.component';
 import { CellEditorComponent } from './components/cell-editor.component';
 import { CellHeaderComponent } from './components/cell-header.component';
-import { CellDocumentComponent } from './cell-document.component';
-import { CellModelComponent } from './cell-model.component';
+import { CellDocumentComponent } from './components/cell-document.component';
+import { CellModelComponent } from './components/cell-model.component';
 import { CellDataComponent } from './components/cell-data.component';
-import { DropAreaComponent } from './drop-area.component';
+import { DropAreaComponent } from './components/drop-area.component';
 import { HTMLPreviewComponent } from './preview/html-preview.component';
 import { KeyCaptureComponent } from './components/key-capture.component';
 import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
-import { ProblemComponent } from './problem.component';
+import { ProblemComponent } from './components/problem.component';
 import { SnippetComponent } from './components/snippet.component';
 import { SnippetsListComponent } from './components/snippets-list.component';
-import { StatusComponent } from './status.component';
+import { StatusComponent } from './components/status.component';
 
 @NgModule({
 	imports: [

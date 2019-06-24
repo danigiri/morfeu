@@ -1,27 +1,27 @@
 // CELL - MODEL . COMPONENT . TS
 
 
+
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable ,  Subscription } from 'rxjs';
 import {filter} from 'rxjs/operators';
 
-import { Component, Input, OnInit } from "@angular/core";
-import { Observable ,  Subscription } from "rxjs";
+import { TreeNode } from 'angular-tree-component';
 
-import { TreeNode } from "angular-tree-component";
+import { Cell } from '../cell.class';
+import { CellModel } from '../cell-model.class';
+import { FamilyMember } from '../family-member.interface';
+import { SelectableWidget } from '../selectable-widget.class';
 
-import { Cell } from "./cell.class";
-import { CellModel } from "./cell-model.class";
-import { FamilyMember } from "./family-member.interface";
-import { SelectableWidget } from "./selectable-widget.class";
-
-import { CellActivatedEvent } from "./events/cell-activated.event";
-import { CellDeactivatedEvent } from "./events/cell-deactivated.event";
-import { CellDropEvent } from "./events/cell-drop.event";
-import { CellModelActivatedEvent } from "./events/cell-model-activated.event";
-import { CellModelDeactivatedEvent } from "./events/cell-model-deactivated.event";
-import { CellSelectEvent } from "./events/cell-select.event";
-import { CellSelectionClearEvent } from "./events/cell-selection-clear.event";
-import { NewCellFromModelEvent } from "./events/new-cell-from-model.event";
-import { EventService } from "./services/event.service";
+import { CellActivatedEvent } from '../events/cell-activated.event';
+import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
+import { CellDropEvent } from '../events/cell-drop.event';
+import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
+import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
+import { CellSelectEvent } from '../events/cell-select.event';
+import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
+import { NewCellFromModelEvent } from '../events/new-cell-from-model.event';
+import { EventService } from '../services/event.service';
 
 @Component({
 	moduleId: module.id,
@@ -160,26 +160,26 @@ select(position: number) {
 		if (this.active) {
 			this.becomeInactive(false);
 		}
-		
+
 		console.log("[UI] CellModelComponent::select("+this.cellModel.name+"("+this.index+"))");
 		this.selected = true;
 		this.unsubscribeFromSelection();
 		// cleverly, we now subscribe to cellmodel activation events that may be triggered by shortcuts
 		this.subscribeToActivation();
-		
+
 		// We temporarly unsubscribe from clear, send a clear event and re-subscribe
 		// This means we are the only ones selected now (previous parent will be unselected, for instance)
 		this.unsubscribeFromSelectionClear();
 		this.events.service.publish(new CellSelectionClearEvent()); // warning: resets model state variables
 		this.subscribeToSelectionClear();
-		
+
 		this.cellModel.children.forEach(c => c.component.subscribeToSelection());
-		
+
 		// TODO: implement out of bounds handling for cell-models
 //	  } else if (this.cellModel.parent && position>=this.cell.parent.childrenCount()) {
 //		  console.log("[UI] SelectableCellModelWidget::select(out of bounds)");
-	 } else {
-		 this.clearSelection();	 // out of bounds, sorry, clear
+	} else {
+		this.clearSelection();	 // out of bounds, sorry, clear
 	}
 
 }

@@ -3,21 +3,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription }	  from 'rxjs';
 
-import { EventListener } from "./events/event-listener.class";
-import { ProblemEvent } from './events/problem.event';
-import { EventService } from "./services/event.service";
+import { EventListener } from '../events/event-listener.class';
+import { ProblemEvent } from '../events/problem.event';
+import { EventService } from '../services/event.service';
 
 
 @Component({
 	moduleId: module.id,
 	selector: 'problem',
 	template: `
-		<div id="problem" *ngIf="problem" class="alert alert-danger" role="alert">{{problem}}</div>		   
+		<div id="problem" *ngIf="problem" class="alert alert-danger" role="alert">{{problem}}</div>	   
 		`,
 	styles:[`
 	 #problem {}
-
-`]
+	`]
 })
 //`
 

@@ -7,7 +7,7 @@ import { FamilyMember } from "../family-member.interface";
 import { Cell } from "../cell.class";
 import { CellModel } from "../cell-model.class";
 
-import { DropAreaComponent } from "../drop-area.component";
+import { DropAreaComponent } from "./drop-area.component";
 import { SelectableWidget } from "../selectable-widget.class";
 
 import { CellActivateEvent } from "../events/cell-activate.event";

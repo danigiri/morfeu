@@ -9,7 +9,7 @@ import { VariableParser } from "./variable-parser.class";
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
-import { CellModelComponent } from "./cell-model.component";
+import {CellModelComponent} from "./components/cell-model.component";
 // ////														////
 
 export class CellModel implements NameValue, FamilyMember {

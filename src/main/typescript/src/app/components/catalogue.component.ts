@@ -1,21 +1,21 @@
 // CATALOGUE . COMPONENT . TS
 
-import { Component, Inject, OnInit } from "@angular/core";
-import { Subscription }	from "rxjs";
+import { Component, Inject, OnInit } from '@angular/core';
+import { Subscription }	from 'rxjs';
 
-import { Catalogue } from "./catalogue.class";
+import { Catalogue } from '../catalogue.class';
 
-import { CellDocument } from "./cell-document.class";
-import { RemoteDataService } from "./services/remote-data.service";
+import { CellDocument } from '../cell-document.class';
+import { RemoteDataService } from '../services/remote-data.service';
 
-import { CatalogueSelectionEvent } from "./events/catalogue-selection.event";
-import { CatalogueLoadedEvent } from "./events/catalogue-loaded.event";
-import { CellDocumentClearEvent } from "./events/cell-document-clear.event";
-import { CellDocumentSelectionEvent } from "./events/cell-document-selection.event";
-import { StatusEvent } from "./events/status.event";
-import { EventListener } from "./events/event-listener.class";
-import { EventService } from "./services/event.service";
-import { RemoteEventService } from "./services/remote-event.service";
+import { CatalogueSelectionEvent } from '../events/catalogue-selection.event';
+import { CatalogueLoadedEvent } from '../events/catalogue-loaded.event';
+import { CellDocumentClearEvent } from '../events/cell-document-clear.event';
+import { CellDocumentSelectionEvent } from '../events/cell-document-selection.event';
+import { StatusEvent } from '../events/status.event';
+import { EventListener } from '../events/event-listener.class';
+import { EventService } from '../services/event.service';
+import { RemoteEventService } from '../services/remote-event.service';
 
 
 @Component({
@@ -120,7 +120,7 @@ markDocumentAsSelected(uri: string) {
 
 
 private preview(d: CellDocument) {
-	return d.presentation ? d.presentation : "assets/images/open-iconic/file.svg";
+	return d.presentation ? d.presentation : 'assets/images/open-iconic/file.svg';
 }
 
 
