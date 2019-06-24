@@ -1,14 +1,14 @@
 // CELL . CLASS . TS
 
-import { Adopter } from "./adopter.interface";
-import { Lifecycle } from "./lifecycle.interface";
-import { FamilyMember } from "./family-member.interface";
-import { CellModel } from "./cell-model.class";
-import { Model } from "./model.class";
-import { NameValue } from "./name-value.interface";
+import {Adopter} from "./adopter.interface";
+import {Lifecycle} from "./lifecycle.interface";
+import {FamilyMember} from "./family-member.interface";
+import {CellModel} from "./cell-model.class";
+import {Model} from "./model.class";
+import {NameValue} from "./name-value.interface";
 
-import { VariableParser } from "./variable-parser.class";
-import { SerialisableToJSON } from "./serialisable-to-json.interface";
+import {VariableParser} from "./variable-parser.class";
+import {SerialisableToJSON} from "./serialisable-to-json.interface";
 
 
 export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
@@ -36,7 +36,7 @@ associateWith(model: Model, uri?: string): Cell {
 		this.associateWith_(model.children, [model.findCellModel(uri)]);	// deep uri within the model
 	} else {
 		this.associateWith_(model.children, model.children);	// we start at the root of the model
-	} 
+	}
 
 	return this;
 
@@ -91,6 +91,26 @@ columnFieldValue(): string {
 	}
 
 	return value;
+
+}
+
+
+/** find a cell that has this URI or return undefined */
+findCellWithURI(uri: string): Cell {
+
+	let cell: Cell;
+	let pending: Cell[] = [this];
+
+	while (!cell && pending.length>0) {
+		const currentCell = pending.pop();
+		if (currentCell.getURI()==uri) {
+			cell = currentCell;
+		} else if (currentCell.childrenCount()>0) {
+			currentCell.children.forEach(c => pending.push(c));
+		}
+	}
+
+	return cell;
 
 }
 

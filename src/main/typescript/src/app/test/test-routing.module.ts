@@ -1,11 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+// TEST - ROUTING . MODULE . TS
+
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Routes, RouterModule} from '@angular/router';
 
 import {ComponentsModule} from '../components/components.module';
+import {CellEditorTestComponent} from '../components/cell-editor/cell-editor-test.component';
 import {PresentationTestComponent} from '../components/presentation/presentation-test.component';
 
 const routes: Routes = [
+						{path: 'cell-editor-test', component: CellEditorTestComponent},
 						{path: 'presentation-test', component: PresentationTestComponent}
 ];
 
@@ -14,9 +18,12 @@ const routes: Routes = [
 				ComponentsModule,
 				CommonModule,
 				RouterModule.forChild(routes)
-				],
+	],
 	exports: [RouterModule],
-	declarations: [PresentationTestComponent]
+	declarations: [
+					CellEditorTestComponent,
+					PresentationTestComponent
+	]
 })
 
 export class TestRoutingModule { }

@@ -1,34 +1,33 @@
 // CELL . COMPONENT . TS
 
 import {filter} from 'rxjs/operators';
-import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import {Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 
-import { FamilyMember } from "../family-member.interface";
-import { Cell } from "../cell.class";
-import { CellModel } from "../cell-model.class";
+import {FamilyMember} from '../family-member.interface';
+import {Cell} from '../cell.class';
+import {CellModel} from '../cell-model.class';
 
-import { DropAreaComponent } from "./drop-area.component";
-import { SelectableWidget } from "../selectable-widget.class";
+import {DropAreaComponent} from './drop-area.component';
+import {SelectableWidget} from '../selectable-widget.class';
 
-import { CellActivateEvent } from "../events/cell-activate.event";
-import { CellActivatedEvent } from "../events/cell-activated.event";
-import { CellDeactivatedEvent } from "../events/cell-deactivated.event";
-import { CellDragEvent } from "../events/cell-drag.event";
-import { CellDropEvent } from "../events/cell-drop.event";
-import { CellEditEvent } from "../events/cell-edit.event";
-import { CellModelDeactivatedEvent } from "../events/cell-model-deactivated.event";
-import { CellRemoveEvent } from "../events/cell-remove.event";
-import { CellSelectEvent } from "../events/cell-select.event";
-import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
-import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
-import { EventService } from "../services/event.service";
-
+import {CellActivateEvent} from '../events/cell-activate.event';
+import {CellActivatedEvent} from '../events/cell-activated.event';
+import {CellDeactivatedEvent} from '../events/cell-deactivated.event';
+import {CellDragEvent} from '../events/cell-drag.event';
+import {CellDropEvent} from '../events/cell-drop.event';
+import {CellEditEvent} from '../events/cell-edit.event';
+import {CellModelDeactivatedEvent} from '../events/cell-model-deactivated.event';
+import {CellRemoveEvent} from '../events/cell-remove.event';
+import {CellSelectEvent} from '../events/cell-select.event';
+import {CellSelectionClearEvent} from '../events/cell-selection-clear.event';
+import {CellModelActivatedEvent} from '../events/cell-model-activated.event';
+import {EventService} from '../services/event.service';
 
 @Component({
 	moduleId: module.id,
-	selector: "cell",
-	templateUrl: "./cell.component.html",
-	styleUrls: ["./cell.component.css", "./presentation/presentation.css"]
+	selector: 'cell',
+	templateUrl: './cell.component.html',
+	styleUrls: ['./cell.component.css', './presentation/presentation.css']
 	// encapsulation: ViewEncapsulation.Emulated,
 })
 
@@ -55,15 +54,14 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	// console.log("[UI] CellComponent::ngOnInit()");
+	// console.log('[UI] CellComponent::ngOnInit()');
 
 	// Drop a cell to a position under this cell
 	this.subscribe(this.events.service.of( CellDropEvent ).pipe(
 				filter(dc => dc.newParent && dc.newParent===this.cell)
 			).subscribe( dc => {
-				console.log("-> cell comp gets dropcell event moving '"+dc.cell.name+"' to	"
-							+this.cell.URI+" at position ("
-							+dc.newPosition+")'");
+				console.log('-> cell comp gets dropcell event moving '+dc.cell.name+' to '
+							+this.cell.URI+' at position ('+dc.newPosition+')');
 				this.adoptCellAtPosition(dc.cell, dc.newPosition);
 			})
 	);
@@ -72,7 +70,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellModelDeactivatedEvent ).pipe(
 				filter(d => d.cellModel && this.isCompatibleWith(d.cellModel))
 			).subscribe( d => {
-				// console.log("-> cell comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
+				// console.log('-> cell comp gets cellmodel deactivated event for ''+d.cellModel.name+''');
 				this.becomeInactive(this.cell);
 			})
 	);
@@ -81,7 +79,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellModelActivatedEvent ).pipe(
 				filter( a => a.cellModel && this.isCompatibleWith(a.cellModel))
 			).subscribe( a => {
-				//console.log("-> cell comp gets cellmodel activated event for '"+a.cellModel.name+"'"); //
+				//console.log('-> cell comp gets cellmodel activated event for ''+a.cellModel.name+'''); //
 				this.becomeActive(this.cell);
 			})
 	);
@@ -90,7 +88,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellActivateEvent ).pipe(
 				filter(a => this.selected && this.canBeActivated())
 			).subscribe( a => {
-				console.log("-> cell comp gets cell activate event and proceeds to focus :)");
+				console.log('-> cell comp gets cell activate event and proceeds to focus :)');
 				// FIXMWE: this allows for multiple activations when conflicting with rollover
 				this.focusOn(this.cell);
 			})
@@ -100,7 +98,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellActivatedEvent ).pipe(
 				filter(a => this.active && a.cell!==this.cell)
 			).subscribe( a => {
-				console.log("-> cell comp gets cell activated event from other cell, we were active, clear");
+				console.log('-> cell comp gets cell activated event from other cell, we were active, clear');
 				this.becomeInactive(this.cell);
 			})
 	);
@@ -109,7 +107,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellDragEvent ).pipe(
 				filter(a => this.active)
 			).subscribe( a => {
-				console.log("-> cell comp gets cell drag event and will try to drop to a selection :)");
+				console.log('-> cell comp gets cell drag event and will try to drop to a selection :)');
 				this.events.service.publish(new CellDropEvent(this.cell));
 			})
 	);
@@ -118,7 +116,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellEditEvent ).pipe(
 					filter(edit => !edit.cell && this.isEditable())
 				).subscribe( edit => {
-					console.log("-> cell comp gets cell edit event and will try to edit :)");
+					console.log('-> cell comp gets cell edit event and will try to edit :)');
 					this.events.service.publish(new CellEditEvent(this.cell));
 				})
 	);
@@ -127,7 +125,7 @@ ngOnInit() {
 	this.subscribe(this.events.service.of( CellRemoveEvent ).pipe(
 					filter(remove => !remove.cell && (this.active || this.selected))
 				).subscribe( remove => {
-					console.log("-> cell comp gets cell remove event and will get removed");
+					console.log('-> cell comp gets cell remove event and will get removed');
 					// we could re-issue an event with the specific cell to be removed if needed
 					//this.events.service.publish(new CellRemoveEvent(this.cell));
 					this.remove();
@@ -141,7 +139,7 @@ ngOnInit() {
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell: Cell) {
 
-	// console.log("[UI] CellComponent::focusOn()");
+	// console.log('[UI] CellComponent::focusOn()');
 	this.events.service.publish(new CellActivatedEvent(cell));
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -154,7 +152,7 @@ focusOn(cell: Cell) {
 // notify all interested in this type of cell that we do not have the focus any longer, remove highlight
 focusOff(cell: Cell) {
 
-	// console.log("[UI] CellComponent::focusOff()");
+	// console.log('[UI] CellComponent::focusOff()');
 	this.becomeInactive(cell);
 	this.events.service.publish(new CellDeactivatedEvent(cell));
 
@@ -164,7 +162,7 @@ focusOff(cell: Cell) {
 // we drag outside any interesting area, we remove focus
 dragEnd(cell: Cell) {
 
-	console.log("[UI] CellComponent::dragEnd()");
+	console.log('[UI] CellComponent::dragEnd()');
 	// this.isBeingDragged = false;
 	this.focusOff(cell);
 }
@@ -173,7 +171,7 @@ dragEnd(cell: Cell) {
 // the drop-area is sending us a cell to adopt
 adoptCellAtPosition(newCell: Cell, position: number) {
 
-	console.log("[UI] CellComponent::adoptCellAtPosition("+position+")");
+	console.log('[UI] CellComponent::adoptCellAtPosition('+position+')');
 	// deactivate based on old location
 	this.events.service.publish(new CellDeactivatedEvent(newCell));
 	// must be an orphan before adopting
@@ -205,13 +203,13 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 // UI method to highlight the cell
 becomeActive(cell: Cell) {
 
-	// console.log("[UI] CellComponent::becomeActive("+cell.URI+")");
+	// console.log('[UI] CellComponent::becomeActive('+cell.URI+')');
 	this.active = true;
 	this.dragEnabled = true;
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
 	this.events.service.publish(new CellSelectionClearEvent());
 
-	console.debug("[becomeActive]>%s, %s", this.cell.getAdoptionName(), this.cell.getAdoptionURI());
+	console.debug('[becomeActive]>%s, %s', this.cell.getAdoptionName(), this.cell.getAdoptionURI());
 
 }
 
@@ -219,7 +217,7 @@ becomeActive(cell: Cell) {
 // UI method to no longer be highlighted
 becomeInactive(cell: Cell) {
 
-	// console.log("[UI] CellComponent::becomeInactive("+cell.URI+")");
+	// console.log('[UI] CellComponent::becomeInactive('+cell.URI+')');
 	this.active = false;
 	this.dragEnabled = false;
 
@@ -235,7 +233,7 @@ isCompatibleWith(element: FamilyMember): boolean {
 // it can be activated (for drag and drop, etc) if it's not a well
 // if it's a snippet, we can always activate it, so it can be cloned
 canBeActivated(): boolean {
-	return !this.cell.cellModel.presentation.includes("COL-WELL") || this.snippet;
+	return !this.cell.cellModel.presentation.includes('COL-WELL') || this.snippet;
 }
 
 
@@ -250,7 +248,7 @@ select(position: number) {
 
 		// we were waiting for a selection and we've matched the position, so we select ourselves
 		// and unsubscribe from selection as we are not eligible anymore
-		console.log("[UI] CellComponent::select("+this.cell.name+"("+this.position+"))");
+		console.log('[UI] CellComponent::select('+this.cell.name+'('+this.position+'))');
 		this.selected = true;
 		this.unsubscribeFromSelection();
 
@@ -281,7 +279,7 @@ select(position: number) {
 		this.children.forEach(c => c.dropArea.subscribeToSelection());
 
 	} else if (this.cell.parent && position>=this.cell.parent.childrenCount()) {
-		console.log("[UI] CellComponent::select(out of bounds)");
+		console.log('[UI] CellComponent::select(out of bounds)');
 	} else {
 		this.clearSelection();	 // out of bounds, sorry, clear
 	}
@@ -311,7 +309,7 @@ getCellPresentation() {
 
 
 private isEditable(): boolean {
-	return this.active && !this.cell.cellModel.presentation.includes("COL-WELL") && !this.snippet;
+	return this.active && !this.cell.cellModel.presentation.includes('COL-WELL') && !this.snippet;
 }
 
 
@@ -333,7 +331,7 @@ private cellDragData() {
 						// as cloning will also clone the reference to the parent.
 						// Then it's effectively an orphan when the adoption takes place
 		cellDragData = this.cell.deepClone();
-		delete cellDragData["parent"];
+		delete cellDragData['parent'];
 	} else {
 		cellDragData = this.cell;
 	}
@@ -342,23 +340,25 @@ private cellDragData() {
 
 }
 
+
 private doubleClick() {
 	this.events.service.publish(new CellEditEvent(this.cell));
 }
+
 
 }
 
 /*
  *	  Copyright 2019 Daniel Giribet
  *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 Licensed under the Apache License, Version 2.0 (the 'License');
  *	 you may not use this file except in compliance with the License.
  *	 You may obtain a copy of the License at
  *
  *		 http://www.apache.org/licenses/LICENSE-2.0
  *
  *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 distributed under the License is distributed on an 'AS IS' BASIS,
  *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.

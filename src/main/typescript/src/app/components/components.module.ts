@@ -1,32 +1,60 @@
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';	// new angular 5 http client
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';	// new angular 5 http client
 
-import { PipesModule } from '../pipes/pipes.module';
+import {PipesModule } from '../pipes/pipes.module';
 
-import { PresentationComponent } from './presentation/presentation.component';
-import { RemoteDataService } from '../services/remote-data.service';
-import { RemoteObjectService } from '../services/remote-object.service';
+import {AttributeDataEditorComponent } from './attribute-data-editor.component';
+import {CellEditorComponent } from './cell-editor/cell-editor.component';
+import {CellHeaderComponent } from './cell-header.component';
+import {PresentationComponent } from './presentation/presentation.component';
 
-import { Model, ModelJSON } from '../model.class';
+import {RemoteDataService } from '../services/remote-data.service';
+import {RemoteObjectService } from '../services/remote-object.service';
+
+import {Content, ContentJSON} from '../content.class';
+import {Model, ModelJSON } from '../model.class';
+
+import { EventService } from '../services/event.service';
 
 @NgModule({
-	declarations: [PresentationComponent],
+	declarations: [
+					AttributeDataEditorComponent,
+					CellEditorComponent,
+					CellHeaderComponent,
+					PresentationComponent
+	],
 	imports: [
 				CommonModule,
+				FormsModule,
 				PipesModule
 	],
-	exports: [PresentationComponent],
+	exports: [
+					AttributeDataEditorComponent,
+					CellEditorComponent,
+					CellHeaderComponent,
+					PresentationComponent
+	],
 	providers: [
-					{provide: "ModelService",
+				{
+					provide: "ContentService",
+					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
+					deps: [HttpClient]
+				},
+				EventService,
+				{
+					provide: "ModelService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<Model, ModelJSON>(http)),
-					deps: [HttpClient]},
-					{provide: "RemoteDataService",
+					deps: [HttpClient]
+				},
+				{
+					provide: "RemoteDataService",
 					useFactory: (http: HttpClient) => (new RemoteDataService(http)),
 					deps: [HttpClient]
-					}
-					]
+				}
+	]
 
 })
 

@@ -1,24 +1,24 @@
 // CELL - EDITOR . COMPONENT . TS
 
 import {filter} from 'rxjs/operators';
-import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
+import {Component, ElementRef, ViewChild, OnInit} from '@angular/core';
 
-import { NgbModal, ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
-import { Cell } from "../cell.class";
-import { CellModel } from "../cell-model.class";
+import {Cell} from '../../cell.class';
+import {CellModel} from '../../cell-model.class';
 
-import { CellActivateEvent } from "../events/cell-activate.event";
-import { CellActivatedEvent } from "../events/cell-activated.event";
-import { CellEditEvent } from "../events/cell-edit.event";
-import { ContentFragmentDisplayEvent } from "../events/content-fragment-display.event";
-import { EventListener } from "../events/event-listener.class";
-import { UXEvent } from "../events/ux.event";
-import { EventService } from "../services/event.service";
+import {CellActivateEvent} from '../../events/cell-activate.event';
+import {CellActivatedEvent} from '../../events/cell-activated.event';
+import {CellEditEvent} from '../../events/cell-edit.event';
+import {ContentFragmentDisplayEvent} from '../../events/content-fragment-display.event';
+import {EventListener} from '../../events/event-listener.class';
+import {UXEvent} from '../../events/ux.event';
+import {EventService} from '../../services/event.service';
 
 @Component({
 	moduleId: module.id,
-	selector: "cell-editor",
+	selector: 'cell-editor',
 	template: `
 		<ng-template let-c="close" let-d="dismiss" #editor>
 			<div id="cell-editor" class="card mt-2 modal-body">
@@ -101,9 +101,9 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 
 
 ngOnInit() {
-	this.subscribe(this.events.service.of( CellEditEvent ).pipe(
-				filter(edit => edit.cell!==undefined && !this.editing)
-			).subscribe(edit => this.edit(edit.cell))
+	this.subscribe(this.events.service.of(CellEditEvent)
+			.pipe(filter(edit => edit.cell!==undefined && !this.editing))
+			.subscribe(edit => this.edit(edit.cell))
 	);
 }
 

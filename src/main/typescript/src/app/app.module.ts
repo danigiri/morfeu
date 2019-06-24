@@ -14,18 +14,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TreeModule } from 'angular-tree-component';
 
 import {ComponentsModule} from './components/components.module';
-import { AppRoutingModule, AppRoutes } from './app-routing.module';
-import { PipesModule } from './pipes/pipes.module';
+import {AppRoutingModule, AppRoutes} from './app-routing.module';
+import {PipesModule} from './pipes/pipes.module';
 
 import { AppComponent } from './app.component';
-import { AttributeDataEditorComponent } from './components/attribute-data-editor.component';
 import { AttributeDataInfoComponent } from './components/attribute-data-info.component';
 import { CatalogueListComponent } from './components/catalogue-list.component';
 import { CatalogueComponent } from './components/catalogue.component';
 import { CollapsibleComponent } from './components/collapsible.component';
 import { ContentComponent } from './components/content.component';
 import { CellComponent } from './components/cell.component';
-import { CellEditorComponent } from './components/cell-editor.component';
 import { CellHeaderComponent } from './components/cell-header.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CellModelComponent } from './components/cell-model.component';
@@ -58,15 +56,12 @@ import { StatusComponent } from './components/status.component';
 	],
 	declarations: [
 					AppComponent
-					, AttributeDataEditorComponent
 					, AttributeDataInfoComponent
 					, CatalogueListComponent
 					, CatalogueComponent
 					, CollapsibleComponent
 					, ContentComponent
 					, CellComponent
-					, CellEditorComponent
-					, CellHeaderComponent
 					, CellDocumentComponent
 					, CellDataComponent
 					, CellModelComponent

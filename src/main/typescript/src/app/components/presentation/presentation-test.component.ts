@@ -1,10 +1,10 @@
+// PRESENTATION - TEST . COMPONENT . TS
 
 import {Component, Inject} from '@angular/core';
-import {Observable} from 'rxjs';
 
-import {CellModel } from "../../cell-model.class";
-import {Model, ModelJSON } from '../../model.class';
-import {RemoteObjectService } from '../../services/remote-object.service';
+import {CellModel } from '../../cell-model.class';
+import {Model, ModelJSON} from '../../model.class';
+import {RemoteObjectService} from '../../services/remote-object.service';
 
 @Component({
 	selector: 'presentation-test',
@@ -16,15 +16,13 @@ export class PresentationTestComponent {
 model: CellModel;
 
 
-constructor(@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
+constructor(@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>) {
 
 	const modelURI = '/morfeu/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 	const data3CellmodelURI = 'target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3';
 	this.modelService.get(modelURI, Model).subscribe(m => this.model = m.findCellModel(data3CellmodelURI));
 
 }
-
-
 
 }
 
