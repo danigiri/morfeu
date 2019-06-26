@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// UI CELL EDITOR . JAVA
 
 package cat.calidos.morfeu.webapp.ui;
 
@@ -28,15 +14,20 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICellEditor extends UIWidget<UICellEditor> {
 
-private UIContent content;
+private Optional<UIContent> content;
 
 
 public UICellEditor(UIContent content) {
 
 	super($("#cell-editor"));
 
-	this.content = content;
+	this.content = Optional.ofNullable(content);
 
+}
+
+
+private UICellEditor() {
+	this(null);
 }
 
 
@@ -87,11 +78,11 @@ public boolean isCreateValueVisible() {
 
 
 public UICellEditor clickCreateValue() {
-	
+
 	$("#cell-editor-create-value-button").click();
-	
+
 	return this;
-	
+
 }
 
 
@@ -117,10 +108,14 @@ public UICellEditor enterText(String value) {
 	for (int i=0; i<l; i++) { 
 		pressBackspace(); 
 	}
-	content.pressKey(value);
+	if (content.isPresent()) {
+		content.get().pressKey(value);
+	} else {	// we are standalone test cell editor and there is no content
+		// TODO implement here
+	}
 
 	return this;
-	
+
 }
 
 
@@ -128,4 +123,27 @@ public UICellData cellData() {
 	return new UICellData(element);	// cell data and cell editor are very similar
 }
 
+
+/** returns the standalone test instance */
+public static UICellEditor testInstance() {
+	return new UICellEditor();
 }
+
+
+}
+
+/*
+ *    Copyright 2018 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
