@@ -1,6 +1,7 @@
 // CELL - EDITOR - TEST . COMPONENT . TS
 
 import {Component, Inject, AfterViewInit, OnInit} from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import {Content, ContentJSON } from '../../content.class';
 import {Model, ModelJSON} from '../../model.class';
@@ -17,7 +18,7 @@ import {EventService} from '../../services/event.service';
 	template: `<cell-editor></cell-editor>`
 })
 
-export class CellEditorTestComponent extends EventListener implements AfterViewInit { //}implements OnInit {
+export class CellEditorTestComponent extends EventListener implements AfterViewInit {
 
 
 constructor(eventService: EventService,
@@ -28,23 +29,26 @@ constructor(eventService: EventService,
 
 
 ngAfterViewInit() {
-//ngOnInit() {
 
+	const content = 'target/test-classes/test-resources/documents/document1.xml';
 	const model = 'target/test-classes/test-resources/models/test-model.xsd';
-	const contentURI = 'target/test-classes/test-resources/documents/document1.xml';
-	const contentAndModelURI = '/morfeu/dyn/content/'+contentURI+'?model='+model;
+	this.loadContent(content, model);
 
-	const modelURI = '/morfeu/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
-	const data3CellmodelURI = 'target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3';
-	this.modelService.get(modelURI, Model).subscribe(m => {
+}
+
+
+private loadContent(contentURI: string, model: string) {
+
+	const contentAndModelURI = '/morfeu/dyn/content/'+contentURI+'?model='+model;
+	const modelURI = '/morfeu/dyn/models/'+model ;
+
+		this.modelService.get(modelURI, Model).subscribe(m => {
 		this.contentService.get(contentAndModelURI, Content).subscribe( (content: Content) => {
 			let cell = content.findCellWithURI(contentURI+'/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)');
 			cell.associateWith(m, cell.cellModelURI);
 			this.events.service.publish(new CellEditEvent(cell));
 		});
 	});
-
-
 
 }
 
