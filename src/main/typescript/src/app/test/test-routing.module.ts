@@ -9,7 +9,7 @@ import {CellEditorTestComponent} from '../components/cell-editor/cell-editor-tes
 import {PresentationTestComponent} from '../components/presentation/presentation-test.component';
 
 const routes: Routes = [
-						{path: 'cell-editor-test', component: CellEditorTestComponent},
+						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
 						{path: 'presentation-test', component: PresentationTestComponent}
 ];
 

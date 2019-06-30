@@ -1,7 +1,8 @@
 // CELL - EDITOR - TEST . COMPONENT . TS
 
 import {Component, Inject, AfterViewInit, OnInit} from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
 
 import {Content, ContentJSON } from '../../content.class';
 import {Model, ModelJSON} from '../../model.class';
@@ -20,8 +21,10 @@ import {EventService} from '../../services/event.service';
 
 export class CellEditorTestComponent extends EventListener implements AfterViewInit {
 
+private readonly model = 'target/test-classes/test-resources/models/test-model.xsd';
 
 constructor(eventService: EventService,
+			private route: ActivatedRoute, 
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>) {
 	super(eventService);
@@ -29,22 +32,44 @@ constructor(eventService: EventService,
 
 
 ngAfterViewInit() {
+	this.route.paramMap.subscribe(params => this.load(params.get('case_')));
+}
+
+
+private load(case_: string) {
+	switch (case_) {
+		case 'document5' : this.document5(); break;
+		default: this.document1();
+	}
+}
+
+
+private document1() {
 
 	const content = 'target/test-classes/test-resources/documents/document1.xml';
-	const model = 'target/test-classes/test-resources/models/test-model.xsd';
-	this.loadContent(content, model);
+	const cell = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
+	this.loadContent(content, this.model, cell);
 
 }
 
 
-private loadContent(contentURI: string, model: string) {
+private document5() {
+
+	const content = 'target/test-classes/test-resources/documents/document5.xml';
+	const cell = '/test(0)/row(0)/col(0)/data3(0)';
+	this.loadContent(content, this.model, cell);
+
+}
+
+
+private loadContent(contentURI: string, model: string, cellPath: string) {
 
 	const contentAndModelURI = '/morfeu/dyn/content/'+contentURI+'?model='+model;
 	const modelURI = '/morfeu/dyn/models/'+model ;
 
 		this.modelService.get(modelURI, Model).subscribe(m => {
 		this.contentService.get(contentAndModelURI, Content).subscribe( (content: Content) => {
-			let cell = content.findCellWithURI(contentURI+'/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)');
+			let cell = content.findCellWithURI(contentURI+cellPath);
 			cell.associateWith(m, cell.cellModelURI);
 			this.events.service.publish(new CellEditEvent(cell));
 		});
