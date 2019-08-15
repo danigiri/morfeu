@@ -1,7 +1,8 @@
 // TEST - ROUTING . MODULE . TS
 
-import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
 import {ComponentsModule} from '../components/components.module';
@@ -17,6 +18,7 @@ const routes: Routes = [
 	imports: [
 				ComponentsModule,
 				CommonModule,
+				FormsModule,
 				RouterModule.forChild(routes)
 	],
 	exports: [RouterModule],

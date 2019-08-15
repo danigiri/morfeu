@@ -9,6 +9,7 @@ export class CellDocument implements SerialisableToJSON<CellDocument, CellDocume
 model?: Model;
 content?: Content;
 
+
 constructor(public name: string,
 			public uri: string,
 			public desc: string,
@@ -24,6 +25,7 @@ hasProblem(): boolean {
 	return this.problem!=null && this.problem.length>0;
 }
 
+//// SerialisableToJSON ////
 
 toJSON(): CellDocumentJSON {
 	return Object.assign({}, this);
@@ -31,11 +33,11 @@ toJSON(): CellDocumentJSON {
 
 
 fromJSON(json: CellDocumentJSON): CellDocument {
-	
+
 	if (typeof json === 'string') {
-		
+
 		return JSON.parse(json, CellDocument.reviver);
-		
+
 	} else {
 	
 		let document_ = Object.create(CellDocument.prototype);
@@ -50,6 +52,8 @@ fromJSON(json: CellDocumentJSON): CellDocument {
 static reviver(key: string, value: any): any {
 	return key === "" ? Object.create(CellDocument.prototype).fromJSON(value) : value;
 }
+
+//// SerialisableToJSON [end] ////
 
 }
 

@@ -1,23 +1,23 @@
 
-import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';	// new angular 5 http client
+import {NgModule} from '@angular/core';
 
-import {PipesModule } from '../pipes/pipes.module';
+import {PipesModule} from '../pipes/pipes.module';
 
-import {AttributeDataEditorComponent } from './attribute-data-editor.component';
-import {CellEditorComponent } from './cell-editor/cell-editor.component';
-import {CellHeaderComponent } from './cell-header.component';
-import {PresentationComponent } from './presentation/presentation.component';
+import {AttributeDataEditorComponent} from './attribute-data-editor.component';
+import {CellEditorComponent} from './cell-editor/cell-editor.component';
+import {CellHeaderComponent} from './cell-header.component';
+import {PresentationComponent} from './presentation/presentation.component';
 
-import {RemoteDataService } from '../services/remote-data.service';
-import {RemoteObjectService } from '../services/remote-object.service';
+import {RemoteDataService} from '../services/remote-data.service';
+import {RemoteObjectService} from '../services/remote-object.service';
 
 import {Content, ContentJSON} from '../content.class';
-import {Model, ModelJSON } from '../model.class';
+import {Model, ModelJSON} from '../model.class';
 
-import { EventService } from '../services/event.service';
+import {EventService} from '../services/event.service';
 
 @NgModule({
 	declarations: [

@@ -1,6 +1,6 @@
 // CELL - EDIT . EVENT . TS
 
-import { Cell } from "../cell.class";
+import {Cell} from '../cell.class';
 
 export class CellEditEvent {
 

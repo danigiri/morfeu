@@ -4,9 +4,6 @@ import { Component, Input, OnInit } from "@angular/core";
 
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
-import { Observable } from "rxjs";
-import { switchMap } from 'rxjs/operators';
-
 @Component({
 	moduleId: module.id,
 	selector: 'html-preview',

@@ -1,7 +1,8 @@
 // CATALOGUE . CLASS . TS
 
-import { CellDocument } from './cell-document.class';
+import {CellDocument} from './cell-document.class';
 
+/** A collection of documents and snippets */
 export class Catalogue {
 
 name: string;

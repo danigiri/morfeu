@@ -1,11 +1,10 @@
 // MODEL . CLASS . TS
 
-import { FamilyMember } from './family-member.interface';
-import { Cell } from './cell.class';
-import { CellType } from "./cell-type.class";
-import { CellModel, CellModelJSON } from './cell-model.class';
-import { SerialisableToJSON } from './serialisable-to-json.interface';
+import {CellType} from './cell-type.class';
+import {CellModel, CellModelJSON} from './cell-model.class';
+import {SerialisableToJSON} from './serialisable-to-json.interface';
 
+/** Root cell model, also called Model */
 export class Model extends CellModel implements SerialisableToJSON<Model, ModelJSON> {
 
 
@@ -46,11 +45,11 @@ constructor(public schema: number,
 
 /** All cell models will point to references **/
 normaliseReferences() {
-    this.children.forEach(cm => cm.normaliseReferencesWith(this.children));
+	this.children.forEach(cm => cm.normaliseReferencesWith(this.children));
 }
 
 
-// given a cell model URI, look for it in a cell model hierarchy, avoids following references
+/** given a cell model URI, look for it in a cell model hierarchy, avoids following references */
 findCellModel(uri: string): CellModel {
 
 	let foundCellModels = this.children.map(cm => cm.findCellModel(uri)).filter(cm => cm!=undefined);
@@ -81,6 +80,8 @@ fromJSON(json: ModelJSON): Model {
 static reviver(key: string, value: any): any {
 	return key === "" ? (Object.create(Model.prototype)).fromJSON(value) : value;
 }
+
+//// SerialisableToJSON [end] ////
 
 }
 

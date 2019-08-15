@@ -3,10 +3,10 @@
 *  As there is no license on the site we should be ok.
 */
 
-import { map, filter } from 'rxjs/operators';
+import {map, filter } from 'rxjs/operators';
 
-import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import {Injectable } from "@angular/core";
+import {Observable, Subject } from "rxjs";
 
 
 interface Event {
@@ -40,6 +40,7 @@ public of<T>(eventType: { new(...args: any[]): T }): Observable<T> {
 	const channel_ = (<any>eventType).name;
 	// console.log("\tSubscribing to event "+channel_);
 
+	// this is ripe for optimization when we need it, hashing on the channel name for instance
 	return this.event$.pipe(filter(m => m.channel.startsWith(channel_, 0)), map(m => m.data));
 
 }

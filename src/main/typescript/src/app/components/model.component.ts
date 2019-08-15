@@ -2,10 +2,7 @@
 
 import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
 
-import { HotkeysService, Hotkey } from "angular2-hotkeys";
 import { TreeComponent } from "angular-tree-component";
-
-import {CellModelComponent} from "./cell-model.component";
 
 import { CellModel } from "../cell-model.class";
 import { Model, ModelJSON } from "../model.class";
@@ -18,7 +15,6 @@ import { CellSelectEvent } from "../events/cell-select.event";
 import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
 import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
 import { ContentRequestEvent } from "../events/content-request.event";
-import { KeyPressedEvent } from "../events/keypressed.event";
 import { ModelLoadedEvent } from "../events/model-loaded.event";
 import { ModelDisplayEvent } from "../events/model-display.event";
 import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
@@ -85,7 +81,7 @@ ngOnInit() {
 	console.log("ModelComponent::ngOnInit()"); 
 
 	// if we are in a tab area this is redundant, as the parent will remove us from the component tree
-	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(selected => this.clearModel()));
+	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(() => this.clearModel()));
 
 	this.subscribe(this.events.service.of(ModelDisplayEvent).subscribe(
 			display => this.displayModel(display.model)

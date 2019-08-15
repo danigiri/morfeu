@@ -1,30 +1,30 @@
 // DROP - AREA . COMPONENT . TS
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import {filter} from 'rxjs/operators';
 
 
-import { FamilyMember } from '../family-member.interface';
-import { Cell } from '../cell.class';
-import { CellModel } from '../cell-model.class';
-import { SelectableWidget } from '../selectable-widget.class';
+import { FamilyMember} from '../family-member.interface';
+import { Cell} from '../cell.class';
+import { CellModel} from '../cell-model.class';
+import { SelectableWidget} from '../selectable-widget.class';
 
-import { CellActivatedEvent } from '../events/cell-activated.event';
-import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
-import { CellDropEvent } from '../events/cell-drop.event';
-import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
-import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
-import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
-import { DropAreaSelectEvent } from '../events/drop-area-select.event';
-import { InfoModeEvent } from '../events/info-mode.event';
-import { EventService } from '../services/event.service';
-import { UXEvent } from '../events/ux.event';
+import { CellActivatedEvent} from '../events/cell-activated.event';
+import { CellDeactivatedEvent} from '../events/cell-deactivated.event';
+import { CellDropEvent} from '../events/cell-drop.event';
+import { CellModelActivatedEvent} from '../events/cell-model-activated.event';
+import { CellModelDeactivatedEvent} from '../events/cell-model-deactivated.event';
+import { CellSelectionClearEvent} from '../events/cell-selection-clear.event';
+import { DropAreaSelectEvent} from '../events/drop-area-select.event';
+import { InfoModeEvent} from '../events/info-mode.event';
+import { EventService} from '../services/event.service';
+import { UXEvent} from '../events/ux.event';
 
 @Component({
 	moduleId: module.id,
 	selector: 'drop-area',
 	template: `
-			<div 	class="drop-area" 
+			<div	class="drop-area" 
 					[class.drop-area-active]="active && !selected" 
 					[class.drop-area-inactive]="!active"
 					[class.drop-area-selected]="selected"

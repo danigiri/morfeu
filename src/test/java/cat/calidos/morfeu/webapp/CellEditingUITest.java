@@ -149,7 +149,7 @@ private UIAttributeData checkAttribute(List<UIAttributeData> attributes, String 
 	assertTrue(attributeOptional.isPresent());
 	UIAttributeData attribute = attributeOptional.get();
 	assertEquals("Wrong value of '"+name+"'", expectedValue, attribute.value());
-	
+
 	return attribute;
 
 }
