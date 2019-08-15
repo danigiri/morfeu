@@ -1,15 +1,17 @@
 // CELL - EDITOR . COMPONENT . TS
 
 import {filter} from 'rxjs/operators';
-import {Component, ElementRef, ViewChild, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {NgForm} from '@angular/forms';
+import {Subscription} from 'rxjs';
 
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 import {Cell} from '../../cell.class';
 import {CellModel} from '../../cell-model.class';
 
-import {CellActivateEvent} from '../../events/cell-activate.event';
 import {CellActivatedEvent} from '../../events/cell-activated.event';
+import {CellChangedEvent} from '../../events/cell-changed.event';
 import {CellEditEvent} from '../../events/cell-edit.event';
 import {ContentFragmentDisplayEvent} from '../../events/content-fragment-display.event';
 import {EventListener} from '../../events/event-listener.class';
@@ -24,7 +26,7 @@ import {EventService} from '../../services/event.service';
 			<div id="cell-editor" class="card mt-2 modal-body">
 				<cell-header [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
 				<div class="card-body">
-					<form>
+					<form #form_="ngForm"> {{formCallback(form_)}}
 						<textarea *ngIf="cell.value!=undefined && showValue()"
 							class="cell-editor-value form-control"
 							rows="textAreaRows()"
@@ -83,17 +85,22 @@ import {EventService} from '../../services/event.service';
 			#cell-editor-create-value-button {}
 			#cell-editor-remove-value-button {}
 			.cell-editor-value {}
-`]
+	`]
 })
 
 
-export class CellEditorComponent extends EventListener implements OnInit {
+export class CellEditorComponent extends EventListener implements OnInit, OnDestroy {
 
-@ViewChild("editor", {static: false}) editor: ElementRef;
+@ViewChild('editor', {static: false}) editor: ElementRef;
+//@ViewChild('form_', {static: false}) ngForm: NgForm;
+private form: NgForm;
+
+private formSubscription: Subscription;
 
 cell: Cell;
 cellBackup: Cell;
 editing = false;
+
 
 constructor(eventService: EventService, private modalService: NgbModal) {
 	super(eventService);
@@ -101,10 +108,33 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 
 
 ngOnInit() {
+
 	this.subscribe(this.events.service.of(CellEditEvent)
 			.pipe(filter(edit => edit.cell!==undefined && !this.editing))
 			.subscribe(edit => this.edit(edit.cell))
 	);
+
+}
+
+
+// we are unable to have this value injected as a viewchild so we have a direct method call
+formCallback(f: NgForm) {
+
+	// we only send an event when we are showing HTML and we need to handle presentation manually 
+	if (this.cell.cellModel.getPresentationType()==='HTML') {
+		// we can optimise this if we compare this cell with the backup one, handle dirtiness from the fields, etc
+		this.events.service.publish(new CellChangedEvent(this.cell));
+	}
+
+}
+
+
+ngOnDestroy() {
+
+	if (this.formSubscription) {
+		this.formSubscription.unsubscribe();
+	}
+
 }
 
 

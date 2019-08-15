@@ -1,13 +1,13 @@
 // ATTRIBUTE DATA EDITOR . COMPONENT . TS
 
-import { Component, Input, OnInit } from "@angular/core";
+import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 
-import { Cell } from "../cell.class";
-import { CellModel } from "../cell-model.class";
+import {Cell} from '../cell.class';
+import {CellModel} from '../cell-model.class';
 
 @Component({
 	moduleId: module.id,
-	selector: "attribute-data-editor",
+	selector: 'attribute-data-editor',
 	template: `
 		<li [class.attribute-data]="isPresent()"
 			[class.attribute-not-present]="!isPresent()"
@@ -66,6 +66,8 @@ export class AttributeDataEditorComponent {
 @Input() parentCell: Cell;
 @Input() index: number;
 
+@ViewChild('input', {static: false}) input: ElementRef;
+
 
 // do we have a value to show?
 isPresent(): boolean {
@@ -99,6 +101,7 @@ private add() {
 	console.log("[UI] adding cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => this.parentCell.adopt(this.cellModel.generateCell()));
 }
+
 
 }
 

@@ -111,7 +111,7 @@ public UICellEditor enterText(String value) {
 	if (content.isPresent()) {
 		content.get().pressKey(value);
 	} else {	// we are standalone test cell editor and there is no content
-		// TODO implement here
+		this.pressKey(value);
 	}
 
 	return this;

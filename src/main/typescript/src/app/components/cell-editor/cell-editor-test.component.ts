@@ -1,13 +1,12 @@
 // CELL - EDITOR - TEST . COMPONENT . TS
 
 import {Component, Inject, AfterViewInit, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
 
 import {Content, ContentJSON } from '../../content.class';
 import {Model, ModelJSON} from '../../model.class';
 
-import { RemoteObjectService } from '../../services/remote-object.service';
+import {RemoteObjectService} from '../../services/remote-object.service';
 
 import {CellEditEvent} from '../../events/cell-edit.event';
 import {EventListener} from '../../events/event-listener.class';

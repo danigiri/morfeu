@@ -1,12 +1,17 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
 import {AfterViewInit, Component, Inject, Input, OnChanges, SimpleChanges, SimpleChange} from '@angular/core';
-import {Observable, Subject, Subscription } from 'rxjs';
+import {Observable, Subject} from 'rxjs';
+
 
 import {RemoteDataService} from '../../services/remote-data.service';
 
 import {Cell} from '../../cell.class';
 import {CellModel} from '../../cell-model.class';
+
+import {EventListener} from '../../events/event-listener.class';
+import {CellChangedEvent} from '../../events/cell-changed.event';
+import {EventService} from '../../services/event.service';
 
 @Component({
 	moduleId: module.id,
@@ -26,34 +31,31 @@ import {CellModel} from '../../cell-model.class';
 // sets the ui to be too slow as the iframe blocks rendering
 //	changeDetection: ChangeDetectionStrategy.OnPush
 
-export class PresentationComponent implements AfterViewInit {//}, OnChanges { //} implements OnDestroy {
+export class PresentationComponent extends EventListener implements AfterViewInit {
 
-//private interval: NodeJS.Timer;
+private readonly CHANGED_LIMIT = 20;
 
 // if showing a cell with values or we are showing a cellmodel
 @Input() cell?: Cell;
 @Input() cellModel?: CellModel;
 
 presentation: String;
-innerHTML$?: Observable<String>;
+innerHTML$?: Subject<String>;
 
-constructor(@Inject("RemoteDataService") private presentationService: RemoteDataService) {}
+private cellChangedCounter = 0;	// we use this to keep track
 
-ngAfterViewInit() {
-	const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
-	
-	console.debug('Getting presentation from %s', presentationURL);
-	this.presentationService.getText(presentationURL).subscribe(
-			p => {
-				Promise.resolve(null).then(() => this.innerHTML$ = new Observable((obs) => { obs.next(p); obs.complete();}));
-			},
-			error => {}
-	);
+
+constructor(eventService: EventService, @Inject("RemoteDataService") private presentationService: RemoteDataService) {
+	super(eventService);
 }
 
-/*ngOnChanges(changes: SimpleChanges) {
-	console.debug("changes", changes);
-}*/
+
+ngAfterViewInit() {
+
+	this.innerHTML$ = new Subject();
+	this.updateInnerHTMLPresentation();
+
+}
 
 
 private getPresentationType(): string {
@@ -66,6 +68,30 @@ private getPresentationType(): string {
 
 private getPresentation(): string {
 	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
+}
+
+
+private updateInnerHTMLPresentation() {
+	
+const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
+
+	console.debug('Getting presentation from %s', presentationURL);
+	this.presentationService.getText(presentationURL).subscribe(
+			html => {
+				Promise.resolve(null)
+						.then(() => this.innerHTML$.next(html));
+			},
+			error => {}
+	);
+	
+	this.subscribe(this.events.service.of(CellChangedEvent)
+			.debounceTime(200)					// annoyingly, I have not found an RXJS that just sends one in N 
+			//.pipe(debounce(() => timer(1000)))
+			//.filter(() => (++this.cellChangedCounter) % this.CHANGED_LIMIT == 0)
+			.subscribe(() => {
+				this.cellChangedCounter = 0;
+				this.updateInnerHTMLPresentation();
+			}));
 }
 
 
