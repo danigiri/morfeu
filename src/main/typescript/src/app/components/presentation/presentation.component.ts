@@ -33,7 +33,9 @@ import {EventService} from '../../services/event.service';
 
 export class PresentationComponent extends EventListener implements AfterViewInit {
 
-private readonly CHANGED_LIMIT = 20;
+//private readonly CHANGED_LIMIT = 20;
+private readonly UPDATE_MS = 200;
+
 
 // if showing a cell with values or we are showing a cellmodel
 @Input() cell?: Cell;
@@ -55,6 +57,14 @@ ngAfterViewInit() {
 	this.innerHTML$ = new Subject();
 	this.updateInnerHTMLPresentation();
 
+	this.subscribe(this.events.service.of(CellChangedEvent)
+			.debounceTime(200)	// the ideal here would be to send one in N or the last one after a timeout
+			//.pipe(debounce(() => timer(1000)))
+			//.filter(() => (++this.cellChangedCounter) % this.CHANGED_LIMIT == 0)
+			.subscribe(() => {
+//				console.debug('.');
+				this.updateInnerHTMLPresentation();	// FIXME: there is a potential race condition where this
+			}));									// method calls pile up on each other on  the get text
 }
 
 
@@ -75,7 +85,7 @@ private updateInnerHTMLPresentation() {
 	
 const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
 
-	console.debug('Getting presentation from %s', presentationURL);
+	//console.debug('Getting presentation from %s', presentationURL);
 	this.presentationService.getText(presentationURL).subscribe(
 			html => {
 				Promise.resolve(null)
@@ -83,15 +93,7 @@ const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;
 			},
 			error => {}
 	);
-	
-	this.subscribe(this.events.service.of(CellChangedEvent)
-			.debounceTime(200)					// annoyingly, I have not found an RXJS that just sends one in N 
-			//.pipe(debounce(() => timer(1000)))
-			//.filter(() => (++this.cellChangedCounter) % this.CHANGED_LIMIT == 0)
-			.subscribe(() => {
-				this.cellChangedCounter = 0;
-				this.updateInnerHTMLPresentation();
-			}));
+
 }
 
 
