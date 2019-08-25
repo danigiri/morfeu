@@ -13,6 +13,8 @@ import {SerialisableToJSON} from "./serialisable-to-json.interface";
 
 export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
+private readonly VALUE_FIELD = 'value';
+
 value?: string;
 attributes?: Cell[];
 internalAttributes?: Cell[];
@@ -47,9 +49,7 @@ associateWith(model: Model, uri?: string): Cell {
 stripPrefixFromURIs(prefix: string) {
 
 	if (this.getURI().startsWith(prefix)) {
-		// console.debug("--> Old uri %s", this.URI);
 		this.URI = this.URI.substr(prefix.length);
-		// console.debug("--> New uri %s", this.URI);
 		if (this.attributes) {
 			this.attributes = this.attributes.map(a => a.stripPrefixFromURIs(prefix));
 		}
@@ -103,7 +103,7 @@ findCellWithURI(uri: string): Cell {
 
 	while (!cell && pending.length>0) {
 		const currentCell = pending.pop();
-		if (currentCell.getURI()==uri) {
+		if (currentCell.getURI()===uri) {
 			cell = currentCell;
 		} else if (currentCell.childrenCount()>0) {
 			currentCell.children.forEach(c => pending.push(c));
@@ -116,7 +116,7 @@ findCellWithURI(uri: string): Cell {
 
 
 /** set ourselves at this position, uses information from the parent but does not mutate the parent */
-setPosition(position:number):Cell {
+setPosition(position: number): Cell {
 
 	// This is tricky, imagine this cases
 	// /foo(0)/bar(0), bar(0) position:1 --> /foo(0)/bar(1), easy peasy
@@ -171,13 +171,63 @@ deepClone(): Cell {
 
 // no value for this cell
 removeValue() {
-	delete this["value"];
+	delete this[this.VALUE_FIELD];
 }
 
 
 // create a new value for this cell, using the cellmodel default value or empty
 createValue() {
 	this.value = this.cellModel.defaultValue ? this.cellModel.defaultValue : CellModel.DEFAULT_EMPTY_VALUE;
+}
+
+
+//
+equalValues(c: Cell): boolean {
+
+	if (this.value!==c.value) {
+		return false;
+	}
+
+	if (this.cellModel.URI!==c.cellModel.URI) {
+		return false;
+	}
+	
+	if ((this.attributes && !c.attributes) || (!this.attributes && c.attributes)) {
+		return false;
+	}
+	
+	// we are assuming the same order for the attributes and internal attributes
+	if (this.attributes && c.attributes && !this.cellsEqualValues(this.attributes, c.attributes)) {
+			return false;
+	}
+
+
+	if ((this.internalAttributes && !c.internalAttributes) || (!this.internalAttributes && c.internalAttributes)) {
+		return false;
+	}
+	if (this.internalAttributes && c.internalAttributes && 
+		!this.cellsEqualValues(this.internalAttributes, c.internalAttributes)) {
+			return false;
+	}
+
+	return true;
+
+}
+
+
+private cellsEqualValues(a: Cell[], b: Cell[]) {
+
+	if (a.length!=b.length) {
+			return false;
+	}
+	for (let i=0; i<a.length; i++) {
+		if (!a[i].equalValues(b[i])) {
+			return false;
+		}
+	}
+
+	return true;
+
 }
 
 
