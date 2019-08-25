@@ -8,7 +8,6 @@ import Stack from 'ts-data.stack';
 import {CellDocument} from '../cell-document.class';
 import {Cell} from '../cell.class';
 import {Content, ContentJSON} from '../content.class';
-import {FamilyMember} from '../family-member.interface';
 import {Model} from '../model.class';
 
 import {RemoteDataService} from '../services/remote-data.service';
@@ -16,7 +15,6 @@ import {RemoteObjectService} from '../services/remote-object.service';
 import {OperationResult} from '../services/operation-result.class';
 
 import {CellComponent} from './cell.component';
-import {DropAreaComponent} from './drop-area.component';
 import {KeyListenerWidget} from '../key-listener-widget.class';
 
 import {CellActivateEvent} from '../events/cell-activate.event';
@@ -33,7 +31,6 @@ import {ContentSaveEvent} from '../events/content-save.event';
 import {ContentSavedEvent} from '../events/content-saved.event';
 import {DropAreaSelectEvent} from '../events/drop-area-select.event';
 import {InfoModeEvent} from '../events/info-mode.event';
-import {KeyPressedEvent} from '../events/keypressed.event';
 import {StatusEvent} from '../events/status.event';
 import {EventService} from '../services/event.service';
 import {RemoteEventService} from '../services/remote-event.service';

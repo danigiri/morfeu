@@ -179,17 +179,19 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 		newCell.parent.remove(newCell);
 	}
 	
-	// if we are adopting a cell that is actually a move and we are moving at the end, position is now position--
+	// if we are adopting a cell that is actually a move and we are moving at the end, 'position' is now 'position--'
 	// (or childrencount) as we have zero based arrays =)
 	// Start:
 	// cell0
 	// cell1
+	//
 	// Move:
 	// cell0 ----------\
 	// cell1           |
 	// [position=2] <--/
 	//
 	// As we have removed cell0 temporarily the parent has only one cell, so the actual target position is 1 and not 2
+	// TODO: this may apply to more cases than moving at the end 
 	
 	//if (newCell.parent.getAdoptionURI()===this.cell.getAdoptionURI()) {
 	if (newCell.parent===this.cell && position>this.cell.childrenCount()) {
