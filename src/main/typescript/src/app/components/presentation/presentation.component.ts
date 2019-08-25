@@ -1,7 +1,7 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
-import {AfterViewInit, Component, Inject, Input, OnChanges, SimpleChanges, SimpleChange} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import {AfterViewInit, Component, Inject, Input, OnDestroy, SimpleChanges, SimpleChange} from '@angular/core';
+import {Subscription, Subject, timer} from 'rxjs';
 
 
 import {RemoteDataService} from '../../services/remote-data.service';
@@ -31,10 +31,11 @@ import {EventService} from '../../services/event.service';
 // sets the ui to be too slow as the iframe blocks rendering
 //	changeDetection: ChangeDetectionStrategy.OnPush
 
-export class PresentationComponent extends EventListener implements AfterViewInit {
+export class PresentationComponent extends EventListener implements AfterViewInit, OnDestroy {
 
-//private readonly CHANGED_LIMIT = 20;
-private readonly UPDATE_MS = 200;
+private readonly HMTL_UPDATE_LIMIT = 30;
+private readonly HTML_UPDATE_FREQ = 500;
+private html_updates = 0;
 
 
 // if showing a cell with values or we are showing a cellmodel
@@ -42,29 +43,44 @@ private readonly UPDATE_MS = 200;
 @Input() cellModel?: CellModel;
 
 presentation: String;
-innerHTML$?: Subject<String>;
+private innerHTML$?: Subject<String>;
+private htmlTimerSubscription: Subscription;
+
 
 private cellChangedCounter = 0;	// we use this to keep track
 
 
 constructor(eventService: EventService, @Inject("RemoteDataService") private presentationService: RemoteDataService) {
 	super(eventService);
+	console.debug('PresentationComponent::constructor() - %s', this.cell ? this.cell.getURI() : '');
 }
 
 
 ngAfterViewInit() {
 
-	this.innerHTML$ = new Subject();
-	this.updateInnerHTMLPresentation();
+	console.debug('PresentationComponent::ngAfterViewInit() - %s', this.cell ? this.cell.getURI() : '');
 
-	this.subscribe(this.events.service.of(CellChangedEvent)
-			.debounceTime(200)	// the ideal here would be to send one in N or the last one after a timeout
-			//.pipe(debounce(() => timer(1000)))
-			//.filter(() => (++this.cellChangedCounter) % this.CHANGED_LIMIT == 0)
-			.subscribe(() => {
-//				console.debug('.');
-				this.updateInnerHTMLPresentation();	// FIXME: there is a potential race condition where this
-			}));									// method calls pile up on each other on  the get text
+
+	if (this.getPresentationType()==='HTML') {
+
+		this.innerHTML$ = new Subject();
+		this.updateInnerHTMLPresentation();	// update at least once to show default model preview or also the
+											// first time for the cell
+
+		// we update from events if we are showing inner html and we have cell content to present  
+		if (this.cell) {
+		this.htmlTimerSubscription = timer(1000, this.HTML_UPDATE_FREQ)
+										.subscribe(() => this.updateInnerHTMLPresentation());
+
+		this.subscribe(this.events.service.of(CellChangedEvent)
+				.filter(() => (++this.html_updates) % this.HMTL_UPDATE_LIMIT == 0)
+				.subscribe(() => {
+					console.debug('>[%i] event received', this.html_updates);
+					this.updateInnerHTMLPresentation();	// FIXME: there is a potential race condition where this
+				}));									// method calls pile up on each other on  the get text
+		}
+	}
+
 }
 
 
@@ -76,23 +92,37 @@ private getPresentationType(): string {
 
 }
 
+
 private getPresentation(): string {
 	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
 }
 
 
 private updateInnerHTMLPresentation() {
-	
-const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
 
-	//console.debug('Getting presentation from %s', presentationURL);
+	const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
+
 	this.presentationService.getText(presentationURL).subscribe(
 			html => {
 				Promise.resolve(null)
-						.then(() => this.innerHTML$.next(html));
+						.then(() => {
+							console.debug('[%i] P %s', this.html_updates, presentationURL);
+							this.innerHTML$.next(html);
+						});
 			},
 			error => {}
 	);
+
+}
+
+
+ngOnDestroy() {
+
+	super.ngOnDestroy();
+
+	if (this.htmlTimerSubscription.) {
+		this.htmlTimerSubscription.unsubscribe();
+	}
 
 }
 
