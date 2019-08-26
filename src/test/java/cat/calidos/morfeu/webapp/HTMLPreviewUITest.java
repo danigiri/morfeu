@@ -2,13 +2,22 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.open;
 
-import org.junit.Test;
-
 import cat.calidos.morfeu.webapp.ui.HTMLPreview;
+import cat.calidos.morfeu.webapp.ui.UIAttributeData;
+import cat.calidos.morfeu.webapp.ui.UICellData;
+import cat.calidos.morfeu.webapp.ui.UICellEditor;
 
 /** Load one HTML preview independently and just check the values
 *	@author daniel giribet
@@ -16,7 +25,7 @@ import cat.calidos.morfeu.webapp.ui.HTMLPreview;
 public class HTMLPreviewUITest extends UITezt {
 
 
-@Test
+@Test @DisplayName("Basic preview content test")
 public void testPreview() {
 
 	open(appBaseURL+"preview/identifier 1;color=ff1100");
@@ -24,8 +33,35 @@ public void testPreview() {
 	HTMLPreview preview = new HTMLPreview();
 	preview.shouldAppear();
 
-	assertEquals("identifier 1", preview.title());
-	assertEquals("#ff1100", preview.color());
+	assertAll("Basic preview content",
+		() -> assertEquals("identifier 1", preview.title()),
+		() -> assertEquals("#ff1100", preview.color())
+	);
+
+}
+
+
+@Test @DisplayName("Cell editor changes update preview content test")
+public void testPreviewLiveUpdates() {
+
+	open(appBaseURL+"test/cell-editor-test/document5");
+
+	UICellEditor editor = new UICellEditor();
+	assertNotNull(editor);
+	editor.shouldAppear();
+
+	UICellData cellEditorData = editor.cellData();
+	assertAll("Basic cell editor stuff",
+		() -> assertNotNull(cellEditorData),
+		() -> assertTrue(cellEditorData.isFromEditor(), "Editing the cell should show an editor"),
+		() -> assertTrue(cellEditorData.isFromCell(), "Editor should show data coming from the cell")
+	);
+
+	List<UIAttributeData> attributes = cellEditorData.attributes();
+	assertAll("Basic cell editor attributes",
+		() -> assertNotNull(attributes),
+		() -> assertEquals(2, attributes.size(), "We should be editing two attributes")
+	);
 
 }
 

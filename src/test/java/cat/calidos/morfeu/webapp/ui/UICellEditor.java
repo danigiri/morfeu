@@ -26,7 +26,9 @@ public UICellEditor(UIContent content) {
 }
 
 
-private UICellEditor() {
+/** Not associated with content
+*/
+public UICellEditor() {
 	this(null);
 }
 
