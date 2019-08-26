@@ -18,6 +18,7 @@ package cat.calidos.morfeu.webapp;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -45,9 +46,9 @@ protected static String appBaseURL;
 protected static WebDriver driver;
 
 
-@BeforeClass
+@BeforeClass @BeforeAll
 public static void setUpClass() throws Exception {
-	
+
 	defineSystemVariable(BROWSER_PROPERTY, DEFAULT_BROWSER);
 	defineSystemVariable(DRIVER_LOCATION_PROPERTY, DEFAULT_DRIVER_LOCATION);
 
@@ -67,8 +68,7 @@ public static void setUpClass() throws Exception {
 protected UICatalogue clickOnCatalogue(int i) {
 
 	// click on catalogue list entry and it appears
-	UICatalogues catalogues = UICatalogues.openCatalogues()
-										  .shouldAppear();
+	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
 	
