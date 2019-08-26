@@ -1,7 +1,7 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
 import {AfterViewInit, Component, Inject, Input, OnDestroy, SimpleChanges, SimpleChange} from '@angular/core';
-import {Subscription, Subject, timer} from 'rxjs';
+import {Subject} from 'rxjs';
 
 
 import {RemoteDataService} from '../../services/remote-data.service';
@@ -33,8 +33,6 @@ import {EventService} from '../../services/event.service';
 
 export class PresentationComponent extends EventListener implements AfterViewInit, OnDestroy {
 
-private readonly HMTL_UPDATE_LIMIT = 30;
-private readonly HTML_UPDATE_FREQ = 500;
 private html_updates = 0;
 
 
@@ -44,10 +42,7 @@ private html_updates = 0;
 
 presentation: String;
 private innerHTML$?: Subject<String>;
-private htmlTimerSubscription: Subscription;
 
-
-private cellChangedCounter = 0;	// we use this to keep track
 
 
 constructor(eventService: EventService, @Inject("RemoteDataService") private presentationService: RemoteDataService) {
@@ -69,11 +64,8 @@ ngAfterViewInit() {
 
 		// we update from events if we are showing inner html and we have cell content to present  
 		if (this.cell) {
-		this.htmlTimerSubscription = timer(1000, this.HTML_UPDATE_FREQ)
-										.subscribe(() => this.updateInnerHTMLPresentation());
 
 		this.subscribe(this.events.service.of(CellChangedEvent)
-				.filter(() => (++this.html_updates) % this.HMTL_UPDATE_LIMIT == 0)
 				.subscribe(() => {
 					console.debug('>[%i] event received', this.html_updates);
 					this.updateInnerHTMLPresentation();	// FIXME: there is a potential race condition where this
@@ -84,7 +76,7 @@ ngAfterViewInit() {
 }
 
 
-private getPresentationType(): string {
+getPresentationType(): string {
 
 	const cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
 
@@ -112,17 +104,6 @@ private updateInnerHTMLPresentation() {
 			},
 			error => {}
 	);
-
-}
-
-
-ngOnDestroy() {
-
-	super.ngOnDestroy();
-
-	if (this.htmlTimerSubscription.) {
-		this.htmlTimerSubscription.unsubscribe();
-	}
 
 }
 

@@ -5,6 +5,10 @@ import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Cell} from '../cell.class';
 import {CellModel} from '../cell-model.class';
 
+import {EventListener} from '../events/event-listener.class';
+import {CellChangedEvent} from '../events/cell-changed.event';
+import {EventService} from '../services/event.service';
+
 @Component({
 	moduleId: module.id,
 	selector: 'attribute-data-editor',
@@ -26,6 +30,8 @@ import {CellModel} from '../cell-model.class';
 					attr.aria-label="{{cellModel.name}}"
 					attr.aria-describedby="{{cellModel.desc}}"
 					[(ngModel)]="this.value"
+					(change)="modified($event)"
+					(input)="modified($event)"
 				/>
 				<div *ngIf="cellModel.minOccurs==0" class="input-group-append">
 					<img class="btn float-right attribute-data-delete"
@@ -60,13 +66,18 @@ import {CellModel} from '../cell-model.class';
 })
 
 
-export class AttributeDataEditorComponent {
+export class AttributeDataEditorComponent extends EventListener {
 
 @Input() cellModel: CellModel;
 @Input() parentCell: Cell;
 @Input() index: number;
 
 @ViewChild('input', {static: false}) input: ElementRef;
+
+
+constructor(eventService: EventService) {
+	super(eventService);
+}
 
 
 // do we have a value to show?
@@ -82,8 +93,24 @@ get value(): string {
 
 
 set value(v: string) {
+
 	let attributeCell = this.parentCell.attributes.find(a => a.name===this.cellModel.name);
 	attributeCell.value = v;
+
+}
+
+// add current attribute with empty or default value
+private add() {
+	console.log("[UI] adding cell attribute ", this.cellModel.name);
+	Promise.resolve(null).then(() => {
+		this.parentCell.adopt(this.cellModel.generateCell());
+		this.events.service.publish(new CellChangedEvent(this.parentCell));
+	});
+}
+
+
+private modified(e) {
+	this.events.service.publish(new CellChangedEvent(this.parentCell));
 }
 
 
@@ -91,16 +118,13 @@ set value(v: string) {
 private delete() {
 
 	console.log("[UI] deleting cell attribute ", this.cellModel.name);
-	Promise.resolve(null).then(() =>
-		this.parentCell.remove(this.parentCell.attributes.find(a => a.name===this.cellModel.name)));
+	Promise.resolve(null).then(() => {
+		this.parentCell.remove(this.parentCell.attributes.find(a => a.name===this.cellModel.name))
+		this.events.service.publish(new CellChangedEvent(this.parentCell));
+	});
 }
 
 
-// add current attribute with empty or default value
-private add() {
-	console.log("[UI] adding cell attribute ", this.cellModel.name);
-	Promise.resolve(null).then(() => this.parentCell.adopt(this.cellModel.generateCell()));
-}
 
 
 }

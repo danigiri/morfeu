@@ -123,7 +123,8 @@ formCallback(f: NgForm) {
 	// we only send an event when we are showing HTML and we need to handle presentation manually 
 	if (this.cell.cellModel.getPresentationType()==='HTML') {
 		// we can optimise this if we compare this cell with the backup one, handle dirtiness from the fields, etc
-		this.events.service.publish(new CellChangedEvent(this.cell));
+		//console.debug('>Firing CellChangedEvent');
+		//this.events.service.publish(new CellChangedEvent(this.cell));
 	}
 
 }
@@ -234,7 +235,12 @@ private clear() {
 private createValue() {
 
 	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
-	Promise.resolve(null).then(() => this.cell.createValue());
+	Promise.resolve(null).then(() => {
+		this.cell.createValue();
+		this.events.service.publish(new CellChangedEvent(this.cell));
+		
+	});
+
 
 }
 
@@ -242,7 +248,10 @@ private createValue() {
 private removeValue() {
 
 	console.log("[UI] Removing value for '%s'", this.cell.URI);
-	Promise.resolve(null).then(() => this.cell.removeValue());
+	Promise.resolve(null).then(() => {
+		this.cell.removeValue();
+		this.events.service.publish(new CellChangedEvent(this.cell));
+	});
 
 }
 
