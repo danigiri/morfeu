@@ -23,7 +23,7 @@ import {EventService} from '../../services/event.service';
 			[src]="getPresentation() | safe: 'resourceUrl' "
 		></iframe>
 		<div class="cell cell-html" *ngIf="this.getPresentationType()==='HTML'">
-			<div [innerHTML]="innerHTML$ | async | safe: 'html'"></div>
+			<div [innerHTML]="html$ | async | safe: 'html'"></div>
 		</div>
 		
 	`,
@@ -41,7 +41,7 @@ private html_updates = 0;
 @Input() cellModel?: CellModel;
 
 presentation: String;
-private innerHTML$?: Subject<String>;
+private html$?: Subject<String>;
 
 
 
@@ -58,18 +58,16 @@ ngAfterViewInit() {
 
 	if (this.getPresentationType()==='HTML') {
 
-		this.innerHTML$ = new Subject();
-		this.updateInnerHTMLPresentation();	// update at least once to show default model preview or also the
+		this.html$ = new Subject();
+		this.updateHTMLPresentation();	// update at least once to show default model preview or also the
 											// first time for the cell
 
 		// we update from events if we are showing inner html and we have cell content to present  
 		if (this.cell) {
 
-		this.subscribe(this.events.service.of(CellChangedEvent)
-				.subscribe(() => {
-					console.debug('>[%i] event received', this.html_updates);
-					this.updateInnerHTMLPresentation();	// FIXME: there is a potential race condition where this
-				}));									// method calls pile up on each other on  the get text
+		// FIXME: is there a potential race condition where this
+		// method calls pile up on each other on the get text?
+			this.subscribe(this.events.service.of(CellChangedEvent).subscribe(() => this.updateHTMLPresentation()));
 		}
 	}
 
@@ -90,17 +88,16 @@ private getPresentation(): string {
 }
 
 
-private updateInnerHTMLPresentation() {
+private updateHTMLPresentation() {
 
 	const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
 
 	this.presentationService.getText(presentationURL).subscribe(
-			html => {
-				Promise.resolve(null)
-						.then(() => {
+			innnerHTML => {
+				Promise.resolve(null).then(() => {
 							console.debug('[%i] P %s', this.html_updates, presentationURL);
-							this.innerHTML$.next(html);
-						});
+							this.html$.next(innnerHTML);
+				});
 			},
 			error => {}
 	);
