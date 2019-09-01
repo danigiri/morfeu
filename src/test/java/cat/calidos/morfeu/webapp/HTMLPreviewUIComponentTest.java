@@ -2,9 +2,6 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -22,7 +19,7 @@ import cat.calidos.morfeu.webapp.ui.UICellEditor;
 /** Load one HTML preview independently and just check the values
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class HTMLPreviewUITest extends UITezt {
+public class HTMLPreviewUIComponentTest extends UITezt {
 
 
 @Test @DisplayName("Basic preview content test")
@@ -50,6 +47,9 @@ public void testPreviewLiveUpdates() {
 	assertNotNull(editor);
 	editor.shouldAppear();
 
+	HTMLPreview preview = new HTMLPreview();
+	preview.shouldAppear();
+	
 	UICellData cellEditorData = editor.cellData();
 	assertAll("Basic cell editor stuff",
 		() -> assertNotNull(cellEditorData),
@@ -61,6 +61,46 @@ public void testPreviewLiveUpdates() {
 	assertAll("Basic cell editor attributes",
 		() -> assertNotNull(attributes),
 		() -> assertEquals(2, attributes.size(), "We should be editing two attributes")
+	);
+
+	UIAttributeData text = cellEditorData.attribute("text");
+	String textExpectedValue = "identifier 1";
+	assertAll("Text content is correct",
+		() -> assertNotNull(text),
+		() -> assertTrue(text.hasValue()),
+		() -> assertEquals(textExpectedValue, preview.title()),
+		() -> assertEquals(textExpectedValue, text.value())
+	);
+
+	UIAttributeData color = cellEditorData.attribute("color");
+	String colorExpectedValue = "ff1100";
+	assertAll("Color content is correct",
+		() -> assertNotNull(color),
+		() -> assertTrue(color.hasValue()),
+		() -> assertEquals("#"+colorExpectedValue, preview.color()),	// preview adds the hash in the markup
+		() -> assertEquals(colorExpectedValue, color.value())
+	);
+
+	// now we edit the content and expect the preview to change interactively
+	
+	text.eraseValueInField();
+	String erasedExpectedValue = "";
+	UIAttributeData erasedText = editor.cellData().attribute("text");
+	assertAll("Interactive erase clears preview value",
+		() -> assertNotNull(erasedText),
+		() -> assertTrue(erasedText.hasValue()),
+		() -> assertEquals(erasedExpectedValue, preview.title()),
+		() -> assertEquals(erasedExpectedValue, erasedText.value())
+	);
+	
+	String enteredExpectedValue = "";
+	text.enterTextDirect(enteredExpectedValue);
+	UIAttributeData enteredText = editor.cellData().attribute("text");
+	assertAll("Interactive change sets preview value",
+		() -> assertNotNull(enteredText),
+		() -> assertTrue(enteredText.hasValue()),
+		() -> assertEquals(enteredExpectedValue, preview.title()),
+		() -> assertEquals(enteredExpectedValue, enteredText.value())
 	);
 
 }
