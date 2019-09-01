@@ -57,7 +57,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentSV
 
 
 @Provides @IntoMap @Named("GET")
-@StringKey("/preview/html/(.+)")
+@StringKey("/preview/html/(.*)")
 public static BiFunction<List<String>, Map<String, String>, String> getContentHTML() {
 
 	return (pathElems, params) -> {
@@ -88,7 +88,7 @@ public static String contentTypeSVG(@Named("Path") String path) {
 
 
 @Provides @IntoMap @Named("Content-Type")
-@StringKey("/preview/html/(.+)")
+@StringKey("/preview/html/(.*)")
 public static String contentTypeHTML(@Named("Path") String path) {
 	return ControlComponent.TEXT;
 }
