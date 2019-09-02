@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';  // new angular 5 http client module
-import { RouterModule } from '@angular/router';
 
 import { DndModule } from 'ng2-dnd';
 import { HotkeyModule } from 'angular2-hotkeys';
@@ -24,12 +23,10 @@ import { CatalogueComponent } from './components/catalogue.component';
 import { CollapsibleComponent } from './components/collapsible.component';
 import { ContentComponent } from './components/content.component';
 import { CellComponent } from './components/cell.component';
-import { CellHeaderComponent } from './components/cell-header.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CellModelComponent } from './components/cell-model.component';
 import { CellDataComponent } from './components/cell-data.component';
 import { DropAreaComponent } from './components/drop-area.component';
-import { HTMLPreviewComponent } from './preview/html-preview.component';
 import { KeyCaptureComponent } from './components/key-capture.component';
 import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
@@ -46,11 +43,11 @@ import { StatusComponent } from './components/status.component';
 				BrowserAnimationsModule,
 				CommonModule,
 				ComponentsModule,
-				DndModule.forRoot()
-				, FormsModule
-				, HttpClientModule
-				, HotkeyModule.forRoot()
-				, NgbModule.forRoot()
+				DndModule.forRoot(),
+				FormsModule,
+				HttpClientModule,
+				HotkeyModule.forRoot()
+				, NgbModule
 				, PipesModule
 				, TreeModule
 	],
