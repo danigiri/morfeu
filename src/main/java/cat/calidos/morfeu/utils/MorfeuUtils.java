@@ -72,6 +72,12 @@ public static Map<String, Object> paramMap(Object... params) {
 
 }
 
+
+public static Map<String, String> emptyParamStringMap() {
+	return paramStringMap();
+}
+
+
 public static Map<String, String> paramStringMap(String... params) {
 
 	int length = params.length;
