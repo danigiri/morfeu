@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -55,15 +56,21 @@ protected final static Logger log = LoggerFactory.getLogger(DataFetcherModule.cl
 
 
 @Produces
-public ListenableFuture<InputStream> fetchData(URI uri,  
-							 @Named("httpData") Producer<InputStream> httpData, 
-							 @Named("fileData") Producer<InputStream> fileData ) 
-									 throws FetchingException {
+public ListenableFuture<InputStream> fetchData(URI uri,
+												@Named("httpData") Producer<InputStream> httpData,
+												@Named("fileData") Producer<InputStream> fileData)
+										throws FetchingException {
+
 	if (uri.getScheme()!=null && uri.getScheme().equals("file")) {
+
 		return fileData.get();
+
 	} else {
+
 		return httpData.get();
+
 	}
+
 }
 
 
@@ -74,14 +81,18 @@ public HttpGet produceRequest(URI uri) {
 
 
 @Produces @Named("httpData")
-public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) throws FetchingException {
+public InputStream fetchHttpData(@Nullable CloseableHttpClient client, HttpGet request) throws FetchingException {
+
+	if (client==null) {
+		throw new FetchingException("Problem fetching http data - no http client supplied");
+	}
 
 	log.trace("Fetching http data from {}", request.getURI());
 	try {
 
 		// we want to close right now so we fetch all the content and close the input stream
 		InputStream content = client.execute(request).getEntity().getContent();
-		
+
 		return IOUtils.toBufferedInputStream(content);
 
 	} catch (Exception e) {
@@ -95,7 +106,7 @@ public InputStream fetchHttpData(CloseableHttpClient client, HttpGet request) th
 				}
 		}
 	}
-	
+
 }
 
 
@@ -105,7 +116,7 @@ public InputStream fetchFileData(URI uri) throws FetchingException {
 	try {
 
 		log.trace("Fetching local data from {}",uri);
-	
+
 		return FileUtils.openInputStream(FileUtils.toFile(uri.toURL()));
 
 	} catch (Exception e) {

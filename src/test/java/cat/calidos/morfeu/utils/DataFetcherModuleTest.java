@@ -54,10 +54,10 @@ public void testGetchHttpData() throws Exception {
 	when(httpClient.execute(request)).thenReturn(response);
 	when(response.getEntity()).thenReturn(entity);
 	when(entity.getContent()).thenReturn(stream);
-	
+
 	DataFetcherModule httpRequester = new DataFetcherModule();
 	InputStream streamResponse =  httpRequester.fetchHttpData(httpClient, request);
-	
+
 	assertEquals(stream, streamResponse);
 	verify(httpClient, times(1)).close();	
 
@@ -79,7 +79,7 @@ public void testFaultyGetchHttpData() throws Exception {
 	}
 
 	// connection should still closed even after exception
-	verify(httpClient, times(1)).close();	
+	verify(httpClient, times(1)).close();
 
 }
 

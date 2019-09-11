@@ -5,6 +5,7 @@ package cat.calidos.morfeu.utils.injection;
 import java.io.InputStream;
 import java.net.URI;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -26,7 +27,7 @@ ListenableFuture<InputStream> fetchData() throws FetchingException;
 interface Builder {
 
 	@BindsInstance Builder forURI(URI u);
-	@BindsInstance Builder withClient(CloseableHttpClient c);
+	@BindsInstance Builder withClient(@Nullable CloseableHttpClient c);
 
 	DataFetcherComponent build();
 
