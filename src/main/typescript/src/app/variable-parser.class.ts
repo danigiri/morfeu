@@ -13,7 +13,9 @@ static expand(str: string, variable: string, data: string|NameValue[]): string {
 	
 	let out = str;
 	if (out.includes(variable)) {
-		if (typeof data === "string") {	  // we do a single variable replacement
+		if (data === undefined) {
+			out = out.replace(variable, '');
+		} else if (typeof data === "string") {	  // we do a single variable replacement
 			out = out.replace(variable, data);
 		} else {
 			const values = (<NameValue[]> data).map(v => v.name+"="+v.value).join("&");
