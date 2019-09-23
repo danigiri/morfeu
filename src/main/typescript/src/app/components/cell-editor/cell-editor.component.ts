@@ -33,7 +33,10 @@ import {EventService} from '../../services/event.service';
 							name="{{cell.cellModel.name}}.value"
 							attr.aria-label="{{cell.cellModel.name}}.value"
 							attr.aria-describedby="{{cell.cellModel.desc}} value"
-							[(ngModel)]="cell.value"></textarea>
+							[(ngModel)]="cell.value"
+							(change)="modified($event)"
+							(input)="modified($event)"
+						></textarea>
 							<!-- create new value button -->
 							<img  *ngIf="cell.value==undefined && showValue()"
 								id="cell-editor-create-value-button"
@@ -238,9 +241,7 @@ private createValue() {
 	Promise.resolve(null).then(() => {
 		this.cell.createValue();
 		this.events.service.publish(new CellChangedEvent(this.cell));
-		
 	});
-
 
 }
 
@@ -253,6 +254,11 @@ private removeValue() {
 		this.events.service.publish(new CellChangedEvent(this.cell));
 	});
 
+}
+
+
+private modified(e) {
+	this.events.service.publish(new CellChangedEvent(this.cell));
 }
 
 
