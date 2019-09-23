@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
-import cat.calidos.morfeu.webapp.GenericAsyncHttpServlet;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
@@ -20,7 +19,7 @@ import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
 /** Generic morfeu filter, will load the configuration and invoke the controller with the request 
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class MorfeuServlet extends GenericAsyncHttpServlet {
+public class MorfeuServlet extends GenericHttpServlet {
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
 
