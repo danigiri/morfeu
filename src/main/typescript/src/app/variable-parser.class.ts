@@ -34,19 +34,18 @@ static expandVariables(str: string, data: NameValue[]): string {
 
 	let out = str;
 	let varStart = out.indexOf("${");
-	let maxAttributes = 0
 	while (varStart>=0) {
 		// let's look for the end of the variable reference
 
-		let varEnd = out.indexOf("}");
+		const varEnd = out.indexOf("}");
 		if (varEnd===-1) {
 			console.error("Start of variable reference specified without corresponding '}' end");
 			varStart = -1;	// exit the loop
 		} else {
 			// do the substitution
-			let name = out.substring(varStart+2, varEnd);
-			let dataEntry = data.find( a => a.name===name);
-			let value = dataEntry!==undefined && dataEntry.value ? dataEntry.value : "";	// watch value not defined!
+			const name = out.substring(varStart+2, varEnd);
+			const dataEntry = data.find( a => a.name===name);
+			const value = dataEntry!==undefined && dataEntry.value ? dataEntry.value : "";	// watch value not defined!
 			out = VariableParser.expand(out, "${"+name+"}", value);
 			varStart = out.indexOf("${", varStart);
 		}
@@ -54,8 +53,9 @@ static expandVariables(str: string, data: NameValue[]): string {
 	}
 
 	return out;
-	
+
 }
+
 
 }
 
