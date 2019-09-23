@@ -1,6 +1,6 @@
 // KEY - CAPTURE . COMPONENT . TS
 
-import { Component, Inject, Input, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 
@@ -11,9 +11,7 @@ import { EventService } from "../services/event.service";
 @Component({
 	moduleId: module.id,
 	selector: 'key-capture',
-	template: ` 
-	<div></div>
-	`
+	template: `<div></div>`
 })
 
 export class KeyCaptureComponent extends EventListener implements OnInit, OnDestroy  {
