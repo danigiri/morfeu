@@ -175,7 +175,7 @@ deepClone(): Cell {
 
 // no value for this cell
 removeValue() {
-	delete this[this.VALUE_FIELD];
+	delete this[Cell.VALUE_FIELD];
 }
 
 
