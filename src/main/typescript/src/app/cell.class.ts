@@ -13,7 +13,11 @@ import {SerialisableToJSON} from "./serialisable-to-json.interface";
 
 export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
-private readonly VALUE_FIELD = 'value';
+private static readonly VALUE_FIELD = 'value';
+private static readonly _NAME = "$_NAME";
+private static readonly _VALUE = "$_VALUE";
+private static readonly _ATTRIBUTES = "$_ATTRIBUTES";
+
 
 value?: string;
 attributes?: Cell[];
@@ -311,9 +315,10 @@ getPresentation(): string {
 	let finalPres = this.cellModel.getRawPresentation();
 	if (finalPres.includes("$")) {
 
-			// expand special variables, both the name and the attributes as GET params
-			finalPres = VariableParser.expand(finalPres, "$_NAME", this.name);
-			finalPres = VariableParser.expand(finalPres, "$_ATTRIBUTES", this.attributes);
+			// expand special variables, like name, value and the attributes as GET params
+			finalPres = VariableParser.expand(finalPres, Cell._NAME , this.name);
+			finalPres = VariableParser.expand(finalPres, Cell._VALUE, this.value);
+			finalPres = VariableParser.expand(finalPres, Cell._ATTRIBUTES, this.attributes);
 
 			// the rest will be cell attributes as ${var}
 			finalPres = VariableParser.expandVariables(finalPres, this.attributes);
