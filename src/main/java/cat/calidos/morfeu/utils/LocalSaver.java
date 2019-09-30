@@ -34,14 +34,14 @@ public LocalSaver(String destination, String content) {
 
 @Override
 public void save() throws SavingException {
-	
+
 	File destinationFile = new File(destination);
+	log.info("Saving to ", destinationFile);
 	if (destinationFile.isDirectory()) {
 		log.error("Cannot save to '{}' as it is a folder and not a file", destination);
 		throw new SavingException("Could not save to '"+destination+"' as it is a folder and not a file");		
 	}
-	
-	
+
 	try {
 		FileUtils.touch(destinationFile);
 	} catch (IOException e) {

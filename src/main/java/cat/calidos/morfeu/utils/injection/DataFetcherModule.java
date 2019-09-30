@@ -18,33 +18,25 @@ package cat.calidos.morfeu.utils.injection;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
 
-import cat.calidos.morfeu.problems.FetchingException;
-import dagger.Lazy;
 import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
-import dagger.producers.ProductionComponent.Builder;
+
+import cat.calidos.morfeu.problems.FetchingException;
 
 /**
 * @author daniel giribet

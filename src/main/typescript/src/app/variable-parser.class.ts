@@ -3,19 +3,17 @@
 import { NameValue } from "./name-value.interface";
 
 export class VariableParser {
-	
-/** perform variable expansion */
+
+
+/** perform variable expansion ifthe variable is there */
 static expand(str: string, variable: string, data: string|NameValue[]): string {
 
-	if (data==null || data==undefined) {
-		return str;
-	}
-	
 	let out = str;
+	console.debug("str:%s, variable:%s, data:",str, variable, data);
 	if (out.includes(variable)) {
-		if (data === undefined) {
+		if (data===null || data===undefined) {	// this behaviour could be reverted to leave string unmodified
 			out = out.replace(variable, '');
-		} else if (typeof data === "string") {	  // we do a single variable replacement
+		} else if (typeof data === "string") {	// we do a single variable replacement
 			out = out.replace(variable, data);
 		} else {
 			const values = (<NameValue[]> data).map(v => v.name+"="+v.value).join("&");
@@ -28,6 +26,7 @@ static expand(str: string, variable: string, data: string|NameValue[]): string {
 }
 
 
+/** expand arbitrarily named variables in a string */
 static expandVariables(str: string, data: NameValue[]): string {
 
 	if (data==null || data==undefined) {

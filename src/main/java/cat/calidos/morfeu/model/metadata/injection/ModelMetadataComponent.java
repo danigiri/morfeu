@@ -42,7 +42,7 @@ interface Builder {
 
 	@BindsInstance Builder from(@Nullable XSAnnotation annotation);
 	@BindsInstance Builder withParentURI(@Nullable @Named("ParentURI") URI parentURI);	
-	
+
 	ModelMetadataComponent build();
 
 }

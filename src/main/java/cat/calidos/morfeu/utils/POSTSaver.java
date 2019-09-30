@@ -47,6 +47,7 @@ public POSTSaver(CloseableHttpClient client, URI destination, Map<String, String
 public void save() throws SavingException {
 
 	try {
+		log.info("Saving to ", destination);
 		InputStream responseInputStream = poster.postData().get();
 		response = IOUtils.toString(responseInputStream, Config.DEFAULT_CHARSET);
 	} catch (Exception e) {

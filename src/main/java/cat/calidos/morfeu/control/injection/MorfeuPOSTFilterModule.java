@@ -43,7 +43,6 @@ public static boolean handle(HttpServletRequest request, Provider<HttpServletRes
 		return false;
 	}
 
-	
 	ServletOutputStream outputStream = null;
 	try {
 		URI destination = DaggerURIComponent.builder().from(uri.get()).builder().uri().get();
@@ -58,7 +57,7 @@ public static boolean handle(HttpServletRequest request, Provider<HttpServletRes
 											.get();
 		saver.save();
 		// now we give a response back
-		HttpServletResponse res = (HttpServletResponse) response;
+		HttpServletResponse res = response.get();
 		res.setStatus(HttpServletResponse.SC_OK);
 		outputStream = res.getOutputStream();
 		IOUtils.write("{\n" + 					//TODO: move this to a template parameter
@@ -78,6 +77,7 @@ public static boolean handle(HttpServletRequest request, Provider<HttpServletRes
 	return true;
 
 }
+
 
 @Provides
 public static HttpServletRequest request(ServletRequest request) {
