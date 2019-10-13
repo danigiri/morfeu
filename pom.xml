@@ -294,6 +294,17 @@
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-dom</artifactId>
 			<version>1.11</version>
+			<!-- get rid of java 1.9 module clashing old xml api dupes -->
+			<exclusions>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis-ext</artifactId>
+				</exclusion>
+			</exclusions> 
 		</dependency>
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
