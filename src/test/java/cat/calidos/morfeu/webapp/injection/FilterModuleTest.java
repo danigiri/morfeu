@@ -69,9 +69,8 @@ public void testFilterOrder() {
 public void testProcess() {
 
 	HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-	HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 	when(request.getHeader(anyString())).then(returnsFirstArg());
-	when(response.getHeader(anyString())).then(returnsFirstArg());
+	HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 
 	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
 
@@ -101,7 +100,8 @@ public void testProcess() {
 	filters.add(f1);
 	filters.add(f2);
 
-	filterModule.process(filters, request, response);
+	boolean process = filterModule.process(filters, request, response);
+	assertTrue(process,"filter chain was not stopped");
 
 	InOrder requestVerifier = Mockito.inOrder(request);
 	requestVerifier.verify(request).getHeader("foo0");
@@ -116,10 +116,51 @@ public void testProcess() {
 }
 
 
-@Test @DisplayName("Test stopping filter chain")
+//@Test @DisplayName("Test stopping filter chain")
 public void testStopping() {
 
+	HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+	when(request.getHeader(anyString())).then(returnsFirstArg());
+	HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
+
+		req.getHeader("foo0");
+
+		return true;
+
+	};
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> {
+
+		req.getHeader("foo1");
+
+		return false;	// stop the chain here
+
+	};
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> {
+
+		req.getHeader("foo2");
+
+		return true;
+
+	};
+
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters 
+										= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	filters.add(f0);
+	filters.add(f1);
+	filters.add(f2);
+
+	boolean process = filterModule.process(filters, request, response);
+
+	assertAll("Checking filter stopped",
+		() -> assertTrue(process,"filter chain was not stopped"),
+		() -> assertEquals(2, Mockito.mockingDetails(response).getInvocations().size(), "ran 3 filters and not 2"),
+		() -> assertEquals(0, Mockito.mockingDetails(request.getHeader("foo2")).getInvocations().size(), "filter 3???")
+	);
+
 }
+
 
 }
 
