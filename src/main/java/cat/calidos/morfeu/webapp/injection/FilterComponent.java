@@ -1,32 +1,39 @@
 package cat.calidos.morfeu.webapp.injection;
 
+import java.io.IOException;
+
 import javax.inject.Named;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
 import dagger.BindsInstance;
-import dagger.Component;
+import dagger.producers.ProductionComponent;
+
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
+import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=FilterModule.class)
+@ProductionComponent(modules= {HttpFilterModule.class, ListeningExecutorServiceModule.class})
 public interface FilterComponent {
 
 public static final String GET = "GET";
 public static final String POST = "POST";
 
 /**	@return true if we want to continue with filtering or false if we want to stop handling the request */
-boolean process();
-HttpServletRequest request();
-HttpServletResponse response();
+ListenableFuture<Boolean> process() throws MorfeuRuntimeException;
 
-@Component.Builder
+@ProductionComponent.Builder
 interface Builder {
 
-
-	@BindsInstance Builder request(@Named("InputRequest") HttpServletRequest request);
-	@BindsInstance Builder response(@Named("InputResponse") HttpServletResponse response);
+	@BindsInstance Builder request(HttpServletRequest request);
+	@BindsInstance Builder response( HttpServletResponse response);
+	@BindsInstance Builder chain(FilterChain chain);
 
 	FilterComponent build();
 

@@ -24,25 +24,27 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
+
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class FilterModuleTest {
 
-private HttpFilterModule filterModule;
-
-
-@BeforeEach
-public void setup() {
-	filterModule = new HttpFilterModule();
-}
-
 
 @Test @DisplayName("Handling exceptions test")
-public void testHandledExceptions() {
+public void testHandledExceptions() throws Exception {
 
-	assertThrows(IllegalStateException.class, () -> filterModule.request(null));
-	assertThrows(IllegalStateException.class, () -> filterModule.response(null));
+	FilterChain chain = Mockito.mock(FilterChain.class);
+	//doThrow(new Exception()).when(mockedObject).methodReturningVoid(...)
+	doThrow(new ServletException()).when(chain).doFilter(null, null);
+
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> true;
+	LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters
+									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	filters.add(f0);
+
+	assertThrows(MorfeuRuntimeException.class, () -> HttpFilterModule.process(filters, filters, null, null, chain));
 
 }
 
@@ -50,19 +52,19 @@ public void testHandledExceptions() {
 @Test @DisplayName("Right order of filters test")
 public void testFilterOrder() {
 
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain> f0 = (reqResp, chain) -> {};
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain> f1 = (reqResp, chain) -> {};
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain> f2 = (reqResp, chain) -> {};
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> true;
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> true;
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> true;
 
-	HashMap<Integer, BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>> filters 
-					= new HashMap<Integer, BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>>(3);
+	HashMap<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters
+								= new HashMap<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>(3);
 	filters.put(HttpFilterModule.IDENTITY_INDEX, HttpFilterModule.identity());
 	filters.put(0, f0);
 	filters.put(1, f1);
 	filters.put(2, f2);
 
-	List<BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>> filterList
-																					= filterModule.filterList(filters);
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filterList
+																				= HttpFilterModule.preFilters(filters);
 	assertAll("",
 		() -> assertNotNull(filterList),
 		() -> assertEquals(3, filterList.size(), "Wrong filter list size"),
@@ -81,50 +83,37 @@ public void testProcess() throws Exception {
 	when(request.getHeader(anyString())).then(returnsFirstArg());
 	HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>f0 = (reqResp, chain) -> {
-
-		HttpServletRequest req = reqResp.left();
-		HttpServletResponse resp = reqResp.right();
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
 		resp.setHeader("foo0", req.getHeader("foo0"));
 
-		try {
-			chain.doFilter(req, resp);
-		} catch (Exception e) {}
+		return true;
 
 	};
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain> f1 = (reqResp, chain) -> {
-
-		HttpServletRequest req = reqResp.left();
-		HttpServletResponse resp = reqResp.right();
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> {
 		resp.setHeader("foo1", req.getHeader("foo1"));
 
-		try {
-			chain.doFilter(req, resp);
-		} catch (Exception e) {}
+		return true;
 
 	};
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain> f2 = (reqResp, chain) -> {
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>  preFilters
+									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	preFilters.add(f0);
+	preFilters.add(f1);
 
-		HttpServletRequest req = reqResp.left();
-		HttpServletResponse resp = reqResp.right();
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> {
 		resp.setHeader("foo2", req.getHeader("foo2"));
-
-		try {
-			chain.doFilter(req, resp);
-		} catch (Exception e) {}
-
+		
+		return true;
+		
 	};
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>  postFilters
+									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	postFilters.add(f2);
 
-	List<BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>> filters 
-							= new LinkedList<BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>>();
-	filters.add(f0);
-	filters.add(f1);
-	filters.add(f2);
+	FilterChain chain = Mockito.mock(FilterChain.class);
 
-	Pair<HttpServletRequest, HttpServletResponse> reqResp 
-												= new Pair<HttpServletRequest, HttpServletResponse>(request, response);
-	boolean process = filterModule.process(filters, reqResp, filterModule.chain(filters));
-	assertTrue(process,"filter chain was not stopped");
+	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
+	assertTrue(continue_,"filter chain was not stopped");
 
 	InOrder requestVerifier = Mockito.inOrder(request);
 	requestVerifier.verify(request).getHeader("foo0");
@@ -146,42 +135,39 @@ public void testStopping() throws Exception {
 	when(request.getHeader(anyString())).then(returnsFirstArg());
 	HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>f0 = (reqResp, chain) -> {
-
-		HttpServletRequest req = reqResp.left();
-		HttpServletResponse resp = reqResp.right();
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
 		req.getHeader("foo0");
 
-		try {
-			chain.doFilter(req, resp);
-		} catch (Exception e) {}
+		return true;
 
 	};
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain> f1 = (reqResp, chain) -> {
-
-		HttpServletRequest req = reqResp.left();
-		HttpServletResponse resp = reqResp.right();
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> {
 		req.getHeader("foo1");
-	};
-	BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain> f2 = (reqResp, chain) -> {
 
-		HttpServletRequest req = reqResp.left();
-		HttpServletResponse resp = reqResp.right();
+		return false;	// this will stop
+
+	};
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>  preFilters
+									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	preFilters.add(f0);
+	preFilters.add(f1);
+
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> {
 		req.getHeader("foo2");
 
-	};
-	List<BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>> filters 
-							= new LinkedList<BiConsumer<Pair<HttpServletRequest, HttpServletResponse>, FilterChain>>();
-	filters.add(f0);
-	filters.add(f1);
-	filters.add(f2);
+		return true;
 
-	Pair<HttpServletRequest, HttpServletResponse> reqResp 
-	= new Pair<HttpServletRequest, HttpServletResponse>(request, response);
-	boolean process = filterModule.process(filters, reqResp, filterModule.chain(filters));
+	};
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>  postFilters
+									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	postFilters.add(f2);
+
+	FilterChain chain = Mockito.mock(FilterChain.class);
+
+	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
 
 	assertAll("Checking filter stopped",
-		() -> assertFalse(process,"filter chain was stopped"),
+		() -> assertFalse(continue_,"filter chain continued when it should have stopped"),
 		() -> assertEquals(2, Mockito.mockingDetails(request).getInvocations().size(), "ran 3 filters and not 2")
 	);
 	verify(request).getHeader("foo0");

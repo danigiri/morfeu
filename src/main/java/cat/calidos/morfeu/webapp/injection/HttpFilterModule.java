@@ -2,102 +2,95 @@
 
 package cat.calidos.morfeu.webapp.injection;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dagger.Module;
-import dagger.Provides;
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import dagger.multibindings.IntKey;
 import dagger.multibindings.IntoMap;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Module
-public class FilterModule {
+@ProducerModule
+public class HttpFilterModule {
 
-protected final static Logger log = LoggerFactory.getLogger(FilterModule.class);
+protected final static Logger log = LoggerFactory.getLogger(HttpFilterModule.class);
 
 public static final int IDENTITY_INDEX = -1;
 
-private boolean handled = false;
+
+@Produces
+public static boolean process(
+			@Named("PreFiltersList") List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> prevFilter,
+			@Named("PostFiltersList") List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> postFilter,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			FilterChain chain) throws MorfeuRuntimeException {
 
 
-@Provides
-boolean process(List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filterList,
-				@Named("InputRequest") HttpServletRequest request,
-				@Named("InputResponse") HttpServletResponse response) {
+	boolean completed_ = !prevFilter.stream().filter(f -> !f.apply(request, response)).findFirst().isPresent();
 
-	boolean continue_= true;
-
-	Iterator<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> iterator = filterList.iterator();
-	while (continue_ && iterator.hasNext()) {
-		continue_ = iterator.next().apply(request, response);
+	if (completed_) {
+		try {
+			chain.doFilter(request, response);
+		} catch (Exception e) {
+			throw new MorfeuRuntimeException("Had a problem running downstream filters", e);
+		}
+		completed_ = !postFilter.stream().filter(f -> !f.apply(request, response)).findFirst().isPresent();
 	}
 
-	
-	
-	handled = true;	// now we can get the request and response objects, even if we stop handling this is valid
-
-	return continue_;
-}
-
-
-@Provides
-HttpServletRequest request(@Named("InputRequest") HttpServletRequest request) {
-
-	if (!handled) {
-		throw new IllegalStateException("Cannot get request of an unprocessed filter");
-	}
-
-	return request;
+	return completed_;	// we return true if we completed and never stopped in this local filter chaing
 
 }
 
 
-@Provides
-HttpServletResponse response(@Named("InputResponse") HttpServletResponse response) {
-
-	if (!handled) {
-		throw new IllegalStateException("Cannot get response of an unprocessed filter");
-	}
-
-	return response;
-
-}
-
-
-@Provides
-List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filterList(
-		Map<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters
-		) {
+@Produces
+@Named("PreFiltersList")
+public static List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> preFilters(
+			@Named("PreFilters") Map<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters) {
 	return filters.keySet().stream().sorted().skip(1).map(filters::get).collect(Collectors.toList());
 }
 
 
-// identity filter, it will be skipped, but this means we have a non-empty filter list
-@Provides @IntoMap
+@Produces
+@Named("PostFiltersList")
+public static List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> postFilters(
+			@Named("PostFilters") Map<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters) {
+	return filters.keySet().stream().sorted().skip(1).map(filters::get).collect(Collectors.toList());
+}
+
+
+// identity filter, it will be skipped, but this means we have a non-empty filter pre list
+@Produces @IntoMap @Named("PreFilters")
 @IntKey(IDENTITY_INDEX)
 public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> identity() {
 	return (req, resp) -> true;
 }
 
 
+@Produces @IntoMap @Named("PostFilters")
+@IntKey(IDENTITY_INDEX)
+public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> identityPost() {
+	return HttpFilterModule.identity();
 }
 
+
+}
 
 /*
  *    Copyright 2019 Daniel Giribet
