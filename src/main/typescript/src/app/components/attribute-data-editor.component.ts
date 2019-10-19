@@ -101,11 +101,13 @@ set value(v: string) {
 
 // add current attribute with empty or default value
 private add() {
+
 	console.log("[UI] adding cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
 		this.parentCell.adopt(this.cellModel.generateCell());
 		this.events.service.publish(new CellChangedEvent(this.parentCell));
 	});
+
 }
 
 
@@ -122,9 +124,8 @@ private delete() {
 		this.parentCell.remove(this.parentCell.attributes.find(a => a.name===this.cellModel.name))
 		this.events.service.publish(new CellChangedEvent(this.parentCell));
 	});
+
 }
-
-
 
 
 }

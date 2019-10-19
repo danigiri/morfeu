@@ -1,6 +1,6 @@
 package cat.calidos.morfeu.control.injection;
 
-import javax.servlet.FilterChain;
+import javax.inject.Named;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
@@ -10,6 +10,9 @@ import dagger.Component;
 @Component(modules = {MorfeuPOSTFilterModule.class})
 public interface MorfeuPOSTFilterComponent {
 
+@Named("NeedsToHandle")
+boolean needsToHandle();
+@Named("Handle")
 boolean handle();
 
 @Component.Builder

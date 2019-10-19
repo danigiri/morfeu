@@ -123,7 +123,7 @@ List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPath
 
 // provides content type default map
 @Provides @IntoMap @Named("Content-Type")
-@StringKey("(NEVERtoBEm4tCHED3241234")
+@StringKey("____(NEVERtoBEm4tCHED3241234")
 public static String contentTypeDefaultMap() {
 	return ControlComponent.TEXT;
 }

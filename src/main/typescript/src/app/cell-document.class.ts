@@ -39,7 +39,7 @@ fromJSON(json: CellDocumentJSON): CellDocument {
 		return JSON.parse(json, CellDocument.reviver);
 
 	} else {
-	
+
 		let document_ = Object.create(CellDocument.prototype);
 
 		return Object.assign(document_, json);
@@ -47,7 +47,7 @@ fromJSON(json: CellDocumentJSON): CellDocument {
 	}
 
 }
- 
+
 
 static reviver(key: string, value: any): any {
 	return key === "" ? Object.create(CellDocument.prototype).fromJSON(value) : value;

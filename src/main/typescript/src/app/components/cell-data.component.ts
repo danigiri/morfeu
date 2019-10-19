@@ -48,7 +48,7 @@ import { EventService } from "../services/event.service";
 			<!-- even if we are showing a cell or a cell model, we use the model to iterate -->
 			<ul class="list-group list-group-flush" *ngIf="cellModel.attributes">
 				<attribute-data-info *ngFor="let a of cellModel.attributes; let i = index"
-					[parentCell]="cell" 
+					[parentCell]="cell"
 					[cellModel]="a"
 					[isFromCell]="cell!=undefined" 
 					[isFromModel]="cell==undefined"
@@ -84,19 +84,15 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	this.subscribe(this.events.service.of( CellActivatedEvent )
+	this.subscribe(this.events.service.of(CellActivatedEvent)
 				.subscribe( activated => this.showCellInformation(activated.cell)
 	));
-	this.subscribe(this.events.service.of( CellDeactivatedEvent )
-			.subscribe( deactivated => this.hideCellInformation()
-	));
-	this.subscribe(this.events.service.of( CellModelActivatedEvent ).pipe(
+	this.subscribe(this.events.service.of(CellDeactivatedEvent).subscribe(() => this.hideCellInformation()));
+	this.subscribe(this.events.service.of(CellModelActivatedEvent).pipe(
 			filter( activated => activated.cellModel!==undefined))
 			.subscribe( activated => this.showCellModelInformation(activated.cellModel)
 	));
-	this.subscribe(this.events.service.of( CellModelDeactivatedEvent )
-			.subscribe( activated => this.hideCellInformation()
-	));
+	this.subscribe(this.events.service.of(CellModelDeactivatedEvent).subscribe(() => this.hideCellInformation()));
 
 }
 

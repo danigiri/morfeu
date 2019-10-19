@@ -31,7 +31,6 @@ import cat.calidos.morfeu.problems.ValidationException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class XSDValidator implements Validable {
 
-
 private Validator validator;
 private DOMSource source;
 private boolean isValid = false;

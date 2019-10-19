@@ -1,6 +1,6 @@
 // ATTRIBUTE - DATA - INFO . COMPONENT . TS
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 import { Cell } from "../cell.class";
 import { CellModel } from "../cell-model.class";
@@ -61,6 +61,7 @@ private isIdentifier(): boolean {
 	return this.parentCell!=undefined && this.parentCell.cellModel.identifier!=undefined 
 			&& this.parentCell.cellModel.identifier==this.cellModel;
 }
+
 
 getValue(): string {
 	return this.parentCell.attributes.find(a => a.name==this.cellModel.name).value;

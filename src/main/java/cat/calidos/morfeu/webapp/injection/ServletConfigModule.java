@@ -3,7 +3,6 @@
 package cat.calidos.morfeu.webapp.injection;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.stream.StreamSupport;
 

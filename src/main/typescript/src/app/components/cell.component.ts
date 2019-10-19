@@ -105,8 +105,8 @@ ngOnInit() {
 
 	// External component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.subscribe(this.events.service.of( CellDragEvent ).pipe(
-				filter(a => this.active)
-			).subscribe( a => {
+				filter(() => this.active)
+			).subscribe( () => {
 				console.log('-> cell comp gets cell drag event and will try to drop to a selection :)');
 				this.events.service.publish(new CellDropEvent(this.cell));
 			})
@@ -115,7 +115,7 @@ ngOnInit() {
 	// Want to edit this cell
 	this.subscribe(this.events.service.of( CellEditEvent ).pipe(
 					filter(edit => !edit.cell && this.isEditable())
-				).subscribe( edit => {
+				).subscribe( () => {
 					console.log('-> cell comp gets cell edit event and will try to edit :)');
 					this.events.service.publish(new CellEditEvent(this.cell));
 				})

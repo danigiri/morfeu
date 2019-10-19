@@ -3,6 +3,7 @@ package cat.calidos.morfeu.control.injection;
 import java.net.URI;
 import java.util.Properties;
 
+import javax.inject.Named;
 import javax.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -34,17 +35,26 @@ protected final static Logger log = LoggerFactory.getLogger(MorfeuPOSTFilterModu
 private static final String _POST = "POST";
 
 
-@Provides
-public static boolean handle(HttpServletRequest request, Provider<HttpServletResponse> response, Provider<String> uri) {
+@Provides @Named("NeedsToHandle")
+public static boolean needsToHandle(HttpServletRequest request) {
+	return request.getMethod().equals(_POST);
+}
+
+
+@Provides @Named("Handle")
+public static boolean handle(HttpServletRequest request,
+								@Named("NeedsToHandle") boolean needsToHandle,
+								Provider<HttpServletResponse> response, Provider<String> uri) {
 
 	log.trace("------ Request filter request ({} {}) ------", request.getMethod(), request.getServletPath());
 
-	if (!request.getMethod().equals(_POST)) {
+	if (!needsToHandle) {
 		return false;
 	}
 
 	ServletOutputStream outputStream = null;
 	try {
+
 		URI destination = DaggerURIComponent.builder().from(uri.get()).builder().uri().get();
 		String content = request.getParameter("content");
 		System.err.println(content);

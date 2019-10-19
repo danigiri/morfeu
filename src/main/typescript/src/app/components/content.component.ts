@@ -49,7 +49,7 @@ import {RemoteEventService} from '../services/remote-event.service';
 						<drop-area [parent]="content" [position]="0"></drop-area>
 					</div>
 				</div>
-				<cell *ngFor="let cell of content.children; let i=index" 
+				<cell *ngFor="let cell of content.children; let i=index"
 					[parent]="content" 
 					[cell]="cell" [level]="0" 
 					[position]="i"
