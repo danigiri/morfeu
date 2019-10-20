@@ -2,7 +2,6 @@
 
 package cat.calidos.morfeu.webapp.injection;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -10,18 +9,18 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import dagger.multibindings.IntKey;
 import dagger.multibindings.IntoMap;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 
 /**
 *	@author daniel giribet

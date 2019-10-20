@@ -8,9 +8,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import cat.calidos.morfeu.webapp.injection.DaggerHttpFilterComponent;
+import cat.calidos.morfeu.webapp.injection.HttpFilterComponent;
 
 /** Placeholder for request filter if we need it
 *	@author daniel giribet
@@ -33,13 +38,31 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 		throws IOException, ServletException {
 
 	log.trace("---- REQUEST {} ----", request);
-	chain.doFilter(request, response);
+
+	HttpServletRequest httpRequest = (HttpServletRequest)request;
+	HttpServletResponse httpResponse = (HttpServletResponse) response;
+	try {
+		HttpFilterComponent filterComponent = filterComponent(chain, httpRequest, httpResponse);
+		filterComponent.process().get();
+	} catch (Exception e) {
+		log.error(e.getMessage());
+	}
 
 }
 
 
 @Override
 public void destroy() {}
+
+
+protected HttpFilterComponent filterComponent(FilterChain chain, HttpServletRequest httpRequest,
+		HttpServletResponse httpResponse) {
+	return DaggerHttpFilterComponent.builder()
+										.request(httpRequest)
+										.response(httpResponse)
+										.chain(chain)
+										.build();
+}
 
 
 }
