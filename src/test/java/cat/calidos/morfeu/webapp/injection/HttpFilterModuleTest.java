@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+import javax.annotation.PreDestroy;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -29,14 +30,25 @@ import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class FilterModuleTest {
+public class HttpFilterModuleTest {
 
+private FilterChain chain;
+private HttpServletRequest request;
+private HttpServletResponse response;
+
+
+@BeforeEach
+public void setup() {
+
+	chain = Mockito.mock(FilterChain.class);
+	request = Mockito.mock(HttpServletRequest.class);
+	response = Mockito.mock(HttpServletResponse.class);
+
+}
 
 @Test @DisplayName("Handling exceptions test")
 public void testHandledExceptions() throws Exception {
 
-	FilterChain chain = Mockito.mock(FilterChain.class);
-	//doThrow(new Exception()).when(mockedObject).methodReturningVoid(...)
 	doThrow(new ServletException()).when(chain).doFilter(null, null);
 
 	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> true;
@@ -79,9 +91,7 @@ public void testFilterOrder() {
 @Test @DisplayName("Test processing")
 public void testProcess() throws Exception {
 
-	HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 	when(request.getHeader(anyString())).then(returnsFirstArg());
-	HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 
 	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
 		resp.setHeader("foo0", req.getHeader("foo0"));
@@ -102,15 +112,13 @@ public void testProcess() throws Exception {
 
 	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> {
 		resp.setHeader("foo2", req.getHeader("foo2"));
-		
+
 		return true;
-		
+
 	};
 	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>  postFilters
 									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
 	postFilters.add(f2);
-
-	FilterChain chain = Mockito.mock(FilterChain.class);
 
 	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
 	assertTrue(continue_,"filter chain was not stopped");
@@ -131,9 +139,7 @@ public void testProcess() throws Exception {
 @Test @DisplayName("Test stopping filter chain")
 public void testStopping() throws Exception {
 
-	HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 	when(request.getHeader(anyString())).then(returnsFirstArg());
-	HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 
 	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
 		req.getHeader("foo0");
@@ -162,8 +168,6 @@ public void testStopping() throws Exception {
 									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
 	postFilters.add(f2);
 
-	FilterChain chain = Mockito.mock(FilterChain.class);
-
 	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
 
 	assertAll("Checking filter stopped",
@@ -172,6 +176,42 @@ public void testStopping() throws Exception {
 	);
 	verify(request).getHeader("foo0");
 	verify(request).getHeader("foo1");
+
+}
+
+
+@Test @DisplayName("Test pre and post filter")
+public void testPrePost() throws Exception {
+
+	StringBuffer testBuffer = new StringBuffer("");
+
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
+
+		testBuffer.append("0");
+
+		return true;
+
+	};
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> {
+
+		testBuffer.append("1");
+
+		return true;
+
+	};
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>  preFilters
+									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	preFilters.add(f0);
+	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>  postFilters
+									= new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
+	postFilters.add(f1);
+
+	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
+
+	assertAll("Checking filter stopped",
+		() -> assertTrue(continue_,"filter chain stopped when it should continue"),
+		() -> assertEquals("01", testBuffer.toString(), "Should have ran the two filters")
+	);
 
 }
 
