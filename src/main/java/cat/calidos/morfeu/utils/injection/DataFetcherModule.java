@@ -75,11 +75,13 @@ public HttpGet produceRequest(URI uri) {
 @Produces @Named("httpData")
 public InputStream fetchHttpData(@Nullable CloseableHttpClient client, HttpGet request) throws FetchingException {
 
+	URI uri = request.getURI();
 	if (client==null) {
-		throw new FetchingException("Problem fetching http data - no http client supplied");
+		log.error("Problem fetching http data - no http client supplied for {}", uri);
+		throw new FetchingException("Problem fetching http data - no http client supplied for "+uri);
 	}
 
-	log.trace("Fetching http data from {}", request.getURI());
+	log.trace("Fetching http data from {}", uri);
 	try {
 
 		// we want to close right now so we fetch all the content and close the input stream
