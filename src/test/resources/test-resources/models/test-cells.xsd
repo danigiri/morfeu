@@ -45,6 +45,26 @@
 		<xs:attribute name="color" type="colorField" />
 	</xs:complexType>
 
+	<xs:complexType name="testPostCell">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>testIdCell desc (one field identifier)</mf:desc>
+					<mf:thumb>assets/images/data3-thumb.svg</mf:thumb>
+					<mf:cell-presentation type="HTML" method="POST">/morfeu/dyn/preview/html/${text}?color=${color}</mf:cell-presentation>
+					<mf:default-value name="@text">Default value</mf:default-value>
+					<mf:default-value name="@number">000011</mf:default-value>
+					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:identifier name="@text" />
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="text" use="required" type="textField" />
+		<xs:attribute name="color" type="colorField" />
+	</xs:complexType>
+	
+
 	<xs:complexType name="testEmptyCell">
 		<xs:annotation>
 			<xs:appinfo>

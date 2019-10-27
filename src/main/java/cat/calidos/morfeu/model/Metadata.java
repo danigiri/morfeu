@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// METADATA . JAVA
 
 package cat.calidos.morfeu.model;
 
@@ -41,6 +27,7 @@ private static final String DEFAULT_THUMB = "DEFAULT";
 public static String DEFAULT_PRESENTATION = "CELL";
 private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
 private static final String DEFAULT_CELL_PRESENTATION_TYPE = "IMG";
+private static final String DEFAULT_CELL_PRESENTATION_METHOD = "GET";
 public static final String DEFAULT_VALUE_PREFIX = "@";
 public static final String ATTRIBUTES_ONLY = "ATTRIBUTES-ONLY";	// directive to signal this cm serialises only attribs
 public static final String LISTS_NO_PLURAL = "LISTS-NO-PLURAL";	// directive that a list is not pluralised (default)
@@ -51,6 +38,7 @@ private String desc;
 private String presentation;
 private String cellPresentation;
 private String cellPresentationType;
+private String cellPresentationMethod;
 private String thumb;
 private Optional<String> identifier;
 private Map<String, String> defaultValues;
@@ -63,6 +51,7 @@ public Metadata(URI uri,
 				String presentation,
 				String cellPresentation,
 				String cellPresentationType,
+				String cellPresentationMethod,
 				String thumb,
 				String identifier,
 				Map<String, String> defaultValues,
@@ -74,6 +63,7 @@ public Metadata(URI uri,
 			Optional.ofNullable(presentation),
 			Optional.ofNullable(cellPresentation),
 			Optional.ofNullable(cellPresentationType),
+			Optional.ofNullable(cellPresentationMethod),
 			Optional.ofNullable(thumb),
 			Optional.ofNullable(identifier),
 			defaultValues,
@@ -87,6 +77,7 @@ public Metadata(URI uri,
 				Optional<String> presentation,
 				Optional<String> cellPresentation,
 				Optional<String> cellPresentationType,
+				Optional<String> cellPresentationMethod,
 				Optional<String> thumb,
 				Optional<String> identifier,
 				Map<String, String> defaultValues,
@@ -98,6 +89,7 @@ public Metadata(URI uri,
 	this.presentation = presentation.orElse(DEFAULT_PRESENTATION);
 	this.cellPresentation = cellPresentation.orElse(DEFAULT_CELL_PRESENTATION);
 	this.cellPresentationType = cellPresentationType.orElse(DEFAULT_CELL_PRESENTATION_TYPE);
+	this.cellPresentationMethod = cellPresentationMethod.orElse(DEFAULT_CELL_PRESENTATION_METHOD);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	this.identifier = identifier;
 	this.defaultValues = defaultValues;
@@ -126,6 +118,10 @@ public String getCellPresentationType() {
 	return cellPresentationType;
 }
 
+
+public String getCellPresentationMethod() {
+	return cellPresentationMethod;
+}
 
 public String getThumb() {
 	return thumb;
@@ -196,7 +192,7 @@ public String toString() {
 *	@return new instance with the merge
 */
 public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority) {
-	
+
 	String desc = morePriority.getDesc();
 	desc = desc.equals(DEFAULT_DESC) ? lessPriority.getDesc() : desc;
 	String presentation = morePriority.getPresentation();
@@ -207,29 +203,33 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	String cellPresentationType = morePriority.getCellPresentationType();
 	cellPresentationType = cellPresentationType.equals(DEFAULT_CELL_PRESENTATION_TYPE) 
 							? lessPriority.getCellPresentationType() : cellPresentationType;
+	String cellPresentationMethod = morePriority.getCellPresentationMethod();
+	cellPresentationMethod = cellPresentationMethod.equals(DEFAULT_CELL_PRESENTATION_METHOD) 
+								? lessPriority.getCellPresentationMethod() : cellPresentationMethod;
 	String thumb = morePriority.getThumb();
 	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
-	
+
 	String identifier = morePriority.getIdentifier().isPresent() ? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
-	
+
 	Map<String,String> newDefaultValues = new HashMap<String, String>();
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
-	
+
 	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
 	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
-	
-	return new Metadata(u, 
-						desc, 
-						presentation, 
-						cellPresentation, 
-						cellPresentationType, 
-						thumb, 
-						identifier, 
-						newDefaultValues, 
-						directives, 
+
+	return new Metadata(u,
+						desc,
+						presentation,
+						cellPresentation,
+						cellPresentationType,
+						cellPresentationMethod,
+						thumb,
+						identifier,
+						newDefaultValues,
+						directives,
 						attributes);
-	
+
 }
 
 
@@ -249,4 +249,21 @@ private static Map<String, Set<String>> mergeMapSet(Map<String, Set<String>> mor
 
 }
 
+
 }
+
+/*
+ *    Copyright 2018 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

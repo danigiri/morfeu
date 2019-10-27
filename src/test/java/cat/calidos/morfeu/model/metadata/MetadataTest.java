@@ -16,17 +16,17 @@
 
 package cat.calidos.morfeu.model.metadata;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import cat.calidos.morfeu.model.Metadata;
 
@@ -38,7 +38,7 @@ public class MetadataTest {
 private URI mergedURI;
 private Metadata merged;
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	URI priorityURI = new URI("priority.xsd");
@@ -56,7 +56,8 @@ public void setup() throws Exception {
 												"descA",
 												"A", 
 												"ACP", 
-												"IMG", 
+												"IMG",
+												"GET",
 												"DEFAULT", 
 												"idA", 
 												priorityDefaultValues, 
@@ -77,6 +78,7 @@ public void setup() throws Exception {
 										"B", 
 										"BCP", 
 										"BCPTYPE", 
+										"GETB",
 										"THUMB", 
 										"idB", 
 										metadataDefaultValues, 
@@ -89,41 +91,51 @@ public void setup() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Merge metadata basic test")
 public void testMergeMetadataBasic() {
 
-	assertEquals(mergedURI, merged.getURI());
-	assertEquals("descA", merged.getDesc());
-	assertEquals("A", merged.getPresentation());
-	assertEquals("ACP", merged.getCellPresentation());
-	assertEquals("BCPTYPE", merged.getCellPresentationType());
-	assertEquals("THUMB", merged.getThumb());
+	assertAll("Checking merge values",
+		() -> assertEquals(mergedURI, merged.getURI()),
+		() -> assertEquals("descA", merged.getDesc()),
+		() -> assertEquals("A", merged.getPresentation()),
+		() -> assertEquals("ACP", merged.getCellPresentation()),
+		() -> assertEquals("BCPTYPE", merged.getCellPresentationType()),
+		() -> assertEquals("GETB", merged.getCellPresentationMethod()),
+		() -> assertEquals("THUMB", merged.getThumb()),
+		() -> assertTrue(merged.getIdentifier().isPresent()),
+		() -> assertEquals("idA", merged.getIdentifier().get())
+	);
 
-	assertTrue(merged.getIdentifier().isPresent());
-	assertEquals("idA", merged.getIdentifier().get());
 
 	Map<String, String> mergedDefaultValues = merged.getDefaultValues();
-	assertEquals(2, mergedDefaultValues.size());
-	assertEquals("priority-default-a", mergedDefaultValues.get("@a"));
-	assertEquals("meta-default-b", mergedDefaultValues.get("@b"));
+	assertAll("Checking merge default values",
+		() -> assertEquals(2, mergedDefaultValues.size()),
+		() -> 	assertEquals("priority-default-a", mergedDefaultValues.get("@a")),
+		() -> 	assertEquals("meta-default-b", mergedDefaultValues.get("@b"))
+	);
 
 }
 
 
-@Test
+@Test @DisplayName("Merge metadata directives test")
 public void testMergeMetadataDirectives() {
 
 	Set<String> directives = merged.getDirectivesFor("directives");
-	assertNotNull(directives);
-	assertEquals(2, directives.size());
-	assertTrue(directives.contains("directive-A"));
-	assertTrue(directives.contains("directive-B"));
+	assertAll("Checking merge values",
+		() -> assertNotNull(directives),
+		() -> assertEquals(2, directives.size()),
+		() -> assertTrue(directives.contains("directive-A")),
+		() -> assertTrue(directives.contains("directive-B"))
+	);
 
-	directives = merged.getDirectivesFor("directives2");
-	assertNotNull(directives);
-	assertEquals(1, directives.size());
-	assertTrue(directives.contains("directive-A2"));
+	Set<String> directives2 = merged.getDirectivesFor("directives2");
+	assertAll("Checking merge values",
+		() -> assertNotNull(directives2),
+		() -> assertEquals(1, directives2.size()),
+		() ->assertTrue(directives2.contains("directive-A2"))
+	);
 
 }
+
 
 }
