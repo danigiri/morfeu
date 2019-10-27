@@ -73,6 +73,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
 	URI fullModelURI = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
 
+	//log.trace(content);
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 
 	String transformedContent = DaggerContentConverterComponent.builder().from(json).build().xml();

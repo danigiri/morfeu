@@ -5,11 +5,8 @@ import java.util.Properties;
 import java.util.function.BiFunction;
 
 import javax.inject.Named;
-import javax.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,19 +14,18 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dagger.multibindings.IntKey;
+import dagger.multibindings.IntoMap;
+import dagger.producers.Producer;
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
+
 import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Saver;
 import cat.calidos.morfeu.utils.injection.DaggerSaverComponent;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
-import dagger.Module;
-import dagger.Provides;
-import dagger.multibindings.IntKey;
-import dagger.multibindings.IntoMap;
-import dagger.producers.Producer;
-import dagger.producers.ProducerModule;
-import dagger.producers.Produces;
 
 /**
 *	@author daniel giribet
@@ -88,7 +84,7 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 
 		return false;	// stop filter chain???
 	};
-	
+
 }
 
 
@@ -101,7 +97,6 @@ public static String uri(HttpServletRequest request) {
 	String uri = prefix+request.getServletPath();
 
 	return uri;
-	
 
 }
 

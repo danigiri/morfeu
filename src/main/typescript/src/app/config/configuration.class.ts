@@ -1,16 +1,16 @@
 // CONFIGURATION . CLASS . TS
 
-import { Inject } from "@angular/core";
-import { Params, ActivatedRoute } from "@angular/router";
+import {Inject} from "@angular/core";
+import {Params} from "@angular/router";
 
-import { environment } from "../../environments/environment";
+import {environment} from "../../environments/environment";
 
-import { RemoteObjectService } from "../services/remote-object.service";
-import { SerialisableToJSON } from "../serialisable-to-json.interface";
+import {RemoteObjectService} from "../services/remote-object.service";
+import {SerialisableToJSON} from "../serialisable-to-json.interface";
 
-import { ConfigurationLoadedEvent } from "../events/configuration-loaded.event";
-import { EventListener } from "../events/event-listener.class";
-import { EventService } from "../services/event.service";
+import {ConfigurationLoadedEvent} from "../events/configuration-loaded.event";
+import {EventListener} from "../events/event-listener.class";
+import {EventService} from "../services/event.service";
 
 export class Configuration extends EventListener implements SerialisableToJSON<Configuration, ConfigJSON>{
 
@@ -51,6 +51,7 @@ overwriteWithParams(params: Params) {
 
 overwriteWithConfig(config: Configuration) {
 
+	//console.debug('Overwriting configuration with', config);
 	this.production = config.production!==undefined ? config.production : this.production;
 	this.catalogues = config.catalogues!==undefined ? config.catalogues : this.catalogues;
 	this.remoteEvents = config.remoteEvents!==undefined ? config.remoteEvents : this.remoteEvents;
