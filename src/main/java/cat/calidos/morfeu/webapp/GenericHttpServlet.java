@@ -73,7 +73,7 @@ public void init(ServletConfig config) throws ServletException {
 public abstract ControlComponent getControl(String path, Map<String, String> params);
 
 
-public abstract ControlComponent putControl(String path, Map<String, String> params);
+public abstract ControlComponent postControl(String path, Map<String, String> params);
 
 
 @Override
@@ -192,7 +192,7 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 
 	String path = pathInfo;
 	log.trace("GenericHttpServlet::doPost {}", path);
-	
+
 	Map<String, String> params = normaliseParams(req.getParameterMap());
 	params.put(METHOD, req.getMethod());
 	String content = "";
@@ -203,8 +203,8 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 	}
 	params.put(POST_VALUE, content);
 	params = processParams(params);
-	
-	ControlComponent controlComponent = putControl(path, params);
+
+	ControlComponent controlComponent = postControl(path, params);
 
 	return controlComponent;
 

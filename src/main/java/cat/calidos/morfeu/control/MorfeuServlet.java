@@ -64,7 +64,7 @@ public ControlComponent getControl(String path, Map<String, String> params) {
 }
 
 
-public ControlComponent putControl(String path, Map<String, String> params) {
+public ControlComponent postControl(String path, Map<String, String> params) {
 	return DaggerMorfeuControlComponent.builder()
 										.withPath(path)
 										.method(DaggerControlComponent.POST)
