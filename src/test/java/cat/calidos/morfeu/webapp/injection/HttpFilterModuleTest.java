@@ -4,18 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import javax.annotation.PreDestroy;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -77,7 +72,7 @@ public void testFilterOrder() {
 
 	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filterList
 																				= HttpFilterModule.preFilters(filters);
-	assertAll("",
+	assertAll("Testing filter order",
 		() -> assertNotNull(filterList),
 		() -> assertEquals(3, filterList.size(), "Wrong filter list size"),
 		() -> assertEquals(f0, filterList.get(0), "f0 should be the first filter"),
