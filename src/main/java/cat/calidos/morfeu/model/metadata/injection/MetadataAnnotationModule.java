@@ -36,12 +36,12 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) 
 	log.trace("MetadataAnnotationModule::provideNodesTagged(tagExpr:'{}'", tagExpr);
 	int attributeIndex = tagExpr.lastIndexOf("@");
 	String tag = attributeIndex!=-1 ?  tagExpr.substring(0, attributeIndex): tagExpr;
-	
+
 	//reverse breadth-first search, as the dom annotation parser adds all sibling nodes in reverse order
 	List<Node> content = new ArrayList<Node>();
 
 	while (annotationNodes.size()>0) {
-		
+
 		Node currentNode = annotationNodes.pop();
 		if (currentNode==null) {
 			// FIXME: is this a problem or is intrinsic from the annotations (like empty value XML nodes)?
@@ -71,9 +71,9 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) 
 				}
 			}
 		}
-		
+
 	}
-	
+
 	return content;
 
 }
@@ -81,7 +81,7 @@ List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) 
 
 @Provides
 LinkedList<Node> annotationNode(@Nullable XSAnnotation annotation) {
-	
+
 	LinkedList<Node> annotationNodes = new LinkedList<Node>();
 	if (annotation!=null) {
 		Node annotationRootNode = (Node)annotation.getAnnotation(); // as we are using the DomAnnotationParserFactory from XSOM

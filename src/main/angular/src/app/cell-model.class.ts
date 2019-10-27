@@ -30,13 +30,14 @@ referenceURI?: string;
 component: CellModelComponent;
 // ////														////
 
-constructor(public schema: number, 
-			public URI: string, 
-			public name: string, 
-			public desc: string, 
+constructor(public schema: number,
+			public URI: string,
+			public name: string,
+			public desc: string,
 			public presentation: string,
 			public cellPresentation: string,
 			public cellPresentationType: string,
+			public cellPresentationMethod: string,
 			public thumb: string,
 			public isSimple: boolean, 
 			public type_: CellType,
@@ -350,6 +351,7 @@ desc: string;
 presentation: string;
 cellPresentation: string;
 cellPresentationType: string;
+cellPresentationMethod: string;
 thumb: string;
 isSimple: boolean;
 isReference: boolean;

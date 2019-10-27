@@ -11,7 +11,7 @@ import {PresentationTestComponent} from '../components/presentation/presentation
 
 const routes: Routes = [
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
-						{path: 'presentation-test', component: PresentationTestComponent}
+						{path: 'presentation-test/:case_', component: PresentationTestComponent}
 ];
 
 @NgModule({

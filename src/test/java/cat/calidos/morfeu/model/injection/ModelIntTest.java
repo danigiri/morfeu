@@ -5,15 +5,12 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import cat.calidos.morfeu.model.BasicCellModel;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;

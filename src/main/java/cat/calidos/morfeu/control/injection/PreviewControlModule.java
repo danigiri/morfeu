@@ -79,6 +79,13 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentHT
 
 }
 
+@Provides @IntoMap @Named("POST")
+@StringKey("/preview/html/(.*)")
+public static BiFunction<List<String>, Map<String, String>, String> getContentHTMLPOST() {
+	return (pathElems, params) -> {
+		return PreviewControlModule.getContentHTML().apply(pathElems, params);
+	};
+}
 
 @Provides @IntoMap @Named("Content-Type")
 @StringKey("/preview/svg/(.+)")

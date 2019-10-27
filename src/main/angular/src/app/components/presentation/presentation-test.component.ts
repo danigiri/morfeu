@@ -1,22 +1,47 @@
 // PRESENTATION - TEST . COMPONENT . TS
 
-import {Component, Inject} from '@angular/core';
+import {AfterViewInit, Component, Inject} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
+import {Cell} from '../../cell.class';
 import {CellModel } from '../../cell-model.class';
 import {Model, ModelJSON} from '../../model.class';
+
 import {RemoteObjectService} from '../../services/remote-object.service';
 
 @Component({
 	selector: 'presentation-test',
-	template: `<presentation *ngIf="model" [cellModel]="model"></presentation>`
+	template: `<presentation *ngIf="model" [cellModel]="model"></presentation>
+				<presentation *ngIf="cell" [cell]="cell"></presentation>`
 })
 
-export class PresentationTestComponent {
+export class PresentationTestComponent implements AfterViewInit {
 
 model: CellModel;
+cell: Cell;
+
+constructor(@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>,
+			private route: ActivatedRoute) {}
+
+ngAfterViewInit() {
+	this.route.paramMap.subscribe(params => this.load(params.get('case_')));
+}
 
 
-constructor(@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>) {
+private load(case_: string) {
+	switch (case_) {
+		case 'post' : this.loadPOST(); break;
+		default: this.loadModel();
+	}
+}
+
+
+private loadPOST() {
+
+}
+
+
+private loadModel() {
 
 	const modelURI = '/morfeu/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 	const data3CellmodelURI = 'target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3';

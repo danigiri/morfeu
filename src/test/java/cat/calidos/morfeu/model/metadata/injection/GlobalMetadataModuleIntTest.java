@@ -19,9 +19,7 @@ package cat.calidos.morfeu.model.metadata.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,8 +28,6 @@ import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
-import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.injection.ModelTezt;
@@ -58,13 +54,11 @@ public void setup() throws Exception {
 
 @Test
 public void testGlobalMetadataFromModel() throws Exception {
-	
 
 	XSSchemaSet schemaSet = parseSchemaFrom(modelURI);
-	
 	XSSchema schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
 	XSAnnotation annotation = schema.getAnnotation();
-	
+
 	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, modelURI);
 	assertNotNull("global metadata parser should not return null", globalMetadata);
 	assertEquals("global metadata should have 4 entries", 4, globalMetadata.size());
@@ -82,13 +76,12 @@ public void testGlobalMetadataFromModel() throws Exception {
 	String actualDefaultValue = defaultValues.get(Metadata.DEFAULT_VALUE_PREFIX+"text");
 	assertEquals("Incorrec text attribute default value from global metadata", expectedDefaultValue, actualDefaultValue);
 
-	
 	URI data2URI = new URI(uri+"/test/row/col/data2");
 	Metadata data2Metadata = globalMetadata.get(data2URI);	
 	assertEquals(data2URI.toString(), data2Metadata.getURI().toString());
 	assertNotNull("global metadata parser should return data2 cell metadata", data2Metadata);
 	assertEquals("assets/images/data2-thumb.svg", data2Metadata.getThumb());
-	assertEquals("/morfeu/dyn/preview/data2.svg?__header=$_NAME&$_ATTRIBUTES", data2Metadata.getCellPresentation());
+	assertEquals("/morfeu/dyn/preview/svg/data2.svg?__header=$_NAME&$_ATTRIBUTES", data2Metadata.getCellPresentation());
 	assertTrue("data2 global metadata has no defaults defined", data2Metadata.getDefaultValues().isEmpty());
 	
 }

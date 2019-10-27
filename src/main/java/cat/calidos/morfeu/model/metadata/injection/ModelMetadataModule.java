@@ -61,6 +61,7 @@ private static final String DESC_FIELD = "mf:desc";
 private static final String PRESENTATION_FIELD = "mf:presentation";
 private static final String CELL_PRESENTATION_FIELD = "mf:cell-presentation";
 private static final String CELL_PRESENTATION_TYPE_FIELD = "mf:cell-presentation@type";
+private static final String CELL_PRESENTATION_METHOD_FIELD = "mf:cell-presentation@method";
 private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
 private static final String IDENTIFIER_FIELD = "mf:identifier@name";
@@ -81,6 +82,7 @@ public static Metadata provideMetadata(URI uri,
 										@Named("presentation") Optional<String> presentation,
 										@Named("cellPresentation") Optional<String> cellPresentation,
 										@Named("cellPresentationType") Optional<String> cellPresentationType,
+										@Named("cellPresentationMethod") Optional<String> cellPresentationMethod,
 										@Named("thumb") Optional<String> thumb,
 										@Named("identifier") Optional<String> identifier,
 										Map<String, String> defaultValues,
@@ -91,6 +93,7 @@ public static Metadata provideMetadata(URI uri,
 						presentation,
 						cellPresentation,
 						cellPresentationType,
+						cellPresentationMethod,
 						thumb,
 						identifier, 
 						defaultValues, 
@@ -169,6 +172,11 @@ public static Optional<String> cellPresentation(@Nullable XSAnnotation annotatio
 
 @Provides @Named("cellPresentationType") Optional<String> cellPresentationType(@Nullable XSAnnotation annotation) {
 	return annotationTaggedAs(annotation, CELL_PRESENTATION_TYPE_FIELD);
+}
+
+
+@Provides @Named("cellPresentationMethod") Optional<String> cellPresentationMethod(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, CELL_PRESENTATION_METHOD_FIELD);
 }
 
 

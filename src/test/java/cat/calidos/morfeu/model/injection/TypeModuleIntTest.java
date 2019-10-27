@@ -73,7 +73,17 @@ public void setup() throws Exception {
 	Map<String, String> emptyDefaultValues = new HashMap<String, String>(0);
 	Map<String, Set<String>> directives = new HashMap<String, Set<String>>(0);
 	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(0);
-	emptyMedatada = new Metadata(null, "desc", "PRESENTATION", "CELL-PRESENTATION", "IMG", "THUMB", null, emptyDefaultValues, directives, attributes);
+	emptyMedatada = new Metadata(null,
+									"desc",
+									"PRESENTATION",
+									"CELL-PRESENTATION",
+									"IMG",
+									"GET",
+									"THUMB",
+									null,
+									emptyDefaultValues,
+									directives,
+									attributes);
 
 }
 

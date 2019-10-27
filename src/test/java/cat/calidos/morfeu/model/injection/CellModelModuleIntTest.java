@@ -72,7 +72,7 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("WELL", test.getMetadata().getPresentation());
 	assertEquals("test root cell model should be min 1", 1, test.getMinOccurs());
 	assertEquals("test root cell model should be max 1", 1, test.getMaxOccurs().getAsInt());
-	
+
 	ComplexCellModel testComplex = test.asComplex();
 	assertNotNull(testComplex);
 	assertEquals(1, testComplex.attributes().size());
@@ -141,9 +141,9 @@ public void testProvideCellModel() throws Exception {
 	} else {
 		assertEquals("CELL", data2.getMetadata().getPresentation());
 		testCell = data2.getReference().get();		
-	}	
+	}
 	assertNotNull(testCell);
-	
+
 	ComplexCellModel testComplexCell = testCell.asComplex();
 	assertNotNull(testComplex);
 	assertEquals(2, testComplexCell.attributes().size());
@@ -163,7 +163,7 @@ public void testColAndRowReference() throws Exception {
 	CellModel test = cellModelFrom(modelURI, "test");							// TEST
 	CellModel row = test.asComplex().children().child("row");					// TEST -> ROW
 	CellModel col = row.asComplex().children().child("col");					// TEST -> ROW -> COL
-	
+
 	// we check the reference from row to col and so forth
 	CellModel rowRef = col.asComplex().children().child("row");				// TEST -> ROW -> COL -> ref(ROW)
 	assertTrue(rowRef.isReference());
@@ -179,7 +179,7 @@ public void testColAndRowReference() throws Exception {
 
 @Test
 public void testAttributesOf() {
-	
+
 	String name = "test";
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 	// Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
@@ -189,7 +189,7 @@ public void testAttributesOf() {
 	HashMap<String, CellModel> globals = new HashMap<String, CellModel>();
 	Metadata meta = DaggerModelMetadataComponent.builder().from(elem.getAnnotation()).withParentURI(modelURI).build().value();
 	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, meta, globals);
-	
+
 	assertNotNull(attributes);
 	assertEquals(1, attributes.size());
 	CellModel attribute = attributes.attribute(0);
@@ -215,12 +215,22 @@ public void testAttributesDefaultValues() {
 	
 	HashMap<String, String> defaultValues = new HashMap<String, String>(1);
 	defaultValues.put("@text", "foo");
-	Metadata cellMetadata = new Metadata(null, "desc", "pres", "cellpres", "IMG", "thumb", null, defaultValues, null, null);
+	Metadata cellMetadata = new Metadata(null,
+											"desc",
+											"pres",
+											"cellpres",
+											"IMG",
+											"GET",
+											"thumb",
+											null,
+											defaultValues,
+											null,
+											null);
 	//when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
-	
+
 	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, cellMetadata, globals);
 	assertNotNull(attributes);
-	
+
 	CellModel textAttribute = attributes.attribute("text");
 	assertNotNull(textAttribute);
 	Optional<String> defaultValue = textAttribute.getDefaultValue();
@@ -238,12 +248,12 @@ public void testChildrenOf() {
 	Type type = provideElementType(elem);
 	Map<String,CellModel> globals = new HashMap<String, CellModel>(0);
 	Map<URI, Metadata> globalMetadata = new HashMap<URI, Metadata>(0);
-	
+
 	Composite<CellModel> children  = CellModelModule.childrenOf(elem, type, modelURI, globals, globalMetadata);
 	CellModel row = children.child("row");
 	assertEquals("row", row.getName());
 	assertEquals(row, children.child(0));
-	
+
 }
 
 
