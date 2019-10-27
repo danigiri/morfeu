@@ -1,3 +1,55 @@
+// REMOTE OBJECT SERVICE . TS
+
+import {take, delay, map, retryWhen} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+
+import {Observable} from 'rxjs';
+
+import {SerialisableToJSON} from '../serialisable-to-json.interface';
+
+/** This class leverages the SerialisableJSON interface so we can invoke the method to conver to a rich
+*	object with its expected methods from a JSON-formatted string
+*/
+@Injectable()
+export class RemoteObjectService<T extends SerialisableToJSON<T, J>, J> {
+
+
+constructor(private http: HttpClient) {}
+
+
+/** we have to explicitly pass the class we're expecting */
+get(uri: string, type_: Constructor<T>): Observable<T> {
+
+	console.log("[SERVICE] RemoteObjectService::get("+uri+")");
+
+	// TODO: handle errors with .catch here
+	return this.http.get<J>(uri)//, { observe: 'response' })
+						.pipe(	retryWhen(errors => errors.pipe(delay(200),take(5),)),
+	// .concat(Observable.throw(new Error("Too many retries")))
+								map(response => <T>createInstance(type_).fromJSON(response)));
+
+}
+
+post(uri: string, content: any, type_: Constructor<T>): Observable<T> {
+
+	console.log("[SERVICE] RemoteObjectService::post('%s')", uri);
+
+	return this.http.post<J>(uri, content).map(response => <T>createInstance(type_).fromJSON(response));
+}
+
+
+}
+
+interface Constructor<T> {
+	new (...args: any[]): T;
+}
+
+
+function createInstance<T extends SerialisableToJSON<T, J>, J>(type_: Constructor<T>): T {
+	return new type_();
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,48 +65,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-
-import {take, delay, map, retryWhen} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-
-import {Observable,  BehaviorSubject} from 'rxjs';
-
-import {SerialisableToJSON } from '../serialisable-to-json.interface';
-
-/** This class leverages the SerialisableJSON interface so we can invoke the method to conver to a rich
-*	object with its expected methods from a JSON-formatted string
-*/
-@Injectable()
-export class RemoteObjectService<T extends SerialisableToJSON<T, J>, J> {
-
-
-constructor(private http: HttpClient) {}
-
-
-/** we have to explicitly pass the class we're expecting */
-get(uri: string, type_: Constructor<T>): Observable<T> {
-
-	console.log("[SERVICE] RemoteObjectService::get("+uri+")"); 
-	// TODO: handle errors with .catch her
-	return this.http.get<J>(uri)//, { observe: 'response' })
-						.pipe(	retryWhen(errors => errors.pipe(delay(200),take(5),)),
-	// .concat(Observable.throw(new Error("Too many retries")))
-								map(response => <T>createInstance(type_).fromJSON(response)),);
-
-}
-
-
-}
-
-interface Constructor<T> {
-	new (...args: any[]): T;
-}
-
-
-function createInstance<T extends SerialisableToJSON<T, J>, J>(type_: Constructor<T>): T {
-	return new type_();
-}
-
-
