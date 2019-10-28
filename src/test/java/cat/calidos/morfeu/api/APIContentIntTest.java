@@ -37,11 +37,11 @@ public void testContent() throws Exception {
 	JsonNode data0 = root.get("children").get(0).get("children").get(0).get("children").get(0).get("children").get(0);
 	assertNotNull(data0);
 	assertTrue(data0.has("attributes"));
-	
+
 	JsonNode number = data0.get("attributes").get(0);
 	assertEquals("number", number.get("name").asText());
 	assertEquals(42, number.get("value").asInt());
-	
+
 }
 
 

@@ -1,6 +1,6 @@
 // CELL - EDITOR - TEST . COMPONENT . TS
 
-import {Component, Inject, AfterViewInit, OnInit} from '@angular/core';
+import {Component, Inject, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Content, ContentJSON } from '../../content.class';

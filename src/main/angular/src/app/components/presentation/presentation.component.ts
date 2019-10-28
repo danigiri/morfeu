@@ -1,6 +1,6 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
-import {AfterViewInit, Component, Inject, Input, OnDestroy, SimpleChanges, SimpleChange} from '@angular/core';
+import {AfterViewInit, Component, Inject, Input, OnDestroy} from '@angular/core';
 import {Subject} from 'rxjs';
 
 
@@ -35,13 +35,12 @@ export class PresentationComponent extends EventListener implements AfterViewIni
 
 private html_updates = 0;
 
-
 // if showing a cell with values or we are showing a cellmodel
 @Input() cell?: Cell;
 @Input() cellModel?: CellModel;
 
 presentation: String;
-private html$?: Subject<String>;
+html$?: Subject<String>;
 
 
 

@@ -8,7 +8,6 @@ import {PipesModule} from '../pipes/pipes.module';
 import {PreviewRoutingModule} from './preview-routing.module';
 
 import {HTMLPreviewComponent} from './html-preview.component';
-import {PresentationComponent } from '../components/presentation/presentation.component';
 
 @NgModule({
 	imports: [

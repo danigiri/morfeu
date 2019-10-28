@@ -99,7 +99,7 @@ public static Optional<Pattern> matchedPathPattern(@Named("Path") String path,
 }
 
 
-// 
+//
 @Provides
 List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPathPattern) {
 
