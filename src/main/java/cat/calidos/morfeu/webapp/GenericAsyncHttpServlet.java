@@ -109,7 +109,7 @@ public void run() {
 					} else {
 						controlComponent = generateGetControlComponent(req, pathInfo);
 					}
-					handleResponse(resp, controlComponent);
+					handleResponse(req, resp, controlComponent);
 					asyncCtx.complete();
 				}
 			});

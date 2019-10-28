@@ -80,7 +80,7 @@ public abstract ControlComponent postControl(String path, Map<String, String> pa
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	ControlComponent controlComponent = generateGetControlComponent(req, req.getPathInfo());
-	handleResponse(resp, controlComponent);
+	handleResponse(req, resp, controlComponent);
 
 }
 
@@ -89,7 +89,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	ControlComponent controlComponent = generatePostControlComponent(req, req.getPathInfo());
-	handleResponse(resp, controlComponent);
+	handleResponse(req, resp, controlComponent);
 
 }
 
@@ -146,13 +146,13 @@ protected void writeTo(String content, HttpServletResponse resp) {
 
 
 
-public void handleResponse(HttpServletResponse resp, ControlComponent controlComponent) {
+public void handleResponse(HttpServletRequest req, HttpServletResponse resp, ControlComponent controlComponent) {
 
 	if (controlComponent.matches()) {
 		String result = controlComponent.process();
 		writeTo(result, controlComponent.contentType(), resp);
 	} else {
-		log.error("GenericMorfeuServlet::doPost {} NOT FOUND (not matched)");
+		log.error("GenericHttpServlet::handleeEsponse {} NOT FOUND (not matched)", req.getPathInfo());
 		resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
 
