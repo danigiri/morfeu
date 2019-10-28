@@ -54,7 +54,7 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 		ServletOutputStream outputStream = null;
 		try {
 
-			URI destination = DaggerURIComponent.builder().from(uri.get().get()).builder().uri().get();
+			URI destination = DaggerURIComponent.builder().from(uri.get().get()).build().uri().get();
 			String content = request.getParameter("content");
 			//System.err.println(content);
 			// we assume Morfeu is doing the validation for now

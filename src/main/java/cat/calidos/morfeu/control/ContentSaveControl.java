@@ -68,10 +68,10 @@ public ContentSaveControl(String prefix, String path, String content, Optional<S
 protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException, 
 									FetchingException, ConfigurationException, SavingException {
 
-	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
-	URI outputURI = DaggerURIComponent.builder().from(destination).builder().uri().get();
-	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
-	URI fullModelURI = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
+	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
+	URI outputURI = DaggerURIComponent.builder().from(destination).build().uri().get();
+	URI modelURI = DaggerURIComponent.builder().from(modelPath).build().uri().get();
+	URI fullModelURI = DaggerURIComponent.builder().from(prefix+modelPath).build().uri().get();
 
 	//log.trace(content);
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();

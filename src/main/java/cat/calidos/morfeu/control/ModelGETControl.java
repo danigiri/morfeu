@@ -53,8 +53,8 @@ public ModelGETControl(String prefix, String path) {
 protected Object process() 
 		throws InterruptedException, ExecutionException, ValidationException, FetchingException {
 
-	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
-	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
+	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
+	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).build().uri().get();
 	
 	return DaggerModelComponent.builder().identifiedBy(uri).fromFetchable(fetchableURI).build().model().get();
 

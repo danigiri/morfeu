@@ -53,7 +53,7 @@ public DocumentGETControl(String prefix, String path) {
 protected Object process() 
 		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
 
-	URI uri = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
+	URI uri = DaggerURIComponent.builder().from(prefix+path).build().uri().get();
 	return DaggerDocumentComponent.builder()
 									.from(uri)
 									.withPrefix(prefix)

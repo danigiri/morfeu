@@ -50,7 +50,7 @@ protected Document produceDocumentFromPath(String path)
 throws InterruptedException, ExecutionException, ParsingException, FetchingException, ValidationException {
 
 	String docPath = testAwareFullPathFrom(path);
-	URI uri = DaggerURIComponent.builder().from(docPath).builder().uri().get();
+	URI uri = DaggerURIComponent.builder().from(docPath).build().uri().get();
 
 	return DaggerDocumentComponent.builder().from(uri).withPrefix("").build().document().get();
 

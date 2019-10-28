@@ -65,10 +65,10 @@ public SnippetGETControl(String prefix, String path, @Nullable String modelPath)
 protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException,
 		FetchingException, ConfigurationException, SavingException, TransformException {
 
-	URI uri = DaggerURIComponent.builder().from(path).builder().uri().get();
-	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).builder().uri().get();
-	URI modelURI = DaggerURIComponent.builder().from(modelPath).builder().uri().get();
-	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).builder().uri().get();
+	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
+	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).build().uri().get();
+	URI modelURI = DaggerURIComponent.builder().from(modelPath).build().uri().get();
+	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).build().uri().get();
 	SnippetComponent snippetComponent = DaggerSnippetComponent.builder()
 																.content(uri)
 																.fetchedContentFrom(fetchableURI)

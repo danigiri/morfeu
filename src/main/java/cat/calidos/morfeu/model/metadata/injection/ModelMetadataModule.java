@@ -113,7 +113,7 @@ public static URI uri(@Nullable XSAnnotation annotation,
 	if (uriValue.isPresent()) {
 		// in the metadata we have explicitly the URI
 		try {
-			uri = DaggerURIComponent.builder().from(parentURI+"/"+uriValue.get()+METADATA).builder().uri().get();
+			uri = DaggerURIComponent.builder().from(parentURI+"/"+uriValue.get()+METADATA).build().uri().get();
 		} catch (Exception e) {
 			// log the error and return empty for the moment
 			// TODO: invalid URIs in metadata fail silently and should probably propagate an error
@@ -139,7 +139,7 @@ public static URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
 		String uriVal = parentURI!=null ? parentURI.toString()+"/"+DEFAULT_URI+METADATA : DEFAULT_URI+METADATA;
 		uri = DaggerURIComponent.builder()
 									.from(uriVal)
-									.builder()
+									.build()
 									.uri()
 									.get();
 	} catch (Exception e) {
