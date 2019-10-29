@@ -18,8 +18,12 @@ package cat.calidos.morfeu.webapp;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
@@ -30,10 +34,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.util.UriEncoder;
 
+import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerServletConfigComponent;
 
@@ -202,6 +211,15 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 		log.error("Could not read input stream in POST servlet code, using empty input", e);
 	}
 	params.put(POST_VALUE, content);
+	try {
+		URI tmpURI = DaggerURIComponent.builder().from("http://localhost/?"+content).build().uri().get();
+		List<NameValuePair> contentAsVars = URLEncodedUtils.parse(tmpURI, Config.DEFAULT_NIO_CHARSET);
+		for (NameValuePair v : contentAsVars) {
+			params.put(v.getName(), v.getValue());
+		}
+	} catch (Exception e) {
+		log.error("Could not read input stream as variables in POST servlet code, no variables added", e);
+	}
 	params = processParams(params);
 
 	ControlComponent controlComponent = postControl(path, params);

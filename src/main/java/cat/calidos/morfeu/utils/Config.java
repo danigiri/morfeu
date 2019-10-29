@@ -16,6 +16,7 @@
 
 package cat.calidos.morfeu.utils;
 
+import java.nio.charset.Charset;
 
 /**
 * @author daniel giribet
@@ -23,5 +24,6 @@ package cat.calidos.morfeu.utils;
 public class Config {
 
 public static final String DEFAULT_CHARSET = "UTF-8";
+public static final Charset DEFAULT_NIO_CHARSET = Charset.forName("UTF-8");
 
 }
