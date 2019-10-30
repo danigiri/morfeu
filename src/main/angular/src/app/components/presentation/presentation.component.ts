@@ -1,7 +1,7 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
 import {AfterViewInit, Component, Inject, Input, OnDestroy} from '@angular/core';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 
 import {RemoteDataService} from '../../services/remote-data.service';
@@ -43,7 +43,6 @@ presentation: String;
 html$?: Subject<String>;
 
 
-
 constructor(eventService: EventService, @Inject("RemoteDataService") private presentationService: RemoteDataService) {
 	super(eventService);
 	console.debug('PresentationComponent::constructor() - %s', this.cell ? this.cell.getURI() : '');
@@ -57,6 +56,7 @@ ngAfterViewInit() {
 
 	if (this.getPresentationType()==='HTML') {
 
+		console.trace('PresentationComponent::ngAfterViewInit() HTML pres (%s)', this.getPresentationMethod());
 		this.html$ = new Subject();
 		this.updateHTMLPresentation();	// update at least once to show default model preview or also the
 											// first time for the cell
@@ -87,18 +87,34 @@ private getPresentation(): string {
 }
 
 
+private getPresentationAllContent(): string {
+	return this.cell===undefined ? this.cellModel.getPresentationAllContent() : this.cell.getPresentationAllContent();
+}
+
+private getPresentationMethod(): string {
+	return this.cell===undefined ? this.cellModel.cellPresentationMethod : this.cell.cellModel.cellPresentationMethod;
+}
+
+
 private updateHTMLPresentation() {
 
 	const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
 
-	this.presentationService.getText(presentationURL).subscribe(
+	let presentationContent: Observable<String>;
+	if (this.getPresentationMethod()=='POST') {
+		const allPresentationContent = this.getPresentationAllContent();
+		presentationContent = this.presentationService.postText(presentationURL, allPresentationContent);
+	} else {
+		presentationContent = this.presentationService.getText(presentationURL);
+	}
+	presentationContent.subscribe(
 			innnerHTML => {
 				Promise.resolve(null).then(() => {
 							console.debug('[%i] P %s', this.html_updates, presentationURL);
 							this.html$.next(innnerHTML);
 				});
 			},
-			error => {}
+			error => console.error('Could not get HTML presentation at %s', presentationURL)
 	);
 
 }

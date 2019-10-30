@@ -4,7 +4,7 @@ import {AfterViewInit, Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Cell} from '../../cell.class';
-import {CellModel } from '../../cell-model.class';
+import {CellModel} from '../../cell-model.class';
 import {Model, ModelJSON} from '../../model.class';
 
 import {RemoteObjectService} from '../../services/remote-object.service';

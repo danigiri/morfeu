@@ -94,6 +94,11 @@ getPresentation() {
 
 }
 
+/** we return all the possible content for presentation (not much, given models have no data) */
+getPresentationAllContent() {
+	return '_name='+this.name;
+}
+
 
 getPresentationType() {
 	return this.cellPresentationType;

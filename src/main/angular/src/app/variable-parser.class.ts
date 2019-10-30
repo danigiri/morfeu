@@ -9,7 +9,7 @@ export class VariableParser {
 static expand(str: string, variable: string, data: string|NameValue[]): string {
 
 	let out = str;
-	console.debug("str:%s, variable:%s, data:",str, variable, data);
+	//console.debug("str:%s, variable:%s, data:",str, variable, data);
 	if (out.includes(variable)) {
 		if (data===null || data===undefined) {	// this behaviour could be reverted to leave string unmodified
 			out = out.replace(variable, '');

@@ -1,8 +1,8 @@
 
-import { take, delay, retryWhen } from 'rxjs/operators';
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse} from "@angular/common/http";
-import { Observable , BehaviorSubject } from 'rxjs';
+import {take, delay, retryWhen } from 'rxjs/operators';
+import {Injectable } from "@angular/core";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {Observable} from 'rxjs';
 
 
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead */
@@ -11,6 +11,7 @@ export class RemoteDataService {
 
 
 constructor(private http: HttpClient) {}
+
 
 getAll<T>(uri: string): Observable<T[]> {
 
@@ -42,12 +43,22 @@ getText(uri: string): Observable<String> {
 }
 
 
+postText(uri: string, content: string): Observable<String> {
+	console.log("[SERVICE] RemoteDataService::postText('%s')", uri);
+
+	return this.http.post(uri, content, {responseType: 'text'}); // no retries on post
+	//.pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
+	//.catch((err: HttpErrorResponse) => this.handleError(err.error));
+
+}
+
+
 post<T>(uri: string, content: any): Observable<T> {
 
 	console.log("[SERVICE] RemoteDataService::post('%s')", uri);
 	// TODO: handle errors here
 
-	return this.http.post<T>(uri, content);
+	return this.http.post<T>(uri, content);	// no retries on post
 
 }
 

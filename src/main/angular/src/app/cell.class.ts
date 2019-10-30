@@ -309,26 +309,40 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 }
 
 
-/** return presentation with all substitutions for dynamic preview */
+/** return presentation with the variable substitutions in the presentation URL for dynamic preview */
 getPresentation(): string {
 
 	let finalPres = this.cellModel.getRawPresentation();
 	if (finalPres.includes("$")) {
-
-			// expand special variables, like name, value and the attributes as GET params
-			finalPres = VariableParser.expand(finalPres, Cell._NAME , this.name);
-			finalPres = VariableParser.expand(finalPres, Cell._VALUE, this.value);
-			finalPres = VariableParser.expand(finalPres, Cell._ATTRIBUTES, this.attributes);
-
-			// the rest will be cell attributes as ${var}
-			finalPres = VariableParser.expandVariables(finalPres, this.attributes);
-
+		finalPres = this.replacePresentationVariables(finalPres);
 	}
 
 	return finalPres;
 
 }
 
+/** return presentation with all variables included for dynamic preview */
+getPresentationAllContent(): string {
+
+	const template = '_name='+Cell._NAME+'&_value='+Cell._VALUE+'&'+Cell._ATTRIBUTES;
+
+	return this.replacePresentationVariables(template);
+
+}
+
+
+private replacePresentationVariables(input: string): string {
+	let output = input;
+	// expand special variables, like name, value and the attributes as GET params
+	output = VariableParser.expand(output, Cell._NAME , this.name);
+	output = VariableParser.expand(output, Cell._VALUE, this.value);
+	output = VariableParser.expand(output, Cell._ATTRIBUTES, this.attributes);
+
+	// the rest will be cell attributes as ${var}
+	output = VariableParser.expandVariables(output, this.attributes);
+
+	return output;
+}
 
 //// Adopter ////
 

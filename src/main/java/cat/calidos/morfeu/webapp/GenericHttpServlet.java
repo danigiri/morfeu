@@ -213,6 +213,7 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 	}
 	params.put(POST_VALUE, content);
 	try {
+		// FIXME: it seems we'll have to write our own parsser
 		URI tmpURI = DaggerURIComponent.builder().from("http://localhost/?"+content).build().uri().get();
 		List<NameValuePair> contentAsVars = URLEncodedUtils.parse(tmpURI, Config.DEFAULT_NIO_CHARSET);
 		log.trace("::doPost() number of vars in input {}", contentAsVars.size());
