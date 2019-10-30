@@ -23,7 +23,7 @@ public class POSTPresentationIntTest extends APITezt {
 @Test //@DisplayName("Testing post presentation")
 public void testPOSTPresentation() throws Exception {
 
-	InputStream answerStream = postToRemote("preview/html/","text=text%20here?color=00ff0a");
+	InputStream answerStream = postToRemote("preview/html/","text=text%20here&color=00ff0a");
 	assertNotNull(answerStream);
 	String answer = IOUtils.toString(answerStream, Config.DEFAULT_CHARSET);
 	System.err.println(answer);

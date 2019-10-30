@@ -62,30 +62,29 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentHT
 
 	return (pathElems, params) -> {
 
-		String template = "<div class=\"card\">\n" + 
-				"				<div class=\"card-body html-preview\" style=\"background-color: #{{v.color}}\">\n" + 
-				"					<h4 class=\"card-title html-preview-title\">{{v.path}}</h4>\n" + 
-				"				</div>\n" + 
-				"			</div>";
-
 		String path = pathElems.get(1);		// normalised already
 		String color = params.get("color");
-		color = color!=null && colorRegexp.matcher(color).matches() ? color : "ff0000";
-		Map<String, String> values = MorfeuUtils.paramStringMap("path", path, "color", color);
 
-		return DaggerViewComponent.builder().withTemplate(template).withValue(values).build().render();
+		return renderPresentation(path, color);
 
 	};
 
 }
+
 
 @Provides @IntoMap @Named("POST")
 @StringKey("/preview/html/(.*)")
 public static BiFunction<List<String>, Map<String, String>, String> getContentHTMLPOST() {
 	return (pathElems, params) -> {
-		return PreviewControlModule.getContentHTML().apply(pathElems, params);
+
+		String path = params.get("text");
+		String color = params.get("color");
+
+		return renderPresentation(path, color);
+
 	};
 }
+
 
 @Provides @IntoMap @Named("Content-Type")
 @StringKey("/preview/svg/(.+)")
@@ -98,6 +97,24 @@ public static String contentTypeSVG(@Named("Path") String path) {
 @StringKey("/preview/html/(.*)")
 public static String contentTypeHTML(@Named("Path") String path) {
 	return ControlComponent.TEXT;
+}
+
+
+
+
+private static String renderPresentation(String path, String color) {
+
+	String template = "<div class=\"card\">\n" + 
+			"				<div class=\"card-body html-preview\" style=\"background-color: #{{v.color}}\">\n" + 
+			"					<h4 class=\"card-title html-preview-title\">{{v.path}}</h4>\n" + 
+			"				</div>\n" + 
+			"			</div>";
+
+	color = color!=null && colorRegexp.matcher(color).matches() ? color : "ff0000";
+	Map<String, String> values = MorfeuUtils.paramStringMap("path", path, "color", color);
+
+	String content = DaggerViewComponent.builder().withTemplate(template).withValue(values).build().render();
+	return content;
 }
 
 

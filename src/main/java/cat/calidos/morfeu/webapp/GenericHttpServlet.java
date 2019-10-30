@@ -200,13 +200,14 @@ public ControlComponent generateGetControlComponent(HttpServletRequest req, Stri
 public ControlComponent generatePostControlComponent(HttpServletRequest req, String pathInfo) {
 
 	String path = pathInfo;
-	log.trace("GenericHttpServlet::doPost {}", path);
+	log.trace("::doPost {}", path);
 
 	Map<String, String> params = normaliseParams(req.getParameterMap());
 	params.put(METHOD, req.getMethod());
 	String content = "";
 	try {
 		content = IOUtils.toString(req.getInputStream(), Config.DEFAULT_CHARSET);
+		log.trace("::doPost() size of input {}", content.length());
 	} catch (IOException e) {
 		log.error("Could not read input stream in POST servlet code, using empty input", e);
 	}
@@ -214,6 +215,7 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 	try {
 		URI tmpURI = DaggerURIComponent.builder().from("http://localhost/?"+content).build().uri().get();
 		List<NameValuePair> contentAsVars = URLEncodedUtils.parse(tmpURI, Config.DEFAULT_NIO_CHARSET);
+		log.trace("::doPost() number of vars in input {}", contentAsVars.size());
 		for (NameValuePair v : contentAsVars) {
 			params.put(v.getName(), v.getValue());
 		}
