@@ -19,7 +19,7 @@
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
 		<async-timeout>2000</async-timeout>
 		<dagger-2-version>2.22.1</dagger-2-version>
-		<jackson-2-version>2.9.10</jackson-2-version>
+		<jackson-2-version>2.10.0</jackson-2-version>
 		<jetty-version>9.4.21.v20190926</jetty-version>
 		<jtwig-version>5.87.0.RELEASE</jtwig-version>
 		<selenide-version>5.3.1</selenide-version>
