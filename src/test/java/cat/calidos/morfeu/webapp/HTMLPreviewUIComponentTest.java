@@ -49,7 +49,7 @@ public void testPreviewLiveUpdates() {
 
 	HTMLPreview preview = new HTMLPreview();
 	preview.shouldAppear();
-	
+
 	UICellData cellEditorData = editor.cellData();
 	assertAll("Basic cell editor stuff",
 		() -> assertNotNull(cellEditorData),
@@ -82,7 +82,6 @@ public void testPreviewLiveUpdates() {
 	);
 
 	// now we edit the content and expect the preview to change interactively
-	
 	text.eraseValueInField();
 	String erasedExpectedValue = "";
 	UIAttributeData erasedText = editor.cellData().attribute("text");
@@ -92,7 +91,7 @@ public void testPreviewLiveUpdates() {
 		() -> assertEquals(erasedExpectedValue, preview.title()),
 		() -> assertEquals(erasedExpectedValue, erasedText.value())
 	);
-	
+
 	String enteredExpectedValue = "";
 	text.enterTextDirect(enteredExpectedValue);
 	UIAttributeData enteredText = editor.cellData().attribute("text");
@@ -106,10 +105,25 @@ public void testPreviewLiveUpdates() {
 }
 
 
+@Test @DisplayName("POST preview content test")
+public void testPOSTPreview() {
+
+	open(appBaseURL+"test/presentation-test/post");
+
+	HTMLPreview preview = new HTMLPreview();
+	preview.shouldAppear();
+
+	assertAll("POST preview content",
+			() -> assertEquals("testvalue", preview.title()),
+			() -> assertEquals("#01a1fb", preview.color())
+	);
+}
+
+
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

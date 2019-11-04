@@ -21,6 +21,7 @@ private readonly modelURI = '/morfeu/dyn/models/target/test-classes/test-resourc
 model: CellModel;
 cell: Cell;
 
+
 constructor(@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>,
 			private route: ActivatedRoute) {}
 
