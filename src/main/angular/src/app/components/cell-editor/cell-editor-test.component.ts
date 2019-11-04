@@ -22,6 +22,7 @@ export class CellEditorTestComponent extends EventListener implements AfterViewI
 
 private readonly model = 'target/test-classes/test-resources/models/test-model.xsd';
 
+
 constructor(eventService: EventService,
 			private route: ActivatedRoute, 
 			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
