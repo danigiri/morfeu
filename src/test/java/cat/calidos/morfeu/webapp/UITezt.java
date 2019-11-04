@@ -41,7 +41,11 @@ public static void setUpClass() throws Exception {
 
 	appBaseURL = defineSystemVariable(URL_PROPERTY, DEFAULT_URL);
 
+	try {
 	WebDriverManager.chromedriver().setup();	// setups the chrome driver
+	} catch (Exception e) {
+		System.err.println("Failed to setup chromedriver, we're probably offline");
+	}
 
 	ChromeOptions chromeOptions = new ChromeOptions();
 	//chromeOptions.addArguments("--log-level=3");
