@@ -45,21 +45,20 @@ html$?: Subject<String>;
 
 constructor(eventService: EventService, @Inject("RemoteDataService") private presentationService: RemoteDataService) {
 	super(eventService);
-	console.debug('PresentationComponent::constructor() - %s', this.cell ? this.cell.getURI() : '');
+	//console.debug('PresentationComponent::constructor() - %s', this.cell ? this.cell.getURI() : '');
 }
 
 
 ngAfterViewInit() {
 
-	console.debug('PresentationComponent::ngAfterViewInit() - %s', this.cell ? this.cell.getURI() : '');
-
+	//console.debug('PresentationComponent::ngAfterViewInit() - %s', this.cell ? this.cell.getURI() : '');
 
 	if (this.getPresentationType()==='HTML') {
 
-		console.trace('PresentationComponent::ngAfterViewInit() HTML pres (%s)', this.getPresentationMethod());
+		//console.debug('PresentationComponent::ngAfterViewInit() HTML pres (%s)', this.getPresentationMethod());
 		this.html$ = new Subject();
 		this.updateHTMLPresentation();	// update at least once to show default model preview or also the
-											// first time for the cell
+										// first time for the cell
 
 		// we update from events if we are showing inner html and we have cell content to present  
 		if (this.cell) {

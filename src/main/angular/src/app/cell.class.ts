@@ -548,8 +548,14 @@ toJSON(): CellJSON {
 }
 
 
-fromJSON(json: CellJSON): Cell {
+fromJSON(json: CellJSON | string): Cell {
 
+	if (typeof json === 'string') {
+
+		return JSON.parse(json, Cell.reviver);
+
+	}
+	
 	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 
 	let cell: Cell = Object.create(Cell.prototype);

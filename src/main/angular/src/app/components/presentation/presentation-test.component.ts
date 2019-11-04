@@ -17,11 +17,13 @@ import {RemoteObjectService} from '../../services/remote-object.service';
 
 export class PresentationTestComponent implements AfterViewInit {
 
+private readonly modelURI = '/morfeu/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 model: CellModel;
 cell: Cell;
 
 constructor(@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>,
 			private route: ActivatedRoute) {}
+
 
 ngAfterViewInit() {
 	this.route.paramMap.subscribe(params => this.load(params.get('case_')));
@@ -37,15 +39,54 @@ private load(case_: string) {
 
 
 private loadPOST() {
+	this.modelService.get(this.modelURI, Model).subscribe(m => {
 
+		console.debug('Creating test cell...');
+		const cellModelURI = 'target/test-classes/test-resources/models/test-model.xsd/test/row/col/data5';
+		const cellJSON: string = `
+			{
+				"schema": 0,
+				"URI": "/testPostCell(0)",
+				"name": "testPostCell",
+				"desc": "test post cell",
+				"cellModelURI": "`+cellModelURI+`",
+				"isSimple": true,
+				"attributes": [
+									{
+										"schema": 0,
+										"URI": "/testPostCell(0)@text",
+										"name": "text",
+										"desc": "test post cell text",
+										"value": "testvalue",
+										"cellModelURI": "`+cellModelURI+`@text",
+										"isSimple": true
+									},
+																		{
+										"schema": 0,
+										"URI": "/testPostCell(0)@color",
+										"name": "color",
+										"desc": "test post cell color",
+										"value": "01A1FB",
+										"cellModelURI": "`+cellModelURI+`@color",
+										"isSimple": true
+									}
+								]
+			}
+		`;
+
+		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
+		const cell = CELL.fromJSON(cellJSON);
+		cell.associateWith(m, cell.cellModelURI);
+		this.cell = cell;
+
+	});
 }
 
 
 private loadModel() {
 
-	const modelURI = '/morfeu/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 	const data3CellmodelURI = 'target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3';
-	this.modelService.get(modelURI, Model).subscribe(m => this.model = m.findCellModel(data3CellmodelURI));
+	this.modelService.get(this.modelURI, Model).subscribe(m => this.model = m.findCellModel(data3CellmodelURI));
 
 }
 
