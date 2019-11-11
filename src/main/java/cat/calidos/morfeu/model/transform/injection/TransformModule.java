@@ -55,6 +55,7 @@ public class TransformModule {
 private static final int STRING_STATE = 0;
 private static final int OBJECT_STATE = 1;
 
+
 @Produces
 public static List<String> parseTransforms(@Named("Transforms") String requestedTransforms) {
 	
@@ -82,6 +83,11 @@ Map<String, Transform<String, String>> stringToStringTransforms() {
 
 	HashMap<String, Transform<Object, String>> map = new HashMap<String, Transform<Object, String>>(1);
 	map.put("content-to-xml", (json) -> DaggerContentConverterComponent.builder().from((JsonNode)json).build().xml());
+	map.put("content-to-yaml", (values) -> DaggerViewComponent.builder()
+											.withTemplatePath("templates/transform/content-to-yaml.twig")
+											.withValue(values)
+											.build()
+											.render());
 
 	return map;
 }

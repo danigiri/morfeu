@@ -4,6 +4,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -43,6 +44,7 @@ interface Builder {
 	@BindsInstance Builder to(@Named("DestinationContentURI") URI u);
 	@BindsInstance Builder having(@Named("ContentURI") URI u);
 	@BindsInstance Builder model(@Named("ModelURI") URI u);
+	@BindsInstance Builder transforms(@Nullable @Named("Transforms") String transforms);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
 
 	ContentSaverParserComponent build();

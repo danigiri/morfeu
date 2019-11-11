@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.apache.commons.io.FilenameUtils;
@@ -38,18 +39,25 @@ protected final static Logger log = LoggerFactory.getLogger(StringFormatModule.c
 public static String produceEffectiveContent(@Named("DestinationContentURI") URI uri, 
 											@Named("YAMLContent") Producer<String> yamlProducer,
 											@Named("JSONContent") Producer<String> jsonProducer,
-											@Named("Content") Producer<String> contentProducer) 
+											@Named("TransformContent") Producer<String> transformProducer,
+											@Named("Content") Producer<String> contentProducer,
+											@Nullable @Named("Transforms") String transforms)
 						throws TransformException {
-	
+
 	String name = FilenameUtils.getName(uri.getPath());
+	String appliedTransforms;
 	String content;
 	try {
-		if (name.endsWith("yaml")) {
-			content = yamlProducer.get().get();
-		} else if (name.endsWith("json")) {
-			content = jsonProducer.get().get();
-		} else {
+		if (transforms==null) {
+			if (name.endsWith("yaml")) {
+				content = yamlProducer.get().get();
+			} else if (name.endsWith("json")) {
+				content = jsonProducer.get().get();
+			} else {
 			content = contentProducer.get().get(); // no transformation required
+			}
+		} else {
+			content = transformProducer.get().get();
 		}
 	} catch (InterruptedException | ExecutionException e) {
 		log.error("Could not get effective content for '{}' ({})", uri, e);
@@ -57,7 +65,7 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 	}
 
 	return content;
-	
+
 }
 
 
@@ -77,10 +85,10 @@ public static String jsonProducer(Composite<Cell> contentRootCells, Model model)
 
 
 @Produces @Named("JSONContent")
-public static String yamlProducer(@Named("DestinationContentURI") URI uri, 
-									@Named("YAMLContent") String yaml, 
-									ObjectMapper jsonMapper, 
-									YAMLMapper yamlMapper) 
+public static String yamlProducer(@Named("DestinationContentURI") URI uri,
+									@Named("YAMLContent") String yaml,
+									ObjectMapper jsonMapper,
+									YAMLMapper yamlMapper)
 						throws TransformException {
 
 	try {
@@ -92,6 +100,7 @@ public static String yamlProducer(@Named("DestinationContentURI") URI uri,
 		throw new TransformException("Problem when transforming effective content to save '"+uri+"'", e);
 	}
 }
+
 
 }
 
