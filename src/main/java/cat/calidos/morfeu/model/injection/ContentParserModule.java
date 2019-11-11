@@ -79,10 +79,10 @@ public static Node contentRootNode(org.w3c.dom.Document xmldoc,
 
 @Produces
 public static DocumentBuilderFactory produceDocumentBuilderFactory() {
-	
+
 	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	dbf.setNamespaceAware(true);
-	
+
 	return dbf;
 
 }
@@ -98,7 +98,7 @@ public static DocumentBuilder produceDocumentBuilder(DocumentBuilderFactory dbf,
 	} catch (ParserConfigurationException e) {
 		throw new ConfigurationException("Problem when configuring the xml parsing system", e);
 	}
-	
+
 	return db;
 
 }

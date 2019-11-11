@@ -59,9 +59,9 @@ public static Document produceDocument(@Named("NormalisedDocument") Document doc
 	} catch (Exception e) {
 		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);
 	}
-	
+
 	return doc;
-	
+
 }
 
 

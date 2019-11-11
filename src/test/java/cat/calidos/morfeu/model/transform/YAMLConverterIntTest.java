@@ -118,7 +118,7 @@ public void testYAMLConverterData() throws Exception {
 	System.err.println(transformed);
 
 	String xml =	"<test xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\" " +
-						"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 
+					"	xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 
 					"	<row>\n" + 
 					"		<col size=\"12\">\n" +
 					"			<data number=\"1\" text=\"blahblah1\" />\n" + 
@@ -191,7 +191,7 @@ public void testYAMLConverterStuff() throws Exception {
 	assertNotNull(transformed);
 	//System.err.println(transformed);
 	String xml =	"<test xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\" " +
-						"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 
+					"	xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 
 					"	<row>\n" + 
 					"		<col size=\"12\">\n" +
 					"			<stuff>Stuff content</stuff>\n" + 
@@ -204,6 +204,7 @@ public void testYAMLConverterStuff() throws Exception {
 	compareWithXML(transformed, xml);
 
 }
+
 
 }
 

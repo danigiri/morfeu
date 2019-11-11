@@ -17,19 +17,16 @@
 package cat.calidos.morfeu.model;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
-
-import cat.calidos.morfeu.problems.InternalException;
 
 /** A Cell Model that has attributes (which cannot be repeated), order is considered important so using list and not set
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ComplexCellModel extends BasicCellModel {
 
-
 private Attributes<CellModel> attributes;
 private Composite<CellModel> children;
+
 
 public ComplexCellModel(URI u, 
 						String name, 
@@ -117,18 +114,19 @@ public String toString() {
 
 
 public static ComplexCellModel from(CellModel m) {
-	
+
 	if (m.isComplex()) {
 		return (ComplexCellModel)m;
 	} else {
 		throw new IllegalArgumentException("Tried to extract complex cell model from a simple one ("+m.getName()+"");
 	}
-	
+
 }
 
 
 public void setChildren(Composite<CellModel> children) {
 	this.children = children;
 }
+
 
 }

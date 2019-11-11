@@ -65,14 +65,14 @@ public static Model model(@Named("ModelURI") URI u,
 @Produces
 public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMParser parser) 
 		throws ParsingException, ExecutionException, FetchingException {
-	
+
 	XSSchemaSet schemaSet = null;
 	String uri = u.toString();
 	try {
 
 		parser.parse(uri);
 		schemaSet = parser.getResult();
-	
+
 	} catch (SAXException e) {
 		// either it's a broken or invalid model or the model is just not found
 		if (e.getCause() instanceof FileNotFoundException) {
@@ -81,7 +81,7 @@ public static XSSchemaSet parseModel(@Named("FetchableModelURI") URI u, XSOMPars
 			throw new ParsingException("Problem parsing model '"+uri+"'", e);
 		}
 	}
-	
+
 	return schemaSet;
 
 }

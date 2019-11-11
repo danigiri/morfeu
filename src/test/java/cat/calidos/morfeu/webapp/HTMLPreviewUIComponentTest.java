@@ -117,6 +117,7 @@ public void testPOSTPreview() {
 			() -> assertEquals("testvalue", preview.title()),
 			() -> assertEquals("#01a1fb", preview.color())
 	);
+
 }
 
 

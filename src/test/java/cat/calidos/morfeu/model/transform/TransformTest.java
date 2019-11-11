@@ -18,15 +18,8 @@ package cat.calidos.morfeu.model.transform;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -66,8 +59,8 @@ public void streamChainTest() {
 	assertEquals("23", finalChain.apply("11"));
 	
 	// this way I always play with strong types and there are no casts anywhere =)
-	
-	
+
 }
+
 
 }
