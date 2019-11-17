@@ -39,7 +39,7 @@ protected final static Logger log = LoggerFactory.getLogger(StringFormatModule.c
 public static String produceEffectiveContent(@Named("DestinationContentURI") URI uri, 
 											@Named("YAMLContent") Producer<String> yamlProducer,
 											@Named("JSONContent") Producer<String> jsonProducer,
-											@Named("TransformContent") Producer<String> transformProducer,
+											//@Named("TransformContent") Producer<String> transformProducer,
 											@Named("Content") Producer<String> contentProducer,
 											@Nullable @Named("Transforms") String transforms)
 						throws TransformException {
@@ -48,7 +48,7 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 	String appliedTransforms;
 	String content;
 	try {
-		if (transforms==null) {
+//		if (transforms==null) {
 			if (name.endsWith("yaml")) {
 				content = yamlProducer.get().get();
 			} else if (name.endsWith("json")) {
@@ -56,9 +56,9 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 			} else {
 			content = contentProducer.get().get(); // no transformation required
 			}
-		} else {
-			content = transformProducer.get().get();
-		}
+//		} else {
+			//content = transformProducer.get().get();
+//		}
 	} catch (InterruptedException | ExecutionException e) {
 		log.error("Could not get effective content for '{}' ({})", uri, e);
 		throw new TransformException("Problem when getting effective content to save '"+uri+"'", e);

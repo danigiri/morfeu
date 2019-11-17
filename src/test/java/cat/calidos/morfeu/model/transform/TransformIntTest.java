@@ -18,19 +18,22 @@ package cat.calidos.morfeu.model.transform;
 
 import static org.junit.Assert.*;
 
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import org.junit.Test;
 
+import cat.calidos.morfeu.model.transform.injection.DaggerTransformComponent;
+
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TransformTest {
+public class TransformIntTest {
 
 
 @Test
-public void streamChainTest() {
+public void streamChainTest() throws Exception {
 	
 	// I pre-create a set of variables that hold the different states 
 	// and keep playing with them: <string, string>, <int,string>, <string, int>, <int,int>
@@ -48,18 +51,19 @@ public void streamChainTest() {
 	// if ned to change, apply and then switch modes
 	Function<String, Integer> toInt3 = (s) -> Integer.valueOf(s);	
 	Function<String, Integer> compose = toInt3.compose(stringComposite);
-	
+
 	UnaryOperator<Integer> increment = (i) -> i.intValue()+1;	
 	Function<String, Integer> chain = increment.compose(compose);
-	
+
 	Function<Integer, String> back = (i) -> i.toString();
-	
+
 	Function<String, String> finalChain = back.compose(chain);
-	
+
 	assertEquals("23", finalChain.apply("11"));
-	
+
 	// this way I always play with strong types and there are no casts anywhere =)
 
+	DaggerTransformComponent.builder().transforms("identity").build().transform().get();
 }
 
 
