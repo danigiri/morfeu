@@ -28,7 +28,7 @@ private String content;
 @Before
 public void setup() throws Exception {
 
-	File inputFile = new File("target/test-classes/test-resources/transform/document1-as-view.json");
+	File inputFile = new File("target/classes/test-resources/transform/document1-as-view.json");
 	content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
 
 }
@@ -42,12 +42,12 @@ public void testTransform() throws Exception {
 	Transform<String, String> transform = DaggerTransformComponent.builder()
 																	.transforms(transforms)
 																	.build()
-																	.transformation()
+																	.transform()
 																	.get();
 
 	String transformed = transform.apply(content);
 	//System.err.println(transformed);
-	compareWithXMLFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	compareWithXMLFile(transformed, "target/classes/test-resources/documents/document1.xml");
 
 }
 
@@ -62,7 +62,7 @@ public void testConverter() throws Exception {
 	String transformed = DaggerContentConverterComponent.builder().from(json).build().xml();
 
 	//System.err.println(transformed);
-	compareWithXMLFile(transformed, "target/test-classes/test-resources/documents/document1.xml");
+	compareWithXMLFile(transformed, "target/classes/test-resources/documents/document1.xml");
 
 }
 
