@@ -64,9 +64,9 @@ public static List<String> parseTransforms(@Named("Transforms") String requested
 	for (String t : split) {
 		transforms.add(t);
 	}
-	
+
 	return transforms;
-	
+
 }
 
 @Produces 
@@ -109,7 +109,39 @@ Map<String, Transform<String, Object>> stringToObjectTransforms() {
 
 
 @Produces
-public static Transform<String, String> transform(List<String> transforms, 
+public static Transform<String, Object> stringToObject(List<String> transforms, 
+												Map<String, Transform<String, String>> stringToStringTransforms,
+												Map<String, Transform<Object, String>> objectToStringTransforms,
+												Map<String, Transform<String, Object>> stringToObjectTransforms,
+												Map<String, Transform<Object, Object>> objectToObjectTransforms) 
+														throws ConfigurationException {
+	int state = STRING_STATE;
+	Transform<String, Object> stringObjectIdentity = (s) -> s;
+	Transform<String, Object> stringObject = stringObjectIdentity;
+
+	return stringObject;
+
+}
+
+
+@Produces
+public static Transform<Object, Object> objectToObject(List<String> transforms, 
+												Map<String, Transform<String, String>> stringToStringTransforms,
+												Map<String, Transform<Object, String>> objectToStringTransforms,
+												Map<String, Transform<String, Object>> stringToObjectTransforms,
+												Map<String, Transform<Object, Object>> objectToObjectTransforms) 
+														throws ConfigurationException {
+	int state = STRING_STATE;
+	Transform<Object, Object> objectObjectIdentity = (s) -> s;
+	Transform<Object, Object> objectObject = objectObjectIdentity;
+
+	return objectObject;
+
+}
+
+
+@Produces
+public static Transform<String, String> stringToString(List<String> transforms, 
 												Map<String, Transform<String, String>> stringToStringTransforms,
 												Map<String, Transform<Object, String>> objectToStringTransforms,
 												Map<String, Transform<String, Object>> stringToObjectTransforms,
@@ -123,12 +155,12 @@ public static Transform<String, String> transform(List<String> transforms,
 	Transform<String, String> stringIdentity = (s) -> s;
 	Transform<String, String> stringString = stringIdentity;	// initial state is string
 	Transform<String, Object> stringObject = null;
-	
+
 	for (String t : transforms) {
-		
+
 		String op = parseOperationNameFromTransform(t);
 		Map<String, String> parameters = parseParametersFrom(t);	//TODO: use parameters to build this
-		
+
 		switch (state) {
 		case STRING_STATE:
 
@@ -160,7 +192,7 @@ public static Transform<String, String> transform(List<String> transforms,
 			break;
 		}
 	}
-	
+
 	return stringString;
 
 }
@@ -170,7 +202,7 @@ private static String parseOperationNameFromTransform(String t) throws Configura
 
 	String op = t;
 	if (hasParameters(op)) {
-		 
+
 		int paramsIndex = beginningOfParameters(op);
 		if (paramsIndex==-1) {
 			throw new ConfigurationException("Operation '"+op+"' not parsing correctly");
