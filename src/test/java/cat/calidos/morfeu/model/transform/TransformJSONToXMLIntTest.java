@@ -42,7 +42,7 @@ public void testTransform() throws Exception {
 	Transform<String, String> transform = DaggerTransformComponent.builder()
 																	.transforms(transforms)
 																	.build()
-																	.transform()
+																	.stringToString()
 																	.get();
 
 	String transformed = transform.apply(content);

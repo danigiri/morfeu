@@ -4,6 +4,9 @@ package cat.calidos.morfeu.model.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -55,8 +58,13 @@ public void streamChainTest() throws Exception {
 @Test @DisplayName("Identity test")
 public void identityTest() throws Exception {
 
-	Transform<String, String> t = DaggerTransformComponent.builder().transforms("identity").build().transform().get();
+	Transform<String, String> t = DaggerTransformComponent.builder().transforms("identity").build().stringToString().get();
 	assertEquals("foo",t.apply("foo"));
+
+	Transform<Object, Object> t2 = DaggerTransformComponent.builder().transforms("identity").build().objectToObject().get();
+	Map<String, String> map = new HashMap<String, String>(1);
+	map.put("foo", "bar");
+	assertEquals(map,t2.apply(map));
 
 }
 

@@ -18,10 +18,10 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 @ProductionComponent(modules={TransformModule.class, ListeningExecutorServiceModule.class})
 public interface TransformComponent {
 
+ListenableFuture<Transform<String, String>> stringToString();
 //ListenableFuture<Transform<String, Object>> stringToObject();
-//ListenableFuture<Transform<String, Object>> objectToObject();
+ListenableFuture<Transform<Object, Object>> objectToObject();
 //ListenableFuture<Transform<Object, String>> objectToString();
-ListenableFuture<Transform<String, String>> transform();
 
 @ProductionComponent.Builder
 interface Builder {

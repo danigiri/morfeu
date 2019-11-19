@@ -49,20 +49,70 @@ public Transform<X, X> xToX(List<String> transforms,
 							Map<String, Transform<Y, Y>> yToYTransforms)
 											throws ConfigurationException {
 
+	Transform<X, X> xToX = null;
+	Transform<X, Y> xToY = null;
+
+	int state = stateMachine(transforms, xToXTransforms, xToYTransforms, yToXTransforms, yToYTransforms, xToX, xToY);
+
+	if (state!=X_TO_X_STATE) {
+		throw new ConfigurationException("Sequence of transforms "+transforms+" did not end as X to X");
+	}
+
+	return xToX;
+
+}
+
+
+public Transform<X, Y> xToY(List<String> transforms, 
+							Map<String, Transform<X, X>> xToXTransforms,
+							Map<String, Transform<X, Y>> xToYTransforms,
+							Map<String, Transform<Y, X>> yToXTransforms,
+							Map<String, Transform<Y, Y>> yToYTransforms) 
+				throws ConfigurationException {
+
+	if (transforms.isEmpty()) {
+		throw new ConfigurationException("Cannot make an X to Y transformation without any transforms");
+	}
+	Transform<X, X> xToX = null;
+	Transform<X, Y> xToY = null;
+
+	int state = stateMachine(transforms, xToXTransforms, xToYTransforms, yToXTransforms, yToYTransforms, xToX, xToY);
+
+	if (state!=X_TO_Y_STATE) {
+		throw new ConfigurationException("Sequence of transforms "+transforms+" did not end as X to Y");
+	}
+
+	return xToY;
+
+}
+
+
+public Transform<X, X> identity() {
+	return (o) -> o;
+}
+
+
+private int stateMachine(List<String> transforms, 
+							Map<String, Transform<X, X>> xToXTransforms,
+							Map<String, Transform<X, Y>> xToYTransforms, 
+							Map<String, Transform<Y, X>> yToXTransforms,
+							Map<String, Transform<Y, Y>> yToYTransforms, 
+							Transform<X, X> xToX, 
+							Transform<X, Y> xToY)
+				throws ConfigurationException {
+
 	// STATES: [string-string] and [string-object]
 	// TRANSITIONS:
 	// [string-string] -> [string-object], [string-object] -> [string-string], [string-string] ->
 	// [string-string]
 	int state = X_TO_X_STATE;
 	Transform<X, X> identity = identity();
-	Transform<X, X> xToX = identity; // initial state x to x
-	Transform<X, Y> xToY = null;
-
+	xToX = identity; // initial state x to x
+	xToY = null;
 	for (String t : transforms) {
 
 		String op = parseOperationNameFromTransform(t);
-		Map<String, String> parameters = parseParametersFrom(t); // TODO: use parameters to build
-																	// this
+		Map<String, String> parameters = parseParametersFrom(t);	// TODO: use parameters to build this
 
 		switch (state) {
 		case X_TO_X_STATE:
@@ -97,15 +147,9 @@ public Transform<X, X> xToX(List<String> transforms,
 
 	}
 
-	return xToX;
-
+	return state;
+	
 }
-
-
-public Transform<X, X> identity() {
-	return (o) -> o;
-}
-
 
 
 private static String parseOperationNameFromTransform(String t) throws ConfigurationException {
