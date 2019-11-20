@@ -100,6 +100,20 @@ Transform<String, String> stringIdentity() {
 }
 
 
+@Produces @IntoMap @Named("stringToString")
+@StringKey("uppercase")
+Transform<String, String> uppercase() {	// mainly for testing
+	return s -> s.toUpperCase();
+}
+
+
+@Produces @IntoMap @Named("stringToString")
+@StringKey("lowercase")
+Transform<String, String> lowercase() {	// mainly for testing
+	return s -> s.toLowerCase();
+}
+
+
 @Produces @IntoMap @Named("objectToString")
 @StringKey("content-to-xml")
 Transform<Object, String> contentToXML() {
@@ -117,11 +131,13 @@ Transform<Object, String> contentToYAML() {
 											.render();
 }
 
+
 @Produces @IntoMap @Named("objectToString")
 @StringKey("to-string")
 Transform<Object, String> toString_() {
 	return (o) -> o.toString();
 }
+
 
 @Produces  @IntoMap @Named("stringToObject")
 @StringKey("string-to-json")

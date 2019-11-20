@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import cat.calidos.morfeu.model.transform.Transform;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.Pair;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 
 /**
@@ -49,12 +50,13 @@ public Transform<X, X> xToX(List<String> transforms,
 							Map<String, Transform<Y, Y>> yToYTransforms)
 											throws ConfigurationException {
 
-	Transform<X, X> xToX = null;
-	Transform<X, Y> xToY = null;
-
-	int state = stateMachine(transforms, xToXTransforms, xToYTransforms, yToXTransforms, yToYTransforms, xToX, xToY);
-
-	if (state!=X_TO_X_STATE) {
+	Pair<Transform<X, X>, Transform<X, Y>> output = stateMachine(transforms, 
+																	xToXTransforms, 
+																	xToYTransforms, 
+																	yToXTransforms, 
+																	yToYTransforms);
+	Transform<X, X> xToX = output.getLeft();
+	if (xToX==null) {
 		throw new ConfigurationException("Sequence of transforms "+transforms+" did not end as X to X");
 	}
 
@@ -73,12 +75,14 @@ public Transform<X, Y> xToY(List<String> transforms,
 	if (transforms.isEmpty()) {
 		throw new ConfigurationException("Cannot make an X to Y transformation without any transforms");
 	}
-	Transform<X, X> xToX = null;
-	Transform<X, Y> xToY = null;
 
-	int state = stateMachine(transforms, xToXTransforms, xToYTransforms, yToXTransforms, yToYTransforms, xToX, xToY);
-
-	if (state!=X_TO_Y_STATE) {
+	Pair<Transform<X, X>, Transform<X, Y>> output = stateMachine(transforms, 
+																		xToXTransforms, 
+																		xToYTransforms, 
+																		yToXTransforms, 
+																		yToYTransforms);
+	Transform<X, Y> xToY = output.getRight();
+	if (xToY==null) {
 		throw new ConfigurationException("Sequence of transforms "+transforms+" did not end as X to Y");
 	}
 
@@ -92,14 +96,12 @@ public Transform<X, X> identity() {
 }
 
 
-private int stateMachine(List<String> transforms, 
-							Map<String, Transform<X, X>> xToXTransforms,
-							Map<String, Transform<X, Y>> xToYTransforms, 
-							Map<String, Transform<Y, X>> yToXTransforms,
-							Map<String, Transform<Y, Y>> yToYTransforms, 
-							Transform<X, X> xToX, 
-							Transform<X, Y> xToY)
-				throws ConfigurationException {
+private Pair<Transform<X, X>, Transform<X, Y>> stateMachine(List<String> transforms, 
+															Map<String, Transform<X, X>> xToXTransforms,
+															Map<String, Transform<X, Y>> xToYTransforms, 
+															Map<String, Transform<Y, X>> yToXTransforms,
+															Map<String, Transform<Y, Y>> yToYTransforms)
+													throws ConfigurationException {
 
 	// STATES: [string-string] and [string-object]
 	// TRANSITIONS:
@@ -107,8 +109,8 @@ private int stateMachine(List<String> transforms,
 	// [string-string]
 	int state = X_TO_X_STATE;
 	Transform<X, X> identity = identity();
-	xToX = identity; // initial state x to x
-	xToY = null;
+	Transform<X, X> xToX = identity; // initial state x to x
+	Transform<X, Y> xToY = null;
 	for (String t : transforms) {
 
 		String op = parseOperationNameFromTransform(t);
@@ -138,7 +140,7 @@ private int stateMachine(List<String> transforms,
 				Transform<Y, X> transform = yToXTransforms.get(op);
 				// stringIdentity = (s) -> s;
 				xToX = xToY.andThen(transform);
-				state = X_TO_Y_STATE;
+				state = X_TO_X_STATE;
 			} else {
 				throw new ConfigurationException("Broken transform: '" + op + "' cannot transition from Y state");
 			}
@@ -147,8 +149,14 @@ private int stateMachine(List<String> transforms,
 
 	}
 
-	return state;
-	
+	if (state==X_TO_X_STATE) {	// we only care for the output state, not intermediate ones
+		xToY = null;
+	} else {
+		xToX = null;
+	}
+
+	return new Pair<Transform<X, X>, Transform<X, Y>>(xToX, xToY);
+
 }
 
 

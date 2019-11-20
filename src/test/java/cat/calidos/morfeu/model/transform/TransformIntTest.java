@@ -58,10 +58,18 @@ public void streamChainTest() throws Exception {
 @Test @DisplayName("Identity test")
 public void identityTest() throws Exception {
 
-	Transform<String, String> t = DaggerTransformComponent.builder().transforms("identity").build().stringToString().get();
+	Transform<String, String> t = DaggerTransformComponent.builder()
+															.transforms("identity")
+															.build()
+															.stringToString()
+															.get();
 	assertEquals("foo",t.apply("foo"));
 
-	Transform<Object, Object> t2 = DaggerTransformComponent.builder().transforms("identity").build().objectToObject().get();
+	Transform<Object, Object> t2 = DaggerTransformComponent.builder()
+															.transforms("identity")
+															.build()
+															.objectToObject()
+															.get();
 	Map<String, String> map = new HashMap<String, String>(1);
 	map.put("foo", "bar");
 	assertEquals(map,t2.apply(map));
@@ -69,10 +77,28 @@ public void identityTest() throws Exception {
 }
 
 
+@Test @DisplayName("More complex test test")
+public void objectToStringTest() throws Exception {
+
+	String transforms = "to-string,identity,lowercase";
+	Transform<Object, String> t = DaggerTransformComponent.builder()
+															.transforms(transforms)
+															.build()
+															.objectToString()
+															.get();
+	StringBuffer fooObject = new StringBuffer("FOO");
+	assertAll("Test transform",
+		() -> assertNotNull(t),
+		() -> assertEquals("foo", t.apply(fooObject), "Correct transform chain was not applied")
+	);
+
+}
+
+
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
