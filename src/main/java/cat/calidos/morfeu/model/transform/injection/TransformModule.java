@@ -93,27 +93,7 @@ public static List<String> parseTransforms(@Named("Transforms") String requested
 }
 
 
-@Produces @IntoMap @Named("stringToString")
-@StringKey("identity")
-Transform<String, String> stringIdentity() {
-	return s -> s;
-}
-
-
-@Produces @IntoMap @Named("stringToString")
-@StringKey("uppercase")
-Transform<String, String> uppercase() {	// mainly for testing
-	return s -> s.toUpperCase();
-}
-
-
-@Produces @IntoMap @Named("stringToString")
-@StringKey("lowercase")
-Transform<String, String> lowercase() {	// mainly for testing
-	return s -> s.toLowerCase();
-}
-
-
+//TODO: move to domain-specific transform module
 @Produces @IntoMap @Named("objectToString")
 @StringKey("content-to-xml")
 Transform<Object, String> contentToXML() {
@@ -121,6 +101,7 @@ Transform<Object, String> contentToXML() {
 }
 
 
+//TODO: move to domain-specific transform module
 @Produces @IntoMap @Named("objectToString")
 @StringKey("content-to-yaml")
 Transform<Object, String> contentToYAML() {
@@ -132,24 +113,11 @@ Transform<Object, String> contentToYAML() {
 }
 
 
-@Produces @IntoMap @Named("objectToString")
-@StringKey("to-string")
-Transform<Object, String> toString_() {
-	return (o) -> o.toString();
-}
-
-
+//TODO: move to domain-specific transform module
 @Produces  @IntoMap @Named("stringToObject")
 @StringKey("string-to-json")
 Transform<String, Object> stringToJSON() {
 	return (content) -> DaggerJSONParserComponent.builder().from(content).build().json().get();
-}
-
-
-@Produces @IntoMap @Named("objectToObject")
-@StringKey("identity")
- Transform<Object, Object> iobjectIdentity() {
-	return o -> o;
 }
 
 

@@ -69,6 +69,7 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 }
 
 
+// TODO: move to domain-specific transform module
 @Produces @Named("YAMLContent")
 public static String jsonProducer(Composite<Cell> contentRootCells, Model model) {
 
@@ -84,6 +85,7 @@ public static String jsonProducer(Composite<Cell> contentRootCells, Model model)
 }
 
 
+//TODO: move to domain-specific transform module
 @Produces @Named("JSONContent")
 public static String yamlProducer(@Named("DestinationContentURI") URI uri,
 									@Named("YAMLContent") String yaml,
