@@ -47,15 +47,11 @@ public static List<String> parseTransforms(String requestedTransforms) {
 }
 
 
-public static Optional<JsonNode> parseParametersFrom(String t) throws ConfigurationException {
+public static JsonNode parseParametersFrom(String t) throws ConfigurationException {
 
-	if (!hasParameters(t)) {
-		return Optional.empty();
-	}
-
-	String paramString = t.substring(beginningOfParameters(t));
+	String paramString = hasParameters(t) ? t.substring(beginningOfParameters(t)) : "{}";
 	try {
-		return Optional.of(DaggerJSONParserComponent.builder().from(paramString).build().json().get());
+		return DaggerJSONParserComponent.builder().from(paramString).build().json().get();
 	} catch (InterruptedException | ExecutionException | ParsingException e) {
 		throw new ConfigurationException("Execution of parsing parameters of '"+t+"' did not go well", e);
 	}

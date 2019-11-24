@@ -49,12 +49,12 @@ public void parseTransformsParameters() throws Exception {
 			() -> assertEquals(1, t.size(), "Should be one transform")
 	);
 
-	Optional<JsonNode> params = TransformEngine.parseParametersFrom(t.get(0));
+	JsonNode params = TransformEngine.parseParametersFrom(t.get(0));
 	assertAll("parse params",
 			() -> assertNotNull(params),
-			() -> assertTrue(params.isPresent(), "Should not get an empty param"),
-			() -> assertEquals("foo", params.get().get("p0").asText(), "Should have a correctly parsed json"),
-			() -> assertEquals(1, params.get().get("p1").asInt(), "Should have a correctly parsed json")
+			() -> assertFalse(params.isEmpty(), "Should not get an empty param"),
+			() -> assertEquals("foo", params.get("p0").asText(), "Should have a correctly parsed json"),
+			() -> assertEquals(1, params.get("p1").asInt(), "Should have a correctly parsed json")
 	);
 
 }
@@ -70,18 +70,18 @@ public void parseTransformsParametersEdgeCases() throws Exception {
 			() -> assertEquals(2, t.size(), "Should be two transforms")
 	);
 
-	Optional<JsonNode> params = TransformEngine.parseParametersFrom(t.get(0));
+	JsonNode params = TransformEngine.parseParametersFrom(t.get(0));
 	assertAll("parse params 0",
 			() -> assertNotNull(params),
-			() -> assertTrue(params.isPresent(), "Should not get an empty param"),
-			() -> assertEquals("fo;o", params.get().get("p0").asText(), "Should have a correctly parsed json"),
-			() -> assertEquals(0, params.get().get("p1").asInt(), "Should have a correctly parsed json")
+			() -> assertFalse(params.isEmpty(), "Should not get an empty param"),
+			() -> assertEquals("fo;o", params.get("p0").asText(), "Should have a correctly parsed json"),
+			() -> assertEquals(0, params.get("p1").asInt(), "Should have a correctly parsed json")
 	);
 
-	Optional<JsonNode> params1 = TransformEngine.parseParametersFrom(t.get(1));
+	JsonNode params1 = TransformEngine.parseParametersFrom(t.get(1));
 	assertAll("parse params 1",
 			() -> assertNotNull(params1),
-			() -> assertTrue(params.isPresent(), "Should get an empty param")
+			() -> assertTrue(params1.isEmpty(), "Should get an empty param")
 	);
 
 }
