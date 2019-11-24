@@ -15,7 +15,7 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={TransformModule.class, BasicTransformsModule.class, ParserTransformsModule.class,
+@ProductionComponent(modules={TransformModule.class, BasicTransformsModule.class, AdvancedTransformsModule.class,
 								ListeningExecutorServiceModule.class})
 public interface TransformComponent {
 

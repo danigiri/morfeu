@@ -1,25 +1,34 @@
 package cat.calidos.morfeu.model.transform.injection;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
-import cat.calidos.morfeu.model.transform.Transform;
-import cat.calidos.morfeu.problems.TransformException;
-import cat.calidos.morfeu.utils.injection.MapperModule;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
+import cat.calidos.morfeu.model.transform.Transform;
+import cat.calidos.morfeu.problems.TransformException;
+import cat.calidos.morfeu.utils.injection.MapperModule;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
+
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule(includes=MapperModule.class)
-public class ParserTransformsModule {
+public class AdvancedTransformsModule {
+
+protected final static Logger log = LoggerFactory.getLogger(AdvancedTransformsModule.class);
 
 
 @Produces @IntoMap @Named("stringToString")
@@ -36,6 +45,37 @@ Transform<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMap
 		}
 	};
 }
+
+
+//TODO: move to domain-specific transform module
+@Produces @IntoMap @Named("objectToString")
+@StringKey("apply-template")
+Transform<Object, String> applyTemplate(Map<String, JsonNode> params) {
+
+	if (!params.containsKey("apply-template")) {
+		return (values) -> "APPLY TEMPLATE NEEDS PARAMETERS";
+	}
+	JsonNode transformParameters = params.get("apply-template");
+	if (!transformParameters.has("template")) {
+		return (values) -> "APPLY TEMPLATE HAS NO TEMPLATE PARAMETER";
+	}
+	JsonNode templateNode = transformParameters.get("template");
+	if (!templateNode.isTextual()) {
+		log.error("Incorrect parameters in apply-template, 'template' param value should be a string");
+		return (values) -> "APPLY TEMPLATE PARAM 'template' IS NOT A STRING";
+	}
+	String template = templateNode.asText();
+
+	return (values) -> {
+		return DaggerViewComponent.builder()
+												.withTemplatePath(template)
+												.withValue(values)
+												.build()
+												.render();
+	};
+
+}
+
 
 
 }

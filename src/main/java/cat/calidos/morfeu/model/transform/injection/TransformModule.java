@@ -2,8 +2,11 @@
 
 package cat.calidos.morfeu.model.transform.injection;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
@@ -94,8 +97,15 @@ public static List<String> transforms(@Named("Transforms") String requestedTrans
 
 
 @Produces
-public static Map<String, Map<String, String>> params(List<String> transforms) {
-	return null;
+public static Map<String, JsonNode> params(List<String> transforms) throws ConfigurationException {
+
+	Map<String, JsonNode> params = new HashMap<String, JsonNode>(transforms.size());
+
+	for (String t : transforms) {
+		params.put(TransformEngine.nameFromTransform(t), TransformEngine.parseParametersFrom(t));
+	}
+
+	return params;
 }
 
 

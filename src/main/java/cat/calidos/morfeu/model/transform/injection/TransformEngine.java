@@ -39,7 +39,7 @@ public static List<String> parseTransforms(String requestedTransforms) {
 	String[] split = escapedTransforms.split(PARAM_DELIMITER);
 	for (String t : split) {
 		String finalTransform = t.replace(PARAM_PLACEHOLDER, PARAM_DELIMITER);
-		transforms.add(finalTransform);
+		transforms.add(finalTransform.trim());	// ensure no trailing whitespace
 	}
 
 	return transforms;
@@ -55,6 +55,24 @@ public static JsonNode parseParametersFrom(String t) throws ConfigurationExcepti
 	} catch (InterruptedException | ExecutionException | ParsingException e) {
 		throw new ConfigurationException("Execution of parsing parameters of '"+t+"' did not go well", e);
 	}
+
+}
+
+
+public static String nameFromTransform(String t) throws ConfigurationException {
+
+	String op = t;
+	if (hasParameters(op)) {
+
+		int paramsIndex = beginningOfParameters(op);
+		if (paramsIndex==-1) {
+			throw new ConfigurationException("Operation '"+op+"' not parsing correctly");
+		}
+		op = op.substring(0, paramsIndex);
+
+	}
+
+	return op;
 
 }
 
@@ -129,7 +147,7 @@ private Pair<Transform<X, X>, Transform<X, Y>> stateMachine(List<String> transfo
 	Transform<X, Y> xToY = null;
 	for (String t : transforms) {
 
-		String op = parseOperationNameFromTransform(t);
+		String op = nameFromTransform(t);
 		switch (state) {
 		case X_TO_X_STATE:
 
@@ -137,7 +155,7 @@ private Pair<Transform<X, X>, Transform<X, Y>> stateMachine(List<String> transfo
 				Transform<X, X> transform = xToXTransforms.get(op);
 				xToX = xToX.andThen(transform);
 			} else if (xToYTransforms.containsKey(op)) { // TRANSITION TO X-Y STATE
-				Transform<X, Y> transform = xToYTransforms.get(t);
+				Transform<X, Y> transform = xToYTransforms.get(op);
 				xToY = xToX.andThen(transform); // transform.compose(stringIdentity);
 				state = X_TO_Y_STATE;
 			} else {
@@ -170,24 +188,6 @@ private Pair<Transform<X, X>, Transform<X, Y>> stateMachine(List<String> transfo
 	}
 
 	return new Pair<Transform<X, X>, Transform<X, Y>>(xToX, xToY);
-
-}
-
-
-private static String parseOperationNameFromTransform(String t) throws ConfigurationException {
-
-	String op = t;
-	if (hasParameters(op)) {
-
-		int paramsIndex = beginningOfParameters(op);
-		if (paramsIndex==-1) {
-			throw new ConfigurationException("Operation '"+op+"' not parsing correctly");
-		}
-		op = op.substring(0, paramsIndex);
-
-	}
-
-	return op;
 
 }
 

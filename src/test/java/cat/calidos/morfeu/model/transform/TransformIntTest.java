@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -123,7 +124,38 @@ public void jsonToYAMLTest() throws Exception {
 
 
 @Test @DisplayName("Apply template transform test")
-public void applyTemplateTest() {
+public void applyTemplateTest() throws Exception {
+
+	String transforms = "apply-template{\"template\":\"templates/transform/map-identity.twig\"}";
+	Transform<Object, String> t = DaggerTransformComponent.builder()
+															.transforms(transforms)
+															.build()
+															.objectToString()
+															.get();
+
+	Map<String, Object> values = new HashMap<String, Object>(2);
+	values.put("a", "foo");
+	values.put("b", "bar");
+	String result = t.apply(values);
+	String expected = 	"a=foo,b=bar,";
+	assertAll("check yaml to json outcome",
+			() -> assertNotNull(result),
+			() -> assertEquals(expected, result, "Correct template was not applied")
+	);
+
+	transforms = "apply-template{}";
+	Transform<Object, String> t2 = DaggerTransformComponent.builder()
+															.transforms(transforms)
+															.build()
+															.objectToString()
+															.get();
+	String result2 = t2.apply(values);
+	String expected2 = "APPLY TEMPLATE HAS NO TEMPLATE PARAMETER";
+	assertAll("check yaml to json outcome",
+			() -> assertNotNull(result2),
+			() -> assertEquals(expected2, result2, "Should not have applied a template")
+	);
+
 
 }
 
