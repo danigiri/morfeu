@@ -4,7 +4,6 @@ package cat.calidos.morfeu.model.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -80,7 +79,7 @@ public void identityTest() throws Exception {
 @Test @DisplayName("More complex test test")
 public void objectToStringTest() throws Exception {
 
-	String transforms = "to-string,identity,lowercase";
+	String transforms = "to-string;identity;lowercase";
 	Transform<Object, String> t = DaggerTransformComponent.builder()
 															.transforms(transforms)
 															.build()
@@ -90,7 +89,7 @@ public void objectToStringTest() throws Exception {
 
 	StringBuffer fooObject = new StringBuffer("FOO");
 	String result = t.apply(fooObject);
-	assertAll("",
+	assertAll("to string and to lower case",
 		() -> assertNotNull(result),
 		() -> assertEquals("foo", result, "Correct transform chain was not applied")
 	);
@@ -116,12 +115,17 @@ public void jsonToYAMLTest() throws Exception {
 	String expected = "{\n" + 
 						"  \"a\" : [ \"a0\", \"a1\" ]\n" + 
 						"}\n";
-	assertAll("",
+	assertAll("check yaml to json outcome",
 			() -> assertNotNull(result),
 			() -> assertEquals(expected, expected, "Correct transform chain was not applied")
 	);
 }
 
+
+@Test @DisplayName("Apply template transform test")
+public void applyTemplateTest() {
+
+}
 
 }
 

@@ -88,8 +88,14 @@ public static Transform<Object, Object> objectToObject(List<String> transforms,
 
 
 @Produces
-public static List<String> parseTransforms(@Named("Transforms") String requestedTransforms) {
+public static List<String> transforms(@Named("Transforms") String requestedTransforms) {
 	return TransformEngine.parseTransforms(requestedTransforms);
+}
+
+
+@Produces
+public static Map<String, Map<String, String>> params(List<String> transforms) {
+	return null;
 }
 
 

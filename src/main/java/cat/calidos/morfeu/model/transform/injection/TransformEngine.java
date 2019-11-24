@@ -1,17 +1,10 @@
 package cat.calidos.morfeu.model.transform.injection;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterators;
-import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -26,6 +19,10 @@ import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformEngine<X,Y> {
 
+private static final String PARAM_DELIMITER = ";";
+private static final String PARAM_ESCAPE = "\\\\;";
+private static final String PARAM_PLACEHOLDER = "___PLACEHOLDER_FOR_SEMICOLON_32141234t6453687923457";
+
 private static final int X_TO_X_STATE = 0;
 private static final int X_TO_Y_STATE = 1;
 
@@ -33,12 +30,35 @@ private static final int X_TO_Y_STATE = 1;
 public static List<String> parseTransforms(String requestedTransforms) {
 
 	LinkedList<String> transforms = new LinkedList<String>();
-	String[] split = requestedTransforms.split(",");
+
+	if (requestedTransforms.isEmpty()) {
+		return transforms;
+	}
+
+	String escapedTransforms = requestedTransforms.replaceAll(PARAM_ESCAPE, PARAM_PLACEHOLDER);
+	String[] split = escapedTransforms.split(PARAM_DELIMITER);
 	for (String t : split) {
-		transforms.add(t);
+		String finalTransform = t.replace(PARAM_PLACEHOLDER, PARAM_DELIMITER);
+		transforms.add(finalTransform);
 	}
 
 	return transforms;
+
+}
+
+
+public static Optional<JsonNode> parseParametersFrom(String t) throws ConfigurationException {
+
+	if (!hasParameters(t)) {
+		return Optional.empty();
+	}
+
+	String paramString = t.substring(beginningOfParameters(t));
+	try {
+		return Optional.of(DaggerJSONParserComponent.builder().from(paramString).build().json().get());
+	} catch (InterruptedException | ExecutionException | ParsingException e) {
+		throw new ConfigurationException("Execution of parsing parameters of '"+t+"' did not go well", e);
+	}
 
 }
 
@@ -114,8 +134,6 @@ private Pair<Transform<X, X>, Transform<X, Y>> stateMachine(List<String> transfo
 	for (String t : transforms) {
 
 		String op = parseOperationNameFromTransform(t);
-		Map<String, String> parameters = parseParametersFrom(t);	// TODO: use parameters to build this
-
 		switch (state) {
 		case X_TO_X_STATE:
 
@@ -172,14 +190,14 @@ private static String parseOperationNameFromTransform(String t) throws Configura
 		op = op.substring(0, paramsIndex);
 
 	}
-	
+
 	return op;
-	
+
 }
 
 
 private static boolean hasParameters(String t) {
-	return t.endsWith("{");
+	return t.endsWith("}");
 }
 
 
@@ -188,30 +206,7 @@ private static int beginningOfParameters(String t) {
 }
 
 
-private static Map<String, String> parseParametersFrom(String t) throws ConfigurationException {
-
-	if (!hasParameters(t)) {
-		return new HashMap<String, String>(0);
-	}
-	
-	String paramString = t.substring(beginningOfParameters(t));
-	JsonNode paramsJSON = null;
-	try {
-		paramsJSON = DaggerJSONParserComponent.builder().from(paramString).build().json().get();
-	} catch (InterruptedException | ExecutionException | ParsingException e) {
-		throw new ConfigurationException("Execution of parsing parameters of '"+t+"' did not go well", e);
-	}
-
-	Iterator<Entry<String, JsonNode>> fields = paramsJSON.fields();
-	
-	return StreamSupport.stream(Spliterators.spliteratorUnknownSize(fields, 0), false)
-							.collect(Collectors.toMap(Entry::getKey, e -> e.getValue().toString()));
-
 }
-
-
-}
-
 
 /*
  *    Copyright 2019 Daniel Giribet
