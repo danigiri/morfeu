@@ -15,7 +15,8 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={TransformModule.class, BasicTransformsModule.class, ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={TransformModule.class, BasicTransformsModule.class, ParserTransformsModule.class,
+								ListeningExecutorServiceModule.class})
 public interface TransformComponent {
 
 ListenableFuture<Transform<String, String>> stringToString();

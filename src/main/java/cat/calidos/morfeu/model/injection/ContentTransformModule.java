@@ -1,6 +1,6 @@
-// STRING FORMAT MODULE . JAVA
+// CONTENT TRANSFORM MODULE . JAVA
 
-package cat.calidos.morfeu.model.transform.injection;
+package cat.calidos.morfeu.model.injection;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,9 +31,9 @@ import dagger.producers.Produces;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class StringFormatModule {
+public class ContentTransformModule {
 
-protected final static Logger log = LoggerFactory.getLogger(StringFormatModule.class);
+protected final static Logger log = LoggerFactory.getLogger(ContentTransformModule.class);
 
 @Produces @Named("EffectiveContent")
 public static String produceEffectiveContent(@Named("DestinationContentURI") URI uri, 

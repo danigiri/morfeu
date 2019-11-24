@@ -86,12 +86,40 @@ public void objectToStringTest() throws Exception {
 															.build()
 															.objectToString()
 															.get();
+	assertNotNull(t);
+
 	StringBuffer fooObject = new StringBuffer("FOO");
-	assertAll("Test transform",
-		() -> assertNotNull(t),
-		() -> assertEquals("foo", t.apply(fooObject), "Correct transform chain was not applied")
+	String result = t.apply(fooObject);
+	assertAll("",
+		() -> assertNotNull(result),
+		() -> assertEquals("foo", result, "Correct transform chain was not applied")
 	);
 
+}
+
+
+@Test @DisplayName("JSON to YAML test")
+public void jsonToYAMLTest() throws Exception {
+
+	String transforms = "yaml-to-json";
+	Transform<String, String> t = DaggerTransformComponent.builder()
+															.transforms(transforms)
+															.build()
+															.stringToString()
+															.get();
+	assertNotNull(t);
+
+	String yaml = "a:\n" + 
+					"- a0\n" + 
+					"- a1";
+	String result = t.apply(yaml);
+	String expected = "{\n" + 
+						"  \"a\" : [ \"a0\", \"a1\" ]\n" + 
+						"}\n";
+	assertAll("",
+			() -> assertNotNull(result),
+			() -> assertEquals(expected, expected, "Correct transform chain was not applied")
+	);
 }
 
 

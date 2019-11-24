@@ -1,3 +1,32 @@
+// TRANSFORM . JAVA
+
+package cat.calidos.morfeu.model.transform;
+
+import java.util.concurrent.ExecutionException;
+
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.TransformException;
+
+/**
+* @author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@FunctionalInterface
+public interface Transform<T, R> {
+
+R apply(T t) throws ParsingException, TransformException, ExecutionException, InterruptedException;
+
+default <V> Transform<T, V> andThen(Transform<? super R, ? extends V> after) {
+	return (T t) -> after.apply(apply(t));
+}
+
+
+default <V> Transform<V, R> compose(Transform<? super V, ? extends T> before) {
+	return (V v) -> apply(before.apply(v));
+}
+
+
+}
+
 /*
  *    Copyright 2018 Daniel Giribet
  *
@@ -13,28 +42,3 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-package cat.calidos.morfeu.model.transform;
-
-import java.util.concurrent.ExecutionException;
-
-import cat.calidos.morfeu.problems.ParsingException;
-
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@FunctionalInterface
-public interface Transform<T, R> {
-
-R apply(T t) throws ParsingException, ExecutionException, InterruptedException;
-
-default <V> Transform<T, V> andThen(Transform<? super R, ? extends V> after) {
-	return (T t) -> after.apply(apply(t));
-}
-
-
-default <V> Transform<V, R> compose(Transform<? super V, ? extends T> before) {
-    return (V v) -> apply(before.apply(v));
-}
-
-}
