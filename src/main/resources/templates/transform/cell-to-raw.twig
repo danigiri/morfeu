@@ -1,0 +1,21 @@
+{%- set meta = cell.cellModel.metadata -%}
+{%- set i = indent -%}
+{% if cell.value.isPresent -%}
+{%- if meta.presentation=='CELL-TEXT' and isMultiline(cell.value.get) -%}
+	{{-i}}{{multiline(i, cell.value.get)}}
+{% else -%}
+		{{-i}}{{cell.value.get}}
+{%- endif -%}
+{%- endif -%}
+{%- if cell.isComplex -%}
+	{#- ____________ complex content case ____________ -#}
+	{#- 1) the attributes (check key value and also identifiers first) -#}
+	{%- if cell.asComplex.attributes.size() > 0 -%}
+			
+	{%- endif -%}
+	{#- 2) the children -#}
+	{%- if cell.asComplex.children.size > 0 -%}
+	{%- endif -%}
+{%- else -%}
+	{#- ____________ simple content case ____________ -#}
+{%endif -%}
