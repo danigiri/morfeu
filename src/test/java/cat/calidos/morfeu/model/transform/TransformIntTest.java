@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -137,7 +136,7 @@ public void applyTemplateTest() throws Exception {
 	values.put("a", "foo");
 	values.put("b", "bar");
 	String result = t.apply(values);
-	String expected = 	"a=foo,b=bar,";
+	String expected = "a=foo,b=bar,";
 	assertAll("check yaml to json outcome",
 			() -> assertNotNull(result),
 			() -> assertEquals(expected, result, "Correct template was not applied")
@@ -158,6 +157,7 @@ public void applyTemplateTest() throws Exception {
 
 
 }
+
 
 }
 

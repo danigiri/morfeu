@@ -5,8 +5,6 @@ package cat.calidos.morfeu.model.transform.injection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
@@ -109,7 +107,7 @@ public static Map<String, JsonNode> params(List<String> transforms) throws Confi
 }
 
 
-//TODO: move to domain-specific transform module
+//TODO: move to domain-specific transform module please
 @Produces @IntoMap @Named("objectToString")
 @StringKey("content-to-xml")
 Transform<Object, String> contentToXML() {

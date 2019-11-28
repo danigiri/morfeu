@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.transform.injection.TransformEngine;
-import cat.calidos.morfeu.problems.ConfigurationException;
 
 /**
 *	@author daniel giribet

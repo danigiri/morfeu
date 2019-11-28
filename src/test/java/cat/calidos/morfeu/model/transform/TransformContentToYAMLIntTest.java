@@ -18,7 +18,6 @@ package cat.calidos.morfeu.model.transform;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -254,17 +253,6 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 	JsonNode amp = keyvalues7.get("amp");			//rows/cols/col0/keyvalues7/double
 	assertNotNull(amp);
 	assertEquals("contains an & amp", amp.asText());
-
-}
-
-
-private Map<String, Object> valueMap(Document doc) {
-
-	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", doc.asComplex().children().child(0).asComplex().children().asList());	// skip root node
-	values.put("model", doc.getModel());
-
-	return values;
 
 }
 
