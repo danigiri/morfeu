@@ -1,6 +1,6 @@
 // TRANSFORM TEZT . JAVA
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.transform;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

@@ -1,6 +1,6 @@
 // TRANSFORM INT TEST . JAVA
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.filter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +12,8 @@ import java.util.function.UnaryOperator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import cat.calidos.morfeu.model.transform.injection.DaggerTransformComponent;
+import cat.calidos.morfeu.filter.Filter;
+import cat.calidos.morfeu.filter.injection.DaggerFilterComponent;
 
 /**
 * @author daniel giribet
@@ -57,41 +58,29 @@ public void streamChainTest() throws Exception {
 @Test @DisplayName("Identity test")
 public void identityTest() throws Exception {
 
-	Transform<String, String> t = DaggerTransformComponent.builder()
-															.transforms("identity")
-															.build()
-															.stringToString()
-															.get();
-	assertEquals("foo",t.apply("foo"));
+	Filter<String, String> f = DaggerFilterComponent.builder().filters("identity").build().stringToString().get();
+	assertEquals("foo", f.apply("foo"));
 
-	Transform<Object, Object> t2 = DaggerTransformComponent.builder()
-															.transforms("identity")
-															.build()
-															.objectToObject()
-															.get();
+	Filter<Object, Object> f2 = DaggerFilterComponent.builder().filters("identity").build().objectToObject().get();
 	Map<String, String> map = new HashMap<String, String>(1);
 	map.put("foo", "bar");
-	assertEquals(map,t2.apply(map));
+	assertEquals(map, f2.apply(map));
 
 }
 
 
-@Test @DisplayName("More complex test test")
+@Test @DisplayName("Chained filter test")
 public void objectToStringTest() throws Exception {
 
 	String transforms = "to-string;identity;lowercase";
-	Transform<Object, String> t = DaggerTransformComponent.builder()
-															.transforms(transforms)
-															.build()
-															.objectToString()
-															.get();
-	assertNotNull(t);
+	Filter<Object, String> f = DaggerFilterComponent.builder().filters(transforms).build().objectToString().get();
+	assertNotNull(f);
 
 	StringBuffer fooObject = new StringBuffer("FOO");
-	String result = t.apply(fooObject);
+	String result = f.apply(fooObject);
 	assertAll("to string and to lower case",
 		() -> assertNotNull(result),
-		() -> assertEquals("foo", result, "Correct transform chain was not applied")
+		() -> assertEquals("foo", result, "Correct filter chain was not applied")
 	);
 
 }
@@ -101,41 +90,33 @@ public void objectToStringTest() throws Exception {
 public void jsonToYAMLTest() throws Exception {
 
 	String transforms = "yaml-to-json";
-	Transform<String, String> t = DaggerTransformComponent.builder()
-															.transforms(transforms)
-															.build()
-															.stringToString()
-															.get();
-	assertNotNull(t);
+	Filter<String, String> f = DaggerFilterComponent.builder().filters(transforms).build().stringToString().get();
+	assertNotNull(f);
 
 	String yaml = "a:\n" + 
 					"- a0\n" + 
 					"- a1";
-	String result = t.apply(yaml);
+	String result = f.apply(yaml);
 	String expected = "{\n" + 
 						"  \"a\" : [ \"a0\", \"a1\" ]\n" + 
 						"}\n";
 	assertAll("check yaml to json outcome",
 			() -> assertNotNull(result),
-			() -> assertEquals(expected, expected, "Correct transform chain was not applied")
+			() -> assertEquals(expected, expected, "Correct filter chain was not applied")
 	);
 }
 
 
-@Test @DisplayName("Apply template transform test")
+@Test @DisplayName("Apply template filter test")
 public void applyTemplateTest() throws Exception {
 
 	String transforms = "apply-template{\"template\":\"templates/transform/map-identity.twig\"}";
-	Transform<Object, String> t = DaggerTransformComponent.builder()
-															.transforms(transforms)
-															.build()
-															.objectToString()
-															.get();
+	Filter<Object, String> f = DaggerFilterComponent.builder().filters(transforms).build().objectToString().get();
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("a", "foo");
 	values.put("b", "bar");
-	String result = t.apply(values);
+	String result = f.apply(values);
 	String expected = "a=foo,b=bar,";
 	assertAll("check yaml to json outcome",
 			() -> assertNotNull(result),
@@ -143,12 +124,8 @@ public void applyTemplateTest() throws Exception {
 	);
 
 	transforms = "apply-template{}";
-	Transform<Object, String> t2 = DaggerTransformComponent.builder()
-															.transforms(transforms)
-															.build()
-															.objectToString()
-															.get();
-	String result2 = t2.apply(values);
+	Filter<Object, String> f2 = DaggerFilterComponent.builder().filters(transforms).build().objectToString().get();
+	String result2 = f2.apply(values);
 	String expected2 = "APPLY TEMPLATE HAS NO TEMPLATE PARAMETER";
 	assertAll("check yaml to json outcome",
 			() -> assertNotNull(result2),

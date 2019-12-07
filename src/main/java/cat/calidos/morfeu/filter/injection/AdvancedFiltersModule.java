@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.model.transform.injection;
+package cat.calidos.morfeu.filter.injection;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,8 +16,7 @@ import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
-
-import cat.calidos.morfeu.model.transform.Transform;
+import cat.calidos.morfeu.filter.Filter;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
@@ -26,14 +25,14 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule(includes=MapperModule.class)
-public class AdvancedTransformsModule {
+public class AdvancedFiltersModule {
 
-protected final static Logger log = LoggerFactory.getLogger(AdvancedTransformsModule.class);
+protected final static Logger log = LoggerFactory.getLogger(AdvancedFiltersModule.class);
 
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("yaml-to-json")
-Transform<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMapper) {
+Filter<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMapper) {
 	return yaml -> {
 		try {
 
@@ -50,16 +49,16 @@ Transform<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMap
 //TODO: move to domain-specific transform module
 @Produces @IntoMap @Named("objectToString")
 @StringKey("apply-template")
-Transform<Object, String> applyTemplate(Map<String, JsonNode> params) {
+Filter<Object, String> applyTemplate(Map<String, JsonNode> params) {
 
 	if (!params.containsKey("apply-template")) {
 		return (values) -> "APPLY TEMPLATE NEEDS PARAMETERS";
 	}
-	JsonNode transformParameters = params.get("apply-template");
-	if (!transformParameters.has("template")) {
+	JsonNode filterParameters = params.get("apply-template");
+	if (!filterParameters.has("template")) {
 		return (values) -> "APPLY TEMPLATE HAS NO TEMPLATE PARAMETER";
 	}
-	JsonNode templateNode = transformParameters.get("template");
+	JsonNode templateNode = filterParameters.get("template");
 	if (!templateNode.isTextual()) {
 		log.error("Incorrect parameters in apply-template, 'template' param value should be a string");
 		return (values) -> "APPLY TEMPLATE PARAM 'template' IS NOT A STRING";
@@ -67,11 +66,7 @@ Transform<Object, String> applyTemplate(Map<String, JsonNode> params) {
 	String template = templateNode.asText();
 
 	return (values) -> {
-		return DaggerViewComponent.builder()
-												.withTemplatePath(template)
-												.withValue(values)
-												.build()
-												.render();
+		return DaggerViewComponent.builder().withTemplatePath(template).withValue(values).build().render();
 	};
 
 }

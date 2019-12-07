@@ -1,6 +1,6 @@
-// TRANSFORM COMPONENT . JAVA
+// FILTER COMPONENT . JAVA
 
-package cat.calidos.morfeu.model.transform.injection;
+package cat.calidos.morfeu.filter.injection;
 
 import javax.inject.Named;
 
@@ -8,35 +8,34 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
-
-import cat.calidos.morfeu.model.transform.Transform;
+import cat.calidos.morfeu.filter.Filter;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={TransformModule.class, BasicTransformsModule.class, AdvancedTransformsModule.class,
+@ProductionComponent(modules={FilterModule.class, BasicFiltersModule.class, AdvancedFiltersModule.class,
 								ListeningExecutorServiceModule.class})
-public interface TransformComponent {
+public interface FilterComponent {
 
-ListenableFuture<Transform<String, String>> stringToString();
-ListenableFuture<Transform<String, Object>> stringToObject();
-ListenableFuture<Transform<Object, String>> objectToString();
-ListenableFuture<Transform<Object, Object>> objectToObject();
+ListenableFuture<Filter<String, String>> stringToString();
+ListenableFuture<Filter<String, Object>> stringToObject();
+ListenableFuture<Filter<Object, String>> objectToString();
+ListenableFuture<Filter<Object, Object>> objectToObject();
 
 @ProductionComponent.Builder
 interface Builder {
 
-	@BindsInstance Builder transforms(@Named("Transforms") String transforms);
+	@BindsInstance Builder filters(@Named("Filters") String filters);
 
-	TransformComponent build();
+	FilterComponent build();
 
 }
 
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

@@ -1,4 +1,5 @@
-package cat.calidos.morfeu.model.transform;
+// TRANSFORM TO RAW INT TEST . JAVA
+package cat.calidos.morfeu.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,11 +18,11 @@ public class TransformToRawIntTest extends TransformTezt {
 
 @Test @DisplayName("Stream chain test")
 public void streamChainTest() throws Exception {
-	
+
 	Document doc = produceDocumentFromPath("test-resources/documents/document1.json");
 	assertNotNull(doc);
-	
-	Map<String, Object> values = valueMap(doc);
+
+	Map<String, Object> values = valueMapFrom(doc);
 	String output = DaggerViewComponent.builder()
 											.withTemplatePath("templates/transform/content-to-raw.twig")
 											.withValue(values)

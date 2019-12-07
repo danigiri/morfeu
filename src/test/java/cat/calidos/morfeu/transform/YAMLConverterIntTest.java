@@ -1,6 +1,6 @@
 // YAML CONVERTER INT TEST . JAVA
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.transform;
 
 import static org.junit.Assert.*;
 

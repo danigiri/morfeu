@@ -1,6 +1,6 @@
-// TRANSFORM . JAVA
+// FILTER . JAVA
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.filter;
 
 import java.util.concurrent.ExecutionException;
 
@@ -11,16 +11,16 @@ import cat.calidos.morfeu.problems.TransformException;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @FunctionalInterface
-public interface Transform<T, R> {
+public interface Filter<F, R> {
 
-R apply(T t) throws ParsingException, TransformException, ExecutionException, InterruptedException;
+R apply(F f) throws ParsingException, TransformException, ExecutionException, InterruptedException;
 
-default <V> Transform<T, V> andThen(Transform<? super R, ? extends V> after) {
-	return (T t) -> after.apply(apply(t));
+default <V> Filter<F, V> andThen(Filter<? super R, ? extends V> after) {
+	return (F f) -> after.apply(apply(f));
 }
 
 
-default <V> Transform<V, R> compose(Transform<? super V, ? extends T> before) {
+default <V> Filter<V, R> compose(Filter<? super V, ? extends F> before) {
 	return (V v) -> apply(before.apply(v));
 }
 

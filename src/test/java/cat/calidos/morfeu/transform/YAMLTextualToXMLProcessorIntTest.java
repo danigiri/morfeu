@@ -1,6 +1,6 @@
 // YAML TEXTUAL TO XML PROCESSOR TEST . JAVA
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.transform;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;

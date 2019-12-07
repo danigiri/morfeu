@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.transform;
 
 import static org.junit.Assert.*;
 
@@ -41,7 +41,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/document1.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = valueMap(doc);
+	Map<String, Object> values = valueMapFrom(doc);
 	
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
@@ -92,7 +92,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/document3.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = valueMap(doc);
+	Map<String, Object> values = valueMapFrom(doc);
 
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
@@ -122,7 +122,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/keyvalues-yaml.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = valueMap(doc);
+	Map<String, Object> values = valueMapFrom(doc);
 	
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
@@ -157,7 +157,7 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/escape-yaml.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = valueMap(doc);
+	Map<String, Object> values = valueMapFrom(doc);
 	
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
@@ -187,7 +187,7 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/escape-yaml.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = valueMap(doc);
+	Map<String, Object> values = valueMapFrom(doc);
 	
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
@@ -224,7 +224,7 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 	Document doc = produceDocumentFromPath("test-resources/documents/escape-yaml.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = valueMap(doc);
+	Map<String, Object> values = valueMapFrom(doc);
 	
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")

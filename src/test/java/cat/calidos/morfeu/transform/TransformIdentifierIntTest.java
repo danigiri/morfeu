@@ -1,6 +1,6 @@
 // TRANSFORM IDENTIFIER INT TEST . JAVA
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.transform;
 
 import static org.junit.Assert.*;
 
@@ -31,10 +31,7 @@ public void testTransformJSONToYAML() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/document5.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", doc.children().child(0).asComplex().children().asList()); // skip root node
-	values.put("model", doc.getModel());
-
+	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
 												.withValue(values)

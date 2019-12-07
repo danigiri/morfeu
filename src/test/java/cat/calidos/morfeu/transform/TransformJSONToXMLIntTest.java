@@ -1,6 +1,6 @@
 // TRANSFORM JSON TO XML INT TEST . JAVA
 
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.transform;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,8 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cat.calidos.morfeu.model.transform.injection.DaggerTransformComponent;
+import cat.calidos.morfeu.filter.Filter;
+import cat.calidos.morfeu.filter.injection.DaggerFilterComponent;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
@@ -24,6 +25,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 public class TransformJSONToXMLIntTest extends TransformTezt {
 
 private String content;
+
 
 @Before
 public void setup() throws Exception {
@@ -39,8 +41,8 @@ public void testTransform() throws Exception {
 
 	String transforms = "string-to-json,content-to-xml";
 
-	Transform<String, String> transform = DaggerTransformComponent.builder()
-																	.transforms(transforms)
+	Filter<String, String> transform = DaggerFilterComponent.builder()
+																	.filters(transforms)
 																	.build()
 																	.stringToString()
 																	.get();
@@ -74,7 +76,7 @@ public void testConverter() throws Exception {
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
  *
  *   Unless required by applicable law or agreed to in writing, software

@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.model.transform;
+package cat.calidos.morfeu.filter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,45 +10,45 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cat.calidos.morfeu.model.transform.injection.TransformEngine;
+import cat.calidos.morfeu.filter.injection.FilterEngine;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TransformEngineTest {
+public class FilterEngineTest {
 
 
 @Test @DisplayName("Parse transform list test")
-public void parseTransformsBasic() {
+public void parseFiltersBasic() {
 
 	String transforms = "a;b;c";
-	List<String> t = TransformEngine.parseTransforms(transforms);
+	List<String> filters = FilterEngine.parseFilters(transforms);
 	assertAll("basic parse transforms",
-			() -> assertNotNull(t),
-			() -> assertEquals(3, t.size(), "Should be three transforms")
+			() -> assertNotNull(filters),
+			() -> assertEquals(3, filters.size(), "Should be three filters")
 	);
-	
+
 	transforms = "";
-	List<String> t2 = TransformEngine.parseTransforms(transforms);
-	assertAll("basic parse transforms",
-			() -> assertNotNull(t2),
-			() -> assertEquals(0, t2.size(), "Should be zero transforms")
+	List<String> filters2 = FilterEngine.parseFilters(transforms);
+	assertAll("basic parse filters",
+			() -> assertNotNull(filters2),
+			() -> assertEquals(0, filters2.size(), "Should be zero filters")
 	);
 
 }
 
 
 @Test @DisplayName("Parse parameters test")
-public void parseTransformsParameters() throws Exception {
+public void parseFiltersParameters() throws Exception {
 
-	String transforms = "a{ \"p0\":\"foo\", \"p1\": 1}";
-	List<String> t = TransformEngine.parseTransforms(transforms);
+	String filters = "a{ \"p0\":\"foo\", \"p1\": 1}";
+	List<String> f = FilterEngine.parseFilters(filters);
 	assertAll("parse params transform",
-			() -> assertNotNull(t),
-			() -> assertEquals(1, t.size(), "Should be one transform")
+			() -> assertNotNull(f),
+			() -> assertEquals(1, f.size(), "Should be one filter")
 	);
 
-	JsonNode params = TransformEngine.parseParametersFrom(t.get(0));
+	JsonNode params = FilterEngine.parseParametersFrom(f.get(0));
 	assertAll("parse params",
 			() -> assertNotNull(params),
 			() -> assertFalse(params.isEmpty(), "Should not get an empty param"),
@@ -60,16 +60,16 @@ public void parseTransformsParameters() throws Exception {
 
 
 @Test @DisplayName("Parse parameters edge cases test")
-public void parseTransformsParametersEdgeCases() throws Exception {
+public void parseFilterssParametersEdgeCases() throws Exception {
 
-	String transforms = "a{ \"p0\":\"fo\\;o\", \"p1\": 0};b{}";
-	List<String> t = TransformEngine.parseTransforms(transforms);
-	assertAll("parse params transform",
-			() -> assertNotNull(t),
-			() -> assertEquals(2, t.size(), "Should be two transforms")
+	String filters = "a{ \"p0\":\"fo\\;o\", \"p1\": 0};b{}";
+	List<String> f = FilterEngine.parseFilters(filters);
+	assertAll("parse params filter",
+			() -> assertNotNull(f),
+			() -> assertEquals(2, f.size(), "Should be two transforms")
 	);
 
-	JsonNode params = TransformEngine.parseParametersFrom(t.get(0));
+	JsonNode params = FilterEngine.parseParametersFrom(f.get(0));
 	assertAll("parse params 0",
 			() -> assertNotNull(params),
 			() -> assertFalse(params.isEmpty(), "Should not get an empty param"),
@@ -77,7 +77,7 @@ public void parseTransformsParametersEdgeCases() throws Exception {
 			() -> assertEquals(0, params.get("p1").asInt(), "Should have a correctly parsed json")
 	);
 
-	JsonNode params1 = TransformEngine.parseParametersFrom(t.get(1));
+	JsonNode params1 = FilterEngine.parseParametersFrom(f.get(1));
 	assertAll("parse params 1",
 			() -> assertNotNull(params1),
 			() -> assertTrue(params1.isEmpty(), "Should get an empty param")

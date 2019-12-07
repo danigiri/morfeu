@@ -1,8 +1,10 @@
-package cat.calidos.morfeu.model.transform.injection;
+// BASIC FILTERS MODULE . JAVA
+
+package cat.calidos.morfeu.filter.injection;
 
 import javax.inject.Named;
 
-import cat.calidos.morfeu.model.transform.Transform;
+import cat.calidos.morfeu.filter.Filter;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 import dagger.producers.ProducerModule;
@@ -12,33 +14,33 @@ import dagger.producers.Produces;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class BasicTransformsModule {
+public class BasicFiltersModule {
 
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("identity")
-Transform<String, String> stringIdentity() {
+Filter<String, String> stringIdentity() {
 	return s -> s;
 }
 
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("uppercase")
-Transform<String, String> uppercase() {	// mainly for testing
+Filter<String, String> uppercase() {	// mainly for testing
 	return s -> s.toUpperCase();
 }
 
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("lowercase")
-Transform<String, String> lowercase() {	// mainly for testing
+Filter<String, String> lowercase() {	// mainly for testing
 	return s -> s.toLowerCase();
 }
 
 
 @Produces @IntoMap @Named("objectToString")
 @StringKey("to-string")
-Transform<Object, String> toString_() {
+Filter<Object, String> toString_() {
 	return (o) -> o.toString();
 }
 
@@ -46,7 +48,7 @@ Transform<Object, String> toString_() {
 
 @Produces @IntoMap @Named("objectToObject")
 @StringKey("identity")
- Transform<Object, Object> iobjectIdentity() {
+ Filter<Object, Object> iobjectIdentity() {
 	return o -> o;
 }
 

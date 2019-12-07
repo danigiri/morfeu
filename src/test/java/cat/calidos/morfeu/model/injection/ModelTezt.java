@@ -137,7 +137,7 @@ protected JsonNode readYAMLFrom(String path) throws Exception {
 }
 
 
-protected Map<String, Object> valueMap(Document doc) {
+protected Map<String, Object> valueMapFrom(Document doc) {
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("cells", doc.asComplex().children().child(0).asComplex().children().asList());	// skip root node
