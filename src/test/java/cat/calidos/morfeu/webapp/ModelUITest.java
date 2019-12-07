@@ -124,7 +124,7 @@ public void testCellModels() {
 
 	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
 	int colChildrenSize = colChildren.size();
-	assertEquals("col model should have 8 children, not "+colChildrenSize, 8, colChildrenSize);
+	assertEquals("col model should have 9 children, not "+colChildrenSize, 9, colChildrenSize);
 
 	assertEquals("stuff", colChildren.get(0).name());
 	assertEquals("data", colChildren.get(1).name());
