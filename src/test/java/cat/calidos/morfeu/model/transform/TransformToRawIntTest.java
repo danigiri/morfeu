@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.Document;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 *	@author daniel giribet
@@ -19,13 +20,25 @@ public void streamChainTest() throws Exception {
 	
 	Document doc = produceDocumentFromPath("test-resources/documents/document1.json");
 	assertNotNull(doc);
-
-	Map<String, Object> valueMap = valueMap(doc);
 	
-}
+	Map<String, Object> values = valueMap(doc);
+	String output = DaggerViewComponent.builder()
+											.withTemplatePath("templates/transform/content-to-raw.twig")
+											.withValue(values)
+											.build() 
+											.render();
+	//System.err.println(output);
+	// hard to test, let's do some basic assertions
+	assertAll("raw output test",
+		() -> assertNotNull(output),
+		() -> assertTrue(output.contains("blahblah")),
+		() -> assertFalse(output.contains("data"))
+	);
 
 }
 
+
+}
 
 /*
  *    Copyright 2019 Daniel Giribet

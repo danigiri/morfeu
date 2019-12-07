@@ -4,17 +4,15 @@
 	{#- ____________ complex content case ____________ -#}
 	{#- 1) the attributes (check key value and also identifiers first) -#}
 	{%- if cell.asComplex.attributes.size() > 0 -%}
-	{{-i}}{% if cell.value.isPresent -%}{{ cell.value.get }}{%- endif %} {% include "cell-attributes-to-raw.twig" with {'cell': cell, 'case': case, 'indent': i} only %}
-{%- endif -%}
+		{{-i}}{%- if cell.value.isPresent -%}{{ cell.value.get }}{% endif %}{% include 'cell-attributes-to-raw.twig' with {'cell': cell, 'case': case, 'indent': i} only %}
 	{%- endif -%}
 	{#- 2) the children -#}
 	{%- if cell.asComplex.children.size > 0 -%}
-		{%- set ilist = concat(i,'  ') -%}
 		{%- for c in cell.asComplex.children.asList -%}
-{%include "cell-to-raw.twig" with {'cell': c, 'case':case, 'indent': concat(ilist,'  ')} only -%}
+{% include 'cell-to-raw.twig' with {'cell': c, 'case':case, 'indent': concat(i,'  ')} only -%}
 		{%- endfor -%}
 	{%- endif -%}
 {%- else -%}
 	{#- ____________ simple content case ____________ -#}
-	{{-i}}{{ cell.value.get }}
+	{%- if cell.value.isPresent -%}{{i}}{{ cell.value.get }}{%- endif -%}
 {%endif -%}

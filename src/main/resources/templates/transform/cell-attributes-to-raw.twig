@@ -1,20 +1,15 @@
 {%- if cell.cellModel.metadata.identifier.isPresent -%}
 	{%- set id = cell.cellModel.metadata.identifier.get -%}
 	{%- set a = cell.asComplex.attributes.attribute(id) -%}
+{%- else -%}
+	{%- set id = '' -%}
 {%- endif -%}
 {#- Find out if we have key value -#}
 {%- if cell.cellModel.metadata.getDirectivesFor(case).contains('KEY-VALUE') -%}
-	{{-indent}}{a.name}}={{a.value.get}}{% for x in cell.asComplex.attributes.asList %}{% if x.name!=id and x.value.isPresent %} {{x.value.get}}{% endif %}{% endfor %}
-{%- else -%}
+ {{a.name}}={{a.value.get}}{% for x in cell.asComplex.attributes.asList %}{% if x.name!=id and x.value.isPresent %} {{x.value.get}}{% endif %}{% endfor %}
+{% else -%}
 	{#- hack to put the identifier first -#}
-	{%- if cell.cellModel.metadata.identifier.isPresent -%}
-		{{-indent}}{{% if a.value.isPresent %}{{a.value.get}}{% endif -%}
-{%- else -%}
-		{%- set id = '' -%}
-	{%- endif -%}
 	{%- for x in cell.asComplex.attributes.asList -%}
-	{%- if x.name!=id -%}
-		{{-indent}}{% if x.value.isPresent %}{{x.value.get}}{% endif %}{# no multiline attributes allowed #}
-{%- endif -%}
-{% endfor -%}
-{%- endif -%}
+		{%- if x.name!=id %}{% if x.value.isPresent %} {{x.value.get}}{% endif %}{%- endif -%}
+	{%- endfor %}
+{% endif -%}
