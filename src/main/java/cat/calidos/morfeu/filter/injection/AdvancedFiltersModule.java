@@ -18,6 +18,7 @@ import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 import cat.calidos.morfeu.filter.Filter;
 import cat.calidos.morfeu.problems.TransformException;
+import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
@@ -71,6 +72,12 @@ Filter<Object, String> applyTemplate(Map<String, JsonNode> params) {
 
 }
 
+
+@Produces  @IntoMap @Named("stringToObject")
+@StringKey("string-to-json")
+Filter<String, Object> stringToJSON() {
+	return (content) -> DaggerJSONParserComponent.builder().from(content).build().json().get();
+}
 
 
 }

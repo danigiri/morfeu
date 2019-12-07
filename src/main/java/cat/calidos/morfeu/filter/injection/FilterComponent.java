@@ -15,7 +15,7 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={FilterModule.class, BasicFiltersModule.class, AdvancedFiltersModule.class,
-								ListeningExecutorServiceModule.class})
+								ContentFiltersModule.class,	ListeningExecutorServiceModule.class})
 public interface FilterComponent {
 
 ListenableFuture<Filter<String, String>> stringToString();

@@ -10,21 +10,17 @@ import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import dagger.multibindings.IntoMap;
-import dagger.multibindings.StringKey;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 import cat.calidos.morfeu.filter.Filter;
 import cat.calidos.morfeu.problems.ConfigurationException;
-import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
-import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
-import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class FilterModule {
+
 
 @Produces
 public static Filter<String, String> stringToString(List<String> links,
@@ -94,43 +90,15 @@ public static List<String> transforms(@Named("Filters") String requestedFilters)
 
 
 @Produces
-public static Map<String, JsonNode> params(List<String> transforms) throws ConfigurationException {
+public static Map<String, JsonNode> params(List<String> filters) throws ConfigurationException {
 
-	Map<String, JsonNode> params = new HashMap<String, JsonNode>(transforms.size());
+	Map<String, JsonNode> params = new HashMap<String, JsonNode>(filters.size());
 
-	for (String t : transforms) {
-		params.put(FilterEngine.nameFromFilter(t), FilterEngine.parseParametersFrom(t));
+	for (String f : filters) {
+		params.put(FilterEngine.nameFromFilter(f), FilterEngine.parseParametersFrom(f));
 	}
 
 	return params;
-}
-
-
-//TODO: move to domain-specific transform module please
-@Produces @IntoMap @Named("objectToString")
-@StringKey("content-to-xml")
-Filter<Object, String> contentToXML() {
-	return (json) -> DaggerContentConverterComponent.builder().from((JsonNode)json).build().xml();
-}
-
-
-//TODO: move to domain-specific transform module
-@Produces @IntoMap @Named("objectToString")
-@StringKey("content-to-yaml")
-Filter<Object, String> contentToYAML() {
-	return (values) -> DaggerViewComponent.builder()
-											.withTemplatePath("templates/transform/content-to-yaml.twig")
-											.withValue(values)
-											.build()
-											.render();
-}
-
-
-//TODO: move to domain-specific transform module
-@Produces  @IntoMap @Named("stringToObject")
-@StringKey("string-to-json")
-Filter<String, Object> stringToJSON() {
-	return (content) -> DaggerJSONParserComponent.builder().from(content).build().json().get();
 }
 
 
