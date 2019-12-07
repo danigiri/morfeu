@@ -44,7 +44,7 @@ interface Builder {
 	@BindsInstance Builder to(@Named("DestinationContentURI") URI u);
 	@BindsInstance Builder having(@Named("ContentURI") URI u);
 	@BindsInstance Builder model(@Named("ModelURI") URI u);
-	@BindsInstance Builder transforms(@Nullable @Named("Transforms") String transforms);
+	@BindsInstance Builder filters(@Nullable @Named("Filters") String filters);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
 
 	ContentSaverParserComponent build();

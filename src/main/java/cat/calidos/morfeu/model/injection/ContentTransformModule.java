@@ -18,9 +18,11 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
+import cat.calidos.morfeu.filter.injection.DaggerFilterComponent;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import dagger.producers.Producer;
@@ -36,19 +38,18 @@ public class ContentTransformModule {
 protected final static Logger log = LoggerFactory.getLogger(ContentTransformModule.class);
 
 @Produces @Named("EffectiveContent")
-public static String produceEffectiveContent(@Named("DestinationContentURI") URI uri, 
-											@Named("YAMLContent") Producer<String> yamlProducer,
-											@Named("JSONContent") Producer<String> jsonProducer,
-											//@Named("TransformContent") Producer<String> transformProducer,
-											@Named("Content") Producer<String> contentProducer,
-											@Nullable @Named("Transforms") String transforms)
+public static String produceEffectiveContent(@Named("DestinationContentURI") URI uri,
+												@Named("YAMLContent") Producer<String> yamlProducer,
+												@Named("JSONContent") Producer<String> jsonProducer,
+												@Named("FilterContent") Producer<String> filtersProducer,
+												@Named("Content") Producer<String> contentProducer,
+												@Nullable @Named("Filters") String filters)
 						throws TransformException {
 
 	String name = FilenameUtils.getName(uri.getPath());
-	String appliedTransforms;
 	String content;
 	try {
-//		if (transforms==null) {
+		if (filters==null) {
 			if (name.endsWith("yaml")) {
 				content = yamlProducer.get().get();
 			} else if (name.endsWith("json")) {
@@ -56,9 +57,9 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 			} else {
 			content = contentProducer.get().get(); // no transformation required
 			}
-//		} else {
-			//content = transformProducer.get().get();
-//		}
+		} else {
+			content = filtersProducer.get().get();
+		}
 	} catch (InterruptedException | ExecutionException e) {
 		log.error("Could not get effective content for '{}' ({})", uri, e);
 		throw new TransformException("Problem when getting effective content to save '"+uri+"'", e);
@@ -69,9 +70,9 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 }
 
 
-// TODO: move to domain-specific transform module
+// TODO: move to domain-specific filter module
 @Produces @Named("YAMLContent")
-public static String jsonProducer(Composite<Cell> contentRootCells, Model model) {
+public static String yamlContent(Composite<Cell> contentRootCells, Model model) {
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("cells", contentRootCells.child(0).asComplex().children().asList());	// skip virtual root
@@ -85,9 +86,9 @@ public static String jsonProducer(Composite<Cell> contentRootCells, Model model)
 }
 
 
-//TODO: move to domain-specific transform module
+//TODO: move to domain-specific filter module
 @Produces @Named("JSONContent")
-public static String yamlProducer(@Named("DestinationContentURI") URI uri,
+public static String jsonContent(@Named("DestinationContentURI") URI uri,
 									@Named("YAMLContent") String yaml,
 									ObjectMapper jsonMapper,
 									YAMLMapper yamlMapper)
@@ -99,8 +100,32 @@ public static String yamlProducer(@Named("DestinationContentURI") URI uri,
 		return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(yamlMapper.readTree(yaml));
 
 	} catch (IOException e) {
-		throw new TransformException("Problem when transforming effective content to save '"+uri+"'", e);
+		String message = "Problem when transforming effective content to save '"+uri+"'";
+		log.error(message);
+		throw new TransformException(message, e);
 	}
+}
+
+
+@Produces @Named("FilterContent")
+public static String filterContent(Composite<Cell> contentRootCells, 
+									Model model,
+									@Nullable @Named("Filters") String filters, 
+									@Named("DestinationContentURI") URI uri) throws TransformException {
+
+	try {
+
+		Map<String, Object> values = new HashMap<String, Object>(2);
+		values.put("cells", contentRootCells);
+		values.put("model", model);
+
+		return DaggerFilterComponent.builder().filters(filters).build().objectToString().get().apply(values);
+	} catch (Exception e) {
+		String message = "Problem when filtering effective content to save '"+uri+"' with '"+filters+"'";
+		log.error(message);
+		throw new TransformException(message, e);
+	}
+
 }
 
 
