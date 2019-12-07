@@ -2,7 +2,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,9 +10,10 @@ import java.net.URI;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ private URI contentURI;
 private String tmpPath;
 
 
-@AfterClass
+@AfterAll
 public static void teardownClass() throws InterruptedException {
 
 	Thread.sleep(5000); // wait for reboot of jetty env
@@ -45,8 +46,7 @@ public static void teardownClass() throws InterruptedException {
 }
 
 
-
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	String modelPath = "test-resources/models/test-model.xsd";
@@ -64,7 +64,7 @@ public void setup() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Validate string parsing")
 public void testValidateString() throws Exception {
 
 	URI outputURI = new URI("file://"+temporaryOutputFilePath());
@@ -80,28 +80,27 @@ public void testValidateString() throws Exception {
 	Validable validator = contentComponent.validator().get();
 	assertNotNull(validator);
 	validator.validate();	// this would throw an exception
-	assertTrue("'Content saver parser' did not validate a valid XML string", validator.isValid());
+	assertTrue(validator.isValid(), "'Content saver parser' did not validate a valid XML string");
 
 	Composite<Cell> rootCells = contentComponent.content().get();
 	assertNotNull(rootCells);
 
-	assertEquals("Wrong size of content root from 'content saver parser' parsed XML string", 1, rootCells.size());
+	assertEquals(1, rootCells.size(), "Wrong size of content root from 'content saver parser' parsed XML string");
 	Cell test = rootCells.child(0).asComplex().children().child("test(0)"); // skip virtual root
-	assertEquals("Wrong root node name from 'content saver parser' parsed XML string", "test", test.getName());
+	assertEquals("test", test.getName(), "Wrong root node name from 'content saver parser' parsed XML string");
 
 }
 
 
-@Test
+@Test @DisplayName("Non valid string parsing")
 public void testNonValidString() throws Exception {
-	
-	URI outputURI = new URI("file://"+temporaryOutputFilePath());
 
+	URI outputURI = new URI("file://"+temporaryOutputFilePath());
 	String contentPath = "test-resources/documents/nonvalid-document.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	URI fullContentURI = new URI(fullContentPath);
 	String content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
-	
+
 	Validable validator = DaggerContentSaverParserComponent
 							.builder()
 							.from(content)
@@ -112,18 +111,18 @@ public void testNonValidString() throws Exception {
 							.build()
 							.validator()
 							.get();
-	
+
 	try {
 		System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid str");
 		validator.validate();
 	} catch (ValidationException e) {
-		assertTrue("Wrong exception message parsing of 'content saver parser'", e.getMessage().contains("notvalid"));
+		assertTrue(e.getMessage().contains("notvalid"), "Wrong exception message parsing of 'content saver parser'");
 	}
 
 }
 
 
-@Test
+@Test @DisplayName("Save to XML")
 public void testSaveToXML() throws Exception {
 
 	String outputPath = temporaryOutputFilePath();
@@ -140,11 +139,11 @@ public void testSaveToXML() throws Exception {
 													.get();
 	saver.save();
 	File savedFile = new File(outputPath);
-	assertTrue("Saver component did not create a file", savedFile.exists());
+	assertTrue(savedFile.exists(), "Saver component did not create a file");
 
 	try {
 		String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
-		assertEquals("Content saved to file is not the same as input", content, writtenContent);
+		assertEquals(content, writtenContent, "Content saved to file is not the same as input");
 	} finally {
 		if (savedFile.exists()) {
 			savedFile.delete();
@@ -154,7 +153,7 @@ public void testSaveToXML() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Save to YAML")
 public void testSaveToYAML() throws Exception {
 
 	String outputPath = temporaryOutputFilePath()+".yaml";
@@ -171,7 +170,7 @@ public void testSaveToYAML() throws Exception {
 													.get();
 	saver.save();
 	File savedFile = new File(outputPath);
-	assertTrue("Saver component did not create a file", savedFile.exists());
+	assertTrue(savedFile.exists(), "Saver component did not create a file");
 	savedFile.deleteOnExit();
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
@@ -183,8 +182,7 @@ public void testSaveToYAML() throws Exception {
 }
 
 
-
-@Test
+@Test @DisplayName("Save to JSON")
 public void testSaveToJSON() throws Exception {
 
 	String outputPath = temporaryOutputFilePath()+".json";
@@ -201,7 +199,7 @@ public void testSaveToJSON() throws Exception {
 													.get();
 	saver.save();
 	File savedFile = new File(outputPath);
-	assertTrue("Saver component did not create a file", savedFile.exists());
+	assertTrue(savedFile.exists(), "Saver component did not create a file");
 	savedFile.deleteOnExit();
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
@@ -209,6 +207,12 @@ public void testSaveToJSON() throws Exception {
 
 	ObjectMapper mapper = new ObjectMapper();
 	checkContent(writtenContent, mapper);
+
+}
+
+
+@Test @DisplayName("Save to filters")
+public void testSaveToFilters() {
 
 }
 
@@ -223,22 +227,30 @@ private String temporaryOutputFilePath() {
 private void checkContent(String writtenContent, ObjectMapper mapper) throws IOException {
 
 	JsonNode node = mapper.readTree(writtenContent);
-	assertNotNull(node);
-	assertTrue(node.isObject());
-	assertTrue(node.has("rows"));
+	assertAll("check content",
+		() -> assertNotNull(node),
+		() -> assertTrue(node.isObject()),
+		() -> assertTrue(node.has("rows"))
+	);
 
 	JsonNode rows = node.get("rows");			//rows
-	assertNotNull(rows);
-	assertTrue(rows.isArray());
-	assertEquals(1, rows.size());
+	assertAll("check rows",
+		() -> assertNotNull(rows),
+		() -> assertTrue(rows.isArray()),
+		() -> assertEquals(1, rows.size())
+	);
 
 	JsonNode cols = rows.get(0).get("cols");
-	assertNotNull(cols);
-	assertTrue(cols.isArray());
+	assertAll("check cols",
+		() -> assertNotNull(cols),
+		() -> assertTrue(cols.isArray())
+	);
 
 	JsonNode col0Size = cols.get(0).get("size");
-	assertNotNull(col0Size);
-	assertEquals(4, col0Size.asInt());
+	assertAll("check col",
+		() -> assertNotNull(col0Size),
+		() -> assertEquals(4, col0Size.asInt())
+	);
 
 }
 
