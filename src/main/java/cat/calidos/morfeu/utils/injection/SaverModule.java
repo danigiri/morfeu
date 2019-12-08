@@ -58,7 +58,9 @@ public static LocalSaver fileSaver(@Named("DestinationPath") String path, @Named
 public static String destinationPathFrom(@Named("DestinationContentURI") URI u) {
 
 	String uriString = u.toString();
-	String path = uriString.substring("file://".length(), uriString.length());
+	// string could start with 'file:/' or with 'file://', we need to handle that
+	int lengthToRemove = uriString.startsWith("file://") ? "file://".length() : "file:".length();
+	String path = uriString.substring(lengthToRemove, uriString.length());
 	log.info("Saving content to destination path '{}'", path);
 
 	return path;
