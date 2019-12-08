@@ -1,6 +1,8 @@
 // MODEL TEZT . JAVA
 package cat.calidos.morfeu.model.injection;
 
+import static org.junit.Assert.assertFalse;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -9,10 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import javax.xml.transform.Source;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.Diff;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -144,6 +151,44 @@ protected Map<String, Object> valueMapFrom(Document doc) {
 	values.put("model", doc.getModel());
 
 	return values;
+
+}
+
+
+protected String temporaryOutputFilePathIn(String pref) {
+	return pref+"/filesaver-test-"+System.currentTimeMillis()+".txt";
+}
+
+
+protected void compareWithXMLFile(String content, String path) {
+
+	Source transformedSource = Input.fromString(content).build();
+	File originalFile = new File(path);
+	Source originalSource = Input.fromFile(originalFile).build();
+
+	Diff diff = DiffBuilder.compare(originalSource)
+							.withTest(transformedSource)
+							.ignoreComments()
+							.ignoreWhitespace()
+							.build();
+
+	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
+
+}
+
+
+protected void compareWithXML(String content, String expected) {
+
+	Source transformedSource = Input.fromString(content).build();
+	Source originalSource = Input.fromString(expected).build();
+
+	Diff diff = DiffBuilder.compare(originalSource)
+							.withTest(transformedSource)
+							.ignoreComments()
+							.ignoreWhitespace()
+							.build();
+
+	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
 
 }
 
