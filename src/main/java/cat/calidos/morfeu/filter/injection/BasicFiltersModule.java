@@ -29,28 +29,28 @@ protected final static Logger log = LoggerFactory.getLogger(BasicFiltersModule.c
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("identity")
-Filter<String, String> stringIdentity() {
+public static Filter<String, String> stringIdentity() {
 	return s -> s;
 }
 
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("uppercase")
-Filter<String, String> uppercase() {	// mainly for testing
+public static Filter<String, String> uppercase() {	// mainly for testing
 	return s -> s.toUpperCase();
 }
 
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("lowercase")
-Filter<String, String> lowercase() {	// mainly for testing
+public static Filter<String, String> lowercase() {	// mainly for testing
 	return s -> s.toLowerCase();
 }
 
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("replace")
-Filter<String, String> replace(Map<String, JsonNode> params) throws TransformException {
+public static Filter<String, String> replace(Map<String, JsonNode> params) throws TransformException {
 
 	if (!params.containsKey("replace")) {
 		return (v) -> "replace filter did not get parameters";
@@ -79,7 +79,7 @@ Filter<String, String> replace(Map<String, JsonNode> params) throws TransformExc
 
 @Produces @IntoMap @Named("objectToString")
 @StringKey("to-string")
-Filter<Object, String> toString_() {
+public static Filter<Object, String> toString_() {
 	return (o) -> o.toString();
 }
 
@@ -87,7 +87,7 @@ Filter<Object, String> toString_() {
 
 @Produces @IntoMap @Named("objectToObject")
 @StringKey("identity")
- Filter<Object, Object> iobjectIdentity() {
+public static Filter<Object, Object> iobjectIdentity() {
 	return o -> o;
 }
 

@@ -55,7 +55,7 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 			} else if (name.endsWith("json")) {
 				content = jsonProducer.get().get();
 			} else {
-			content = contentProducer.get().get(); // no transformation required
+				content = contentProducer.get().get(); // no transformation required
 			}
 		} else {
 			content = filtersProducer.get().get();
@@ -120,11 +120,14 @@ public static String filterContent(@Named("ValuesForTemplate") Map<String, Objec
 }
 
 @Produces @Named("ValuesForTemplate")
-public static Map<String, Object> values(Composite<Cell> contentRootCells, Model model) {
+public static Map<String, Object> values(Composite<Cell> contentRootCells,
+											Model model,
+											@Named("Content") String content) {
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("cells", contentRootCells);
 	values.put("model", model);
+	values.put("xml", content);
 
 	return values;
 

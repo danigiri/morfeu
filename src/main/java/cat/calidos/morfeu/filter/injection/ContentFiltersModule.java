@@ -1,5 +1,7 @@
 package cat.calidos.morfeu.filter.injection;
 
+import java.util.Map;
+
 import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,14 +23,34 @@ public class ContentFiltersModule {
 
 @Produces @IntoMap @Named("objectToString")
 @StringKey("content-to-xml")
-Filter<Object, String> contentToXML() {
+public static Filter<Object, String> contentToXML() {
 	return (json) -> DaggerContentConverterComponent.builder().from((JsonNode)json).build().xml();
 }
 
 
 @Produces @IntoMap @Named("objectToString")
+@StringKey("map-to-string")
+@SuppressWarnings("unchecked")
+public static Filter<Object, String> mapToString(Map<String, JsonNode> params) {
+	if (!params.containsKey("map-to-string")) {
+		return (map) -> "map filter did not get parameters";
+	}
+	JsonNode filterParams = params.get("map-to-string");
+	if (!filterParams.has("key")) {
+		return (map) -> "map filter did not get key parameter";
+	}
+	String key = filterParams.get("key").asText();
+	return (map) -> {
+		return (String)((Map<String, Object>)map).get(key);	// TODO: add more error control
+
+	};
+
+}
+
+
+@Produces @IntoMap @Named("objectToString")
 @StringKey("content-to-yaml")
-Filter<Object, String> contentToYAML() {
+public static Filter<Object, String> contentToYAML() {
 	return (values) -> DaggerViewComponent.builder()
 											.withTemplatePath("templates/transform/content-to-yaml.twig")
 											.withValue(values)

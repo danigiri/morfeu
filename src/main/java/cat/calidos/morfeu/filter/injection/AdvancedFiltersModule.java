@@ -33,7 +33,7 @@ protected final static Logger log = LoggerFactory.getLogger(AdvancedFiltersModul
 
 @Produces @IntoMap @Named("stringToString")
 @StringKey("yaml-to-json")
-Filter<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMapper) {
+public static Filter<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMapper) {
 	return yaml -> {
 		try {
 
@@ -50,7 +50,7 @@ Filter<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMapper
 //TODO: move to domain-specific transform module
 @Produces @IntoMap @Named("objectToString")
 @StringKey("apply-template")
-Filter<Object, String> applyTemplate(Map<String, JsonNode> params) {
+public static Filter<Object, String> applyTemplate(Map<String, JsonNode> params) {
 
 	if (!params.containsKey("apply-template")) {
 		return (values) -> "APPLY TEMPLATE NEEDS PARAMETERS";
@@ -75,7 +75,7 @@ Filter<Object, String> applyTemplate(Map<String, JsonNode> params) {
 
 @Produces  @IntoMap @Named("stringToObject")
 @StringKey("string-to-json")
-Filter<String, Object> stringToJSON() {
+public static Filter<String, Object> stringToJSON() {
 	return (content) -> DaggerJSONParserComponent.builder().from(content).build().json().get();
 }
 
