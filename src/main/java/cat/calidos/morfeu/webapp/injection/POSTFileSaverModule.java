@@ -44,7 +44,7 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 															@Named("POSTFileSaverModule-POSTUri")Producer<String> uri) {
 
 
-	return (request,response) -> {
+	return (request, response) -> {
 		log.trace("------ Request filter request ({} {}) ------", request.getMethod(), request.getServletPath());
 
 		if (!request.getMethod().equals(_POST)) {
@@ -58,13 +58,8 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 			String content = request.getParameter("content");
 			//System.err.println(content);
 			// we assume Morfeu is doing the validation for now
-			Saver saver = DaggerSaverComponent.builder()
-												.toURI(destination)
-												.content(content)
-												.build()
-												.saver()
-												.get();
-			saver.save();
+			DaggerSaverComponent.builder().toURI(destination).content(content).build().saver().get().save();
+
 			// now we give a response back
 			response.setStatus(HttpServletResponse.SC_OK);
 			outputStream = response.getOutputStream();
@@ -83,6 +78,7 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 		}
 
 		return false;	// stop filter chain???
+
 	};
 
 }

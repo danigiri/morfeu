@@ -107,7 +107,6 @@ public void testProduceJSONContent() throws Exception {
 															.get();
 	testDocument1Content(content);
 
-	
 }
 
 
