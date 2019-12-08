@@ -1,5 +1,12 @@
 {
   "schema": 0,
+  "URI": "target/test-classes/test-resources/documents/document1.xml",
+  "name": "",
+  "desc": "",
+  "cellModelURI": "target/test-classes/test-resources/models/test-model.xsd",
+  "isSimple": false,
+  "attributes": [],
+  "internalAttributes": [],
   "children": [
     {
       "schema": 0,
