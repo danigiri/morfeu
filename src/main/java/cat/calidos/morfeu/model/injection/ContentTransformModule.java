@@ -49,7 +49,7 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 	String name = FilenameUtils.getName(uri.getPath());
 	String content;
 	try {
-		if (filters==null) {
+		if (filters==null || filters.isEmpty()) {
 			if (name.endsWith("yaml")) {
 				content = yamlProducer.get().get();
 			} else if (name.endsWith("json")) {

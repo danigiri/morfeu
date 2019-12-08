@@ -34,7 +34,7 @@ private final static Logger log = LoggerFactory.getLogger(ContentSaveControl.cla
 private String prefix;				// prefix where things will be saved
 private String path;				// relative destination path
 private String destination;			// final destination: saveable prefix + relative path contatenated
-private Optional<String> transforms;//
+private Optional<String> filters;//
 private String modelPath;			// relative model path
 private String content;				// the content to be saved in string form
 
@@ -43,14 +43,14 @@ private String contentSnippet;		// the first few characters of the content, for 
 private HashMap<String, String> resultMetadata;
 
 
-public ContentSaveControl(String prefix, String path, String content, Optional<String> transforms, String modelPath) {
+public ContentSaveControl(String prefix, String path, String content, Optional<String> filters, String modelPath) {
 
 	super("POST content:"+path, "templates/operation-ok.twig", "templates/operation-problem.twig");
 
 	this.prefix = prefix;
 	this.path = path;
 	this.destination = prefix+path;
-	this.transforms = transforms;
+	this.filters = filters;
 	this.modelPath = modelPath;
 	this.content = content;
 	this.contentSnippet = content.substring(0, Math.min(10, content.length()));
@@ -58,7 +58,7 @@ public ContentSaveControl(String prefix, String path, String content, Optional<S
 
 	resultMetadata.put("target", path);
 	resultMetadata.put("operation", "FileSaver");
-	resultMetadata.put("transforms", transforms.orElse(""));
+	resultMetadata.put("filters", filters.orElse(""));
 	resultMetadata.put("operationTime", "-1");
 
 }
@@ -82,6 +82,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	ContentSaverParserComponent component = DaggerContentSaverParserComponent.builder()
 																				.from(transformedContent)
 																				.to(outputURI)
+																				.filters(filters.orElse(""))
 																				.having(uri)
 																				.model(modelURI)
 																				.withModelFetchedFrom(fullModelURI)

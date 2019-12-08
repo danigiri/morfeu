@@ -18,7 +18,7 @@ config: "default";
 production: boolean = environment.production;
 catalogues = "/morfeu/test-resources/catalogues.json";
 remoteEvents = "/morfeu/dyn/events";
-
+savefilters: string;
 
 constructor(eventService: EventService, 
 		@Inject("ConfigurationService") private configService: RemoteObjectService<Configuration, ConfigJSON>) {
@@ -43,6 +43,7 @@ overwriteWithParams(params: Params) {
 	this.production = params.production!==undefined ? params.production : environment.production;
 	this.catalogues = params.catalogues!==undefined ? params.catalogues : this.catalogues;
 	this.remoteEvents = params.remoteEvents!==undefined ? params.remoteEvents : this.remoteEvents;
+	this.savefilters = params.savefilters!==undefined ? params.savefilters : this.savefilters;
 
 	return this;
 
@@ -55,6 +56,7 @@ overwriteWithConfig(config: Configuration) {
 	this.production = config.production!==undefined ? config.production : this.production;
 	this.catalogues = config.catalogues!==undefined ? config.catalogues : this.catalogues;
 	this.remoteEvents = config.remoteEvents!==undefined ? config.remoteEvents : this.remoteEvents;
+	this.savefilters = config.savefilters!==undefined ? config.savefilters : this.savefilters;
 
 	return this;
 
@@ -72,14 +74,14 @@ fromJSON(json: ConfigJSON|string): Configuration {
 	if (typeof json === "string") {
 
 		return JSON.parse(json, Configuration.reviver);
-		
+
 	} else {
 	
 		let config = Object.create(Configuration.prototype);
 		config = Object.assign(config, json);
-	
+
 		return config;
-		
+
 	}
 	
 }
@@ -99,6 +101,7 @@ config?: string;
 production: boolean;
 catalogues?: string;
 remoteEvents?: string;
+savefilters?: string;
 
 }
 

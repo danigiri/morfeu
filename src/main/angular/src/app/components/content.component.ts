@@ -10,6 +10,8 @@ import {Cell} from '../cell.class';
 import {Content, ContentJSON} from '../content.class';
 import {Model} from '../model.class';
 
+import { Configuration } from '../config/configuration.class';
+
 import {RemoteDataService} from '../services/remote-data.service';
 import {RemoteObjectService} from '../services/remote-object.service';
 import {OperationResult} from '../services/operation-result.class';
@@ -24,6 +26,7 @@ import {CellEditEvent} from '../events/cell-edit.event';
 import {CellRemoveEvent} from '../events/cell-remove.event';
 import {CellSelectEvent} from '../events/cell-select.event';
 import {CellSelectionClearEvent} from '../events/cell-selection-clear.event';
+import { ConfigurationLoadedEvent } from '../events/configuration-loaded.event';
 import {ContentFragmentDisplayEvent} from '../events/content-fragment-display.event';
 import {ContentRefreshedEvent} from '../events/content-refreshed.event';
 import {ContentRequestEvent} from '../events/content-request.event';
@@ -117,7 +120,7 @@ protected commandKeys: string[] = ["c", "a", "d", "t", "e", "R", "i", "u"];
 private cellSelectionClearSubscription: Subscription;
 private cellSelectingMode = false;
 private dropAreaSelectingMode = false;
-
+private configuration: Configuration;
 
 constructor(eventService: EventService,
 			remoteEventService: RemoteEventService,
@@ -147,6 +150,10 @@ ngOnInit() {
 			fragment => this.displayContentFragment(fragment.cell)
 	));
 
+	// we subscribe to the configuration service to get the save filters
+	this.subscribe(this.events.service.of(ConfigurationLoadedEvent).subscribe(
+			loaded => this.configuration = loaded.configuration
+	));
 }
 
 
@@ -267,7 +274,8 @@ clear() {
 saveContent(document_: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Saving content"));
-	const postURI = "/morfeu/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
+	let postURI = "/morfeu/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
+	postURI = this.configuration.savefilters ? postURI+'&filters='+this.configuration.savefilters : postURI;
 	const content = document_.content.toJSON();
 	console.log("ContentComponent::saveContent('%s')", postURI);
 
