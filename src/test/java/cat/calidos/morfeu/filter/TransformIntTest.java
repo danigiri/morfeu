@@ -132,9 +132,17 @@ public void applyTemplateTest() throws Exception {
 			() -> assertEquals(expected2, result2, "Should not have applied a template")
 	);
 
-
 }
 
+
+@Test @DisplayName("Search and replace test")
+public void replaceTest() throws Exception {
+
+	String filter = "replace{\"from\":\"FROM\", \"to\":\"TO\"}";
+	Filter<String, String> f = DaggerFilterComponent.builder().filters(filter).build().stringToString().get();
+	assertEquals("TO here TO there", f.apply("FROM here FROM there"));
+
+}
 
 }
 

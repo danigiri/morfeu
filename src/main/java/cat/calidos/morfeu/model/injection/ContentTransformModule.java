@@ -72,12 +72,7 @@ public static String produceEffectiveContent(@Named("DestinationContentURI") URI
 
 // TODO: move to domain-specific filter module
 @Produces @Named("YAMLContent")
-public static String yamlContent(Composite<Cell> contentRootCells, Model model) {
-
-	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", contentRootCells.child(0).asComplex().children().asList());	// skip virtual root
-	values.put("model", model);
-
+public static String yamlContent(@Named("ValuesForTemplate") Map<String, Object> values) {
 	return DaggerViewComponent.builder()
 								.withTemplatePath("templates/transform/content-to-yaml.twig")
 								.withValue(values)
@@ -108,23 +103,30 @@ public static String jsonContent(@Named("DestinationContentURI") URI uri,
 
 
 @Produces @Named("FilterContent")
-public static String filterContent(Composite<Cell> contentRootCells, 
-									Model model,
+public static String filterContent(@Named("ValuesForTemplate") Map<String, Object> values,
 									@Nullable @Named("Filters") String filters, 
 									@Named("DestinationContentURI") URI uri) throws TransformException {
 
 	try {
-
-		Map<String, Object> values = new HashMap<String, Object>(2);
-		values.put("cells", contentRootCells);
-		values.put("model", model);
-
 		return DaggerFilterComponent.builder().filters(filters).build().objectToString().get().apply(values);
 	} catch (Exception e) {
+
 		String message = "Problem when filtering effective content to save '"+uri+"' with '"+filters+"'";
 		log.error(message);
 		throw new TransformException(message, e);
+
 	}
+
+}
+
+@Produces @Named("ValuesForTemplate")
+public static Map<String, Object> values(Composite<Cell> contentRootCells, Model model) {
+
+	Map<String, Object> values = new HashMap<String, Object>(2);
+	values.put("cells", contentRootCells);
+	values.put("model", model);
+
+	return values;
 
 }
 

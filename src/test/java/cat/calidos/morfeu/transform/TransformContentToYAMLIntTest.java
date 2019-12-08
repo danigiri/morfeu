@@ -42,14 +42,14 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	
+
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
 												.withValue(values)
 												.build()
 												.render();
 	//System.err.println(transformed);
-	
+
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);

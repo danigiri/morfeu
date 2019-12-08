@@ -169,9 +169,7 @@ public void testSaveToYAML() throws Exception {
 													.saver()
 													.get();
 	saver.save();
-	File savedFile = new File(outputPath);
-	assertTrue(savedFile.exists(), "Saver component did not create a file");
-	savedFile.deleteOnExit();
+	File savedFile = checkSavedFile(outputPath);
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
 	//System.err.println(writtenContent);
@@ -198,9 +196,7 @@ public void testSaveToJSON() throws Exception {
 													.saver()
 													.get();
 	saver.save();
-	File savedFile = new File(outputPath);
-	assertTrue(savedFile.exists(), "Saver component did not create a file");
-	savedFile.deleteOnExit();
+	File savedFile = checkSavedFile(outputPath);
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
 	//System.err.println(writtenContent);
@@ -212,16 +208,42 @@ public void testSaveToJSON() throws Exception {
 
 
 @Test @DisplayName("Save to filters")
-public void testSaveToFilters() {
+public void testSaveToFilters() throws Exception {
+
+	String outputPath = temporaryOutputFilePath()+".yaml";
+	URI outputURI = new URI("file://"+outputPath);
+
+	String filters = "content-to-yaml;replace{\"from\":\"blahblah\", \"to\":\"YEAH\"}";
+	Saver saver = DaggerContentSaverParserComponent.builder()
+													.from(content)
+													.filters(filters)
+													.to(outputURI)
+													.having(contentURI)
+													.model(modelURI)
+													.withModelFetchedFrom(modelFetchableURI)
+													.build()
+													.saver()
+													.get();
+	saver.save();
+	File savedFile = checkSavedFile(outputPath);
+
+	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
+	System.err.println(writtenContent);
+
+	YAMLMapper mapper = new YAMLMapper();
+	checkContent(writtenContent, mapper);
+
+	assertAll("Check replace was applied",
+			() -> assertFalse(writtenContent.contains("blahblah")),
+			() -> assertTrue(writtenContent.contains("YEAH"))
+	);
 
 }
 
 
 private String temporaryOutputFilePath() {
-
 	return tmpPath+"/filesaver-test-"+System.currentTimeMillis()+".txt";
 }
-
 
 
 private void checkContent(String writtenContent, ObjectMapper mapper) throws IOException {
@@ -251,6 +273,17 @@ private void checkContent(String writtenContent, ObjectMapper mapper) throws IOE
 		() -> assertNotNull(col0Size),
 		() -> assertEquals(4, col0Size.asInt())
 	);
+
+}
+
+
+private File checkSavedFile(String outputPath) {
+
+	File savedFile = new File(outputPath);
+	assertTrue(savedFile.exists(), "Saver component did not create a file");
+	savedFile.deleteOnExit();
+
+	return savedFile;
 
 }
 
