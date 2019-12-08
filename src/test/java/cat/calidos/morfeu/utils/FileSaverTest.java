@@ -33,7 +33,7 @@ public class FileSaverTest extends Tezt {
 @Test
 public void testSave() throws Exception {
 
-	String tmp = setupTempDirectory();
+	String tmp = setupTempDirectory().getAbsolutePath();
 	//System.err.println("FileSaverTest::Using '"+tmp+"' as temporary test folder");
 	String path = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
 	File file = new File(path);
@@ -55,7 +55,7 @@ public void testSave() throws Exception {
 @Test
 public void testBackup() throws Exception {
 
-	String tmp = setupTempDirectory();
+	String tmp = setupTempDirectory().getAbsolutePath();
 	//System.err.println("FileSaverTest::Using '"+tmp+"' as temporary test folder");
 	String path = tmp+"/filesaver-test-"+System.currentTimeMillis()+".txt";
 

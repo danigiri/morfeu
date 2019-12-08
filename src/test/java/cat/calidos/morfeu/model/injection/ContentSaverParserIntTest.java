@@ -59,7 +59,7 @@ public void setup() throws Exception {
 	URI fullContentURI = new URI(fullContentPath);
 	content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 
-	tmpPath = setupTempDirectory();
+	tmpPath = setupTempDirectory().getAbsolutePath();
 
 }
 
@@ -67,7 +67,7 @@ public void setup() throws Exception {
 @Test @DisplayName("Validate string parsing")
 public void testValidateString() throws Exception {
 
-	URI outputURI = new URI("file://"+temporaryOutputFilePath());
+	URI outputURI = new URI("file://"+temporaryOutputFilePathIn(tmpPath));
 	ContentSaverParserComponent contentComponent = DaggerContentSaverParserComponent
 													.builder()
 													.from(content)
@@ -95,7 +95,7 @@ public void testValidateString() throws Exception {
 @Test @DisplayName("Non valid string parsing")
 public void testNonValidString() throws Exception {
 
-	URI outputURI = new URI("file://"+temporaryOutputFilePath());
+	URI outputURI = new URI("file://"+temporaryOutputFilePathIn(tmpPath));
 	String contentPath = "test-resources/documents/nonvalid-document.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	URI fullContentURI = new URI(fullContentPath);
@@ -125,7 +125,7 @@ public void testNonValidString() throws Exception {
 @Test @DisplayName("Save to XML")
 public void testSaveToXML() throws Exception {
 
-	String outputPath = temporaryOutputFilePath();
+	String outputPath = temporaryOutputFilePathIn(tmpPath);
 	URI outputURI = new URI("file://"+outputPath);
 
 	Saver saver = DaggerContentSaverParserComponent.builder()
@@ -156,7 +156,7 @@ public void testSaveToXML() throws Exception {
 @Test @DisplayName("Save to YAML")
 public void testSaveToYAML() throws Exception {
 
-	String outputPath = temporaryOutputFilePath()+".yaml";
+	String outputPath = temporaryOutputFilePathIn(tmpPath)+".yaml";
 	URI outputURI = new URI("file://"+outputPath);
 
 	Saver saver = DaggerContentSaverParserComponent.builder()
@@ -183,7 +183,7 @@ public void testSaveToYAML() throws Exception {
 @Test @DisplayName("Save to JSON")
 public void testSaveToJSON() throws Exception {
 
-	String outputPath = temporaryOutputFilePath()+".json";
+	String outputPath = temporaryOutputFilePathIn(tmpPath)+".json";
 	URI outputURI = new URI("file://"+outputPath);
 
 	Saver saver = DaggerContentSaverParserComponent.builder()
@@ -210,7 +210,7 @@ public void testSaveToJSON() throws Exception {
 @Test @DisplayName("Save to filters")
 public void testSaveToFilters() throws Exception {
 
-	String outputPath = temporaryOutputFilePath()+".yaml";
+	String outputPath = temporaryOutputFilePathIn(tmpPath)+".yaml";
 	URI outputURI = new URI("file://"+outputPath);
 
 	String filters = "content-to-yaml;replace{\"from\":\"blahblah\", \"to\":\"YEAH\"}";
@@ -238,11 +238,6 @@ public void testSaveToFilters() throws Exception {
 			() -> assertTrue(writtenContent.contains("YEAH"))
 	);
 
-}
-
-
-private String temporaryOutputFilePath() {
-	return tmpPath+"/filesaver-test-"+System.currentTimeMillis()+".txt";
 }
 
 

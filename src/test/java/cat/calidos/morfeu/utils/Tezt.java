@@ -20,10 +20,17 @@ import org.apache.commons.io.FileUtils;
 public class Tezt {
 
 
-public String setupTempDirectory() throws Exception {
+public static final String DEFAULT_TMP_FOLDER_NAME = "integration-tests-tmp";
 
-	String defaultTmp = "./target/integration-tests-tmp";
-	String tmp = defineSystemVariable("TMP_FOLDER", defaultTmp);
+
+public String tempDirectoryPath() {
+	return defineSystemVariable("TMP_FOLDER", "./target/"+DEFAULT_TMP_FOLDER_NAME);
+}
+
+
+public File setupTempDirectory() throws Exception {
+
+	String tmp = tempDirectoryPath();
 	File tmpFolder = new File(tmp);
 	if (tmpFolder.exists()) {
 		if (tmpFolder.isFile()) {
@@ -33,7 +40,7 @@ public String setupTempDirectory() throws Exception {
 		FileUtils.forceMkdir(tmpFolder);
 	}
 
-	return tmpFolder.getAbsolutePath();
+	return tmpFolder;
 
 }
 

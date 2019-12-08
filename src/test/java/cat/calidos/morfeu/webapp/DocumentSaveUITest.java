@@ -60,7 +60,7 @@ public void setup() throws Exception {
 	String contentPath = "test-resources/documents/document1.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	contentFile = new File(new URL(fullContentPath).getFile());
-	String tmpPath = setupTempDirectory()+"/document1.xml.backup";
+	String tmpPath = setupTempDirectory().getAbsolutePath()+"/document1.xml.backup";
 	backupFile = new File(tmpPath);
 	
 	// System.err.println("\t"+contentFile+" ->"+backupFile);
