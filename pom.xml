@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
 	<artifactId>morfeu-webapp</artifactId>	
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Morfeu web application</name>
@@ -32,7 +32,7 @@
 
 		<resources>	<!-- skip moving node modules about -->
 			<resource>
-				<directory>src/main/typescript/dist</directory>
+				<directory>src/main/angular/dist</directory>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -79,7 +79,7 @@
 				<configuration>
 					<webResources>
 						<resource>
-							<directory>src/main/typescript/dist</directory> <!-- skip moving node modules about -->
+							<directory>src/main/angular/dist</directory> <!-- skip moving node modules about -->
 						</resource>
 					</webResources>
 					<attachClasses>true</attachClasses>	<!-- creates a jar with the classes and attaches an artifact -->
