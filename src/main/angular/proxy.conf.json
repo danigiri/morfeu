@@ -1,6 +1,6 @@
 {
-  "/morfeu": {
-    "target": "http://localhost:8080",
-    "secure": false
-  }
+	"/morfeu": {
+	"target": "http://localhost:8980",
+	"secure": false
+	}
 }

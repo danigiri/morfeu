@@ -12,8 +12,8 @@
 	<inceptionYear>2016</inceptionYear>
 
 	<properties>
-		<jetty-http-port>8080</jetty-http-port>
-		<jetty-stop-port>8180</jetty-stop-port>
+		<jetty-http-port>8980</jetty-http-port>
+		<jetty-stop-port>8981</jetty-stop-port>
 		<jetty-context-path>/morfeu</jetty-context-path>
 		<webapp-prefix>http://localhost:${jetty-http-port}${jetty-context-path}/</webapp-prefix>
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
