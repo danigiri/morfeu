@@ -35,7 +35,7 @@ import static com.codeborne.selenide.Selenide.*;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CatalogueUITest extends UITezt {
 
-private static final int EXPECTED_CATALOGUES_COUNT = 4;
+private static final int EXPECTED_CATALOGUES_COUNT = 5;
 private static final int EXPECTED_DOCUMENTS_SIZE = 8;
 
 
@@ -44,14 +44,13 @@ public void catalogueListTest() throws Exception {
 
 	open(appBaseURL);
 
-	List<UICatalogueEntry> catalogueEntries = UICatalogues.openCatalogues()
-													  		.shouldAppear()
-													  		.allCatalogueEntries();
+	List<UICatalogueEntry> catalogueEntries = UICatalogues.openCatalogues().shouldAppear().allCatalogueEntries();
 	assertEquals(EXPECTED_CATALOGUES_COUNT, catalogueEntries.size());
 	assertEquals("Wrong catalogue content", "Catalogue 1", catalogueEntries.get(0).name());
 	assertEquals("Wrong catalogue content", "Catalogue 2", catalogueEntries.get(1).name());
 	assertEquals("Wrong catalogue content", "Catalogue 1 yaml", catalogueEntries.get(2).name());
-	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(3).name());
+	assertEquals("Wrong catalogue content", "Catalogue 1 json", catalogueEntries.get(3).name());
+	assertEquals("Wrong catalogue content", "Catalogue not found", catalogueEntries.get(4).name());
 	UIProblem.shouldNotBeVisible();
 
 }

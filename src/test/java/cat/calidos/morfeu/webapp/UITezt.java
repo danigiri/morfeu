@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -23,11 +24,16 @@ import cat.calidos.morfeu.webapp.ui.UIProblem;
 public class UITezt extends Tezt {
 
 protected static final String URL_PROPERTY = "app-url";
-protected static final String DEFAULT_URL = "http://localhost:8080/morfeu";
+protected static final String DEFAULT_URL = "http://localhost:8980/morfeu";
+protected static final String DRIVER_PROPERTY = "driver";
 protected static final String BROWSER_PROPERTY = "selenide.browser";
-protected static final String DEFAULT_BROWSER = "chrome";
-protected static final String DRIVER_LOCATION_PROPERTY = "webdriver.chrome.driver";
-protected static final String DEFAULT_DRIVER_LOCATION = "/Applications/chromedriver";
+protected static final String DEFAULT_CHROME = "chrome";
+protected static final String DEFAULT_FIREFOX = "firefox";
+protected static final String CHROME_LOCATION_PROPERTY = "webdriver.chrome.driver";
+protected static final String DEFAULT_CHROME_LOCATION = "/Applications/chromedriver";
+protected static final String FIREFOX_LOCATION_PROPERTY = "webdriver.gecko.driver";
+protected static final String DEFAULT_FIREFOX_LOCATION = "/usr/local/bin/geckodriver";
+
 
 protected static String appBaseURL;
 protected static WebDriver driver;
@@ -36,23 +42,28 @@ protected static WebDriver driver;
 @BeforeClass @BeforeAll
 public static void setUpClass() throws Exception {
 
-	defineSystemVariable(BROWSER_PROPERTY, DEFAULT_BROWSER);
-	defineSystemVariable(DRIVER_LOCATION_PROPERTY, DEFAULT_DRIVER_LOCATION);
-
 	appBaseURL = defineSystemVariable(URL_PROPERTY, DEFAULT_URL);
 
-	try {
-	WebDriverManager.chromedriver().setup();	// setups the chrome driver
-	} catch (Exception e) {
-		System.err.println("Failed to setup chromedriver, we're probably offline");
+	String driverName = defineSystemVariable(DRIVER_PROPERTY, DEFAULT_CHROME);
+	if (driverName.equalsIgnoreCase(DEFAULT_CHROME)) {
+		defineSystemVariable(BROWSER_PROPERTY, DEFAULT_CHROME);
+		defineSystemVariable(CHROME_LOCATION_PROPERTY, DEFAULT_CHROME_LOCATION);
+		try {
+			WebDriverManager.chromedriver().setup();	// setups the chrome driver
+		} catch (Exception e) {
+			System.err.println("Failed to setup chromedriver, we're probably offline");
+		}
+		ChromeOptions chromeOptions = new ChromeOptions();
+		//chromeOptions.addArguments("--log-level=3");
+		chromeOptions.addArguments("--log-path=/dev/null");	//really?
+		chromeOptions.addArguments("--silent");
+		driver = new ChromeDriver(chromeOptions);
+	} else {
+		defineSystemVariable(BROWSER_PROPERTY, DEFAULT_FIREFOX);
+		defineSystemVariable(FIREFOX_LOCATION_PROPERTY, DEFAULT_FIREFOX_LOCATION);
+		driver = new FirefoxDriver();
 	}
-
-	ChromeOptions chromeOptions = new ChromeOptions();
-	//chromeOptions.addArguments("--log-level=3");
-	chromeOptions.addArguments("--log-path=/dev/null");	//really?
-	chromeOptions.addArguments("--silent");
-	driver = new ChromeDriver(chromeOptions);	
-
+	
 }
 
 
