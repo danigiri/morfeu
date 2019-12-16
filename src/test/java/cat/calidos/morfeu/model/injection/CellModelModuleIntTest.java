@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// CELL MODEL MODULE INT TEST . JAVA
 
 package cat.calidos.morfeu.model.injection;
 
@@ -47,6 +33,8 @@ import dagger.Lazy;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellModelModuleIntTest extends ModelTezt {
+
+private static final int EXPECTED_COL_CHILDREN_COUNT = 9;
 
 @Mock Lazy<Collection<? extends XSAttributeUse>> mockAttributesProducer;
 
@@ -107,7 +95,7 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("Size attribute of columns should be compulsory", 1, sizeAttribute.getMinOccurs());
 	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
 	int childrenCount = colComplex.children().size();
-	assertEquals("Column should have 8 children, not "+childrenCount, 8, childrenCount);
+	assertEquals("Column should have 9 children, not "+childrenCount, EXPECTED_COL_CHILDREN_COUNT, childrenCount);
 
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	String dataDesc = "Globally provided description of 'data'";
@@ -291,3 +279,19 @@ private void checkAttribute(CellModel textAttribute, String name, String typeNam
 
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
