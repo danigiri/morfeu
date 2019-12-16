@@ -40,7 +40,7 @@ import cat.calidos.morfeu.utils.Tezt;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APITezt extends Tezt {
 
-private static final String DEFAULT_WEBAPP_BASE_URL = "http://localhost:8080/morfeu/dyn/";
+private static final String DEFAULT_WEBAPP_BASE_URL = DEFAULT_URL+"/dyn/";
 private static final String WEBAPP_BASE_URL = "webapp-prefix";
 protected CloseableHttpClient client;
 protected String webappPrefix;
