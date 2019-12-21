@@ -4,14 +4,16 @@ package cat.calidos.morfeu.transform;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformYAMLToContentIntTest extends TransformTezt {
 
-@Test
+
+@Test @DisplayName("Transform doc 1 test")
 public void testTransformUsingTemplateDocument1() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document1.yaml";
@@ -26,7 +28,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Transform doc 3 test")
 public void testTransformUsingTemplateDocument3() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/document3.yaml";
@@ -41,7 +43,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Transform kv doc test")
 public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/keyvalues.yaml";
@@ -56,7 +58,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Transform esc doc test")
 public void testTransformUsingTemplateEscapeDocument() throws Exception {
 
 	String yamlPath = "target/test-classes/test-resources/transform/escape.yaml";
