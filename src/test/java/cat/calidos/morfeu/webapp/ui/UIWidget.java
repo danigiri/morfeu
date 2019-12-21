@@ -93,7 +93,13 @@ public T pressKey(String k) {
 	Actions actions = new Actions(driver);
 	//actions.moveToElement(element.getWrappedElement());
 	//actions.click();
-	actions.sendKeys(Keys.chord((CharSequence)k));
+
+	// on geckodriver, tab is sent specifically and does not switch fields
+	if (k.equals("\t") ) {
+		actions.sendKeys(Keys.TAB);
+	} else {
+		actions.sendKeys(Keys.chord((CharSequence)k));
+	}
 	actions.build().perform();
 
 	// this keeps failing randomly
