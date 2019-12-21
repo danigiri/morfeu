@@ -18,11 +18,11 @@
 		<webapp-prefix>http://localhost:${jetty-http-port}${jetty-context-path}/</webapp-prefix>
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
 		<async-timeout>2000</async-timeout>
-		<dagger-2-version>2.22.1</dagger-2-version>
+		<dagger-2-version>2.25.2</dagger-2-version>
 		<jackson-2-version>2.10.1</jackson-2-version>
 		<jetty-version>9.4.24.v20191120</jetty-version>
 		<jtwig-version>5.87.0.RELEASE</jtwig-version>
-		<selenide-version>5.3.1</selenide-version>
+		<selenide-version>5.5.1</selenide-version>
 		<selenium-version>3.141.59</selenium-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -176,6 +176,7 @@
 					<excludes>	<!-- no UI/integration tests in unit testing -->
 						<exclude>**/*IntTest*</exclude>
 						<exclude>**/*UITest*</exclude>
+						<exclude>**/*ComponentTest*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -198,6 +199,7 @@
 							<includes>
 								<include>**/*IntTest*</include>
 								<include>**/*UITest*</include>
+								<include>**/*ComponentTest*</include>
 							</includes>
 						</configuration>
 					</execution>
@@ -293,7 +295,7 @@
 		<dependency><!-- to test dynamic preview with SVG -->
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-dom</artifactId>
-			<version>1.11</version>
+			<version>1.12</version>
 			<!-- get rid of java 1.9 module clashing old xml api dupes -->
 			<exclusions>
 				<exclusion>  <!-- declare the exclusion here -->
@@ -309,7 +311,7 @@
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-svggen</artifactId>
-			<version>1.11</version>
+			<version>1.12</version>
 		</dependency>
 
 		<!-- logback -->
@@ -384,7 +386,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.1.0</version>
+			<version>3.2.0</version>
 			<scope>test</scope>
 		</dependency>
 
