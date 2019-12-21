@@ -62,7 +62,7 @@ public static void setUpClass() throws Exception {
 		defineSystemVariable(FIREFOX_LOCATION_PROPERTY, DEFAULT_FIREFOX_LOCATION);
 		driver = new FirefoxDriver();
 	}
-	
+
 }
 
 

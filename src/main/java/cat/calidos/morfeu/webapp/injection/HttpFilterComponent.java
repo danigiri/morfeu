@@ -28,7 +28,7 @@ ListenableFuture<Boolean> process() throws MorfeuRuntimeException;
 interface Builder {
 
 	@BindsInstance Builder request(HttpServletRequest request);
-	@BindsInstance Builder response( HttpServletResponse response);
+	@BindsInstance Builder response(HttpServletResponse response);
 	@BindsInstance Builder chain(FilterChain chain);
 
 	HttpFilterComponent build();
