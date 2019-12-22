@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
 
 export const AppRoutes: Routes = [
-									{path: 'morfeu', component: MainComponent, children:[
+									{path: '', component: MainComponent, children:[
 									{path: 'preview/:id', loadChildren: () => import('./preview/preview.module')
 																					.then(mod => mod.PreviewModule),
 									},
@@ -16,7 +16,7 @@ export const AppRoutes: Routes = [
 									];
 
 @NgModule({
-	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: false }) ],
+	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: true }) ],
 	exports: [ RouterModule ]
 })
 
