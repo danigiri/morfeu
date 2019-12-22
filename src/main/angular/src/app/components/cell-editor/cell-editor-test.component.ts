@@ -11,6 +11,7 @@ import {RemoteObjectService} from '../../services/remote-object.service';
 import {CellEditEvent} from '../../events/cell-edit.event';
 import {EventListener} from '../../events/event-listener.class';
 import {EventService} from '../../services/event.service';
+import { Configuration } from '../../config/configuration.class';
 
 
 @Component({
@@ -64,8 +65,8 @@ private document5() {
 
 private loadContent(contentURI: string, model: string, cellPath: string) {
 
-	const contentAndModelURI = '/morfeu/dyn/content/'+contentURI+'?model='+model;
-	const modelURI = '/morfeu/dyn/models/'+model ;
+	const contentAndModelURI = Configuration.BACKEND_PREF+'/dyn/content/'+contentURI+'?model='+model;
+	const modelURI = Configuration.BACKEND_PREF+'/dyn/models/'+model ;
 
 		this.modelService.get(modelURI, Model).subscribe(m => {
 		this.contentService.get(contentAndModelURI, Content).subscribe( (content: Content) => {

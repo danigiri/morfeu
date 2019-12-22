@@ -3,6 +3,8 @@
 import {filter} from 'rxjs/operators';
 import {Component, Inject, OnInit} from '@angular/core';
 
+import { Configuration } from '../config/configuration.class';
+
 import { CellDocument, CellDocumentJSON } from '../cell-document.class';
 import { RemoteObjectService } from '../services/remote-object.service';
 
@@ -97,7 +99,7 @@ loadDocument(url: string) {
 	// this.events.service.publish(new DocumentSelectionEvent(null));  // we don't have a document now
 	this.events.service.publish(new StatusEvent("Fetching document"));
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
-	const documentURI = "/morfeu/dyn/documents/"+url;
+	const documentURI = Configuration.BACKEND_PREF+'/dyn/documents/'+url;
 	console.debug("DocumentComponent::loadDocument() About to fetch document from '%s'", documentURI);
 	this.documentService.get(documentURI, CellDocument).subscribe(d => {
 

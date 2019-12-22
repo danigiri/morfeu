@@ -1,7 +1,7 @@
 [
-	{ "name":"Catalogue 1", "uri":"/morfeu/test-resources/catalogues/catalogue1.json" }
-	,{ "name":"Catalogue 2", "uri":"/morfeu/test-resources/catalogues/catalogue2.json"  }
-	,{ "name":"Catalogue 1 yaml", "uri":"/morfeu/test-resources/catalogues/catalogue1-yaml.json"  }
-	,{ "name":"Catalogue 1 json", "uri":"/morfeu/test-resources/catalogues/catalogue1-json.json"  }
-	,{ "name":"Catalogue not found", "uri":"/morfeu/test-resources/catalogues/catalogue-nonexistant.json"  }
+	{ "name":"Catalogue 1", "uri":"/test-resources/catalogues/catalogue1.json" }
+	,{ "name":"Catalogue 2", "uri":"/test-resources/catalogues/catalogue2.json"  }
+	,{ "name":"Catalogue 1 yaml", "uri":"/test-resources/catalogues/catalogue1-yaml.json"  }
+	,{ "name":"Catalogue 1 json", "uri":"/test-resources/catalogues/catalogue1-json.json"  }
+	,{ "name":"Catalogue not found", "uri":"/test-resources/catalogues/catalogue-nonexistant.json"  }
 ]

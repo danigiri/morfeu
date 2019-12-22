@@ -4,6 +4,8 @@ import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@a
 
 import { TreeComponent } from "angular-tree-component";
 
+import { Configuration } from '../config/configuration.class';
+
 import { CellModel } from "../cell-model.class";
 import { Model, ModelJSON } from "../model.class";
 import { RemoteObjectService } from "../services/remote-object.service";
@@ -108,7 +110,7 @@ ngAfterViewInit() {
 loadModel(document: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Fetching model"));
-	const modelURI = "/morfeu/dyn/models/"+document.modelURI;
+	const modelURI = Configuration.BACKEND_PREF+"/dyn/models/"+document.modelURI;
 	this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
 			console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
 			this.displayModel(model);	// not firing a load event yet if not needed

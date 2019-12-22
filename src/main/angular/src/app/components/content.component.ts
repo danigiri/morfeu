@@ -177,7 +177,7 @@ fetchContentFor(document_: CellDocument, model: Model) {
 
 	this.events.service.publish(new StatusEvent("Fetching content"));
 	const uri = document_.contentURI;
-	const contentURI = "/morfeu/dyn/content/"+uri+"?model="+model.URI;
+	const contentURI = Configuration.BACKEND_PREF+"/dyn/content/"+uri+"?model="+model.URI;
 
 	console.debug("ContentComponent::fetchContent() About to fetch content from '%s'", contentURI);
 	this.contentService.get(contentURI, Content).subscribe( (content: Content) => {
@@ -274,7 +274,7 @@ clear() {
 saveContent(document_: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Saving content"));
-	let postURI = "/morfeu/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
+	let postURI = Configuration.BACKEND_PREF+"/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
 	postURI = this.configuration.savefilters ? postURI+'&filters='+this.configuration.savefilters : postURI;
 	const content = document_.content.toJSON();
 	console.log("ContentComponent::saveContent('%s')", postURI);

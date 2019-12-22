@@ -6,6 +6,8 @@ import { Observable, Subject, Subscription } from "rxjs";
 import { RemoteDataService } from "../services/remote-data.service";
 import { RemoteObjectService } from "../services/remote-object.service";
 
+import { Configuration } from '../config/configuration.class';
+
 import { CellDocument, CellDocumentJSON } from "../cell-document.class";
 import { Content, ContentJSON } from "../content.class";
 import { Model } from "../model.class";
@@ -16,7 +18,6 @@ import { SnippetComponent } from "./snippet.component";
 import { CellActivateEvent } from "../events/cell-activate.event";
 import { CellSelectEvent } from "../events/cell-select.event";
 import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
-import { SnippetContentRequestEvent } from "../events/snippet-content-request.event";
 import { SnippetDocumentRequestEvent } from "../events/snippet-document-request.event";
 import { StatusEvent } from "../events/status.event";
 import { EventService } from "../services/event.service";
@@ -103,7 +104,7 @@ private fetchSnippets() {
 // load all snippet documents which in turn will be used to fetch all snippets
 private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 
-	const uri = "/morfeu/"+snippetStub.uri;
+	const uri = Configuration.BACKEND_PREF+snippetStub.uri;
 	console.log("Loading snippet document %s", uri);
 	this.snippetDocumentService.get<CellDocument>(uri).subscribe(
 			snippetDoc => this.loadSnippetContent(snippetDoc, index),
@@ -117,7 +118,7 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 
 private loadSnippetContent(snippet: CellDocument, index: number) {
 
-	const snippetURI = "/morfeu/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
+	const snippetURI = Configuration.BACKEND_PREF+"/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
 	console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
 	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 		// we set the document with the content, associate it with the model

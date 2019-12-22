@@ -3,6 +3,8 @@
 import {AfterViewInit, Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
+import { Configuration } from '../../config/configuration.class';
+
 import {Cell} from '../../cell.class';
 import {CellModel} from '../../cell-model.class';
 import {Model, ModelJSON} from '../../model.class';
@@ -17,7 +19,7 @@ import {RemoteObjectService} from '../../services/remote-object.service';
 
 export class PresentationTestComponent implements AfterViewInit {
 
-private readonly modelURI = '/morfeu/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
+private readonly modelURI = Configuration.BACKEND_PREF+'/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 model: CellModel;
 cell: Cell;
 

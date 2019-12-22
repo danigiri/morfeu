@@ -97,7 +97,7 @@ private getPresentationMethod(): string {
 
 private updateHTMLPresentation() {
 
-	const presentationURL = this.getPresentation(); //'/morfeu/dyn/preview/html/aaa;color=ff00ff';
+	const presentationURL = this.getPresentation(); //'/dyn/preview/html/aaa;color=ff00ff';
 
 	let presentationContent: Observable<String>;
 	if (this.getPresentationMethod()=='POST') {

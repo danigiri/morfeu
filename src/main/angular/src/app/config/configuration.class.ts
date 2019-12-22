@@ -12,12 +12,15 @@ import {ConfigurationLoadedEvent} from "../events/configuration-loaded.event";
 import {EventListener} from "../events/event-listener.class";
 import {EventService} from "../services/event.service";
 
+
 export class Configuration extends EventListener implements SerialisableToJSON<Configuration, ConfigJSON>{
+
+public static readonly BACKEND_PREF = "";
 
 config: "default";
 production: boolean = environment.production;
-catalogues = "/morfeu/test-resources/catalogues.json";
-remoteEvents = "/morfeu/dyn/events";
+catalogues = Configuration.BACKEND_PREF+"/test-resources/catalogues.json";
+remoteEvents = Configuration.BACKEND_PREF+"/dyn/events";
 savefilters: string;
 
 constructor(eventService: EventService, 
