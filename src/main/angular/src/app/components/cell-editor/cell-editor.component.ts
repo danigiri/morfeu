@@ -197,6 +197,7 @@ private button(result: string) {
 		this.rollbackChanges();
 	}
 	this.clear();
+
 }
 
 

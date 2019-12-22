@@ -109,8 +109,7 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 	this.snippetDocumentService.get<CellDocument>(uri).subscribe(
 			snippetDoc => this.loadSnippetContent(snippetDoc, index),
 			error => this.events.problem(error.message),
-			() => {
-			}
+			() => {}
 	);
 
 }
@@ -222,6 +221,7 @@ private unsubscribeChildrenFromCellSelection() {
 	this.snippetComponents.forEach( sc => sc.unsubscribeFromSelection() );
 
 }
+
 
 }
 

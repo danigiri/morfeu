@@ -19,7 +19,7 @@ public static readonly BACKEND_PREF = "";
 
 config: "default";
 production: boolean = environment.production;
-catalogues = Configuration.BACKEND_PREF+"/test-resources/catalogues.json";
+catalogues = Configuration.BACKEND_PREF+'/test-resources/catalogues.json';
 remoteEvents = Configuration.BACKEND_PREF+"/dyn/events";
 savefilters: string;
 
