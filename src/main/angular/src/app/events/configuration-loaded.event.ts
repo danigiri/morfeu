@@ -1,8 +1,11 @@
 // CONFIGURATION - LOADED . EVENT . TS
 
+import { Event } from './event.interface';
+
+
 import { Configuration } from "../config/configuration.class";
 
-export class ConfigurationLoadedEvent {
+export class ConfigurationLoadedEvent implements Event {
 
 
 constructor(public configuration: Configuration) {}
@@ -10,6 +13,12 @@ constructor(public configuration: Configuration) {}
 
 public toString = (): string => {
 	return "ConfigurationLoaded:{"+this.configuration+"}";
+}
+
+/// Event ////
+
+name(): string {
+	return 'ConfigurationLoadedEvent';
 }
 
 

@@ -3,13 +3,15 @@
 *  As there is no license on the site we should be ok.
 */
 
-import {map, filter } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 
-import {Injectable } from "@angular/core";
-import {Observable, Subject } from "rxjs";
+import { Injectable } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+
+import { Event } from '../events/event.interface';
 
 
-interface Event {
+interface _Event {
 	channel: string;
 	data: any;
 }
@@ -17,31 +19,29 @@ interface Event {
 @Injectable()
 export class EventService {
 
-private event$: Subject<Event>
+private event$: Subject<_Event>
 
 constructor() {
-	this.event$ = new Subject<Event>();
+	this.event$ = new Subject<_Event>();
 }
 
 
-public publish<T>(event: T, subtype?: string): void {
+public publish(event: Event): void {
 
-	const type_ = (<any>event.constructor).name;
-	const channel_ = (subtype) ? type_+subtype : type_;
-	// console.log("\tSending event "+channel_+" -> ("+event.toString()+")");
+	const channel_ = event.name();
+	//console.debug("\tSending event "+channel_+" -> ("+event.toString()+")");
 	this.event$.next({ channel: channel_, data: event });
 
 }
 
 
-public of<T>(eventType: { new(...args: any[]): T }): Observable<T> {
+public of<T extends Event>(eventType: { new(...args: any[]): T }): Observable<T> {
 
-	// by using starts with, we can have hierarchies of event types
-	const channel_ = (<any>eventType).name;
-	// console.log("\tSubscribing to event "+channel_);
+	const channel_ = Object.create(eventType.prototype).name();	// HACK
+	//console.debug("\tSubscribing to event "+channel_);
 
 	// this is ripe for optimization when we need it, hashing on the channel name for instance
-	return this.event$.pipe(filter(m => m.channel.startsWith(channel_, 0)), map(m => m.data));
+	return this.event$.pipe(filter(m => m.channel===channel_), map(m => m.data));
 
 }
 

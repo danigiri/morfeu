@@ -104,8 +104,10 @@ loadDocument(url: string) {
 	this.documentService.get(documentURI, CellDocument).subscribe(d => {
 
 				console.log("DocumentComponent::loadDocument() Got document from Morfeu ("+d.name+")");
+				console.log('DocumentComponent::loadDocument() sending doc clear event');
 				this.events.remote.publish(new CellDocumentClearEvent());	// clear everything (subscriptions, etc.)
 				if (!d.hasProblem()) {	// we only publish the load if we have no issues with the doc
+					console.log('DocumentComponent::loadDocument() no issues found, sending doc loaded event');
 					this.events.service.publish(new CellDocumentLoadedEvent(d));
 					this.display(d);
 					this.events.ok();

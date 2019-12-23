@@ -1,3 +1,27 @@
+import { Event } from './event.interface';
+
+
+import { CellModel } from "../cell-model.class";
+
+
+export class CellModelActivatedEvent implements Event {
+
+constructor(public cellModel?: CellModel) {}
+
+
+public toString = (): string => {
+	return "CellModelActivatedEvent:{cellModel:'"+(this.cellModel ? this.cellModel.URI : "<selection>")+"}'}";
+}
+
+/// Event ////
+
+name(): string {
+	return 'CellModelActivatedEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,17 +37,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { CellModel } from "../cell-model.class";
-
-
-export class CellModelActivatedEvent {
-
-constructor(public cellModel?: CellModel) {}
-
-
-public toString = (): string => {
-	return "CellModelActivatedEvent:{cellModel:'"+(this.cellModel ? this.cellModel.URI : "<selection>")+"}'}";
-}
-
-}

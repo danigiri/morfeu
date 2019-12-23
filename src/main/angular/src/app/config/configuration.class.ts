@@ -15,7 +15,7 @@ import {EventService} from "../services/event.service";
 
 export class Configuration extends EventListener implements SerialisableToJSON<Configuration, ConfigJSON>{
 
-public static readonly BACKEND_PREF = "";
+public static readonly BACKEND_PREF = '';
 
 config: "default";
 production: boolean = environment.production;
@@ -73,13 +73,13 @@ toJSON(): ConfigJSON {
 
 
 fromJSON(json: ConfigJSON|string): Configuration {
-	
+
 	if (typeof json === "string") {
 
 		return JSON.parse(json, Configuration.reviver);
 
 	} else {
-	
+
 		let config = Object.create(Configuration.prototype);
 		config = Object.assign(config, json);
 
@@ -92,6 +92,11 @@ fromJSON(json: ConfigJSON|string): Configuration {
 
 static reviver(key: string, value: any): any {
 	return key === "" ? Object.create(Configuration.prototype).fromJSON(value) : value;
+}
+
+
+public toString = (): string => {
+	return 'config='+this.config+', production='+this.production+',catalogues='+this.catalogues+',remoteEvents=';
 }
 
 

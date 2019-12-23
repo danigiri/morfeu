@@ -1,3 +1,27 @@
+
+import { Event } from './event.interface';
+
+import { Cell } from "../cell.class";
+
+export class CellActivatedEvent implements Event {
+
+constructor(public cell: Cell) {}
+
+
+public toString = (): string => {
+	return "CellActivatedEvent:{cell:'"+this.cell.URI+"'}";
+}
+
+
+/// Event ////
+
+name(): string {
+	return 'CellActivatedEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,17 +37,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { Cell } from "../cell.class";
-
-
-export class CellActivatedEvent {
-
-constructor(public cell: Cell) {}
-
-
-public toString = (): string => {
-	return "CellActivatedEvent:{cell:'"+this.cell.URI+"'}";
-}
-
-}

@@ -1,8 +1,11 @@
 // CONTENT - SAVED . EVENT . TS
 
+import { Event } from './event.interface';
+
+
 import { CellDocument } from "../cell-document.class";
 
-export class ContentSavedEvent {
+export class ContentSavedEvent implements Event {
 
 
 constructor(public document: CellDocument) {}
@@ -12,6 +15,11 @@ public toString = (): string => {
 	return "ContentSavedEvent?doc="+this.document.contentURI; 
 }
 
+/// Event ////
+
+name(): string {
+	return 'ContentSavedEvent';
+}
 
 }
 

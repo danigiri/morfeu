@@ -1,8 +1,11 @@
 // CELL - EDIT . EVENT . TS
 
+import { Event } from './event.interface';
+
+
 import {Cell} from '../cell.class';
 
-export class CellEditEvent {
+export class CellEditEvent implements Event {
 
 constructor(public cell?: Cell) {}
 
@@ -10,6 +13,14 @@ constructor(public cell?: Cell) {}
 public toString = (): string => {
 	return "CellEditEvent:{cell:"+this.cell.URI+"}";
 }
+
+
+/// Event ////
+
+name(): string {
+	return 'CellEditEvent';
+}
+
 
 }
 

@@ -1,3 +1,21 @@
+import { Event } from './event.interface';
+
+import { Model } from "../model.class";
+
+export class ModelDisplayEvent implements Event {
+	
+
+constructor(public model: Model) {}
+
+/// Event ////
+
+name(): string {
+	return 'ModelDisplayEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,11 +31,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { Model } from "../model.class";
-
-export class ModelDisplayEvent {
-	
-constructor(public model: Model) {}
-
-}

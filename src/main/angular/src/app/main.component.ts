@@ -150,7 +150,11 @@ ngAfterViewInit() {
 
 	this.subscribe(this.events.service.of(ConfigurationLoadedEvent).subscribe(
 			loaded => {
-				console.log("Configuration loaded, we're about to request catalogue load");
+				if (loaded===undefined || loaded===null) {
+					console.warn('Got an empty configuration loaded event');
+					return;
+				}
+				console.log("Configuration loaded, we're about to request catalogue load: %s", loaded.toString());
 				console.log("loaded.configuration.catalogues=%s", loaded.configuration.catalogues);
 				this.config = loaded.configuration;
 				Promise.resolve(null)

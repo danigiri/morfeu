@@ -1,3 +1,20 @@
+import { Event } from './event.interface';
+
+import { CellDocument } from "../cell-document.class";
+
+export class SnippetContentRequestEvent implements Event {
+
+
+constructor(public document: CellDocument) {}
+
+/// Event ////
+
+name(): string {
+	return 'SnippetContentRequestEvent';
+}
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,11 +30,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { CellDocument } from "../cell-document.class";
-
-export class SnippetContentRequestEvent {
-
-constructor(public document: CellDocument) {}
-
-}

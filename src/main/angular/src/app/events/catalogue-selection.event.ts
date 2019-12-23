@@ -1,3 +1,18 @@
+import { Event } from './event.interface';
+
+export class CatalogueSelectionEvent implements Event {
+
+constructor(public url: string) {}
+
+/// Event ////
+
+name(): string {
+	return 'CatalogueSelectionEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,9 +28,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class CatalogueSelectionEvent {
-
-constructor(public url: string) {}
-
-}

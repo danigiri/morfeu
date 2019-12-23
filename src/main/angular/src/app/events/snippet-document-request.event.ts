@@ -1,3 +1,21 @@
+
+import { Event } from './event.interface';
+
+
+export class SnippetDocumentRequestEvent implements Event {
+
+
+constructor(public index: number) {} 
+
+/// Event ////
+
+name(): string {
+	return 'SnippetDocumentRequestEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,10 +31,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class SnippetDocumentRequestEvent {
-
-
-constructor(public index: number) {} 
-	
-}

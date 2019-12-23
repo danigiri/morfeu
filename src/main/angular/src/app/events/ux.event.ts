@@ -1,6 +1,9 @@
 // UX . EVENT . TS
 
-export class UXEvent {
+import { Event } from './event.interface';
+
+
+export class UXEvent implements Event {
 
 public static DOCUMENT_DIRTY: number = 100;
 public static TOGGLE_COLLAPSABLE: number = 200;
@@ -23,6 +26,12 @@ public toString = () : string => {
 	}
 	return "UXEvent:{'"+message+"'}";
 
+}
+
+/// Event ////
+
+name(): string {
+	return 'UXEvent';
 }
 
 

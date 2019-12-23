@@ -1,6 +1,9 @@
 // KEY PRESSED . EVENT . TS 
 
-export class KeyPressedEvent {
+import { Event } from './event.interface';
+
+
+export class KeyPressedEvent implements Event {
 
 
 constructor(public str: string, public num?: number) {}
@@ -18,6 +21,13 @@ public isCommand(): boolean {
 
 public toString = (): string => {
 	return "KeyPressedEvent:{ key:"+this.str+( (this.num) ? ", num:"+this.num : "" )+"}";
+}
+
+
+/// Event ////
+
+name(): string {
+	return 'KeyPressedEvent';
 }
 
 

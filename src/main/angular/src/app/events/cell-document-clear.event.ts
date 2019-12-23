@@ -1,6 +1,10 @@
 // CELL DOCUMENT CLEAR . EVENT . TS
 
-export class CellDocumentClearEvent {
+
+import { Event } from './event.interface';
+
+
+export class CellDocumentClearEvent implements Event {
 
 
 constructor() {}
@@ -8,6 +12,12 @@ constructor() {}
 
 public toString = (): string => {
 	return "CellDocumentClearEvent";
+}
+
+/// Event ////
+
+name(): string {
+	return 'CellDocumentClearEvent';
 }
 
 

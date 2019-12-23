@@ -1,3 +1,25 @@
+import { Event } from './event.interface';
+
+export class ProblemEvent implements Event {
+
+
+constructor(public message: String) {}
+
+
+public toString = () : string => {
+	return "ProblemEvent:{:'"+this.message==null ? "NO PROBLEMO" :+this.message+"'}";
+}
+
+
+/// Event ////
+
+name(): string {
+	return 'ProblemEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,14 +35,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class ProblemEvent {
-	
-constructor(public message: String) {}
-
-public toString = () : string => {
-	return "ProblemEvent:{:'"+this.message==null ? "NO PROBLEMO" :+this.message+"'}";
-}
-
-
-}

@@ -1,10 +1,18 @@
 // CELL - SELECTION - CLEAR . EVENT . TS
 
-export class CellSelectionClearEvent {
+import { Event } from './event.interface';
+
+export class CellSelectionClearEvent implements Event  {
 
 
 public toString = (): string => {
 	return "CellSelectionClearEvent:{}";
+}
+
+/// Event ////
+
+name(): string {
+	return 'CellSelectionClearEvent';
 }
 
 

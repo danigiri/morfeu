@@ -1,3 +1,23 @@
+import { Event } from './event.interface';
+
+
+//TODO: not used at the moment,
+import { Model } from '../model.class';
+
+export class ModelLoadedEvent implements Event{
+	
+constructor(public model: Model) {}
+
+
+/// Event ////
+
+name(): string {
+	return 'ModelLoadedEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,12 +33,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-//TODO: not used at the moment,
-import { Model } from '../model.class';
-
-export class ModelLoadedEvent {
-	
-constructor(public model: Model) {}
-
-}

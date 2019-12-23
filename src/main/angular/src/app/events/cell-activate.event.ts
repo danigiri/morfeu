@@ -1,3 +1,25 @@
+import { Event } from './event.interface';
+
+
+export class CellActivateEvent implements Event {
+
+constructor() {}
+
+
+public toString = (): string => {
+	return "CellActivateEvent:{currently selected}";
+}
+
+
+/// Event ////
+
+name(): string {
+	return 'CellActivateEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,14 +35,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class CellActivateEvent {
-
-constructor() {}
-
-
-public toString = (): string => {
-	return "CellActivateEvent:{currently selected}";
-}
-
-}

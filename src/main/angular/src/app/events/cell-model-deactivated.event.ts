@@ -1,3 +1,25 @@
+import { Event } from './event.interface';
+
+import { CellModel } from "../cell-model.class";
+
+export class CellModelDeactivatedEvent implements Event {
+
+constructor(public cellModel: CellModel) {}
+
+
+public toString = (): string => {
+	return "CellModelDeactivatedEvent:{cellModel:'"+this.cellModel.URI+"'}";
+}
+
+/// Event ////
+
+name(): string {
+	return 'CellModelDeactivatedEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,18 +35,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { CellModel } from "../cell-model.class";
-
-
-export class CellModelDeactivatedEvent {
-
-constructor(public cellModel: CellModel) {}
-
-
-public toString = (): string => {
-	return "CellModelDeactivatedEvent:{cellModel:'"+this.cellModel.URI+"'}";
-}
-
-
-}

@@ -1,8 +1,10 @@
 // CATALOGUE - LOADED EVENT . TS
 
-import { Catalogue } from "../catalogue.class";
+import { Catalogue } from '../catalogue.class';
+import { Event } from './event.interface';
 
-export class CatalogueLoadedEvent {
+export class CatalogueLoadedEvent implements Event {
+
 
 constructor(public catalogue: Catalogue) {}
 
@@ -10,6 +12,13 @@ constructor(public catalogue: Catalogue) {}
 public toString = (): string => {
 	return "CatalogueLoadedEvent:{catalogue:'"+this.catalogue.name+"'}";
 }
+
+/// Event ////
+
+name(): string {
+	return 'CatalogueLoadedEvent';
+}
+
 
 }
 

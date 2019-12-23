@@ -1,10 +1,19 @@
 // CONTENT - REFRESHED EVENT . TS
+import { Event } from './event.interface';
 
 import { Content } from "../content.class";
 
-export class ContentRefreshedEvent {
+export class ContentRefreshedEvent implements Event {
 
 constructor(public content: Content) {}
+
+
+/// Event ////
+
+name(): string {
+	return 'ContentRefreshedEvent';
+}
+
 
 }
 

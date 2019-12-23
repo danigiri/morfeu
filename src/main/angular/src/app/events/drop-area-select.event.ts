@@ -1,3 +1,24 @@
+import { Event } from './event.interface';
+
+export class DropAreaSelectEvent implements Event {
+
+constructor(public position: number) {}
+
+
+public toString = (): string => {
+	return "DropAreaSelectEvent:{position:"+this.position+"}";
+}
+
+
+/// Event ////
+
+name(): string {
+	return 'DropAreaSelectEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,14 +34,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class DropAreaSelectEvent {
-
-constructor(public position: number) {}
-
-
-public toString = (): string => {
-	return "DropAreaSelectEvent:{position:"+this.position+"}";
-}
-
-}

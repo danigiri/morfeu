@@ -1,3 +1,20 @@
+import { Event } from './event.interface';
+
+import { Catalogue } from "../catalogue.class";
+
+export class CataloguesLoadedEvent implements Event {
+
+
+constructor(public catalogues: Catalogue[]) {}
+
+/// Event ////
+
+name(): string {
+	return 'CataloguesLoadedEvent';
+}
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,12 +30,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { Catalogue } from "../catalogue.class";
-
-export class CataloguesLoadedEvent {
-
-
-constructor(public catalogues: Catalogue[]) {}
-
-}

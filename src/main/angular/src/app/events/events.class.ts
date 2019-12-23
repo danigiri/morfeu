@@ -1,9 +1,8 @@
 // EVENTS . CLASS . TS
 
-
+import { ProblemEvent } from "./problem.event";
 import { EventService } from "../services/event.service";
 import { RemoteEventService } from "../services/remote-event.service";
-import { ProblemEvent } from "./problem.event";
 
 export class Events {
 
@@ -12,15 +11,15 @@ constructor(public service: EventService, public remote?: RemoteEventService) {}
 
 
 public problem(p: any) {
-	
+
 	console.error("Widget::reportProblem("+p+")");
 	this.service.publish(new ProblemEvent(p));
-	
+
 }
 
 
 public ok() {
-	
+
 	this.service.publish(new ProblemEvent(null));
 
 }

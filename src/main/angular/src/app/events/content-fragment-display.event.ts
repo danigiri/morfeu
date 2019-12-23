@@ -1,11 +1,18 @@
 // CONTENT - FRAGMENT - DISPLAY EVENT . TS
+import { Event } from './event.interface';
 
 import { Cell } from "../cell.class";
 
-export class ContentFragmentDisplayEvent {
+export class ContentFragmentDisplayEvent implements Event {
 
 
 constructor(public cell: Cell) {}
+
+/// Event ////
+
+name(): string {
+	return 'ContentFragmentDisplayEvent';
+}
 
 
 }

@@ -1,3 +1,24 @@
+import { Event } from './event.interface';
+
+import { CellDocument } from "../cell-document.class";
+
+export class CellDocumentSelectionEvent implements Event {
+
+constructor(public url: string) {}
+
+public toString = (): string => {
+	return "CellDocumentSelectionEvent?url="+this.url;
+}
+
+/// Event ////
+
+name(): string {
+	return 'CellDocumentSelectionEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,15 +34,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { CellDocument } from "../cell-document.class";
-
-export class CellDocumentSelectionEvent {
-
-constructor(public url: string) {}
-
-public toString = (): string => {
-	return "CellDocumentSelectionEvent?url="+this.url;
-}
-
-}

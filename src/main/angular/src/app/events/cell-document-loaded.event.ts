@@ -1,3 +1,21 @@
+import { Event } from './event.interface';
+
+import { CellDocument } from "../cell-document.class";
+
+export class CellDocumentLoadedEvent implements Event {
+
+constructor(public document: CellDocument) {}
+
+
+/// Event ////
+
+name(): string {
+	return 'CellDocumentLoadedEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,11 +31,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { CellDocument } from "../cell-document.class";
-
-export class CellDocumentLoadedEvent {
-
-constructor(public document: CellDocument) {}
-
-}

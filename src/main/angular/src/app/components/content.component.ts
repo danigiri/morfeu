@@ -218,7 +218,7 @@ displayContentFragment(cell: Cell) {
 	console.debug("[UI] ContentComponent::displayContentFragment(%s)", cell.getURI());
 
 	// we need to clear the content, allow the UI to refresh to nothing 
-	Promise.resolve(null).then(d => {
+	Promise.resolve(null).then(() => {
 		console.debug("[UI] ContentComponent::displayContentFragment()[Promise with new content]]");
 
 		this.contentStack.push(this.content);

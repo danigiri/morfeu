@@ -1,3 +1,24 @@
+
+import { Event } from './event.interface';
+
+
+export class NewCellFromModelEvent implements Event {
+
+constructor() {}
+
+
+public toString = (): string => {
+	return "NewCellFromModelEvent:{instantiate a new cell}";
+}
+
+/// Event ////
+
+name(): string {
+	return 'NewCellFromModelEvent';
+}
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,15 +34,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-
-export class NewCellFromModelEvent {
-
-constructor() {}
-
-
-public toString = (): string => {
-	return "NewCellFromModelEvent:{instantiate a new cell}";
-}
-
-}

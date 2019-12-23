@@ -1,3 +1,24 @@
+import { Event } from './event.interface';
+
+
+export class CellDragEvent implements Event {
+
+constructor() {}
+
+
+public toString = (): string => {
+	return "CellDragEvent:{currently active}";
+}
+
+/// Event ////
+
+name(): string {
+	return 'CellDragEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,15 +34,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-
-export class CellDragEvent {
-
-constructor() {}
-
-
-public toString = (): string => {
-	return "CellDragEvent:{currently active}";
-}
-
-}

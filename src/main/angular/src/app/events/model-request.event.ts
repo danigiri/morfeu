@@ -1,3 +1,20 @@
+import { Event } from './event.interface';
+
+import { CellDocument } from '../cell-document.class';
+
+export class ModelRequestEvent implements Event {
+
+constructor(public document:CellDocument) {}
+
+/// Event ////
+
+name(): string {
+	return 'ModelRequestEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,11 +30,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { CellDocument } from '../cell-document.class';
-
-export class ModelRequestEvent {
-	
-constructor(public document:CellDocument) {}
-
-}

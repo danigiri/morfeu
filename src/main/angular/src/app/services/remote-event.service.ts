@@ -8,6 +8,7 @@ import { Configuration } from "../config/configuration.class";
 
 import { RemoteDataService } from "../services/remote-data.service";
 
+import { Event } from '../events/event.interface';
 import { ConfigurationLoadedEvent } from "../events/configuration-loaded.event";
 import { EventService } from "./event.service";
 
@@ -36,6 +37,12 @@ constructor(private eventService: EventService,
 			loaded => {
 						console.debug("Remote Event Service loaded the configuration");
 						this.configuration = loaded.configuration;
+						// in optimisation mode we keep receiving this event
+						Promise.resolve(null).then(() => {
+							console.debug("Remote Event Service unsubscribing");
+							this.configurationSubscription.unsubscribe();
+							this.configurationSubscription = null;
+						});
 			}
 	);
 
@@ -43,27 +50,27 @@ constructor(private eventService: EventService,
 
 
 /** After publishing the event internally, we send it to the server */
-publish<T>(event: T, subtype?: string): void {
+publish(event: Event): void {
 
-	this.eventService.publish(event, subtype);
-
+	this.eventService.publish(event);
 	let eventURL = this.configuration.remoteEvents+"/"+event
-	
+
 	// we iterate through our attributes
-	
-	
 	console.debug("Calling server event '%s'", eventURL);
-	
 	this.remoteEventService.get<RemoteEventResponse>(eventURL).subscribe(
 			response => console.debug("Server responded to event with '%s' - '%s'", response.result, response.desc),
 			error => console.error("Server responded to event with an error '%'", error)
 	);
-	
+
 }
 
 
 ngOnDestroy() {
-	this.configurationSubscription.unsubscribe();
+
+	if (this.configurationSubscription) {
+		this.configurationSubscription.unsubscribe();
+	}
+
 }
 
 

@@ -1,8 +1,8 @@
 // INFO - MODE EVENT . TS
 
-import { Catalogue } from "../catalogue.class";
+import { Event } from './event.interface';
 
-export class InfoModeEvent {
+export class InfoModeEvent implements Event {
 
 constructor(public active: boolean) {}
 
@@ -10,6 +10,13 @@ constructor(public active: boolean) {}
 public toString = (): string => {
 	return "InfoModeEvent:{active:'"+this.active+"'}";
 }
+
+/// Event ////
+
+name(): string {
+	return 'InfoModeEvent';
+}
+
 
 }
 

@@ -1,3 +1,19 @@
+
+import { Event } from './event.interface';
+
+export class ModelDisplayReadyEvent implements Event {
+	
+constructor() {}
+
+/// Event ////
+
+name(): string {
+	return 'ModelDisplayReadyEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -14,9 +30,3 @@
  *	 limitations under the License.
  */
 
-
-export class ModelDisplayReadyEvent {
-	
-constructor() {}
-
-}

@@ -1,9 +1,11 @@
 // CONTENT - REQUEST . EVENT . TS
 
+import { Event } from './event.interface';
+
 import { CellDocument } from "../cell-document.class";
 import { Model } from "../model.class";
 
-export class ContentRequestEvent {
+export class ContentRequestEvent implements Event {
 
 
 constructor(public document: CellDocument, public model: Model) {}
@@ -11,6 +13,12 @@ constructor(public document: CellDocument, public model: Model) {}
 
 public toString = (): string => {
 	return "ContentRequestEvent?doc="+this.document.contentURI; 
+}
+
+/// Event ////
+
+name(): string {
+	return 'ContentRequestEvent';
 }
 
 

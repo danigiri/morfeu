@@ -1,12 +1,19 @@
 // CONTENT - SAVE . EVENT . TS
 
+import { Event } from './event.interface';
+
 import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
 
-
-export class ContentSaveEvent {
+export class ContentSaveEvent implements Event {
 
 constructor(public document: CellDocument) {}
+
+/// Event ////
+
+name(): string {
+	return 'ContentSaveEvent';
+}
+
 
 }
 

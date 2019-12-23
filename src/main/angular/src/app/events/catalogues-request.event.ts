@@ -1,3 +1,20 @@
+import { Event } from './event.interface';
+
+export class CataloguesRequestEvent implements Event {
+
+
+constructor(public url: string) {}
+
+
+/// Event ////
+
+name(): string {
+	return 'CataloguesRequestEvent';
+}
+
+
+}
+
 /*
  *	  Copyright 2017 Daniel Giribet
  *
@@ -13,10 +30,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class CataloguesRequestEvent {
-
-
-constructor(public url: string) {}
-
-}

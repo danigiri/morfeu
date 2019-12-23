@@ -1,3 +1,25 @@
+import { Event } from './event.interface';
+
+export class StatusEvent implements Event {
+
+public static DONE:number = 100;
+
+
+constructor(public message: String, public percentage?: number) {}
+
+
+public toString = () : string => {
+	return "StatusEvent:{'"+this.message+(this.percentage ? " ["+this.percentage+"]" : "")+"'}";
+}
+
+/// Event ////
+
+name(): string {
+	return 'StatusEvent';
+}
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,17 +35,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class StatusEvent {
-
-public static DONE:number = 100;
-
-
-constructor(public message: String, public percentage?: number) {}
-
-
-public toString = () : string => {
-	return "StatusEvent:{'"+this.message+(this.percentage ? " ["+this.percentage+"]" : "")+"'}";
-}
-
-}

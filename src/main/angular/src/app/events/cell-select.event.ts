@@ -1,8 +1,8 @@
 // CELL - SELECT . EVENT . TS
 
-// import { SelectableWidget } from "../selectable-widget.class";
+import { Event } from './event.interface';
 
-export class CellSelectEvent {
+export class CellSelectEvent implements Event {
 
 constructor(public position: number) {}
 
@@ -11,6 +11,11 @@ public toString = (): string => {
 	return "CellSelectEvent:{position:"+this.position+"}";
 }
 
+/// Event ////
+
+name(): string {
+	return 'CellSelectEvent';
+}
 
 }
 
