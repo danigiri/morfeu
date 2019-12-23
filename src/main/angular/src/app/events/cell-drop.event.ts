@@ -1,16 +1,17 @@
-import { Event } from './event.interface';
-
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { Cell } from "../cell.class";
 // import { CellModel } from '../cell-model.class';
 import { FamilyMember } from "../family-member.interface";
 
-export class CellDropEvent implements Event {
+export class CellDropEvent extends MorfeuEvent {
 
 
 constructor(public cell:Cell,
 			public newParent: FamilyMember = undefined, 
-			public newPosition: number = undefined) {}
+			public newPosition: number = undefined) {
+	super('CellDropEvent');
+			}
 
 
 public toString = () : string => {
@@ -20,12 +21,6 @@ public toString = () : string => {
 			+ (this.newPosition ? "', newPosition:"+this.newPosition : "")
 			+"}";
 
-}
-
-/// Event ////
-
-name(): string {
-	return 'CellDropEvent';
 }
 
 

@@ -1,18 +1,12 @@
-// CELL - REMOVE . EVENT . TS
-import { MorfeuEvent } from './morfeu-event.class';
 
-import { Cell } from "../cell.class";
-
-export class CellRemoveEvent extends MorfeuEvent {
+export class MorfeuEvent {
 
 
-constructor(public cell?: Cell) {
-	super('CellRemoveEvent');
-}
+constructor(private readonly _name: string) {}
 
 
-public toString = (): string => {
-	return "CellRemoveEvent:{cell:"+this.cell.URI+"}";
+get name(): string {
+	return this._name;
 }
 
 

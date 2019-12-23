@@ -1,17 +1,13 @@
 // CONTENT - SAVE . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { CellDocument } from "../cell-document.class";
 
-export class ContentSaveEvent implements Event {
+export class ContentSaveEvent extends MorfeuEvent {
 
-constructor(public document: CellDocument) {}
-
-/// Event ////
-
-name(): string {
-	return 'ContentSaveEvent';
+constructor(public document: CellDocument) {
+	super('ContentSaveEvent');
 }
 
 

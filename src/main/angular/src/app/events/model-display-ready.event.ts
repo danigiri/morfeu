@@ -1,14 +1,16 @@
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class ModelDisplayReadyEvent implements Event {
-	
-constructor() {}
+export class ModelDisplayReadyEvent extends MorfeuEvent {
 
-/// Event ////
 
-name(): string {
-	return 'ModelDisplayReadyEvent';
+constructor() {
+	super('ModelDisplayReadyEvent');
+}
+
+
+public toString = (): string => {
+	return this.name+'{}';
 }
 
 

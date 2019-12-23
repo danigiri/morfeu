@@ -1,16 +1,11 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { CellDocument } from "../cell-document.class";
 
-export class CellDocumentLoadedEvent implements Event {
+export class CellDocumentLoadedEvent extends MorfeuEvent {
 
-constructor(public document: CellDocument) {}
-
-
-/// Event ////
-
-name(): string {
-	return 'CellDocumentLoadedEvent';
+constructor(public document: CellDocument) {
+	super('CellDocumentLoadedEvent');
 }
 
 

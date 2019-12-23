@@ -8,7 +8,7 @@ import { map, filter } from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 
-import { Event } from '../events/event.interface';
+import { MorfeuEvent } from '../events/morfeu-event.class';
 
 
 interface _Event {
@@ -26,18 +26,18 @@ constructor() {
 }
 
 
-public publish(event: Event): void {
+public publish(event: MorfeuEvent): void {
 
-	const channel_ = event.name();
+	const channel_ = event.name;
 	//console.debug("\tSending event "+channel_+" -> ("+event.toString()+")");
 	this.event$.next({ channel: channel_, data: event });
 
 }
 
 
-public of<T extends Event>(eventType: { new(...args: any[]): T }): Observable<T> {
+public of<T extends MorfeuEvent>(eventType: { new(...args: any[]): T }): Observable<T> {
 
-	const channel_ = Object.create(eventType.prototype).name();	// HACK
+	const channel_ = Object.create(eventType.prototype).constructor.name;	// HACK
 	//console.debug("\tSubscribing to event "+channel_);
 
 	// this is ripe for optimization when we need it, hashing on the channel name for instance

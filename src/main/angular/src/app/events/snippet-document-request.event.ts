@@ -1,16 +1,12 @@
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
-export class SnippetDocumentRequestEvent implements Event {
+export class SnippetDocumentRequestEvent extends MorfeuEvent {
 
 
-constructor(public index: number) {} 
-
-/// Event ////
-
-name(): string {
-	return 'SnippetDocumentRequestEvent';
+constructor(public index: number) {
+	super('SnippetDocumentRequestEvent');
 }
 
 

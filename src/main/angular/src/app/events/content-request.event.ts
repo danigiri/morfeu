@@ -1,24 +1,20 @@
 // CONTENT - REQUEST . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { CellDocument } from "../cell-document.class";
 import { Model } from "../model.class";
 
-export class ContentRequestEvent implements Event {
+export class ContentRequestEvent extends MorfeuEvent {
 
 
-constructor(public document: CellDocument, public model: Model) {}
+constructor(public document: CellDocument, public model: Model) {
+	super('ContentRequestEvent');
+}
 
 
 public toString = (): string => {
 	return "ContentRequestEvent?doc="+this.document.contentURI; 
-}
-
-/// Event ////
-
-name(): string {
-	return 'ContentRequestEvent';
 }
 
 

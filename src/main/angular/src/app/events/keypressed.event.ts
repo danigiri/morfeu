@@ -1,12 +1,14 @@
 // KEY PRESSED . EVENT . TS 
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
-export class KeyPressedEvent implements Event {
+export class KeyPressedEvent extends MorfeuEvent {
 
 
-constructor(public str: string, public num?: number) {}
+constructor(public str: string, public num?: number) {
+	super('KeyPressedEvent');
+}
 
 
 public isNumber(): boolean {
@@ -21,13 +23,6 @@ public isCommand(): boolean {
 
 public toString = (): string => {
 	return "KeyPressedEvent:{ key:"+this.str+( (this.num) ? ", num:"+this.num : "" )+"}";
-}
-
-
-/// Event ////
-
-name(): string {
-	return 'KeyPressedEvent';
 }
 
 

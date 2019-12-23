@@ -1,28 +1,24 @@
 // CONTENT - SAVED . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
 import { CellDocument } from "../cell-document.class";
 
-export class ContentSavedEvent implements Event {
+export class ContentSavedEvent extends MorfeuEvent {
 
 
-constructor(public document: CellDocument) {}
+constructor(public document: CellDocument) {
+	super('ContentSavedEvent');
+}
 
 
 public toString = (): string => {
 	return "ContentSavedEvent?doc="+this.document.contentURI; 
 }
 
-/// Event ////
-
-name(): string {
-	return 'ContentSavedEvent';
-}
 
 }
-
 /*
  *	  Copyright 2019 Daniel Giribet
  *

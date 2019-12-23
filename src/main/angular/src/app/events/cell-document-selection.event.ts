@@ -1,19 +1,16 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { CellDocument } from "../cell-document.class";
 
-export class CellDocumentSelectionEvent implements Event {
+export class CellDocumentSelectionEvent extends MorfeuEvent {
 
-constructor(public url: string) {}
+constructor(public url: string) {
+	super('CellDocumentSelectionEvent');
+}
+
 
 public toString = (): string => {
 	return "CellDocumentSelectionEvent?url="+this.url;
-}
-
-/// Event ////
-
-name(): string {
-	return 'CellDocumentSelectionEvent';
 }
 
 

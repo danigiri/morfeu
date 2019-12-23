@@ -1,19 +1,14 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class DropAreaSelectEvent implements Event {
+export class DropAreaSelectEvent extends MorfeuEvent {
 
-constructor(public position: number) {}
+constructor(public position: number) {
+	super('DropAreaSelectEvent');
+}
 
 
 public toString = (): string => {
 	return "DropAreaSelectEvent:{position:"+this.position+"}";
-}
-
-
-/// Event ////
-
-name(): string {
-	return 'DropAreaSelectEvent';
 }
 
 

@@ -1,17 +1,13 @@
 // CONTENT - FRAGMENT - DISPLAY EVENT . TS
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { Cell } from "../cell.class";
 
-export class ContentFragmentDisplayEvent implements Event {
+export class ContentFragmentDisplayEvent extends MorfeuEvent {
 
 
-constructor(public cell: Cell) {}
-
-/// Event ////
-
-name(): string {
-	return 'ContentFragmentDisplayEvent';
+constructor(public cell: Cell) {
+	super('ContentFragmentDisplayEvent');
 }
 
 

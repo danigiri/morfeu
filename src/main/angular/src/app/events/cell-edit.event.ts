@@ -1,24 +1,19 @@
 // CELL - EDIT . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
 import {Cell} from '../cell.class';
 
-export class CellEditEvent implements Event {
+export class CellEditEvent extends MorfeuEvent {
 
-constructor(public cell?: Cell) {}
+constructor(public cell?: Cell) {
+	super('CellEditEvent');
+}
 
 
 public toString = (): string => {
 	return "CellEditEvent:{cell:"+this.cell.URI+"}";
-}
-
-
-/// Event ////
-
-name(): string {
-	return 'CellEditEvent';
 }
 
 

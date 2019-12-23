@@ -1,22 +1,18 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
 import { CellModel } from "../cell-model.class";
 
 
-export class CellModelActivatedEvent implements Event {
+export class CellModelActivatedEvent extends MorfeuEvent {
 
-constructor(public cellModel?: CellModel) {}
+constructor(public cellModel?: CellModel) {
+	super('CellModelActivatedEvent');
+}
 
 
 public toString = (): string => {
 	return "CellModelActivatedEvent:{cellModel:'"+(this.cellModel ? this.cellModel.URI : "<selection>")+"}'}";
-}
-
-/// Event ////
-
-name(): string {
-	return 'CellModelActivatedEvent';
 }
 
 

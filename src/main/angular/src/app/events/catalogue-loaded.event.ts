@@ -1,22 +1,18 @@
 // CATALOGUE - LOADED EVENT . TS
 
 import { Catalogue } from '../catalogue.class';
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class CatalogueLoadedEvent implements Event {
+export class CatalogueLoadedEvent extends MorfeuEvent {
 
 
-constructor(public catalogue: Catalogue) {}
+constructor(public catalogue: Catalogue) {
+	super('CatalogueLoadedEvent');
+}
 
 
 public toString = (): string => {
 	return "CatalogueLoadedEvent:{catalogue:'"+this.catalogue.name+"'}";
-}
-
-/// Event ////
-
-name(): string {
-	return 'CatalogueLoadedEvent';
 }
 
 

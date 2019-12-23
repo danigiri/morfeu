@@ -1,18 +1,17 @@
 // CELL - SELECTION - CLEAR . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class CellSelectionClearEvent implements Event  {
+export class CellSelectionClearEvent extends MorfeuEvent  {
+
+
+constructor() {
+	super('CellSelectionClearEvent');
+}
 
 
 public toString = (): string => {
 	return "CellSelectionClearEvent:{}";
-}
-
-/// Event ////
-
-name(): string {
-	return 'CellSelectionClearEvent';
 }
 
 

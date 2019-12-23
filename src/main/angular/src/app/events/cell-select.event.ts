@@ -1,21 +1,19 @@
 // CELL - SELECT . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class CellSelectEvent implements Event {
+export class CellSelectEvent extends MorfeuEvent {
 
-constructor(public position: number) {}
+
+constructor(public position: number) {
+	super('CellSelectEvent');
+}
 
 
 public toString = (): string => {
 	return "CellSelectEvent:{position:"+this.position+"}";
 }
 
-/// Event ////
-
-name(): string {
-	return 'CellSelectEvent';
-}
 
 }
 

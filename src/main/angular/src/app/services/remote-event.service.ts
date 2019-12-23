@@ -8,7 +8,7 @@ import { Configuration } from "../config/configuration.class";
 
 import { RemoteDataService } from "../services/remote-data.service";
 
-import { Event } from '../events/event.interface';
+import { MorfeuEvent } from '../events/morfeu-event.class';
 import { ConfigurationLoadedEvent } from "../events/configuration-loaded.event";
 import { EventService } from "./event.service";
 
@@ -50,7 +50,7 @@ constructor(private eventService: EventService,
 
 
 /** After publishing the event internally, we send it to the server */
-publish(event: Event): void {
+publish(event: MorfeuEvent): void {
 
 	this.eventService.publish(event);
 	let eventURL = this.configuration.remoteEvents+"/"+event

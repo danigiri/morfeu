@@ -1,22 +1,19 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class StatusEvent implements Event {
+export class StatusEvent extends MorfeuEvent {
 
 public static DONE:number = 100;
 
 
-constructor(public message: String, public percentage?: number) {}
+constructor(public message: String, public percentage?: number) {
+	super('StatusEvent');
+}
 
 
 public toString = () : string => {
 	return "StatusEvent:{'"+this.message+(this.percentage ? " ["+this.percentage+"]" : "")+"'}";
 }
 
-/// Event ////
-
-name(): string {
-	return 'StatusEvent';
-}
 
 }
 

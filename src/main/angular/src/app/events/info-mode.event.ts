@@ -1,20 +1,16 @@
 // INFO - MODE EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class InfoModeEvent implements Event {
+export class InfoModeEvent extends MorfeuEvent {
 
-constructor(public active: boolean) {}
+constructor(public active: boolean) {
+	super('InfoModeEvent');
+}
 
 
 public toString = (): string => {
 	return "InfoModeEvent:{active:'"+this.active+"'}";
-}
-
-/// Event ////
-
-name(): string {
-	return 'InfoModeEvent';
 }
 
 

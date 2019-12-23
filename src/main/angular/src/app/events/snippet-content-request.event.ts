@@ -1,17 +1,14 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { CellDocument } from "../cell-document.class";
 
-export class SnippetContentRequestEvent implements Event {
+export class SnippetContentRequestEvent extends MorfeuEvent {
 
 
-constructor(public document: CellDocument) {}
-
-/// Event ////
-
-name(): string {
-	return 'SnippetContentRequestEvent';
+constructor(public document: CellDocument) {
+	super('SnippetContentRequestEvent');
 }
+
 
 }
 

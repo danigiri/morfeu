@@ -1,24 +1,20 @@
 // CONFIGURATION - LOADED . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
 import { Configuration } from "../config/configuration.class";
 
-export class ConfigurationLoadedEvent implements Event {
+export class ConfigurationLoadedEvent extends MorfeuEvent {
 
 
-constructor(public configuration: Configuration) {}
+constructor(public configuration: Configuration) {
+	super('ConfigurationLoadedEvent');
+}
 
 
 public toString = (): string => {
 	return "ConfigurationLoaded:{"+this.configuration+"}";
-}
-
-/// Event ////
-
-name(): string {
-	return 'ConfigurationLoadedEvent';
 }
 
 

@@ -1,17 +1,14 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { Catalogue } from "../catalogue.class";
 
-export class CataloguesLoadedEvent implements Event {
+export class CataloguesLoadedEvent extends MorfeuEvent {
 
 
-constructor(public catalogues: Catalogue[]) {}
-
-/// Event ////
-
-name(): string {
-	return 'CataloguesLoadedEvent';
+constructor(public catalogues: Catalogue[]) {
+		super('CataloguesLoadedEvent');
 }
+
 
 }
 

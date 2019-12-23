@@ -1,16 +1,12 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { Model } from "../model.class";
 
-export class ModelDisplayEvent implements Event {
-	
+export class ModelDisplayEvent extends MorfeuEvent {
 
-constructor(public model: Model) {}
 
-/// Event ////
-
-name(): string {
-	return 'ModelDisplayEvent';
+constructor(public model: Model) {
+	super('ModelDisplayEvent');
 }
 
 

@@ -1,15 +1,11 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { CellDocument } from '../cell-document.class';
 
-export class ModelRequestEvent implements Event {
+export class ModelRequestEvent extends MorfeuEvent {
 
-constructor(public document:CellDocument) {}
-
-/// Event ////
-
-name(): string {
-	return 'ModelRequestEvent';
+constructor(public document:CellDocument) {
+	super('ModelRequestEvent');
 }
 
 

@@ -1,20 +1,15 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class ProblemEvent implements Event {
+export class ProblemEvent extends MorfeuEvent {
 
 
-constructor(public message: String) {}
+constructor(public message: String) {
+	super('ProblemEvent');
+}
 
 
 public toString = () : string => {
 	return "ProblemEvent:{:'"+this.message==null ? "NO PROBLEMO" :+this.message+"'}";
-}
-
-
-/// Event ////
-
-name(): string {
-	return 'ProblemEvent';
 }
 
 

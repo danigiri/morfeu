@@ -1,17 +1,13 @@
 // CONTENT - REFRESHED EVENT . TS
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { Content } from "../content.class";
 
-export class ContentRefreshedEvent implements Event {
-
-constructor(public content: Content) {}
+export class ContentRefreshedEvent extends MorfeuEvent {
 
 
-/// Event ////
-
-name(): string {
-	return 'ContentRefreshedEvent';
+constructor(public content: Content) {
+	super('ContentRefreshedEvent');
 }
 
 

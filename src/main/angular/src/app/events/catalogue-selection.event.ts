@@ -1,13 +1,10 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-export class CatalogueSelectionEvent implements Event {
+export class CatalogueSelectionEvent extends MorfeuEvent {
 
-constructor(public url: string) {}
 
-/// Event ////
-
-name(): string {
-	return 'CatalogueSelectionEvent';
+constructor(public url: string) {
+	super('CatalogueSelectionEvent');
 }
 
 

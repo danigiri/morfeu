@@ -1,22 +1,18 @@
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 import { Cell } from "../cell.class";
 
 /** We were focusing on a cell and we notify that we are not focusing on it anymore */
-export class CellDeactivatedEvent implements Event {
+export class CellDeactivatedEvent extends MorfeuEvent {
 
-constructor(public cell: Cell) {}
+
+constructor(public cell: Cell) {
+	super('CellDeactivatedEvent');
+}
 
 
 public toString = (): string => {
 	return "CellDeactivatedEvent:{cell:'"+this.cell.URI+"'}";
-}
-
-
-/// Event ////
-
-name(): string {
-	return 'CellDeactivatedEvent';
 }
 
 

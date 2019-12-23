@@ -1,23 +1,19 @@
 // CELL DOCUMENT CLEAR . EVENT . TS
 
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
-export class CellDocumentClearEvent implements Event {
+export class CellDocumentClearEvent extends MorfeuEvent {
 
 
-constructor() {}
+constructor() {
+	super('CellDocumentClearEvent');
+}
 
 
 public toString = (): string => {
 	return "CellDocumentClearEvent";
-}
-
-/// Event ////
-
-name(): string {
-	return 'CellDocumentClearEvent';
 }
 
 

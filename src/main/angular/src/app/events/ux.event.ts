@@ -1,21 +1,21 @@
 // UX . EVENT . TS
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
-
-export class UXEvent implements Event {
+export class UXEvent extends MorfeuEvent {
 
 public static DOCUMENT_DIRTY: number = 100;
 public static TOGGLE_COLLAPSABLE: number = 200;
 
 
-constructor(public type: number, public payload?: any) {}
+constructor(public readonly type: number, public readonly payload?: any) {
+	super('UXEvent');
+}
 
 
 public toString = () : string => {
 
 	let message: string;
-
 	switch (this.type) {
 		case UXEvent.DOCUMENT_DIRTY:
 			message = "DOCUMENT_DIRTY";
@@ -24,14 +24,9 @@ public toString = () : string => {
 			message = "UNKNOWN";
 			break;
 	}
+	
 	return "UXEvent:{'"+message+"'}";
 
-}
-
-/// Event ////
-
-name(): string {
-	return 'UXEvent';
 }
 
 

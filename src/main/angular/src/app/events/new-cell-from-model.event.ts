@@ -1,21 +1,18 @@
 
-import { Event } from './event.interface';
+import { MorfeuEvent } from './morfeu-event.class';
 
 
-export class NewCellFromModelEvent implements Event {
+export class NewCellFromModelEvent extends MorfeuEvent {
 
-constructor() {}
+constructor() {
+	super('NewCellFromModelEvent');
+}
 
 
 public toString = (): string => {
 	return "NewCellFromModelEvent:{instantiate a new cell}";
 }
 
-/// Event ////
-
-name(): string {
-	return 'NewCellFromModelEvent';
-}
 
 }
 
