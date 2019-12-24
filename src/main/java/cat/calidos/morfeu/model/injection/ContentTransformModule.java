@@ -104,7 +104,7 @@ public static String jsonContent(@Named("DestinationContentURI") URI uri,
 
 @Produces @Named("FilterContent")
 public static String filterContent(@Named("ValuesForTemplate") Map<String, Object> values,
-									@Nullable @Named("Filters") String filters, 
+									@Nullable @Named("Filters") String filters,
 									@Named("DestinationContentURI") URI uri) throws TransformException {
 
 	try {

@@ -34,6 +34,8 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformContentToYAMLIntTest extends ModelTezt {
 
+private static final String TEMPLATE = "templates/transform/content-to-yaml.twig";
+
 
 @Test
 public void testTransformUsingTemplateDocument1() throws Exception {
@@ -44,7 +46,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	Map<String, Object> values = valueMapFrom(doc);
 
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath(TEMPLATE)
 												.withValue(values)
 												.build()
 												.render();
@@ -71,7 +73,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	assertTrue(col0.has("size"));
 	assertEquals(4, col0.get("size").asInt());
 	assertTrue(col0.has("data"));
-	
+
 	JsonNode datas = col0.get("data");
 	assertNotNull(datas);
 	assertTrue(datas.isArray());
@@ -95,7 +97,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	Map<String, Object> values = valueMapFrom(doc);
 
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath(TEMPLATE)
 												.withValue(values)
 												.build()
 												.render();
@@ -123,14 +125,13 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath(TEMPLATE)
 												.withValue(values)
 												.build()
 												.render();
 	System.err.println(transformed);
-	
+
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
@@ -147,7 +148,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	JsonNode bar = keyvalues.get("bar");			//rows/cols/col0/keyvalues/bar
 	assertNotNull(bar);
 	assertEquals("foo", bar.asText());
-	
+
 }
 
 
@@ -158,9 +159,8 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath(TEMPLATE)
 												.withValue(values)
 												.build()
 												.render();
@@ -188,9 +188,8 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath(TEMPLATE)
 												.withValue(values)
 												.build()
 												.render();
@@ -227,7 +226,7 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 	Map<String, Object> values = valueMapFrom(doc);
 	
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath(TEMPLATE)
 												.withValue(values)
 												.build()
 												.render();

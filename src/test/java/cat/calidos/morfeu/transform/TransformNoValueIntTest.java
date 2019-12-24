@@ -57,10 +57,7 @@ public void testTransformJSONToYAML() throws Exception {
 	Document doc = produceDocumentFromPath("test-resources/documents/document4.json");
 	assertNotNull(doc);
 
-	Map<String, Object> values = new HashMap<String, Object>(2);	//UGLY:  we skip the virtual root
-	values.put("cells", doc.asComplex().children().child(0).asComplex().children().asList());
-	values.put("model", doc.getModel());
-
+	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
 												.withTemplatePath("templates/transform/content-to-yaml.twig")
 												.withValue(values)

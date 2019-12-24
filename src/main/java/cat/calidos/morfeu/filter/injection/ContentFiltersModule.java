@@ -61,7 +61,6 @@ public static Filter<Object, String> contentToYAML() {
 
 }
 
-
 /*
  *    Copyright 2019 Daniel Giribet
  *
