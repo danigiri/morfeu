@@ -4,9 +4,7 @@ export class CataloguesRequestEvent extends MorfeuEvent {
 
 
 constructor(public url: string) {
-
-		super('CataloguesRequestEvent');
-
+	super('CataloguesRequestEvent');
 }
 
 

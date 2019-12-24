@@ -10,7 +10,6 @@ import { Observable, Subject } from "rxjs";
 
 import { MorfeuEvent } from '../events/morfeu-event.class';
 
-
 interface _Event {
 	channel: string;
 	data: any;
@@ -20,6 +19,7 @@ interface _Event {
 export class EventService {
 
 private event$: Subject<_Event>
+
 
 constructor() {
 	this.event$ = new Subject<_Event>();
