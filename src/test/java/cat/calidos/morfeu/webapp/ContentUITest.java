@@ -58,11 +58,11 @@ public void contentTest() {
 										.clickOnDocumentNamed("Document 1")
 										.content();
 	content.shouldBeVisible();
-	
+
 	List<UICell> rootCells = content.rootCells();		// TEST
 	assertNotNull(rootCells);
 	assertEquals(1, rootCells.size());
-	
+
 	UICell test1 = rootCells.get(0);					// TEST/*
 	assertNotNull(test1);
 	assertTrue(test1.isWell());
@@ -71,15 +71,14 @@ public void contentTest() {
 	assertNotNull(row2);
 	assertTrue(row2.isRowWell());
 
-	
 	List<UICell> cols3 = row2.children();				// TEST/ROW/*
 	assertNotNull(cols3);
 	assertEquals(2, cols3.size());
-	
+
 	UICell col3a = cols3.get(0);						// TEST/ROW/COL0
 	assertNotNull(col3a);
 	assertTrue(col3a.isColumnWell());
-	
+
 	UICell data = col3a.child("data(0)");
 	assertTrue("'data' cell representation img is wrong", data.img().endsWith("assets/images/data-cell.svg"));
 
@@ -88,7 +87,7 @@ public void contentTest() {
 	assertTrue(col3b.isColumnWell());
 
 	UICell data2 = col3b.child("row(0)").child("col(0)").child("data2(1)");
-	assertTrue("'data2' cell representation img is wrong", data2.img().contains("/morfeu/dyn/preview/data2.svg"));
+	assertTrue("'data2' cell representation img is wrong", data2.img().contains("/dyn/preview/data2.svg"));
 
 }
 
@@ -110,18 +109,18 @@ public void relationshipFromContentToModelTest() {
 	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
 	assertTrue(data.isCell());
 	assertEquals(document1URI+"/test(0)/row(0)/col(0)/data(0)", data.id());
-	
+
 	data.hover();
 	assertTrue(data.isActive());
-	
+
 	UIModel model = document.model();
 	//test/row/col/data
 	UICellModelEntry dataModel = model.rootCellModel("test").child("row").child("col").child("data");
 	assertTrue(dataModel.isActive());
-	
+
 	UICellModelEntry data2Model =  model.rootCellModel("test").child("row").child("col").child("data2");
 	assertFalse(data2Model.isActive());
-	
+
 	UICell data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").child("data2(0)");
 	assertFalse(data2.isActive());
 
