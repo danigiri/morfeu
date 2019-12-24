@@ -44,13 +44,13 @@ private UIContent content;
 
 @Before
 public void setup() {
-	
+
 	open(appBaseURL);
 	content = UICatalogues.openCatalogues()
-			.shouldAppear()
-			.clickOn(0)
-			.clickOnDocumentNamed("Document 2")
-			.content();
+							.shouldAppear()
+							.clickOn(0)
+							.clickOnDocumentNamed("Document 2")
+							.content();
 	content.shouldBeVisible();
 	test = content.rootCells().get(0);
 
@@ -58,7 +58,7 @@ public void setup() {
 
 
 @Test
-public void addAttributeTest() {
+public void addAttributeTest() throws Exception {
 
 	// /test(0)/row(0)/col(0)/row(0)/col(0)/data(0)
 	UICell data = test.child("row(0)")
@@ -89,8 +89,9 @@ public void addAttributeTest() {
 	UIAttributeData textAttribute = notPresentAttribute.get();
 	assertFalse(textAttribute.hasValue());
 	assertTrue(textAttribute.isNotPresent());
-	
+
 	textAttribute = textAttribute.clickOnCreate();
+	waitOneSec();
 	assertTrue(textAttribute.isPresent());
 	assertTrue(textAttribute.hasValue());
 	assertEquals("Default value for text (from global)", textAttribute.value());
