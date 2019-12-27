@@ -50,11 +50,11 @@ public UIWidget(SelenideElement element) {
 
 @SuppressWarnings("unchecked")
 public T shouldBeVisible() {
-	
+
 	element.shouldBe(visible);
-		
+
 	return (T)this;
-	
+
 }
 
 
@@ -136,6 +136,7 @@ public T pressTAB() {
 	return (T) this;
 
 }
+
 
 /**
 * @return

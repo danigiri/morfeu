@@ -25,7 +25,7 @@ get(uri: string, type_: Constructor<T>): Observable<T> {
 
 	// TODO: handle errors with .catch here
 	return this.http.get<J>(uri)//, { observe: 'response' })
-						.pipe(	retryWhen(errors => errors.pipe(delay(200),take(5),)),
+						.pipe(	retryWhen(errors => errors.pipe(delay(200),take(5))),
 	// .concat(Observable.throw(new Error("Too many retries")))
 								map(response => <T>createInstance(type_).fromJSON(response)));
 
@@ -36,6 +36,7 @@ post(uri: string, content: any, type_: Constructor<T>): Observable<T> {
 	console.log("[SERVICE] RemoteObjectService::post('%s')", uri);
 
 	return this.http.post<J>(uri, content).map(response => <T>createInstance(type_).fromJSON(response));
+
 }
 
 
