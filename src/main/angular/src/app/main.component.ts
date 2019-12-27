@@ -106,14 +106,14 @@ ngAfterViewInit() {
 	const foo = !environment.production && false;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
-		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of<CataloguesLoadedEvent>('CataloguesLoadedEvent')
+		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of<CataloguesLoadedEvent>(CataloguesLoadedEvent)
 				.subscribe(loaded => {
 						this.unsubscribe(this.cataloguesLoadedEventSubscription);
 						const catalogue = loaded.catalogues[0].uri;
 						this.events.service.publish(new CatalogueSelectionEvent(catalogue));
 				})
 		);
-		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of<CatalogueLoadedEvent>('CatalogueLoadedEvent')
+		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of<CatalogueLoadedEvent>(CatalogueLoadedEvent)
 				.subscribe(loaded => {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
 						const document = loaded.catalogue.documents[0].uri;
@@ -148,7 +148,7 @@ ngAfterViewInit() {
 	// This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
 	// events can use binding properties that have been setup properly
 
-	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>('ConfigurationLoadedEvent')
+	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
 			.subscribe(loaded => {
 				if (loaded===undefined || loaded===null) {
 					console.warn('Got an empty configuration loaded event');

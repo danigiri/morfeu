@@ -65,7 +65,7 @@ ngAfterViewInit() {
 
 		// FIXME: is there a potential race condition where this
 		// method calls pile up on each other on the get text?
-			this.subscribe(this.events.service.of<CellChangedEvent>('CellChangedEvent')
+			this.subscribe(this.events.service.of<CellChangedEvent>(CellChangedEvent)
 					.subscribe(() => this.updateHTMLPresentation())
 			);
 		}

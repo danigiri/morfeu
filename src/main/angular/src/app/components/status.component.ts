@@ -57,7 +57,7 @@ ngOnInit() {
 	this.statuses = new Array();
 	this.pendingStatuses = new Array();
 
-	this.eventSubscription = this.eventService.of<StatusEvent>('StatusEvent').subscribe(s =>
+	this.eventSubscription = this.eventService.of<StatusEvent>(StatusEvent).subscribe(s =>
 		// console.log("-> status component gets new status '"+s.message+"' ["+s.percentage+"]");
 																				this.newStatusReceived(s)
 	);

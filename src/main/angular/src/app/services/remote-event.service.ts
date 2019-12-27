@@ -33,7 +33,7 @@ constructor(private eventService: EventService,
 
 	super();
 
-	this.configurationSubscription = eventService.of<ConfigurationLoadedEvent>('ConfigurationLoadedEvent')
+	this.configurationSubscription = eventService.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
 			.subscribe(loaded => {
 						console.debug("Remote Event Service loaded the configuration");
 						this.configuration = loaded.configuration;

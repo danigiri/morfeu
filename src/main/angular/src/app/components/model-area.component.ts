@@ -73,19 +73,19 @@ ngOnInit() {
 
 	console.log("ModelAreaComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of<CellDocumentClearEvent>('CellDocumentClearEvent')
+	this.subscribe(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
 			.subscribe(() => this.clear())
 	);
 
-	this.subscribe(this.events.service.of<CellDocumentLoadedEvent>('CellDocumentLoadedEvent')
+	this.subscribe(this.events.service.of<CellDocumentLoadedEvent>(CellDocumentLoadedEvent)
 			.subscribe(loaded => this.events.service.publish(new ModelRequestEvent(loaded.document)))
 	);
 
-	this.subscribe(this.events.service.of<ModelLoadedEvent>('ModelLoadedEvent')
+	this.subscribe(this.events.service.of<ModelLoadedEvent>(ModelLoadedEvent)
 			.subscribe(loaded => this.store(loaded.model))
 	);
 
-	this.subscribe(this.events.service.of<CatalogueLoadedEvent>('CatalogueLoadedEvent')
+	this.subscribe(this.events.service.of<CatalogueLoadedEvent>(CatalogueLoadedEvent)
 			.subscribe(loaded => this.snippets = loaded.catalogue.snippets)
 	);
 
@@ -126,7 +126,7 @@ beforeTabChange($event: NgbTabChangeEvent) {
 	console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
 	if ($event.activeId===ModelAreaComponent.MODEL_TAB) {
 	} else if ($event.activeId===ModelAreaComponent.SNIPPETS_TAB) {
-		this.modelDisplayReadySubscription = this.subscribe(this.events.service.of<ModelDisplayReadyEvent>('ModelDisplayReadyEvent')
+		this.modelDisplayReadySubscription = this.subscribe(this.events.service.of<ModelDisplayReadyEvent>(ModelDisplayReadyEvent)
 													.subscribe(() => this.redisplayModel())
 											);
 	}

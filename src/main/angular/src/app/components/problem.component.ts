@@ -32,7 +32,7 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 	console.log("ProblemComponent::ngOnInit()");
-	this.subscribe(this.events.service.of<ProblemEvent>('ProblemEvent')
+	this.subscribe(this.events.service.of<ProblemEvent>(ProblemEvent)
 			.subscribe( p => {
 				if ( p.message != null ) {
 					console.log( "-> ProblemComponent gets problem"+p.message );

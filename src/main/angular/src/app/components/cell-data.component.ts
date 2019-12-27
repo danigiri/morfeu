@@ -84,16 +84,16 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	this.subscribe(this.events.service.of<CellActivatedEvent>('CellActivatedEvent')
+	this.subscribe(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
 			.subscribe( activated => this.showCellInformation(activated.cell))
 	);
-	this.subscribe(this.events.service.of<CellDeactivatedEvent>('CellDeactivatedEvent')
+	this.subscribe(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
 			.subscribe(() => this.hideCellInformation()));
-	this.subscribe(this.events.service.of<CellModelActivatedEvent>('CellModelActivatedEvent')
+	this.subscribe(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 			.pipe(filter(activated => activated.cellModel!==undefined))
 			.subscribe( activated => this.showCellModelInformation(activated.cellModel))
 	);
-	this.subscribe(this.events.service.of<CellModelDeactivatedEvent>('CellModelDeactivatedEvent')
+	this.subscribe(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.subscribe(() => this.hideCellInformation())
 	);
 

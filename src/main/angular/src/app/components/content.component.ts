@@ -135,25 +135,25 @@ ngOnInit() {
 
 	console.log("ContentComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of<CellDocumentClearEvent>('CellDocumentClearEvent')
+	this.subscribe(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
 		.subscribe(() => this.clear())
 	);
 
-	this.subscribe(this.events.service.of<ContentRequestEvent>('ContentRequestEvent')
+	this.subscribe(this.events.service.of<ContentRequestEvent>(ContentRequestEvent)
 			.subscribe(requested => this.fetchContentFor(requested.document, requested.model))
 	);
 
-	this.subscribe(this.events.service.of<ContentSaveEvent>('ContentSaveEvent')
+	this.subscribe(this.events.service.of<ContentSaveEvent>(ContentSaveEvent)
 			.subscribe(save => this.saveContent(save.document))
 	);
 
 	// we subscribe to fragment editing events
-	this.subscribe(this.events.service.of<ContentFragmentDisplayEvent>('ContentFragmentDisplayEvent')
+	this.subscribe(this.events.service.of<ContentFragmentDisplayEvent>(ContentFragmentDisplayEvent)
 			.subscribe(fragment => this.displayContentFragment(fragment.cell))
 	);
 
 	// we subscribe to the configuration service to get the save filters
-	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>('ConfigurationLoadedEvent')
+	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
 			.subscribe(loaded => this.configuration = loaded.configuration)
 	);
 

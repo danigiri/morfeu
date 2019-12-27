@@ -54,7 +54,7 @@ ngOnInit() {
 
 	console.log("StatusComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of<CataloguesRequestEvent>('CataloguesRequestEvent')
+	this.subscribe(this.events.service.of<CataloguesRequestEvent>(CataloguesRequestEvent)
 			.subscribe(s => {
 				console.log("-> catalogue-list component gets request event for '%s'", s.url);
 				if (s.url!==undefined) {
@@ -66,7 +66,7 @@ ngOnInit() {
 	);
 
 	// on catalogue selection we highlight the selected catalogue and clear the document selection
-	this.subscribe(this.events.service.of<CatalogueSelectionEvent>('CatalogueSelectionEvent')
+	this.subscribe(this.events.service.of<CatalogueSelectionEvent>(CatalogueSelectionEvent)
 		.subscribe(s => {
 			console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
 			this.markCatalogueAsSelected(s.url);

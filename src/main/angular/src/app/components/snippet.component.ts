@@ -93,7 +93,7 @@ select(position: number) {
 
 subscribeToSelection() {
 
-	this.selectionSubscription = this.subscribe(this.events.service.of<CellSelectEvent>('CellSelectEvent')
+	this.selectionSubscription = this.subscribe(this.events.service.of<CellSelectEvent>(CellSelectEvent)
 				.subscribe(cs => this.select(cs.position))
 	);
 	this.subscribeToSelectionClear();  // if we are selectable we are also clearable

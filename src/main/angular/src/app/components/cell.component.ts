@@ -57,7 +57,7 @@ ngOnInit() {
 	// console.log('[UI] CellComponent::ngOnInit()');
 
 	// Drop a cell to a position under this cell
-	this.subscribe(this.events.service.of<CellDropEvent>('CellDropEvent')
+	this.subscribe(this.events.service.of<CellDropEvent>(CellDropEvent)
 			.pipe(filter(dc => dc.newParent && dc.newParent===this.cell))
 			.subscribe( dc => {
 				console.log('-> cell comp gets dropcell event moving '+dc.cell.name+' to '
@@ -67,21 +67,21 @@ ngOnInit() {
 	);
 
 	// A cell model was deactivated that is compatible with this cell
-	this.subscribe(this.events.service.of<CellModelDeactivatedEvent>('CellModelDeactivatedEvent')
+	this.subscribe(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.pipe(filter(d => d.cellModel && this.isCompatibleWith(d.cellModel)))
 			.subscribe(() => this.becomeInactive(this.cell))
 				// console.log('-> cell comp gets cellmodel deactivated event for ''+d.cellModel.name+''');
 	);
 
 	// a cell model activated that is compatible with this cell
-	this.subscribe(this.events.service.of<CellModelActivatedEvent>('CellModelActivatedEvent')
+	this.subscribe(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 			.pipe(filter( a => a.cellModel && this.isCompatibleWith(a.cellModel)))
 			.subscribe(() => this.becomeActive(this.cell))
 				//console.log('-> cell comp gets cellmodel activated event for ''+a.cellModel.name+'''); 
 	);
 
 	// an outsider component (like a keyboard shortcut) wants to activate this selected cell
-	this.subscribe(this.events.service.of<CellActivateEvent>('CellActivateEvent')
+	this.subscribe(this.events.service.of<CellActivateEvent>(CellActivateEvent)
 			.pipe(filter(() => this.selected && this.canBeActivated()))
 			.subscribe(() => {
 				console.log('-> cell comp gets cell activate event and proceeds to focus :)');
@@ -91,7 +91,7 @@ ngOnInit() {
 	);
 
 	// A different cell was activated and we are active at this moment
-	this.subscribe(this.events.service.of<CellActivatedEvent>('CellActivatedEvent').pipe(
+	this.subscribe(this.events.service.of<CellActivatedEvent>(CellActivatedEvent).pipe(
 				filter(a => this.active && a.cell!==this.cell)
 			).subscribe( a => {
 				console.log('-> cell comp gets cell activated event from other cell, we were active, clear');
@@ -100,7 +100,7 @@ ngOnInit() {
 	);
 
 	// External component (like a keyboard shortcut) wants to drag this cell somewhere
-	this.subscribe(this.events.service.of<CellDragEvent>('CellDragEvent')
+	this.subscribe(this.events.service.of<CellDragEvent>(CellDragEvent)
 			.pipe(filter(() => this.active))
 			.subscribe(() => {
 				console.log('-> cell comp gets cell drag event and will try to drop to a selection :)');
@@ -109,7 +109,7 @@ ngOnInit() {
 	);
 
 	// Want to edit this cell
-	this.subscribe(this.events.service.of<CellEditEvent>('CellEditEvent')
+	this.subscribe(this.events.service.of<CellEditEvent>(CellEditEvent)
 			.pipe(filter(edit => !edit.cell && this.isEditable()))
 			.subscribe(() => {
 					console.log('-> cell comp gets cell edit event and will try to edit :)');
@@ -118,7 +118,7 @@ ngOnInit() {
 	);
 
 	// Want to remove this cell
-	this.subscribe(this.events.service.of<CellRemoveEvent>('CellRemoveEvent')
+	this.subscribe(this.events.service.of<CellRemoveEvent>(CellRemoveEvent)
 			.pipe(filter(remove => !remove.cell && (this.active || this.selected)))
 			.subscribe(() => {
 					console.log('-> cell comp gets cell remove event and will get removed');
@@ -287,7 +287,7 @@ select(position: number) {
 /** This cell now can be selected or can bubble down selections, and can also be cleared */
 subscribeToSelection() {
 
-	this.selectionSubscription = this.subscribe(this.events.service.of<CellSelectEvent>('CellSelectEvent')
+	this.selectionSubscription = this.subscribe(this.events.service.of<CellSelectEvent>(CellSelectEvent)
 										.subscribe(cs => this.select(cs.position))
 	);
 	this.subscribeToSelectionClear();  // if we are selectable we are also clearable

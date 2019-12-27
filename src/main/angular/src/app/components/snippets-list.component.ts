@@ -91,7 +91,7 @@ private fetchSnippets() {
 		this._snippetsSubject = new Subject();
 		this.snippets = this._snippetsSubject.asObservable();
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
-		this.snippetDocumentSubs = this.subscribe(this.events.service.of<SnippetDocumentRequestEvent>('SnippetDocumentRequestEvent')
+		this.snippetDocumentSubs = this.subscribe(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
 										.subscribe(
 											req => this.loadSnippetDocument(this.snippetStubs[req.index], req.index)
 										)
