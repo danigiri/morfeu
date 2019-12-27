@@ -24,7 +24,7 @@ public class MorfeuServlet extends GenericHttpServlet {
 protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
 
 public final static String RESOURCES_PREFIX = "__RESOURCES_PREFIX";
-protected static final String DEFAULT_RESOURCES_PREFIX = "http://localhost:8080/morfeu/";
+protected static final String DEFAULT_RESOURCES_PREFIX = "http://localhost:8980/";
 protected String resourcesPrefix;
 
 
