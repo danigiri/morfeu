@@ -32,9 +32,6 @@
 
 		<resources>	<!-- skip moving node modules about -->
 			<resource>
-				<directory>src/main/angular/dist</directory>
-			</resource>
-			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 			<resource>
@@ -79,7 +76,12 @@
 				<configuration>
 					<webResources>
 						<resource>
-							<directory>src/main/angular/dist</directory> <!-- skip moving node modules about -->
+							<directory>${project.build.directory}/dist</directory> <!-- add build distribution to root of WAR -->
+						</resource>
+						<resource>
+							<directory>${project.build.outputDirectory}/test-resources</directory>	<!-- test material for dev env compatibility -->
+							<targetPath>test-resources</targetPath>
+							<targetPath>target/test-classes/test-resources</targetPath>
 						</resource>
 					</webResources>
 					<attachClasses>true</attachClasses>	<!-- creates a jar with the classes and attaches an artifact -->
@@ -111,8 +113,7 @@
 							<resourceBase>${project.build.outputDirectory}</resourceBase>	<!-- data files for angular app -->
 							<!-- fallback for testing: /morfeu/target/test-classes/test-resources/.. is ok -->
 							<resourceBase>${basedir}</resourceBase>								<!-- more data files, compatible with int tests -->
-							<!-- resourceBase>${basedir}/src/main/typescript/src</resourceBase-->		<!-- for assets/images -->
-							<!--resourceBase>${basedir}/src/main/typescript/dist</resourceBase-->
+							<resourceBase>${project.build.directory}/dist</resourceBase>
 						</resourceBases>
 						<webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
 					</webApp>
@@ -216,10 +217,15 @@
 
 	</build>
 	<dependencies>
-		<!-- DEPENDENCY INJECTION -->
+		<!-- DEPENDENCY INJECTION dependencies (optionals not included in the final WAR archive) -->
 		<dependency>
 			<groupId>com.google.dagger</groupId>
 			<artifactId>dagger</artifactId>
+			<version>${dagger-2-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.dagger</groupId>
+			<artifactId>dagger-producers</artifactId>
 			<version>${dagger-2-version}</version>
 		</dependency>
 		<dependency>
