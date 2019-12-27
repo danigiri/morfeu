@@ -15,8 +15,9 @@ protected numberPressedSubscription: Subscription;
 
 registerKeyPressedEvents() {
 
-	this.commandPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent ).pipe(
-			filter( key => key.isCommand())).subscribe( key => {
+	this.commandPressedSubscription = this.subscribe(this.events.service.of<KeyPressedEvent>('KeyPressedEvent')
+			.pipe(filter(key => key.isCommand()))
+			.subscribe(key => {
 				if (this.commandKeys.find( c => c===key.str)!==undefined) {
 					this.commandPressedCallback(key.str);
 				} else {
@@ -25,9 +26,9 @@ registerKeyPressedEvents() {
 			})
 	);
 
-	this.numberPressedSubscription = this.subscribe(this.events.service.of( KeyPressedEvent ).pipe(
-			filter( key => key.isNumber()))
-			.subscribe( key => this.numberPressedCallback(key.num))
+	this.numberPressedSubscription = this.subscribe(this.events.service.of<KeyPressedEvent>('KeyPressedEvent')
+			.pipe(filter(key => key.isNumber()))
+			.subscribe(key => this.numberPressedCallback(key.num))
 	);
 
 }

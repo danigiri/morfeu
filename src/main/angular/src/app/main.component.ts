@@ -106,22 +106,22 @@ ngAfterViewInit() {
 	const foo = !environment.production && false;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
-		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of(CataloguesLoadedEvent).subscribe( 
-				loaded => {
+		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of<CataloguesLoadedEvent>('CataloguesLoadedEvent')
+				.subscribe(loaded => {
 						this.unsubscribe(this.cataloguesLoadedEventSubscription);
 						const catalogue = loaded.catalogues[0].uri;
 						this.events.service.publish(new CatalogueSelectionEvent(catalogue));
-				}
-		));
-		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of(CatalogueLoadedEvent).subscribe(
-				loaded => {
+				})
+		);
+		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of<CatalogueLoadedEvent>('CatalogueLoadedEvent')
+				.subscribe(loaded => {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
 						const document = loaded.catalogue.documents[0].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
 							this.events.service.publish(new CellDocumentSelectionEvent(document))
 						);
-				}
-		));
+				})
+		);
 //		this.subscribe(this.events.service.of(ContentRefreshedEvent).subscribe(
 //				_ => {
 					//this.events.service.publish(new CellSelectionClearEvent());
@@ -148,8 +148,8 @@ ngAfterViewInit() {
 	// This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
 	// events can use binding properties that have been setup properly
 
-	this.subscribe(this.events.service.of(ConfigurationLoadedEvent).subscribe(
-			loaded => {
+	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>('ConfigurationLoadedEvent')
+			.subscribe(loaded => {
 				if (loaded===undefined || loaded===null) {
 					console.warn('Got an empty configuration loaded event');
 					return;
@@ -160,8 +160,8 @@ ngAfterViewInit() {
 				Promise.resolve(null)
 						.then(() => this.events.service
 												.publish(new CataloguesRequestEvent(loaded.configuration.catalogues)));
-			}
-	));
+			})
+	);
 
 	// we need to subscribe to the query params to override possible configuration
 	this.route.queryParams.subscribe(
@@ -171,8 +171,9 @@ ngAfterViewInit() {
 					this.config.loadConfigFrom(params.config);
 				} else {
 					let merged = this.config.overwriteWithParams(params);
-					console.log("Configuration bootstrapped from defaults, firing config loaded event");
+					console.log("Configuration bootstrapped from defaults, firing config loaded event ^^");
 					this.events.service.publish(new ConfigurationLoadedEvent(merged));
+					console.debug('Configuration loaded event fired');
 				}
 			}
 	);

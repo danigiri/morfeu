@@ -135,25 +135,28 @@ ngOnInit() {
 
 	console.log("ContentComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => this.clear()));
+	this.subscribe(this.events.service.of<CellDocumentClearEvent>('CellDocumentClearEvent')
+		.subscribe(() => this.clear())
+	);
 
-	this.subscribe(this.events.service.of(ContentRequestEvent).subscribe(
-			requested => this.fetchContentFor(requested.document, requested.model)
-	));
+	this.subscribe(this.events.service.of<ContentRequestEvent>('ContentRequestEvent')
+			.subscribe(requested => this.fetchContentFor(requested.document, requested.model))
+	);
 
-	this.subscribe(this.events.service.of(ContentSaveEvent).subscribe(
-			save => this.saveContent(save.document)
-	));
+	this.subscribe(this.events.service.of<ContentSaveEvent>('ContentSaveEvent')
+			.subscribe(save => this.saveContent(save.document))
+	);
 
 	// we subscribe to fragment editing events
-	this.subscribe(this.events.service.of(ContentFragmentDisplayEvent).subscribe(
-			fragment => this.displayContentFragment(fragment.cell)
-	));
+	this.subscribe(this.events.service.of<ContentFragmentDisplayEvent>('ContentFragmentDisplayEvent')
+			.subscribe(fragment => this.displayContentFragment(fragment.cell))
+	);
 
 	// we subscribe to the configuration service to get the save filters
-	this.subscribe(this.events.service.of(ConfigurationLoadedEvent).subscribe(
-			loaded => this.configuration = loaded.configuration
-	));
+	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>('ConfigurationLoadedEvent')
+			.subscribe(loaded => this.configuration = loaded.configuration)
+	);
+
 }
 
 
@@ -164,9 +167,9 @@ ngAfterViewInit() {
 	this.childrenCellComponents.changes.subscribe(c => {
 		if (this.cellSelectingMode) {
 			this.subscribeChildrenToCellSelection();
-			// if we send the vent immediately in the binding changing callback we'll probably be affecting the
+			// if we send the event immediately in the binding changing callback we'll probably be affecting the
 			// component binding values after they have been read, we trigger it outside the callback then:
-			Promise.resolve(null).then(d=>this.events.service.publish(new ContentRefreshedEvent(this.content)));
+			Promise.resolve(null).then(() => this.events.service.publish(new ContentRefreshedEvent(this.content)));
 		}
 	});
 

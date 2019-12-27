@@ -74,12 +74,11 @@ constructor(eventService: EventService) {
 
 
 ngOnInit() {
-	
-	this.subscribe(this.events.service.of( UXEvent ).pipe( 
-			filter( e => e.type==UXEvent.TOGGLE_COLLAPSABLE),
-			filter( e => e.payload && (e.payload==="*" || e.payload===this.id_)),)
-			.subscribe( e => this.toggle() ));
-
+	this.subscribe(this.events.service.of<UXEvent>('UXEvent')
+			.pipe(	filter(e => e.type==UXEvent.TOGGLE_COLLAPSABLE),
+					filter(e => e.payload && (e.payload==="*" || e.payload===this.id_)))
+			.subscribe(() => this.toggle() )
+	);
 }
 
 

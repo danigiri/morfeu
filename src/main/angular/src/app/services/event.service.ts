@@ -28,17 +28,17 @@ constructor() {
 
 public publish(event: MorfeuEvent): void {
 
-	const channel_ = event.name;
-	//console.debug("\tSending event "+channel_+" -> ("+event.toString()+")");
+	const channel_ = event.eventName;
+	console.debug("\tSending event "+channel_+" -> ("+event.toString()+")");
 	this.event$.next({ channel: channel_, data: event });
 
 }
 
 
-public of<T extends MorfeuEvent>(eventType: { new(...args: any[]): T }): Observable<T> {
+public of<T extends MorfeuEvent>(channel_: string): Observable<T> {
 
-	const channel_ = Object.create(eventType.prototype).constructor.name;	// HACK
-	//console.debug("\tSubscribing to event "+channel_);
+	console.debug("\tSubscribing to event "+channel_);	// we use a string to avoid problems with
+														// dynamic minimised class names
 
 	// this is ripe for optimization when we need it, hashing on the channel name for instance
 	return this.event$.pipe(filter(m => m.channel===channel_), map(m => m.data));

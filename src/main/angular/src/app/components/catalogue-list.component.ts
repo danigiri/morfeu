@@ -54,24 +54,24 @@ ngOnInit() {
 
 	console.log("StatusComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of( CataloguesRequestEvent ).subscribe( 
-			s => {
+	this.subscribe(this.events.service.of<CataloguesRequestEvent>('CataloguesRequestEvent')
+			.subscribe(s => {
 				console.log("-> catalogue-list component gets request event for '%s'", s.url);
 				if (s.url!==undefined) {
 					this.fetchCatalogues(s.url);
 				} else {
 					console.error("Undefined catalogue list, doing nothing");
 				}
-			}
-	));
+			})
+	);
 
 	// on catalogue selection we highlight the selected catalogue and clear the document selection
-	this.subscribe(this.events.service.of( CatalogueSelectionEvent ).subscribe(
-			s => {
-				console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
-				this.markCatalogueAsSelected(s.url);
-			}
-	));
+	this.subscribe(this.events.service.of<CatalogueSelectionEvent>('CatalogueSelectionEvent')
+		.subscribe(s => {
+			console.log("-> catalogue-list component gets selection event for '"+s.url+"'");
+			this.markCatalogueAsSelected(s.url);
+		})
+	);
 
 }
 
@@ -82,6 +82,7 @@ fetchCatalogues(url: string) {
 	// TODO: make this configurable and into an event
 	this.catalogueService.getAll<Catalogue>(url).subscribe(
 			c => {
+				console.debug('Fetched catalogues from %s', url);
 				this.catalogues = c;
 				this.events.service.publish(new CataloguesLoadedEvent(c));
 				this.events.ok();

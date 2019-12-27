@@ -67,13 +67,13 @@ ngOnInit() {
 
 	console.log("DocumentComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
-			selected => this.markDocumentAsSelected(selected.url)
-	));
+	this.subscribe(this.events.service.of<CellDocumentSelectionEvent>('CellDocumentSelectionEvent')
+			.subscribe(selected => this.markDocumentAsSelected(selected.url))
+	);
 
-	this.subscribe(this.events.service.of(CatalogueSelectionEvent).subscribe(
-			selected => this.loadCatalogueAt(selected.url)
-	));
+	this.subscribe(this.events.service.of<CatalogueSelectionEvent>('CatalogueSelectionEvent')
+			.subscribe(selected => this.loadCatalogueAt(selected.url))
+	);
 
 
 }

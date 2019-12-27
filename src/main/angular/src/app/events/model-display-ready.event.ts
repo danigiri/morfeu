@@ -10,7 +10,7 @@ constructor() {
 
 
 public toString = (): string => {
-	return this.name+'{}';
+	return this.eventName+'{}';
 }
 
 

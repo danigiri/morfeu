@@ -32,14 +32,16 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 	console.log("ProblemComponent::ngOnInit()");
-	this.subscribe(this.events.service.of( ProblemEvent ).subscribe( p => {
-		if ( p.message != null ) {
-			console.log( "-> ProblemComponent gets problem"+p.message );
-		} else {
-			console.log( "-> ProblemComponent clears problem" );
-		}
-			this.problem = p.message;
-	}));
+	this.subscribe(this.events.service.of<ProblemEvent>('ProblemEvent')
+			.subscribe( p => {
+				if ( p.message != null ) {
+					console.log( "-> ProblemComponent gets problem"+p.message );
+				} else {
+					console.log( "-> ProblemComponent clears problem" );
+				}
+				this.problem = p.message;
+			})
+	);
 	
 }
 

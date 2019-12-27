@@ -75,18 +75,19 @@ ngOnInit() {
 
 	console.log("DocumentComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of(CellDocumentClearEvent).subscribe(s => {
+	this.subscribe(this.events.service.of<CellDocumentClearEvent>('CellDocumentClearEvent')
+		.subscribe(() => {
 			this.clear();
 			this.events.ok();
-		}
-	));
+		})
+	);
 
-	this.subscribe(this.events.service.of(CellDocumentSelectionEvent).subscribe(
+	this.subscribe(this.events.service.of<CellDocumentSelectionEvent>('CellDocumentSelectionEvent').subscribe(
 			selected => this.loadDocument(selected.url)
 	));
 
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
-	this.subscribe(this.events.service.of( UXEvent ).pipe(
+	this.subscribe(this.events.service.of<UXEvent>('UXEvent').pipe(
 			filter(e => e.type===UXEvent.DOCUMENT_DIRTY))
 			.subscribe(e => this.enableSave())
 	);

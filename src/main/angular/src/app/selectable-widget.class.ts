@@ -41,8 +41,8 @@ unsubscribeFromSelection() {
 
 
 subscribeToSelectionClear() {
-	this.selectionClearSubscription = this.subscribe(this.events.service.of( CellSelectionClearEvent )
-			.subscribe( cs => this.clearSelection() )
+	this.selectionClearSubscription = this.subscribe(this.events.service.of<CellSelectionClearEvent>('CellSelectionClearEvent')
+			.subscribe(() => this.clearSelection())
 	);
 }
 

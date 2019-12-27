@@ -33,8 +33,8 @@ constructor(private eventService: EventService,
 
 	super();
 
-	this.configurationSubscription = eventService.of(ConfigurationLoadedEvent).subscribe(
-			loaded => {
+	this.configurationSubscription = eventService.of<ConfigurationLoadedEvent>('ConfigurationLoadedEvent')
+			.subscribe(loaded => {
 						console.debug("Remote Event Service loaded the configuration");
 						this.configuration = loaded.configuration;
 						// in optimisation mode we keep receiving this event
@@ -43,9 +43,7 @@ constructor(private eventService: EventService,
 							this.configurationSubscription.unsubscribe();
 							this.configurationSubscription = null;
 						});
-			}
-	);
-
+			});
 }
 
 

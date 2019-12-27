@@ -5,7 +5,7 @@ export class MorfeuEvent {
 constructor(private readonly _name: string) {}
 
 
-get name(): string {
+get eventName(): string {
 	return this._name;
 }
 

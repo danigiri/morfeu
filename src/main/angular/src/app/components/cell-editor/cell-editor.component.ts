@@ -112,7 +112,7 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 
 ngOnInit() {
 
-	this.subscribe(this.events.service.of(CellEditEvent)
+	this.subscribe(this.events.service.of<CellEditEvent>('CellEditEvent')
 			.pipe(filter(edit => edit.cell!==undefined && !this.editing))
 			.subscribe(edit => this.edit(edit.cell))
 	);

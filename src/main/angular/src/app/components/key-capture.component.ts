@@ -34,7 +34,7 @@ public readonly ALL_KEYS: string[] = [	"'", "a", "b", "c", "d", "e", "f", "g", "
 private numberHotkey: Hotkey | Hotkey[];
 private commandHotkey: Hotkey | Hotkey[];
 
-	
+
 constructor(eventService: EventService, public hotkeysService: HotkeysService) {
 	super(eventService);
 }
@@ -44,14 +44,14 @@ ngOnInit() {
 
 	console.log("KeyCaptureComponent::ngOnInit()");
 	this.registerKeyShortcuts();
-	
+
 }
 
 
 public registerKeyShortcuts() {
-	
+
 	console.log("KeyCaptureComponent::registerKeyShortcuts()");
-	
+
 	const numbers: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 	this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed_));
 
