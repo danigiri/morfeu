@@ -1,0 +1,11 @@
+src
+target/classes                                  
+target/generated-test-sources                   
+target/morfeu-webapp-0.6.0-SNAPSHOT             
+targetdist                                     
+target/maven-archiver                           
+target/*jar*
+target/test-classes
+target/generated-sources 
+target/maven-status
+

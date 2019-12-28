@@ -69,6 +69,32 @@
 				</executions>
 			</plugin>
 
+			<plugin>        <!-- run test scripts -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<id>build-angular</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>bash</executable>
+							<workingDirectory>${project.basedir}/src/main/angular</workingDirectory>
+							<arguments>
+								<argument>-c</argument>
+								<argument>
+									ng build --prod --optimization=true --aot=true --deleteOutputPath=false \
+									 --outputPath=${project.build.directory}/dist
+								</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>	<!--  mvn package war:war install -DarchiveClasses=true -DattachClasses=true -DskipITs -DskipTests=true -Djetty.skip -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -80,8 +106,11 @@
 						</resource>
 						<resource>
 							<directory>${project.build.outputDirectory}/test-resources</directory>	<!-- test material for dev env compatibility -->
-							<targetPath>test-resources</targetPath>
 							<targetPath>target/test-classes/test-resources</targetPath>
+						</resource>
+						<resource>
+							<directory>${project.build.outputDirectory}/test-resources</directory>	<!-- test material for dev env compatibility -->
+							<targetPath>test-resources</targetPath>
 						</resource>
 					</webResources>
 					<attachClasses>true</attachClasses>	<!-- creates a jar with the classes and attaches an artifact -->
