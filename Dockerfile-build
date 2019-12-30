@@ -17,8 +17,8 @@ RUN curl ${MAVEN_URL} | tar zxf - -C ${MAVEN_HOME} --strip-components 1
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
 # add code
-COPY src .
-COPY pom.xml .
+COPY src src
+COPY pom.xml pom.xml
 
 # and build (two steps to reuse the lengthy maven download
 RUN /usr/bin/mvn compile

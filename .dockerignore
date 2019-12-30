@@ -1,4 +1,4 @@
-src
+src/main/angular/node_modules
 target/classes                                  
 target/generated-test-sources                   
 target/morfeu-webapp-0.6.0-SNAPSHOT             
