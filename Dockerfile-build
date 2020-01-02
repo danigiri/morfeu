@@ -6,8 +6,8 @@ MAINTAINER Daniel Giribet "dani [at] calidos [.] cat"
 ENV MAVEN_URL https://www-eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 ENV MAVEN_HOME /usr/share/maven
 
-# install dependencies (bash to launch angular build, ncurses for pretty output with tput)
-RUN apk add --no-cache curl bash ncurses
+# install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
+RUN apk add --no-cache curl bash ncurses git
 RUN apk add --no-cache --update nodejs npm
 RUN npm install -g @angular/cli
 
