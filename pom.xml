@@ -37,6 +37,11 @@
 			<resource>
 				<directory>src/test/resources</directory>
 			</resource>
+			<resource>
+				<directory>src/main/scripts</directory>
+				<filtering>true</filtering>
+				<targetPath>${project.build.directory}/scripts</targetPath>
+			</resource>
 		</resources>
 	
 		<plugins>
@@ -82,12 +87,12 @@
 						</goals>
 						<configuration>
 							<executable>bash</executable>
-							<workingDirectory>${project.basedir}/src/main/angular</workingDirectory>
+							<workingDirectory></workingDirectory>
 							<arguments>
 								<argument>-c</argument>
 								<argument>
-									ng build --prod --optimization=true --aot=true --deleteOutputPath=false \
-									 --outputPath=${project.build.directory}/dist
+									chmod -c a-x ${project.build.directory}/scripts/angular.sh && \
+									${project.build.directory}/scripts/angular.sh
 								</argument>
 							</arguments>
 						</configuration>

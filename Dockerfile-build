@@ -7,7 +7,7 @@ ENV MAVEN_URL https://www-eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache
 ENV MAVEN_HOME /usr/share/maven
 
 # install dependencies
-RUN apk add --no-cache curl bash
+RUN apk add --no-cache curl bash printf
 RUN apk add --no-cache --update nodejs npm
 RUN npm install -g @angular/cli
 
