@@ -91,7 +91,7 @@
 							<arguments>
 								<argument>-c</argument>
 								<argument>
-									chmod -c a-x ${project.build.directory}/scripts/angular.sh &amp;&amp; \
+									chmod a+x ${project.build.directory}/scripts/angular.sh &amp;&amp; \
 									${project.build.directory}/scripts/angular.sh
 								</argument>
 							</arguments>
