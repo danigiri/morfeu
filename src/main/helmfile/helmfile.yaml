@@ -1,0 +1,8 @@
+repositories:
+- name: localhost
+  url: https://127.0.0.1:3200
+
+releases:
+- name: morfeu
+  namespace: morfeu
+  chart: morfeu
