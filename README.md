@@ -10,15 +10,43 @@ It is licensed under the Apache 2 open-source license and is under heavy develop
 
 ## Getting Started
 
+### Using Docker
+```
+git clone https://github.com/danigiri/morfeu.git
+cd morfeu
+docker build -t morfeu-build -f Dockerfile-build .
+
+# copy generated war
+mkdir target
+docker run --rm --entrypoint cat morfeu-build /target/morfeu-webapp-0.6.0-SNAPSHOT.war > target/morfeu-webapp-0.6.0-SNAPSHOT.war
+
+# generate runnable docker and run it
+docker build -t morfeu .
+docker run --rm morfeu
+
+```
+
+### Manually
 ```
 # clone the project
 git clone https://github.com/danigiri/morfeu.git
+# install maven, npm and angular and then...
 cd morfeu
 # Start the backend (notice that we are setting an java env var to point to our location)
 mvn clean compile jetty:run -D__RESOURCES_PREFIX=file://$(PWD)/ &
 # launch the frontend
 cd src/main/typescript && npm install && npm start
 # This will open a browser with the application on http://localhost:3000
+```
+
+### Deploying on Kubernetes
+Follow the same steps for Docker and use the generated image (example below is for a local microk8s cluster).
+
+```
+docker tag morfeu 127.0.0.1:32000/morfeu
+docker push 127.0.0.1:32000/morfeu
+# examine dashboard
+http://<ip>:8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
 ```
 
 
@@ -30,7 +58,7 @@ In this short video we showcase a Morfeu editing session with a simple YAML-base
 
 ### Installation
 
-Morfeu requires [Java 8](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 6](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests
+Morfeu requires [Java 8](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 8](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests
 
 ### Tests
 
