@@ -19,6 +19,7 @@
 	<logger name="cat.calidos.morfeu.CellModelsFilterModule" level="TRACE"/>
 	<logger name="cat.calidos.morfeu.utils.injection" level="WARN"/>
 	<logger name="cat.calidos.morfeu.utils.injection.SaverModule" level="TRACE"/>
+	<logger name="cat.calidos.morfeu.proxy.MorfeuProxyServlet" level="TRACE"/>
 	<logger name="cat.calidos.morfeu.webapp" level="WARN"/>
 	<logger name="cat.calidos.morfeu.webapp.injection.ControlModule" level="WARN"/>	<!--  debug servlet framework -->
 
@@ -26,9 +27,6 @@
 	<logger name="cat.calidos.morfeu.control.MorfeuServletListener" level="INFO"/>
 	<logger name="cat.calidos.morfeu.control.MorfeuRequestFilter" level="INFO"/-->
 
-
-	<logger name="cat.calidos.morfeu.proxy.MorfeuProxyServlet" level="TRACE"/>
-	<logger name="cat.calidos.morfeu.webapp.injection.ControlModule" level="WARN"/>
 
 	<root level="WARN">
 		<appender-ref ref="STDOUT" />
