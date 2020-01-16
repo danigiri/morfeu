@@ -1,3 +1,19 @@
+// ADOPTER . INTERFACE . TS
+
+import { Cell } from "./cell.class";
+import { FamilyMember } from './family-member.interface';
+
+
+export interface Adopter extends FamilyMember {
+	
+/** new cell must not have a parent */
+adopt(orphan:Cell, position:number);
+
+/** remove this child from our children or attributes */ 
+remove(child:Cell);
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,17 +29,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-import { Cell } from "./cell.class";
-import { FamilyMember } from './family-member.interface';
-
-
-export interface Adopter extends FamilyMember {
-	
-/** new cell must not have a parent */
-adopt(orphan:Cell, position:number);
-
-/** remove this child from our children or attributes */ 
-remove(child:Cell);
-
-}

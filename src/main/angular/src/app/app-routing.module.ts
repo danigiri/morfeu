@@ -13,7 +13,7 @@ export const AppRoutes: Routes = [
 									{path: 'test', loadChildren: () => import('./test/test.module')
 																			.then(mod => mod.TestModule)
 									}
-									];
+];
 
 @NgModule({
 	imports: [ RouterModule.forRoot(AppRoutes, { enableTracing: false }) ],
