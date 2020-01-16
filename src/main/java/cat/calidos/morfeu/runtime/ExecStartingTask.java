@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.runtime;
 
+import java.io.InputStream;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.zeroturnaround.exec.ProcessExecutor;
@@ -35,6 +37,7 @@ private ExecRunningTask runningTask;
 
 public ExecStartingTask(int type, 
 						ProcessExecutor executor,
+						Optional<InputStream> stdin,
 						ExecOutputProcessor outputProcessorWrapper,
 						ExecProblemProcessor problemProcessorWrapper,
 						StartingOutputProcessor outputProcessor, 
@@ -45,8 +48,9 @@ public ExecStartingTask(int type,
 						ExecFinishedTask finishedTask) {
 
 	super(type, 
-			STARTING, 
-			executor, 
+			STARTING,
+			executor,
+			stdin,
 			outputProcessorWrapper, 
 			problemProcessorWrapper, 
 			outputProcessor, 
@@ -56,7 +60,7 @@ public ExecStartingTask(int type,
 
 	this.startedCallback = startedCallback;
 	this.runningTask = runningTask;
-	
+
 	outputProcessor.setTask(this); 	// the processors need to mark us as NEXT or failed, so they need a ref to this
 	problemProcessor.setTask(this);	// specific instance
 
@@ -76,12 +80,12 @@ public RunningTask runningTask() throws IllegalStateException {
 
 @Override
 public RunningTask markAsStarted() {
-	
+
 	System.out.println("STARTING: Mark as started, about to redirect to running task");
 	runningTask.startRedirectingOutput();
 	status = STARTED;
 	setRemaining(NEXT);
-	
+
 	startedCallback.accept(this, runningTask);
 
 	return runningTask;

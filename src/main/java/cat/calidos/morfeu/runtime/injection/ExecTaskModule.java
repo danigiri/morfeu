@@ -16,6 +16,10 @@
 
 package cat.calidos.morfeu.runtime.injection;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,6 +31,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+import org.apache.commons.io.IOUtils;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import cat.calidos.morfeu.runtime.ExecFinishedTask;
@@ -41,6 +46,7 @@ import cat.calidos.morfeu.runtime.StartingOutputProcessor;
 import cat.calidos.morfeu.runtime.StoppingOutputProcessor;
 import cat.calidos.morfeu.runtime.api.ReadyTask;
 import cat.calidos.morfeu.runtime.api.Task;
+import cat.calidos.morfeu.utils.Config;
 
 /**
 *	@author daniel giribet
@@ -68,8 +74,23 @@ ProcessExecutor executor(@Named("Path") String... command) {
 
 
 @Provides @Singleton
+Optional<InputStream> stdin(@Nullable @Named("STDIN") String stdin) {
+
+	if (stdin!=null) {
+		try {
+			return Optional.of(IOUtils.toInputStream(stdin, Config.DEFAULT_CHARSET));
+		} catch (IOException e) {}
+	}
+
+	return Optional.empty();
+
+}
+
+
+@Provides @Singleton
 ExecStartingTask startingTask(@Named("Type") int type,
 								ProcessExecutor executor,
+								Optional<InputStream> stdin,
 								@Named("OutputWrapper") ExecOutputProcessor outputProcessorWrapper,
 								@Named("ProblemWrapper") ExecProblemProcessor problemProcessorWrapper,
 								StartingOutputProcessor startingOutputProcessor,
@@ -80,6 +101,7 @@ ExecStartingTask startingTask(@Named("Type") int type,
 								ExecFinishedTask finishedTask) {
 	return new ExecStartingTask(type,
 								executor,
+								stdin,
 								outputProcessorWrapper,
 								problemProcessorWrapper,
 								startingOutputProcessor,

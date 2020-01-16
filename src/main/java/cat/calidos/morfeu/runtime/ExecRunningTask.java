@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.runtime;
 
+import java.io.InputStream;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.zeroturnaround.exec.ProcessExecutor;
@@ -45,8 +47,8 @@ public ExecRunningTask(int type,
 						BiConsumer<ExecRunningTask, ExecFinishedTask> finishedCallBack) {
 
 	super(type, 
-			RUNNING, 
-			executor, 
+			RUNNING,
+			executor,
 			outputProcessorWrapper, 
 			problemProcessorWrapper, 
 			outputProcessor, 

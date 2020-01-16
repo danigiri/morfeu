@@ -16,6 +16,9 @@
 
 package cat.calidos.morfeu.runtime;
 
+import java.io.InputStream;
+import java.util.Optional;
+
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import cat.calidos.morfeu.runtime.api.Task;
@@ -36,6 +39,7 @@ protected ExecOutputProcessor logMatcher;
 protected ExecProblemProcessor problemMatcher;
 
 private boolean isOK = true;
+private Optional<InputStream> stdin;
 
 
 public ExecTask(int type, int status, ProcessExecutor executor) {
@@ -47,22 +51,43 @@ public ExecTask(int type, int status, ProcessExecutor executor) {
 }
 
 
-public ExecTask(int type, 
-				int status, 
-				ProcessExecutor executor, 
+public ExecTask(int type,
+				int status,
+				ProcessExecutor executor,
+				Optional<InputStream> stdin,
 				ExecOutputProcessor outputProcessorWrapper,
 				ExecProblemProcessor problemProcessorWrapper,
-				ExecOutputProcessor logMatcher, 
+				ExecOutputProcessor logMatcher,
 				ExecProblemProcessor problemMatcher) {
-	
+
 	this(type, status, executor);
-	
+
+	this.stdin = stdin;
+
 	this.logMatcher = logMatcher;
 	this.problemMatcher = problemMatcher;
-	
+
 	this.outputProcessorWrapper = outputProcessorWrapper;
 	this.problemProcessorWrapper = problemProcessorWrapper;
 
+}
+
+
+public ExecTask(int type,
+				int status,
+				ProcessExecutor executor,
+				ExecOutputProcessor outputProcessorWrapper,
+				ExecProblemProcessor problemProcessorWrapper,
+				ExecOutputProcessor logMatcher,
+				ExecProblemProcessor problemMatcher) {
+	this(type,
+			status, 
+			executor, 
+			Optional.empty(), 
+			outputProcessorWrapper, 
+			problemProcessorWrapper, 
+			logMatcher,
+			problemMatcher);
 }
 
 
@@ -70,12 +95,21 @@ public void startRedirectingOutput() {
 
 	// we are using the indirection as the executor.redirect* methods are non-reentrant, namely, if they are called
 	// from within a callback, they have no effect, so we use a level of indirection
-	
+
 	System.out.println("REDIRECTING (INDIRECTLY) IN "+this.translate(status));
 	problemProcessorWrapper.setIndirectProcessor(problemMatcher);
 	outputProcessorWrapper.setIndirectProcessor(logMatcher);
 	executor.redirectError(problemProcessorWrapper);
 	executor.redirectOutput(outputProcessorWrapper);
+
+}
+
+
+public void redirectInput() {
+
+	if (stdin.isPresent()) {
+		executor.redirectInput(stdin.get());
+	}
 
 }
 

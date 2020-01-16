@@ -17,6 +17,8 @@
 package cat.calidos.morfeu.runtime;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
 
 import org.zeroturnaround.exec.ProcessExecutor;
 import org.zeroturnaround.exec.StartedProcess;
@@ -110,7 +112,9 @@ public StartingTask start() throws MorfeuRuntimeException {
 	//				c) if any of the tasks fails, we are marked as failed
 
 	status = STARTING;
+	startingTask.redirectInput();
 	startingTask.startRedirectingOutput();
+	
 	try {
 		startedProcess = executor.start();
 		//FIXME: race condition here, we may be finished already if the process starts and finishes fast

@@ -17,6 +17,8 @@
 package cat.calidos.morfeu.runtime;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
 
 import org.zeroturnaround.exec.ProcessExecutor;
 import org.zeroturnaround.process.Processes;
@@ -50,8 +52,37 @@ public ExecMutableTask(int type,
 						ExecProblemProcessor problemProcessor,
 						ExecStoppingTask stoppingTask,
 						ExecFinishedTask finishedTask) {
+	this(type, 
+			status,
+			executor,
+			Optional.empty(),
+			outputProcessorWrapper,
+			problemProcessorWrapper,
+			logProcessor,
+			problemProcessor,
+			stoppingTask,
+			finishedTask);
+}
+
+public ExecMutableTask(int type, 
+						int status, 
+						ProcessExecutor executor,
+						Optional<InputStream> stdin,
+						ExecOutputProcessor outputProcessorWrapper,
+						ExecProblemProcessor problemProcessorWrapper,
+						ExecOutputProcessor logProcessor, 
+						ExecProblemProcessor problemProcessor,
+						ExecStoppingTask stoppingTask,
+						ExecFinishedTask finishedTask) {
  
-	super(type, status, executor, outputProcessorWrapper, problemProcessorWrapper, logProcessor, problemProcessor);
+	super(type, 
+			status,
+			executor,
+			stdin,
+			outputProcessorWrapper,
+			problemProcessorWrapper,
+			logProcessor,
+			problemProcessor);
 	
 	this.stoppingTask = stoppingTask;
 	this.finishedTask = finishedTask;
@@ -99,7 +130,7 @@ public FinishedTask markAsFailed() {
 
 	setKO();
 	setRemaining(NEXT);
-	
+
 	return finishedTask();
 
 }
