@@ -34,14 +34,13 @@ import org.junit.Before;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Tezt;
 
-
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APITezt extends Tezt {
 
-private static final String DEFAULT_WEBAPP_BASE_URL = DEFAULT_URL+"/dyn/";
-private static final String WEBAPP_BASE_URL = "webapp-prefix";
+public static final String WEBAPP_BASE_URL = "webapp-prefix";
+protected static String DEFAULT_WEBAPP_BASE_URL = DEFAULT_URL+"/dyn/";
 protected CloseableHttpClient client;
 protected String webappPrefix;
 protected String pathPrefix = "target/test-classes/test-resources/";
@@ -58,11 +57,15 @@ public void setup() {
 
 @After
 public void teardown() throws IOException {
-	client.close();
+
+	if (client!=null) {
+		client.close();
+	}
+
 }
 
 
-protected InputStream fetchRemoteInputStreamFrom(String location)	throws Exception {
+public InputStream fetchRemoteInputStreamFrom(String location)	throws Exception {
 
 	String uri = webappPrefix+location;
 	System.err.println("Fetching remote input stream from '"+uri+"'");
@@ -74,7 +77,7 @@ protected InputStream fetchRemoteInputStreamFrom(String location)	throws Excepti
 }
 
 
-protected InputStream postToRemote(String location, String content) throws Exception {
+public InputStream postToRemote(String location, String content) throws Exception {
 
 	String uri = webappPrefix+location;
 	System.err.println("Posting to remote '"+uri+"'");
@@ -87,5 +90,6 @@ protected InputStream postToRemote(String location, String content) throws Excep
 	return client.execute(request).getEntity().getContent();
 
 }
+
 
 }

@@ -20,7 +20,7 @@ import org.apache.commons.io.FileUtils;
 public class Tezt {
 
 public static final String DEFAULT_TMP_FOLDER_NAME = "integration-tests-tmp";
-protected static final String DEFAULT_URL = "http://localhost:8980";
+protected static String DEFAULT_URL = "http://localhost:8980";
 
 
 public String tempDirectoryPath() {
