@@ -20,9 +20,6 @@ import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.visible;
 
-import java.util.Optional;
-import java.util.function.Predicate;
-
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;

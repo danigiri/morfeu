@@ -22,15 +22,15 @@ import cat.calidos.morfeu.filter.injection.DaggerFilterComponent;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Model;
-import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-/**
-* @author daniel giribet
+/** Given in memory content (the model and cells) of a document, serialise to a specific format given the URI extension
+* 	or the supplied filters
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class ContentTransformModule {
@@ -118,6 +118,7 @@ public static String filterContent(@Named("ValuesForTemplate") Map<String, Objec
 	}
 
 }
+
 
 @Produces @Named("ValuesForTemplate")
 public static Map<String, Object> values(Composite<Cell> contentRootCells,

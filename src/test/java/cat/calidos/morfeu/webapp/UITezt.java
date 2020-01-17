@@ -68,6 +68,8 @@ public static void setUpClass() throws Exception {
 
 protected UICatalogue clickOnCatalogue(int i) {
 
+	// TODO: move to a domain-specific subclass
+
 	// click on catalogue list entry and it appears
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue.shouldNotBeVisible();
