@@ -22,6 +22,7 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public void init(ServletConfig config) throws ServletException {
 	//TODO: add the servlet init params as part of the config so a proper merge can be done
 	configuration = DaggerServletConfigComponent.builder().servletConfig(config).build().getProperties();
 	context = config.getServletContext();
-	context.setAttribute(__CONFIG, configuration);
+	addConfigurationToContext();
 
 }
 
@@ -229,6 +230,16 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 
 	return controlComponent;
 
+}
+
+
+public static Optional<Properties> getConfigurationFromContext(ServletContext context) {
+	return Optional.ofNullable((Properties)context.getAttribute(__CONFIG));
+}
+
+
+private void addConfigurationToContext() {
+	context.setAttribute(__CONFIG, configuration);
 }
 
 

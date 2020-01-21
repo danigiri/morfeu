@@ -34,10 +34,11 @@ public static Properties getProperties(ServletConfig c) {
 	p.putAll(System.getenv());
 
 	//p.propertyNames().asIterator().forEachRemaining(null);;
-	
+
 	return p;
 
 }
+
 
 }
 
