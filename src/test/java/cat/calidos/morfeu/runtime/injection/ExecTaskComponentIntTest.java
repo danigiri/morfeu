@@ -232,14 +232,13 @@ public void testOneTimeExecSTDINTask() throws Exception {
 	ReadyTask task = DaggerExecTaskComponent.builder()
 												.exec( "/bin/bash")
 												.type(Task.ONE_TIME)
-												.withStdin("echo 'hello world'")
 												.startedMatcher(s -> s.equals("hello world") ? Task.NEXT : Task.MAX)
 												.problemMatcher(s -> true)	// if anything shows on STDERR
 												.build()
 												.readyTask();
 	assertFalse("Task not started should not be 'done'", task.isDone());
 	assertEquals("Task not started should be ready", Task.READY, task.getStatus());
-	StartingTask starting = task.start();
+	StartingTask starting = task.start("hello world");
 	starting.spinUntil(Task.STARTED);
 	assertEquals("hello world\n", starting.show());
 	

@@ -16,6 +16,8 @@
 
 package cat.calidos.morfeu.runtime.api;
 
+import java.util.Optional;
+
 import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 
 /** Generic task holder, where all configuration is stored/created
@@ -24,7 +26,20 @@ import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 public interface ReadyTask extends Task {
 
 
-/** Start this task and @return a starting task */
-public StartingTask start() throws MorfeuRuntimeException;
+/** Start this task and @return a starting task, no stdin */
+default public StartingTask start() throws MorfeuRuntimeException {
+	return start(Optional.empty());
+}
+
+
+/** Start this task and @return a starting task, stdin */
+default public StartingTask start(String stdin) throws MorfeuRuntimeException {
+	return start(Optional.of(stdin));
+}
+
+
+/** Start this task and @return a starting task, optional stdin */
+public StartingTask start(Optional<String> stdin) throws MorfeuRuntimeException;
+
 
 }

@@ -52,38 +52,15 @@ public ExecMutableTask(int type,
 						ExecProblemProcessor problemProcessor,
 						ExecStoppingTask stoppingTask,
 						ExecFinishedTask finishedTask) {
-	this(type, 
-			status,
-			executor,
-			Optional.empty(),
-			outputProcessorWrapper,
-			problemProcessorWrapper,
-			logProcessor,
-			problemProcessor,
-			stoppingTask,
-			finishedTask);
-}
 
-public ExecMutableTask(int type, 
-						int status, 
-						ProcessExecutor executor,
-						Optional<InputStream> stdin,
-						ExecOutputProcessor outputProcessorWrapper,
-						ExecProblemProcessor problemProcessorWrapper,
-						ExecOutputProcessor logProcessor, 
-						ExecProblemProcessor problemProcessor,
-						ExecStoppingTask stoppingTask,
-						ExecFinishedTask finishedTask) {
- 
 	super(type, 
 			status,
 			executor,
-			stdin,
 			outputProcessorWrapper,
 			problemProcessorWrapper,
 			logProcessor,
 			problemProcessor);
-	
+
 	this.stoppingTask = stoppingTask;
 	this.finishedTask = finishedTask;
 
@@ -92,7 +69,6 @@ public ExecMutableTask(int type,
 
 @Override
 public void appendToOutput(String content) {
-	
 	output.append(content).append(LF);
 }
 

@@ -33,7 +33,6 @@ interface Builder {
 
 	@BindsInstance Builder type(@Named("Type") int type);
 	@BindsInstance Builder exec(@Named("Path") String... command);
-	@BindsInstance Builder withStdin(@Nullable @Named("STDIN") String stdin);
 	@BindsInstance Builder startedMatcher(@Named("StartedMatcher") Function<String, Integer> matcher);
 	@BindsInstance Builder startedCallback(@Nullable BiConsumer<ExecStartingTask, ExecRunningTask> callback);
 	@BindsInstance Builder runningMatcher(@Nullable @Named("RunningMatcher") Function<String, Integer> matcher);

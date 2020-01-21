@@ -74,23 +74,8 @@ ProcessExecutor executor(@Named("Path") String... command) {
 
 
 @Provides @Singleton
-Optional<InputStream> stdin(@Nullable @Named("STDIN") String stdin) {
-
-	if (stdin!=null) {
-		try {
-			return Optional.of(IOUtils.toInputStream(stdin, Config.DEFAULT_CHARSET));
-		} catch (IOException e) {}
-	}
-
-	return Optional.empty();
-
-}
-
-
-@Provides @Singleton
 ExecStartingTask startingTask(@Named("Type") int type,
 								ProcessExecutor executor,
-								Optional<InputStream> stdin,
 								@Named("OutputWrapper") ExecOutputProcessor outputProcessorWrapper,
 								@Named("ProblemWrapper") ExecProblemProcessor problemProcessorWrapper,
 								StartingOutputProcessor startingOutputProcessor,
@@ -101,7 +86,6 @@ ExecStartingTask startingTask(@Named("Type") int type,
 								ExecFinishedTask finishedTask) {
 	return new ExecStartingTask(type,
 								executor,
-								stdin,
 								outputProcessorWrapper,
 								problemProcessorWrapper,
 								startingOutputProcessor,
@@ -231,5 +215,6 @@ BiConsumer<ExecRunningTask, ExecFinishedTask> finishedCallback(
 												@Nullable BiConsumer<ExecRunningTask, ExecFinishedTask> callback) {
 	return (callback==null)? (s, r) -> {} : callback;
 }
+
 
 }

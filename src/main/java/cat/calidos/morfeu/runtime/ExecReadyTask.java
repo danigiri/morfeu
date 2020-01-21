@@ -62,7 +62,7 @@ public ExecReadyTask(int type,
 
 
 @Override
-public StartingTask start() throws MorfeuRuntimeException {
+public StartingTask start(Optional<String> stdin) throws MorfeuRuntimeException {
 
 	// race condition here, stdout and stderr are to all intents and purposes being examined simultaneously, this
 	// means that in the case of an error, we can have the following cases:
@@ -112,9 +112,11 @@ public StartingTask start() throws MorfeuRuntimeException {
 	//				c) if any of the tasks fails, we are marked as failed
 
 	status = STARTING;
-	startingTask.redirectInput();
+	if (stdin.isPresent()) {
+		startingTask.redirectInput(stdin.get());
+	}
 	startingTask.startRedirectingOutput();
-	
+
 	try {
 		startedProcess = executor.start();
 		//FIXME: race condition here, we may be finished already if the process starts and finishes fast

@@ -16,12 +16,20 @@
 
 package cat.calidos.morfeu.runtime;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.apache.commons.io.IOUtils;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import cat.calidos.morfeu.runtime.api.Task;
+import cat.calidos.morfeu.utils.Config;
+import dagger.Provides;
 
 /**
 *	@author daniel giribet
@@ -39,7 +47,6 @@ protected ExecOutputProcessor logMatcher;
 protected ExecProblemProcessor problemMatcher;
 
 private boolean isOK = true;
-private Optional<InputStream> stdin;
 
 
 public ExecTask(int type, int status, ProcessExecutor executor) {
@@ -54,7 +61,6 @@ public ExecTask(int type, int status, ProcessExecutor executor) {
 public ExecTask(int type,
 				int status,
 				ProcessExecutor executor,
-				Optional<InputStream> stdin,
 				ExecOutputProcessor outputProcessorWrapper,
 				ExecProblemProcessor problemProcessorWrapper,
 				ExecOutputProcessor logMatcher,
@@ -62,32 +68,12 @@ public ExecTask(int type,
 
 	this(type, status, executor);
 
-	this.stdin = stdin;
-
 	this.logMatcher = logMatcher;
 	this.problemMatcher = problemMatcher;
 
 	this.outputProcessorWrapper = outputProcessorWrapper;
 	this.problemProcessorWrapper = problemProcessorWrapper;
 
-}
-
-
-public ExecTask(int type,
-				int status,
-				ProcessExecutor executor,
-				ExecOutputProcessor outputProcessorWrapper,
-				ExecProblemProcessor problemProcessorWrapper,
-				ExecOutputProcessor logMatcher,
-				ExecProblemProcessor problemMatcher) {
-	this(type,
-			status, 
-			executor, 
-			Optional.empty(), 
-			outputProcessorWrapper, 
-			problemProcessorWrapper, 
-			logMatcher,
-			problemMatcher);
 }
 
 
@@ -105,12 +91,8 @@ public void startRedirectingOutput() {
 }
 
 
-public void redirectInput() {
-
-	if (stdin.isPresent()) {
-		executor.redirectInput(stdin.get());
-	}
-
+public void redirectInput(String stdin) {
+		executor.redirectInput(stdinStream(stdin));
 }
 
 
@@ -146,6 +128,22 @@ public void setKO() {
 @Override
 public boolean isOK() {
 	return isOK;
+}
+
+
+private InputStream stdinStream(String stdin) {
+
+	// this is setup as a private method as we want to set it outside the exec task injection creation
+	// which means we can decouple the task creation (config) from it's input (runtime)
+	try {
+		return IOUtils.toInputStream(stdin, Config.DEFAULT_CHARSET);
+	} catch (IOException e) {}
+
+	try {
+		return IOUtils.toInputStream("", Config.DEFAULT_CHARSET);
+	} catch (IOException e) {}
+
+	return null;	// giving up
 }
 
 
