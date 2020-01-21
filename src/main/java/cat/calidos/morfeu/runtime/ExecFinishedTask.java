@@ -61,7 +61,7 @@ public int result() throws InterruptedException {
 	while (process==null) {
 		Thread.sleep(10);
 	}
-	
+
 	return process.exitValue();
 
 }
