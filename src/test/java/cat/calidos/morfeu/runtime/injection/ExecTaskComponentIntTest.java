@@ -27,7 +27,7 @@ private boolean finishedCallbackCalled = false;
 @Test 
 public void testOneTimeExecSimpleTask() throws Exception {
 
-	System.out.println("TEST: START");
+	//System.out.println("TEST: START");
 	ReadyTask task = DaggerExecTaskComponent.builder()
 												.exec( "/bin/bash", "-c", "echo 'hello world' && sleep 1")
 												.type(Task.ONE_TIME)
@@ -35,6 +35,8 @@ public void testOneTimeExecSimpleTask() throws Exception {
 												.problemMatcher(s -> true)	// if anything shows on STDERR
 												.build()
 												.readyTask();
+	
+	assertTrue("Wrong task definition", task.toString().contains("/bin/bash, -c, echo 'hello world' && sleep 1"));
 	assertFalse("Task not started should not be 'done'", task.isDone());
 	assertEquals("Task not started should be ready", Task.READY, task.getStatus());
 	System.out.println("TEST: about to call start");

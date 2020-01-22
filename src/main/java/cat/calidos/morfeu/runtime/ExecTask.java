@@ -147,4 +147,12 @@ private InputStream stdinStream(String stdin) {
 }
 
 
+@Override
+public String toString() {
+	return process!=null ? process.toString() : "[null task definition]";
+}
+
+
+
+
 }
