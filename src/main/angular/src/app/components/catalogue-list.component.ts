@@ -1,6 +1,6 @@
 // CATALOGUE LIST . COMPONENT . TS
 
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 
 import { Catalogue } from '../catalogue.class';
 

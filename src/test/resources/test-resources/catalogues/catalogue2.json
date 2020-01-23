@@ -6,6 +6,6 @@
 		,{ "name":"table2", "kind": "xml", "uri":"test-resources/documents/document1.json"}
 		]
 	,"snippets": [
-		{ "name": "Stuff", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
+		{ "name": "Stuff", "kind": "simple", "uri": "/test-resources/snippets/stuff.json"}
 		]
 }

@@ -2,17 +2,17 @@
 	"name": "Catalogue JSON"
 	,"desc": "First Catalogue with JSON format"
 	,"documents": [
-		{ "name":"Document 1 JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/document1-json.json" }
+		 { "name":"Document 1 JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/document1-json.json" }
 		,{ "name":"Document 3 JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/document3-json.json" }
 		,{ "name":"Document keyvalues JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/keyvalues-json.json" }
 		,{ "name":"Document escape JSON", "kind": "json", "uri":"target/test-classes/test-resources/documents/escape-yaml.json" }
 		]
 	,"snippets": [
-		 { "name": "Stuff 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/stuff.json"}
-		,{ "name": "Data 1", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data.json"}
-		,{ "name": "Data 2", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data2.json"}
-		,{ "name": "Data 3", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data3.json"}
-		,{ "name": "Data 4", "kind": "simple", "uri": "target/test-classes/test-resources/snippets/data4.json"}
-		,{ "name": "Row", "kind": "complex", "uri": "target/test-classes/test-resources/snippets/row.json"}
+		 { "name": "Stuff 1", "kind": "simple", "uri": "/test-resources/snippets/stuff.json"}
+		,{ "name": "Data 1", "kind": "simple", "uri": "/test-resources/snippets/data.json"}
+		,{ "name": "Data 2", "kind": "simple", "uri": "/test-resources/snippets/data2.json"}
+		,{ "name": "Data 3", "kind": "simple", "uri": "/test-resources/snippets/data3.json"}
+		,{ "name": "Data 4", "kind": "simple", "uri": "/test-resources/snippets/data4.json"}
+		,{ "name": "Row", "kind": "complex", "uri": "/test-resources/snippets/row.json"}
 		]
 }

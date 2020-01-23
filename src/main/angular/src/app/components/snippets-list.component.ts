@@ -8,7 +8,7 @@ import { RemoteObjectService } from "../services/remote-object.service";
 
 import { Configuration } from '../config/configuration.class';
 
-import { CellDocument, CellDocumentJSON } from "../cell-document.class";
+import { CellDocument } from "../cell-document.class";
 import { Content, ContentJSON } from "../content.class";
 import { Model } from "../model.class";
 
