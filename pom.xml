@@ -24,7 +24,7 @@
 		<jtwig-version>5.87.0.RELEASE</jtwig-version>
 		<selenide-version>5.6.1</selenide-version>
 		<selenium-version>3.141.59</selenium-version>
-		<jupiter-version>5.6.0</jupiter-version>
+		<jupiter-version>5.5.2</jupiter-version>
 		<junit-platform-version>1.5.2</junit-platform-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
