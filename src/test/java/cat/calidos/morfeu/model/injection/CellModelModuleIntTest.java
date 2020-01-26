@@ -45,7 +45,7 @@ private XSSchemaSet schemaSet;
 @Before
 public void setup() throws Exception {
 
-	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	modelURI = new URI("target/classes/test-resources/models/test-model.xsd");
 	schemaSet = parseSchemaFrom(modelURI);
 
 }
