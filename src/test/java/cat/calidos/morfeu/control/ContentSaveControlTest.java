@@ -30,6 +30,7 @@ private String path;
 private String content;
 private String modelPath;
 
+
 @BeforeAll
 public void setup() throws Exception {
 
@@ -95,7 +96,6 @@ private String readFromFile(String contentPath) throws URISyntaxException, IOExc
 
 
 }
-
 
 /*
  *    Copyright 2019 Daniel Giribet

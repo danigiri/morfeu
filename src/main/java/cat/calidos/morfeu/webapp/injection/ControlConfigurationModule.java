@@ -2,6 +2,7 @@ package cat.calidos.morfeu.webapp.injection;
 
 import java.util.Properties;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
@@ -10,7 +11,7 @@ import dagger.Provides;
 
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 
-/**
+/** Generate a configuration from the servlet context
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
@@ -18,7 +19,7 @@ public class ControlConfigurationModule {
 
 
 @Provides @Named("Configuration")
-public static Properties configuration(ServletContext context) {
+public static Properties configuration(@Nullable ServletContext context) {
 	return GenericHttpServlet.getConfigurationFromContext(context).orElse(new Properties());
 }
 

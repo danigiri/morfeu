@@ -16,6 +16,7 @@ import cat.calidos.morfeu.transform.StackContext;
 @Module
 public class ContentConverterModule {
 
+
 @Provides
 String xml(Converter<JsonNode, String> converter) {
 	return converter.process();

@@ -17,7 +17,6 @@ import cat.calidos.morfeu.filter.injection.DaggerFilterComponent;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
-import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 * @author daniel giribet

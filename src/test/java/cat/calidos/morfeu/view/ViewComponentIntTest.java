@@ -5,9 +5,11 @@ package cat.calidos.morfeu.view;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
+import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import cat.calidos.morfeu.view.injection.ViewComponent;
 
@@ -20,8 +22,7 @@ public class ViewComponentIntTest {
 @Test
 public void testInlineTemplate() {
 
-	HashMap<String, Object> values = new HashMap<String, Object>(1);
-	values.put("foo", "bar");	
+	Map<String, Object> values = MorfeuUtils.paramMap("foo", "bar");
 	String templ = "value={{ v.foo }}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("").build();
