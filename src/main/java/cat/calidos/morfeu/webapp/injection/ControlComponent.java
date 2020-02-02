@@ -4,6 +4,7 @@ package cat.calidos.morfeu.webapp.injection;
 
 import java.util.Map;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
@@ -41,7 +42,7 @@ interface Builder {
 	@BindsInstance Builder withPath(@Named("Path") String path);
 	@BindsInstance Builder method(@Named("Method") String method);
 	@BindsInstance Builder withParams(@Named("Params") Map<String, String> params);
-	@BindsInstance Builder andContext(ServletContext context);
+	@BindsInstance Builder andContext(@Nullable ServletContext context);
 
 	ControlComponent build();
 

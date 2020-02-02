@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
@@ -38,10 +39,10 @@ public static BiFunction<List<String>, Map<String, String>, String> ping() {
 
 @Provides @IntoMap @Named("GET")
 @StringKey("/counter/?(reset)?")
-public static BiFunction<List<String>, Map<String, String>, String> counter(ServletContext context) {
+public static BiFunction<List<String>, Map<String, String>, String> counter(@Nullable ServletContext context) {
 	return (pathElems, params) -> {
 
-		Integer counter = (Integer)context.getAttribute("counter");
+		Integer counter = context !=null ? (Integer)context.getAttribute("counter") : 0;
 		context.setAttribute("counter", ++counter);
 
 		return counter.toString();
