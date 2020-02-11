@@ -3,7 +3,12 @@ module.exports = [{
         "/dyn",
         "/test-resources",
         "/assets",
+		"/proxy"
     ],
     target: "http://localhost:8980",
-    secure: false
-}];
+    secure: false,
+	logLevel: "info"
+},
+
+
+];
