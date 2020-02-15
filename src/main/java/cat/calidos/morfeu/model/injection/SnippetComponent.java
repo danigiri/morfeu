@@ -25,7 +25,8 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 
 								ModelModule.class, SnippetCellModelModule.class, CellModelsFilterModule.class, 
-								ValidatorModule.class, ListeningExecutorServiceModule.class})
+								DocumentBuilderModule.class, ValidatorModule.class, 
+								ListeningExecutorServiceModule.class})
 public interface SnippetComponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;

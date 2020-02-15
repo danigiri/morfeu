@@ -64,7 +64,7 @@ public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db,
 													@Named("FetchableContentURI") URI uri, 
 													@Named("FetchedEffectiveContent") InputStream effectiveContent) 
 															throws ParsingException, FetchingException {
-	
+
 	// TODO: we can probably parse with something faster than building into dom
 	try {
 		return db.parse(effectiveContent);

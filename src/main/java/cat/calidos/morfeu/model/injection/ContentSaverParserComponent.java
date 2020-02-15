@@ -30,7 +30,8 @@ import dagger.producers.ProductionComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, StringToParsedModule.class, ContentTransformModule.class,
 								MapperModule.class, SaverModule.class, ModelModule.class, ValidatorModule.class,
-								CellModelsFilterModule.class, ListeningExecutorServiceModule.class})
+								DocumentBuilderModule.class, CellModelsFilterModule.class, 
+								ListeningExecutorServiceModule.class})
 public interface ContentSaverParserComponent { //FIXME: this is probably a subcomponent of the content saver?
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;

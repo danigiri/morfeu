@@ -5,12 +5,12 @@ package cat.calidos.morfeu.model.injection;
 import java.net.URI;
 import java.util.Optional;
 
+import dagger.producers.ProducerModule;
+import dagger.producers.Produces;
+
 import javax.inject.Named;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -25,11 +25,8 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
-import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.OrderedMap;
-import dagger.producers.ProducerModule;
-import dagger.producers.Produces;
 
 /** Module to validate and parse document content
 * @author daniel giribet
@@ -74,33 +71,6 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 public static Node contentRootNode(org.w3c.dom.Document xmldoc, 
 									@Named("CellModelFilter") Optional<URI> cellModelFilter) {
 	return cellModelFilter.isPresent() ? xmldoc.getFirstChild() : xmldoc;
-}
-
-
-@Produces
-public static DocumentBuilderFactory produceDocumentBuilderFactory() {
-
-	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	dbf.setNamespaceAware(true);
-
-	return dbf;
-
-}
-
-
-@Produces
-public static DocumentBuilder produceDocumentBuilder(DocumentBuilderFactory dbf, Schema s) throws ConfigurationException {
-
-	//dbf.setSchema(s);
-	DocumentBuilder db;
-	try {
-		db = dbf.newDocumentBuilder();
-	} catch (ParserConfigurationException e) {
-		throw new ConfigurationException("Problem when configuring the xml parsing system", e);
-	}
-
-	return db;
-
 }
 
 
