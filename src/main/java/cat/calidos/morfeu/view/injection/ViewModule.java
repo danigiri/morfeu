@@ -69,6 +69,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(xmlc)
 												.add(yamlc)
 												.add(yamla)
+												.add(substr)
 											.and()
 											.build();
 
@@ -398,6 +399,7 @@ final static SimpleJtwigFunction yamlc = new SimpleJtwigFunction() {
 
 };
 
+
 /** returns yaml attribute scaping \" --> ", */
 final static SimpleJtwigFunction yamla = new SimpleJtwigFunction() {
 
@@ -421,6 +423,43 @@ final static SimpleJtwigFunction yamla = new SimpleJtwigFunction() {
 	}
 
 };
+
+
+/** returns yaml attribute scaping \" --> ", */
+final static SimpleJtwigFunction substr = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "substr";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(3).maximumNumberOfArguments(3);
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+		int start = request.getEnvironment()
+								.getValueEnvironment()
+								.getNumberConverter()
+								.convert(request.get(1))
+								.get()
+								.intValue();
+		int end = request.getEnvironment()
+							.getValueEnvironment()
+							.getNumberConverter()
+							.convert(request.get(2))
+							.get()
+							.intValue();
+		s = s.substring(start, end);
+
+		return s;
+
+	}
+
+};
+
 
 }
 
