@@ -13,9 +13,15 @@ RUN curl ${JETTY_URL} | tar zxf - -C ${JETTY_HOME} --strip-components 1
 # installing freetype, fontconfig and some fonts so we can generate the SVGs
 RUN apk add --no-cache freetype fontconfig ttf-ubuntu-font-family
 
+# add war
 ADD ./target/*.war ${JETTY_HOME}/webapps/root.war
+
+# add test data
+RUN mkdir -p ${JETTY_HOME}/target/test-classes/test-resources
+ADD ./target/test-classes/test-resources ${JETTY_HOME}/target/test-classes/test-resources
 
 WORKDIR ${JETTY_HOME}
 #ENTRYPOINT java -jar ./start.jar --module=http jetty.http.port=8980 -D__RESOURCES_PREFIX=file://${JETTY_HOME}/
-ENTRYPOINT java -jar ./start.jar -D__RESOURCES_PREFIX=http://localhost:8980/
+#ENTRYPOINT java -jar ./start.jar  -D__RESOURCES_PREFIX=file://${JETTY_HOME}/
+ENTRYPOINT java -jar ./start.jar --module=http jetty.http.port=8980 -D__RESOURCES_PREFIX=file://${JETTY_HOME}/
 

@@ -1,11 +1,11 @@
 src/main/angular/node_modules
-target/classes                                  
+target/classes/cat
 target/generated-test-sources                   
 target/morfeu-webapp-0.6.0-SNAPSHOT             
 targetdist                                     
 target/maven-archiver                           
 target/*jar*
-target/test-classes
+target/test-classes/cat
 target/generated-sources 
 target/maven-status
 
