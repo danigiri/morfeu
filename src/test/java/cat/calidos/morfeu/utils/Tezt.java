@@ -2,17 +2,23 @@
 
 package cat.calidos.morfeu.utils;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.xml.transform.Source;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.FileUtils;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.Diff;
 
 /**
 * @author daniel giribet
@@ -84,6 +90,39 @@ protected String getConfigurationVariable(String name, String defaultValue) {
 	value = value==null ? defaultValue : value; 
 
 	return value;
+
+}
+
+
+protected void compareWithXMLFile(String content, String path) {
+
+	Source transformedSource = Input.fromString(content).build();
+	File originalFile = new File(path);
+	Source originalSource = Input.fromFile(originalFile).build();
+
+	Diff diff = DiffBuilder.compare(originalSource)
+							.withTest(transformedSource)
+							.ignoreComments()
+							.ignoreWhitespace()
+							.build();
+
+	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
+
+}
+
+
+protected void compareWithXML(String content, String expected) {
+
+	Source transformedSource = Input.fromString(content).build();
+	Source originalSource = Input.fromString(expected).build();
+
+	Diff diff = DiffBuilder.compare(originalSource)
+							.withTest(transformedSource)
+							.ignoreComments()
+							.ignoreWhitespace()
+							.build();
+
+	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
 
 }
 
