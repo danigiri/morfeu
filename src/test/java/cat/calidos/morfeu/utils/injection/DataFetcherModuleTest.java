@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.utils;
+package cat.calidos.morfeu.utils.injection;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -90,5 +90,6 @@ private HttpGet produceRequest() throws URISyntaxException {
 	return module.produceRequest(new URI(uri));
 
 }
+
 
 }

@@ -25,7 +25,7 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 
 								ModelModule.class, SnippetCellModelModule.class, CellModelsFilterModule.class, 
-								DocumentBuilderModule.class, ValidatorModule.class, 
+								XMLDocumentBuilderModule.class, ValidatorModule.class, 
 								ListeningExecutorServiceModule.class})
 public interface SnippetComponent {
 

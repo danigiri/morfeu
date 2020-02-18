@@ -13,7 +13,7 @@ import cat.calidos.morfeu.problems.ConfigurationException;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class DocumentBuilderModule {
+public class XMLDocumentBuilderModule {
 
 
 @Produces

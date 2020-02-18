@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package cat.calidos.morfeu.utils;
+package cat.calidos.morfeu.utils.injection;
 
 import static org.junit.Assert.*;
 

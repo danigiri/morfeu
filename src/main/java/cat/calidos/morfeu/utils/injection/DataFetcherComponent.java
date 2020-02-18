@@ -22,7 +22,6 @@ public interface DataFetcherComponent {
 
 ListenableFuture<InputStream> fetchData() throws FetchingException;
 
-
 @ProductionComponent.Builder
 interface Builder {
 
