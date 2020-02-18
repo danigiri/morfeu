@@ -3,6 +3,7 @@ FROM openjdk:13-alpine
 MAINTAINER Daniel Giribet "dani [at] calidos [.] cat"
 
 # variables
+ENV VERSION 0.6.1
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.24.v20191120/jetty-distribution-9.4.24.v20191120.tar.gz
 ENV JETTY_HOME /var/lib/jetty 
 
@@ -14,7 +15,7 @@ RUN curl ${JETTY_URL} | tar zxf - -C ${JETTY_HOME} --strip-components 1
 RUN apk add --no-cache freetype fontconfig ttf-ubuntu-font-family
 
 # add war
-ADD ./target/*.war ${JETTY_HOME}/webapps/root.war
+ADD ./target/morfeu-webapp-${VERSION}-SNAPSHOT.war ${JETTY_HOME}/webapps/root.war
 
 # add test data
 RUN mkdir -p ${JETTY_HOME}/target/test-classes/test-resources
