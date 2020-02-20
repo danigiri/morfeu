@@ -3,11 +3,10 @@ package cat.calidos.morfeu.control.injection;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
-import cat.calidos.morfeu.webapp.injection.ControlComponent.Builder;
 import dagger.BindsInstance;
 import dagger.Component;
 
-/**
+/** Returns string representation of the results of an operation
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules=OperationResultModule.class)
@@ -20,11 +19,10 @@ interface Builder {
 
 	@BindsInstance Builder result(@Named("Result") String result);
 	@BindsInstance Builder target(@Named("Target") String target);
-	@BindsInstance Builder operation(@Named("Result") String result);
-	@BindsInstance Builder operationTime(long result);
+	@BindsInstance Builder operation(@Named("Operation") String op);
+	@BindsInstance Builder operationTime(long operationTime);
 	@BindsInstance Builder problem(@Nullable @Named("Problem")  String problem);
-	
-	
+
 	OperationResultComponent build();
 
 }

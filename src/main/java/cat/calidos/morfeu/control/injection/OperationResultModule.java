@@ -8,8 +8,9 @@ import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import dagger.BindsInstance;
 import dagger.Module;
+import dagger.Provides;
 
-/**
+/** Module to create a standarised operation result output
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
@@ -17,18 +18,19 @@ public class OperationResultModule {
 
 
 private static final String TEMPLATE = "{" +
-										"result: \\\"{{v.result}}\"\n" + 
-										"target: \"{{v.target}}\",\n" + 
-										"operation: \"{{v.operation}}\",\n" + 
-										"operationTime: {{v.operationTime}}\n" + 
-										"{% if v.hasProblem.present %}, \"problem\": \"{{v.hasProblem.get}}\""+
+										"\"result\": \"{{v.result}}\",\n" + 
+										"\"target\": \"{{v.target}}\",\n" + 
+										"\"operation\": \"{{v.operation}}\",\n" + 
+										"\"operationTime\": {{v.operationTime}}\n" + 
+										"{% if hasProblem.isPresent %}, \"problem\": \"{{hasProblem.get}}\"{%endif%}"+
 										"}";
 
-String result(@Named("Result") String result,
-				@Named("Target") String target,
-				@Named("Operation") String op,
-				long operationTime,
-				@Nullable @Named("Problem")  String problem) {
+@Provides
+public static String result(@Named("Result") String result,
+							@Named("Target") String target,
+							@Named("Operation") String op,
+							long operationTime,
+							@Nullable @Named("Problem")  String problem) {
 
 	return DaggerViewComponent.builder()
 								.withTemplate(TEMPLATE)

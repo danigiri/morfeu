@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -43,7 +44,9 @@ public Map<String, Object> values(@Named("value") Object v, @Nullable @Named("pr
 		problem = problem.replaceAll("\t|\n", " ");	// error messages may contain illegal JSON text
 		problem = problem.replaceAll("\"", "'");	// 
 		value.put("problem", problem);
+
 	}
+	value.put("hasProblem", Optional.ofNullable(problem));
 	value.put("v", v);
 
 	return value;
