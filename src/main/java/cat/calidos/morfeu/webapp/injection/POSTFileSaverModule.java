@@ -56,6 +56,9 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 
 			URI destination = DaggerURIComponent.builder().from(uri.get().get()).build().uri().get();
 			String content = request.getParameter("content");
+			if (content==null) {
+				content = request.getParameter(GenericHttpServlet.POST_VALUE);
+			}
 			//System.err.println(content);
 			// we assume Morfeu is doing the validation for now
 			DaggerSaverComponent.builder().toURI(destination).content(content).build().saver().get().save();
