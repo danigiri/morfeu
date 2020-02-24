@@ -3,10 +3,8 @@ package cat.calidos.morfeu.utils.injection;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +30,7 @@ public void setup() throws Exception {
 
 }
 
+
 @Test @DisplayName("Generate xml test")
 public void testGenerateXML() throws Exception {
 
@@ -40,7 +39,7 @@ public void testGenerateXML() throws Exception {
 
 	String out = DaggerXMLNodeToStringComponent.builder().fromNode(doc).build().xml().get();
 	assertNotNull(out);
-	
+
 	compareWithXML(out, content);
 
 }
@@ -55,7 +54,6 @@ public void testGenerateXMLNode() throws Exception {
 	Node node = doc.getChildNodes().item(0).getChildNodes().item(1).getChildNodes().item(1).getChildNodes().item(1);
 
 	String out = DaggerXMLNodeToStringComponent.builder().fromNode(node).build().xml().get();
-
 	assertEquals("<data number=\"42\" text=\"blahblah\"/>", out);
 
 }

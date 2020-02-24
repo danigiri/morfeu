@@ -18,7 +18,6 @@ private static readonly _NAME = "$_NAME";
 private static readonly _VALUE = "$_VALUE";
 private static readonly _ATTRIBUTES = "$_ATTRIBUTES";
 
-
 value?: string;
 attributes?: Cell[];
 internalAttributes?: Cell[];
@@ -26,6 +25,7 @@ children?: Cell[];
 cellModel?: CellModel;
 parent?: Adopter;
 position?: number;
+
 
 constructor(public schema: number,
 			public URI: string,
@@ -342,6 +342,7 @@ private replacePresentationVariables(input: string): string {
 	output = VariableParser.expandVariables(output, this.attributes);
 
 	return output;
+
 }
 
 //// Adopter ////

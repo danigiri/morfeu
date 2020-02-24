@@ -41,9 +41,9 @@ String xml(Transformer transformer, DOMSource source, StreamResult result, Write
 		log.error(msg);
 		throw new ParsingException(msg, e);
 	}
-	
+
 	return writer.toString();
-	
+
 }
 
 

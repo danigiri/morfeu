@@ -19,8 +19,6 @@ package cat.calidos.morfeu.model.metadata.injection;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Before;
@@ -82,7 +80,7 @@ public void testTransformAttributes() {
 	assertEquals("We should have two yaml-to-xml attributes", 2, ytxAttributes.size());
 	assertTrue(ytxAttributes.contains("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""));
 	assertTrue(ytxAttributes.contains("xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\""));
-	
+
 }
 
 
@@ -100,7 +98,8 @@ public void testTransformDirectives() {
 
 	String directive = directives.iterator().next();
 	assertEquals("Wrong directives for xml-to-yaml",  "ATTRIBUTES-ONLY", directive);
-	
+
 }
+
 
 }
