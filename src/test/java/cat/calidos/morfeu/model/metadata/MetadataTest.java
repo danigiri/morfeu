@@ -52,6 +52,7 @@ public void setup() throws Exception {
 	directivesA2.add("directive-A2");
 	directives.put("directives2", directivesA2);
 	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(1);
+	boolean readonly = true;
 	Metadata priorityMetadata = new Metadata(priorityURI, 
 												"descA",
 												"A", 
@@ -60,6 +61,7 @@ public void setup() throws Exception {
 												"GET",
 												"DEFAULT", 
 												"idA", 
+												readonly,
 												priorityDefaultValues, 
 												directives, 
 												attributes);
@@ -81,6 +83,7 @@ public void setup() throws Exception {
 										"GETB",
 										"THUMB", 
 										"idB", 
+										false,
 										metadataDefaultValues, 
 										directives, 
 										attributes2);
@@ -103,6 +106,7 @@ public void testMergeMetadataBasic() {
 		() -> assertEquals("GETB", merged.getCellPresentationMethod()),
 		() -> assertEquals("THUMB", merged.getThumb()),
 		() -> assertTrue(merged.getIdentifier().isPresent()),
+		() -> assertTrue(merged.isReadonly()),
 		() -> assertEquals("idA", merged.getIdentifier().get())
 	);
 

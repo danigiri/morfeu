@@ -211,6 +211,7 @@ public void testAttributesDefaultValues() {
 											"GET",
 											"thumb",
 											null,
+											false,
 											defaultValues,
 											null,
 											null);
@@ -224,7 +225,7 @@ public void testAttributesDefaultValues() {
 	Optional<String> defaultValue = textAttribute.getDefaultValue();
 	assertTrue("We should have a default value in this test", defaultValue.isPresent());
 	assertEquals("Wrong default value in this test", "foo", defaultValue.get());
-	
+
 }
 
 

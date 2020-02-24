@@ -41,9 +41,11 @@ private String cellPresentationType;
 private String cellPresentationMethod;
 private String thumb;
 private Optional<String> identifier;
+private Boolean readonly;
 private Map<String, String> defaultValues;
 private Map<String, Set<String>> directives;
 private Map<String, Set<String>> attributes;
+
 
 
 public Metadata(URI uri,
@@ -54,6 +56,7 @@ public Metadata(URI uri,
 				String cellPresentationMethod,
 				String thumb,
 				String identifier,
+				Boolean readonly,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes
@@ -66,6 +69,7 @@ public Metadata(URI uri,
 			Optional.ofNullable(cellPresentationMethod),
 			Optional.ofNullable(thumb),
 			Optional.ofNullable(identifier),
+			Optional.ofNullable(readonly),
 			defaultValues,
 			directives,
 			attributes);
@@ -80,6 +84,7 @@ public Metadata(URI uri,
 				Optional<String> cellPresentationMethod,
 				Optional<String> thumb,
 				Optional<String> identifier,
+				Optional<Boolean> readonly,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes) {
@@ -92,6 +97,7 @@ public Metadata(URI uri,
 	this.cellPresentationMethod = cellPresentationMethod.orElse(DEFAULT_CELL_PRESENTATION_METHOD);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	this.identifier = identifier;
+	this.readonly = readonly.orElse(false);
 	this.defaultValues = defaultValues;
 	this.directives = directives;
 	this.attributes = attributes;
@@ -130,6 +136,11 @@ public String getThumb() {
 
 public Optional<String> getIdentifier() {
 	return identifier;
+}
+
+
+public Boolean isReadonly() {
+	return readonly;
 }
 
 
@@ -211,6 +222,8 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 
 	String identifier = morePriority.getIdentifier().isPresent() ? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
 
+	Boolean readonly = morePriority.isReadonly(); 
+	
 	Map<String,String> newDefaultValues = new HashMap<String, String>();
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
@@ -226,6 +239,7 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 						cellPresentationMethod,
 						thumb,
 						identifier,
+						readonly,
 						newDefaultValues,
 						directives,
 						attributes);

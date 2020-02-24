@@ -66,7 +66,9 @@ private static final String THUMB_FIELD = "mf:thumb";
 private static final String DEFAULT_VALUE_FIELD = "mf:default-value";
 private static final String IDENTIFIER_FIELD = "mf:identifier@name";
 private static final String IDENTIFIER_FIELD_PREFIX = "@";
-
+private static final String READONLY_FIELD = "mf:readonly";
+private static final String TRUE = "true";
+private static final String YES = "yes";
 
 // serialisation metadata definitions
 private static final String TRANSFORM_TAG = "mf:transform";
@@ -85,6 +87,7 @@ public static Metadata provideMetadata(URI uri,
 										@Named("cellPresentationMethod") Optional<String> cellPresentationMethod,
 										@Named("thumb") Optional<String> thumb,
 										@Named("identifier") Optional<String> identifier,
+										@Named("readonly") Optional<Boolean> readonly,
 										Map<String, String> defaultValues,
 										@Named("Directives") Map<String, Set<String>> directives,
 										@Named("Attributes") Map<String, Set<String>> attributes) {
@@ -96,6 +99,7 @@ public static Metadata provideMetadata(URI uri,
 						cellPresentationMethod,
 						thumb,
 						identifier, 
+						readonly,
 						defaultValues, 
 						directives, 
 						attributes);
@@ -195,6 +199,24 @@ public static Optional<String> identifier(@Nullable XSAnnotation annotation) {
 	} 
 
 	return identifier;
+
+}
+
+
+@Provides @Named("readonlyValue") 
+public static Optional<String> readonlyValue(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, READONLY_FIELD);
+}
+
+@Provides @Named("readonly") 
+public static Optional<Boolean> readonly(@Named("readonlyValue") Optional<String> readonlyValue) {
+
+	boolean isReadonly = false;
+	if (readonlyValue.isPresent()) {
+		String str = readonlyValue.get();
+		isReadonly = str.equalsIgnoreCase(TRUE) || str.equalsIgnoreCase(YES) ? true : false;
+	}
+	return Optional.of(isReadonly);
 
 }
 
