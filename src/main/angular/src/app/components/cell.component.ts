@@ -33,6 +33,8 @@ import {EventService} from '../services/event.service';
 
 export class CellComponent extends SelectableWidget implements OnInit {
 
+private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues with too long presentation
+
 @Input() parent?: FamilyMember;	// may not have a parent if we are a snippet
 @Input() cell: Cell;
 @Input() snippet?: boolean;
@@ -93,7 +95,7 @@ ngOnInit() {
 	// A different cell was activated and we are active at this moment
 	this.subscribe(this.events.service.of<CellActivatedEvent>(CellActivatedEvent).pipe(
 				filter(a => this.active && a.cell!==this.cell)
-			).subscribe( a => {
+			).subscribe(() => {
 				console.log('-> cell comp gets cell activated event from other cell, we were active, clear');
 				this.becomeInactive(this.cell);
 			})
@@ -125,7 +127,7 @@ ngOnInit() {
 					// we could re-issue an event with the specific cell to be removed if needed
 					//this.events.service.publish(new CellRemoveEvent(this.cell));
 					this.remove();
-				})
+			})
 	);
 
 }
@@ -301,7 +303,14 @@ private cellPresentationIsIMG(): boolean {
 
 
 getCellPresentation() {
-	return this.cell.getPresentation();
+	
+	const pres = this.cell.getPresentation();
+	if (pres.length > CellComponent._MAX_PRESENTATION_SIZE) {
+		console.warn('Presentation may be too long for %s (%d)', this.cell.name, pres.length);
+	}
+
+	return pres;;
+
 }
 
 
