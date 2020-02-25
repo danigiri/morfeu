@@ -1,6 +1,6 @@
 // CONFIGURATION . CLASS . TS
 
-import {Inject} from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import {Params} from "@angular/router";
 
 import {environment} from "../../environments/environment";
@@ -13,6 +13,7 @@ import {EventListener} from "../events/event-listener.class";
 import {EventService} from "../services/event.service";
 
 
+@Injectable()
 export class Configuration extends EventListener implements SerialisableToJSON<Configuration, ConfigJSON>{
 
 public static readonly BACKEND_PREF = '';

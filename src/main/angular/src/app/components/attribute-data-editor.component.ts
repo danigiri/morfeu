@@ -72,7 +72,7 @@ export class AttributeDataEditorComponent extends EventListener {
 @Input() parentCell: Cell;
 @Input() index: number;
 
-@ViewChild('input', {static: false}) input: ElementRef;
+@ViewChild('input') input: ElementRef;
 
 
 constructor(eventService: EventService) {

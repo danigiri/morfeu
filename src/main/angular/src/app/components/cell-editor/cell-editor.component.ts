@@ -94,7 +94,7 @@ import {EventService} from '../../services/event.service';
 
 export class CellEditorComponent extends EventListener implements OnInit, OnDestroy {
 
-@ViewChild('editor', {static: false}) editor: ElementRef;
+@ViewChild('editor') editor: ElementRef;
 //@ViewChild('form_', {static: false}) ngForm: NgForm;
 private form: NgForm;
 

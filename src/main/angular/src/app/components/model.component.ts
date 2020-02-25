@@ -67,7 +67,7 @@ displayName: string;
 protected commandKeys: string[] = ["m", "a", "n"];
 private cellModelSelectingMode = false;
 
-@ViewChild(TreeComponent, {static: false}) private cellModelComponentsRoot: TreeComponent;
+@ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
 
 constructor(eventService: EventService,

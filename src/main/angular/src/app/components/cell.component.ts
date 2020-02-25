@@ -46,7 +46,7 @@ active = false;
 dragEnabled = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
-@ViewChild(DropAreaComponent, {static: false}) dropArea: DropAreaComponent;	// we only have one of those!!!
+@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
 
 
 constructor(eventService: EventService) {
