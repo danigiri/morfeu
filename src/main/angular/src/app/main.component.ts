@@ -26,7 +26,6 @@ import { EventService } from './services/event.service';
 import { RemoteEventService } from './services/remote-event.service';
 
 @Component({
-	moduleId: module.id,
 	selector: "app-main",
 	template: `
 		<div class="card">

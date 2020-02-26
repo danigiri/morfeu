@@ -23,7 +23,6 @@ import { ModelLoadedEvent } from "../events/model-loaded.event";
 import { EventService } from "../services/event.service";
 
 @Component({
-	moduleId: module.id,
 	selector: "model-area",
 	template: `
 		<div [hidden]="!isVisible()">

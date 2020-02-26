@@ -9,7 +9,6 @@ import { EventListener } from "../events/event-listener.class";
 import { EventService } from "../services/event.service";
 
 @Component({
-	moduleId: module.id,
 	selector: 'key-capture',
 	template: `<div></div>`
 })

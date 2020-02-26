@@ -15,7 +15,6 @@ import { EventListener } from "../events/event-listener.class";
 import { EventService } from "../services/event.service";
 
 @Component({
-	moduleId: module.id,
 	selector: "cell-data",
 	template: `
 		<div  *ngIf="cellModel" 

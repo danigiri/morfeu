@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
 import { CellModel } from '../cell-model.class';
 
 @Component({
-	moduleId: module.id,
 	selector: 'cell-header',
 	template: `
 			<h4 class="cell-header card-title card-header">

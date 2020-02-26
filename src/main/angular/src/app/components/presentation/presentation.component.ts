@@ -14,7 +14,6 @@ import {CellChangedEvent} from '../../events/cell-changed.event';
 import {EventService} from '../../services/event.service';
 
 @Component({
-	moduleId: module.id,
 	selector: "presentation",
 	template: `
 		<!-- TODO: add inner html type? -->

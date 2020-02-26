@@ -6,7 +6,6 @@ import { Cell } from "../cell.class";
 import { CellModel } from "../cell-model.class";
 
 @Component({
-	moduleId: module.id,
 	selector: "attribute-data-info",
 	template: `
 		<li *ngIf="isFromModel || (isFromCell && hasValue)"

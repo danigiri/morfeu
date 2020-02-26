@@ -7,7 +7,6 @@ import { EventService } from '../services/event.service';
 import { StatusEvent } from '../events/status.event';
 
 @Component({
-	moduleId: module.id,
 	selector: "status",
 	template: `<div id="status"
 					[@visibilityChanged]="visibility"

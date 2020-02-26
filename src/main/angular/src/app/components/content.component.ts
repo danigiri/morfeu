@@ -39,7 +39,6 @@ import {EventService} from '../services/event.service';
 import {RemoteEventService} from '../services/remote-event.service';
 
 @Component({
-	moduleId: module.id,
 	selector: 'content',
 	template: `
 	<!-- if we change the cell so the root cell is presented like a well we are good to go to remove dirty if here-->

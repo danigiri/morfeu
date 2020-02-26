@@ -9,7 +9,6 @@ import {UXEvent} from "../events/ux.event";
 
 
 @Component({
-	moduleId: module.id,
 	selector: 'collapsible',
 	template: `
 		<!-- TODO: have header be a template and not an attribute, so we can have more than text -->

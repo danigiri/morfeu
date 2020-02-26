@@ -19,7 +19,6 @@ import { RemoteEventService } from '../services/remote-event.service';
 
 
 @Component({
-	moduleId: module.id,
 	selector: "catalogue",
 	template: `
 		<div id="catalogue" class="card bg-light mt-2" *ngIf="catalogue">

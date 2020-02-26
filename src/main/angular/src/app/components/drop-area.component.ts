@@ -21,7 +21,6 @@ import { EventService} from '../services/event.service';
 import { UXEvent} from '../events/ux.event';
 
 @Component({
-	moduleId: module.id,
 	selector: 'drop-area',
 	template: `
 			<div	class="drop-area" 

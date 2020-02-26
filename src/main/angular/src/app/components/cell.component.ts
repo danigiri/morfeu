@@ -24,7 +24,6 @@ import {CellModelActivatedEvent} from '../events/cell-model-activated.event';
 import {EventService} from '../services/event.service';
 
 @Component({
-	moduleId: module.id,
 	selector: 'cell',
 	templateUrl: './cell.component.html',
 	styleUrls: ['./cell.component.css', './presentation/presentation.css']
@@ -303,7 +302,7 @@ private cellPresentationIsIMG(): boolean {
 
 
 getCellPresentation() {
-	
+
 	const pres = this.cell.getPresentation();
 	if (pres.length > CellComponent._MAX_PRESENTATION_SIZE) {
 		console.warn('Presentation may be too long for %s (%d)', this.cell.name, pres.length);

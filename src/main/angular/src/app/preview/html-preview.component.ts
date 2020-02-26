@@ -5,7 +5,6 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
 @Component({
-	moduleId: module.id,
 	selector: 'html-preview',
 	template: `
 			<div class="card">

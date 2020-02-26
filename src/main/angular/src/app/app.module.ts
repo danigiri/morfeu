@@ -12,9 +12,9 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TreeModule } from 'angular-tree-component';
 
-import {ComponentsModule} from './components/components.module';
-import {AppRoutingModule, AppRoutes} from './app-routing.module';
-import {PipesModule} from './pipes/pipes.module';
+import { ComponentsModule } from './components/components.module';
+import { AppRoutingModule, AppRoutes } from './app-routing.module';
+import { PipesModule } from './pipes/pipes.module';
 
 import { AppComponent } from './app.component';
 import { AttributeDataInfoComponent } from './components/attribute-data-info.component';
@@ -46,10 +46,10 @@ import { StatusComponent } from './components/status.component';
 				DndModule.forRoot(),
 				FormsModule,
 				HttpClientModule,
-				HotkeyModule.forRoot()
-				, NgbModule
-				, PipesModule
-				, TreeModule
+				HotkeyModule.forRoot(),
+				NgbModule, 
+				PipesModule,
+				TreeModule.forRoot()
 	],
 	declarations: [
 					AppComponent

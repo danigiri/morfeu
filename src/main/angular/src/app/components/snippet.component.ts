@@ -14,7 +14,6 @@ import { CellSelectEvent } from "../events/cell-select.event";
 import { EventService } from "../services/event.service";
 
 @Component({
-	moduleId: module.id,
 	selector: "snippet",
 	template: `
 		<a href="#" class="list-group-item list-group-item-action flex-column align-items-start snippet"

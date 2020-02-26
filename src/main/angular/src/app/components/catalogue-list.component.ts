@@ -14,7 +14,6 @@ import { EventListener } from '../events/event-listener.class';
 import { EventService } from '../services/event.service';
 
 @Component({
-	moduleId: module.id,
 	selector: "catalogue-list",
 	template: `
 	<collapsible header="Catalogues" class="mb-2"  [folded]="false">

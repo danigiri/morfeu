@@ -23,7 +23,6 @@ import { StatusEvent } from "../events/status.event";
 import { EventService } from "../services/event.service";
 
 @Component({
-	moduleId: module.id,
 	selector: "snippets",
 	template: `
 		<div id="snippets" class="list-group">

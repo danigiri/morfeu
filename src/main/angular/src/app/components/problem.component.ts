@@ -9,7 +9,6 @@ import { EventService } from '../services/event.service';
 
 
 @Component({
-	moduleId: module.id,
 	selector: 'problem',
 	template: `
 		<div id="problem" *ngIf="problem" class="alert alert-danger" role="alert">{{problem}}</div>	   

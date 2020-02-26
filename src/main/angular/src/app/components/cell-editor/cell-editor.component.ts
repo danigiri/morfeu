@@ -19,7 +19,6 @@ import {UXEvent} from '../../events/ux.event';
 import {EventService} from '../../services/event.service';
 
 @Component({
-	moduleId: module.id,
 	selector: 'cell-editor',
 	template: `
 		<ng-template let-c="close" let-d="dismiss" #editor>

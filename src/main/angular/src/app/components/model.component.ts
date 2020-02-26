@@ -27,7 +27,6 @@ import { EventService } from "../services/event.service";
 import { RemoteEventService } from "../services/remote-event.service";
 
 @Component({
-	moduleId: module.id,
 	selector: "model",
 	template: `
 	<ng-container *ngIf="model">
@@ -41,7 +40,7 @@ import { RemoteEventService } from "../services/remote-event.service";
 						<tree-root
 							[nodes]="model.children">
 							<ng-template #treeNodeTemplate let-node let-index="index">
-							   <cell-model [node]="node" [index]="index"></cell-model>
+								<cell-model [node]="node" [index]="index"></cell-model>
 							</ng-template>
 						</tree-root>
 					</div>
