@@ -34,7 +34,7 @@ public void testDragCell() {
 										.clickOnDocumentNamed("Document 1")
 										.content();
 	content.shouldBeVisible();
-	
+
 	UICell test = content.rootCells().get(0);
 
 	// source col has one data child
@@ -42,11 +42,11 @@ public void testDragCell() {
 	assertEquals(1, sourceCol.children().size());
 	UICell data = sourceCol.child("data(0)");
 	assertTrue(data.isCell());
-	
+
 	// col(1) here has two data2 children, we'll drop the data into the middle
 	UICell targetCol = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	assertEquals(2, targetCol.children().size());
-	
+
 	data.dragTo(targetCol.dropArea(1));				// drop in the middle
 	assertEquals(3, targetCol.children().size());
 
@@ -57,14 +57,13 @@ public void testDragCell() {
 
 	// we also check that the source col has no children anymore
 	assertTrue(sourceCol.children().isEmpty());
-	
+
 }
 
 
 @Test
 public void testDragCellSoOtherCellsChangeTheirURIs() {
-	
-	
+
 	UIContent content = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)
