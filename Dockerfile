@@ -3,7 +3,7 @@ FROM openjdk:13-alpine
 MAINTAINER Daniel Giribet "dani [at] calidos [.] cat"
 
 # variables
-ENV VERSION 0.6.1
+ENV VERSION 0.6.2
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.24.v20191120/jetty-distribution-9.4.24.v20191120.tar.gz
 ENV JETTY_HOME /var/lib/jetty 
 
