@@ -21,7 +21,7 @@ import { AttributeDataInfoComponent } from './components/attribute-data-info.com
 import { CatalogueListComponent } from './components/catalogue-list.component';
 import { CatalogueComponent } from './components/catalogue.component';
 import { CollapsibleComponent } from './components/collapsible.component';
-import { ContentComponent } from './components/content.component';
+import { ContentComponent } from './components/content/content.component';
 import { CellComponent } from './components/cell.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CellModelComponent } from './components/cell-model.component';

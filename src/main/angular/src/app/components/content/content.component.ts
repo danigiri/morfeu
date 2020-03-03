@@ -1,42 +1,42 @@
 // CONTENT . COMPONENT . TS
 
-import {Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Subscription} from 'rxjs';
+import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import Stack from 'ts-data.stack';
 
-import {CellDocument} from '../cell-document.class';
-import {Cell} from '../cell.class';
-import {Content, ContentJSON} from '../content.class';
-import {Model} from '../model.class';
+import { CellDocument } from '../../cell-document.class';
+import { Cell } from '../../cell.class';
+import { Content, ContentJSON } from '../../content.class';
+import { Model} from '../../model.class';
 
-import { Configuration } from '../config/configuration.class';
+import { Configuration } from '../../config/configuration.class';
 
-import {RemoteDataService} from '../services/remote-data.service';
-import {RemoteObjectService} from '../services/remote-object.service';
-import {OperationResult} from '../services/operation-result.class';
+import { RemoteDataService } from '../../services/remote-data.service';
+import { RemoteObjectService } from '../../services/remote-object.service';
+import { OperationResult} from '../../services/operation-result.class';
 
-import {CellComponent} from './cell.component';
-import {KeyListenerWidget} from '../key-listener-widget.class';
+import { CellComponent} from '../cell.component';
+import { KeyListenerWidget} from '../../key-listener-widget.class';
 
-import {CellActivateEvent} from '../events/cell-activate.event';
-import {CellDocumentClearEvent} from '../events/cell-document-clear.event';
-import {CellDragEvent} from '../events/cell-drag.event';
-import {CellEditEvent} from '../events/cell-edit.event';
-import {CellRemoveEvent} from '../events/cell-remove.event';
-import {CellSelectEvent} from '../events/cell-select.event';
-import {CellSelectionClearEvent} from '../events/cell-selection-clear.event';
-import { ConfigurationLoadedEvent } from '../events/configuration-loaded.event';
-import {ContentFragmentDisplayEvent} from '../events/content-fragment-display.event';
-import {ContentRefreshedEvent} from '../events/content-refreshed.event';
-import {ContentRequestEvent} from '../events/content-request.event';
-import {ContentSaveEvent} from '../events/content-save.event';
-import {ContentSavedEvent} from '../events/content-saved.event';
-import {DropAreaSelectEvent} from '../events/drop-area-select.event';
-import {InfoModeEvent} from '../events/info-mode.event';
-import {StatusEvent} from '../events/status.event';
-import {EventService} from '../services/event.service';
-import {RemoteEventService} from '../services/remote-event.service';
+import { CellActivateEvent } from '../../events/cell-activate.event';
+import { CellDocumentClearEvent } from '../../events/cell-document-clear.event';
+import { CellDragEvent } from '../../events/cell-drag.event';
+import { CellEditEvent } from '../../events/cell-edit.event';
+import { CellRemoveEvent } from '../../events/cell-remove.event';
+import { CellSelectEvent } from '../../events/cell-select.event';
+import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
+import { ConfigurationLoadedEvent } from '../../events/configuration-loaded.event';
+import { ContentFragmentDisplayEvent } from '../../events/content-fragment-display.event';
+import { ContentRefreshedEvent } from '../../events/content-refreshed.event';
+import { ContentRequestEvent } from '../../events/content-request.event';
+import { ContentSaveEvent} from '../../events/content-save.event';
+import { ContentSavedEvent } from '../../events/content-saved.event';
+import { DropAreaSelectEvent } from '../../events/drop-area-select.event';
+import { InfoModeEvent } from '../../events/info-mode.event';
+import { StatusEvent} from '../../events/status.event';
+import { EventService } from '../../services/event.service';
+import { RemoteEventService } from '../../services/remote-event.service';
 
 @Component({
 	selector: 'content',
@@ -163,7 +163,7 @@ ngOnInit() {
 ngAfterViewInit() {
 
 	console.debug("ContentComponent::ngAfterViewInit()")
-	this.childrenCellComponents.changes.subscribe(c => {
+	this.childrenCellComponents.changes.subscribe(() => {
 		if (this.cellSelectingMode) {
 			this.subscribeChildrenToCellSelection();
 			// if we send the event immediately in the binding changing callback we'll probably be affecting the
@@ -240,7 +240,7 @@ displayContentFragment(cell: Cell) {
 
 unstackContentFromFragment(save: boolean) {
 
-	Promise.resolve(null).then(d => {
+	Promise.resolve(null).then(() => {
 		if (!this.cellStack.isEmpty()) {
 			let fragmentCell = this.cellStack.pop();
 
@@ -254,7 +254,7 @@ unstackContentFromFragment(save: boolean) {
 			this.content = null;
 
 			// need to find the previous cell to apply changes
-			Promise.resolve(null).then(d => this.displayContent(this.contentStack.pop()));
+			Promise.resolve(null).then(() => this.displayContent(this.contentStack.pop()));
 		}
 	});
 
