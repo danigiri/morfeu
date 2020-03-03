@@ -21,18 +21,14 @@ import { AttributeDataInfoComponent } from './components/attribute-data-info.com
 import { CatalogueListComponent } from './components/catalogue-list.component';
 import { CatalogueComponent } from './components/catalogue.component';
 import { CollapsibleComponent } from './components/collapsible.component';
-import { ContentComponent } from './components/content/content.component';
-import { CellComponent } from './components/cell.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CellModelComponent } from './components/cell-model.component';
 import { CellDataComponent } from './components/cell-data.component';
-import { DropAreaComponent } from './components/drop-area.component';
 import { KeyCaptureComponent } from './components/key-capture.component';
 import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
 import { ProblemComponent } from './components/problem.component';
-import { SnippetComponent } from './components/snippet.component';
 import { SnippetsListComponent } from './components/snippets-list.component';
 import { StatusComponent } from './components/status.component';
 
@@ -57,18 +53,14 @@ import { StatusComponent } from './components/status.component';
 					, CatalogueListComponent
 					, CatalogueComponent
 					, CollapsibleComponent
-					, ContentComponent
-					, CellComponent
 					, CellDocumentComponent
 					, CellDataComponent
 					, CellModelComponent
-					, DropAreaComponent
 					, KeyCaptureComponent
 					, MainComponent
 					, ModelAreaComponent
 					, ModelComponent
 					, ProblemComponent
-					, SnippetComponent
 					, SnippetsListComponent
 					, StatusComponent 
 	],

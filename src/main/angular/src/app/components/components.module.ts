@@ -1,40 +1,53 @@
 
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';	// new angular 5 http client
-import {NgModule} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';	// new angular 5 http client
+import { NgModule } from '@angular/core';
 
-import {PipesModule} from '../pipes/pipes.module';
+import { DndModule } from 'ng2-dnd';
 
-import {AttributeDataEditorComponent} from './attribute-data-editor.component';
-import {CellEditorComponent} from './cell-editor/cell-editor.component';
-import {CellHeaderComponent} from './cell-header.component';
-import {PresentationComponent} from './presentation/presentation.component';
+import { PipesModule } from '../pipes/pipes.module';
 
-import {RemoteDataService} from '../services/remote-data.service';
-import {RemoteObjectService} from '../services/remote-object.service';
+import { AttributeDataEditorComponent } from './attribute-data-editor.component';
+import { CellComponent } from './cell.component';
+import { CellEditorComponent } from './cell-editor/cell-editor.component';
+import { CellHeaderComponent } from './cell-header.component';
+import { ContentComponent } from './content/content.component';
+import { DropAreaComponent } from './drop-area.component';
+import { PresentationComponent } from './presentation/presentation.component';
+import { SnippetComponent } from './snippet.component';
 
-import {Content, ContentJSON} from '../content.class';
-import {Model, ModelJSON} from '../model.class';
+import { RemoteDataService } from '../services/remote-data.service';
+import { RemoteObjectService } from '../services/remote-object.service';
 
-import {EventService} from '../services/event.service';
+import { Content, ContentJSON } from '../content.class';
+import { Model, ModelJSON } from '../model.class';
+
+import { EventService } from '../services/event.service';
 
 @NgModule({
 	declarations: [
 					AttributeDataEditorComponent,
+					CellComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
-					PresentationComponent
+					ContentComponent,
+					DropAreaComponent,
+					PresentationComponent,
+					SnippetComponent
 	],
 	imports: [
 				CommonModule,
+				DndModule,
 				FormsModule,
 				PipesModule
 	],
 	exports: [
 					AttributeDataEditorComponent,
+					CellComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
+					ContentComponent,
 					PresentationComponent
 	],
 	providers: [

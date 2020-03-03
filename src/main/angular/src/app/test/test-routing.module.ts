@@ -5,9 +5,11 @@ import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
-import {ComponentsModule} from '../components/components.module';
-import {CellEditorTestComponent} from '../components/cell-editor/cell-editor-test.component';
-import {PresentationTestComponent} from '../components/presentation/presentation-test.component';
+import { ComponentsModule} from '../components/components.module';
+
+import { CellEditorTestComponent} from '../components/cell-editor/cell-editor-test.component';
+import { ContentTestComponent } from '../components/content/content-test.component';
+import { PresentationTestComponent} from '../components/presentation/presentation-test.component';
 
 const routes: Routes = [
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
@@ -24,6 +26,7 @@ const routes: Routes = [
 	exports: [RouterModule],
 	declarations: [
 					CellEditorTestComponent,
+					ContentTestComponent,
 					PresentationTestComponent
 	]
 })
