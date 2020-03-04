@@ -13,7 +13,8 @@ import { PresentationTestComponent} from '../components/presentation/presentatio
 
 const routes: Routes = [
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
-						{path: 'presentation-test/:case_', component: PresentationTestComponent}
+						{path: 'presentation-test/:case_', component: PresentationTestComponent},
+						{path: 'content-test/:case_', component: ContentTestComponent}
 ];
 
 @NgModule({

@@ -1,23 +1,13 @@
-// TEST.  MODULE . TS
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+// TEST - COMPONENT . INTERFACE . TS
 
-import {ComponentsModule} from '../components/components.module';
-import {TestRoutingModule} from './test-routing.module';
+export interface TestComponent {
 
-@NgModule({
-	declarations: [],
-	imports: [
-		ComponentsModule,
-		CommonModule,
-		TestRoutingModule
-	]
-})
+load(case_: string): void;
 
-export class TestModule {}
+}
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2020 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

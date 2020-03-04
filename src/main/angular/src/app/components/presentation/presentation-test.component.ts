@@ -1,15 +1,16 @@
 // PRESENTATION - TEST . COMPONENT . TS
 
-import {AfterViewInit, Component, Inject} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { AfterViewInit, Component, Inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { Configuration } from '../../config/configuration.class';
+import { TestComponent } from '../../test/test-component.interface';
 
-import {Cell} from '../../cell.class';
-import {CellModel} from '../../cell-model.class';
-import {Model, ModelJSON} from '../../model.class';
+import { Cell } from '../../cell.class';
+import { CellModel } from '../../cell-model.class';
+import { Model, ModelJSON } from '../../model.class';
 
-import {RemoteObjectService} from '../../services/remote-object.service';
+import { RemoteObjectService } from '../../services/remote-object.service';
 
 @Component({
 	selector: 'presentation-test',
@@ -17,7 +18,7 @@ import {RemoteObjectService} from '../../services/remote-object.service';
 				<presentation *ngIf="cell" [cell]="cell"></presentation>`
 })
 
-export class PresentationTestComponent implements AfterViewInit {
+export class PresentationTestComponent implements AfterViewInit, TestComponent {
 
 private readonly modelURI = Configuration.BACKEND_PREF+'/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 model: CellModel;
@@ -33,7 +34,7 @@ ngAfterViewInit() {
 }
 
 
-private load(case_: string) {
+load(case_: string) {
 	switch (case_) {
 		case 'post' : this.loadPOST(); break;
 		default: this.loadModel();
