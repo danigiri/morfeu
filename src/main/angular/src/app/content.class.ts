@@ -1,13 +1,9 @@
 // CONTENT . CLASS . TS
 
-import { Adopter } from "./adopter.interface";
-
 import { Cell, CellJSON } from "./cell.class";
-import { FamilyMember } from "./family-member.interface";
 import { Model } from "./model.class";
 
 import { SerialisableToJSON } from "./serialisable-to-json.interface";
-
 
 export class Content extends Cell implements SerialisableToJSON<Content, ContentJSON> {
 
@@ -42,9 +38,13 @@ toJSON(): ContentJSON {
 }
 
 
-fromJSON(json: ContentJSON): Content {
+fromJSON(json: ContentJSON|string): Content {
 
 	// not implementing the cell fragment option as it's not applicable yet
+
+	if (typeof json === 'string') {
+		return JSON.parse(json, Content.reviver);
+	}
 
 	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 	const cell = CELL.fromJSON(json); 
