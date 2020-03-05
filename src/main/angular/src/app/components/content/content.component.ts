@@ -1,6 +1,6 @@
 // CONTENT . COMPONENT . TS
 
-import { Component, Inject, OnInit, AfterViewInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import Stack from 'ts-data.stack';
@@ -8,16 +8,16 @@ import Stack from 'ts-data.stack';
 import { CellDocument } from '../../cell-document.class';
 import { Cell } from '../../cell.class';
 import { Content, ContentJSON } from '../../content.class';
-import { Model} from '../../model.class';
+import { Model } from '../../model.class';
 
 import { Configuration } from '../../config/configuration.class';
 
 import { RemoteDataService } from '../../services/remote-data.service';
 import { RemoteObjectService } from '../../services/remote-object.service';
-import { OperationResult} from '../../services/operation-result.class';
+import { OperationResult } from '../../services/operation-result.class';
 
-import { CellComponent} from '../cell.component';
-import { KeyListenerWidget} from '../../key-listener-widget.class';
+import { CellComponent } from '../cell.component';
+import { KeyListenerWidget } from '../../key-listener-widget.class';
 
 import { CellActivateEvent } from '../../events/cell-activate.event';
 import { CellDocumentClearEvent } from '../../events/cell-document-clear.event';
@@ -128,16 +128,16 @@ fetchContentFor(document_: CellDocument, model: Model) {
 
 	this.events.service.publish(new StatusEvent("Fetching content"));
 	const uri = document_.contentURI;
-	const contentURI = Configuration.BACKEND_PREF+"/dyn/content/"+uri+"?model="+model.URI;
+	const contentURI = ContentComponent.contenttURIFrom(uri, model.URI);
 
 	console.debug("ContentComponent::fetchContent() About to fetch content from '%s'", contentURI);
 	this.contentService.get(contentURI, Content).subscribe( (content: Content) => {
 			console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
-			// we associate the content with the document and the model so it al fits together
+			// we associate the content with the document and the model so it all fits together
 			document_.content = content;
 			// as we want the model to have all references, we create a copy, as this may have
 			// an infinite recursion structure
-			let MODEL = Object.create(Model.prototype); // to simulate a static call
+			const MODEL = Object.create(Model.prototype); // to simulate a static call
 			this.model = MODEL.fromJSON(model.toJSON());
 			this.model.normaliseReferences();
 			content.associateFromRoot(this.model);
@@ -326,6 +326,11 @@ numberPressedCallback(num: number) {
 }
 
 //// KeyListenerWidget [end] ////
+
+
+static contenttURIFrom(contentURI: string, model: string): string {
+	return Configuration.BACKEND_PREF+'/dyn/content/'+contentURI+'?model='+model;
+}
 
 
 private subscribeChildrenToCellSelection () {

@@ -1,9 +1,10 @@
 // TEST.  MODULE . TS
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {ComponentsModule} from '../components/components.module';
-import {TestRoutingModule} from './test-routing.module';
+import { ComponentsModule } from '../components/components.module';
+import { TestRoutingModule } from './test-routing.module';
 
 @NgModule({
 	declarations: [],

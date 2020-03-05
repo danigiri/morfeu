@@ -6,13 +6,14 @@ import {ActivatedRoute} from '@angular/router';
 import {Content, ContentJSON } from '../../content.class';
 import {Model, ModelJSON} from '../../model.class';
 
+import { ContentComponent } from '../content/content.component';
+import { ModelComponent } from '../model.component';
+
 import {RemoteObjectService} from '../../services/remote-object.service';
 
-import {CellEditEvent} from '../../events/cell-edit.event';
-import {EventListener} from '../../events/event-listener.class';
-import {EventService} from '../../services/event.service';
-import { Configuration } from '../../config/configuration.class';
-
+import { CellEditEvent } from '../../events/cell-edit.event';
+import { EventListener } from '../../events/event-listener.class';
+import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'cell-editor-test',
@@ -65,13 +66,13 @@ private document5() {
 
 private loadContent(contentURI: string, model: string, cellPath: string) {
 
-	const contentAndModelURI = Configuration.BACKEND_PREF+'/dyn/content/'+contentURI+'?model='+model;
-	const modelURI = Configuration.BACKEND_PREF+'/dyn/models/'+model ;
+	const contentAndModelURI = ContentComponent.contenttURIFrom(contentURI, model);
+	const modelURI = ModelComponent.modelURIFrom(model);
 
-		this.modelService.get(modelURI, Model).subscribe(m => {
+	this.modelService.get(modelURI, Model).subscribe(model => {
 		this.contentService.get(contentAndModelURI, Content).subscribe( (content: Content) => {
-			let cell = content.findCellWithURI(contentURI+cellPath);
-			cell.associateWith(m, cell.cellModelURI);
+			const cell = content.findCellWithURI(contentURI+cellPath);
+			cell.associateWith(model, cell.cellModelURI);
 			this.events.service.publish(new CellEditEvent(cell));
 		});
 	});

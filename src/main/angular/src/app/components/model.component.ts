@@ -214,6 +214,11 @@ activateCellModelSelectingMode() {
 }
 
 
+static modelURIFrom(model: string): string {
+	return Configuration.BACKEND_PREF+'/dyn/models/'+model;
+}
+
+
 private subscribeChildrenToCellSelection () {
 
 	console.log("ModelComponent::subscribeChildrenToCellSelection()");

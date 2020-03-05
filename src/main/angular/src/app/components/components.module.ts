@@ -24,6 +24,7 @@ import { Content, ContentJSON } from '../content.class';
 import { Model, ModelJSON } from '../model.class';
 
 import { EventService } from '../services/event.service';
+import { RemoteEventService } from '../services/remote-event.service';
 
 @NgModule({
 	declarations: [
@@ -51,6 +52,10 @@ import { EventService } from '../services/event.service';
 					PresentationComponent
 	],
 	providers: [
+				{provide: "RemoteJSONDataService",
+					useFactory: (http: HttpClient) => (new RemoteDataService(http)),
+					deps: [HttpClient]
+				},
 				{
 					provide: "ContentService",
 					useFactory: (http: HttpClient) => (new RemoteObjectService<Content, ContentJSON>(http)),
@@ -66,7 +71,8 @@ import { EventService } from '../services/event.service';
 					provide: "RemoteDataService",
 					useFactory: (http: HttpClient) => (new RemoteDataService(http)),
 					deps: [HttpClient]
-				}
+				},
+				RemoteEventService
 	]
 
 })

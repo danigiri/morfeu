@@ -32,7 +32,7 @@ toJSON(): CellDocumentJSON {
 }
 
 
-fromJSON(json: CellDocumentJSON): CellDocument {
+fromJSON(json: CellDocumentJSON|string): CellDocument {
 
 	if (typeof json === 'string') {
 
