@@ -8,7 +8,6 @@ import {filter} from 'rxjs/operators';
 
 import { TreeNode } from 'angular-tree-component';
 
-import { Cell } from '../cell.class';
 import { CellModel } from '../cell-model.class';
 import { FamilyMember } from '../family-member.interface';
 import { SelectableWidget } from '../selectable-widget.class';
@@ -55,7 +54,7 @@ import { EventService } from '../services/event.service';
 				border: 1px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
 			}
 			.cell-model-active {
-				border: 1px solid #f00;
+				border: 1px solid #00f000;
 			}
 			 .cell-model-selected {
 					border: 1px dashed #00f;
