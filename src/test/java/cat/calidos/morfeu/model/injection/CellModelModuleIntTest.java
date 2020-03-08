@@ -18,6 +18,8 @@ import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 
+import dagger.Lazy;
+
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
@@ -26,7 +28,6 @@ import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
-import dagger.Lazy;
 
 
 /**
@@ -34,7 +35,7 @@ import dagger.Lazy;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellModelModuleIntTest extends ModelTezt {
 
-private static final int EXPECTED_COL_CHILDREN_COUNT = 9;
+private static final int EXPECTED_COL_CHILDREN_COUNT = 10;
 
 @Mock Lazy<Collection<? extends XSAttributeUse>> mockAttributesProducer;
 
@@ -128,7 +129,7 @@ public void testProvideCellModel() throws Exception {
 
 	} else {
 		assertEquals("CELL", data2.getMetadata().getPresentation());
-		testCell = data2.getReference().get();		
+		testCell = data2.getReference().get();
 	}
 	assertNotNull(testCell);
 
