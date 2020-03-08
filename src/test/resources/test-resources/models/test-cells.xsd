@@ -118,6 +118,23 @@
 		<xs:attribute name="text" type="textField" />
 	</xs:complexType>
 
+	<xs:complexType name="readonlyCell">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>readonly desc</mf:desc>
+					<mf:thumb>assets/images/readonly-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/readonly-cell.svg</mf:cell-presentation>
+					<mf:default-value name="@number">333</mf:default-value>
+					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:readonly>true</mf:readonly>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="number" use="required" type="numberField" />
+	</xs:complexType>
+
 	<xs:complexType name="colCell">
 		<xs:annotation>
 			<xs:appinfo>
@@ -138,6 +155,7 @@
 			<xs:element name="data5" type="testPostCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="keyvalue" type="keyValueCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="holderWell" type="holderWell" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="readonly" type="readonlyCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="size" use="required" type="colField" />

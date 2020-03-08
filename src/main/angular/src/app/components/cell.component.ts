@@ -174,7 +174,7 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	if (newCell.parent) {
 		newCell.parent.remove(newCell);
 	}
-	
+
 	// if we are adopting a cell that is actually a move and we are moving at the end, 'position' is now 'position--'
 	// (or childrencount) as we have zero based arrays =)
 	// Start:

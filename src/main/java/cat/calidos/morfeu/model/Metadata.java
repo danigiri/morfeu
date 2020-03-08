@@ -41,11 +41,10 @@ private String cellPresentationType;
 private String cellPresentationMethod;
 private String thumb;
 private Optional<String> identifier;
-private Boolean readonly;
+private Optional<Boolean> readonly;			// important to distinguish between no readonly ddefinition and false
 private Map<String, String> defaultValues;
 private Map<String, Set<String>> directives;
 private Map<String, Set<String>> attributes;
-
 
 
 public Metadata(URI uri,
@@ -56,7 +55,7 @@ public Metadata(URI uri,
 				String cellPresentationMethod,
 				String thumb,
 				String identifier,
-				Boolean readonly,
+				Optional<Boolean> readonly,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes
@@ -69,7 +68,7 @@ public Metadata(URI uri,
 			Optional.ofNullable(cellPresentationMethod),
 			Optional.ofNullable(thumb),
 			Optional.ofNullable(identifier),
-			Optional.ofNullable(readonly),
+			readonly,
 			defaultValues,
 			directives,
 			attributes);
@@ -97,7 +96,7 @@ public Metadata(URI uri,
 	this.cellPresentationMethod = cellPresentationMethod.orElse(DEFAULT_CELL_PRESENTATION_METHOD);
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	this.identifier = identifier;
-	this.readonly = readonly.orElse(false);
+	this.readonly = readonly;
 	this.defaultValues = defaultValues;
 	this.directives = directives;
 	this.attributes = attributes;
@@ -139,7 +138,7 @@ public Optional<String> getIdentifier() {
 }
 
 
-public Boolean isReadonly() {
+public Optional<Boolean> isReadonly() {
 	return readonly;
 }
 
@@ -222,9 +221,13 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 
 	String identifier = morePriority.getIdentifier().isPresent() ? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
 
-	Boolean readonly = morePriority.isReadonly(); 
-	
-	Map<String,String> newDefaultValues = new HashMap<String, String>();
+	// if we have metadata defined in a type (like readonlyCell) with readonly = true and we merge with the 
+	// metadata of an element (like xs:element="readonly") that has null annotaiton, we need to distinguish
+	// between no defined readonly property and false
+	Optional<Boolean> readonly = morePriority.isReadonly().isPresent() ? 
+									morePriority.isReadonly() : lessPriority.isReadonly();
+
+ 	Map<String,String> newDefaultValues = new HashMap<String, String>();
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
 

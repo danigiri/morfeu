@@ -19,8 +19,7 @@ public void testReadonly() {
 	Optional<Boolean> readonly0 = ModelMetadataModule.readonly(Optional.empty());
 	assertAll("test empty", 
 		() -> assertNotNull(readonly0),
-		() -> assertTrue(readonly0.isPresent()),
-		() -> assertFalse(readonly0.get())
+		() -> assertFalse(readonly0.isPresent())
 	);
 
 	Optional<Boolean> readonly1 = ModelMetadataModule.readonly(Optional.of("yes"));
@@ -38,13 +37,26 @@ public void testReadonly() {
 	);
 
 	Optional<Boolean> readonly3 = ModelMetadataModule.readonly(Optional.of("nope"));
-	assertAll("test no", 
+	assertAll("test nope", 
 		() -> assertNotNull(readonly3),
 		() -> assertTrue(readonly3.isPresent()),
 		() -> assertFalse(readonly3.get())
 	);
 
-	
+	Optional<Boolean> readonly4 = ModelMetadataModule.readonly(Optional.of("no"));
+	assertAll("test no", 
+		() -> assertNotNull(readonly4),
+		() -> assertTrue(readonly4.isPresent()),
+		() -> assertFalse(readonly4.get())
+	);
+
+	Optional<Boolean> readonly5 = ModelMetadataModule.readonly(Optional.of("false"));
+	assertAll("test false", 
+		() -> assertNotNull(readonly5),
+		() -> assertTrue(readonly5.isPresent()),
+		() -> assertFalse(readonly5.get())
+	);
+
 }
 
 

@@ -385,14 +385,14 @@ public static Metadata metadata(XSElementDecl elem,
 													.build()
 													.value();
 
-	//fallback from merging global(if available) and type
+	// fallback from merging global(if available) and type
 	Metadata typeMetadata = t.getMetadata();
 	Metadata fallback = (globalMetadata!=null  && globalMetadata.containsKey(uri)) ?
 							Metadata.merge(uri, globalMetadata.get(uri), typeMetadata) : typeMetadata;
 
 	// then we merge the current cell model metadata with the fallback 
 	meta = Metadata.merge(uri, meta, fallback);
-	
+
 	// then if we are a reference we will merge the reference metadata as well :)
 	// * but we do it with the type metadata, as the reference cellModel will have merged the global stuff
 	// * and the global stuff is referenced with an explicit URI that is not the current cell model, therefore it is

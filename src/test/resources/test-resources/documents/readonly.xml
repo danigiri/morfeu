@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
+>
+	<row>
+		<col size="12">
+			<data number="0"/>
+		</col>
+	</row>
+	<row>
+		<col size="12">
+			<data number="1"/>
+			<readonly number="2"/>
+			<readonly number="3"/>
+		</col>
+	</row>
+</test>

@@ -23,10 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -150,9 +147,9 @@ public static URI defaultURI(@Nullable @Named("ParentURI") URI parentURI) {
 		// DEFAULT URI SHOULD NOT FAIL
 		log.error("Really? Default URI for metadata fails - epic fail");
 	}
-	
+
 	return uri;
-	
+
 }
 
 
@@ -192,11 +189,11 @@ public static Optional<String> thumb(@Nullable XSAnnotation annotation) {
 
 @Provides @Named("identifier")
 public static Optional<String> identifier(@Nullable XSAnnotation annotation) {	
-	
+
 	Optional<String> identifier = annotationTaggedAs(annotation, IDENTIFIER_FIELD);
 	if (identifier.isPresent() && identifier.get().startsWith(IDENTIFIER_FIELD_PREFIX)) {
 		identifier = Optional.of(identifier.get().substring(IDENTIFIER_FIELD_PREFIX.length()));
-	} 
+	}
 
 	return identifier;
 
@@ -208,15 +205,18 @@ public static Optional<String> readonlyValue(@Nullable XSAnnotation annotation) 
 	return annotationTaggedAs(annotation, READONLY_FIELD);
 }
 
+
 @Provides @Named("readonly") 
 public static Optional<Boolean> readonly(@Named("readonlyValue") Optional<String> readonlyValue) {
 
-	boolean isReadonly = false;
+	// ensure we return empty and not false as they really mean different things, specially for merges
+	Boolean isReadonly = null;
 	if (readonlyValue.isPresent()) {
 		String str = readonlyValue.get();
 		isReadonly = str.equalsIgnoreCase(TRUE) || str.equalsIgnoreCase(YES) ? true : false;
 	}
-	return Optional.of(isReadonly);
+
+	return Optional.ofNullable(isReadonly);
 
 }
 
@@ -245,11 +245,11 @@ public static Map<String, String> defaultValues(@Nullable XSAnnotation annotatio
 		} else {
 			defaultValues.put(null, defaultValue); 		// this is the default value for the cell content
 		}
-		
+
 	}
-	
+
 	return defaultValues;
-	
+
 }
 
 
@@ -307,9 +307,9 @@ private static Map<String, Set<String>> groupSerializeTagsByCaseFilterBy(String 
 									}
 									groups.get(case_).add(an.getTextContent());
 	});
-	
+
 	return groups;
-	
+
 }
 
 

@@ -42,6 +42,7 @@ constructor(public schema: number,
 			public isSimple: boolean, 
 			public type_: CellType,
 			public minOccurs: number,
+			public readonly?: boolean,
 			public isAttribute?: boolean,
 			public maxOccurs?: number,
 			public defaultValue?: string,
@@ -362,11 +363,12 @@ isSimple: boolean;
 isReference: boolean;
 type_: CellType;
 minOccurs: number;
+readonly?: boolean;
 maxOccurs?: number;
 isAttribute?: boolean;
 defaultValue?: string;
-identifier?: string | CellModel;	// coming from the JSON it will be a string, coming from an object it will
-									// be an reference to the attribute that is the identifier
+identifier?: string|CellModel;	// coming from the JSON it will be a string, coming from an object it will
+								// be an reference to the attribute that is the identifier
 attributes?: CellModelJSON[];
 children?: CellModelJSON[];
 referenceURI?: string;

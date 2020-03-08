@@ -14,22 +14,19 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 import { ContentRequestEvent } from '../../events/content-request.event';
 import { EventListener } from '../../events/event-listener.class';
 import { EventService } from '../../services/event.service';
-import { RemoteEventService } from '../../services/remote-event.service';
 
 @Component({
 	selector: 'content-test',
-	template: '<content></content>'
+	template: '<div><content></content></div>'
 })
 
 export class ContentTestComponent extends EventListener implements AfterViewInit, TestComponent {
 
 
-constructor(eventService: EventService, 
-			remoteEventService: RemoteEventService,
+constructor(eventService: EventService,
 			private route: ActivatedRoute,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>) {
-   // super(eventService);
-super(eventService, remoteEventService);
+	super(eventService);
 }
 
 ngAfterViewInit() {
@@ -55,7 +52,7 @@ private readonly() {
 							,"desc": "Readonly content"
 							,"kind": "xml"
 							,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
-							,"contentURI": "target/test-classes/test-resources/documents/document1.xml"
+							,"contentURI": "target/test-classes/test-resources/documents/readonly.xml"
 	}`;
 	const DOC = Object.create(CellDocument.prototype); // to simulate a static call
 	const doc = DOC.fromJSON(docContent);
