@@ -14,6 +14,7 @@ import { CellEditorComponent } from './cell-editor/cell-editor.component';
 import { CellHeaderComponent } from './cell-header.component';
 import { ContentComponent } from './content/content.component';
 import { DropAreaComponent } from './drop-area.component';
+import { KeyCaptureComponent } from '../components/key-capture.component';
 import { PresentationComponent } from './presentation/presentation.component';
 import { SnippetComponent } from './snippet.component';
 
@@ -27,6 +28,12 @@ import { EventService } from '../services/event.service';
 import { RemoteEventService } from '../services/remote-event.service';
 
 @NgModule({
+	imports: [
+				CommonModule,
+				DndModule,
+				FormsModule,
+				PipesModule
+	],
 	declarations: [
 					AttributeDataEditorComponent,
 					CellComponent,
@@ -34,14 +41,9 @@ import { RemoteEventService } from '../services/remote-event.service';
 					CellHeaderComponent,
 					ContentComponent,
 					DropAreaComponent,
+					KeyCaptureComponent,
 					PresentationComponent,
 					SnippetComponent
-	],
-	imports: [
-				CommonModule,
-				DndModule,
-				FormsModule,
-				PipesModule
 	],
 	exports: [
 					AttributeDataEditorComponent,
@@ -49,6 +51,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					CellEditorComponent,
 					CellHeaderComponent,
 					ContentComponent,
+					KeyCaptureComponent,
 					PresentationComponent
 	],
 	providers: [

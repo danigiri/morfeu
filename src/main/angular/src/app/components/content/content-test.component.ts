@@ -17,7 +17,13 @@ import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'content-test',
-	template: '<div><content></content></div>'
+	template: `
+		<div>
+			<content></content>
+			<key-capture></key-capture>
+			<cell-editor></cell-editor>
+		</div>
+	`
 })
 
 export class ContentTestComponent extends EventListener implements AfterViewInit, TestComponent {

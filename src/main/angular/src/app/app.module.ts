@@ -24,7 +24,6 @@ import { CollapsibleComponent } from './components/collapsible.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CellModelComponent } from './components/cell-model.component';
 import { CellDataComponent } from './components/cell-data.component';
-import { KeyCaptureComponent } from './components/key-capture.component';
 import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
@@ -56,7 +55,6 @@ import { StatusComponent } from './components/status.component';
 					, CellDocumentComponent
 					, CellDataComponent
 					, CellModelComponent
-					, KeyCaptureComponent
 					, MainComponent
 					, ModelAreaComponent
 					, ModelComponent
