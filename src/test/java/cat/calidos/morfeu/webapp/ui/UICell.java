@@ -37,6 +37,8 @@ private static final String COL_WELL = "col-well";
 private static final String WELL = "well";
 private static final String ROW_WELL = "row-well";
 private static final String SELECTED = "cell-selected";
+private static final String READONLY = "readonly";
+private static final String ACTIVE_READONLY = "cell-selected-readonly";
 
 private UIContent content;
 private Optional<UICell> parent;
@@ -130,14 +132,14 @@ public UICell dragTo(UIDropArea target) {
 public UICell click() {
 
 	element.click();
-	
+
 	return this;
-	
+
 }
 
 
 public UICell select() {
-	
+
 	// first we build a list of the tree nodes we use to reach this destination and we will be selecting them in turn
 	content.pressKey(UIContent.SELECTION_MODE);
 	LinkedList<UICell> path = new LinkedList<UICell>();
@@ -146,7 +148,7 @@ public UICell select() {
 		path.push(parentVisitor);	// notice we are inserting, so it has the right order (and not reverse)
 		parentVisitor = parentVisitor.parent().orElse(null);
 	}
-	
+
 	// activate selection mode and then select each in turn
 	content.pressKey(UIContent.SELECTION_MODE);
 	path.stream().forEachOrdered(c -> content.pressKey(c.position()+""));
@@ -265,6 +267,22 @@ public boolean isActive() {
 
 public boolean isSelected() {
 	return class_().contains(SELECTED);
+}
+
+
+public boolean isReadonly() {
+	return class_().contains(READONLY);
+}
+
+
+public boolean isActiveReadonly() {
+
+	// this keeps failing randomly
+	try {
+		Thread.sleep(50);
+	} catch (InterruptedException e) {}
+
+	return class_().contains(ACTIVE_READONLY);
 }
 
 }

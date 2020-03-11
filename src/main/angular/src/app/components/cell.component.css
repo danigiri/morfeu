@@ -28,11 +28,13 @@
 	border: 3px dashed blue;
 	border-radius: 5px;
 }
-.cell-readonly {
+.cell-selected-readonly {
 	border: 3px dashed red;
 	border-radius: 5px;
 	background-color: red;
 }
+.cell-readonly {}
+
 .cell-dragged {
 	opacity: .2;
 }
