@@ -22,10 +22,12 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.BeforeEach;
 
 import cat.calidos.morfeu.model.Metadata;
@@ -52,8 +54,8 @@ public void setup() throws Exception {
 	directivesA2.add("directive-A2");
 	directives.put("directives2", directivesA2);
 	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(1);
-	boolean readonly = true;
-	Metadata priorityMetadata = new Metadata(priorityURI, 
+	Optional<Boolean> readonly = Optional.of(true);
+	Metadata priorityMetadata = new Metadata(priorityURI,
 												"descA",
 												"A", 
 												"ACP", 
@@ -63,7 +65,7 @@ public void setup() throws Exception {
 												"idA", 
 												readonly,
 												priorityDefaultValues, 
-												directives, 
+												directives,
 												attributes);
 
 	URI metadataURI = new URI("priority.xsd");
@@ -83,7 +85,7 @@ public void setup() throws Exception {
 										"GETB",
 										"THUMB", 
 										"idB", 
-										false,
+										Optional.of(false),
 										metadataDefaultValues, 
 										directives, 
 										attributes2);
@@ -106,7 +108,8 @@ public void testMergeMetadataBasic() {
 		() -> assertEquals("GETB", merged.getCellPresentationMethod()),
 		() -> assertEquals("THUMB", merged.getThumb()),
 		() -> assertTrue(merged.getIdentifier().isPresent()),
-		() -> assertTrue(merged.isReadonly()),
+		() -> assertTrue(merged.isReadonly().isPresent()),
+		() -> assertTrue(merged.isReadonly().get()),
 		() -> assertEquals("idA", merged.getIdentifier().get())
 	);
 

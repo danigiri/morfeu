@@ -61,6 +61,7 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("WELL", test.getMetadata().getPresentation());
 	assertEquals("test root cell model should be min 1", 1, test.getMinOccurs());
 	assertEquals("test root cell model should be max 1", 1, test.getMaxOccurs().getAsInt());
+	assertTrue(test.getMetadata().isReadonly().isEmpty());
 
 	ComplexCellModel testComplex = test.asComplex();
 	assertNotNull(testComplex);
@@ -107,6 +108,7 @@ public void testProvideCellModel() throws Exception {
 	String defaultTextAttributeFromGlobal = "Default value for text (from global)";
 	assertEquals(defaultTextAttributeFromGlobal, dataComplex.attributes().attribute("text").getDefaultValue().get());
 	assertEquals("11", dataComplex.attributes().attribute("number").getDefaultValue().get());	// type default
+	assertTrue(data.getMetadata().isReadonly().isEmpty());
 
 	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
 	String data2Desc = "Globally provided description of 'data2'";
@@ -212,7 +214,7 @@ public void testAttributesDefaultValues() {
 											"GET",
 											"thumb",
 											null,
-											false,
+											Optional.empty(),
 											defaultValues,
 											null,
 											null);

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.swing.plaf.synth.SynthSeparatorUI;
@@ -67,7 +68,7 @@ public void setup() throws Exception {
 									"GET",
 									"THUMB",
 									null,
-									false,
+									Optional.empty(),
 									emptyDefaultValues,
 									directives,
 									attributes);
@@ -138,7 +139,7 @@ public void testTextSimpleType() {
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
 	assertFalse(type.isContentValid(new Object()));
-	
+
 //	XSRestrictionSimpleType restriction = xsType.asSimpleType().asRestriction();
 //	XSType baseType = xsType.getBaseType();
 
