@@ -7,6 +7,7 @@
 			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
 			[class.cell-selected]="selected"
+			[class.cell-readonly]="readonlyActive"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
 			dnd-draggable
@@ -18,6 +19,7 @@
 			class="well container-fluid show-grid cell-level-{{level}} rounded"
 			[class.cell-active]="active"
 			[class.cell-selected]="selected"
+			[class.cell-readonly]="readonlyActive"
 		>
 			<!-- drop area to be able to add new rows to this well -->
 			<div class="row">
@@ -43,6 +45,7 @@
 			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
 			[class.cell-selected]="selected"
+			[class.cell-readonly]="readonlyActive"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
 			dnd-draggable
@@ -54,6 +57,7 @@
 			class="row-well row show-grid cell-level-{{level}} rounded"
 			[class.cell-active]="active"
 			[class.cell-selected]="selected"
+			[class.cell-readonly]="readonlyActive"
 		 >
 			<!-- add a drop area here if we ever want to dynamically add new columns -->
 			<cell *ngFor="let c of cell.children; let i=index"
@@ -78,6 +82,7 @@
 			class="col-well col show-grid cell-level-{{level}} rounded"
 			[class.cell-active]="active"
 			[class.cell-selected]="selected"
+			[class.cell-readonly]="readonlyActive"
 		><!--COL-{{this.cell.columnFieldValue()}}-->
 			<!-- drop area here to add anything at the beginning of the column -->
 			<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
@@ -97,6 +102,7 @@
 			[class.cell-img]="!active && !selected"
 			[class.cell-active]="active"
 			[class.cell-selected]="selected"
+			[class.cell-readonly]="readonlyActive"
 			class="cell cell-img-size img-fluid cell-level-{{level}}"
 			src="{{getCellPresentation()}}"
 			(mouseenter)="focusOn(cell)"
@@ -111,6 +117,7 @@
 			class="cell cell-img-size cell-level-{{level}}"
 			[class.cell-active]="active"
 			[class.cell-selected]="selected"
+			[class.cell-readonly]="readonlyActive"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
 			dnd-draggable

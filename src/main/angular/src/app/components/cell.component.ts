@@ -1,27 +1,27 @@
 // CELL . COMPONENT . TS
 
-import {filter} from 'rxjs/operators';
-import {Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import { filter } from 'rxjs/operators';
+import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 
-import {FamilyMember} from '../family-member.interface';
-import {Cell} from '../cell.class';
-import {CellModel} from '../cell-model.class';
+import { FamilyMember } from '../family-member.interface';
+import { Cell } from '../cell.class';
+import { CellModel } from '../cell-model.class';
 
-import {DropAreaComponent} from './drop-area.component';
-import {SelectableWidget} from '../selectable-widget.class';
+import  {DropAreaComponent } from './drop-area.component';
+import {SelectableWidget } from '../selectable-widget.class';
 
-import {CellActivateEvent} from '../events/cell-activate.event';
-import {CellActivatedEvent} from '../events/cell-activated.event';
-import {CellDeactivatedEvent} from '../events/cell-deactivated.event';
-import {CellDragEvent} from '../events/cell-drag.event';
-import {CellDropEvent} from '../events/cell-drop.event';
-import {CellEditEvent} from '../events/cell-edit.event';
-import {CellModelDeactivatedEvent} from '../events/cell-model-deactivated.event';
-import {CellRemoveEvent} from '../events/cell-remove.event';
-import {CellSelectEvent} from '../events/cell-select.event';
-import {CellSelectionClearEvent} from '../events/cell-selection-clear.event';
-import {CellModelActivatedEvent} from '../events/cell-model-activated.event';
-import {EventService} from '../services/event.service';
+import { CellActivateEvent } from '../events/cell-activate.event';
+import { CellActivatedEvent } from '../events/cell-activated.event';
+import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
+import { CellDragEvent } from '../events/cell-drag.event';
+import { CellDropEvent } from '../events/cell-drop.event';
+import { CellEditEvent } from '../events/cell-edit.event';
+import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
+import { CellRemoveEvent } from '../events/cell-remove.event';
+import { CellSelectEvent } from '../events/cell-select.event';
+import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
+import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
+import { EventService } from '../services/event.service';
 
 @Component({
 	selector: 'cell',
@@ -43,6 +43,8 @@ private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues 
 
 active = false;
 dragEnabled = false;
+readonly = false;
+readonlyActive = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -56,6 +58,7 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
 	// console.log('[UI] CellComponent::ngOnInit()');
+	this.readonly = this.cell.cellModel?.readonly ?? false;
 
 	// Drop a cell to a position under this cell
 	this.subscribe(this.events.service.of<CellDropEvent>(CellDropEvent)
@@ -161,6 +164,7 @@ dragEnd(cell: Cell) {
 	console.log('[UI] CellComponent::dragEnd()');
 	// this.isBeingDragged = false;
 	this.focusOff(cell);
+
 }
 
 
@@ -201,9 +205,11 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 // UI method to highlight the cell
 becomeActive(cell: Cell) {
 
+	const modifiable = !this.readonly;
 	// console.log('[UI] CellComponent::becomeActive('+cell.URI+')');
-	this.active = true;
-	this.dragEnabled = true;
+	this.active = modifiable;
+	this.dragEnabled = modifiable;	// can only be dragged if it's not a readonly cellmodel'
+	this.readonlyActive = !modifiable;
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
 	this.events.service.publish(new CellSelectionClearEvent());
 
@@ -218,6 +224,7 @@ becomeInactive(cell: Cell) {
 	// console.log('[UI] CellComponent::becomeInactive('+cell.URI+')');
 	this.active = false;
 	this.dragEnabled = false;
+	this.readonlyActive = false;
 
 }
 

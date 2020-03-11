@@ -25,8 +25,13 @@
 	border-radius: 5px;
 }
 .cell-selected {
-	border: 3px dashed #00f;
+	border: 3px dashed blue;
 	border-radius: 5px;
+}
+.cell-readonly {
+	border: 3px dashed red;
+	border-radius: 5px;
+	background-color: red;
 }
 .cell-dragged {
 	opacity: .2;
