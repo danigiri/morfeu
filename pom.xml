@@ -181,14 +181,7 @@
 						</resourceBases>
 						<webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
 					</webApp>
-					<!--scanTargetPatterns> this is a terrible idea, it seems that it opens all the files
-          				<scanTargetPattern> in the exclude, which leads to thousands of fds being used
-          					< directory>src/main/webapp</directory>
-          					<excludes>
-					              <exclude>node_modules</exclude>
-				              </excludes>
-          				</scanTargetPattern>
-    					</scanTargetPatterns-->
+					<testClassesDirectory>${project.build.directory}/SKIPSCANTESTCLASSES</testClassesDirectory>
 					<systemProperties>
 						<systemProperty>
 							<name>org.eclipse.jetty.annotations.maxWait</name>
@@ -561,7 +554,7 @@
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-			<comments>Copyright (C) 2019 Daniel Giribet</comments>
+			<comments>Copyright (C) 2020 Daniel Giribet</comments>
 		</license>
 	</licenses>
 
