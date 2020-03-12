@@ -165,7 +165,7 @@ public UICell activate() {
 	}
 
 	return this;
-	
+
 }
 
 
@@ -200,11 +200,17 @@ public UICellEditor editByDoubleClicking() {
 public void remove() {
 
 	if (isActive() || isSelected()) {
-		pressKey("R");
+		forceRemove();
 	} else {
 		throw new IllegalStateException("Cannot remove something not selected or active");
 	}
 
+}
+
+
+/** delete this cell, no checks */
+public void forceRemove() {
+	pressKey("R");
 }
 
 

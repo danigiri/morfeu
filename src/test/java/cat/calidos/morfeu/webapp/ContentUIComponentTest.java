@@ -3,10 +3,13 @@ package cat.calidos.morfeu.webapp;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.codeborne.selenide.Selenide.open;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoSuchElementException;
 
 import cat.calidos.morfeu.webapp.ui.UICell;
+import cat.calidos.morfeu.webapp.ui.UICellData;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
 /** Test the content component behaviour
@@ -14,13 +17,22 @@ import cat.calidos.morfeu.webapp.ui.UIContent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUIComponentTest extends UITezt {
 
+private UIContent content;
+
+
+@BeforeEach
+public void setup() {
+
+	open(appBaseURL+"test/content-test/readonly");
+	content = new UIContent();
+	content.shouldBeVisible();
+
+}
+
 
 @Test @DisplayName("Test readonly cells")
 public void testReadonlyCells() {
 
-	open(appBaseURL+"test/content-test/readonly");
-	UIContent content = new UIContent();
-	content.shouldBeVisible();
 
 	//target/test-classes/test-resources/documents/readonly.xml/test(0)/row(1)/col(0)/data(0)
 	UICell data0 = content.rootCells().get(0).child("row(1)").child("col(0)").child("data(0)");
@@ -47,6 +59,39 @@ public void testReadonlyCells() {
 			() -> assertFalse(readonly1.isActive()),
 			() -> assertTrue(readonly1.isActiveReadonly())
 	);
+
+}
+
+
+@Test @DisplayName("Test cannot delete cells")
+public void testCannotDeleteReadonlyCells() {
+
+	UICell parent = content.rootCells().get(0).child("row(1)").child("col(0)");
+	assertEquals(3, parent.children().size());
+	UICell readonly2 = parent.child("readonly(2)");
+	readonly2.select().activate();
+	readonly2.forceRemove();
+	UICell readonly2AfterDelete = parent.child("readonly(1)");
+	assertNotNull(readonly2AfterDelete);
+	readonly2AfterDelete.shouldBeVisible();
+	assertAll("could not remove cell",
+		() -> assertTrue(readonly2AfterDelete.isCell()),
+		() -> assertEquals(3, parent.children().size())
+	);
+
+}
+
+
+@Test @DisplayName("Test cannot edit cells")
+public void testCannotEditReadonlyCells() {
+
+	UICell readonly1 = content.rootCells().get(0).child("row(1)").child("col(0)").child("readonly(1)");
+	UICellData.shouldNotBeVisible();
+	assertThrows(NoSuchElementException.class, () ->readonly1.edit());
+	UICellData.shouldNotBeVisible();
+
+	assertThrows(NoSuchElementException.class, () ->readonly1.editByDoubleClicking());
+	UICellData.shouldNotBeVisible();
 
 }
 

@@ -60,7 +60,7 @@ ngOnInit() {
 	// console.log('[UI] CellComponent::ngOnInit()');
 	this.readonly = this.cell.cellModel?.readonly ?? false;
 
-	// Drop a cell to a position under this cell
+	// drop a cell to a position under this cell
 	this.subscribe(this.events.service.of<CellDropEvent>(CellDropEvent)
 			.pipe(filter(dc => dc.newParent && dc.newParent===this.cell))
 			.subscribe( dc => {
@@ -70,7 +70,7 @@ ngOnInit() {
 			})
 	);
 
-	// A cell model was deactivated that is compatible with this cell
+	// a cell model was deactivated that is compatible with this cell
 	this.subscribe(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.pipe(filter(d => d.cellModel && this.isCompatibleWith(d.cellModel)))
 			.subscribe(() => this.becomeInactive(this.cell))
@@ -94,7 +94,7 @@ ngOnInit() {
 			})
 	);
 
-	// A different cell was activated and we are active at this moment
+	// a different cell was activated and we are active at this moment
 	this.subscribe(this.events.service.of<CellActivatedEvent>(CellActivatedEvent).pipe(
 				filter(a => this.active && a.cell!==this.cell)
 			).subscribe(() => {
@@ -103,7 +103,7 @@ ngOnInit() {
 			})
 	);
 
-	// External component (like a keyboard shortcut) wants to drag this cell somewhere
+	// external component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.subscribe(this.events.service.of<CellDragEvent>(CellDragEvent)
 			.pipe(filter(() => this.active))
 			.subscribe(() => {
@@ -112,7 +112,7 @@ ngOnInit() {
 			})
 	);
 
-	// Want to edit this cell
+	// want to edit this cell
 	this.subscribe(this.events.service.of<CellEditEvent>(CellEditEvent)
 			.pipe(filter(edit => !edit.cell && this.isEditable()))
 			.subscribe(() => {
@@ -121,9 +121,9 @@ ngOnInit() {
 			})
 	);
 
-	// Want to remove this cell
+	// want to remove this cell (skip if readonly)
 	this.subscribe(this.events.service.of<CellRemoveEvent>(CellRemoveEvent)
-			.pipe(filter(remove => !remove.cell && (this.active || this.selected)))
+			.pipe(filter(remove => !remove.cell && (this.active || this.selected) && !this.readonly))
 			.subscribe(() => {
 					console.log('-> cell comp gets cell remove event and will get removed');
 					// we could re-issue an event with the specific cell to be removed if needed
@@ -321,7 +321,7 @@ getCellPresentation() {
 
 
 private isEditable(): boolean {
-	return this.active && !this.cell.cellModel.presentation.includes('COL-WELL') && !this.snippet;
+	return this.active && !this.cell.cellModel.presentation.includes('COL-WELL') && !this.snippet && !this.readonly;
 }
 
 
@@ -354,7 +354,11 @@ private cellDragData() {
 
 
 private doubleClick() {
-	this.events.service.publish(new CellEditEvent(this.cell));
+
+	if (this.isEditable()) {
+		this.events.service.publish(new CellEditEvent(this.cell));
+	}
+
 }
 
 
