@@ -1,14 +1,14 @@
 // CELL . CLASS . TS
 
-import {Adopter} from "./adopter.interface";
-import {Lifecycle} from "./lifecycle.interface";
-import {FamilyMember} from "./family-member.interface";
-import {CellModel} from "./cell-model.class";
-import {Model} from "./model.class";
-import {NameValue} from "./name-value.interface";
+import { Adopter } from './adopter.interface';
+import { Lifecycle } from './lifecycle.interface';
+import { FamilyMember } from './family-member.interface';
+import { CellModel } from './cell-model.class';
+import { Model } from './model.class';
+import { NameValue } from './name-value.interface';
 
-import {VariableParser} from "./variable-parser.class";
-import {SerialisableToJSON} from "./serialisable-to-json.interface";
+import { VariableParser } from './variable-parser.class';
+import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 
 export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
@@ -556,9 +556,8 @@ fromJSON(json: CellJSON | string): Cell {
 		return JSON.parse(json, Cell.reviver);
 
 	}
-	
-	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 
+	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 	let cell: Cell = Object.create(Cell.prototype);
 	cell = Object.assign(cell, json);
 
