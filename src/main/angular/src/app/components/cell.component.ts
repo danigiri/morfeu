@@ -105,7 +105,7 @@ ngOnInit() {
 
 	// external component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.subscribe(this.events.service.of<CellDragEvent>(CellDragEvent)
-			.pipe(filter(() => this.active))
+			.pipe(filter(() => this.active && !this.readonly))
 			.subscribe(() => {
 				console.log('-> cell comp gets cell drag event and will try to drop to a selection :)');
 				this.events.service.publish(new CellDropEvent(this.cell));
@@ -121,7 +121,7 @@ ngOnInit() {
 			})
 	);
 
-	// want to remove this cell (skip if readonly)
+	// want to remove this cell (skip if readonly) [can be optimised to not even subscribe if needed]
 	this.subscribe(this.events.service.of<CellRemoveEvent>(CellRemoveEvent)
 			.pipe(filter(remove => !remove.cell && (this.active || this.selected) && !this.readonly))
 			.subscribe(() => {

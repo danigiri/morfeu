@@ -195,11 +195,11 @@ equalValues(c: Cell): boolean {
 	if (this.cellModel.URI!==c.cellModel.URI) {
 		return false;
 	}
-	
+
 	if ((this.attributes && !c.attributes) || (!this.attributes && c.attributes)) {
 		return false;
 	}
-	
+
 	// we are assuming the same order for the attributes and internal attributes
 	if (this.attributes && c.attributes && !this.cellsEqualValues(this.attributes, c.attributes)) {
 			return false;
@@ -394,6 +394,20 @@ adopt(orphan: Cell, position?: number) {
 
 		}
 	}
+
+}
+
+
+canRemove(): boolean {
+
+	let removable = !this.cellModel?.readonly ?? true;
+
+	// we check if any of the children is readonly, as then we will not be able to remove either
+	if (this.childrenCount()>0) {
+		removable = this.children.every(c => c.canRemove());
+	}
+
+	return removable;
 
 }
 

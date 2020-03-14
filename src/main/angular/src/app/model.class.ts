@@ -56,6 +56,10 @@ normaliseReferences() {
 /** given a cell model URI, look for it in a cell model hierarchy, avoids following references */
 findCellModel(uri: string): CellModel {
 
+	if (this.URI===uri) {
+		return this;
+	}
+
 	let foundCellModels = this.children.map(cm => cm.findCellModel(uri)).filter(cm => cm!=undefined);
 	if (foundCellModels.length==0) {
 		console.error("Incorrect cell model reference %s", uri);
@@ -72,7 +76,13 @@ toJSON(): ModelJSON {
 }
 
 
-fromJSON(json: ModelJSON): Model {
+fromJSON(json: ModelJSON|string): Model {
+
+	if (typeof json === 'string') {
+
+		return JSON.parse(json, Model.reviver);
+
+	}
 
 	let model = Object.create(Model.prototype);
 
