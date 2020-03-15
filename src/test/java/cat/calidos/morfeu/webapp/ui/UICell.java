@@ -38,7 +38,7 @@ private static final String WELL = "well";
 private static final String ROW_WELL = "row-well";
 private static final String SELECTED = "cell-selected";
 private static final String READONLY = "readonly";
-private static final String ACTIVE_READONLY = "cell-selected-readonly";
+private static final String ACTIVE_READONLY = "cell-active-readonly";
 
 private UIContent content;
 private Optional<UICell> parent;

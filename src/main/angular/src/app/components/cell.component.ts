@@ -323,7 +323,7 @@ getCellPresentation() {
 
 private isEditable(): boolean {
 	return (this.active || this.activeReadonly)
-			&& this.canBeModified && !this.cell.cellModel.presentation.includes('COL-WELL') && !this.snippet;
+			&& this.canBeModified && !this.snippet && !this.cell.cellModel.presentation.includes('COL-WELL');
 }
 
 
