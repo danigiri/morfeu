@@ -19,17 +19,17 @@ package cat.calidos.morfeu.utils.injection;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import cat.calidos.morfeu.problems.FetchingException;
-import dagger.Module;
-import dagger.Provides;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+
+import cat.calidos.morfeu.problems.FetchingException;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class URIModule {
+
 
 @Produces
 public static URI uri(String uri) throws FetchingException {
@@ -41,5 +41,6 @@ public static URI uri(String uri) throws FetchingException {
 	}
 
 }
+
 
 }

@@ -27,7 +27,7 @@
 					<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
 				</div>
 			</div>
-			<cell *ngFor="let c of cell.children; let i=index"
+			<cell *ngFor="let c of cell.children; let i=index" 
 					[cell]="c"
 					[parent]="cell"
 					[level]="level+1"

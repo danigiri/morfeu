@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.net.URI;
 
 import javax.annotation.Nullable;
-import javax.inject.Named;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 

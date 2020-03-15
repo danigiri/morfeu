@@ -113,7 +113,6 @@ public void testMergeMetadataBasic() {
 		() -> assertEquals("idA", merged.getIdentifier().get())
 	);
 
-
 	Map<String, String> mergedDefaultValues = merged.getDefaultValues();
 	assertAll("Checking merge default values",
 		() -> assertEquals(2, mergedDefaultValues.size()),

@@ -250,11 +250,11 @@ public boolean isRowWell() {
 }
 
 public boolean isColumnWell() {
-	
+
 	element.$(".col-well");	// wait for dom updates
 
 	return class_().contains(COL_WELL);
-	
+
 }
 
 
@@ -266,8 +266,9 @@ public boolean isActive() {
 	try {
 		Thread.sleep(50);
 	} catch (InterruptedException e) {}
-	
+
 	return class_().contains(ACTIVE);
+
 }
 
 
