@@ -40,39 +40,42 @@ describe('Cell', () => {
 
 	});
 
-	it('should be able to delete', () => {
+	it('should be able to delete and modify', () => {
 
 		const uri = prefix+'/test(0)/row(1)/col(0)/data(0)';
 		const data0 = cell.findCellWithURI(uri);
 		expect(data0).toBeDefined();
-		expect(data0.canDelete()).toBe(true);
+		expect(data0.canBeDeleted()).toBe(true);
+		expect(data0.canBeModified()).toBe(true);
 
 	});
 
-	it('should not be able to delete', () => {
+	it('should not be able to delete nor modify', () => {
 
 		const uri = prefix+'/test(0)/row(1)/col(0)/readonly(1)';
 		const readonly1 = cell.findCellWithURI(uri);
 		expect(readonly1).toBeDefined();
-		expect(readonly1.canDelete()).toBe(false);
+		expect(readonly1.canBeDeleted()).toBe(false);
+		expect(readonly1.canBeModified()).toBe(false);
 
 	});
 
-	it('should not be able to delete as it has readonly children', () => {
+	it('should not be able to delete as it has readonly children but modify', () => {
 
 		const uri = prefix+'/test(0)/row(1)';
 		const row = cell.findCellWithURI(uri);
 		expect(row).toBeDefined();
-		expect(row.canDelete()).toBe(false);
-
+		expect(row.canBeDeleted()).toBe(false);
+		expect(row.canBeModified()).toBe(true);
+		
 	});
 
 
 	beforeEach(() => {
-	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
-	const MODEL: Model = Object.create(Model.prototype); // to simulate static call
-	//wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
-	const c = `
+		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
+		const MODEL: Model = Object.create(Model.prototype); // to simulate static call
+		//wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
+		const c = `
 {
   "schema": 0,
   "URI": "target/test-classes/test-resources/documents/readonly.xml",
@@ -268,9 +271,9 @@ describe('Cell', () => {
     }
   ]
 }
-	`;
+		`;
 
-	const m = `{
+		const m = `{
   "schema": 0,
   "URI": "target/test-classes/test-resources/models/test-model.xsd",
   "name": "",
@@ -1017,7 +1020,7 @@ describe('Cell', () => {
   ],
   "valid": true
 }
-	`;
+		`;
 
 		cell = CELL.fromJSON(c);
 		const model = MODEL.fromJSON(m);

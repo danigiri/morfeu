@@ -21,6 +21,7 @@ import { CellRemoveEvent } from '../events/cell-remove.event';
 import { CellSelectEvent } from '../events/cell-select.event';
 import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
+import { InfoModeEvent } from '../events/info-mode.event';
 import { EventService } from '../services/event.service';
 
 @Component({
@@ -46,6 +47,7 @@ activeReadonly = false;
 dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
+info = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -59,7 +61,8 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
 	// console.log('[UI] CellComponent::ngOnInit()');
-	this.canBeDeleted = this.cell.canDelete();
+	this.canBeDeleted = this.cell.canBeDeleted();
+	this.canBeModified = this.cell.canBeModified();
 
 	// drop a cell to a position under this cell
 	this.subscribe(this.events.service.of<CellDropEvent>(CellDropEvent)
@@ -132,6 +135,8 @@ ngOnInit() {
 					this.remove();
 			})
 	);
+
+	this.subscribe(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe( mode => this.info = mode.active));
 
 }
 
