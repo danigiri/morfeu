@@ -42,9 +42,10 @@ private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues 
 @Input() position: number;
 
 active = false;
+activeReadonly = false;
 dragEnabled = false;
-readonly = false;
-readonlyActive = false;
+canBeDeleted = true;
+canBeModified = true;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -58,11 +59,11 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
 	// console.log('[UI] CellComponent::ngOnInit()');
-	this.readonly = this.cell.cellModel?.readonly ?? false;
+	this.canBeDeleted = this.cell.canDelete();
 
 	// drop a cell to a position under this cell
 	this.subscribe(this.events.service.of<CellDropEvent>(CellDropEvent)
-			.pipe(filter(dc => dc.newParent && dc.newParent===this.cell))
+			.pipe(filter(dc => dc.newParent && dc.newParent===this.cell && this.canBeModified))
 			.subscribe( dc => {
 				console.log('-> cell comp gets dropcell event moving '+dc.cell.name+' to '
 							+this.cell.URI+' at position ('+dc.newPosition+')');
@@ -105,7 +106,7 @@ ngOnInit() {
 
 	// external component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.subscribe(this.events.service.of<CellDragEvent>(CellDragEvent)
-			.pipe(filter(() => this.active && !this.readonly))
+			.pipe(filter(() => this.active  && this.canBeModified))
 			.subscribe(() => {
 				console.log('-> cell comp gets cell drag event and will try to drop to a selection :)');
 				this.events.service.publish(new CellDropEvent(this.cell));
@@ -123,7 +124,7 @@ ngOnInit() {
 
 	// want to remove this cell (skip if readonly) [can be optimised to not even subscribe if needed]
 	this.subscribe(this.events.service.of<CellRemoveEvent>(CellRemoveEvent)
-			.pipe(filter(remove => !remove.cell && (this.active || this.selected) && !this.readonly))
+			.pipe(filter(remove => !remove.cell && (this.active || this.selected) && this.canBeModified))
 			.subscribe(() => {
 					console.log('-> cell comp gets cell remove event and will get removed');
 					// we could re-issue an event with the specific cell to be removed if needed
@@ -205,11 +206,11 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 // UI method to highlight the cell
 becomeActive(cell: Cell) {
 
-	const modifiable = !this.readonly;
+	const activate = this.canBeDeleted && this.canBeModified;
 	// console.log('[UI] CellComponent::becomeActive('+cell.URI+')');
-	this.active = modifiable;
-	this.dragEnabled = modifiable;	// can only be dragged if it's not a readonly cellmodel'
-	this.readonlyActive = !modifiable;
+	this.active = activate;
+	this.activeReadonly = !activate;
+	this.dragEnabled = this.canBeModified;	// can only be dragged if it's modifiable'
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
 	this.events.service.publish(new CellSelectionClearEvent());
 
@@ -223,8 +224,8 @@ becomeInactive(cell: Cell) {
 
 	// console.log('[UI] CellComponent::becomeInactive('+cell.URI+')');
 	this.active = false;
+	this.activeReadonly = false;
 	this.dragEnabled = false;
-	this.readonlyActive = false;
 
 }
 
@@ -321,7 +322,8 @@ getCellPresentation() {
 
 
 private isEditable(): boolean {
-	return this.active && !this.cell.cellModel.presentation.includes('COL-WELL') && !this.snippet && !this.readonly;
+	return (this.active || this.activeReadonly)
+			&& this.canBeModified && !this.cell.cellModel.presentation.includes('COL-WELL') && !this.snippet;
 }
 
 

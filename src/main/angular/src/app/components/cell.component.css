@@ -24,14 +24,14 @@
 	border: 3px solid #00f000;
 	border-radius: 5px;
 }
+.cell-active-readonly {
+	border: 3px dashed red;
+	border-radius: 5px;
+	/*background-color: red;*/
+}
 .cell-selected {
 	border: 3px dashed blue;
 	border-radius: 5px;
-}
-.cell-selected-readonly {
-	border: 3px dashed red;
-	border-radius: 5px;
-	background-color: red;
 }
 .cell-readonly {}
 

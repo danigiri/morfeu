@@ -40,30 +40,30 @@ describe('Cell', () => {
 
 	});
 
-	it('should be able to remove', () => {
+	it('should be able to delete', () => {
 
 		const uri = prefix+'/test(0)/row(1)/col(0)/data(0)';
 		const data0 = cell.findCellWithURI(uri);
 		expect(data0).toBeDefined();
-		expect(data0.canRemove()).toBe(true);
+		expect(data0.canDelete()).toBe(true);
 
 	});
 
-	it('should not be able to remove', () => {
+	it('should not be able to delete', () => {
 
 		const uri = prefix+'/test(0)/row(1)/col(0)/readonly(1)';
 		const readonly1 = cell.findCellWithURI(uri);
 		expect(readonly1).toBeDefined();
-		expect(readonly1.canRemove()).toBe(false);
+		expect(readonly1.canDelete()).toBe(false);
 
 	});
 
-	it('should not be able to remove as it has readonly children', () => {
+	it('should not be able to delete as it has readonly children', () => {
 
 		const uri = prefix+'/test(0)/row(1)';
 		const row = cell.findCellWithURI(uri);
 		expect(row).toBeDefined();
-		expect(row.canRemove()).toBe(false);
+		expect(row.canDelete()).toBe(false);
 
 	});
 

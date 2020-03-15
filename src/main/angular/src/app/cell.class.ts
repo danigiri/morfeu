@@ -175,13 +175,21 @@ deepClone(): Cell {
 
 // no value for this cell
 removeValue() {
-	delete this[Cell.VALUE_FIELD];
+
+	if (this.canBeModified()) {
+		delete this[Cell.VALUE_FIELD];
+	}
+
 }
 
 
 // create a new value for this cell, using the cellmodel default value or empty
 createValue() {
-	this.value = this.cellModel.defaultValue ? this.cellModel.defaultValue : CellModel.DEFAULT_EMPTY_VALUE;
+
+	if (this.canBeModified()) {
+		this.value = this.cellModel.defaultValue ? this.cellModel.defaultValue : CellModel.DEFAULT_EMPTY_VALUE;
+	}
+
 }
 
 
@@ -345,13 +353,20 @@ private replacePresentationVariables(input: string): string {
 
 }
 
+
+canBeModified(): boolean {
+
+	return !this.cellModel?.readonly ?? true;
+
+}
+
 //// Adopter ////
 
 adopt(orphan: Cell, position?: number) {
 
 
 	if (orphan.cellModel.isAttribute) {
-		this.attributes.push(orphan);
+		this.attributes.push(orphan);	//TODO: we should check if the attribute exists...
 	} else {
 
 		// notice that we are adopting only orphan cells as we do not want this method to have side effects on
@@ -394,20 +409,6 @@ adopt(orphan: Cell, position?: number) {
 
 		}
 	}
-
-}
-
-
-canRemove(): boolean {
-
-	let removable = !this.cellModel?.readonly ?? true;
-
-	// we check if any of the children is readonly, as then we will not be able to remove either
-	if (this.childrenCount()>0) {
-		removable = this.children.every(c => c.canRemove());
-	}
-
-	return removable;
 
 }
 
@@ -463,6 +464,10 @@ matches(e: FamilyMember): boolean {
 canAdopt(newMember: FamilyMember): boolean {
 
 	// we will do all checks one by one and return to optimise speed
+	
+	if (!this.canBeModified()) {
+		return false;
+	}
 	
 	// we check the model compatibility first
 	if (!this.cellModel.canAdopt(newMember)) {
@@ -534,6 +539,20 @@ delete() {
 	if (this.parent) {	// sanity check
 		this.parent.remove(this);
 	}
+
+}
+
+
+canDelete(): boolean {
+
+	let canBeDeleted = !this.cellModel?.readonly ?? true;
+
+	// we check if any of the children is readonly, as then we will not be able to remove either
+	if (this.childrenCount()>0) {
+		canBeDeleted = this.children.every(c => c.canDelete());
+	}
+
+	return canBeDeleted;
 
 }
 

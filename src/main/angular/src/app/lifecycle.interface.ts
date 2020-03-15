@@ -1,3 +1,13 @@
+// LIFECYCLE . INTERFACE . TS
+export interface Lifecycle {
+	
+/** delete this element */
+delete(): void;
+
+canDelete(): boolean;
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,9 +23,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export interface Lifecycle {
-	
-/** delete this element */
-delete();
-}

@@ -9,9 +9,6 @@ export interface Adopter extends FamilyMember {
 /** new cell must not have a parent */
 adopt(orphan:Cell, position:number): void;
 
-/** can we remove this cell? may be readonly or have readonly children/attributes */
-canRemove(): boolean;
-
 /** remove this child from our children or attributes */ 
 remove(child:Cell): void;
 
