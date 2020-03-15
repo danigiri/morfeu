@@ -4,7 +4,7 @@ export interface Lifecycle {
 /** delete this element */
 delete(): void;
 
-canDelete(): boolean;
+canBeDeleted(): boolean;
 
 }
 

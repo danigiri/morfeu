@@ -10,7 +10,6 @@ import { NameValue } from './name-value.interface';
 import { VariableParser } from './variable-parser.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
-
 export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
 private static readonly VALUE_FIELD = 'value';
@@ -464,11 +463,11 @@ matches(e: FamilyMember): boolean {
 canAdopt(newMember: FamilyMember): boolean {
 
 	// we will do all checks one by one and return to optimise speed
-	
+
 	if (!this.canBeModified()) {
 		return false;
 	}
-	
+
 	// we check the model compatibility first
 	if (!this.cellModel.canAdopt(newMember)) {
 		return false;
@@ -543,13 +542,13 @@ delete() {
 }
 
 
-canDelete(): boolean {
+canBeDeleted(): boolean {
 
 	let canBeDeleted = !this.cellModel?.readonly ?? true;
 
-	// we check if any of the children is readonly, as then we will not be able to remove either
-	if (this.childrenCount()>0) {
-		canBeDeleted = this.children.every(c => c.canDelete());
+	// if it can be deleted we check if any of the children is readonly, as then we will not be able to delete it
+	if (canBeDeleted && this.childrenCount()>0) {
+		canBeDeleted = this.children.every(c => c.canBeDeleted());
 	}
 
 	return canBeDeleted;
