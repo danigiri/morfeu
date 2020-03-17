@@ -19,10 +19,10 @@
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
 		<async-timeout>2000</async-timeout>
 		<dagger-2-version>2.25.4</dagger-2-version>
-		<jackson-2-version>2.10.2</jackson-2-version>
+		<jackson-2-version>2.10.3</jackson-2-version>
 		<jetty-version>9.4.24.v20191120</jetty-version>
 		<jtwig-version>5.87.0.RELEASE</jtwig-version>
-		<selenide-version>5.6.1</selenide-version>
+		<selenide-version>5.9.0</selenide-version>
 		<selenium-version>3.141.59</selenium-version>
 		<jupiter-version>5.5.2</jupiter-version>
 		<junit-platform-version>1.5.2</junit-platform-version>
@@ -388,7 +388,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.3.0-alpha4</version>
+			<version>1.3.0-alpha5</version>
 		</dependency>
 
 		<!--  templating -->
