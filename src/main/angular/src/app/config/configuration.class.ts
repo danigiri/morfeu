@@ -22,7 +22,9 @@ config: "default";
 production: boolean = environment.production;
 catalogues = Configuration.BACKEND_PREF+'/test-resources/catalogues.json';
 remoteEvents = Configuration.BACKEND_PREF+"/dyn/events";
-savefilters: string;
+savefilters: string;														// filters to apply before saving
+reloadOnSave = false;														// reload content on save
+
 
 constructor(eventService: EventService, 
 		@Inject("ConfigurationService") private configService: RemoteObjectService<Configuration, ConfigJSON>) {
@@ -48,6 +50,7 @@ overwriteWithParams(params: Params) {
 	this.catalogues = params.catalogues!==undefined ? params.catalogues : this.catalogues;
 	this.remoteEvents = params.remoteEvents!==undefined ? params.remoteEvents : this.remoteEvents;
 	this.savefilters = params.savefilters!==undefined ? params.savefilters : this.savefilters;
+	this.reloadOnSave = params.reloadOnSave ?? this.reloadOnSave;
 
 	return this;
 
@@ -61,6 +64,7 @@ overwriteWithConfig(config: Configuration) {
 	this.catalogues = config.catalogues!==undefined ? config.catalogues : this.catalogues;
 	this.remoteEvents = config.remoteEvents!==undefined ? config.remoteEvents : this.remoteEvents;
 	this.savefilters = config.savefilters!==undefined ? config.savefilters : this.savefilters;
+	this.reloadOnSave = config.reloadOnSave ?? this.reloadOnSave;
 
 	return this;
 
@@ -111,6 +115,7 @@ production: boolean;
 catalogues?: string;
 remoteEvents?: string;
 savefilters?: string;
+reloadOnSave?: boolean;
 
 }
 

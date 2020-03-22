@@ -102,8 +102,16 @@ ngOnInit() {
 
 	// we subscribe to the configuration service to get the save filters
 	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
-			.subscribe(loaded => this.configuration = loaded.configuration)
+			.subscribe(loaded => {
+				this.configuration = loaded.configuration;
+				// if we are configured to reload on save, we subscribe to the relevant event and trigger a reload
+				if (this.configuration.reloadOnSave) {
+					this.subscribe(this.events.service.of<ContentSavedEvent>(ContentSavedEvent)
+							.subscribe(saved => this.fetchContentFor(saved.document, saved.document.model)));
+				}
+			})
 	);
+
 
 }
 
@@ -232,9 +240,9 @@ saveContent(document_: CellDocument) {
 
 	this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
 				console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
-				// reloading would go here if we needed any kind of refresh
 				//this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
 				// we send a remote event so the backend knows we've modified the content
+				// this will also allow to reload the content if configured thus
 				this.events.remote.publish(new ContentSavedEvent(document_));
 			},
 			error => this.events.problem(error.message),	 // error is of the type HttpErrorResponse
