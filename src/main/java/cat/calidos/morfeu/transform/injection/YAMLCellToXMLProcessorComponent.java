@@ -34,13 +34,12 @@ interface Builder {
 	@BindsInstance Builder givenCase(@Named("Case") String case_);
 	@BindsInstance Builder fromNode(JsonNode node);	// either a parent or a plain node (for the slash generation)
 	@BindsInstance Builder cellModel(CellModel cellModel);
-	
+
 	YAMLCellToXMLProcessorComponent build();
 
 }
 
-} 
-
+}
 
 /*
  *    Copyright 2019 Daniel Giribet

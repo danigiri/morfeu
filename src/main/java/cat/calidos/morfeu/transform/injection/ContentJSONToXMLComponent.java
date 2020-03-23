@@ -14,7 +14,6 @@ public interface ContentJSONToXMLComponent {
 @Named("Begin")	Processor<JsonNode, String> processor();
 @Named("End")	Processor<JsonNode, String> processorSlash();
 
-
 @Component.Builder
 interface Builder {
 

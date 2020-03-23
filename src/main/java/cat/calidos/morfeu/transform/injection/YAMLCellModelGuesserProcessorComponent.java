@@ -20,7 +20,6 @@ import dagger.Component;
 @Component(modules={YAMLCellModelGuesserProcessorModule.class})
 public interface YAMLCellModelGuesserProcessorComponent {
 
-
 List<PrefixProcessor<JsonNodeCellModel, String>> processors();
 
 @Component.Builder
@@ -32,9 +31,8 @@ interface Builder {
 	@BindsInstance Builder fromNode(JsonNode node);
 	@BindsInstance Builder parentCellModel(ComplexCellModel parentCellmodel);
 
-	
 	YAMLCellModelGuesserProcessorComponent build();
-	
+
 }
 
 }

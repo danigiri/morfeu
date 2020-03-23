@@ -16,7 +16,6 @@ import dagger.Component;
 		SnippetsControlModule.class, ClientEventControlModule.class})
 public interface MorfeuControlComponent extends ControlComponent {
 
-
 @Component.Builder
 interface Builder extends ControlComponent.Builder {}
 
