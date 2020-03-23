@@ -23,7 +23,7 @@ public class ModelUITest extends UITezt {
 
 
 @Before
-public void setup() {	
+public void setup() {
 	open(appBaseURL);
 }
 
@@ -41,7 +41,6 @@ public void modelTest() {
 
 	UIModel model = catalogue.clickOnDocumentNamed("Document 1").model();
 	model.shouldAppear();
-
 	assertEquals("Model at: .../test-model.xsd", model.name());
 	assertEquals("Description of test model", model.desc());
 
@@ -124,7 +123,7 @@ public void testCellModels() {
 
 	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
 	int colChildrenSize = colChildren.size();
-	assertEquals("col model should have 9 children, not "+colChildrenSize, 9, colChildrenSize);
+	assertEquals("col model should have 10 children, not "+colChildrenSize, 10, colChildrenSize);
 
 	assertEquals("stuff", colChildren.get(0).name());
 	assertEquals("data", colChildren.get(1).name());
@@ -133,6 +132,7 @@ public void testCellModels() {
 	assertTrue(data2.thumb().endsWith("assets/images/data2-thumb.svg"));
 
 }
+
 
 }
 
