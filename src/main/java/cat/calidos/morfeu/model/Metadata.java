@@ -45,7 +45,7 @@ private Optional<Boolean> readonly;			// important to distinguish between no rea
 private Map<String, String> defaultValues;
 private Map<String, Set<String>> directives;
 private Map<String, Set<String>> attributes;
-private Optional<String> defaultCategory;
+private Optional<String> category;
 private Map<String, Set<String>> categories;
 
 
@@ -61,7 +61,7 @@ public Metadata(URI uri,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes,
-				String defaultCategory,
+				String category,
 				Map<String, Set<String>> categories
 				) {
 	this(uri,
@@ -76,7 +76,7 @@ public Metadata(URI uri,
 			defaultValues,
 			directives,
 			attributes,
-			Optional.ofNullable(defaultCategory),
+			Optional.ofNullable(category),
 			categories
 			);
 }
@@ -94,7 +94,7 @@ public Metadata(URI uri,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes,
-				Optional<String> defaultCategory,
+				Optional<String> category,
 				Map<String, Set<String>> categories) {
 
 	this.uri = uri;
@@ -109,7 +109,7 @@ public Metadata(URI uri,
 	this.defaultValues = defaultValues;
 	this.directives = directives;
 	this.attributes = attributes;
-	this.defaultCategory = defaultCategory;
+	this.category = category;
 	this.categories = categories;
 
 }
@@ -194,8 +194,8 @@ public Map<String, Set<String>> getAttributes() {
 }
 
 
-public Optional<String> getDefaultCategory() {
-	return defaultCategory;
+public Optional<String> getCategory() {
+	return category;
 }
 
 
@@ -261,7 +261,7 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
 	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
 
-	String category = morePriority.getDefaultCategory().orElse(lessPriority.getDefaultCategory().orElse(null));
+	String category = morePriority.getCategory().orElse(lessPriority.getCategory().orElse(null));
 	Map<String, Set<String>> categories = mergeMapSet(morePriority.getCategories(), lessPriority.getCategories());
 
 	return new Metadata(u,

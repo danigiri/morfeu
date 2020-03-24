@@ -159,7 +159,7 @@ public void testMergeMetadataDirectives() {
 @Test @DisplayName("Merge attribute categories test")
 public void testMergeAttributeCategories() {
 
-	assertEquals("X", merged.getDefaultCategory().get());
+	assertEquals("X", merged.getCategory().get());
 	assertEquals(2, merged.getCategories().size());
 	assertAll("Checking all two categories",
 		() -> assertTrue(merged.getAttributesIn("X").contains("a")),
