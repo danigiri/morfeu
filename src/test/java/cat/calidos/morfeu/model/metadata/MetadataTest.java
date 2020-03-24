@@ -27,7 +27,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
+import org.bouncycastle.asn1.est.AttrOrOID;
 import org.junit.jupiter.api.BeforeEach;
 
 import cat.calidos.morfeu.model.Metadata;
@@ -44,6 +44,7 @@ private Metadata merged;
 public void setup() throws Exception {
 
 	URI priorityURI = new URI("priority.xsd");
+	Optional<Boolean> readonly = Optional.of(true);
 	HashMap<String, String> priorityDefaultValues = new HashMap<String, String>(1);
 	priorityDefaultValues.put("@a", "priority-default-a");
 	Map<String, Set<String>> directives = new HashMap<String, Set<String>>(1);
@@ -53,8 +54,8 @@ public void setup() throws Exception {
 	HashSet<String> directivesA2 = new HashSet<String>(1);
 	directivesA2.add("directive-A2");
 	directives.put("directives2", directivesA2);
-	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(1);
-	Optional<Boolean> readonly = Optional.of(true);
+	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(0);
+	Map<String, Set<String>> attributeCategories = new HashMap<String, Set<String>>(0);
 	Metadata priorityMetadata = new Metadata(priorityURI,
 												"descA",
 												"A", 
@@ -66,7 +67,9 @@ public void setup() throws Exception {
 												readonly,
 												priorityDefaultValues, 
 												directives,
-												attributes);
+												attributes,
+												null,
+												attributeCategories);
 
 	URI metadataURI = new URI("priority.xsd");
 	HashMap<String, String> metadataDefaultValues = new HashMap<String, String>(2);
@@ -77,6 +80,13 @@ public void setup() throws Exception {
 	directivesB.add("directive-B");
 	directives.put("directives", directivesB);
 	Map<String, Set<String>> attributes2 = new HashMap<String, Set<String>>(0);
+	Map<String, Set<String>> attributeCategories2 = new HashMap<String, Set<String>>(2);
+	HashSet<String> categoryX = new HashSet<String>(1);
+	categoryX.add("a");
+	HashSet<String> categoryY = new HashSet<String>(1);
+	categoryY.add("b");
+	attributeCategories2.put("X", categoryX);
+	attributeCategories2.put("Y", categoryY);
 	Metadata metadata = new Metadata(metadataURI, 
 										"descB", 
 										"B", 
@@ -88,7 +98,9 @@ public void setup() throws Exception {
 										Optional.of(false),
 										metadataDefaultValues, 
 										directives, 
-										attributes2);
+										attributes2,
+										"X",
+										attributeCategories2);
 
 	mergedURI = new URI("foo.xsd");
 	merged = Metadata.merge(mergedURI, priorityMetadata, metadata);
@@ -138,10 +150,41 @@ public void testMergeMetadataDirectives() {
 	assertAll("Checking merge values",
 		() -> assertNotNull(directives2),
 		() -> assertEquals(1, directives2.size()),
-		() ->assertTrue(directives2.contains("directive-A2"))
+		() -> assertTrue(directives2.contains("directive-A2"))
+	);
+
+}
+
+
+@Test @DisplayName("Merge attribute categories test")
+public void testMergeAttributeCategories() {
+
+	assertEquals("X", merged.getDefaultCategory().get());
+	assertEquals(2, merged.getCategories().size());
+	assertAll("Checking all two categories",
+		() -> assertTrue(merged.getAttributesIn("X").contains("a")),
+		() -> assertTrue(merged.getAttributesIn("Y").contains("b")),
+		() -> assertEquals(1, merged.getAttributesIn("X").size()),
+		() -> assertEquals(1, merged.getAttributesIn("Y").size())
 	);
 
 }
 
 
 }
+
+/*
+ *    Copyright 2020 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

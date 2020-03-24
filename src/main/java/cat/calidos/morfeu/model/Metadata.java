@@ -41,10 +41,12 @@ private String cellPresentationType;
 private String cellPresentationMethod;
 private String thumb;
 private Optional<String> identifier;
-private Optional<Boolean> readonly;			// important to distinguish between no readonly ddefinition and false
+private Optional<Boolean> readonly;			// important to distinguish between no readonly definition and false
 private Map<String, String> defaultValues;
 private Map<String, Set<String>> directives;
 private Map<String, Set<String>> attributes;
+private Optional<String> defaultCategory;
+private Map<String, Set<String>> categories;
 
 
 public Metadata(URI uri,
@@ -58,8 +60,10 @@ public Metadata(URI uri,
 				Optional<Boolean> readonly,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
-				Map<String, Set<String>> attributes
-			) {
+				Map<String, Set<String>> attributes,
+				String defaultCategory,
+				Map<String, Set<String>> categories
+				) {
 	this(uri,
 			Optional.ofNullable(desc),
 			Optional.ofNullable(presentation),
@@ -71,7 +75,10 @@ public Metadata(URI uri,
 			readonly,
 			defaultValues,
 			directives,
-			attributes);
+			attributes,
+			Optional.ofNullable(defaultCategory),
+			categories
+			);
 }
 
 
@@ -86,7 +93,9 @@ public Metadata(URI uri,
 				Optional<Boolean> readonly,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
-				Map<String, Set<String>> attributes) {
+				Map<String, Set<String>> attributes,
+				Optional<String> defaultCategory,
+				Map<String, Set<String>> categories) {
 
 	this.uri = uri;
 	this.desc = desc.orElse(DEFAULT_DESC);
@@ -100,6 +109,8 @@ public Metadata(URI uri,
 	this.defaultValues = defaultValues;
 	this.directives = directives;
 	this.attributes = attributes;
+	this.defaultCategory = defaultCategory;
+	this.categories = categories;
 
 }
 
@@ -127,6 +138,7 @@ public String getCellPresentationType() {
 public String getCellPresentationMethod() {
 	return cellPresentationMethod;
 }
+
 
 public String getThumb() {
 	return thumb;
@@ -182,6 +194,21 @@ public Map<String, Set<String>> getAttributes() {
 }
 
 
+public Optional<String> getDefaultCategory() {
+	return defaultCategory;
+}
+
+
+public Set<String> getAttributesIn(String category) {
+	return categories.containsKey(category) ? categories.get(category) : EMPTY_SET;
+}
+
+
+public Map<String, Set<String>> getCategories() {
+	return categories;
+}
+
+
 @Override
 public String toString() {
 
@@ -234,6 +261,9 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
 	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
 
+	String category = morePriority.getDefaultCategory().orElse(lessPriority.getDefaultCategory().orElse(null));
+	Map<String, Set<String>> categories = mergeMapSet(morePriority.getCategories(), lessPriority.getCategories());
+
 	return new Metadata(u,
 						desc,
 						presentation,
@@ -245,7 +275,10 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 						readonly,
 						newDefaultValues,
 						directives,
-						attributes);
+						attributes,
+						category,
+						categories
+						);
 
 }
 

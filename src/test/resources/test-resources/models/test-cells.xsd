@@ -122,7 +122,7 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<mf:metadata>
-					<mf:desc>readonly desc</mf:desc>
+					<mf:desc>cells following this model cannot be modified or deleted</mf:desc>
 					<mf:thumb>assets/images/readonly-thumb.svg</mf:thumb>
 					<mf:cell-presentation>assets/images/readonly-cell.svg</mf:cell-presentation>
 					<mf:default-value name="@number">333</mf:default-value>
@@ -134,6 +134,30 @@
 		</xs:annotation>
 		<xs:attribute name="number" use="required" type="numberField" />
 	</xs:complexType>
+
+	<xs:complexType name="categoriesCell">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>multiple attributes grouped by semantic criteria</mf:desc>
+					<mf:thumb>assets/images/categ-thumb.svg</mf:thumb>
+					<mf:cell-presentation>assets/images/categ-cell.svg</mf:cell-presentation>
+					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
+					<mf:default-category value="X"/>
+					<mf:category name="@value0x" value="X"/>
+					<mf:category name="@value1x" value="X"/>
+					<mf:category name="@value0y" value="Y"/>
+					<mf:category name="@value1y" value="Y"/>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:attribute name="value0x" type="textField" />
+		<xs:attribute name="value1a" type="textField" />
+		<xs:attribute name="value0b" type="textField" />
+		<xs:attribute name="value1b" type="textField" />
+	</xs:complexType>
+
 
 	<xs:complexType name="colCell">
 		<xs:annotation>
