@@ -52,7 +52,7 @@ public void setup() throws Exception {
 	modelURI = new URI(uri);
 	schemaSet = parseSchemaFrom(modelURI);
 	schema = schemaSet.getSchema(Model.MODEL_NAMESPACE);
-	
+
 }
 
 
@@ -69,12 +69,12 @@ public void testValue() {
 
 @Test
 public void testTransformAttributes() {
-	
+
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	XSAnnotation annotation = elem.getAnnotation();
 	Metadata meta = DaggerModelMetadataComponent.builder().from(annotation).withParentURI(modelURI).build().value();
 	assertTrue(meta.getAttributesFor("nonexistant").isEmpty());
-	
+
 	Set<String> ytxAttributes = meta.getAttributesFor("yaml-to-xml");
 	assertNotNull(ytxAttributes);
 	assertEquals("We should have two yaml-to-xml attributes", 2, ytxAttributes.size());

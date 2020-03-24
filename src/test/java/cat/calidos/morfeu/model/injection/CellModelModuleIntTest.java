@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellModelModuleIntTest extends ModelTezt {
 
-private static final int EXPECTED_COL_CHILDREN_COUNT = 10;
+private static final int EXPECTED_COL_CHILDREN_COUNT = 11;
 
 @Mock Lazy<Collection<? extends XSAttributeUse>> mockAttributesProducer;
 
@@ -62,33 +63,34 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("test root cell model should be min 1", 1, test.getMinOccurs());
 	assertEquals("test root cell model should be max 1", 1, test.getMaxOccurs().getAsInt());
 	assertTrue(test.getMetadata().isReadonly().isEmpty());
+	assertTrue(test.getCategory().isEmpty());
 
 	ComplexCellModel testComplex = test.asComplex();
 	assertNotNull(testComplex);
 	assertEquals(1, testComplex.attributes().size());
 	assertEquals(1, testComplex.children().size());
-	
+
 	CellModel textAttribute = testComplex.attributes().attribute("text");		// TEST . TEXT
 	checkAttribute(textAttribute, "text", "textField", modelURI+"/test@text");
-	
+
 	CellModel row = testComplex.children().child("row");						// TEST -> ROW
 	checkComplexCellModel(row, "row", "rowCell desc", "rowCell", modelURI+"/test/row");	// getting desc from type
 	assertEquals("/test/row cell model should be min 0", 0, row.getMinOccurs());
 	assertFalse("/test/row cell model should be unbounded", row.getMaxOccurs().isPresent());
 
-	
+
 	ComplexCellModel rowComplex = row.asComplex();
 	assertNotNull(rowComplex);
 	assertEquals(1, rowComplex.attributes().size());
 	assertEquals(1, rowComplex.children().size());
-	
+
 	CellModel numberAttribute = rowComplex.attributes().attribute("number");	// TEST -> ROW . NUMBER
 	checkAttribute(numberAttribute, "number","numberField", modelURI+"/test/row@number");
-	
+
 	CellModel col = rowComplex.children().child("col");							// TEST -> ROW -> COL
 	checkComplexCellModel(col, "col", "Column, can accept content", "colCell", modelURI+"/test/row/col");
 	assertEquals("COL-WELL", col.getMetadata().getPresentation());
-	
+
 	ComplexCellModel colComplex = col.asComplex();
 	assertNotNull(colComplex);
 	assertEquals(1, colComplex.attributes().size());
@@ -139,11 +141,9 @@ public void testProvideCellModel() throws Exception {
 	assertNotNull(testComplex);
 	assertEquals(2, testComplexCell.attributes().size());
 	assertEquals(0, testComplexCell.children().size());
-	
 	CellModel attribute = testComplexCell.attributes().attribute("number");
 	assertNotNull(attribute);
 	assertEquals("11", attribute.getDefaultValue().get());
-	
 
 }
 
@@ -164,7 +164,7 @@ public void testColAndRowReference() throws Exception {
 	assertTrue(rowRef.isComplex());
 	assertEquals(1, rowRef.asComplex().children().size());
 	assertNotNull(rowRef.asComplex().children().child("col"));
-	
+
 }
 
 
@@ -195,7 +195,7 @@ public void testAttributesOf() {
 
 @Test
 public void testAttributesDefaultValues() {
-	
+
 	String name = "test";
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 	// Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
@@ -203,9 +203,10 @@ public void testAttributesDefaultValues() {
 
 	URI uri = CellModelModule.getURIFrom(modelURI+"/"+name, name);
 	HashMap<String, CellModel> globals = new HashMap<String, CellModel>();
-	
+
 	HashMap<String, String> defaultValues = new HashMap<String, String>(1);
 	defaultValues.put("@text", "foo");
+	Map<String, Set<String>> categories = new HashMap<String, Set<String>>(0);
 	Metadata cellMetadata = new Metadata(null,
 											"desc",
 											"pres",
@@ -217,7 +218,9 @@ public void testAttributesDefaultValues() {
 											Optional.empty(),
 											defaultValues,
 											null,
-											null);
+											null,
+											"X",
+											categories);
 	//when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
 
 	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, cellMetadata, globals);
@@ -230,7 +233,6 @@ public void testAttributesDefaultValues() {
 	assertEquals("Wrong default value in this test", "foo", defaultValue.get());
 
 }
-
 
 
 @Test
@@ -254,6 +256,23 @@ public void testGetDefaultTypeName() throws Exception {
 
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	assertEquals("test-type", CellModelModule.getDefaultTypeName(elem));
+
+}
+
+
+@Test
+public void testCategory() throws Exception {
+
+	CellModel test = cellModelFrom(modelURI, "test");
+	CellModel col = test.asComplex().children().child("row").asComplex().children().child("col"); 
+
+	ComplexCellModel categ = col.asComplex().children().child("categ").asComplex();
+	assertNotNull(categ);
+	assertEquals("X", categ.getCategory().get());
+	assertEquals("X", categ.attributes().attribute("value0x").getCategory().get());
+	assertEquals("X", categ.attributes().attribute("value1x").getCategory().get());
+	assertEquals("Y", categ.attributes().attribute("value0y").getCategory().get());
+	assertEquals("Y", categ.attributes().attribute("value1y").getCategory().get());
 
 }
 

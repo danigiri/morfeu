@@ -19,20 +19,21 @@ protected XSSchemaSet schema;
 public static final String MODEL_NAMESPACE = "";
 
 
-public Model(URI u, 
+public Model(URI u,
 				String name,
 				String desc,
 				Type type,
-				int minOccurs, 
-				int maxOccurs, 
-				Metadata meta, 
+				int minOccurs,
+				int maxOccurs,
 				Optional<String> defaultValue,
+				Optional<String> category,
+				Metadata meta,
 				Attributes<CellModel> attributes,
 				XSSchemaSet s,
 				Composite<CellModel> children) {
 
 	// TODO: fetch description from annotation
-	super(u, name, desc, type, minOccurs, maxOccurs, meta, defaultValue, attributes, children);
+	super(u, name, desc, type, minOccurs, maxOccurs, defaultValue, category, meta,  attributes, children);
 
 	this.schema = s;
 

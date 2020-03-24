@@ -28,18 +28,19 @@ private Attributes<CellModel> attributes;
 private Composite<CellModel> children;
 
 
-public ComplexCellModel(URI u, 
-						String name, 
-						String desc, 
-						Type type, 
-						int minOccurs, 
-						int maxOccurs, 
-						Metadata meta, 
+public ComplexCellModel(URI u,
+						String name,
+						String desc,
+						Type type,
+						int minOccurs,
+						int maxOccurs,
 						Optional<String> defaultValue,
+						Optional<String> category,
+						Metadata meta,
 						Attributes<CellModel> attributes,
 						Composite<CellModel> children) {
 
-	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, meta);
+	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, category, meta);
 
 	this.attributes = attributes;
 	this.children = children;
@@ -53,19 +54,21 @@ public ComplexCellModel(URI u,
 						String desc, 
 						Type type, 
 						int minOccurs, 
-						int maxOccurs, 
-						Metadata meta, 
+						int maxOccurs,
 						Optional<String> defaultValue,
+						Optional<String> category,
+						Metadata meta, 
 						Attributes<CellModel> attributes, 
 						ComplexCellModel ref) {
 
-	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, meta, ref);
+	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, category, meta, ref);
 
 	this.attributes = attributes;		// attributes are the same as the reference, but may have different metadata
 	this.children = null;			// we will use the ones from the reference to ensure they are the same
 	this.isSimple = false;
 
 }
+
 
 public Attributes<CellModel> attributes() {
 	return attributes;

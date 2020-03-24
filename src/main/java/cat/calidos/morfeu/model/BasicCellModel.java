@@ -31,6 +31,7 @@ private OptionalInt maxOccurs;
 private Optional<String> defaultValue;
 private boolean isAttribute;
 protected boolean isSimple = true;
+private Optional<String> category;
 private Metadata metadata;
 private boolean isReference;
 private Optional<CellModel> reference;
@@ -43,7 +44,8 @@ public BasicCellModel(URI u,
 						int minOccurs, 
 						int maxOccurs, 
 						boolean isAttribute,
-						Optional<String> defaultValue, 
+						Optional<String> defaultValue,
+						Optional<String> category,
 						Metadata meta) {
 
 	super(u, name, desc);
@@ -53,6 +55,7 @@ public BasicCellModel(URI u,
 	this.maxOccurs = maxOccurs==CellModel.UNBOUNDED ? OptionalInt.empty() : OptionalInt.of(maxOccurs);
 	this.isAttribute = isAttribute;
 	this.defaultValue = defaultValue;
+	this.category = category;
 	this.metadata = meta;
 	this.isReference = false;
 	this.reference = Optional.empty();
@@ -60,18 +63,19 @@ public BasicCellModel(URI u,
 }
 
 
-public BasicCellModel(URI u, 
-		String name, 
-		String desc, 
-		Type type,  
-		int minOccurs, 
-		int maxOccurs, 
-		boolean isAttribute,
-		Optional<String> defaultValue, 
-		Metadata meta,
-		CellModel ref) {
-	
-	this(u, name, desc, type, minOccurs, maxOccurs, isAttribute, defaultValue, meta);
+public BasicCellModel(URI u,
+						String name, 
+						String desc, 
+						Type type,
+						int minOccurs, 
+						int maxOccurs, 
+						boolean isAttribute,
+						Optional<String> defaultValue, 
+						Optional<String> category,
+						Metadata meta,
+						CellModel ref) {
+
+	this(u, name, desc, type, minOccurs, maxOccurs, isAttribute, defaultValue, category, meta);
 
 	this.isReference = true;
 	this.reference = Optional.of(ref);
@@ -133,6 +137,12 @@ public int getMinOccurs() {
 @Override
 public OptionalInt getMaxOccurs() {
 	return maxOccurs;
+}
+
+
+@Override
+public  Optional<String> getCategory() {
+	return category;
 }
 
 

@@ -144,18 +144,18 @@
 					<mf:cell-presentation>assets/images/categ-cell.svg</mf:cell-presentation>
 					<mf:transform case="obj-to-yaml" type="directive">LISTS-NO-PLURAL</mf:transform>
 					<mf:transform case="yaml-to-xml" type="directive">LISTS-NO-PLURAL</mf:transform>
-					<mf:default-category value="X"/>
-					<mf:category name="@value0x" value="X"/>
-					<mf:category name="@value1x" value="X"/>
-					<mf:category name="@value0y" value="Y"/>
-					<mf:category name="@value1y" value="Y"/>
+					<mf:category categ="X"/>
+					<mf:category attr="@value0x" categ="X"/>
+					<mf:category attr="@value1x" categ="X"/>
+					<mf:category attr="@value0y" categ="Y"/>
+					<mf:category attr="@value1y" categ="Y"/>
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:attribute name="value0x" type="textField" />
-		<xs:attribute name="value1a" type="textField" />
-		<xs:attribute name="value0b" type="textField" />
-		<xs:attribute name="value1b" type="textField" />
+		<xs:attribute name="value1x" type="textField" />
+		<xs:attribute name="value0y" type="textField" />
+		<xs:attribute name="value1y" type="textField" />
 	</xs:complexType>
 
 
@@ -180,6 +180,7 @@
 			<xs:element name="keyvalue" type="keyValueCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="holderWell" type="holderWell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="readonly" type="readonlyCell" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="categ" type="categoriesCell" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="size" use="required" type="colField" />

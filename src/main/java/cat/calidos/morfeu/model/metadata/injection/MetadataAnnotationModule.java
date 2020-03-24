@@ -29,7 +29,7 @@ protected final static Logger log = LoggerFactory.getLogger(MetadataAnnotationMo
 
 @Provides
 List<Node> provideNodesTagged(LinkedList<Node> annotationNodes, String tagExpr) {
-	
+
 	// the expression can be of two types (<nodename> or <nodename>@<attributename>)
 	// in the case of node it's straightforward, in the case of looking for an attribute, we look for the node name
 	// but add the attribute value as output node

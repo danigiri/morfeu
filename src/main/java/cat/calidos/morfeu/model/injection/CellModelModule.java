@@ -7,8 +7,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -16,6 +18,7 @@ import javax.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 import org.xml.sax.Locator;
 
 import com.sun.xml.xsom.XSAttributeDecl;
@@ -38,6 +41,7 @@ import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
+import cat.calidos.morfeu.model.metadata.injection.DaggerMetadataAnnotationComponent;
 import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 import cat.calidos.morfeu.utils.OrderedMap;
 
@@ -49,6 +53,8 @@ import cat.calidos.morfeu.utils.OrderedMap;
 public class CellModelModule {
 
 protected final static Logger log = LoggerFactory.getLogger(CellModelModule.class);
+
+private static final OrderedMap<CellModel> EMPTY_ORDERED_MAP = new OrderedMap<CellModel>(0);
 
 //private static final String DEFAULT_DESC = "";
 private static final String NODE_SEPARATOR = "/";
@@ -87,10 +93,11 @@ public static CellModel reference(Type t, Map<String, CellModel> globals) {
 public static BasicCellModel buildCellModelFrom(URI u,
 												@Named("name") String name, 
 												@Named("desc") String desc,
+												Type t,
 												@Named("MinOccurs") int minOccurs,
 												@Named("MaxOccurs") int maxOccurs,
 												Optional<String> defaultValue,
-												Type t, 
+												@Named("category") Optional<String> category,
 												Metadata metadata,
 												@Named("isReference") boolean isReference,
 												@Named("reference") Provider<CellModel> referenceProvider,
@@ -102,10 +109,29 @@ public static BasicCellModel buildCellModelFrom(URI u,
 		// we are a cell model reference, so we get the reference cell model and use it to build ourselves
 		// bear in mind that references can have different metadata (defaults, etc.)
 		CellModel reference = referenceProvider.get();
-		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, false, defaultValue, metadata, reference);
+		newCellModel = new BasicCellModel(u,
+											name,
+											desc,
+											t,
+											minOccurs,
+											maxOccurs,
+											false,
+											defaultValue,
+											category,
+											metadata,
+											reference);
 	} else {
 		// we are a new cell model, we create a new instance and add it to globals so future cells can reference it
-		newCellModel = new BasicCellModel(u, name, desc, t, minOccurs, maxOccurs, false, defaultValue, metadata);
+		newCellModel = new BasicCellModel(u,
+											name,
+											desc,
+											t,
+											minOccurs,
+											maxOccurs,
+											false,
+											defaultValue,
+											category,
+											metadata);
 		updateGlobalsWith(globals, t, newCellModel);
 	}
 
@@ -119,10 +145,11 @@ public static BasicCellModel buildCellModelFrom(URI u,
 public static ComplexCellModel buildComplexCellModelFrom(URI u,
 															@Named("name") String name,
 															@Named("desc") String desc, 
+															Type t,
 															@Named("MinOccurs") int minOccurs,
 															@Named("MaxOccurs") int maxOccurs,
+															@Named("category") Optional<String> category,
 															Optional<String> defaultValue,
-															Type t,
 															Metadata metadata,
 															Provider<Attributes<CellModel>> attributesProvider,
 															Provider<Composite<CellModel>> childrenProvider,
@@ -144,14 +171,15 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 
 		// Attributes are the same as the reference but may have different metatata, so we use our own provided attribs
 		newComplexCellModel = new ComplexCellModel(u, 
-													name, 
-													desc, 
-													t, 
+													name,
+													desc,
+													t,
 													minOccurs, 
 													maxOccurs, 
-													metadata,
 													defaultValue,
-													attributesProvider.get(),	
+													category,
+													metadata,
+													attributesProvider.get(),
 													reference.asComplex());
 
 	} else {
@@ -163,16 +191,17 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 		// one we've just created.
 		// This means that the cell model instance is 'mutable', but we mutate it within this small scope
 
-		newComplexCellModel = new ComplexCellModel(u, 
-				name, 
-				desc, 
-				t, 
-				minOccurs, 
-				maxOccurs, 
-				metadata,
-				defaultValue,
-				new OrderedMap<CellModel>(0),	// empty attribs
-				new OrderedMap<CellModel>(0));	// empty children
+		newComplexCellModel = new ComplexCellModel(u,
+													name,
+													desc, 
+													t,
+													minOccurs, 
+													maxOccurs,
+													defaultValue,
+													category,
+													metadata,
+													EMPTY_ORDERED_MAP,	// empty attribs
+													EMPTY_ORDERED_MAP);	// empty children
 
 		updateGlobalsWith(globals, t, newComplexCellModel);
 
@@ -205,7 +234,7 @@ public int minOccurs(XSParticle particle) {
 public int maxOccurs(XSParticle particle) {
 
 	BigInteger maxOccurs = particle.getMaxOccurs();
-	
+
 	return maxOccurs.equals(BigInteger.valueOf(XSParticle.UNBOUNDED)) ? CellModel.UNBOUNDED : maxOccurs.intValueExact();
 
 }
@@ -218,6 +247,14 @@ public Optional<String> defaultValue(Metadata metadata) {
 }
 
 
+//default value for the cell following this model, if any
+@Provides @Named("category")
+public Optional<String> category(Metadata metadata) {
+	return metadata.getCategory();
+}
+
+
+
 // given the XSD type, we get our own domain type instance
 @Provides
 public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String defaultName) {
@@ -228,6 +265,7 @@ public static Type getTypeFrom(XSType type, @Named("TypeDefaultName") String def
 								.type();
 }
 
+
 // attributes of the current cell model
 @Provides
 public static Attributes<CellModel> attributesOf(XSElementDecl elem,
@@ -237,10 +275,12 @@ public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 													@Nullable Map<String, CellModel> globals) {
 
 	if (t.isSimple()) {
-		return new OrderedMap<CellModel>(0);
+		return EMPTY_ORDERED_MAP;
 	}
-	
+
 	XSComplexType complexType = elem.getType().asComplexType();
+
+
 	Collection<? extends XSAttributeUse> rawAttributes = complexType.getAttributeUses();
 
 	Attributes<CellModel> attributes = new OrderedMap<CellModel>(rawAttributes.size());
@@ -248,16 +288,16 @@ public static Attributes<CellModel> attributesOf(XSElementDecl elem,
 	rawAttributes.forEach(a -> {
 								XSAttributeDecl attributeDecl = a.getDecl();
 								boolean isRequired = a.isRequired();
-								CellModel cellModel = attributeCellModelFor(attributeDecl, 
-																			isRequired, 
-																			u, 
-																			metadata, 
+								CellModel cellModel = attributeCellModelFor(attributeDecl,
+																			isRequired,
+																			u,
+																			metadata,
 																			globals);
 								attributes.addAttribute(attributeDecl.getName(), cellModel);
 	});
 
 	return attributes;
-	
+
 }
 
 
@@ -276,7 +316,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	// RECURSIVE CASE:
 	//	we go through all the children and we add them
 	if (t.isSimple()) {
-		return new OrderedMap<CellModel>(0);							// * base case, simple type sanity check
+		return EMPTY_ORDERED_MAP;							// * base case, simple type sanity check
 	}
 
 	Composite<CellModel> children = new OrderedMap<CellModel>();
@@ -284,7 +324,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	XSComplexType complexType = elem.getType().asComplexType();
 	XSContentType contentType = complexType.getContentType();
 	if (contentType.asEmpty()!=null) {
-		return new OrderedMap<CellModel>(0);							// * base case, no children, we return
+		return EMPTY_ORDERED_MAP;							// * base case, no children, we return
 	}
 
 	XSParticle particle = contentType.asParticle();						// * recursive case, go through all children
@@ -372,8 +412,8 @@ public static XSType type(XSElementDecl elem) {
 
 @Provides
 public static Metadata metadata(XSElementDecl elem, 
-								URI uri, 
-								Type t, 
+								URI uri,
+								Type t,
 								Map<URI, Metadata> globalMetadata,
 								@Named("isReference") boolean isReference,
 								@Named("reference") Provider<CellModel> referenceProvider) {
@@ -403,16 +443,16 @@ public static Metadata metadata(XSElementDecl elem,
 		// gaps (Notice our own metadata has more priority)
 		meta = Metadata.merge(uri, meta, referenceProvider.get().getType().getMetadata());
 	}
-	
+
 	return meta;
-	
+
 }
 
 
 private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
 											 boolean required,
 											 URI nodeURI, 
-											 Metadata metadata,	// remember this is the cell metadata
+											 Metadata parentMetadata,	// remember this is the parent cell model meta
 											 @Nullable Map<String, CellModel> globals) {
 
 	String name = xsAttributeDecl.getName();
@@ -424,34 +464,43 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 									.type();
 	int minOccurs = required ? ATTRIBUTE_REQUIRED : ATTRIBUTE_MIN;
 
-	
-			
 	Metadata attributeMetadata = DaggerModelMetadataComponent.builder()
 																.from(xsAttributeDecl.getAnnotation())
 																.withParentURI(attributeURI)
 																.build()
 																.value();
-	
 	attributeMetadata = Metadata.merge(attributeURI, attributeMetadata, type.getMetadata());
-	
+
 	// default value priorities
 	// 1) the Cell metadata, with '<mf:default-value name="@attributename">foo</mf:default-value>'
 	// 2) XML schema default="foo" (on optional attributes)
 	// 3) the type default value
 	Optional<String> defaultValue = Optional.ofNullable(
-			metadata.getDefaultValues().get(Metadata.DEFAULT_VALUE_PREFIX+name));
+			parentMetadata.getDefaultValues().get(Metadata.DEFAULT_VALUE_PREFIX+name));
 	if (!defaultValue.isPresent()) {
 		XmlString defaultValueXMLString = xsAttributeDecl.getDefaultValue();
 		defaultValue = (defaultValueXMLString!=null) ? Optional.of(defaultValueXMLString.value) : defaultValue;
 	}
 	String defaultValueFromType = attributeMetadata.getDefaultValues().get(name);
 	defaultValue = (!defaultValue.isPresent()) ? Optional.ofNullable(defaultValueFromType) : defaultValue;
-	
+
+	// in the case of the category, we give priority to the category listed in the parent cell model, as it is very
+	// convenient to override it from the parent definition, categorising the attributes
+	// --> bear in mind that because we reuse most of the attribute type definitions, we usually not know which
+	// --> categories we will have the type used in in the different cell models
+	// therefore, we check for the attribute listing in the parent cell model and use that, with the type as fallback
+	Map<String, Set<String>> categories = parentMetadata.getCategories();
+	Optional<String> category = categories.keySet()
+											.stream()
+											.filter(c -> parentMetadata.getAttributesIn(c).contains(name))
+											.findAny();
+	category = category.isPresent() ? category : attributeMetadata.getCategory();
+
 	// no references for attributes at the moment
 //	if (globals.containsKey(type.getName())) {		// if it's an attribute we keep the local uri
 //		cellModel = new BasicCellModelReference(attributeURI, name, globals.get(type.getName()));
 //	} else {
-		
+
 	// attributes have the presentation of the corresponding type
 	return new BasicCellModel(attributeURI,
 								name, 
@@ -461,10 +510,10 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 								ATTRIBUTE_MAX,
 								true,					// is an attribute
 								defaultValue,
+								category,
 								attributeMetadata);
 //	}
 
-	
 }
 
 

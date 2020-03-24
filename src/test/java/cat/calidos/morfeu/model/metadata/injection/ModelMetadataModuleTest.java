@@ -62,7 +62,6 @@ public void testReadonly() {
 
 }
 
-
 /*
  *    Copyright 2020 Daniel Giribet
  *

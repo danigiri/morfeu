@@ -30,6 +30,7 @@ import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import com.sun.xml.xsom.XSAnnotation;
@@ -46,6 +47,7 @@ import dagger.Provides;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ModelMetadataModule {
+
 
 protected final static Logger log = LoggerFactory.getLogger(ModelMetadataModule.class);
 
@@ -67,12 +69,18 @@ private static final String READONLY_FIELD = "mf:readonly";
 private static final String TRUE = "true";
 private static final String YES = "yes";
 
+// attribute categorisation
+private static final String CATEGORY_TAG = "mf:category";
+private static final String CATEGORY_ATTRIBUTE_FIELD = "attr";
+private static final String CATEGORY = "categ";
+
 // serialisation metadata definitions
 private static final String TRANSFORM_TAG = "mf:transform";
 private static final String TRANSFORM_TYPE_ATTR = "type";
 private static final String ATTRIBUTE_TYPE = "attribute";
 private static final String DIRECTIVE_TYPE = "directive";
 private static final String TRANSFORM_CASE_ATTR = "case";
+
 
 
 @Provides
@@ -87,7 +95,9 @@ public static Metadata provideMetadata(URI uri,
 										@Named("readonly") Optional<Boolean> readonly,
 										Map<String, String> defaultValues,
 										@Named("Directives") Map<String, Set<String>> directives,
-										@Named("Attributes") Map<String, Set<String>> attributes) {
+										@Named("Attributes") Map<String, Set<String>> attributes,
+										@Named("category") Optional<String> category,
+										@Named("categories") Map<String, Set<String>> categories) {
 	return new Metadata(uri,
 						desc,
 						presentation,
@@ -99,7 +109,10 @@ public static Metadata provideMetadata(URI uri,
 						readonly,
 						defaultValues, 
 						directives, 
-						attributes);
+						attributes,
+						category,
+						categories
+						);
 }
 
 
@@ -107,7 +120,7 @@ public static Metadata provideMetadata(URI uri,
 public static URI uri(@Nullable XSAnnotation annotation,
 						@Nullable @Named("ParentURI") URI parentURI,
 						@Named("DefaultURI") Lazy<URI> defaultURI) {
-	
+
 	Optional<String> uriValue = annotationTaggedAs(annotation, URI_FIELD);
 	URI uri = null;
 
@@ -272,6 +285,47 @@ Map<String, Set<String>> attributes(@Named("TransformNodes") List<Node> transfor
 }
 
 
+//list of <mf:attribute> nodes
+@Provides @Named("categoryNodes")
+public static List<Node> attributeNodes(@Nullable XSAnnotation annotation) {
+	return DaggerMetadataAnnotationComponent.builder().from(annotation).andTag(CATEGORY_TAG).build().values();
+}
+
+
+@Provides @Named("category")	// we get the <mf:category> node that has no 'name', like <mf:category value="X"/>
+public static Optional<String> category(@Named("categoryNodes") List<Node> categoryNodes) {
+	return categoryNodes.stream()
+							.filter(Node::hasAttributes)
+							.filter(n -> n.getAttributes().getNamedItem(CATEGORY_ATTRIBUTE_FIELD)==null)
+							.map(n -> n.getAttributes().getNamedItem(CATEGORY).getNodeValue()).findAny();
+}
+
+
+@Provides @Named("categories") 
+public static Map<String, Set<String>> categories(@Named("categoryNodes") List<Node> categoryNodes) {
+
+	Map<String, Set<String>> categories = new HashMap<String, Set<String>>();
+
+	categoryNodes.stream()
+					.filter(Node::hasAttributes)
+					.filter(n -> n.getAttributes().getNamedItem(CATEGORY_ATTRIBUTE_FIELD)!=null)
+					.filter(n -> n.getAttributes().getNamedItem(CATEGORY)!=null)
+					.forEach(c -> {
+									NamedNodeMap nodeAttributes = c.getAttributes();
+									String category = nodeAttributes.getNamedItem(CATEGORY).getNodeValue();
+									if (!categories.containsKey(category)) {
+										categories.put(category, new HashSet<String>());
+									}
+									String name = nodeAttributes.getNamedItem(CATEGORY_ATTRIBUTE_FIELD).getNodeValue();
+									// strip '@' at beginning as it's cosmetic
+									name = name.startsWith(IDENTIFIER_FIELD_PREFIX) ? name.substring(1) : name;
+									categories.get(category).add(name);
+					});
+
+	return categories;
+
+}
+
 private static Optional<String> annotationTaggedAs(@Nullable XSAnnotation annotation, String tag) {
 
 	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
@@ -287,8 +341,8 @@ private static Optional<String> annotationTaggedAs(@Nullable XSAnnotation annota
 
 
 private static Map<String, Set<String>> groupSerializeTagsByCaseFilterBy(String type, List<Node> nodeValues) {
-	
-	Map<String, Set<String>> groups = new HashMap<String, Set<String>>(0);
+
+	Map<String, Set<String>> groups = new HashMap<String, Set<String>>();
 	// first we get all the serialize tags of the given type
 	Stream<Node> attributeNodes = nodeValues.stream()
 									.filter(Node::hasAttributes)
