@@ -57,7 +57,18 @@ public static Model model(@Named("ModelURI") URI u,
 							Attributes<CellModel> attributes,
 							XSSchemaSet schemaSet,
 							@Named("RootCellModels") Composite<CellModel> rootCellModels) {
-	return new Model(u, ROOT_NAME, desc, type, 1, 1, metadata, Optional.empty(), attributes, schemaSet, rootCellModels);
+	return new Model(u,
+						ROOT_NAME,
+						desc,
+						type,
+						1,
+						1,
+						Optional.empty(),
+						metadata.getCategory(),
+						metadata,
+						attributes,
+						schemaSet,
+						rootCellModels);
 }
 
 
