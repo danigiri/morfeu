@@ -28,6 +28,9 @@
 	{% if cm.metadata.isReadonly().orElse(false) %}
 		,"readonly": true
 	{% endif %}
+	{% if cm.getCategory().orElse(false) %}
+		,"category": "{{cm.getCategory().get}}"
+	{% endif %}
 	{% if cm.isAttribute %}
 	, "isAttribute": true
 	{% endif %}
