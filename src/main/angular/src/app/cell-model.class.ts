@@ -46,6 +46,7 @@ constructor(public schema: number,
 			public isAttribute?: boolean,
 			public maxOccurs?: number,
 			public defaultValue?: string,
+			public category?: string,
 			public identifier?: CellModel
 			) {
 	this.init();
@@ -367,6 +368,7 @@ readonly?: boolean;
 maxOccurs?: number;
 isAttribute?: boolean;
 defaultValue?: string;
+category?: string;
 identifier?: string|CellModel;	// coming from the JSON it will be a string, coming from an object it will
 								// be an reference to the attribute that is the identifier
 attributes?: CellModelJSON[];

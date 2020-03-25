@@ -26,6 +26,7 @@ constructor(public schema: number,
 			public isAttribute?: boolean,
 			public maxOccurs?: number,
 			public defaultValue?: string,
+			public category?: string,
 			public identifier?: CellModel
 			) {
 	super(schema,
@@ -44,6 +45,7 @@ constructor(public schema: number,
 			isAttribute,
 			maxOccurs,
 			defaultValue,
+			category,
 			identifier);
 }
 
