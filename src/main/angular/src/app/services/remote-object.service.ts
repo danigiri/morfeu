@@ -21,7 +21,7 @@ constructor(private http: HttpClient) {}
 /** we have to explicitly pass the class we're expecting */
 get(uri: string, type_: Constructor<T>): Observable<T> {
 
-	console.log("[SERVICE] RemoteObjectService::get("+uri+")");
+	console.log('[SERVICE] RemoteObjectService::get(%s)', uri);
 
 	// TODO: handle errors with .catch here
 	return this.http.get<J>(uri)//, { observe: 'response' })
@@ -33,7 +33,7 @@ get(uri: string, type_: Constructor<T>): Observable<T> {
 
 post(uri: string, content: any, type_: Constructor<T>): Observable<T> {
 
-	console.log("[SERVICE] RemoteObjectService::post('%s')", uri);
+	console.log('[SERVICE] RemoteObjectService::post("%s")', uri);
 
 	return this.http.post<J>(uri, content).map(response => <T>createInstance(type_).fromJSON(response));
 
