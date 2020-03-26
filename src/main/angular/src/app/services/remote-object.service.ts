@@ -1,12 +1,12 @@
 // REMOTE OBJECT SERVICE . TS
 
-import {take, delay, map, retryWhen} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { take, delay, map, retryWhen } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
-import {SerialisableToJSON} from '../serialisable-to-json.interface';
+import { SerialisableToJSON } from '../serialisable-to-json.interface';
 
 /** This class leverages the SerialisableJSON interface so we can invoke the method to conver to a rich
 *	object with its expected methods from a JSON-formatted string

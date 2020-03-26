@@ -40,7 +40,7 @@ import { RemoteEventService } from '../../services/remote-event.service';
 
 @Component({
 	selector: 'content',
-	templateUrl: './content.html',
+	templateUrl: './content.component.html',
 	styles: [`
 		#content {}
 		.content-info {

@@ -41,6 +41,7 @@ ngAfterViewInit() {
 private load(case_: string) {
 	switch (case_) {
 		case 'document5' : this.document5(); break;
+		case 'categories-all' : this.categoriesAll(); break;
 		default: this.document1();
 	}
 }
@@ -59,6 +60,14 @@ private document5() {
 
 	const content = 'target/test-classes/test-resources/documents/document5.xml';
 	const cell = '/test(0)/row(0)/col(0)/data3(0)';
+	this.loadContent(content, this.model, cell);
+
+}
+
+private categoriesAll() {
+
+	const content = 'target/test-classes/test-resources/documents/categories.xml';
+	const cell = '/test(0)/row(0)/col(0)/row(0)/col(0)/categ(0)';
 	this.loadContent(content, this.model, cell);
 
 }
