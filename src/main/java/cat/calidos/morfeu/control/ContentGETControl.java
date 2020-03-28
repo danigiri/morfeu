@@ -14,6 +14,7 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.injection.ContentParserComponent;
 import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
+import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
@@ -24,7 +25,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 /** Controller that GETs, validates and transforms content into a cell list, from original XML or YAML, given a schema
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ContentGETControl extends Control {
+public class ContentGETControl extends JSONGETControl {
 
 private final static Logger log = LoggerFactory.getLogger(ContentGETControl.class);
 

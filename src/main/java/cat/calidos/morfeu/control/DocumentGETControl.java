@@ -16,7 +16,6 @@
 
 package cat.calidos.morfeu.control;
 
-import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
@@ -31,7 +30,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 /** Document GET controller, outputs JSON
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentGETControl extends Control {
+public class DocumentGETControl extends JSONGETControl  {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentGETControl.class);
 
@@ -52,15 +51,12 @@ public DocumentGETControl(String prefix, String path) {
 @Override
 protected Object process() 
 		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
-
-	URI uri = DaggerURIComponent.builder().from(prefix+path).build().uri().get();
 	return DaggerDocumentComponent.builder()
-									.from(uri)
+									.from(DaggerURIComponent.builder().from(prefix+path).build().uri().get())
 									.withPrefix(prefix)
 									.build()
 									.document()
 									.get();
-
 }
 
 

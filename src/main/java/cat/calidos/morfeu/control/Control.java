@@ -72,13 +72,13 @@ protected String render(String template, Object value, String problem) {
 
 /** @return process the request, handling any problems */
 public String processRequest() {
-	
+
 	beforeProcess();
-	
+
 	Object result = null;
 	String problem = "";
 	String parsedResult = null;
-	
+
 	try {
 		result = process();
 
@@ -107,7 +107,7 @@ public String processRequest() {
 	} else {
 		afterProblem(problem);
 		Object problemInformation = problemInformation(); 
-		parsedResult = render(problemTemplate, problemInformation, problem);		
+		parsedResult = render(problemTemplate, problemInformation, problem);
 	}
 
 	return parsedResult;

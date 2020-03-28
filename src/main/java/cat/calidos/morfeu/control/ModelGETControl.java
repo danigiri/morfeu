@@ -31,7 +31,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 /** Controller to get the model
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ModelGETControl extends Control {
+public class ModelGETControl extends JSONGETControl {
 
 protected final static Logger log = LoggerFactory.getLogger(ModelGETControl.class);
 
@@ -42,10 +42,10 @@ private String prefix;	// orefix, to build the full fetchable path
 public ModelGETControl(String prefix, String path) {
 
 	super("model:"+path, "templates/model.twig", "templates/model-problem.twig");
-		
+
 	this.prefix = prefix;
 	this.path = path;
-	
+
 }
 
 

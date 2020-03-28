@@ -17,6 +17,8 @@
 
 package cat.calidos.morfeu.utils.injection;
 
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ protected final static Logger log = LoggerFactory.getLogger(JSONParserModule.cla
 
 
 @Produces
-public static JsonNode produceJSONNode(String content, ObjectMapper mapper) throws ParsingException {
+public static JsonNode json(String content, ObjectMapper mapper) throws ParsingException {
 
 	try {
 
@@ -49,6 +51,12 @@ public static JsonNode produceJSONNode(String content, ObjectMapper mapper) thro
 		throw new ParsingException("Cound not process input '"+snippet+"', as valid JSON", e);
 	}
 
+}
+
+
+@Produces
+public static @Named("pretty") String pretty(JsonNode json) {
+	return json.toPrettyString();
 }
 
 
