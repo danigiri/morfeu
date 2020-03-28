@@ -1,6 +1,7 @@
 // CELL-MODEL . CLASS . SPEC . TS
 
 import { Model } from './model.class';
+import { CellModel } from './cell-model.class';
 
 import { _model, _readonly } from './test/test.data';
 
@@ -45,12 +46,17 @@ describe('cell-model.class', () => {
 
 		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/categ');
 		expect(cm).toBeDefined();
+		
+		const categories = cm.getCategories();
+		expect(categories.length).toBe(2);
+		expect(categories.indexOf('X')).not.toBe(-1);
+		expect(categories.indexOf('Y')).not.toBe(-1);
 
-		const ac: [string, string[]] = cm.getAttributesByCategory();
+		const ac:  Map<string, CellModel[]> = cm.getAttributesByCategory();
 		expect(ac).toBeDefined();
-		expect(ac.length).toBe(2);
-		expect(ac['X'].length).toBe(2);
-		expect(ac['Y'].length).toBe(2);
+		expect(ac.size).toBe(2);
+		expect(ac.get('X').length).toBe(2);
+		expect(ac.get('Y').length).toBe(2);
 
 	});
 

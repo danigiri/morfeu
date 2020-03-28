@@ -37,10 +37,20 @@
 					></attribute-data-editor>
 				</ul>
 				<ul ngbNav *ngIf="showCategories" #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
-					<li [ngbNavItem]="cell.cellModel.category">
-						<a ngbNavLink>{{cell.cellModel.category}}</a>	<!-- default category -->
+					<li [ngbNavItem]="cell.cellModel.category">	<!-- default category -->
+						<a ngbNavLink>{{cell.cellModel.category}}</a>
 						<ng-template ngbNavContent>
-							<attribute-data-editor *ngFor="let a of cell.cellModel.attributes; let i = index"
+							<attribute-data-editor *ngFor="let a of defaultCategoryAttributes; let i = index"
+								[parentCell]="cell"
+								[cellModel]="a"
+								[index]="i"
+							></attribute-data-editor>
+						</ng-template>
+					</li>
+					<li  *ngFor="let c of categories" [ngbNavItem]="c">	<!-- rest of categories -->
+						<a ngbNavLink>{{c}}</a>
+						<ng-template ngbNavContent>
+							<attribute-data-editor *ngFor="let a of attributesByCategory.get(c); let i = index"
 								[parentCell]="cell"
 								[cellModel]="a"
 								[index]="i"

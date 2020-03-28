@@ -72,17 +72,16 @@ child(name: string): CellModel {
 }
 
 
-getAttributesByCategory(): [string, string[]] {
+getAttributesByCategory(): Map<string, CellModel[]> {
 
-	let categoryAttributes: [string, string[]] = [,[]]; 
-
+	let categoryAttributes: Map<string, CellModel[]> = new Map();
 	if (!this.attributes) {
 		return categoryAttributes;
 	}
 
 	// create the keys and then fill out the arrays
-	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes[a.category] = []);
-	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes[a.category].push(a));
+	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes.set(a.category, []));
+	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes.get(a.category).push(a));
 
 	return categoryAttributes;
 
@@ -91,6 +90,11 @@ getAttributesByCategory(): [string, string[]] {
 
 getAttributesInCategory(c: string): CellModel[] {
 	return this.attributes?.filter(a => a.category===c);
+}
+
+
+getCategories(): string[] {
+	return Array.from(new Set(this.attributes?.filter(a => a.category!==undefined).map(c => c.category)));
 }
 
  

@@ -45,6 +45,9 @@ cellBackup: Cell;
 editing = false;
 showAttributes = false;
 showCategories = false;
+categories: string[];
+defaultCategoryAttributes: CellModel[];
+attributesByCategory: Map<string, CellModel[]>;
 
 constructor(eventService: EventService, private modalService: NgbModal) {
 	super(eventService);
@@ -98,14 +101,28 @@ private edit(cell: Cell) {
 	console.log("[UI] Edit at position %s [%s]", cell.position, cell.cellModel.presentation);
 
 	// if we are not a CELL-WELL we can edit directly
-
 	if (cell.cellModel.presentation!=="CELL-WELL") {
+
 		this.editing = true;
 		this.cellBackup = cell.deepClone();
 		this.cell = cell;
-		this.showAttributes = this.cell.cellModel.attributes!==undefined && this.cell.cellModel.category===undefined;
-		this.showCategories =  this.cell.cellModel.attributes!==undefined && this.cell.cellModel.category!==undefined;
+		const cellModel = this.cell.cellModel;
+
+		// do we show all attributes or do we do it by category
+		this.showAttributes = cellModel.attributes!==undefined && cellModel.category===undefined;
+
+		// handle attribute categories if needed
+		this.showCategories =  cellModel.attributes!==undefined && cellModel.category!==undefined;
+		if (this.showCategories) {
+			this.defaultCategoryAttributes = cellModel.getAttributesInCategory(cellModel.category);
+			this.attributesByCategory = cellModel.getAttributesByCategory();
+			this.categories = cellModel.getCategories().filter(c => c!==cellModel.category);
+			const attributesWithNoCategory = cellModel.getAttributesInCategory(undefined);
+			this.defaultCategoryAttributes.concat(attributesWithNoCategory);
+		}
+
 		this.modalService.open(this.editor).result.then((result) => this.button(result), (reason) => this.outside());
+
 	} else {
 		console.debug("We're editing a cell-well so need to load a fragment of the content");
 		this.events.service.publish(new ContentFragmentDisplayEvent(cell));
