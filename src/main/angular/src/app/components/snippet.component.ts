@@ -33,14 +33,12 @@ import { EventService } from "../services/event.service";
 		</a>
 	`,
 	styles: [`
-	        .snippet {
-	            /* border: 3px dashed #f00; */
-	        }
-			 .snippet-selected {
+				.snippet {}
+				.snippet-selected {
 					border: 1px dashed #00f;
 					border-radius: 5px;
-			}
-			.snippet-name {}
+				}
+				.snippet-name {}
 	`]
 })
 

@@ -26,9 +26,9 @@ import { EventService } from "../services/event.service";
 	selector: "snippets",
 	template: `
 		<div id="snippets" class="list-group">
-			<snippet *ngFor="let snippet of snippets | async; let i=index"
+			<snippet *ngFor="let s of snippets | async; let i=index"
 				class="list-group-item"
-				[snippet]="snippet"
+				[snippet]="s"
 				[model]="normalisedModel"
 				[position]="i"
 				[parent]="this"

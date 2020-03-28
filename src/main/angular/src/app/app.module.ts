@@ -28,7 +28,6 @@ import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
 import { ProblemComponent } from './components/problem.component';
-import { SnippetsListComponent } from './components/snippets-list.component';
 import { StatusComponent } from './components/status.component';
 
 @NgModule({
@@ -59,7 +58,6 @@ import { StatusComponent } from './components/status.component';
 					, ModelAreaComponent
 					, ModelComponent
 					, ProblemComponent
-					, SnippetsListComponent
 					, StatusComponent 
 	],
 	bootstrap:	[AppComponent]
