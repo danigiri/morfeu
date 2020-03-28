@@ -1,15 +1,18 @@
+// CELL . CLASS . SPEC . TS
+
 import { Cell } from './cell.class';
 import { Model } from './model.class';
 
 import { _model, _readonly } from './test/test.data';
 
 
-describe('Cell', () => {
+describe('cell.class', () => {
 
 	const prefix = 'target/test-classes/test-resources/documents/readonly.xml';
 	let cell: Cell;
 
 	beforeEach(() => {
+
 		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 		const MODEL: Model = Object.create(Model.prototype); // to simulate static call
 		//wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json

@@ -67,11 +67,38 @@ setComponent(c: CellModelComponent) {
 }
 
 
+child(name: string): CellModel {
+	return this.children?.find(c => c.name===name);
+}
+
+
+getAttributesByCategory(): [string, string[]] {
+
+	let categoryAttributes: [string, string[]] = [,[]]; 
+
+	if (!this.attributes) {
+		return categoryAttributes;
+	}
+
+	// create the keys and then fill out the arrays
+	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes[a.category] = []);
+	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes[a.category].push(a));
+
+	return categoryAttributes;
+
+}
+
+
+getAttributesInCategory(c: string): CellModel[] {
+	return this.attributes?.filter(a => a.category===c);
+}
+
+ 
 getRawPresentation() {
 
 	// TODO: handle HTML presentation
 	// TODO: for proper separation of concerns, these values should be in the component and also configurable
-	
+
 	switch (this.cellPresentation) {
 		case "DEFAULT":
 			return "assets/images/cell.svg";
@@ -133,10 +160,6 @@ normaliseReferencesWith(rootCellModels: CellModel[]) {
 
 
 canGenerateNewCell(): boolean {
-	// not dragging WELL-type cell models for the moment, as it is quite a complex use case, so we only allow
-	// cell models that do not have any children
-	// (now trying to drag WELL-type cell models)
-	// return this.childrenCount()==0;
 	return true;
 }
 

@@ -63,7 +63,7 @@ static reviver(key: string, value: any): any {
 
 //serialisable interface
 export interface CellDocumentJSON {
-	
+
 name: string;
 uri: string;
 desc: string;
