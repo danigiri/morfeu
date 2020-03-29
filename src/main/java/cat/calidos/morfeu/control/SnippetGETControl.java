@@ -41,7 +41,7 @@ import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 *	however, it still creates a correct reference to the model from each cell
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class SnippetGETControl extends Control {
+public class SnippetGETControl extends JSONGETControl {
 
 protected final static Logger log = LoggerFactory.getLogger(SnippetGETControl.class);
 
