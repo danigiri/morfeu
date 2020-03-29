@@ -31,11 +31,11 @@ private UISnippetsArea snippets;
 
 
 public UISnippetEntry(SelenideElement e, UISnippetsArea snippets) {
-	
+
 	super(e);
-	
+
 	this.snippets = snippets;
-	
+
 }
 
 
@@ -78,9 +78,9 @@ public UISnippetEntry activate() {
 	if (this.isSelected()) {
 		snippets.pressKey(UISnippetsArea.ACTIVATE_KEY);
 	}
-	
+
 	return this;
-	
+
 }
 
 

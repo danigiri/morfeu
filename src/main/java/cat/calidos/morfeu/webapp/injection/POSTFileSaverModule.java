@@ -22,7 +22,6 @@ import dagger.producers.Produces;
 
 import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.utils.Saver;
 import cat.calidos.morfeu.utils.injection.DaggerSaverComponent;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;

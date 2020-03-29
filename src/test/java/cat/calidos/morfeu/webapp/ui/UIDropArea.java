@@ -73,11 +73,11 @@ public UICell dropHere(UICell cell) {
 	if (!cell.isActive()) {
 		content.pressKey(UIContent.ACTIVATE);
 	}
-	
+
 	// we will use keyboard shorcuts to select the target destination
 	this.select();
 	content.pressKey(UIContent.DRAGNDROP);
-	
+
 	// if we have dropped at the end, the position is off by one
 	int childrenCount = parent.children().size();
 	if (position>=childrenCount) {
@@ -95,9 +95,10 @@ public UIDropArea select() {
 	parent.select();
 	content.pressKey(UIContent.DROPAREA_MODE);
 	content.pressKey(position+"");
-		
+
 	return this;
-	
+
 }
+
 
 }

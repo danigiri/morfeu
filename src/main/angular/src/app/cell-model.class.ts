@@ -79,7 +79,7 @@ getAttributesByCategory(): Map<string, CellModel[]> {
 		return categoryAttributes;
 	}
 
-	// create the keys and then fill out the arrays
+	// create the category keys and then fill out the arrays
 	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes.set(a.category, []));
 	this.attributes.filter(a => a.category!==undefined).forEach(a => categoryAttributes.get(a.category).push(a));
 

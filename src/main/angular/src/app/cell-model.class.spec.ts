@@ -46,7 +46,7 @@ describe('cell-model.class', () => {
 
 		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/categ');
 		expect(cm).toBeDefined();
-		
+	
 		const categories = cm.getCategories();
 		expect(categories.length).toBe(2);
 		expect(categories.indexOf('X')).not.toBe(-1);
