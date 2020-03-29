@@ -28,6 +28,8 @@ import {EventService} from '../../services/event.service';
 				#cell-editor-create-value-button {}
 				#cell-editor-remove-value-button {}
 				.cell-editor-value {}
+				.cell-editor-category {}
+				.cell-editor-category-link {}
 	`]
 })
 

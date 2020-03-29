@@ -70,6 +70,11 @@ public List<UIAttributeData> attributes() {
 }
 
 
+public List<UIAttributeData> displayedAttributes() {
+	return attributes().stream().filter(a -> a.isDisplayed()).collect(Collectors.toList());
+}
+
+
 // we have * at the end of compulsory
 public UIAttributeData attribute(String name) {
 	return attributes().stream().filter(a -> a.name().equals(name)).findAny().get();

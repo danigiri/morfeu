@@ -1,7 +1,7 @@
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

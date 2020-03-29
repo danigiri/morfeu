@@ -4,8 +4,12 @@ package cat.calidos.morfeu.webapp.ui;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.codeborne.selenide.SelenideElement;
 
@@ -13,6 +17,8 @@ import com.codeborne.selenide.SelenideElement;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICellEditor extends UIWidget<UICellEditor> {
+
+private static final String CATEGORY_LINK = ".cell-editor-category-link";
 
 private Optional<UIContent> content;
 
@@ -26,8 +32,7 @@ public UICellEditor(UIContent content) {
 }
 
 
-/** Not associated with content
-*/
+/** Not associated with content */
 public UICellEditor() {
 	this(null);
 }
@@ -41,7 +46,7 @@ public static void shouldNotBeVisible() {
 public UICellEditor clickSave() {
 
 	$("#cell-editor-save-button").click();	// can access from global id
-	
+
 	return this;
 
 }
@@ -50,32 +55,32 @@ public UICellEditor clickSave() {
 public UICellEditor clickDiscard() {
 
 	$("#cell-editor-discard-button").click();	// can access from global id
-	
+
 	return this;
 
 }
 
 
 public boolean isRemoveValueVisible() {
-	
+
 	return $("#cell-editor-remove-value-button").exists();
-	
+
 }
 
 
 public UICellEditor clickRemoveValue() {
-	
+
 	$("#cell-editor-remove-value-button").click();
-	
+
 	return this;
-	
+
 }
 
 
 public boolean isCreateValueVisible() {
-	
+
 	return $("#cell-editor-create-value-button").exists();
-	
+
 }
 
 
@@ -92,7 +97,7 @@ public Optional<String> value() {
 
 		SelenideElement valueElement = element.$(".cell-editor-value");
 
-		return valueElement.exists() ? Optional.of(valueElement.getValue()) :  Optional.empty();
+		return valueElement.exists() ? Optional.of(valueElement.getValue()) : Optional.empty();
 
 }
 
@@ -123,6 +128,20 @@ public UICellEditor enterText(String value) {
 
 public UICellData cellData() {
 	return new UICellData(element);	// cell data and cell editor are very similar
+}
+
+
+public void clickOnCategory(String category) {
+	$$(CATEGORY_LINK).stream()
+						.filter(e -> e.getText().equals(category))
+						.findAny()
+						.orElseThrow(() -> new NoSuchElementException("Could not click on category "+category))
+						.click();
+}
+
+
+public List<String> categories() {
+	return $$(CATEGORY_LINK).stream().map(e -> e.getText()).collect(Collectors.toList());
 }
 
 

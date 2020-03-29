@@ -55,13 +55,18 @@ public T shouldBeVisible() {
 }
 
 
+public boolean isDisplayed() {
+	return element.isDisplayed();
+}
+
+
 @SuppressWarnings("unchecked")
 public T shouldAppear() {
-	
+
 	element.should(appear);
-	
+
 	return (T)this;
-	
+
 }
 
 
