@@ -30,16 +30,19 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.parboiled.support.Filters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import cat.calidos.morfeu.filter.injection.DaggerFilterComponent;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -57,7 +60,7 @@ public class URIToParsedModule {
 private static final String JSON_EXTENSION = "json";
 private static final String YAML_EXTENSION = "yaml";
 protected final static Logger log = LoggerFactory.getLogger(URIToParsedModule.class);
-		
+
 //notice this is a DOM Document and not a morfeu document
 @Produces
 public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db, 
@@ -123,33 +126,43 @@ public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI ur
 		log.error("Could not fetch '{}' ({}", uri, e);
 		throw new FetchingException("Problem when fetching '"+uri+"'", e);
 	}
+
 }
 
 
 @Produces @Named("FetchedTransformedContent")
 public static InputStream fetchedTransformedContent(@Named("FetchableContentURI") URI uri,
-													@Named("FetchedRawContent") InputStream fetchedRawContent,
+													@Named("FetchedRawContent") Producer<InputStream> fetchedRawContent,
 													@Named("IsYAML") boolean isYAML,
 													Producer<ObjectMapper> mapperJSON,
 													Producer<YAMLMapper> mapperYAML,
+													@Named("FilteredContent") Producer<InputStream> filteredContent,
+													@Nullable @Named("Filters") String filters,
 													Producer<Model> model) 
 							throws FetchingException, TransformException {
 
 	// get the yaml and apply the transformation from yaml to xml
 
+	InputStream content;
 	try {
 
-		log.trace("Converting yaml to xml '{}'", uri);
-		ObjectMapper mapper = isYAML ? mapperYAML.get().get() : mapperJSON.get().get();
-		JsonNode yaml = mapper.readTree(fetchedRawContent);
-		String xml = DaggerYAMLConverterComponent.builder().from(yaml).given(model.get().get()).build().xml();
+		if (filters!=null && !filters.isEmpty()) {
+			log.trace("Converting yaml to xml '{}'", uri);
+			ObjectMapper mapper = isYAML ? mapperYAML.get().get() : mapperJSON.get().get();
+			JsonNode yaml = mapper.readTree(fetchedRawContent.get().get());
+			String xml = DaggerYAMLConverterComponent.builder().from(yaml).given(model.get().get()).build().xml();
 
-		log.trace("Transformed yaml to xml '{}'", xml);
+			log.trace("Transformed yaml to xml '{}'", xml);
+			content =  IOUtils.toInputStream(xml, Config.DEFAULT_CHARSET);
 
-		return IOUtils.toInputStream(xml, Config.DEFAULT_CHARSET);
+		} else {
+			content = filteredContent.get().get();
+		}
+
+		return content;
 
 	} catch (IOException e) {
-		log.error("Could not fetch yaml '{}' ({}", uri, e);
+		log.error("Could not fetch yaml '{}' ({})", uri, e.getMessage());
 		throw new FetchingException("Problem when fetching yaml '"+uri+"'", e);
 	} catch (InterruptedException | ExecutionException e) {
 		log.error("Could not transform yaml to xml '{}' ({}", uri, e);
@@ -157,6 +170,29 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 	}
 
 }
+
+
+
+@Produces @Named("FilteredContent")
+public static InputStream filteredContent(@Named("FetchableContentURI") URI uri,
+											@Nullable @Named("Filters") String filters,
+											@Named("FetchedRawContent") InputStream fetchedRawContent) 
+							throws FetchingException {
+
+	try {
+
+		String raw = IOUtils.toString(fetchedRawContent, Config.DEFAULT_CHARSET);
+		String filtered = DaggerFilterComponent.builder().filters(filters).build().stringToString().get().apply(raw);
+		return IOUtils.toInputStream(filtered, Config.DEFAULT_CHARSET);
+
+	} catch (Exception e) {
+
+		log.error("Could not filter '{}' ({})", uri, e.getMessage());
+		throw new FetchingException("Problem when filtering '"+uri+"'", e);
+	}
+
+}
+
 
 
 @Produces @Named("Filename")

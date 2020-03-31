@@ -18,6 +18,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -48,6 +49,7 @@ interface Builder {
 
 	@BindsInstance Builder content(@Named("ContentURI") URI u);
 	@BindsInstance Builder fetchedContentFrom(@Named("FetchableContentURI") URI u);
+	@BindsInstance Builder filters(@Nullable @Named("Filters") String filters);
 	@BindsInstance Builder model(@Named("ModelURI") URI u);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
 

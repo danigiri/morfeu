@@ -4,6 +4,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -27,7 +28,7 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 								ModelModule.class, SnippetCellModelModule.class, CellModelsFilterModule.class, 
 								XMLDocumentBuilderModule.class, ValidatorModule.class, 
 								ListeningExecutorServiceModule.class})
-public interface SnippetComponent {
+public interface SnippetParserComponent {
 
 ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
 ListenableFuture<Composite<Cell>> content() throws FetchingException, ParsingException, TransformException;
@@ -37,10 +38,11 @@ interface Builder {
 
 	@BindsInstance Builder content(@Named("ContentURI") URI u);
 	@BindsInstance Builder fetchedContentFrom(@Named("FetchableContentURI") URI u);
+	@BindsInstance Builder filters(@Nullable @Named("Filters") String filters);
 	@BindsInstance Builder modelFiltered(@Named("FilteredModelURI") URI u);
 	@BindsInstance Builder withModelFetchedFrom(@Named("FetchableModelURI") URI u);
 
-	SnippetComponent build();
+	SnippetParserComponent build();
 
 }
 

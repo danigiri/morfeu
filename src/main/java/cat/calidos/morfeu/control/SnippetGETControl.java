@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.injection.DaggerSnippetComponent;
-import cat.calidos.morfeu.model.injection.SnippetComponent;
+import cat.calidos.morfeu.model.injection.SnippetParserComponent;
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
@@ -69,7 +69,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).build().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).build().uri().get();
 	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).build().uri().get();
-	SnippetComponent snippetComponent = DaggerSnippetComponent.builder()
+	SnippetParserComponent snippetComponent = DaggerSnippetComponent.builder()
 																.content(uri)
 																.fetchedContentFrom(fetchableURI)
 																.modelFiltered(modelURI)
