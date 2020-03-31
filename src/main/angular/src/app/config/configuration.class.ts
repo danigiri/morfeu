@@ -1,16 +1,16 @@
 // CONFIGURATION . CLASS . TS
 
-import { Inject, Injectable } from "@angular/core";
-import {Params} from "@angular/router";
+import { Inject, Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 
-import {environment} from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
-import {RemoteObjectService} from "../services/remote-object.service";
-import {SerialisableToJSON} from "../serialisable-to-json.interface";
+import { RemoteObjectService } from '../services/remote-object.service';
+import { SerialisableToJSON } from '../serialisable-to-json.interface';
 
-import {ConfigurationLoadedEvent} from "../events/configuration-loaded.event";
-import {EventListener} from "../events/event-listener.class";
-import {EventService} from "../services/event.service";
+import { ConfigurationLoadedEvent } from '../events/configuration-loaded.event';
+import { EventListener } from '../events/event-listener.class';
+import { EventService } from '../services/event.service';
 
 
 @Injectable()
@@ -21,7 +21,7 @@ public static readonly BACKEND_PREF = '';
 config: "default";
 production: boolean = environment.production;
 catalogues = Configuration.BACKEND_PREF+'/test-resources/catalogues.json';
-remoteEvents = Configuration.BACKEND_PREF+"/dyn/events";
+remoteEvents = Configuration.BACKEND_PREF+'/dyn/events';
 savefilters: string;														// filters to apply before saving
 reloadOnSave = false;														// reload content on save
 

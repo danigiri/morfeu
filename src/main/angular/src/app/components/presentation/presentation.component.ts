@@ -1,20 +1,20 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
-import {AfterViewInit, Component, Inject, Input, OnDestroy} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import { AfterViewInit, Component, Inject, Input, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 
-import {RemoteDataService} from '../../services/remote-data.service';
+import { RemoteDataService } from '../../services/remote-data.service';
 
-import {Cell} from '../../cell.class';
-import {CellModel} from '../../cell-model.class';
+import { Cell } from '../../cell.class';
+import { CellModel } from '../../cell-model.class';
 
-import {EventListener} from '../../events/event-listener.class';
-import {CellChangedEvent} from '../../events/cell-changed.event';
-import {EventService} from '../../services/event.service';
+import { EventListener } from '../../events/event-listener.class';
+import { CellChangedEvent } from '../../events/cell-changed.event';
+import { EventService } from '../../services/event.service';
 
 @Component({
-	selector: "presentation",
+	selector: 'presentation',
 	template: `
 		<!-- TODO: add inner html type? -->
 		<iframe *ngIf="this.getPresentationType()==='IFRAME'"
@@ -24,15 +24,12 @@ import {EventService} from '../../services/event.service';
 		<div class="cell cell-html" *ngIf="this.getPresentationType()==='HTML'">
 			<div [innerHTML]="html$ | async | safe: 'html'"></div>
 		</div>
-		
 	`,
 })
 // sets the ui to be too slow as the iframe blocks rendering
 //	changeDetection: ChangeDetectionStrategy.OnPush
 
 export class PresentationComponent extends EventListener implements AfterViewInit, OnDestroy {
-
-private html_updates = 0;
 
 // if showing a cell with values or we are showing a cellmodel
 @Input() cell?: Cell;
@@ -44,7 +41,7 @@ html$?: Subject<String>;
 
 constructor(eventService: EventService, @Inject("RemoteDataService") private presentationService: RemoteDataService) {
 	super(eventService);
-	//console.debug('PresentationComponent::constructor() - %s', this.cell ? this.cell.getURI() : '');
+	// console.debug('PresentationComponent::constructor() - %s', this.cell ? this.cell.getURI() : '');
 }
 
 
@@ -108,12 +105,7 @@ private updateHTMLPresentation() {
 		presentationContent = this.presentationService.getText(presentationURL);
 	}
 	presentationContent.subscribe(
-			innnerHTML => {
-				Promise.resolve(null).then(() => {
-							console.debug('[%i] P %s', this.html_updates, presentationURL);
-							this.html$.next(innnerHTML);
-				});
-			},
+			innnerHTML => Promise.resolve(null).then(() => this.html$.next(innnerHTML)),
 			error => console.error('Could not get HTML presentation at %s', presentationURL)
 	);
 

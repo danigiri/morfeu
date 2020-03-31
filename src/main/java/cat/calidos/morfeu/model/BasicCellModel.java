@@ -38,9 +38,9 @@ private Optional<CellModel> reference;
 
 
 public BasicCellModel(URI u, 
-						String name, 
-						String desc, 
-						Type type,  
+						String name,
+						String desc,
+						Type type,
 						int minOccurs, 
 						int maxOccurs, 
 						boolean isAttribute,
@@ -59,7 +59,7 @@ public BasicCellModel(URI u,
 	this.metadata = meta;
 	this.isReference = false;
 	this.reference = Optional.empty();
-	
+
 }
 
 

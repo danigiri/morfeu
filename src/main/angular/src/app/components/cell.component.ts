@@ -321,7 +321,7 @@ getCellPresentation() {
 		console.warn('Presentation may be too long for %s (%d)', this.cell.name, pres.length);
 	}
 
-	return pres;;
+	return pres;
 
 }
 

@@ -27,7 +27,7 @@ get<T>(uri: string): Observable<T> {
 
 	console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
 	// TODO: handle errors with .catch here
-	
+
 	return this.http.get<T>(uri).pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
 	//.concat(Observable.throw(new Error("Too many retries")))
 
@@ -36,7 +36,7 @@ get<T>(uri: string): Observable<T> {
 
 getText(uri: string): Observable<String> {
 
-	console.log("[SERVICE] RemoteDataService::getText('%s')", uri);
+	// console.log("[SERVICE] RemoteDataService::getText('%s')", uri);
 
 	return this.http.get(uri, {responseType: 'text'}).pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
 	//.catch((err: HttpErrorResponse) => this.handleError(err.error));
@@ -44,7 +44,8 @@ getText(uri: string): Observable<String> {
 
 
 postText(uri: string, content: string): Observable<String> {
-	console.log("[SERVICE] RemoteDataService::postText('%s')", uri);
+
+	// console.log("[SERVICE] RemoteDataService::postText('%s')", uri);
 
 	return this.http.post(uri, content, {responseType: 'text'}); // no retries on post
 	//.pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
@@ -55,7 +56,7 @@ postText(uri: string, content: string): Observable<String> {
 
 post<T>(uri: string, content: any): Observable<T> {
 
-	console.log("[SERVICE] RemoteDataService::post('%s')", uri);
+	// console.log("[SERVICE] RemoteDataService::post('%s')", uri);
 	// TODO: handle errors here
 
 	return this.http.post<T>(uri, content);	// no retries on post

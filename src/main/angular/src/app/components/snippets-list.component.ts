@@ -96,6 +96,8 @@ private fetchSnippets() {
 										)
 		);
 		this.events.service.publish(new SnippetDocumentRequestEvent(0));
+	} else {
+		console.warn('Empty snippets list from catalogue');
 	}
 
 }

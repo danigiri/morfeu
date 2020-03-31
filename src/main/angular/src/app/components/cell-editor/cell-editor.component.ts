@@ -1,22 +1,22 @@
 // CELL - EDITOR . COMPONENT . TS
 
-import {filter} from 'rxjs/operators';
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {NgForm} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import {Cell} from '../../cell.class';
-import {CellModel} from '../../cell-model.class';
+import { Cell } from '../../cell.class';
+import { CellModel } from '../../cell-model.class';
 
-import {CellActivatedEvent} from '../../events/cell-activated.event';
-import {CellChangedEvent} from '../../events/cell-changed.event';
-import {CellEditEvent} from '../../events/cell-edit.event';
-import {ContentFragmentDisplayEvent} from '../../events/content-fragment-display.event';
-import {EventListener} from '../../events/event-listener.class';
-import {UXEvent} from '../../events/ux.event';
-import {EventService} from '../../services/event.service';
+import { CellActivatedEvent } from '../../events/cell-activated.event';
+import { CellChangedEvent } from '../../events/cell-changed.event';
+import { CellEditEvent } from '../../events/cell-edit.event';
+import { ContentFragmentDisplayEvent } from '../../events/content-fragment-display.event';
+import { EventListener } from '../../events/event-listener.class';
+import { UXEvent } from '../../events/ux.event';
+import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'cell-editor',
