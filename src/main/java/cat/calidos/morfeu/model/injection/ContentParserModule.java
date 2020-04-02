@@ -43,7 +43,7 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 												@Named("CellModel") CellModel cellModel,
 												@Named("CellModelFilter") Optional<URI> cellModelFilter)
 								throws ParsingException {
-	
+
 	//FIXME: this is a quite repetitive from cellmodule, not following DRY	
 	Composite<Cell> contentCells = new OrderedMap<Cell>();
 
@@ -89,7 +89,7 @@ public static StreamSource produceStreamSource(@Named("FetchableModelURI") URI u
 
 @Produces
 public static Schema produceSchema(SchemaFactory sf, StreamSource schemaSource) throws ParsingException {
-	
+
 	Schema schema;
 	try {
 		schema = sf.newSchema(schemaSource);

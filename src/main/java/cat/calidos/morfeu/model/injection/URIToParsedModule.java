@@ -65,7 +65,7 @@ protected final static Logger log = LoggerFactory.getLogger(URIToParsedModule.cl
 @Produces
 public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db, 
 													@Named("FetchableContentURI") URI uri, 
-													@Named("FetchedEffectiveContent") InputStream effectiveContent) 
+													@Named("EffectiveContent") InputStream effectiveContent)
 															throws ParsingException, FetchingException {
 
 	// TODO: we can probably parse with something faster than building into dom
@@ -84,7 +84,8 @@ public static org.w3c.dom.Document produceDomDocument(DocumentBuilder db,
 
 @Produces @Named("FetchedEffectiveContent") 
 InputStream fetchedContentReady(@Named("Filename") String filename,
-								@Named("FetchableContentURI") URI uri,
+								@Named("ContentURI") URI uri,
+								@Nullable @Named("FetchableContentURI") URI fetchableURI,
 								@Named("FetchedRawContent") Producer<InputStream> rawContentProvider,
 								@Named("FetchedTransformedContent") Producer<InputStream> transformedContentProvider
 								) throws FetchingException {
@@ -100,7 +101,7 @@ InputStream fetchedContentReady(@Named("Filename") String filename,
 			effectiveContent =  rawContentProvider.get().get();
 		}
 	} catch (InterruptedException | ExecutionException e) {
-		log.error("Could not complete executing fetch of '{}' ({}", uri, e);
+		log.error("Could not complete executing fetch of '{}' ({})", uri, e);
 		throw new FetchingException("Problem executing fetch '"+uri+"'", e);
 	}
 
@@ -136,35 +137,26 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 													@Named("IsYAML") boolean isYAML,
 													Producer<ObjectMapper> mapperJSON,
 													Producer<YAMLMapper> mapperYAML,
-													@Named("FilteredContent") Producer<InputStream> filteredContent,
-													@Nullable @Named("Filters") String filters,
 													Producer<Model> model) 
 							throws FetchingException, TransformException {
 
 	// get the yaml and apply the transformation from yaml to xml
 
-	InputStream content;
 	try {
 
-		if (filters!=null && !filters.isEmpty()) {
 			log.trace("Converting yaml to xml '{}'", uri);
 			ObjectMapper mapper = isYAML ? mapperYAML.get().get() : mapperJSON.get().get();
 			JsonNode yaml = mapper.readTree(fetchedRawContent.get().get());
 			String xml = DaggerYAMLConverterComponent.builder().from(yaml).given(model.get().get()).build().xml();
 
 			log.trace("Transformed yaml to xml '{}'", xml);
-			content =  IOUtils.toInputStream(xml, Config.DEFAULT_CHARSET);
 
-		} else {
-			content = filteredContent.get().get();
-		}
-
-		return content;
+			return  IOUtils.toInputStream(xml, Config.DEFAULT_CHARSET);
 
 	} catch (IOException e) {
 		log.error("Could not fetch yaml '{}' ({})", uri, e.getMessage());
 		throw new FetchingException("Problem when fetching yaml '"+uri+"'", e);
-	} catch (InterruptedException | ExecutionException e) {
+	} catch (Exception e) {
 		log.error("Could not transform yaml to xml '{}' ({}", uri, e);
 		throw new TransformException("Problem when transforming yaml to xml '"+uri+"'", e);
 	}
@@ -173,26 +165,35 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 
 
 
-@Produces @Named("FilteredContent")
+@Produces @Named("EffectiveContent")
 public static InputStream filteredContent(@Named("FetchableContentURI") URI uri,
 											@Nullable @Named("Filters") String filters,
-											@Named("FetchedRawContent") InputStream fetchedRawContent) 
+											@Named("FetchedEffectiveContent") InputStream fetchedEffectiveContent) 
 							throws FetchingException {
 
-	try {
+	InputStream content;
 
-		String raw = IOUtils.toString(fetchedRawContent, Config.DEFAULT_CHARSET);
-		String filtered = DaggerFilterComponent.builder().filters(filters).build().stringToString().get().apply(raw);
-		return IOUtils.toInputStream(filtered, Config.DEFAULT_CHARSET);
-
-	} catch (Exception e) {
-
-		log.error("Could not filter '{}' ({})", uri, e.getMessage());
-		throw new FetchingException("Problem when filtering '"+uri+"'", e);
+	if (filters!=null && !filters.isBlank()) {
+		try {
+				String raw = IOUtils.toString(fetchedEffectiveContent, Config.DEFAULT_CHARSET);
+				String filtered = DaggerFilterComponent.builder()
+														.filters(filters)
+														.build()
+														.stringToString()
+														.get()
+														.apply(raw);
+				content = IOUtils.toInputStream(filtered, Config.DEFAULT_CHARSET);
+		} catch (Exception e) {
+			log.error("Could not filter '{}' ({})", uri, e.getMessage());
+			throw new FetchingException("Problem when filtering '"+uri+"'", e);
+		}
+	} else {
+		content = fetchedEffectiveContent;
 	}
 
-}
+	return content;
 
+}
 
 
 @Produces @Named("Filename")

@@ -4,6 +4,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -31,6 +32,7 @@ ListenableFuture<Document> document() throws ParsingException, FetchingException
 interface Builder {
 
 	@BindsInstance Builder from(URI u);
+	@BindsInstance Builder filters(@Nullable @Named("Filters") String filters);	// to filter the content if needed
 	@BindsInstance Builder withPrefix(@Named("Prefix") String p);
 
 	DocumentComponent build();

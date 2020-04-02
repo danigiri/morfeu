@@ -2,18 +2,23 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.ExecutionException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
+import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 
 /**
@@ -21,14 +26,15 @@ import cat.calidos.morfeu.problems.ValidationException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentParserIntTest extends ModelTezt {
 
+private static String modelPath = "test-resources/models/test-model.xsd";
 
-@Test
+@Test @DisplayName("Test validate content")
 public void testValidate() throws Exception {
 
 	String contentPath = "test-resources/documents/document1.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
-	String modelPath = "test-resources/models/test-model.xsd";
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
+
 	Validable validator = DaggerContentParserComponent.builder()
 														.content(new URI(contentPath))
 														.fetchedContentFrom(new URI(fullContentPath))
@@ -43,13 +49,13 @@ public void testValidate() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Testing invalid content")
 public void testNonValidDocument() throws Exception {
 
 	String contentPath = "test-resources/documents/nonvalid-document.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
-	String modelPath = "test-resources/models/test-model.xsd";
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
+
 	Validable validator = DaggerContentParserComponent.builder()
 														.content(new URI(contentPath))
 														.fetchedContentFrom(new URI(fullContentPath))
@@ -68,12 +74,11 @@ public void testNonValidDocument() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Testing the resulting cells")
 public void testProduceContent() throws Exception {
 
 	String contentPath = "test-resources/documents/document1.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
-	String modelPath = "test-resources/models/test-model.xsd";
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 
 	Composite<Cell> content = DaggerContentParserComponent.builder()
@@ -89,12 +94,11 @@ public void testProduceContent() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Testing JSON input")
 public void testProduceJSONContent() throws Exception {
 
 	String contentPath = "test-resources/transform/document1-json-content.json";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
-	String modelPath = "test-resources/models/test-model.xsd";
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 
 	Composite<Cell> content = DaggerContentParserComponent.builder()
@@ -108,6 +112,30 @@ public void testProduceJSONContent() throws Exception {
 	testDocument1Content(content);
 
 }
+
+
+@Test @DisplayName("Testing filtered content")
+public void testFilteredContent() throws Exception {
+
+	String contentPath = "test-resources/documents/filtered.xml";
+	String fullContentPath = testAwareFullPathFrom(contentPath);
+	String testAwareModelPath = testAwareFullPathFrom(modelPath);
+	// first we use java encoding, then json encoding, finally regexp pattern
+	String f = "replace{\"replacements\":[{\"from\":\"=\\\\{\",\"to\":\"=\\\"{\"}, {\"from\":\"}\",\"to\":\"}\\\"\"}]}";
+
+	Composite<Cell> content = DaggerContentParserComponent.builder()
+															.content(new URI(contentPath))
+															.fetchedContentFrom(new URI(fullContentPath))
+															.filters(f)
+															.model(new URI(modelPath))
+															.withModelFetchedFrom(new URI(testAwareModelPath))
+															.build()
+															.content()
+															.get();
+	testDocument1Content(content);
+
+}
+
 
 
 private void testDocument1Content(Composite<Cell> content) {
@@ -120,7 +148,7 @@ private void testDocument1Content(Composite<Cell> content) {
 	assertNotNull(rootNode);
 	assertEquals(Document.ROOT_NAME, rootNode.getName());
 	assertTrue(rootNode.isComplex());
-	
+
 	Cell testNode = rootNode.asComplex().children().child("test(0)");
 	assertNotNull(testNode);
 	assertEquals("test", testNode.getName());
