@@ -189,7 +189,7 @@ private static boolean hasParameters(String filter) {
 
 
 private static int beginningOfParameters(String filter) {
-	return filter.lastIndexOf("{");
+	return filter.indexOf("{");
 }
 
 

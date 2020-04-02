@@ -2,6 +2,8 @@
 
 package cat.calidos.morfeu.filter.injection;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Named;
@@ -35,6 +37,20 @@ public static Filter<String, String> stringIdentity() {
 
 
 @Produces @IntoMap @Named("stringToString")
+@StringKey("syserr")
+public static Filter<String, String> syserr() {	// mainly for testing
+	return s -> {
+
+		System.err.println(s);
+
+		return s;
+
+	};
+}
+
+
+
+@Produces @IntoMap @Named("stringToString")
 @StringKey("uppercase")
 public static Filter<String, String> uppercase() {	// mainly for testing
 	return s -> s.toUpperCase();
@@ -53,25 +69,43 @@ public static Filter<String, String> lowercase() {	// mainly for testing
 public static Filter<String, String> replace(Map<String, JsonNode> params) throws TransformException {
 
 	if (!params.containsKey("replace")) {
-		return (v) -> "replace filter did not get parameters";
+		return (v) -> "replace filter did not get any parameters";
 	}
-	JsonNode filterParameters = params.get("replace");
-	if (!filterParameters.has("from") || !filterParameters.has("to")) {
-		String message = "replace filter did not get proper parameters (from: and/or to:)";
-		log.error(message);
-		return (v) -> message;
+	JsonNode replaceParameters = params.get("replace");
+	if (!replaceParameters.has("replacements")) {
+		return (v) -> "replace filter did not have 'replacements' key";
 	}
-	JsonNode fromNode = filterParameters.get("from");
-	JsonNode toNode = filterParameters.get("to");
-	if (!fromNode.isTextual() || !toNode.isTextual()) {
+	JsonNode filterParameters = replaceParameters.get("replacements");
+	
+	// we check if we have an array here and then we loop
+	List<JsonNode> fromTos = new ArrayList<JsonNode>();
+	if (filterParameters.isArray()) {
+		for (int i=0; i<filterParameters.size();i++) {
+			fromTos.add(filterParameters.get(i));
+		}
+	} else {
+		fromTos.add(filterParameters);
+	}
+	
+	if (fromTos.stream().filter(n -> !n.has("from") || !n.has("to")).findAny().isPresent()) {
+			String message = "replace filter did not get proper parameters (from: and/or to:)";
+			log.error(message);
+			return (v) -> message;
+	}
+	if (fromTos.stream().filter(n -> !n.get("from").isTextual() || !n.get("to").isTextual()).findAny().isPresent()) {
 		String message = "Incorrect parameters in replace, 'from' and 'to' param values should both be strings";
 		log.error(message);
 		return (v) -> message;
 	}
-	String from = fromNode.asText();
-	String to = toNode.asText();
 
-	return s -> s.replaceAll(from, to);
+
+	return s -> {	 String out = s;
+					for (int i=0;i<fromTos.size();i++) {
+						JsonNode fromTo = fromTos.get(i);
+						out = out.replaceAll(fromTo.get("from").asText(), fromTo.get("to").asText());
+					}
+					return out;
+	};
 
 }
 

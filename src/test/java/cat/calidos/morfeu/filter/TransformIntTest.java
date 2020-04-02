@@ -138,9 +138,14 @@ public void applyTemplateTest() throws Exception {
 @Test @DisplayName("Search and replace test")
 public void replaceTest() throws Exception {
 
-	String filter = "replace{\"from\":\"FROM\", \"to\":\"TO\"}";
+	String filter = "replace{\"replacements\":{\"from\":\"FROM\", \"to\":\"TO\"}}";
 	Filter<String, String> f = DaggerFilterComponent.builder().filters(filter).build().stringToString().get();
 	assertEquals("TO here TO there", f.apply("FROM here FROM there"));
+
+	// arrays of replacements also work
+	String filter2 = "replace{\"replacements\":[{\"from\":\"FROM\", \"to\":\"TO\"}]}";
+	Filter<String, String> f2 = DaggerFilterComponent.builder().filters(filter2).build().stringToString().get();
+	assertEquals("TO here TO there", f2.apply("FROM here FROM there"));
 
 }
 
