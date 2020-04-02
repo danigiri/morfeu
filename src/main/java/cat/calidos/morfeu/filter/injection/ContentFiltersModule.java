@@ -7,6 +7,7 @@ import javax.inject.Named;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.filter.Filter;
+import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import dagger.multibindings.IntoMap;

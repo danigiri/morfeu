@@ -26,20 +26,20 @@ public void testSnippet() throws Exception {
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff";
 	String testAwareModelPath = testAwareFullPathFrom("test-resources/models/test-model.xsd");
-	Composite<Cell> content = DaggerSnippetComponent.builder()
-														.content(new URI(contentPath))
-														.fetchedContentFrom(new URI(fullContentPath))
-														.modelFiltered(new URI(modelPath))
-														.withModelFetchedFrom(new URI(testAwareModelPath))
-														.build()
-														.content()
-														.get();
+	Composite<Cell> content = DaggerSnippetParserComponent.builder()
+															.content(new URI(contentPath))
+															.fetchedContentFrom(new URI(fullContentPath))
+															.modelFiltered(new URI(modelPath))
+															.withModelFetchedFrom(new URI(testAwareModelPath))
+															.build()
+															.content()
+															.get();
 	assertNotNull(content);
 	assertEquals("There should be only one stuff snippet", 1, content.size());
-	
+
 	Cell stuff = content.child(0);
 	assertNotNull(stuff);
-	
+
 	Optional<String> stuffValue = stuff.getValue();
 	assertTrue(stuffValue.isPresent());
 	assertEquals("Stuff content", stuffValue.get());
