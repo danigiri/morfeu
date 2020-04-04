@@ -121,7 +121,10 @@ public void testFilteredContent() throws Exception {
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 	// first we use java encoding, then json encoding, finally regexp pattern
-	String f = "replace{\"replacements\":[{\"from\":\"=\\\\{\",\"to\":\"=\\\"{\"}, {\"from\":\"}\",\"to\":\"}\\\"\"}]}";
+	String f = "replace{\"replacements\":[" +
+					"{\"from\":\"=\\\\s*\\\\{\",\"to\":\"=\\\"{\"},"+
+					"{\"from\":\"}\",\"to\":\"}\\\"\"}" +
+				"]}";
 
 	Composite<Cell> content = DaggerContentParserComponent.builder()
 															.content(new URI(contentPath))

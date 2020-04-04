@@ -3,6 +3,7 @@
 package cat.calidos.morfeu.filter.injection;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +77,7 @@ public static Filter<String, String> replace(Map<String, JsonNode> params) throw
 		return (v) -> "replace filter did not have 'replacements' key";
 	}
 	JsonNode filterParameters = replaceParameters.get("replacements");
-	
+
 	// we check if we have an array here and then we loop
 	List<JsonNode> fromTos = new ArrayList<JsonNode>();
 	if (filterParameters.isArray()) {
@@ -86,7 +87,6 @@ public static Filter<String, String> replace(Map<String, JsonNode> params) throw
 	} else {
 		fromTos.add(filterParameters);
 	}
-	
 	if (fromTos.stream().filter(n -> !n.has("from") || !n.has("to")).findAny().isPresent()) {
 			String message = "replace filter did not get proper parameters (from: and/or to:)";
 			log.error(message);
@@ -99,16 +99,18 @@ public static Filter<String, String> replace(Map<String, JsonNode> params) throw
 	}
 
 
-	return s -> {	 String out = s;
-					for (int i=0;i<fromTos.size();i++) {
-						JsonNode fromTo = fromTos.get(i);
-						out = out.replaceAll(fromTo.get("from").asText(), fromTo.get("to").asText());
+	return s -> {	String replaced = s;
+					Iterator<JsonNode> i = fromTos.iterator();
+					while (i.hasNext()) {
+						JsonNode fromTo = i.next();
+						replaced = replaced.replaceAll(fromTo.get("from").asText(), fromTo.get("to").asText());
 					}
-					return out;
+
+					return replaced;
+
 	};
 
 }
-
 
 
 @Produces @IntoMap @Named("objectToString")
@@ -116,7 +118,6 @@ public static Filter<String, String> replace(Map<String, JsonNode> params) throw
 public static Filter<Object, String> toString_() {
 	return (o) -> o.toString();
 }
-
 
 
 @Produces @IntoMap @Named("objectToObject")
