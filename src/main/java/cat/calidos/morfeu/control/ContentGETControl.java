@@ -3,6 +3,7 @@
 package cat.calidos.morfeu.control;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
@@ -31,16 +32,17 @@ private final static Logger log = LoggerFactory.getLogger(ContentGETControl.clas
 private String prefix;
 private String path;
 private String modelPath;
+private String filters;
 
 
-public ContentGETControl(String prefix, String path, @Nullable String modelPath) {
+public ContentGETControl(String prefix, String path, Optional<String> filters, @Nullable String modelPath) {
 
 	super("GET content:"+path, "templates/content.twig", "templates/content-problem.twig");
 
 	this.prefix = prefix;
 	this.path = path;
 	this.modelPath = modelPath;
-
+	this.filters = filters.orElse(null);
 }
 
 
@@ -57,6 +59,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	ContentParserComponent contentComponent = DaggerContentParserComponent.builder()
 																			.content(uri)
 																			.fetchedContentFrom(fetchableURI)
+																			.filters(filters)
 																			.model(modelURI)
 																			.withModelFetchedFrom(fetchableModelPath)
 																			.build();
