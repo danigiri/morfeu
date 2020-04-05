@@ -76,17 +76,7 @@ public static Filter<String, String> replace(Map<String, JsonNode> params) throw
 	if (!replaceParameters.has("replacements")) {
 		return (v) -> "replace filter did not have 'replacements' key";
 	}
-	JsonNode filterParameters = replaceParameters.get("replacements");
-
-	// we check if we have an array here and then we loop
-	List<JsonNode> fromTos = new ArrayList<JsonNode>();
-	if (filterParameters.isArray()) {
-		for (int i=0; i<filterParameters.size();i++) {
-			fromTos.add(filterParameters.get(i));
-		}
-	} else {
-		fromTos.add(filterParameters);
-	}
+	List<JsonNode> fromTos = nodesToList(replaceParameters.get("replacements"));
 	if (fromTos.stream().filter(n -> !n.has("from") || !n.has("to")).findAny().isPresent()) {
 			String message = "replace filter did not get proper parameters (from: and/or to:)";
 			log.error(message);
@@ -98,12 +88,14 @@ public static Filter<String, String> replace(Map<String, JsonNode> params) throw
 		return (v) -> message;
 	}
 
-
 	return s -> {	String replaced = s;
 					Iterator<JsonNode> i = fromTos.iterator();
 					while (i.hasNext()) {
 						JsonNode fromTo = i.next();
-						replaced = replaced.replaceAll(fromTo.get("from").asText(), fromTo.get("to").asText());
+						String from = fromTo.get("from").asText();
+						String to = fromTo.get("to").asText();
+						log.trace("replace: {} -> {}", from, to);
+						replaced = replaced.replaceAll(from, to);
 					}
 
 					return replaced;
@@ -122,8 +114,25 @@ public static Filter<Object, String> toString_() {
 
 @Produces @IntoMap @Named("objectToObject")
 @StringKey("identity")
-public static Filter<Object, Object> iobjectIdentity() {
+public static Filter<Object, Object> objectIdentity() {
 	return o -> o;
+}
+
+
+private static List<JsonNode> nodesToList(JsonNode node) {
+
+	// we check if we have an array here and then we loop
+	List<JsonNode> nodeList = new ArrayList<JsonNode>();
+	if (node.isArray()) {
+		for (int i=0; i<node.size();i++) {
+			nodeList.add(node.get(i));
+		}
+	} else {
+		nodeList.add(node);
+	}
+
+	return nodeList;
+
 }
 
 
