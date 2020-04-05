@@ -75,7 +75,7 @@ private categoriesAll() {
 
 private loadContent(contentURI: string, model: string, cellPath: string) {
 
-	const contentAndModelURI = ContentComponent.contenttURIFrom(contentURI, model);
+	const contentAndModelURI = ContentComponent.contentURIFrom(contentURI, model);
 	const modelURI = ModelComponent.modelURIFrom(model);
 
 	this.modelService.get(modelURI, Model).subscribe(model => {
