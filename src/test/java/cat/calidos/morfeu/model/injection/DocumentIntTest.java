@@ -61,7 +61,7 @@ public void testNotFoundModelDocument() throws Exception {
 	
 	try {
 
-		System.err.println("Please ignore next FileNotFoundException, it is expected");
+		System.out.println("Please ignore next FileNotFoundException, it is expected");
 		produceDocumentFromPath("test-resources/documents/document-with-notfound-model.json");
 
 	} catch (ExecutionException e) {

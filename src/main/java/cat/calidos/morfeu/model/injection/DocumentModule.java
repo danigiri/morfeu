@@ -140,9 +140,9 @@ public static URI documentPrefix(@Named("ParsedDocument") Document doc,
 			throw new ParsingException("Problem with invalid URI of prefix '"+prefix+"'", e);
 		}
 	}
-	
+
 	return prefixURI;
-	
+
 }
 
 

@@ -45,7 +45,7 @@ public void testTransformJSONToXML() throws Exception {
 	assertNotNull(json);
 
 	String transformed = DaggerContentConverterComponent.builder().from(json).build().xml();
-	System.err.println(transformed);
+	//System.err.println(transformed);
 	compareWithXMLFile(transformed, "target/test-classes/test-resources/documents/document4.xml");
 
 }

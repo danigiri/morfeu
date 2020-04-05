@@ -112,7 +112,7 @@ public void testNonValidString() throws Exception {
 															.get();
 
 	try {
-		System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid str");
+		System.out.println("Please ignore next ParsingException, it is expected as we are testing non valid str");
 		validator.validate();
 	} catch (ValidationException e) {
 		assertTrue(e.getMessage().contains("notvalid"), "Wrong exception message parsing of 'content saver parser'");

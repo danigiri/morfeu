@@ -153,7 +153,7 @@ public void testYAMLConverterDatas() throws Exception {
 	JsonNode node = mapper.readTree(yaml);
 	String transformed = DaggerYAMLConverterComponent.builder().from(node).given(model).build().xml();
 	assertNotNull(transformed);
-	System.err.println(transformed);
+	//System.err.println(transformed);
 
 	String xml =	"<test xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\" " +
 						"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 

@@ -68,7 +68,6 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 			ComplexCellModel complex = cellModel.asComplex();
 			if (node.isArray()) {
 				for (int i=0; i<node.size(); i++) {
-					System.err.println(node.get(i).getNodeType());
 					DaggerYAMLCellModelGuesserProcessorComponent.builder()
 																	.withPrefix("\t"+prefix)
 																	.givenCase(case_)
