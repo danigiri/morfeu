@@ -48,13 +48,15 @@ public void contentGETFiltered() throws Exception {
 	String path = "test-resources/documents/filtered.xml";
 	String model = "test-resources/models/test-model.xsd";
 	String f = "replace{\"replacements\":[" +
-			"{\"from\":\"=\\\\s*\\\\{\",\"to\":\"=\\\"{\"},"+
-			"{\"from\":\"}\",\"to\":\"}\\\"\"}" +
-		"]}";
+						"{\"from\":\"=\\\\s*\\\\{\",\"to\":\"=\\\"{\"},"+
+						"{\"from\":\"}\",\"to\":\"}\\\"\"}" +
+				"]}";
 	Optional<String> filters = Optional.of(f);	// if the filters are not applied we get a different exception
 	assertThrows(ValidationException.class, () -> new ContentGETControl(prefix, path, filters, model).process());
+
+	Optional<String> empty = Optional.empty();
 	System.err.println("Ignore the next exception, thrown during testing");
-	assertThrows(ExecutionException.class, () -> new ContentGETControl(prefix, path, Optional.empty(), model).process());
+	assertThrows(ExecutionException.class, () -> new ContentGETControl(prefix, path, empty, model).process());
 
 }
 

@@ -38,12 +38,12 @@ public class ContentTransformModule {
 protected final static Logger log = LoggerFactory.getLogger(ContentTransformModule.class);
 
 @Produces @Named("EffectiveContent")
-public static String produceEffectiveContent(@Named("DestinationContentURI") URI uri,
-												@Named("YAMLContent") Producer<String> yamlProducer,
-												@Named("JSONContent") Producer<String> jsonProducer,
-												@Named("FilterContent") Producer<String> filtersProducer,
-												@Named("Content") Producer<String> contentProducer,
-												@Nullable @Named("Filters") String filters)
+public static String effectiveContent(@Named("DestinationContentURI") URI uri,
+										@Named("YAMLContent") Producer<String> yamlProducer,
+										@Named("JSONContent") Producer<String> jsonProducer,
+										@Named("FilterContent") Producer<String> filtersProducer,
+										@Named("Content") Producer<String> contentProducer,
+										@Nullable @Named("Filters") String filters)
 						throws TransformException {
 
 	String name = FilenameUtils.getName(uri.getPath());

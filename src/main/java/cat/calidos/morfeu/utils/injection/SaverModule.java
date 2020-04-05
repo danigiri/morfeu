@@ -32,7 +32,7 @@ protected final static Logger log = LoggerFactory.getLogger(SaverModule.class);
 
 
 @Produces
-public static Saver saver(@Named("DestinationContentURI") URI u, 
+public static Saver saver(@Named("DestinationContentURI") URI u,
 							Producer<LocalSaver> fileSaverProducer,
 							Producer<POSTSaver> postSaverProducer) throws SavingException {
 

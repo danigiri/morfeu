@@ -201,6 +201,7 @@ String filename(@Named("FetchableContentURI") URI uri) {
 	return FilenameUtils.getName(uri.getPath());
 }
 
+
 @Produces @Named("IsYAML")
 boolean isYAML(@Named("Filename") String filename) {
 	return filename.endsWith(YAML_EXTENSION);

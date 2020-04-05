@@ -12,7 +12,7 @@ import dagger.producers.ProductionComponent;
 import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
-/**
+/** Generic filter component interface, meant to be subclassed
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={HttpFilterModule.class, ListeningExecutorServiceModule.class})

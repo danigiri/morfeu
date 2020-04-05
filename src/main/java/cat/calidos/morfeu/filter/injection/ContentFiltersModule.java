@@ -6,14 +6,14 @@ import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cat.calidos.morfeu.filter.Filter;
-import cat.calidos.morfeu.model.injection.DaggerContentParserComponent;
-import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
-import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+
+import cat.calidos.morfeu.filter.Filter;
+import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
 /**
 *	@author daniel giribet
@@ -33,6 +33,7 @@ public static Filter<Object, String> contentToXML() {
 @StringKey("map-to-string")
 @SuppressWarnings("unchecked")
 public static Filter<Object, String> mapToString(Map<String, JsonNode> params) {
+
 	if (!params.containsKey("map-to-string")) {
 		return (map) -> "map filter did not get parameters";
 	}
@@ -40,8 +41,11 @@ public static Filter<Object, String> mapToString(Map<String, JsonNode> params) {
 	if (!filterParams.has("key")) {
 		return (map) -> "map filter did not get key parameter";
 	}
+
+
 	String key = filterParams.get("key").asText();
 	return (map) -> {
+
 		return (String)((Map<String, Object>)map).get(key);	// TODO: add more error control
 
 	};

@@ -23,11 +23,11 @@ import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.utils.injection.MapperModule;
-import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
+import cat.calidos.morfeu.utils.injection.MapperModule;
+import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 /**
 * @author daniel giribet

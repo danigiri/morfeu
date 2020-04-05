@@ -9,7 +9,9 @@ import javax.inject.Named;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import cat.calidos.morfeu.filter.injection.FilterModule;
+import dagger.BindsInstance;
+import dagger.producers.ProductionComponent;
+
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
@@ -22,8 +24,6 @@ import cat.calidos.morfeu.utils.Saver;
 import cat.calidos.morfeu.utils.injection.SaverModule;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
-import dagger.BindsInstance;
-import dagger.producers.ProductionComponent;
 
 /**
 * @author daniel giribet
