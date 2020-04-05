@@ -22,7 +22,8 @@ config: "default";
 production: boolean = environment.production;
 catalogues = Configuration.BACKEND_PREF+'/test-resources/catalogues.json';
 remoteEvents = Configuration.BACKEND_PREF+'/dyn/events';
-savefilters: string;														// filters to apply before saving
+saveFilters: string;														// filters to apply before saving
+loadFilters: string;														// filters to apply before loading/parse
 reloadOnSave = false;														// reload content on save
 
 
@@ -49,7 +50,8 @@ overwriteWithParams(params: Params) {
 	this.production = params.production!==undefined ? params.production : environment.production;
 	this.catalogues = params.catalogues!==undefined ? params.catalogues : this.catalogues;
 	this.remoteEvents = params.remoteEvents!==undefined ? params.remoteEvents : this.remoteEvents;
-	this.savefilters = params.savefilters!==undefined ? params.savefilters : this.savefilters;
+	this.saveFilters = params.savefilters ?? this.saveFilters;
+	this.loadFilters = params.loadFilters ?? this.loadFilters;
 	this.reloadOnSave = params.reloadOnSave ?? this.reloadOnSave;
 
 	return this;
@@ -63,7 +65,8 @@ overwriteWithConfig(config: Configuration) {
 	this.production = config.production!==undefined ? config.production : this.production;
 	this.catalogues = config.catalogues!==undefined ? config.catalogues : this.catalogues;
 	this.remoteEvents = config.remoteEvents!==undefined ? config.remoteEvents : this.remoteEvents;
-	this.savefilters = config.savefilters!==undefined ? config.savefilters : this.savefilters;
+	this.saveFilters = config.saveFilters ?? this.saveFilters;
+	this.loadFilters = config.loadFilters ?? this.loadFilters;
 	this.reloadOnSave = config.reloadOnSave ?? this.reloadOnSave;
 
 	return this;

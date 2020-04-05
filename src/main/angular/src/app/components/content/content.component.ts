@@ -136,7 +136,8 @@ fetchContentFor(document_: CellDocument, model: Model) {
 
 	this.events.service.publish(new StatusEvent("Fetching content"));
 	const uri = document_.contentURI;
-	const contentURI = ContentComponent.contenttURIFrom(uri, model.URI);
+	let contentURI = ContentComponent.contentURIFrom(uri, model.URI);
+	contentURI = this.configuration.loadFilters ? contentURI+'&filters='+this.configuration.loadFilters : contentURI;
 
 	console.debug("ContentComponent::fetchContent() About to fetch content from '%s'", contentURI);
 	this.contentService.get(contentURI, Content).subscribe( (content: Content) => {
@@ -234,7 +235,7 @@ saveContent(document_: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Saving content"));
 	let postURI = Configuration.BACKEND_PREF+"/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
-	postURI = this.configuration.savefilters ? postURI+'&filters='+this.configuration.savefilters : postURI;
+	postURI = this.configuration.saveFilters ? postURI+'&filters='+this.configuration.saveFilters : postURI;
 	const content = document_.content.toJSON();
 	console.log("ContentComponent::saveContent('%s')", postURI);
 
@@ -336,7 +337,7 @@ numberPressedCallback(num: number) {
 //// KeyListenerWidget [end] ////
 
 
-static contenttURIFrom(contentURI: string, model: string): string {
+static contentURIFrom(contentURI: string, model: string): string {
 	return Configuration.BACKEND_PREF+'/dyn/content/'+contentURI+'?model='+model;
 }
 
