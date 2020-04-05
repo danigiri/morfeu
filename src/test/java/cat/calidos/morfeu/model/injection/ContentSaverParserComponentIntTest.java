@@ -25,11 +25,12 @@ import cat.calidos.morfeu.model.Validable;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Saver;
+import cat.calidos.morfeu.utils.injection.DaggerXMLParserComponent;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ContentSaverParserIntTest extends ModelTezt {
+public class ContentSaverParserComponentIntTest extends ModelTezt {
 
 private URI modelURI;
 private URI modelFetchableURI;
@@ -68,21 +69,20 @@ public void setup() throws Exception {
 public void testValidateString() throws Exception {
 
 	URI outputURI = new URI("file://"+temporaryOutputFilePathIn(tmpPath));
-	ContentSaverParserComponent contentComponent = DaggerContentSaverParserComponent
-													.builder()
-													.from(content)
-													.to(outputURI)
-													.having(contentURI)
-													.model(modelURI)
-													.withModelFetchedFrom(modelFetchableURI)
-													.build();
+	ContentSaverParserComponent contentComp = DaggerContentSaverParserComponent.builder()
+																				.from(content)
+																				.to(outputURI)
+																				.having(contentURI)
+																				.model(modelURI)
+																				.withModelFetchedFrom(modelFetchableURI)
+																				.build();
 
-	Validable validator = contentComponent.validator().get();
+	Validable validator = contentComp.validator().get();
 	assertNotNull(validator);
 	validator.validate();	// this would throw an exception
 	assertTrue(validator.isValid(), "'Content saver parser' did not validate a valid XML string");
 
-	Composite<Cell> rootCells = contentComponent.content().get();
+	Composite<Cell> rootCells = contentComp.content().get();
 	assertNotNull(rootCells);
 
 	assertEquals(1, rootCells.size(), "Wrong size of content root from 'content saver parser' parsed XML string");
@@ -101,16 +101,15 @@ public void testNonValidString() throws Exception {
 	URI fullContentURI = new URI(fullContentPath);
 	String content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 
-	Validable validator = DaggerContentSaverParserComponent
-							.builder()
-							.from(content)
-							.to(outputURI)
-							.having(new URI(contentPath))
-							.model(modelURI)
-							.withModelFetchedFrom(modelFetchableURI)
-							.build()
-							.validator()
-							.get();
+	Validable validator = DaggerContentSaverParserComponent.builder()
+															.from(content)
+															.to(outputURI)
+															.having(new URI(contentPath))
+															.model(modelURI)
+															.withModelFetchedFrom(modelFetchableURI)
+															.build()
+															.validator()
+															.get();
 
 	try {
 		System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid str");
@@ -169,13 +168,13 @@ public void testSaveToYAML() throws Exception {
 													.saver()
 													.get();
 	saver.save();
-	File savedFile = checkSavedFile(outputPath);
+	File savedFile = checkSavedFileExistsAt(outputPath);
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
 	//System.err.println(writtenContent);
 
 	YAMLMapper mapper = new YAMLMapper();
-	checkContent(writtenContent, mapper);
+	checkYAMLContent(writtenContent, mapper);
 
 }
 
@@ -196,24 +195,24 @@ public void testSaveToJSON() throws Exception {
 													.saver()
 													.get();
 	saver.save();
-	File savedFile = checkSavedFile(outputPath);
+	File savedFile = checkSavedFileExistsAt(outputPath);
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
 	//System.err.println(writtenContent);
 
 	ObjectMapper mapper = new ObjectMapper();
-	checkContent(writtenContent, mapper);
+	checkYAMLContent(writtenContent, mapper);
 
 }
 
 
-@Test @DisplayName("Save to filters")
-public void testSaveToFilters() throws Exception {
+@Test @DisplayName("Save to filters YAML")
+public void testSaveToFiltersYAML() throws Exception {
 
 	String outputPath = temporaryOutputFilePathIn(tmpPath)+".yaml";
 	URI outputURI = new URI("file://"+outputPath);
 
-	String filters = "content-to-yaml;replace{\"from\":\"blahblah\", \"to\":\"YEAH\"}";
+	String filters = "content-to-yaml;replace{\"replacements\":{\"from\":\"blahblah\", \"to\":\"YEAH\"}}";
 	Saver saver = DaggerContentSaverParserComponent.builder()
 													.from(content)
 													.filters(filters)
@@ -225,13 +224,45 @@ public void testSaveToFilters() throws Exception {
 													.saver()
 													.get();
 	saver.save();
-	File savedFile = checkSavedFile(outputPath);
+	File savedFile = checkSavedFileExistsAt(outputPath);
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
-	System.err.println(writtenContent);
+	//System.err.println(writtenContent);
 
 	YAMLMapper mapper = new YAMLMapper();
-	checkContent(writtenContent, mapper);
+	checkYAMLContent(writtenContent, mapper);
+
+	assertAll("Check replace was applied",
+			() -> assertFalse(writtenContent.contains("blahblah")),
+			() -> assertTrue(writtenContent.contains("YEAH"))
+	);
+
+}
+
+@Test @DisplayName("Save to filters XML")
+public void testSaveToFilters() throws Exception {
+
+	String outputPath = temporaryOutputFilePathIn(tmpPath)+".xml";
+	URI outputURI = new URI("file://"+outputPath);
+
+	String filters = "map-to-string{\"key\":\"xml\"};replace{\"replacements\":{\"from\":\"blahblah\",\"to\":\"YEAH\"}}";
+	Saver saver = DaggerContentSaverParserComponent.builder()
+													.from(content)
+													.filters(filters)
+													.to(outputURI)
+													.having(contentURI)
+													.model(modelURI)
+													.withModelFetchedFrom(modelFetchableURI)
+													.build()
+													.saver()
+													.get();
+	saver.save();
+	File savedFile = checkSavedFileExistsAt(outputPath);
+
+	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
+	//System.err.println(writtenContent);
+	org.w3c.dom.Document doc = DaggerXMLParserComponent.builder().withContent(writtenContent).build().document().get();
+	assertNotNull(doc);	// no exception here means parse was OK
 
 	assertAll("Check replace was applied",
 			() -> assertFalse(writtenContent.contains("blahblah")),
@@ -241,7 +272,8 @@ public void testSaveToFilters() throws Exception {
 }
 
 
-private void checkContent(String writtenContent, ObjectMapper mapper) throws IOException {
+
+private void checkYAMLContent(String writtenContent, ObjectMapper mapper) throws IOException {
 
 	JsonNode node = mapper.readTree(writtenContent);
 	assertAll("check content",
@@ -272,9 +304,9 @@ private void checkContent(String writtenContent, ObjectMapper mapper) throws IOE
 }
 
 
-private File checkSavedFile(String outputPath) {
+private File checkSavedFileExistsAt(String path) {
 
-	File savedFile = new File(outputPath);
+	File savedFile = new File(path);
 	assertTrue(savedFile.exists(), "Saver component did not create a file");
 	savedFile.deleteOnExit();
 
