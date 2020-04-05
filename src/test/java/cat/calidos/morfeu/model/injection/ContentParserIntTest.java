@@ -137,8 +137,22 @@ public void testFilteredContent() throws Exception {
 															.get();
 	testDocument1Content(content);
 
-}
+	// testing with backreferences for more robust handling
 
+	String f2 = "replace{\"replacements\":{\"from\":\"=\\\\s*\\\\{([^}]*?)}\",\"to\":\"=\\\"{$1}\\\"\"}}";
+
+	Composite<Cell> content2 = DaggerContentParserComponent.builder()
+														.content(new URI(contentPath))
+														.fetchedContentFrom(new URI(fullContentPath))
+														.filters(f2)
+														.model(new URI(modelPath))
+														.withModelFetchedFrom(new URI(testAwareModelPath))
+														.build()
+														.content()
+														.get();
+	testDocument1Content(content2);
+
+}
 
 
 private void testDocument1Content(Composite<Cell> content) {

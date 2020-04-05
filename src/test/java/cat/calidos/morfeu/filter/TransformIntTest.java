@@ -147,6 +147,11 @@ public void replaceTest() throws Exception {
 	Filter<String, String> f2 = DaggerFilterComponent.builder().filters(filter2).build().stringToString().get();
 	assertEquals("TO here TO there", f2.apply("FROM here FROM there"));
 
+	// backreferences
+	String filter3 = "replace{\"replacements\":[{\"from\":\"F(\\\\d)\", \"to\":\"T$1\"}]}";
+	Filter<String, String> f3 = DaggerFilterComponent.builder().filters(filter3).build().stringToString().get();
+	assertEquals("T1 here T2 there", f3.apply("F1 here F2 there"));
+
 }
 
 }
