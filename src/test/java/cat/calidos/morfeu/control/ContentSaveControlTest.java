@@ -58,12 +58,12 @@ public void contentSave() throws Exception {
 @Test @DisplayName("Content save with filter test")
 public void contentSaveWithFilter() throws Exception {
 
-	String filter = "map-to-string{\"key\":\"xml\"};replace{\"from\":\"blahblah\", \"to\":\"HELLO\"}";
+	String filter = "map-to-string{\"key\":\"xml\"};" +
+					"replace{\"replacements\":{\"from\":\"blahblah\", \"to\":\"HELLO\"}}";
 	ContentSaveControl ctrl = new ContentSaveControl(prefix, path, content, Optional.of(filter), modelPath);
 	ctrl.process();	// this controller will save the document
 
 	String savedContent = readFromFile(path);
-
 	assertAll("testing filtered save",
 		() -> assertNotNull(savedContent),
 		() -> assertTrue(savedContent.contains("HELLO")),
