@@ -55,9 +55,10 @@ public static BiFunction<List<String>, Map<String, String>, String> content() {
 				String resourcesPrefix = params.get(MorfeuServlet.RESOURCES_PREFIX);
 				String path = pathElems.get(1);		// normalised already
 				String modelPath = params.get("model");
+				Optional<String> filters =  Optional.ofNullable(params.get("filters"));
 				log.trace("ContentControlModule::content GET [{}]{}, model: {}", resourcesPrefix, path, modelPath);
 
-				return new ContentGETControl(resourcesPrefix, path, modelPath).processRequest();
+				return new ContentGETControl(resourcesPrefix, path, filters, modelPath).processRequest();
 
 	};
 
