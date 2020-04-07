@@ -1,10 +1,15 @@
 # Morfeu
 
-Morfeu is an application to manage multiple APIs represented as [YAML](http://yaml.org) or XML documents. It features a browser-based visual editor that can group heterogeneous APIs together. APIs are defined formally and enriched with metadata, which enables Morfeu to present a common UI.
+Morfeu is an application to manage multiple APIs represented as [YAML](http://yaml.org), JSON, JSX or XML documents. 
+It features a browser-based visual editor that can group heterogeneous APIs together. APIs are defined formally and enriched with 
+metadata, which enables Morfeu to present a common UI.
 
-YAML-based APIs are commonly used in many domains to represent complex API configurations, and Morfeu makes it easier for users to engage and experiment with those APIs. [Eurinome](https://github.com/danigiri/eurinome) is a sister project that applies the Morfeu concept to the Kubernetes ecosystem using Helm.
+YAML and JSON-based APIs are commonly used in many domains to represent complex API configurations, and Morfeu makes it easier 
+for users to engage and experiment with those APIs. [Eurinome](https://github.com/danigiri/eurinome) is a sister project 
+that applies the Morfeu concept to the Kubernetes ecosystem using Helm.
 
-Morfeu is flexible and can work with any YAML, JSON or XML API once a schema is for that API is created and added to the system.
+Morfeu is flexible and can work with any YAML, JSON or XML API once a schema is for that API is created and added to the 
+system.
 
 It is licensed under the Apache 2 open-source license and is under heavy development.
 
@@ -23,7 +28,6 @@ docker run --rm --entrypoint cat morfeu-build /target/morfeu-webapp-0.6.0-SNAPSH
 # generate runnable docker and run it
 docker build -t morfeu .
 docker run --rm morfeu
-
 ```
 
 ### Manually
@@ -58,7 +62,7 @@ In this short video we showcase a Morfeu editing session with a simple YAML-base
 
 ### Installation
 
-Morfeu requires [Java 8](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 8](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests
+Morfeu requires [Java 8](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 9](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests
 
 ### Tests
 
@@ -127,7 +131,7 @@ Architecture diagrams go here
 
 ## Contributing
 
-PRs or issues are welcome. Morfeu is still under heavy development.
+PRs or issues are welcome. Morfeu is under heavy development.
 
 ## Authors
 
@@ -135,7 +139,7 @@ Daniel Giribet - Twitter: [@danielgiri](https://twitter.com/danielgiri)
 
 ## License
 
-> Copyright 2019 Daniel Giribet
+> Copyright 2020 Daniel Giribet
 >
 > Licensed under the Apache License, Version 2.0 (the "License");
 > you may not use this file except in compliance with the License.
