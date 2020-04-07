@@ -317,11 +317,11 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 
 
 /** return presentation with the variable substitutions in the presentation URL for dynamic preview */
-getPresentation(): string {
+getCellPresentation(): string {
 
-	let finalPres = this.cellModel.getRawPresentation();
+	let finalPres = this.cellModel.getRawCellPresentation();
 	if (finalPres.includes("$")) {
-		finalPres = this.replacePresentationVariables(finalPres);
+		finalPres = this.replaceCellPresentationVariables(finalPres);
 	}
 
 	return finalPres;
@@ -329,16 +329,16 @@ getPresentation(): string {
 }
 
 /** return presentation with all variables included for dynamic preview */
-getPresentationAllContent(): string {
+getCellPresentationAllContent(): string {
 
 	const template = '_name='+Cell._NAME+'&_value='+Cell._VALUE+'&'+Cell._ATTRIBUTES;
 
-	return this.replacePresentationVariables(template);
+	return this.replaceCellPresentationVariables(template);
 
 }
 
 
-private replacePresentationVariables(input: string): string {
+private replaceCellPresentationVariables(input: string): string {
 	let output = input;
 	// expand special variables, like name, value and the attributes as GET params
 	output = VariableParser.expand(output, Cell._NAME , this.name);

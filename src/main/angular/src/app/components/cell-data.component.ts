@@ -23,12 +23,12 @@ import { EventService } from "../services/event.service";
 			[class.cell-data-source-cell]="cell!==undefined"
 		>
 			<cell-header [uri]="uri" [cellModel]="cellModel"></cell-header>
-			<img *ngIf="showPresentation() && cellPresentationIsIMG()"
+			<img *ngIf="showCellPresentation() && cellPresentationIsIMG()"
 				class="card-img-bottom"
-				src="{{getPresentation()}}"
+				src="{{getCellPresentation()}}"
 				alt="Image representation of the cell"
 			/>
-			<presentation *ngIf="showPresentation() && !cellPresentationIsIMG()" 
+			<presentation *ngIf="showCellPresentation() && !cellPresentationIsIMG()" 
 				[cell]="cell" [cellModel]="cellModel"
 			></presentation>
 			<!-- if we have a value field we should show it (readonly!) -->
@@ -135,18 +135,18 @@ private cellPresentationIsIMG(): boolean {
 
 	let cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
 	
-	return cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+	return cellModel.getCellPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 
 }
 
 
-private showPresentation() {
+private showCellPresentation() {
 	return this.cellModel.presentation.startsWith("CELL");
 }
 
 
-private getPresentation(): string {
-	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
+private getCellPresentation(): string {
+	return this.cell===undefined ? this.cellModel.getCellPresentation() : this.cell.getCellPresentation();
 }
 
 

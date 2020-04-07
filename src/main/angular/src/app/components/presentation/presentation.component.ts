@@ -19,7 +19,7 @@ import { EventService } from '../../services/event.service';
 		<!-- TODO: add inner html type? -->
 		<iframe *ngIf="this.getPresentationType()==='IFRAME'"
 			class="cell cell-html"
-			[src]="getPresentation() | safe: 'resourceUrl' "
+			[src]="getCellPresentation() | safe: 'resourceUrl' "
 		></iframe>
 		<div class="cell cell-html" *ngIf="this.getPresentationType()==='HTML'">
 			<div [innerHTML]="html$ | async | safe: 'html'"></div>
@@ -39,7 +39,8 @@ presentation: String;
 html$?: Subject<String>;
 
 
-constructor(eventService: EventService, @Inject("RemoteDataService") private presentationService: RemoteDataService) {
+constructor(eventService: EventService, 
+			@Inject("RemoteDataService") private cellPresentationService: RemoteDataService) {
 	super(eventService);
 	// console.debug('PresentationComponent::constructor() - %s', this.cell ? this.cell.getURI() : '');
 }
@@ -74,35 +75,36 @@ getPresentationType(): string {
 
 	const cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
 
-	return cellModel.getPresentationType();
+	return cellModel.getCellPresentationType();
 
 }
 
 
-private getPresentation(): string {
-	return this.cell===undefined ? this.cellModel.getPresentation() : this.cell.getPresentation();
+private getCellPresentation(): string {
+	return this.cell===undefined ? this.cellModel.getCellPresentation() : this.cell.getCellPresentation();
 }
 
 
-private getPresentationAllContent(): string {
-	return this.cell===undefined ? this.cellModel.getPresentationAllContent() : this.cell.getPresentationAllContent();
+private getCellPresentationAllContent(): string {
+	return this.cell===undefined ? this.cellModel.getCellPresentationAllContent() :
+									this.cell.getCellPresentationAllContent();
 }
 
-private getPresentationMethod(): string {
+private getCellPresentationMethod(): string {
 	return this.cell===undefined ? this.cellModel.cellPresentationMethod : this.cell.cellModel.cellPresentationMethod;
 }
 
 
 private updateHTMLPresentation() {
 
-	const presentationURL = this.getPresentation(); //'/dyn/preview/html/aaa;color=ff00ff';
+	const presentationURL = this.getCellPresentation(); //'/dyn/preview/html/aaa;color=ff00ff';
 
 	let presentationContent: Observable<String>;
-	if (this.getPresentationMethod()=='POST') {
-		const allPresentationContent = this.getPresentationAllContent();
-		presentationContent = this.presentationService.postText(presentationURL, allPresentationContent);
+	if (this.getCellPresentationMethod()=='POST') {
+		const allPresentationContent = this.getCellPresentationAllContent();
+		presentationContent = this.cellPresentationService.postText(presentationURL, allPresentationContent);
 	} else {
-		presentationContent = this.presentationService.getText(presentationURL);
+		presentationContent = this.cellPresentationService.getText(presentationURL);
 	}
 	presentationContent.subscribe(
 			innnerHTML => Promise.resolve(null).then(() => this.html$.next(innnerHTML)),

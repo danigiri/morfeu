@@ -70,7 +70,7 @@ ngOnInit() {
 formCallback(f: NgForm) {
 
 	// we only send an event when we are showing HTML and we need to handle presentation manually 
-	if (this.cell.cellModel.getPresentationType()==='HTML') {
+	if (this.cell.cellModel.getCellPresentationType()==='HTML') {
 		// we can optimise this if we compare this cell with the backup one, handle dirtiness from the fields, etc
 		//console.debug('>Firing CellChangedEvent');
 		//this.events.service.publish(new CellChangedEvent(this.cell));
@@ -135,7 +135,7 @@ private edit(cell: Cell) {
 
 //TODO: this is duplicated code, should refactor
 private cellPresentationIsIMG(): boolean {
-	return this.cell.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+	return this.cell.cellModel.getCellPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
 
@@ -145,7 +145,7 @@ private showPresentation() {
 
 
 private getPresentation(): string {
-	return this.cell===undefined ? this.cell.cellModel.getPresentation() : this.cell.getPresentation();
+	return this.cell===undefined ? this.cell.cellModel.getCellPresentation() : this.cell.getCellPresentation();
 }
 
 

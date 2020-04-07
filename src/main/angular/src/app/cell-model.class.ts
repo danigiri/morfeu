@@ -97,8 +97,8 @@ getCategories(): string[] {
 	return Array.from(new Set(this.attributes?.filter(a => a.category!==undefined).map(c => c.category)));
 }
 
- 
-getRawPresentation() {
+
+getRawCellPresentation() {
 
 	// TODO: handle HTML presentation
 	// TODO: for proper separation of concerns, these values should be in the component and also configurable
@@ -114,10 +114,9 @@ getRawPresentation() {
 
 }
 
+getCellPresentation() {
 
-getPresentation() {
-
-	let finalPres = this.getRawPresentation();
+	let finalPres = this.getRawCellPresentation();
 
 	if (finalPres.includes("$")) {
 			finalPres = VariableParser.expand(finalPres, "$_NAME", this.name);
@@ -128,12 +127,12 @@ getPresentation() {
 }
 
 /** we return all the possible content for presentation (not much, given models have no data) */
-getPresentationAllContent() {
+getCellPresentationAllContent() {
 	return '_name='+this.name;
 }
 
 
-getPresentationType() {
+getCellPresentationType() {
 	return this.cellPresentationType;
 }
 

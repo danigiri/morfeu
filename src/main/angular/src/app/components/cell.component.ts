@@ -310,13 +310,13 @@ subscribeToSelection() {
 
 
 private cellPresentationIsIMG(): boolean {
-	return this.cell.cellModel.getPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
+	return this.cell.cellModel.getCellPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
 
 getCellPresentation() {
 
-	const pres = this.cell.getPresentation();
+	const pres = this.cell.getCellPresentation();
 	if (pres.length > CellComponent._MAX_PRESENTATION_SIZE) {
 		console.warn('Presentation may be too long for %s (%d)', this.cell.name, pres.length);
 	}
