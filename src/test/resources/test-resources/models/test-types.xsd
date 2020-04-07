@@ -64,6 +64,7 @@
 			<xs:appinfo>
 				<mf:metadata>
 					<mf:desc>Boolean value (true|false)</mf:desc>
+					<mf:presentation>BOOLEAN</mf:presentation>
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
@@ -96,6 +97,5 @@
 
 		<xs:restriction base="xs:string" />
 	</xs:simpleType>
-
 
 </xs:schema>
