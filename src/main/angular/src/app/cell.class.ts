@@ -66,18 +66,10 @@ stripPrefixFromURIs(prefix: string) {
 }
 
 
-/** get the attribute value named this way, or return undefined if no such attribute is present */
-getAttributeValue(name: string): string {
+/** get the attribute with this name, or return undefined if no such attribute is present */
+getAttribute(name: string): Cell {
 
-	let value: string;
-	if (this.attributes) {
-		const attribute:Cell = this.attributes.find(a => a.name===name);
-		if (attribute) {
-			value = attribute.value;
-		}
-	}
-
-	return value;
+	return  this.attributes?.find(a => a.name===name);
 
 }
 
