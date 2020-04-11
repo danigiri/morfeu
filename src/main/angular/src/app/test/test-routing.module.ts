@@ -1,17 +1,19 @@
 // TEST - ROUTING . MODULE . TS
 
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
-import { ComponentsModule} from '../components/components.module';
+import { ComponentsModule } from '../components/components.module';
 
-import { CellEditorTestComponent} from '../components/cell-editor/cell-editor-test.component';
+import { AttributeDataInfoTestComponent } from '../components/attribute-data-info/attribute-data-info-test.component';
+import { CellEditorTestComponent } from '../components/cell-editor/cell-editor-test.component';
 import { ContentTestComponent } from '../components/content/content-test.component';
-import { PresentationTestComponent} from '../components/presentation/presentation-test.component';
+import { PresentationTestComponent } from '../components/presentation/presentation-test.component';
 
 const routes: Routes = [
+						{path: 'attribute-data-info-test/:case_', component: AttributeDataInfoTestComponent},
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
 						{path: 'presentation-test/:case_', component: PresentationTestComponent},
 						{path: 'content-test/:case_', component: ContentTestComponent}
@@ -26,6 +28,7 @@ const routes: Routes = [
 	],
 	exports: [RouterModule],
 	declarations: [
+					AttributeDataInfoTestComponent,
 					CellEditorTestComponent,
 					ContentTestComponent,
 					PresentationTestComponent

@@ -3,6 +3,7 @@
 package cat.calidos.morfeu.webapp.ui;
 
 import com.codeborne.selenide.SelenideElement;
+import com.google.common.base.Optional;
 
 
 /**
@@ -10,15 +11,22 @@ import com.codeborne.selenide.SelenideElement;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIAttributeData extends UIWidget<UIAttributeData> {
 
-private UICellData parent;
+private Optional<UICellData> parent;
+
+
+public UIAttributeData(SelenideElement element) {
+	this(element, null);
+}
 
 
 public UIAttributeData(SelenideElement element, UICellData parent) {
 
 	super(element);
 
-	this.parent = parent;
+	this.parent = Optional.fromNullable(parent);
+
 }
+
 
 
 /** @return the normalised name, without any UI embellishments or clarifications */
@@ -71,12 +79,22 @@ private String name_() {
 
 
 public String value() {
-	return isEditable()? element.$(".attribute-data-value").getValue() : element.$(".attribute-data-value").text();
+	return isEditable() ? element.$(".attribute-data-value").getValue() : element.$(".attribute-data-value").innerText();
 }
 
 
 public boolean hasValue() {
 	return element.$(".attribute-data-value").exists();	// this is brittle?
+}
+
+
+public boolean isBoolean() {
+	return class_().contains("attribute-data-boolean");
+}
+
+
+public boolean asBoolean() {
+	return Boolean.parseBoolean(value());
 }
 
 
@@ -138,10 +156,13 @@ public UIAttributeData clickOnCreate() {
 	if (!isNotPresent()) {
 		throw new UnsupportedOperationException("Cannot create an attribute unless it's not present");
 	}
+	if (!parent.isPresent()) {
+		throw new UnsupportedOperationException("We have no parent we cannot click on create");
+	}
 
 	element.$(".attribute-data-add").click();	// we click on the add button
 
-	return parent.attribute(this.name());		// and we now have new element, so we recreate ourselves
+	return parent.get().attribute(this.name());		// and we now have new element, so we recreate ourselves
 
 }
 

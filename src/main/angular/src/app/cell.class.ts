@@ -66,8 +66,8 @@ stripPrefixFromURIs(prefix: string) {
 }
 
 
-/** get the attribute named this way, or return undefined if no such attribute is present */
-attribute(name: string): string {
+/** get the attribute value named this way, or return undefined if no such attribute is present */
+getAttributeValue(name: string): string {
 
 	let value: string;
 	if (this.attributes) {

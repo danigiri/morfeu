@@ -9,13 +9,14 @@ import { VariableParser } from "./variable-parser.class";
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
-import {CellModelComponent} from "./components/cell-model.component";
+import { CellModelComponent } from "./components/cell-model.component";
 // ////														////
 
 export class CellModel implements NameValue, FamilyMember {
 
 static readonly DEFAULT_EMPTY_VALUE = "";
 public static readonly DEFAULT_PRESENTATION_TYPE = "IMG";
+public static readonly ATTR_BOOLEAN_PRESENTATION = 'BOOLEAN';
 
 id: string;
 isExpanded: boolean;
@@ -69,6 +70,11 @@ setComponent(c: CellModelComponent) {
 
 child(name: string): CellModel {
 	return this.children?.find(c => c.name===name);
+}
+
+
+getAttribute(name: string): CellModel {
+	return this.attributes?.find((a: CellModel) => a.name===name);
 }
 
 
