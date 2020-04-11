@@ -17,7 +17,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { PipesModule } from './pipes/pipes.module';
 
 import { AppComponent } from './app.component';
-import { AttributeDataInfoComponent } from './components/attribute-data-info.component';
 import { CatalogueListComponent } from './components/catalogue-list.component';
 import { CatalogueComponent } from './components/catalogue.component';
 import { CollapsibleComponent } from './components/collapsible.component';
@@ -47,7 +46,6 @@ import { StatusComponent } from './components/status.component';
 	],
 	declarations: [
 					AppComponent
-					, AttributeDataInfoComponent
 					, CatalogueListComponent
 					, CatalogueComponent
 					, CollapsibleComponent
