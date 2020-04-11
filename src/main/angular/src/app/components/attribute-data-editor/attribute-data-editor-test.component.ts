@@ -1,4 +1,5 @@
-// ATTRIBUTE - DATA - INFO - TEST . COMPONENT . TS
+// ATTRIBUTE - DATA - EDITOR - TEST . COMPONENT . TS
+
 
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -16,18 +17,18 @@ import { EventService } from '../../services/event.service';
 
 
 @Component({
-	selector: 'attribute-data-info-test',
-	template: `<attribute-data-info *ngIf="cell"
-				[parentCell]="cell"
-				[cellModel]="attributeCellModel"
-				[isFromCell]="true" 
-				[isFromModel]="false"
-				[index]="0"
-				></attribute-data-info>`
+	selector: 'attribute-data-edutir-test',
+	template: `
+		<attribute-data-editor *ngIf="cell"
+			[parentCell]="cell"
+			[cellModel]="attributeCellModel"
+			[index]="0"
+		></attribute-data-editor>
+	
+	`
 })
 
-
-export class AttributeDataInfoTestComponent extends TestComponent {
+export class AttributeDataEditorTestComponent extends TestComponent {
 
 private readonly content = 'target/test-classes/test-resources/documents/types.xml';
 private readonly model = 'target/test-classes/test-resources/models/test-model.xsd';
@@ -45,24 +46,18 @@ constructor(eventService: EventService,
 }
 
 
-protected test(case_: string) {
+protected test(case_: string): void {
 	switch (case_) {
-		case 'boolean-true': this.booleanTrue(); break;
-		case 'boolean-false': this.booleanFalse(); break;
-		default: this.booleanTrue();
+		default: this.boolean();
 	}
 }
 
 
-private booleanTrue() {
+private boolean() {
+
 	this.cellPath = '/test(0)/row(0)/col(0)/types(0)';
 	this.load(this.content, this.model);
-}
 
-
-private booleanFalse() {
-	this.cellPath = '/test(0)/row(0)/col(0)/types(1)';
-	this.load(this.content, this.model);
 }
 
 

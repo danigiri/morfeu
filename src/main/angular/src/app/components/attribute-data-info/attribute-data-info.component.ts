@@ -30,32 +30,30 @@ export class AttributeDataInfoComponent {
 @Input() cellModel: CellModel;	// always there
 @Input() index: number;
 
-hasValue: boolean;
 isBoolean: boolean = false;
+
 
 ngOnInit() {
 
-	this.hasValue = this.hasValue_();
 	this.isBoolean = this.cellModel.presentation === CellModel.ATTR_BOOLEAN_PRESENTATION;
 
 }
 
 
 // do we have a value to show?
-private hasValue_(): boolean {
-	return this.parentCell && this.parentCell.attributes 
-			&& this.parentCell.attributes.find(a => a.name==this.cellModel.name)!=undefined;
+hasValue_(): boolean {
+	return this.parentCell?.getAttribute(this.cellModel.name)!=undefined;
 }
 
 
 private isIdentifier(): boolean {
-	return this.parentCell!=undefined && this.parentCell.cellModel.identifier!=undefined 
+	return this.parentCell?.cellModel.identifier!=undefined 
 			&& this.parentCell.cellModel.identifier==this.cellModel;
 }
 
 
 private getValue(): string {
-	return this.parentCell.getAttribute(this.cellModel.name).value;
+	return this.parentCell?.getAttribute(this.cellModel.name).value;
 }
 
 

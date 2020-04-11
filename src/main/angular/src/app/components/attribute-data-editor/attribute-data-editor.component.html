@@ -1,0 +1,52 @@
+<li [class.attribute-data]="isPresent()"
+	[class.attribute-not-present]="!isPresent()"
+	class="attribute-data-editor list-group-item"
+	[attr._index]="index"
+>
+	<div *ngIf="isPresent()" class="input-group input-group-sm mb-3">
+		<div class="input-group-prepend">
+			<span class="attribute-data-name input-group-text"
+				[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
+				id="{{cellModel.name}}"
+			>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+		</div>
+		<ng-container [ngSwitch]="true">
+			<ng-container *ngSwitchCase="!isBoolean">
+				<input type="text"
+					class="attribute-data-value form-control"
+					attr.aria-label="{{cellModel.name}}"
+					attr.aria-describedby="{{cellModel.desc}}"
+					[(ngModel)]="this.value"
+					(change)="modified($event)"
+					(input)="modified($event)"
+				/>
+			</ng-container>
+			<ng-container *ngSwitchCase="isBoolean">
+				<input type="checkbox"
+					class="attribute-data-value form-control"
+					attr.aria-label="{{cellModel.name}}"
+					attr.aria-describedby="{{cellModel.desc}}"
+					[(ngModel)]="this.booleanValue"
+					(change)="modified($event)"
+					(input)="modified($event)"
+					[checked]="this.booleanValue"
+				/>
+			</ng-container>
+		</ng-container>
+		<div *ngIf="cellModel.minOccurs==0" class="input-group-append">
+			<img class="btn float-right attribute-data-delete"
+				src="assets/images/open-iconic/circle-x.svg"
+				(click)="delete()"
+			/>
+		</div>
+	</div>
+	<div *ngIf="!isPresent()" class="list-group-item">
+		<small class="attribute-data-name">{{cellModel.name}}</small>
+		<span class="badge float-right">
+			<img class="btn float-right attribute-data-add"
+				src="assets/images/open-iconic/plus.svg"
+				(click)="add()"
+			/>
+		</span>
+	</div>
+</li>

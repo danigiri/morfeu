@@ -7,12 +7,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ComponentsModule } from '../components/components.module';
 
+import { AttributeDataEditorTestComponent } 
+	from '../components/attribute-data-editor/attribute-data-editor-test.component';
 import { AttributeDataInfoTestComponent } from '../components/attribute-data-info/attribute-data-info-test.component';
 import { CellEditorTestComponent } from '../components/cell-editor/cell-editor-test.component';
 import { ContentTestComponent } from '../components/content/content-test.component';
 import { PresentationTestComponent } from '../components/presentation/presentation-test.component';
 
 const routes: Routes = [
+						{path: 'attribute-data-editor-test/:case_', component: AttributeDataEditorTestComponent},
 						{path: 'attribute-data-info-test/:case_', component: AttributeDataInfoTestComponent},
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
 						{path: 'presentation-test/:case_', component: PresentationTestComponent},
@@ -28,6 +31,7 @@ const routes: Routes = [
 	],
 	exports: [RouterModule],
 	declarations: [
+					AttributeDataEditorTestComponent,
 					AttributeDataInfoTestComponent,
 					CellEditorTestComponent,
 					ContentTestComponent,
@@ -35,7 +39,7 @@ const routes: Routes = [
 	]
 })
 
-export class TestRoutingModule { }
+export class TestRoutingModule {}
 
 /*
  *	  Copyright 2019 Daniel Giribet

@@ -9,7 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PipesModule } from '../pipes/pipes.module';
 
-import { AttributeDataEditorComponent } from './attribute-data-editor.component';
+import { AttributeDataEditorComponent } from './attribute-data-editor/attribute-data-editor.component';
 import { AttributeDataInfoComponent } from './attribute-data-info/attribute-data-info.component';
 import { CellComponent } from './cell.component';
 import { CellEditorComponent } from './cell-editor/cell-editor.component';
