@@ -77,6 +77,7 @@ public void editCellAndSave() {
 	number.enterTextNext("66");
 	dataEditor.clickSave();
 
+	data = test.child("row(0)").child("col(0)").child("data(0)").select().activate();	// refresh
 	attributes = data.cellInfo().attributes();	// re-read attributes from the now-modified cell
 	text = checkAttribute(attributes, "text", "foo");
 	number = checkAttribute(attributes, "number", "66");
