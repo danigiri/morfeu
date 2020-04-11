@@ -1,18 +1,17 @@
 // CONTENT - TEST . COMPONENT . TS
 
-import { AfterViewInit, Component, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CellDocument } from '../../cell-document.class';
+import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
-import { ModelComponent } from '../model.component';
-import { TestComponent } from '../../test/test-component.interface';
+import { TestComponent } from '../../test/test-component.class';
 
 import { RemoteObjectService } from '../../services/remote-object.service';
 
 import { ContentRequestEvent } from '../../events/content-request.event';
-import { EventListener } from '../../events/event-listener.class';
 import { EventService } from '../../services/event.service';
 
 @Component({
@@ -26,22 +25,20 @@ import { EventService } from '../../services/event.service';
 	`
 })
 
-export class ContentTestComponent extends EventListener implements AfterViewInit, TestComponent {
+export class ContentTestComponent extends TestComponent {
+
+document: CellDocument;
 
 
 constructor(eventService: EventService,
-			private route: ActivatedRoute,
-			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>) {
-	super(eventService);
-}
-
-ngAfterViewInit() {
-
-	this.route.paramMap.subscribe(params => this.load(params.get('case_')));
+			route: ActivatedRoute,
+			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
+			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
+	super(eventService, route, contentService, modelService);
 }
 
 
-load(case_: string) {
+protected test(case_: string) {
 
 	switch (case_) {
 		//case 'post' : this.loadPOST(); break;
@@ -60,13 +57,15 @@ private readonly() {
 							,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
 							,"contentURI": "target/test-classes/test-resources/documents/readonly.xml"
 	}`;
-	const DOC = Object.create(CellDocument.prototype); // to simulate a static call
-	const doc = DOC.fromJSON(docContent);
-	const modelURI = ModelComponent.modelURIFrom(doc.modelURI);
-	this.modelService.get(modelURI, Model).subscribe(model => 
-		this.events.service.publish(new ContentRequestEvent(doc, model))
-	);
+	const DOCUMENT = Object.create(CellDocument.prototype); // to simulate a static call
+	this.document = DOCUMENT.fromJSON(docContent);
+	this.loadModel(this.document.modelURI);
 
+}
+
+
+protected loadedModel(model: Model): void {
+	this.events.service.publish(new ContentRequestEvent(this.document, model))
 }
 
 

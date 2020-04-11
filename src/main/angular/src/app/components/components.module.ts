@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PipesModule } from '../pipes/pipes.module';
 
 import { AttributeDataEditorComponent } from './attribute-data-editor.component';
+import { AttributeDataInfoComponent } from './attribute-data-info/attribute-data-info.component';
 import { CellComponent } from './cell.component';
 import { CellEditorComponent } from './cell-editor/cell-editor.component';
 import { CellHeaderComponent } from './cell-header.component';
@@ -39,6 +40,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 	],
 	declarations: [
 					AttributeDataEditorComponent,
+					AttributeDataInfoComponent,
 					CellComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
@@ -51,6 +53,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 	],
 	exports: [
 					AttributeDataEditorComponent,
+					AttributeDataInfoComponent,
 					CellComponent,
 					CellEditorComponent,
 					CellHeaderComponent,

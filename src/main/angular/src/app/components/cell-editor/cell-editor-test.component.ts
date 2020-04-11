@@ -1,44 +1,38 @@
 // CELL - EDITOR - TEST . COMPONENT . TS
 
-import {Component, Inject, AfterViewInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { Component, Inject, AfterViewInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import {Content, ContentJSON } from '../../content.class';
-import {Model, ModelJSON} from '../../model.class';
+import { Content, ContentJSON } from '../../content.class';
+import { Model, ModelJSON } from '../../model.class';
 
-import { ContentComponent } from '../content/content.component';
-import { ModelComponent } from '../model.component';
+import { TestComponent } from '../../test/test-component.class';
 
-import {RemoteObjectService} from '../../services/remote-object.service';
+import { RemoteObjectService } from '../../services/remote-object.service';
 
 import { CellEditEvent } from '../../events/cell-edit.event';
-import { EventListener } from '../../events/event-listener.class';
 import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'cell-editor-test',
-	template: `<cell-editor></cell-editor>`
+	template: '<cell-editor></cell-editor>'
 })
 
-export class CellEditorTestComponent extends EventListener implements AfterViewInit {
+export class CellEditorTestComponent extends TestComponent {
 
 private readonly model = 'target/test-classes/test-resources/models/test-model.xsd';
+private cellPath: string;
 
 
 constructor(eventService: EventService,
-			private route: ActivatedRoute, 
-			@Inject("ContentService") private contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>) {
-	super(eventService);
+			route: ActivatedRoute,
+			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
+			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
+	super(eventService, route, contentService, modelService);
 }
 
 
-ngAfterViewInit() {
-	this.route.paramMap.subscribe(params => this.load(params.get('case_')));
-}
-
-
-private load(case_: string) {
+protected test(case_: string) {
 	switch (case_) {
 		case 'document5' : this.document5(); break;
 		case 'categories-all' : this.categoriesAll(); break;
@@ -49,42 +43,31 @@ private load(case_: string) {
 
 private document1() {
 
-	const content = 'target/test-classes/test-resources/documents/document1.xml';
-	const cell = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
-	this.loadContent(content, this.model, cell);
+	this.cellPath = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
+	this.load('target/test-classes/test-resources/documents/document1.xml', this.model);
 
 }
 
 
 private document5() {
 
-	const content = 'target/test-classes/test-resources/documents/document5.xml';
-	const cell = '/test(0)/row(0)/col(0)/data3(0)';
-	this.loadContent(content, this.model, cell);
+	this.cellPath = '/test(0)/row(0)/col(0)/data3(0)';
+	this.load('target/test-classes/test-resources/documents/document5.xml', this.model);
 
 }
 
 private categoriesAll() {
 
-	const content = 'target/test-classes/test-resources/documents/categories.xml';
-	const cell = '/test(0)/row(0)/col(0)/row(0)/col(0)/categ(0)';
-	this.loadContent(content, this.model, cell);
+	this.cellPath = '/test(0)/row(0)/col(0)/row(0)/col(0)/categ(0)';
+	this.load('target/test-classes/test-resources/documents/categories.xml', this.model);
 
 }
 
+protected loaded(model: Model, content: Content): void {
 
-private loadContent(contentURI: string, model: string, cellPath: string) {
-
-	const contentAndModelURI = ContentComponent.contentURIFrom(contentURI, model);
-	const modelURI = ModelComponent.modelURIFrom(model);
-
-	this.modelService.get(modelURI, Model).subscribe(model => {
-		this.contentService.get(contentAndModelURI, Content).subscribe( (content: Content) => {
-			const cell = content.findCellWithURI(contentURI+cellPath);
-			cell.associateWith(model, cell.cellModelURI);
-			this.events.service.publish(new CellEditEvent(cell));
-		});
-	});
+	const cell = content.findCellWithURI(content.getURI()+this.cellPath);
+	cell.associateWith(model, cell.cellModelURI);
+	this.events.service.publish(new CellEditEvent(cell));
 
 }
 

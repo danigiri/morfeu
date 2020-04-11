@@ -4,13 +4,16 @@ import { AfterViewInit, Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Configuration } from '../../config/configuration.class';
-import { TestComponent } from '../../test/test-component.interface';
+import { TestComponent } from '../../test/test-component.class';
 
 import { Cell } from '../../cell.class';
 import { CellModel } from '../../cell-model.class';
+import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
 import { RemoteObjectService } from '../../services/remote-object.service';
+
+import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'presentation-test',
@@ -18,26 +21,25 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 				<presentation *ngIf="cell" [cell]="cell"></presentation>`
 })
 
-export class PresentationTestComponent implements AfterViewInit, TestComponent {
+export class PresentationTestComponent extends TestComponent {
 
 private readonly modelURI = Configuration.BACKEND_PREF+'/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 model: CellModel;
 cell: Cell;
 
 
-constructor(@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON>,
-			private route: ActivatedRoute) {}
-
-
-ngAfterViewInit() {
-	this.route.paramMap.subscribe(params => this.load(params.get('case_')));
+constructor(eventService: EventService,
+			route: ActivatedRoute,
+			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
+			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
+	super(eventService, route, contentService, modelService);
 }
 
 
-load(case_: string) {
+protected test(case_: string) {
 	switch (case_) {
 		case 'post' : this.loadPOST(); break;
-		default: this.loadModel();
+		default: this.loadModel('target/test-classes/test-resources/models/test-model.xsd');
 	}
 }
 
@@ -87,10 +89,8 @@ private loadPOST() {
 }
 
 
-private loadModel() {
-
-	const data3CellmodelURI = 'target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3';
-	this.modelService.get(this.modelURI, Model).subscribe(m => this.model = m.findCellModel(data3CellmodelURI));
+protected loadedModel(model: Model): void {
+	this.model = model.findCellModel(model.getURI()+'/test/row/col/data3');
 
 }
 
