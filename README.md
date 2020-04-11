@@ -22,12 +22,12 @@ cd morfeu
 docker build -t morfeu-build -f Dockerfile-build .
 
 # copy generated war
-mkdir target
-docker run --rm --entrypoint cat morfeu-build /target/morfeu-webapp-0.6.0-SNAPSHOT.war > target/morfeu-webapp-0.6.0-SNAPSHOT.war
+mkdir -p target
+docker run --rm --entrypoint cat morfeu-build /target/morfeu-webapp-0.6.2-SNAPSHOT.war > target/morfeu-webapp-0.6.2-SNAPSHOT.war
 
 # generate runnable docker and run it
 docker build -t morfeu .
-docker run --rm morfeu
+docker run --rm -p 8980:8980 morfeu
 ```
 
 ### Manually

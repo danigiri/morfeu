@@ -1,7 +1,7 @@
 // CELL . COMPONENT . TS
 
 import { filter } from 'rxjs/operators';
-import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -26,6 +26,7 @@ import { EventService } from '../services/event.service';
 
 @Component({
 	selector: 'cell',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './cell.component.html',
 	styleUrls: ['./cell.component.css', './presentation/presentation.css']
 	// encapsulation: ViewEncapsulation.Emulated,
@@ -53,7 +54,7 @@ info = false;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
 
 
-constructor(eventService: EventService) {
+constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
 	super(eventService);
 }
 
@@ -151,6 +152,8 @@ focusOn(cell: Cell) {
 	// to make that happen we can associate the cell-model.class with the component (view) and just do it
 	// without events
 
+	this.cdr.markForCheck();
+
 }
 
 
@@ -160,6 +163,8 @@ focusOff(cell: Cell) {
 	// console.log('[UI] CellComponent::focusOff()');
 	this.becomeInactive(cell);
 	this.events.service.publish(new CellDeactivatedEvent(cell));
+
+	this.cdr.markForCheck();
 
 }
 
@@ -205,6 +210,8 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	}
 	this.cell.adopt(newCell, position);
 
+	this.cdr.markForCheck();
+
 }
 
 
@@ -221,6 +228,8 @@ becomeActive(cell: Cell) {
 
 	//console.debug('[becomeActive]>%s, %s', this.cell.getAdoptionName(), this.cell.getAdoptionURI());
 
+	this.cdr.markForCheck();
+
 }
 
 
@@ -231,6 +240,8 @@ becomeInactive(cell: Cell) {
 	this.active = false;
 	this.activeReadonly = false;
 	this.dragEnabled = false;
+
+	this.cdr.markForCheck();
 
 }
 
@@ -295,6 +306,8 @@ select(position: number) {
 		this.clearSelection();	 // out of bounds, sorry, clear
 	}
 
+	this.cdr.markForCheck();
+
 }
 
 
@@ -338,6 +351,8 @@ private remove() {
 	if (parent) {
 		parent.remove(this.cell);
 	}
+
+	this.cdr.markForCheck();
 
 }
 

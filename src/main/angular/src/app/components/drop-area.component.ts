@@ -1,7 +1,7 @@
 // DROP - AREA . COMPONENT . TS
 
-import { Component, Input, OnInit} from '@angular/core';
-import {filter} from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { filter } from 'rxjs/operators';
 
 
 import { FamilyMember } from '../family-member.interface';
@@ -22,6 +22,7 @@ import { UXEvent } from '../events/ux.event';
 
 @Component({
 	selector: 'drop-area',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 			<div	class="drop-area" 
 					[class.drop-area-active]="active && !selected" 
@@ -74,7 +75,7 @@ selected = false;			// are we selected?
 info = false;
 
 
-constructor(eventService: EventService) {
+constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
 	super(eventService);
 }
 
@@ -154,6 +155,8 @@ select(position:number) {
 		this.clearSelection();	// out of bounds, sorry, clear
 	}
 
+	this.cdr.markForCheck();
+
 }
 
 
@@ -168,12 +171,18 @@ subscribeToSelection() {
 
 
 becomeInactive() {
+
 	this.active = false;
+	this.cdr.markForCheck();
+
 }
 
 
 becomeActive() {
+
 	this.active = true;
+	this.cdr.markForCheck();
+
 }
 
 
@@ -190,7 +199,6 @@ matchesCellmodel(cellModel: CellModel): boolean {
 
 /** we drop here as we are only droppeable if we are active, and that's model validated */
 dropSuccess($event: any) {
-
 	this.performDropHere($event.dragData, this.parent, this.position);
 }
 
@@ -201,6 +209,8 @@ performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 	this.events.service.publish(new CellDropEvent(cell, this.parent, this.position));
 	// the document is now dirty
 	this.events.service.publish(new UXEvent(UXEvent.DOCUMENT_DIRTY));
+
+	this.cdr.markForCheck();
 
 }
 
