@@ -43,6 +43,8 @@ public class ModelTezt extends Tezt {
 
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
+public  static final int EXPECTED_COL_CHILDREN_COUNT = 12;
+
 
 protected Document produceDocumentFromPath(String path)
 throws InterruptedException, ExecutionException, ParsingException, FetchingException, ValidationException {

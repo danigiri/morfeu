@@ -36,8 +36,6 @@ import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellModelModuleIntTest extends ModelTezt {
 
-private static final int EXPECTED_COL_CHILDREN_COUNT = 12;
-
 @Mock Lazy<Collection<? extends XSAttributeUse>> mockAttributesProducer;
 
 private URI modelURI;
