@@ -9,12 +9,12 @@
 	>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
 	<ng-container  *ngIf="hasValue" [ngSwitch]="true">
 		<ng-container *ngSwitchCase="!isBoolean">
-			<span class="attribute-data-value">{{value}}</span>
+			<span class="attribute-data-value">{{getValue()}}</span>
 		</ng-container>
 		<ng-container *ngSwitchCase="isBoolean">
 			<span *ngIf="value==='true'"> ✅</span>
 			<span *ngIf="value!=='true'"> ❌</span>
-			<span class="attribute-data-value d-none">{{value}}</span>
+			<span class="attribute-data-value d-none">{{getValue()}}</span>
 		</ng-container>
 	</ng-container>
 	<span class="text-muted attribute-data-type-name float-right">({{cellModel.type_.name}})</span>
