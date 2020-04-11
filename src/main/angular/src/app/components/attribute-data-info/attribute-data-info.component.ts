@@ -32,13 +32,11 @@ export class AttributeDataInfoComponent {
 
 hasValue: boolean;
 isBoolean: boolean = false;
-value: string;
 
 ngOnInit() {
 
 	this.hasValue = this.hasValue_();
 	this.isBoolean = this.cellModel.presentation === CellModel.ATTR_BOOLEAN_PRESENTATION;
-	this.value = this.hasValue ? this.getValue() : undefined;
 
 }
 

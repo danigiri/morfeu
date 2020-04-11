@@ -12,8 +12,8 @@
 			<span class="attribute-data-value">{{getValue()}}</span>
 		</ng-container>
 		<ng-container *ngSwitchCase="isBoolean">
-			<span *ngIf="value==='true'"> ✅</span>
-			<span *ngIf="value!=='true'"> ❌</span>
+			<span *ngIf="getValue()==='true'"> ✅ <small>true</small></span>
+			<span *ngIf="getValue()!=='true'"> ❌ <small>false</small></span>
 			<span class="attribute-data-value d-none">{{getValue()}}</span>
 		</ng-container>
 	</ng-container>
