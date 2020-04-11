@@ -16,15 +16,17 @@ private Optional<XSType> xsType;
 private Optional<Metadata> metadata;
 private boolean isGlobal;
 
+
 public Type(URI u, String name) {
-	
+
 	super(u, name, "TYPE DESC");
-	
+
 	this.xsType = Optional.empty();
 	this.isGlobal = false;
 	this.metadata = Optional.empty();
-	
+
 }
+
 
 public Type(URI u, String name, XSType xsType, boolean isGlobal, Metadata m) {
 	//TODO: extract description for types from annotation
@@ -53,6 +55,7 @@ public Metadata getMetadata() {
 
 
 public boolean isContentValid(Object content) {
+
 	if (isSimple()) {
 		//TODO: we're assuming we have a base type that can tell us how to validate
 		XSType baseType = xsType.get().getBaseType();
@@ -62,17 +65,18 @@ public boolean isContentValid(Object content) {
 		case "integer":
 			return validateIntegers(content);
 		default:
+
 			return false;
 		}
 	} else {
+
 		return false;
+
 	}
+
 }
 
 
-/* (non-Javadoc)
-* @see java.lang.Object#toString()
-*//////////////////////////////////////////////////////////////////////////////
 @Override
 public String toString() {
 	return "["+name+", "+(isSimple() ? "simple]" : "complex]");
@@ -94,8 +98,9 @@ protected boolean validateIntegers(Object content) {
 	} else {
 		isValid = false;
 	} 
-	
+
 	return isValid;
+
 }
 
 

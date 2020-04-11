@@ -90,6 +90,7 @@ private getCellPresentationAllContent(): string {
 									this.cell.getCellPresentationAllContent();
 }
 
+
 private getCellPresentationMethod(): string {
 	return this.cell===undefined ? this.cellModel.cellPresentationMethod : this.cell.cellModel.cellPresentationMethod;
 }

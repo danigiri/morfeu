@@ -6,13 +6,13 @@ import {Cell} from '../cell.class';
 
 export class CellChangedEvent extends MorfeuEvent {
 
-constructor(private cell: Cell) {
+constructor(public cell: Cell) {
 	super('CellChangedEvent');
 }
 
 
 public toString = (): string => {
-	return 'CellChangedEvent:{'+this.cell.URI+'}';
+	return 'CellChangedEvent:{'+this.cell?.URI+'}';
 }
 
 

@@ -51,6 +51,7 @@ categories: string[];
 defaultCategoryAttributes: CellModel[];
 attributesByCategory: Map<string, CellModel[]>;
 
+
 constructor(eventService: EventService, private modalService: NgbModal) {
 	super(eventService);
 }
@@ -74,15 +75,6 @@ formCallback(f: NgForm) {
 		// we can optimise this if we compare this cell with the backup one, handle dirtiness from the fields, etc
 		//console.debug('>Firing CellChangedEvent');
 		//this.events.service.publish(new CellChangedEvent(this.cell));
-	}
-
-}
-
-
-ngOnDestroy() {
-
-	if (this.formSubscription) {
-		this.formSubscription.unsubscribe();
 	}
 
 }
@@ -222,6 +214,15 @@ private removeValue() {
 
 private modified(e) {
 	this.events.service.publish(new CellChangedEvent(this.cell));
+}
+
+
+ngOnDestroy() {
+
+	if (this.formSubscription) {
+		this.formSubscription.unsubscribe();
+	}
+
 }
 
 
