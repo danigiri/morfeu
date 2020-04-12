@@ -46,7 +46,7 @@ RUN apk add --no-cache freetype fontconfig ttf-ubuntu-font-family
 
 # create jetty-base folder and add the configuration
 RUN mkdir -p ${JETTY_BASE}/webapps
-COPY --from=build ./target/jetty /jetty-base
+COPY --from=build ./target/classes/jetty /jetty-base
 
 # add war
 COPY --from=build ./target/morfeu-webapp-${VERSION}-SNAPSHOT.war ${JETTY_BASE}/webapps/root.war
