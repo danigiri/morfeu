@@ -24,7 +24,6 @@ import { EventService } from '../../services/event.service';
 			[cellModel]="attributeCellModel"
 			[index]="0"
 		></attribute-data-editor>
-	
 	`
 })
 
@@ -48,6 +47,7 @@ constructor(eventService: EventService,
 
 protected test(case_: string): void {
 	switch (case_) {
+		case 'boolean-true' : this.boolean(); break;
 		default: this.boolean();
 	}
 }

@@ -1,4 +1,5 @@
 package cat.calidos.morfeu.webapp;
+// ATTRIBUTE DATA EDITOR COMPONENT UI TEST . JAVA
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.$;
@@ -12,36 +13,25 @@ import cat.calidos.morfeu.webapp.ui.UIAttributeData;
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class AttributeDataInfoComponentUITest extends UITezt {
+public class AttributeDataEditorComponentUITest extends UITezt {
 
 
-@Test @DisplayName("Boolean attribute data (true)")
+@Test @DisplayName("Boolean attribute editor (true)")
 public void testBooleanAttributeTrue() {
 
-	open(appBaseURL+"test/attribute-data-info-test/boolean-true");
+	open(appBaseURL+"test/attribute-data-editor-test/boolean-true");
 
 	UIAttributeData attribute = new UIAttributeData($(".attribute-data"));
-	assertAll("check boolean true",
+	assertAll("check default as true",
 		() -> assertNotNull(attribute),
 		() -> assertTrue(attribute.isBoolean(), "attribute should be a boolean and it is not"),
 		() -> assertTrue(attribute.asBoolean(), "attribute should have the value 'true'"),
-		() -> assertFalse(attribute.isEditable())
+		() -> assertTrue(attribute.isEditable())
+
 	);
 
-}
-
-
-@Test @DisplayName("Boolean attribute data (false)")
-public void testBooleanAttributeFalse() {
-
-	open(appBaseURL+"test/attribute-data-info-test/boolean-false");
-
-	UIAttributeData attribute = new UIAttributeData($(".attribute-data"));
-	assertAll("check boolean false",
-		() -> assertNotNull(attribute),
-		() -> assertTrue(attribute.isBoolean(), "attribute should be a boolean and it is not"),
-		() -> assertFalse(attribute.asBoolean(), "attribute should have the value 'false'")
-	);
+	attribute.toggle();
+	assertTrue(attribute.asBoolean(), "attribute should have the value 'true'");
 
 }
 

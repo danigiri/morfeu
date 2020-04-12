@@ -23,6 +23,7 @@ import { EventService } from '../../services/event.service';
 				.attribute-data-value {}
 				.attribute-data-delete {}
 				.attribute-data-add {}
+				.attribute-data-boolean {}
 	`]
 })
 
@@ -66,15 +67,13 @@ set value(v: string) {
 }
 
 
-
-
 get booleanValue(): boolean {
 	return this.parentCell.getAttribute(this.cellModel?.name).value==='true';
 }
 
 
 set booleanValue(v: boolean) {
-	this.parentCell.getAttribute(this.cellModel?.name).value = v ? 'true' : 'false';
+	this.parentCell.getAttribute(this.cellModel?.name).value = v===true ? 'true' : 'false';
 }
 
 
@@ -102,7 +101,7 @@ private delete() {
 
 	console.log("[UI] deleting cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
-		this.parentCell.remove(this.parentCell.attributes.find(a => a.name===this.cellModel.name))
+		this.parentCell.remove(this.parentCell.getAttribute(this.cellModel.name))
 		this.events.service.publish(new CellChangedEvent(this.parentCell));
 	});
 

@@ -11,6 +11,7 @@ import com.google.common.base.Optional;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIAttributeData extends UIWidget<UIAttributeData> {
 
+private static final String ATTRIBUTE_DATA_VALUE = ".attribute-data-value";
 private Optional<UICellData> parent;
 
 
@@ -79,12 +80,12 @@ private String name_() {
 
 
 public String value() {
-	return isEditable() ? element.$(".attribute-data-value").getValue() : element.$(".attribute-data-value").innerText();
+	return isEditable() ? element.$(ATTRIBUTE_DATA_VALUE).getValue() : element.$(ATTRIBUTE_DATA_VALUE).innerText();
 }
 
 
 public boolean hasValue() {
-	return element.$(".attribute-data-value").exists();	// this is brittle?
+	return element.$(ATTRIBUTE_DATA_VALUE).exists();	// this is brittle?
 }
 
 
@@ -94,7 +95,7 @@ public boolean isBoolean() {
 
 
 public boolean asBoolean() {
-	return Boolean.parseBoolean(value());
+	return isEditable() ? value().equals("on") : Boolean.parseBoolean(value());
 }
 
 
@@ -140,11 +141,27 @@ public UIAttributeData eraseValueInField() {
 		throw new UnsupportedOperationException("Cannot erase the value of a non-editable field");
 	}
 
-
 	int length = value().length();
 	for (int i=0;i<length;i++) {
 		pressBackspace();
 	}
+
+	return this;
+
+}
+
+
+public UIAttributeData toggle() {
+
+	if (!isBoolean()) {
+		throw new UnsupportedOperationException("Cannot toggle the value of a non-boolean field");
+	}
+
+	if (!isEditable()) {
+		throw new UnsupportedOperationException("Cannot toggle the value of a non-editable boolean field");
+	}
+
+	element.$(ATTRIBUTE_DATA_VALUE).click();
 
 	return this;
 

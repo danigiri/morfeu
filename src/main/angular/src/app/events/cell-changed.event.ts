@@ -6,6 +6,7 @@ import {Cell} from '../cell.class';
 
 export class CellChangedEvent extends MorfeuEvent {
 
+
 constructor(public cell: Cell) {
 	super('CellChangedEvent');
 }
