@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
+import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
@@ -60,6 +61,7 @@ public ControlComponent getControl(String path, Map<String, String> params) {
 										.method(DaggerControlComponent.GET)
 										.withParams(params)
 										.andContext(context)
+										.encoding(Config.DEFAULT_CHARSET)
 										.build();
 }
 
@@ -70,6 +72,7 @@ public ControlComponent postControl(String path, Map<String, String> params) {
 										.method(DaggerControlComponent.POST)
 										.withParams(params)
 										.andContext(context)
+										.encoding(Config.DEFAULT_CHARSET)
 										.build();
 }
 

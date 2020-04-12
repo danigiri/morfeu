@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
 
@@ -38,6 +39,7 @@ public void testPingControl() {
 																.method(DaggerControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
+																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 	assertTrue("Should match /ping path", controlComponent.matches());
 	assertEquals("OK", controlComponent.process());
@@ -54,10 +56,20 @@ public void testPingControlWithParam() {
 																.method(DaggerControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
+																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 	assertTrue("Should match /ping/param path", controlComponent.matches());
 	assertEquals("OK param", controlComponent.process());
 	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
+
+	controlComponent = DaggerControlComponent.builder()
+			.withPath("/ping/param%20with%20space")
+			.method(DaggerControlComponent.GET)
+			.withParams(emptyParams)
+			.andContext(context)
+			.encoding(Config.DEFAULT_CHARSET)
+			.build();
+	assertTrue("Should match /ping/param path", controlComponent.matches());
 
 }
 
@@ -70,6 +82,7 @@ public void testNoMatch() {
 																.method(DaggerControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
+																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 
 	assertFalse(controlComponent.matches());
@@ -88,6 +101,7 @@ public void testContext() {
 																.method(DaggerControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
+																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 	assertTrue("Should match /counter path", controlComponent.matches());
 	assertEquals("1", controlComponent.process());

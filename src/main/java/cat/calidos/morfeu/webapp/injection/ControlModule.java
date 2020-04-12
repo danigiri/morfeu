@@ -13,12 +13,12 @@ import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.utils.Config;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
@@ -30,8 +30,10 @@ import dagger.multibindings.StringKey;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ControlModule {
-
 protected final static Logger log = LoggerFactory.getLogger(ControlModule.class);
+
+private static final String DEFAULT_ENCODING = "UTF-8";
+
 
 // Given the input path, the path elements, the explicit parameters, look for the control and run it on the data
 @Provides @Named("Content")
@@ -104,7 +106,9 @@ public static Optional<Pattern> matchedPathPattern(@Named("Path") String path,
 
 //
 @Provides
-List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPathPattern) {
+List<String> pathElems(@Named("Path") String path, 
+						Optional<Pattern> matchedPathPattern,
+						@Named("effectiveEncoding") String effectiveEncoding) {
 
 	ArrayList<String> pathElems = new ArrayList<String>();
 
@@ -114,7 +118,7 @@ List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPath
 		for (int i=0; i<=matcher.groupCount(); i++) {
 			String elem = matcher.group(i);
 			if (elem!=null) {
-				String decoded = decode(elem);	// we turn %20 to ' ' and things like that
+				String decoded = decode(elem, effectiveEncoding);	// we turn %20 to ' ' and things like that
 				pathElems.add(decoded);
 			}
 		}
@@ -133,11 +137,17 @@ public static String contentTypeDefaultMap() {
 }
 
 
-private String decode(String s) {
+@Provides @Named("effectiveEncoding") 
+String encoding(@Named("encoding") @Nullable String encoding) {
+	return encoding==null ? DEFAULT_ENCODING : encoding;
+}
+
+
+private String decode(String s, String encoding) {
 
 	String decoded;
 	try {
-		decoded = URLDecoder.decode(s, Config.DEFAULT_CHARSET);
+		decoded = URLDecoder.decode(s, encoding);
 	} catch (UnsupportedEncodingException e) {
 		decoded = s;
 	}

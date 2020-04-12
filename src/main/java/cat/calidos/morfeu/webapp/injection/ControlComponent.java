@@ -43,6 +43,7 @@ interface Builder {
 	@BindsInstance Builder method(@Named("Method") String method);
 	@BindsInstance Builder withParams(@Named("Params") Map<String, String> params);
 	@BindsInstance Builder andContext(@Nullable ServletContext context);
+	@BindsInstance Builder encoding(@Named("encoding") @Nullable String encoding);
 
 	ControlComponent build();
 
