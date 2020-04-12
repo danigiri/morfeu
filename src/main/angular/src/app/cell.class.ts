@@ -456,10 +456,12 @@ canAdopt(newMember: FamilyMember): boolean {
 
 	// we will do all checks one by one and return to optimise speed
 
+	if (!this.cellModel) {	// this will be true for the root node, though this can be refactored to point to the model
+		return false;
+	}
 	if (!this.canBeModified()) {
 		return false;
 	}
-
 	// we check the model compatibility first
 	if (!this.cellModel.canAdopt(newMember)) {
 		return false;
