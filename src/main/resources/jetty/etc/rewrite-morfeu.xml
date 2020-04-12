@@ -1,0 +1,21 @@
+<?xml version="1.0"?><!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_3.dtd">
+
+<!-- =============================================================== --><!-- Configure the demos --><!-- =============================================================== -->
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+
+	<!-- ============================================================= -->
+	<!-- Add rewrite rules -->
+	<!-- ============================================================= -->
+	<Ref refid="Rewrite">
+
+		<!-- test links now work as this internally ends up with all test links handled by the index -->
+		<Call name="addRule">
+			<Arg>
+				<New class="org.eclipse.jetty.rewrite.handler.RewriteRegexRule">
+					<Set name="regex">/test/(.*)</Set>
+					<Set name="replacement">/index.html</Set>
+				</New>
+			</Arg>
+		</Call>
+	</Ref>
+</Configure>

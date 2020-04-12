@@ -39,7 +39,7 @@
 			<resource>
 				<directory>src/test/resources</directory>
 			</resource>
-			<resource>
+			<resource>											<!-- folder for angular app distribution -->
 				<directory>src/main/angular/dist</directory>	<!-- will create any empty dist dir in target -->
 				<targetPath>${project.build.directory}/dist</targetPath>
 			</resource>
@@ -49,7 +49,7 @@
 				<targetPath>${project.build.directory}/scripts</targetPath>
 			</resource>
 		</resources>
-	
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
