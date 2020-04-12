@@ -2,6 +2,8 @@
 
 package cat.calidos.morfeu.webapp.injection;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.utils.Config;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
@@ -111,7 +114,8 @@ List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPath
 		for (int i=0; i<=matcher.groupCount(); i++) {
 			String elem = matcher.group(i);
 			if (elem!=null) {
-				pathElems.add(elem);
+				String decoded = decode(elem);	// we turn %20 to ' ' and things like that
+				pathElems.add(decoded);
 			}
 		}
 	}
@@ -126,6 +130,20 @@ List<String> pathElems(@Named("Path") String path, Optional<Pattern> matchedPath
 @StringKey("____(NEVERtoBEm4tCHED3241234")
 public static String contentTypeDefaultMap() {
 	return ControlComponent.TEXT;
+}
+
+
+private String decode(String s) {
+
+	String decoded;
+	try {
+		decoded = URLDecoder.decode(s, Config.DEFAULT_CHARSET);
+	} catch (UnsupportedEncodingException e) {
+		decoded = s;
+	}
+
+	return decoded;
+
 }
 
 

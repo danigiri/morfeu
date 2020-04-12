@@ -14,9 +14,9 @@ static expand(str: string, variable: string, data: string|NameValue[]): string {
 		if (data===null || data===undefined) {	// this behaviour could be reverted to leave string unmodified
 			out = out.replace(variable, '');
 		} else if (typeof data === 'string') {	// we do a single variable replacement
-			out = out.replace(variable, data);
+			out = out.replace(variable, encodeURIComponent(data));
 		} else {
-			const values = (<NameValue[]> data).map(v => v.name+'='+v.value).join('&');
+			const values = (<NameValue[]> data).map(v => v.name+'='+encodeURIComponent(v.value)).join('&');
 			out = out.replace(variable, values);
 		}
 	}
@@ -47,7 +47,7 @@ static expandVariables(str: string, data: NameValue[]): string {
 			const name = out.substring(varStart+2, varEnd);
 			const dataEntry = data.find( a => a.name===name);
 			const value = dataEntry!==undefined && dataEntry.value ? dataEntry.value : '';	// watch value not defined!
-			out = VariableParser.expand(out, '${'+name+'}', value);
+			out = VariableParser.expand(out, '${'+name+'}', encodeURIComponent(value));
 			varStart = out.indexOf('${', varStart);
 		}
 
