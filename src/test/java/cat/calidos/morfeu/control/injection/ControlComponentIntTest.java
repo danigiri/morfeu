@@ -63,13 +63,14 @@ public void testPingControlWithParam() {
 	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
 
 	controlComponent = DaggerControlComponent.builder()
-			.withPath("/ping/param%20with%20space")
+			.withPath("/ping/param%20with%20spaces")
 			.method(DaggerControlComponent.GET)
 			.withParams(emptyParams)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)
 			.build();
-	assertTrue("Should match /ping/param path", controlComponent.matches());
+	assertTrue("Should match /ping/param path with %20 encoded spaces", controlComponent.matches());
+	assertEquals("OK param with spaces", controlComponent.process());
 
 }
 
