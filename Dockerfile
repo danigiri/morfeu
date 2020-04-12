@@ -60,4 +60,3 @@ WORKDIR ${JETTY_HOME}
 #ENTRYPOINT java -jar ./start.jar --module=http jetty.http.port=8980 -D__RESOURCES_PREFIX=file://${JETTY_HOME}/
 #ENTRYPOINT java -jar ./start.jar  -D__RESOURCES_PREFIX=file://${JETTY_HOME}/
 ENTRYPOINT java -jar ./start.jar jetty.base=${JETTY_BASE} -D__RESOURCES_PREFIX=file://${JETTY_HOME}/
-
