@@ -74,7 +74,10 @@ get value(): string {
 set value(v: string) {
 
 	this.parentCell.getAttribute(this.cellModel.name).value = v;
-	this.validates = this.regexp?.test(v);
+	if (this.regexp) {
+		const result = this.regexp.exec(v);
+		this.validates = result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing
+	}
 
 }
 
@@ -105,6 +108,9 @@ private add() {
 
 private modified(e) {
 	this.events.service.publish(new CellChangedEvent(this.parentCell));
+	if (!this.validates) {
+		console.debug('Invalid value');
+	}
 }
 
 
