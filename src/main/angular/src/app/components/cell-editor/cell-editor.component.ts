@@ -106,7 +106,7 @@ private edit(cell: Cell) {
 		this.showAttributes = cellModel.attributes!==undefined && cellModel.category===undefined;
 
 		// handle attribute categories if needed
-		this.showCategories =  cellModel.attributes!==undefined && cellModel.category!==undefined;
+		this.showCategories = cellModel.attributes!==undefined && cellModel.category!==undefined;
 		if (this.showCategories) {
 			this.defaultCategoryAttributes = cellModel.getAttributesInCategory(cellModel.category);
 			this.attributesByCategory = cellModel.getAttributesByCategory();

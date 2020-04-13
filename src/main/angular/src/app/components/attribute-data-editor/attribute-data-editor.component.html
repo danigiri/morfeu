@@ -1,43 +1,48 @@
-<li [class.attribute-data]="isPresent()"
+<li class="attribute-data-editor list-group-item"
+	[class.attribute-data]="isPresent()"
 	[class.attribute-not-present]="!isPresent()"
 	[class.attribute-data-boolean] = "isBoolean"
-	class="attribute-data-editor list-group-item"
 	[attr._index]="index"
 >
-	<div *ngIf="isPresent()" class="input-group input-group-sm mb-3">
-		<div class="input-group-prepend">
-			<span class="attribute-data-name input-group-text"
-				[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier==cellModel"
-				id="{{cellModel.name}}"
-			>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
-		</div>
+	<div *ngIf="isPresent()" class="form-group input-group-sm row">
+		<label 	class="col-sm-2 col-form-label col-form-label-sm attribute-data-name"
+				for="{{cellModel.name}}"
+				[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier===cellModel"
+		>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:
+		</label>
 		<ng-container [ngSwitch]="true">
 			<ng-container *ngSwitchCase="!isBoolean">
-				<input type="text"
-					class="attribute-data-value form-control"
-					attr.aria-label="{{cellModel.name}}"
-					attr.aria-describedby="{{cellModel.desc}}"
-					[(ngModel)]="this.value"
-					(change)="modified($event)"
-					(input)="modified($event)"
-				/>
+				<div class="col-sm-8">
+					<input 	type="text"
+							id="{{cellModel.name}}"
+							class="attribute-data-value form-control-sm"
+							attr.aria-label="{{cellModel.name}}"
+							attr.aria-describedby="{{cellModel.desc}}"
+							[(ngModel)]="this.value"
+							(change)="modified($event)"
+							(input)="modified($event)"
+					/>
+					<small *ngIf="!validates" class="form-text attribute-data-validation-warning"
+					>{{validationWarning}}</small>
+				</div>
 			</ng-container>
 			<ng-container *ngSwitchCase="isBoolean">
-				<input type="checkbox"
-					class="attribute-data-value form-control"
-					attr.aria-label="{{cellModel.name}}"
-					attr.aria-describedby="{{cellModel.desc}}"
-					[(ngModel)]="this.booleanValue"
-					(change)="modified($event)"
-					(input)="modified($event)"
-					[checked]="this.booleanValue"
+				<input 	type="checkbox"
+						id="{{cellModel.name}}"
+						class="attribute-data-value form-control-sm"
+						attr.aria-label="{{cellModel.name}}"
+						attr.aria-describedby="{{cellModel.desc}}"
+						[(ngModel)]="this.booleanValue"
+						(change)="modified($event)"
+						(input)="modified($event)"
+						[checked]="this.booleanValue"
 				/>
 			</ng-container>
 		</ng-container>
-		<div *ngIf="cellModel.minOccurs==0" class="input-group-append">
-			<img class="btn float-right attribute-data-delete"
-				src="assets/images/open-iconic/circle-x.svg"
-				(click)="delete()"
+		<div *ngIf="cellModel.minOccurs==0" class="col-sm-2">
+			<img	class="btn float-right attribute-data-delete"
+					src="assets/images/open-iconic/circle-x.svg"
+					(click)="delete()"
 			/>
 		</div>
 	</div>

@@ -12,6 +12,7 @@ import com.google.common.base.Optional;
 public class UIAttributeData extends UIWidget<UIAttributeData> {
 
 private static final String ATTRIBUTE_DATA_VALUE = ".attribute-data-value";
+private static final String ATTRIBUTE_VALIDATION_WARNING = ".attribute-data-validation-warning";
 private Optional<UICellData> parent;
 
 
@@ -86,6 +87,22 @@ public String value() {
 
 public boolean hasValue() {
 	return element.$(ATTRIBUTE_DATA_VALUE).exists();	// this is brittle?
+}
+
+
+public boolean validates() {
+	return !element.$(ATTRIBUTE_VALIDATION_WARNING).exists();
+}
+
+
+public String validationWarning() {
+
+	if (validates()) {
+		throw new IllegalStateException("Cannot get a validation warning of a correct attribute, sorry");
+	}
+
+	return element.$(ATTRIBUTE_VALIDATION_WARNING).getText();
+
 }
 
 

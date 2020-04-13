@@ -21,20 +21,61 @@ public void testBooleanAttributeTrue() {
 
 	open(appBaseURL+"test/attribute-data-editor-test/boolean-true");
 
-	UIAttributeData attribute = new UIAttributeData($(".attribute-data"));
+	UIAttributeData bool = new UIAttributeData($(".attribute-data"));
 	assertAll("check default as true",
-		() -> assertNotNull(attribute),
-		() -> assertTrue(attribute.isBoolean(), "attribute should be a boolean and it is not"),
-		() -> assertTrue(attribute.asBoolean(), "attribute should have the value 'true'"),
-		() -> assertTrue(attribute.isEditable())
+		() -> assertNotNull(bool),
+		() -> assertTrue(bool.isBoolean(), "attribute should be a boolean and it is not"),
+		() -> assertTrue(bool.asBoolean(), "attribute should have the value 'true'"),
+		() -> assertTrue(bool.isEditable(), "attribute should be editable")
 
 	);
 
-	attribute.toggle();
-	assertTrue(attribute.asBoolean(), "attribute should have the value 'true'");
+	bool.toggle();
+	assertTrue(bool.asBoolean(), "attribute should have the value 'true'");
 
 }
 
+
+
+@Test @DisplayName("Text attribute editor validation")
+public void testColorValidation() {
+
+	open(appBaseURL+"test/attribute-data-editor-test/color-validation");
+
+	UIAttributeData color = new UIAttributeData($(".attribute-data"));
+	assertAll("check no validation message at first",
+		() -> assertNotNull(color),
+		() -> assertEquals("ff1100", color.value(), "attribute should have the right value at first"),
+		() -> assertTrue(color.isEditable(), "attribute should be editable"),
+		() -> assertTrue(color.validates(), "attribute should validate at first and show no warning")
+	);
+
+	// we enter invalid color
+	String invalidColor = "ff00X0";
+	color.enterTextNext(invalidColor);
+	assertAll("now we get a validation message",
+		() -> assertEquals(invalidColor, color.value(), "attribute should have the new value"),
+		() -> assertFalse(color.validates(), "attribute should not validate now"),
+		() -> assertEquals("Should match [0-9a-fA-F]{6}", color.validationWarning())
+	);
+
+	color.eraseValueInField();
+	assertAll("now we get a validation message",
+			() -> assertFalse(color.validates(), "attribute should still not validate"),
+			() -> assertEquals("Should match [0-9a-fA-F]{6}", color.validationWarning())
+	);
+
+	// we enter valid color
+	String validColor = "ff00aa";
+	color.enterTextDirect(validColor);
+	assertAll("finally we are ok",
+		() -> assertEquals(validColor, color.value(), "attribute should have the new value"),
+		() -> assertTrue(color.validates(), "attribute should not validate now")
+	);
+	assertThrows(IllegalStateException.class, () -> color.validationWarning());
+
+
+}
 
 }
 

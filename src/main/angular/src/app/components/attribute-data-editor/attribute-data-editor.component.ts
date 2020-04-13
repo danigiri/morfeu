@@ -21,6 +21,9 @@ import { EventService } from '../../services/event.service';
 				}
 				.attribute-data-name {}
 				.attribute-data-value {}
+				.attribute-data-validation-warning {
+					color: red !important;
+				}
 				.attribute-data-delete {}
 				.attribute-data-add {}
 				.attribute-data-boolean {}
@@ -35,6 +38,10 @@ export class AttributeDataEditorComponent extends EventListener implements OnIni
 @Input() index: number;
 
 isBoolean: boolean = false;
+validates: boolean = true;
+validationWarning: string;
+
+private regexp: RegExp;
 
 @ViewChild('input') input: ElementRef;
 
@@ -47,6 +54,8 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
 	this.isBoolean = this.cellModel.presentation === CellModel.ATTR_BOOLEAN_PRESENTATION;
+	this.regexp = this.cellModel.type_.regex ? new RegExp(this.cellModel.type_.regex) : undefined;
+	this.validationWarning = 'Should match '+this.cellModel.type_.regex;
 
 }
 
@@ -58,22 +67,25 @@ isPresent(): boolean {
 
 
 get value(): string {
-	return this.parentCell.getAttribute(this.cellModel?.name).value;
+	return this.parentCell.getAttribute(this.cellModel.name).value;
 }
 
 
 set value(v: string) {
-	this.parentCell.getAttribute(this.cellModel?.name).value = v;
+
+	this.parentCell.getAttribute(this.cellModel.name).value = v;
+	this.validates = this.regexp?.test(v);
+
 }
 
 
 get booleanValue(): boolean {
-	return this.parentCell.getAttribute(this.cellModel?.name).value==='true';
+	return this.parentCell.getAttribute(this.cellModel.name).value==='true';
 }
 
 
 set booleanValue(v: boolean) {
-	this.parentCell.getAttribute(this.cellModel?.name).value = v===true ? 'true' : 'false';
+	this.parentCell.getAttribute(this.cellModel.name).value = v===true ? 'true' : 'false';
 }
 
 
