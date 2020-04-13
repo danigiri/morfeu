@@ -2,12 +2,19 @@
 
 import { MorfeuEvent } from './morfeu-event.class';
 
-import {Cell} from '../cell.class';
+import { Cell } from '../cell.class';
 
 export class CellChangedEvent extends MorfeuEvent {
 
+public static readonly ADDED_ATTRIBUTE = 0;
+public static readonly MODIFIED_ATTRIBUTE = 1;
+public static readonly REMOVED_ATTRIBUTE = 2;
+public static readonly CREATED_VALUE = 3;
+public static readonly MODIFIED_VALUE = 4;
+public static readonly REMOVED_VALUE = 5;
 
-constructor(public cell: Cell) {
+
+constructor(public cell: Cell, public action: number, public attribute?: Cell, public valid?: boolean) {
 	super('CellChangedEvent');
 }
 

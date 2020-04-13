@@ -10,8 +10,8 @@
 					attr.aria-label="{{cell.cellModel.name}}.value"
 					attr.aria-describedby="{{cell.cellModel.desc}} value"
 					[(ngModel)]="cell.value"
-					(change)="modified($event)"
-					(input)="modified($event)"
+					(change)="modifiedValue($event)"
+					(input)="modifiedValue($event)"
 				></textarea>
 					<!-- create new value button -->
 					<img  *ngIf="cell.value==undefined && showValue()"

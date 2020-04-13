@@ -195,9 +195,14 @@ private createValue() {
 	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {
 		this.cell.createValue();
-		this.events.service.publish(new CellChangedEvent(this.cell));
+		this.events.service.publish(new CellChangedEvent(this.cell, CellChangedEvent.CREATED_VALUE));
 	});
 
+}
+
+
+private modifiedValue(e) {
+	this.events.service.publish(new CellChangedEvent(this.cell, CellChangedEvent.MODIFIED_VALUE));
 }
 
 
@@ -206,15 +211,11 @@ private removeValue() {
 	console.log("[UI] Removing value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {
 		this.cell.removeValue();
-		this.events.service.publish(new CellChangedEvent(this.cell));
+		this.events.service.publish(new CellChangedEvent(this.cell, CellChangedEvent.REMOVED_VALUE));
 	});
 
 }
 
-
-private modified(e) {
-	this.events.service.publish(new CellChangedEvent(this.cell));
-}
 
 
 ngOnDestroy() {

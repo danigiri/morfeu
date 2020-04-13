@@ -62,7 +62,7 @@ ngOnInit() {
 
 // do we have a value to show?
 isPresent(): boolean {
-	return this.parentCell?.getAttribute(this.cellModel.name)!==undefined;
+	return this.parentCell.getAttribute(this.cellModel.name)!==undefined;
 }
 
 
@@ -75,10 +75,8 @@ set value(v: string) {
 
 	this.parentCell.getAttribute(this.cellModel.name).value = v;
 	if (this.regexp) {
-		const result = this.regexp.exec(v);
-		this.validates = result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing
+		this.validates = this.isValid(v);
 	}
-
 }
 
 
@@ -99,18 +97,19 @@ private add() {
 
 	console.log("[UI] adding cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
-		this.parentCell.adopt(this.cellModel.generateCell());
-		this.events.service.publish(new CellChangedEvent(this.parentCell));
+		const attr = this.cellModel.generateCell();
+		this.parentCell.adopt(attr);
+		this.events.service.publish(new CellChangedEvent(this.parentCell, CellChangedEvent.ADDED_ATTRIBUTE, attr));
 	});
 
 }
 
 
 private modified(e) {
-	this.events.service.publish(new CellChangedEvent(this.parentCell));
-	if (!this.validates) {
-		console.debug('Invalid value');
-	}
+
+	const attr = this.parentCell.getAttribute(this.cellModel.name);
+	this.events.service.publish(new CellChangedEvent(this.parentCell, CellChangedEvent.MODIFIED_ATTRIBUTE, attr));
+
 }
 
 
@@ -120,8 +119,16 @@ private delete() {
 	console.log("[UI] deleting cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
 		this.parentCell.remove(this.parentCell.getAttribute(this.cellModel.name))
-		this.events.service.publish(new CellChangedEvent(this.parentCell));
+		this.events.service.publish(new CellChangedEvent(this.parentCell, CellChangedEvent.REMOVED_ATTRIBUTE));
 	});
+
+}
+
+
+private isValid(v: string): boolean {
+
+	const result = this.regexp.exec(v);
+	return result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing{
 
 }
 

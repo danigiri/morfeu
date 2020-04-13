@@ -48,13 +48,13 @@
 		<listener-class>cat.calidos.morfeu.control.MorfeuServletListener</listener-class>
 	</listener>
 
-	<!-- filter>
+	<!--filter>
 		<filter-name>MorfeuRequestFilter</filter-name>
 		<filter-class>cat.calidos.morfeu.control.MorfeuRequestFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>MorfeuRequestFilter</filter-name>
-		<url-pattern>/*</url-pattern> 
+		<url-pattern>/dyn/*</url-pattern> 
 	</filter-mapping-->
 
 	<servlet>
