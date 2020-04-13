@@ -18,30 +18,43 @@ interface _Event {
 @Injectable()
 export class EventService {
 
-private event$: Subject<_Event>
+private events$: Map<string, Subject<_Event>>;
 
 
 constructor() {
-	this.event$ = new Subject<_Event>();
+
+	this.events$ = new  Map<string, Subject<_Event>>();
+
 }
 
 
 public publish(event: MorfeuEvent): void {
 
-	const channel_ = event.eventName;
-	//console.debug("\tSending event "+channel_+" -> ("+event.toString()+")");
-	this.event$.next({ channel: channel_, data: event });
+	const k = event.eventName;
+	//console.debug("\tSending event "+k+" -> ("+event.toString()+")");
+	this.subject(k).next({ channel: k, data: event });
 
 }
 
 
 public of<T extends MorfeuEvent>(type_: Constructor<T>): Observable<T> {
 
-	const channel_ = new type_().eventName;
+	const k = new type_().eventName;
 	//console.debug("\tSubscribing to event "+channel_);
+	return this.subject(k).map(m => m.data);
 
-	// this is ripe for optimization when we need it, hashing on the channel name for instance
-	return this.event$.pipe(filter(m => m.channel===channel_), map(m => m.data));
+}
+
+
+private subject(k: string): Subject<_Event> {
+
+	let e$ = this.events$.get(k);
+	if (!e$) {
+		e$ = new Subject<_Event>();
+		this.events$.set(k, e$);
+	}
+
+	return e$;
 
 }
 
