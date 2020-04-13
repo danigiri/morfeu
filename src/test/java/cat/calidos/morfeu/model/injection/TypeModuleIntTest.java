@@ -2,44 +2,26 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.sun.xml.xsom.ForeignAttributes;
-import com.sun.xml.xsom.XSAttGroupDecl;
-import com.sun.xml.xsom.XSAttributeUse;
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSComponent;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
-import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.XSSimpleType;
-import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
-
 
 
 /**
@@ -52,7 +34,7 @@ private Metadata emptyMedatada;
 private URI modelURI;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
@@ -80,13 +62,13 @@ public void setup() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Root test type")
 public void testRootAnonymousType() throws Exception {
 
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
-	
+
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.type(modelURI, "cell-model-name", xsType, emptyMedatada);
+	Type type = TypeModule.type(modelURI, "cell-model-name", xsType, null, emptyMedatada);
 	assertEquals("cell-model-name", type.getName());
 	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
 	assertEquals("CELL-PRESENTATION", type.getMetadata().getCellPresentation());
@@ -134,11 +116,11 @@ public void testRootAnonymousType() throws Exception {
 }
 
 
-@Test
+@Test @DisplayName("Test textField type")
 public void testTextSimpleType() {
-	
+
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "textField");
-	Type type = TypeModule.type(modelURI, "not used default", xsType, emptyMedatada);
+	Type type = TypeModule.type(modelURI, "not used default", xsType, null, emptyMedatada);
 	assertEquals("textField", type.getName());
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
@@ -150,24 +132,24 @@ public void testTextSimpleType() {
 }
 
 
-@Test
+@Test @DisplayName("Test numberField type")
 public void testIntegerSimpleType() {
-	
+
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "numberField");
-	Type type = TypeModule.type(modelURI, "not used default", xsType, emptyMedatada);
+	Type type = TypeModule.type(modelURI, "not used default", xsType, null, emptyMedatada);
 	assertEquals("numberField", type.getName());
 	assertTrue(type.isSimple());
-	
+
 	validateInteger(type);
 
 }
 
 
-@Test
+@Test @DisplayName("Test colField type")
 public void testColFieldSimpleType() {
 
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colField");
-	Type type = TypeModule.type(modelURI, "not used default", xsType, emptyMedatada);
+	Type type = TypeModule.type(modelURI, "not used default", xsType, null, emptyMedatada);
 	assertEquals("colField", type.getName());
 	assertTrue(type.isSimple());
 
@@ -177,13 +159,31 @@ public void testColFieldSimpleType() {
 }
 
 
-@Test
+@Test @DisplayName("Test empty type")
 public void testEmptyType() {
 
 	Type type = TypeModule.emptyType(modelURI, "defaultName");
 	assertEquals("defaultName", type.getName());
 	assertFalse(type.isSimple());
 	assertNull(type.getMetadata());
+	assertTrue(type.getRegex().isEmpty());
+
+}
+
+
+
+@Test @DisplayName("Test colorField type")
+public void testColorType() {
+
+	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colorField");
+	String regex = TypeModule.regex(xsType);
+	Type type = TypeModule.type(modelURI, "not used default", xsType, regex, emptyMedatada);
+	assertAll("testing color",
+		() -> assertEquals("colorField", type.getName()),
+		() -> assertTrue(type.isSimple()),
+		() -> assertTrue(type.getRegex().isPresent()),
+		() -> assertEquals("[0-9a-fA-F]{6}", type.getRegex().get())
+	);
 
 }
 

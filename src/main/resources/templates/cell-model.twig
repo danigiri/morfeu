@@ -20,6 +20,8 @@
 		"name": "{{cm.type.name}}"
 		,"isSimple": {{cm.type.isSimple}}
 		,"desc": "{{cm.type.metadata.desc | trim}}"
+		{%if cm.type.regex.isPresent %}
+		,"regex":"{{cm.type.regex.get}}"{%endif%}
 	}
 	,"minOccurs": {{cm.minOccurs}}
 	{% if cm.maxOccurs.isPresent %}

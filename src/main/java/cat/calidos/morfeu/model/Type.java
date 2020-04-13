@@ -15,6 +15,7 @@ public class Type extends RemoteResource {
 private Optional<XSType> xsType;
 private Optional<Metadata> metadata;
 private boolean isGlobal;
+private Optional<String> regex;
 
 
 public Type(URI u, String name) {
@@ -24,17 +25,18 @@ public Type(URI u, String name) {
 	this.xsType = Optional.empty();
 	this.isGlobal = false;
 	this.metadata = Optional.empty();
-
+	this.regex = Optional.empty();
 }
 
 
-public Type(URI u, String name, XSType xsType, boolean isGlobal, Metadata m) {
+public Type(URI u, String name, XSType xsType, String regex, boolean isGlobal, Metadata m) {
 	//TODO: extract description for types from annotation
 	super(u, name, "TYPE DESC");
 
 	this.xsType = Optional.of(xsType);
 	this.isGlobal = isGlobal;
 	this.metadata = Optional.of(m);
+	this.regex = Optional.ofNullable(regex);
 
 }
 
@@ -48,6 +50,10 @@ public boolean isGlobal() {
 	return isGlobal;
 }
 
+
+public Optional<String> getRegex() {
+	return regex;
+}
 
 public Metadata getMetadata() {
 	return metadata.orElse(null);

@@ -191,6 +191,28 @@ public void testAttributesOf() {
 }
 
 
+
+@Test
+public void testColorRestriction() throws Exception {
+
+	CellModel color = cellModelFrom(modelURI, "test").asComplex()
+															.children()
+															.child("row")
+															.asComplex()
+															.children()
+															.child("col")
+															.asComplex()
+															.children()
+															.child("data3")
+															.asComplex()
+															.attributes()
+															.attribute("color");
+	assertNotNull(color);
+	assertTrue(color.getType().getRegex().isPresent());
+	assertEquals("[0-9a-fA-F]{6}", color.getType().getRegex().get());
+
+}
+
 @Test
 public void testAttributesDefaultValues() {
 

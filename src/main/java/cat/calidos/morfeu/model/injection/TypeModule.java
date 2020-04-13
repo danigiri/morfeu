@@ -4,21 +4,16 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Locator;
 
-import com.sun.xml.xsom.XSAnnotation;
-import com.sun.xml.xsom.XSAttributeUse;
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSTerm;
+import com.sun.xml.xsom.XSFacet;
+import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 
 import dagger.Module;
@@ -38,15 +33,16 @@ protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
 
 @Provides
 public static Type type(@Named("EffectiveURI") URI uri,
-						String defaultName, 
-						@Nullable XSType xsType, 
+						String defaultName,
+						@Nullable XSType xsType,
+						@Nullable @Named("regex") String regex,
 						Metadata metadata) {
 
 	// if it's a local type we use the cell model name
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
 	boolean global = xsType.isGlobal();
 
-	return new Type(uri, name, xsType, global, metadata);
+	return new Type(uri, name, xsType, regex, global, metadata);
 
 }
 
@@ -76,11 +72,30 @@ URI uri(@Nullable XSType xsType, @Nullable URI uri) {
 }
 
 
+@Provides @Nullable @Named("regex") 
+public static String regex(@Nullable XSType xsType) {
+
+	String regex = null;
+
+	if (xsType!=null) {
+		XSSimpleType xsSimpleType = xsType.asSimpleType();
+		if (xsSimpleType!=null && xsSimpleType.isRestriction()) {
+			XSFacet pattern = xsSimpleType.asRestriction().getDeclaredFacet("pattern");
+				if (pattern!=null) {
+				regex = pattern.getValue().value;
+				}
+		}
+	}
+
+	return regex;
+
+}
+
+
 @Provides
 public static Metadata metadata(@Nullable XSType xsType, @Named("EffectiveURI") URI uri) {
 	return DaggerModelMetadataComponent.builder().from(xsType.getAnnotation()).withParentURI(uri).build().value();
 }
-
 
 // STASHED REFERENCE
 // get the types from a complex type

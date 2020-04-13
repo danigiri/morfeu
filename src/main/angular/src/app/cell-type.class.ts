@@ -1,3 +1,14 @@
+// CELL TYPE . CLASS . TS
+
+export class CellType {
+
+name: string;
+isSimple: boolean;
+desc: string;
+regex?: string;
+
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,12 +24,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export class CellType {
-
-name: string;
-isSimple: boolean;
-desc: string;
-
-}
-

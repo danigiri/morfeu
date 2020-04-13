@@ -7,7 +7,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -18,7 +17,6 @@ import javax.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Node;
 import org.xml.sax.Locator;
 
 import com.sun.xml.xsom.XSAttributeDecl;
@@ -26,8 +24,11 @@ import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSParticle;
+import com.sun.xml.xsom.XSRestrictionSimpleType;
+import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.XmlString;
 
@@ -41,7 +42,6 @@ import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
-import cat.calidos.morfeu.model.metadata.injection.DaggerMetadataAnnotationComponent;
 import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 import cat.calidos.morfeu.utils.OrderedMap;
 
@@ -174,8 +174,8 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 													name,
 													desc,
 													t,
-													minOccurs, 
-													maxOccurs, 
+													minOccurs,
+													maxOccurs,
 													defaultValue,
 													category,
 													metadata,
@@ -234,6 +234,7 @@ public int minOccurs(XSParticle particle) {
 public int maxOccurs(XSParticle particle) {
 
 	BigInteger maxOccurs = particle.getMaxOccurs();
+
 
 	return maxOccurs.equals(BigInteger.valueOf(XSParticle.UNBOUNDED)) ? CellModel.UNBOUNDED : maxOccurs.intValueExact();
 
@@ -449,11 +450,11 @@ public static Metadata metadata(XSElementDecl elem,
 }
 
 
-private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl, 
-											 boolean required,
-											 URI nodeURI, 
-											 Metadata parentMetadata,	// remember this is the parent cell model meta
-											 @Nullable Map<String, CellModel> globals) {
+private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
+												boolean required,
+												URI nodeURI,
+												Metadata parentMetadata,	// this is the parent cell model meta
+												@Nullable Map<String, CellModel> globals) {
 
 	String name = xsAttributeDecl.getName();
 	URI attributeURI = getURIFrom(nodeURI.toString()+ATTRIBUTE_SEPARATOR+name, name);
@@ -503,9 +504,9 @@ private static CellModel attributeCellModelFor(XSAttributeDecl xsAttributeDecl,
 
 	// attributes have the presentation of the corresponding type
 	return new BasicCellModel(attributeURI,
-								name, 
+								name,
 								attributeMetadata.getDesc(), 
-								type, 
+								type,
 								minOccurs,
 								ATTRIBUTE_MAX,
 								true,					// is an attribute

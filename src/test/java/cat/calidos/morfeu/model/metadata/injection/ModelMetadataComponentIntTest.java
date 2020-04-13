@@ -32,7 +32,6 @@ import com.sun.xml.xsom.XSSchemaSet;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.injection.ModelTezt;
-import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 
 /**
 * @author daniel giribet
