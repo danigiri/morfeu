@@ -7,7 +7,6 @@ import { Cell } from '../cell.class';
 import { CellModel } from '../cell-model.class';
 
 import { CellActivatedEvent } from '../events/cell-activated.event';
-import { CellChangedEvent } from '../events/cell-changed.event';
 import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
 import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
 import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';

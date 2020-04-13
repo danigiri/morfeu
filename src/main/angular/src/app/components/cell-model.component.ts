@@ -192,12 +192,12 @@ subscribeToSelection() {
 
 
 unsubscribeFromSelection() {
-	
+
 	super.unsubscribeFromSelection();
 	if (this.activationSubscription) {	// if we were selectable we may have been activable as well
 		this.unsubscribe(this.activationSubscription);
 	}
-	
+
 }
 
 

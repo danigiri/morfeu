@@ -112,8 +112,8 @@ public UICellEditor enterText(String value) {
 	// so we send the keys which works
 	// content.pressTAB(); (do not seem to need it in the latest selenium and selenide versions
 	int l = value().get().length();
-	for (int i=0; i<l; i++) { 
-		pressBackspace(); 
+	for (int i=0; i<l; i++) {
+		pressBackspace();
 	}
 	if (content.isPresent()) {
 		content.get().pressKey(value);

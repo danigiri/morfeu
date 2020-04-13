@@ -475,7 +475,6 @@ canAdopt(newMember: FamilyMember): boolean {
 	//		[drop area 1]
 	//	</col>
 	// in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
-
 	if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
 		return false;
 	}
