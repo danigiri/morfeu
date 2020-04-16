@@ -1,5 +1,6 @@
 // PRESENTATION . COMPONENT . TS (NOT USED AT THE MOMENT)
 
+import { filter } from 'rxjs/operators';
 import { AfterViewInit, Component, Inject, Input, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
@@ -10,7 +11,7 @@ import { Cell } from '../../cell.class';
 import { CellModel } from '../../cell-model.class';
 
 import { EventListener } from '../../events/event-listener.class';
-import { CellChangedEvent } from '../../events/cell-changed.event';
+import { CellChangeEvent, CellChange } from '../../events/cell-change.event';
 import { EventService } from '../../services/event.service';
 
 @Component({
@@ -62,7 +63,8 @@ ngAfterViewInit() {
 
 		// FIXME: is there a potential race condition where this
 		// method calls pile up on each other on the get text?
-			this.subscribe(this.events.service.of<CellChangedEvent>(CellChangedEvent)
+			this.subscribe(this.events.service.of<CellChangeEvent>(CellChangeEvent)
+					.pipe(filter(change => (change.what===CellChange.COMPLETED)))
 					.subscribe(() => this.updateHTMLPresentation())
 			);
 		}

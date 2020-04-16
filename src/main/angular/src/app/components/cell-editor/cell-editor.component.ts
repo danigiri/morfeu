@@ -11,7 +11,7 @@ import { Cell } from '../../cell.class';
 import { CellModel } from '../../cell-model.class';
 
 import { CellActivatedEvent } from '../../events/cell-activated.event';
-import { CellChangedEvent } from '../../events/cell-changed.event';
+import { CellChangeEvent, CellChange } from '../../events/cell-change.event';
 import { CellEditEvent } from '../../events/cell-edit.event';
 import { ContentFragmentDisplayEvent } from '../../events/content-fragment-display.event';
 import { EventListener } from '../../events/event-listener.class';
@@ -59,9 +59,16 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 
 ngOnInit() {
 
+	// trigger cell edits from keyboard, clicking...
 	this.subscribe(this.events.service.of<CellEditEvent>(CellEditEvent)
 			.pipe(filter(edit => edit.cell!==undefined && !this.editing))
 			.subscribe(edit => this.edit(edit.cell))
+	);
+
+	// attributes are being edited (using the filter), so we triggg
+	this.subscribe(this.events.service.of<CellChangeEvent>(CellChangeEvent)
+			.pipe(filter(changed => changed.attribute!==undefined && this.editing))
+			.subscribe(changed => this.attributeChange(changed.attribute, changed.what, changed.valid))
 	);
 
 }
@@ -195,14 +202,14 @@ private createValue() {
 	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {
 		this.cell.createValue();
-		this.events.service.publish(new CellChangedEvent(this.cell, CellChangedEvent.CREATED_VALUE));
+		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.CREATED_VALUE));
 	});
 
 }
 
 
 private modifiedValue(e) {
-	this.events.service.publish(new CellChangedEvent(this.cell, CellChangedEvent.MODIFIED_VALUE));
+	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.MODIFIED_VALUE));
 }
 
 
@@ -211,11 +218,32 @@ private removeValue() {
 	console.log("[UI] Removing value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {
 		this.cell.removeValue();
-		this.events.service.publish(new CellChangedEvent(this.cell, CellChangedEvent.REMOVED_VALUE));
+		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.REMOVED_VALUE));
 	});
 
 }
 
+
+private attributeChange(attribute: Cell, what: CellChange, isValid: boolean) {
+
+	switch(what) {
+		case CellChange.ADD_ATTRIBUTE:
+			this.cell.adopt(attribute);
+		break;
+		case CellChange.MODIFIED_ATTRIBUTE:
+			// no action needed, the attribute state is owned and changed by the child component
+			// though in the future we may change this for performance
+		break;
+		case CellChange.REMOVE_ATTRIBUTE:
+			this.cell.remove(attribute)
+		break;
+		default:
+			console.error('Unknown attribute change');
+	}
+	// changes now are done, we notify any listeners that the cell is now in the state it should be
+	// so we can do things like change the presentation, etc
+	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.COMPLETED, attribute, ));
+}
 
 
 ngOnDestroy() {

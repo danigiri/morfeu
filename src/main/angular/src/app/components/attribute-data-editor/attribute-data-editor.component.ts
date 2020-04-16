@@ -6,7 +6,7 @@ import { Cell } from '../../cell.class';
 import { CellModel } from '../../cell-model.class';
 
 import { EventListener } from '../../events/event-listener.class';
-import { CellChangedEvent } from '../../events/cell-changed.event';
+import { CellChangeEvent, CellChange } from '../../events/cell-change.event';
 import { EventService } from '../../services/event.service';
 
 @Component({
@@ -38,7 +38,7 @@ export class AttributeDataEditorComponent extends EventListener implements OnIni
 @Input() index: number;
 
 isBoolean: boolean = false;
-validates: boolean = true;
+validates: boolean;
 validationWarning: string;
 
 private regexp: RegExp;
@@ -55,7 +55,13 @@ ngOnInit() {
 
 	this.isBoolean = this.cellModel.presentation === CellModel.ATTR_BOOLEAN_PRESENTATION;
 	this.regexp = this.cellModel.type_.regex ? new RegExp(this.cellModel.type_.regex) : undefined;
-	this.validationWarning = 'Should match '+this.cellModel.type_.regex;
+	// if we have a value at the beginning
+	const attr = this.parentCell.getAttribute(this.cellModel.name);
+	const valid = this.isValueOK(this.value);
+	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.INIT_ATTRIBUTE, attr, valid));
+	if (!valid) {
+		this.validationWarning = 'Should match '+this.cellModel.type_.regex;
+	}
 
 }
 
@@ -74,9 +80,7 @@ get value(): string {
 set value(v: string) {
 
 	this.parentCell.getAttribute(this.cellModel.name).value = v;
-	if (this.regexp) {
-		this.validates = this.isValid(v);
-	}
+
 }
 
 
@@ -98,8 +102,9 @@ private add() {
 	console.log("[UI] adding cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
 		const attr = this.cellModel.generateCell();
-		this.parentCell.adopt(attr);
-		this.events.service.publish(new CellChangedEvent(this.parentCell, CellChangedEvent.ADDED_ATTRIBUTE, attr));
+		//this.parentCell.adopt(attr);
+		const valid = this.isValueOK(attr.value);	// default value could be valid from the start
+		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.ADD_ATTRIBUTE, attr, valid));
 	});
 
 }
@@ -108,7 +113,8 @@ private add() {
 private modified(e) {
 
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
-	this.events.service.publish(new CellChangedEvent(this.parentCell, CellChangedEvent.MODIFIED_ATTRIBUTE, attr));
+	const valid = this.isValueOK(attr.value);
+	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.MODIFIED_ATTRIBUTE, attr, valid));
 
 }
 
@@ -118,17 +124,19 @@ private delete() {
 
 	console.log("[UI] deleting cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
-		this.parentCell.remove(this.parentCell.getAttribute(this.cellModel.name))
-		this.events.service.publish(new CellChangedEvent(this.parentCell, CellChangedEvent.REMOVED_ATTRIBUTE));
+	//	this.parentCell.remove(this.parentCell.getAttribute(this.cellModel.name))
+		const attr = this.parentCell.getAttribute(this.cellModel.name);
+		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.REMOVE_ATTRIBUTE, attr));
 	});
 
 }
 
 
-private isValid(v: string): boolean {
+private isValueOK(v: string) {
 
 	const result = this.regexp.exec(v);
-	return result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing{
+
+	return result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing
 
 }
 

@@ -4,25 +4,30 @@ import { MorfeuEvent } from './morfeu-event.class';
 
 import { Cell } from '../cell.class';
 
-export class CellChangedEvent extends MorfeuEvent {
-
-public static readonly ADDED_ATTRIBUTE = 0;
-public static readonly MODIFIED_ATTRIBUTE = 1;
-public static readonly REMOVED_ATTRIBUTE = 2;
-public static readonly CREATED_VALUE = 3;
-public static readonly MODIFIED_VALUE = 4;
-public static readonly REMOVED_VALUE = 5;
+export class CellChangeEvent extends MorfeuEvent {
 
 
-constructor(public cell: Cell, public action: number, public attribute?: Cell, public valid?: boolean) {
+constructor(public cell: Cell, public what: CellChange, public attribute?: Cell, public valid?: boolean) {
 	super('CellChangedEvent');
 }
 
 
 public toString = (): string => {
-	return 'CellChangedEvent:{'+this.cell?.URI+'}';
+	return 'CellChangedEvent:{'+this.cell?.URI+','+this.what+'}';
 }
 
+
+}
+
+export enum CellChange {
+
+ADD_ATTRIBUTE = 0,
+MODIFIED_ATTRIBUTE = 1,
+REMOVE_ATTRIBUTE = 2,
+CREATED_VALUE = 3,
+MODIFIED_VALUE = 4,
+REMOVED_VALUE = 5,
+COMPLETED = 6
 
 }
 
