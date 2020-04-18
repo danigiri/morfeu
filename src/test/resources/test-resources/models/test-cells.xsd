@@ -178,6 +178,7 @@
 			<xs:appinfo>
 				<mf:metadata>
 					<mf:desc>List of possible values</mf:desc>
+					<mf:presentation>LIST</mf:presentation>
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>

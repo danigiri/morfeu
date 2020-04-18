@@ -2,7 +2,6 @@ package cat.calidos.morfeu.webapp;
 // ATTRIBUTE DATA EDITOR COMPONENT UI TEST . JAVA
 
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +20,7 @@ public void testBooleanAttributeTrue() {
 
 	open(appBaseURL+"test/attribute-data-editor-test/boolean-true");
 
-	UIAttributeData bool = new UIAttributeData($(".attribute-data"));
+	UIAttributeData bool = new UIAttributeData();
 	assertAll("check default as true",
 		() -> assertNotNull(bool),
 		() -> assertTrue(bool.isBoolean(), "attribute should be a boolean and it is not"),
@@ -36,13 +35,12 @@ public void testBooleanAttributeTrue() {
 }
 
 
-
 @Test @DisplayName("Text attribute editor validation")
 public void testColorValidation() {
 
 	open(appBaseURL+"test/attribute-data-editor-test/color-validation");
 
-	UIAttributeData color = new UIAttributeData($(".attribute-data"));
+	UIAttributeData color = new UIAttributeData();
 	assertAll("check no validation message at first",
 		() -> assertNotNull(color),
 		() -> assertEquals("ff1100", color.value(), "attribute should have the right value at first"),
@@ -76,6 +74,28 @@ public void testColorValidation() {
 
 
 }
+
+
+
+@Test @DisplayName("Text attribute dropdown")
+public void testSelectDropdown() {
+
+	open(appBaseURL+"test/attribute-data-editor-test/list");
+
+	UIAttributeData list = new UIAttributeData();
+	assertAll("check no validation message at first",
+		() -> assertNotNull(list),
+		() -> assertEquals("A0", list.value(), "attribute should have the right value at first"),
+		() -> assertTrue(list.isList(), "attribute should be a (dropdown) list"),
+		() -> assertTrue(list.isEditable(), "attribute should be editable"),
+		() -> assertTrue(list.validates(), "attribute should validate at first and show no warning")
+	);
+
+	list.select("A1");
+	assertEquals("A1", list.value(), "attribute should have the right value at first");
+	
+}
+
 
 }
 

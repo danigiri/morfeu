@@ -2,9 +2,10 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
+import static com.codeborne.selenide.Selenide.$;
+
 import com.codeborne.selenide.SelenideElement;
 import com.google.common.base.Optional;
-
 
 /**
 * @author daniel giribet
@@ -14,6 +15,11 @@ public class UIAttributeData extends UIWidget<UIAttributeData> {
 private static final String ATTRIBUTE_DATA_VALUE = ".attribute-data-value";
 private static final String ATTRIBUTE_VALIDATION_WARNING = ".attribute-data-validation-warning";
 private Optional<UICellData> parent;
+
+
+public UIAttributeData() {
+	this($(".attribute-data"));
+}
 
 
 public UIAttributeData(SelenideElement element) {
@@ -116,6 +122,11 @@ public boolean asBoolean() {
 }
 
 
+public boolean isList() {
+	return class_().contains("attribute-data-list");
+}
+
+
 public UIAttributeData tabIntoEnterText(String value) {
 
 	if (!isEditable()) {
@@ -186,7 +197,6 @@ public UIAttributeData toggle() {
 	if (!isBoolean()) {
 		throw new UnsupportedOperationException("Cannot toggle the value of a non-boolean field");
 	}
-
 	if (!isEditable()) {
 		throw new UnsupportedOperationException("Cannot toggle the value of a non-editable boolean field");
 	}
@@ -196,6 +206,22 @@ public UIAttributeData toggle() {
 	return this;
 
 }
+
+public UIAttributeData select(String value) {
+
+	if (!isList()) {
+		throw new UnsupportedOperationException("Cannot select the value of a non-dropdown field");
+	}
+	if (!isEditable()) {
+		throw new UnsupportedOperationException("Cannot toggle the value of a non-editable dropdown field");
+	}
+
+	element.$(ATTRIBUTE_DATA_VALUE).selectOption(value);
+
+	return this;
+
+}
+
 
 
 public UIAttributeData clickOnCreate() {
