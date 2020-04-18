@@ -17,7 +17,7 @@ import { EventService } from '../../services/event.service';
 
 
 @Component({
-	selector: 'attribute-data-edutir-test',
+	selector: 'attribute-data-editor-test',
 	template: `
 		<attribute-data-editor *ngIf="cell"
 			[parentCell]="cell"
@@ -49,6 +49,7 @@ protected test(case_: string): void {
 	switch (case_) {
 		case 'boolean-true' : this.boolean(); break;
 		case 'color-validation' : this.colorValidation(); break;
+		case 'list' : this.listValidation(); break;
 		default: this.boolean();
 	}
 }
@@ -68,6 +69,15 @@ colorValidation() {
 	this.cellPath = '/test(0)/row(0)/col(0)/data3(0)';	// this has a color attribute
 	this.attributeName = 'color';
 	this.load('target/test-classes/test-resources/documents/document5.xml', this.model);
+
+}
+
+
+listValidation() {
+
+	this.cellPath = '/test(0)/row(0)/col(0)/types(2)';	// this has a list attribute
+	this.attributeName = 'list';
+	this.load('target/test-classes/test-resources/documents/types.xml', this.model);
 
 }
 

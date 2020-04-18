@@ -27,6 +27,7 @@ import { EventService } from '../../services/event.service';
 				.attribute-data-delete {}
 				.attribute-data-add {}
 				.attribute-data-boolean {}
+				.attribute-data-list {}
 	`]
 })
 
@@ -37,11 +38,11 @@ export class AttributeDataEditorComponent extends EventListener implements OnIni
 @Input() parentCell: Cell;
 @Input() index: number;
 
+isText: boolean = true;
 isBoolean: boolean = false;
+isList: boolean = false;
 validates: boolean;
 validationWarning: string;
-
-private regexp: RegExp;
 
 @ViewChild('input') input: ElementRef;
 
@@ -54,7 +55,9 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
 	this.isBoolean = this.cellModel.presentation === CellModel.ATTR_BOOLEAN_PRESENTATION;
-	this.regexp = this.cellModel.type_.regex ? new RegExp(this.cellModel.type_.regex) : undefined;
+	this.isList = this.cellModel.presentation === CellModel.ATTR_LIST_PRESENTATION;
+	this.isText = !this.isBoolean &&!this.isList;
+
 	// if we have a value at the beginning
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
 	const valid = this.updateValidity(this.value);
@@ -133,18 +136,12 @@ private delete() {
 
 private updateValidity(v: string) {
 
-	let valid = true;
-	if (this.regexp!==undefined) {
-		const result = this.regexp.exec(v);
-		valid = result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing
-		if (!valid) {
-			this.validationWarning = 'Should match '+this.cellModel.type_.regex;
-		}
+	this.validates = this.cellModel.validates(v);
+	if (!this.validates) {
+		this.validationWarning = 'Should match '+this.cellModel.type_.regex;
 	}
 
-	this.validates = valid;
-
-	return valid;
+	return this.validates;
 
 }
 

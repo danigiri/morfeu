@@ -2,6 +2,7 @@
 	[class.attribute-data]="isPresent()"
 	[class.attribute-not-present]="!isPresent()"
 	[class.attribute-data-boolean] = "isBoolean"
+	[class.attribute-data-list] = "isList"
 	[attr._index]="index"
 >
 	<div *ngIf="isPresent()" class="form-group input-group-sm row">
@@ -11,7 +12,7 @@
 		>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:
 		</label>
 		<ng-container [ngSwitch]="true">
-			<ng-container *ngSwitchCase="!isBoolean">
+			<ng-container *ngSwitchCase="isText">
 				<div class="col-sm-8">
 					<input 	type="text"
 							id="{{cellModel.name}}"
@@ -37,6 +38,17 @@
 						(input)="modified($event)"
 						[checked]="this.booleanValue"
 				/>
+			</ng-container>
+			<ng-container *ngSwitchCase="isList">
+				<select id="{{cellModel.name}}"
+						class="form-control form-control-sm attribute-data-value"
+						attr.aria-label="{{cellModel.name}}"
+						attr.aria-describedby="{{cellModel.desc}}"
+						[(ngModel)]="this.value"
+						(change)="modified($event)"
+				>
+					<option	*ngFor="let o of cellModel.type_.possibleValues" [selected]="o===this.value">{{o}}</option>
+				</select>
 			</ng-container>
 		</ng-container>
 		<div *ngIf="cellModel.minOccurs==0" class="col-sm-2">
