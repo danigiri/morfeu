@@ -7,6 +7,7 @@
 		<col size="12">
 			<types bool="true"/>
 			<types bool="false"/>
+			<types list="A0" />
 		</col>
 	</row>
 </test>

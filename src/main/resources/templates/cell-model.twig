@@ -22,6 +22,8 @@
 		,"desc": "{{cm.type.metadata.desc | trim}}"
 		{%if cm.type.regex.isPresent %}
 		,"regex":"{{cm.type.regex.get}}"{%endif%}
+		{%if cm.type.possibleValues.size > 0 %}
+		,"possibleValues":[{% for pv in cm.type.possibleValues %}"{{pv}}"{%if (loop.last)%}{%else%} ,{%endif%}{%endfor%}]{%endif%}
 	}
 	,"minOccurs": {{cm.minOccurs}}
 	{% if cm.maxOccurs.isPresent %}

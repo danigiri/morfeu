@@ -4,6 +4,7 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 import com.sun.xml.xsom.XSType;
 
@@ -13,9 +14,10 @@ import com.sun.xml.xsom.XSType;
 public class Type extends RemoteResource {
 
 private Optional<XSType> xsType;
-private Optional<Metadata> metadata;
-private boolean isGlobal;
 private Optional<String> regex;
+private Set<String> possibleValues;
+private boolean isGlobal;
+private Optional<Metadata> metadata;
 
 
 public Type(URI u, String name) {
@@ -29,14 +31,20 @@ public Type(URI u, String name) {
 }
 
 
-public Type(URI u, String name, XSType xsType, String regex, boolean isGlobal, Metadata m) {
+public Type(URI u, String name, 			
+			XSType xsType,
+			String regex,
+			Set<String> possibleValues,
+			boolean global,
+			Metadata metadata) {
 	//TODO: extract description for types from annotation
 	super(u, name, "TYPE DESC");
 
 	this.xsType = Optional.of(xsType);
-	this.isGlobal = isGlobal;
-	this.metadata = Optional.of(m);
 	this.regex = Optional.ofNullable(regex);
+	this.possibleValues = possibleValues;
+	this.isGlobal = global;
+	this.metadata = Optional.of(metadata);
 
 }
 
@@ -54,6 +62,13 @@ public boolean isGlobal() {
 public Optional<String> getRegex() {
 	return regex;
 }
+
+
+/**	@return all allowed values of elements of this type, empty set means all values allowed */
+public Set<String> getPossibleValues() {
+	return possibleValues;
+}
+
 
 public Metadata getMetadata() {
 	return metadata.orElse(null);

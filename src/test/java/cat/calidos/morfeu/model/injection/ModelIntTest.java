@@ -34,6 +34,7 @@ public void setup () throws Exception {
 	// TODO: see what we can do about these ugly maven specific paths
 	modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	model = parseModelFrom(modelURI);
+
 }
 
 

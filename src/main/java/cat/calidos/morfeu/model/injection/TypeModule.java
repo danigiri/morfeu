@@ -4,6 +4,8 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
@@ -36,13 +38,14 @@ public static Type type(@Named("EffectiveURI") URI uri,
 						String defaultName,
 						@Nullable XSType xsType,
 						@Nullable @Named("regex") String regex,
+						@Named("possibleValues") Set<String> possibleValues,
 						Metadata metadata) {
 
 	// if it's a local type we use the cell model name
 	String name = (xsType.isLocal()) ? defaultName : xsType.getName();
 	boolean global = xsType.isGlobal();
 
-	return new Type(uri, name, xsType, regex, global, metadata);
+	return new Type(uri, name, xsType, regex, possibleValues, global, metadata);
 
 }
 
@@ -66,13 +69,13 @@ URI uri(@Nullable XSType xsType, @Nullable URI uri) {
 			log.error("What the heck, locator-based URI of element '{}' is not valid ", xsType.getName());
 		}
 	}
-	
+
 	return u;
 
 }
 
 
-@Provides @Nullable @Named("regex") 
+@Provides @Nullable @Named("regex")
 public static String regex(@Nullable XSType xsType) {
 
 	String regex = null;
@@ -88,6 +91,23 @@ public static String regex(@Nullable XSType xsType) {
 	}
 
 	return regex;
+
+}
+
+
+@Provides @Named("possibleValues")
+public static Set<String> possibleValues(@Nullable XSType xsType) {
+
+	Set<String> values = new HashSet<String>();
+
+	if (xsType!=null) {
+		XSSimpleType xsSimpleType = xsType.asSimpleType();
+		if (xsSimpleType!=null && xsSimpleType.isRestriction() && xsSimpleType.getFacet("enumeration")!=null) {
+			xsSimpleType.asRestriction().getFacets("enumeration").forEach(f -> values.add(f.getValue().value));
+		}
+	}
+
+	return values;
 
 }
 

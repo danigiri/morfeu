@@ -3,63 +3,66 @@
 import { Cell } from './cell.class';
 import { Model } from './model.class';
 
-import { _model, _readonly } from './test/test.data';
+import { _model, _readonlyPrefix, _readonly, _typesPrefix, _types } from './test/test.data';
 
 
 describe('cell.class', () => {
 
-	const prefix = 'target/test-classes/test-resources/documents/readonly.xml';
-	let cell: Cell;
+	let readonly: Cell;
+	let typesContent: Cell;
 
 	beforeEach(() => {
 
 		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 		const MODEL: Model = Object.create(Model.prototype); // to simulate static call
-		//wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
 
-		cell = CELL.fromJSON(_readonly);
 		const model = MODEL.fromJSON(_model);
-		cell.associateWith(model, cell.cellModelURI);
+
+		readonly = CELL.fromJSON(_readonly);
+		readonly.associateWith(model, readonly.cellModelURI);
+
+		typesContent = CELL.fromJSON(_types);
+		typesContent.associateWith(model, typesContent.cellModelURI);
 
 	});
 
 	it('should read from json', () => {
 
-		expect(cell).toBeDefined();
-		expect(cell.desc).toBe('DESC');
-		expect(cell.isSimple).toBe(false);
-		expect(cell.value).toBeUndefined();
+		expect(readonly).toBeDefined();
+		expect(readonly.desc).toBe('DESC');
+		expect(readonly.isSimple).toBe(false);
+		expect(readonly.value).toBeUndefined();
 
 	});
 
 	it('should find cell with correct URI', () => {
 
-		const uri = prefix+'/test(0)/row(1)/col(0)/readonly(2)';
-		const foundCell = cell.findCellWithURI(uri);
+		const uri = _readonlyPrefix+'/test(0)/row(1)/col(0)/readonly(2)';
+		const foundCell = readonly.findCellWithURI(uri);
 		expect(foundCell).toBeDefined();
 		expect(foundCell.URI).toBe(uri);
 
-		const uri2 = prefix+'/test(111)/row(1)/col(0)/readonly(2)';
-		const foundCell2 = cell.findCellWithURI(uri2);
+		const uri2 = _readonlyPrefix+'/test(111)/row(1)/col(0)/readonly(2)';
+		const foundCell2 = readonly.findCellWithURI(uri2);
 		expect(foundCell2).toBeUndefined();
 
 	});
 
 	it('should generate a correct all presentation', () => {
 
-		const uri = prefix+'/test(0)/row(1)/col(0)/data(0)';
-		let data0 = cell.findCellWithURI(uri);
+		const uri = _readonlyPrefix+'/test(0)/row(1)/col(0)/data(0)';
+		let data0 = readonly.findCellWithURI(uri);
 		expect(data0).toBeDefined();
-		data0.value = 'VALUE'; 
-		const presentationAllContent = data0.getPresentationAllContent();
+		data0.value = 'VALUE';
+		const presentationAllContent = data0.getCellPresentationAllContent();
 		expect(presentationAllContent).toBe('_name=data&_value=VALUE&number=1');
 
 	});
 
 	it('should be able to delete and modify', () => {
 
-		const uri = prefix+'/test(0)/row(1)/col(0)/data(0)';
-		const data0 = cell.findCellWithURI(uri);
+		const uri = _readonlyPrefix+'/test(0)/row(1)/col(0)/data(0)';
+		const data0 = readonly.findCellWithURI(uri);
 		expect(data0).toBeDefined();
 		expect(data0.canBeDeleted()).toBe(true);
 		expect(data0.canBeModified()).toBe(true);
@@ -68,8 +71,8 @@ describe('cell.class', () => {
 
 	it('should not be able to delete nor modify', () => {
 
-		const uri = prefix+'/test(0)/row(1)/col(0)/readonly(1)';
-		const readonly1 = cell.findCellWithURI(uri);
+		const uri = _readonlyPrefix+'/test(0)/row(1)/col(0)/readonly(1)';
+		const readonly1 = readonly.findCellWithURI(uri);
 		expect(readonly1).toBeDefined();
 		expect(readonly1.canBeDeleted()).toBe(false);
 		expect(readonly1.canBeModified()).toBe(false);
@@ -78,13 +81,26 @@ describe('cell.class', () => {
 
 	it('should not be able to delete as it has readonly children but modify', () => {
 
-		const uri = prefix+'/test(0)/row(1)';
-		const row = cell.findCellWithURI(uri);
+		const uri = _readonlyPrefix+'/test(0)/row(1)';
+		const row = readonly.findCellWithURI(uri);
 		expect(row).toBeDefined();
 		expect(row.canBeDeleted()).toBe(false);
 		expect(row.canBeModified()).toBe(true);
 
 	});
+
+	it('should validate correct content with list', () => {
+
+		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
+		const types = typesContent.findCellWithURI(uri);
+		expect(types).toBeDefined();
+
+		const list = types.getAttribute('list');
+		expect(list).toBeDefined();
+		expect(list.cellModel.validates(list.value));
+
+	});
+
 
 
 });

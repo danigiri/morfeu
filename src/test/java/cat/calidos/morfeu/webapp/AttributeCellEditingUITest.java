@@ -85,7 +85,7 @@ public void addAttributeTest() throws Exception {
 
 	Optional<UIAttributeData> notPresentAttribute = dataEditorCellData.notPresentAttribute("text");
 	assertTrue("Text attribute is not present yet", notPresentAttribute.isPresent());	// a bit of a contradiction
-	
+
 	UIAttributeData textAttribute = notPresentAttribute.get();
 	assertFalse(textAttribute.hasValue());
 	assertTrue(textAttribute.isNotPresent());

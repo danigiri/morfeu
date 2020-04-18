@@ -170,7 +170,24 @@
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:attribute name="bool" type="booleanField" />
+		<xs:attribute name="list" type="listField" />
 	</xs:complexType>
+
+	<xs:simpleType name="listField">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>List of possible values</mf:desc>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A0" />
+			<xs:enumeration value="A1" />
+			<xs:enumeration value="A2" />
+		</xs:restriction>
+	</xs:simpleType>
+
 
 
 	<xs:complexType name="colCell">

@@ -6,6 +6,8 @@ name: string;
 isSimple: boolean;
 desc: string;
 regex?: string;
+regexCompiled?: RegExp;
+possibleValues?: string[];
 
 }
 

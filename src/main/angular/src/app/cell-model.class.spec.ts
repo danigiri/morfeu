@@ -27,7 +27,7 @@ describe('cell-model.class', () => {
 	});
 
 	it('getPresentationAllContent for test should be correct', () => {
-		expect(model.child('test').getPresentationAllContent()).toBe('_name=test')
+		expect(model.child('test').getCellPresentationAllContent()).toBe('_name=test')
 	});
 
 	it('should have a correct category cell modell example', () => {
@@ -46,7 +46,7 @@ describe('cell-model.class', () => {
 
 		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/categ');
 		expect(cm).toBeDefined();
-	
+
 		const categories = cm.getCategories();
 		expect(categories.length).toBe(2);
 		expect(categories.indexOf('X')).not.toBe(-1);
@@ -59,6 +59,53 @@ describe('cell-model.class', () => {
 		expect(ac.get('Y').length).toBe(2);
 
 	});
+
+
+	it('should validate regexs', () => {
+
+		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3');
+		expect(cm).toBeDefined();
+
+		const color = cm.getAttribute('color');
+		expect(color).toBeDefined();
+		expect(color.validates('FF00AA')).toBeTrue;
+		expect(color.validates('12aacc')).toBeTrue;
+		expect(color.validates('12aaccx')).toBeFalse;
+		expect(color.validates('12aacx')).toBeFalse;
+
+	});
+
+
+	it('should validate regexs', () => {
+
+		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3');
+		expect(cm).toBeDefined();
+
+		const color = cm.getAttribute('color');
+		expect(color).toBeDefined();
+		expect(color.validates('FF00AA')).toBeTrue;
+		expect(color.validates('12aacc')).toBeTrue;
+		expect(color.validates('12aaccx')).toBeFalse;
+		expect(color.validates('12aacx')).toBeFalse;
+
+	});
+
+	it('should validate lists', () => {
+
+		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/types');
+		expect(cm).toBeDefined();
+
+		const list = cm.getAttribute('list');
+		expect(list).toBeDefined();
+		expect(list.validates('A0')).toBeTrue;
+		expect(list.validates('A1')).toBeTrue;
+		expect(list.validates('A2')).toBeTrue;
+		expect(list.validates('')).toBeFalse;
+		expect(list.validates('Ax')).toBeFalse;
+
+	});
+
+
 
 });
 

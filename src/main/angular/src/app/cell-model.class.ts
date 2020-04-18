@@ -55,10 +55,14 @@ constructor(public schema: number,
 
 
 // there are values specific to comply wit the treemodel model, we set them explicitly here 
+// also compile the regexp for validity
 init() {
 
 	this.id = this.URI;	 // this is guaranteed to be unique 
 	this.isExpanded = true;
+	if (this.type_.regex) {
+		this.type_.regexCompiled = new RegExp(this.type_.regex);
+	}
 
 }
 
@@ -211,6 +215,28 @@ findCellModel(uri: string): CellModel {
 	return this.findCellModelWithURI(this, uri);
 }
 
+
+/** return true if the current value (or supplied parameter) is a valid value given our model */
+public validates(v: string): boolean {
+
+	const regexp = this.type_.regexCompiled;
+	const possibleValues = this.type_.possibleValues;
+	if (!regexp && !possibleValues) {
+		return true;
+	}
+
+	let isValid = true;
+	if (regexp) {
+		const result = regexp.exec(v);	// a single match and for the whole thing, the backend checker complains with ^$
+		isValid = result?.length===1 && result[0].length===v.length;
+	}
+	if (isValid && possibleValues) {
+		isValid = possibleValues.find(pv => pv===v)!==undefined;
+	}
+
+	return isValid;
+
+}
 
 //// FamilyMember ////
 

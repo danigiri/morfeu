@@ -55,7 +55,7 @@
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:pattern value="[0-9a-fA-F]{6}"/>
+			<xs:pattern value="[0-9a-fA-F]{6}"/>	<!-- cannot use ^$ as xerces seems to complain -->
 		</xs:restriction>
 	</xs:simpleType>
 

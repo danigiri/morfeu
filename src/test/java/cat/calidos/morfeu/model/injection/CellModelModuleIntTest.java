@@ -191,7 +191,6 @@ public void testAttributesOf() {
 }
 
 
-
 @Test
 public void testColorRestriction() throws Exception {
 
@@ -212,6 +211,37 @@ public void testColorRestriction() throws Exception {
 	assertEquals("[0-9a-fA-F]{6}", color.getType().getRegex().get());
 
 }
+
+
+@Test
+public void testPossibleValues() throws Exception {
+
+	CellModel list = cellModelFrom(modelURI, "test").asComplex()
+															.children()
+															.child("row")
+															.asComplex()
+															.children()
+															.child("col")
+															.asComplex()
+															.children()
+															.child("types")
+															.asComplex()
+															.attributes()
+															.attribute("list");
+	assertNotNull(list);
+
+	Type type = list.getType();
+	assertTrue(type.getRegex().isEmpty());
+
+	Set<String> possibleValues = type.getPossibleValues();
+	assertEquals(3, possibleValues.size());
+	assertTrue(possibleValues.contains("A0"));
+	assertTrue(possibleValues.contains("A1"));
+	assertTrue(possibleValues.contains("A2"));
+
+}
+
+
 
 @Test
 public void testAttributesDefaultValues() {
