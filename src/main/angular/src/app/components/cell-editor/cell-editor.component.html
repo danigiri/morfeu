@@ -77,6 +77,7 @@
 				type="button"
 				class="btn btn-success float-right"
 				(click)="c('Save')"
+				[disabled]="!canSave"
 			>Save</button>
 		</div>
 	</div>

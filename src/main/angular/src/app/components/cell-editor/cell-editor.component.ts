@@ -50,7 +50,7 @@ showCategories = false;
 categories: string[];
 defaultCategoryAttributes: CellModel[];
 attributesByCategory: Map<string, CellModel[]>;
-
+canSave: boolean = false;
 
 constructor(eventService: EventService, private modalService: NgbModal) {
 	super(eventService);
@@ -65,9 +65,11 @@ ngOnInit() {
 			.subscribe(edit => this.edit(edit.cell))
 	);
 
-	// attributes are being edited (using the filter), so we triggg
+	// attributes or values are being edited (using the filter), so we act accordingly
+	// we are not interested in the COMPLETED subevent given we generate it, it's for other components
 	this.subscribe(this.events.service.of<CellChangeEvent>(CellChangeEvent)
-			.pipe(filter(changed => changed.attribute!==undefined && this.editing))
+			.pipe(filter(changed => changed.what!==CellChange.COMPLETED))
+			.pipe(filter(changed => this.editing))
 			.subscribe(changed => this.attributeChange(changed.attribute, changed.what, changed.valid))
 	);
 
@@ -226,23 +228,40 @@ private removeValue() {
 
 private attributeChange(attribute: Cell, what: CellChange, isValid: boolean) {
 
+	let canBeSaved: boolean;
 	switch(what) {
+		case CellChange.INIT_ATTRIBUTE:
+			canBeSaved = false;			// if valid, when loading we want to disable saving as no modifications have
+			break;						// been made, if invalid (for some reason), then we still do not want saving
 		case CellChange.ADD_ATTRIBUTE:
 			this.cell.adopt(attribute);
+			canBeSaved = isValid;
 		break;
 		case CellChange.MODIFIED_ATTRIBUTE:
 			// no action needed, the attribute state is owned and changed by the child component
-			// though in the future we may change this for performance
+			// though in the future we may change this for coherence
+			canBeSaved = isValid;
 		break;
 		case CellChange.REMOVE_ATTRIBUTE:
 			this.cell.remove(attribute)
+			canBeSaved = true;
+		break;
+		case CellChange.CREATED_VALUE:
+			canBeSaved = isValid;
+		break;
+		case CellChange.MODIFIED_VALUE:
+			canBeSaved = isValid;
+		break;
+		case CellChange.REMOVED_VALUE:
+			canBeSaved = true;
 		break;
 		default:
 			console.error('Unknown attribute change');
 	}
+	Promise.resolve(null).then(() => this.canSave = canBeSaved);
 	// changes now are done, we notify any listeners that the cell is now in the state it should be
 	// so we can do things like change the presentation, etc
-	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.COMPLETED, attribute, ));
+	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.COMPLETED, attribute, isValid));
 }
 
 

@@ -57,11 +57,8 @@ ngOnInit() {
 	this.regexp = this.cellModel.type_.regex ? new RegExp(this.cellModel.type_.regex) : undefined;
 	// if we have a value at the beginning
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
-	const valid = this.isValueOK(this.value);
+	const valid = this.updateValidity(this.value);
 	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.INIT_ATTRIBUTE, attr, valid));
-	if (!valid) {
-		this.validationWarning = 'Should match '+this.cellModel.type_.regex;
-	}
 
 }
 
@@ -103,7 +100,7 @@ private add() {
 	Promise.resolve(null).then(() => {
 		const attr = this.cellModel.generateCell();
 		//this.parentCell.adopt(attr);
-		const valid = this.isValueOK(attr.value);	// default value could be valid from the start
+		const valid = this.updateValidity(attr.value);	// default value could be valid from the start
 		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.ADD_ATTRIBUTE, attr, valid));
 	});
 
@@ -113,7 +110,7 @@ private add() {
 private modified(e) {
 
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
-	const valid = this.isValueOK(attr.value);
+	const valid = this.updateValidity(attr.value);
 	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.MODIFIED_ATTRIBUTE, attr, valid));
 
 }
@@ -126,17 +123,28 @@ private delete() {
 	Promise.resolve(null).then(() => {
 	//	this.parentCell.remove(this.parentCell.getAttribute(this.cellModel.name))
 		const attr = this.parentCell.getAttribute(this.cellModel.name);
-		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.REMOVE_ATTRIBUTE, attr));
+		const valid = true;	// we assume a delete is valid==true, given we cannot delete nonmandatory attributes
+		this.validates = true;
+		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.REMOVE_ATTRIBUTE, attr, valid));
 	});
 
 }
 
 
-private isValueOK(v: string) {
+private updateValidity(v: string) {
 
-	const result = this.regexp.exec(v);
+	let valid = true;
+	if (this.regexp!==undefined) {
+		const result = this.regexp.exec(v);
+		valid = result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing
+		if (!valid) {
+			this.validationWarning = 'Should match '+this.cellModel.type_.regex;
+		}
+	}
 
-	return result?.length===1 && result[0].length===v.length;	// a single match and for the whole thing
+	this.validates = valid;
+
+	return valid;
 
 }
 
