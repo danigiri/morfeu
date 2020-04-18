@@ -19,12 +19,35 @@ import cat.calidos.morfeu.webapp.ui.UICellEditor;
 public class CellEditorComponentUITest extends UITezt {
 
 
+@Test @DisplayName("Color value validation")
+public void testColorValidation() {
+
+	// this will display 'target/test-classes/test-resources/documents/document5.xml/test(0)/row(0)/col(0)/data3(0)'
+	// which has the color attribute
+	open(appBaseURL+"test/cell-editor-test/document5");
+	UICellEditor editor = UICellEditor.testInstance();
+	editor.shouldBeVisible();
+	assertFalse(editor.canSave());
+
+	UIAttributeData color = editor.cellData().attribute("color");
+	// we have an invalid color, we cannot save
+	editor.pressTAB();
+	editor.pressKey("x");
+	assertFalse(editor.canSave());
+	color.pressBackspace();
+	color.enterText("FF00FA");
+	assertTrue(editor.canSave());
+
+}
+
+
 @Test @DisplayName("Categories")
 public void testReadonlyCells() {
 
 	open(appBaseURL+"test/cell-editor-test/categories-all");
-	UICellEditor editor = new UICellEditor();
+	UICellEditor editor = UICellEditor.testInstance();
 	editor.shouldBeVisible();
+	assertFalse(editor.canSave());
 
 	List<String> categories = editor.categories();
 	assertAll("check categories",
