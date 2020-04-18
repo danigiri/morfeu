@@ -116,7 +116,7 @@ public boolean asBoolean() {
 }
 
 
-public UIAttributeData enterTextDirect(String value) {
+public UIAttributeData tabIntoEnterText(String value) {
 
 	if (!isEditable()) {
 		throw new UnsupportedOperationException("Cannot set the value of a non-editable field");
@@ -149,6 +149,19 @@ public UIAttributeData enterTextNext(String value) {
 	return this;
 
 }
+
+// no tabbing
+public UIAttributeData enterText(String value) {
+
+	if (!isEditable()) {
+		throw new UnsupportedOperationException("Cannot set the value of a non-editable field");
+	}
+	pressKey(value);
+
+	return this;
+
+}
+
 
 
 /** Erase the attribute text in the field, we assume our cursor is in the field  */

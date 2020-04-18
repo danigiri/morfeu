@@ -66,14 +66,12 @@ public void editCellAndSave() {
 	UIAttributeData text = checkAttribute(attributes, "text", "blahblah");
 	assertTrue("Attribute text should be editable", text.isEditable());
 
-	Optional<UIAttributeData> numberOpt = attributes.stream().filter(a -> a.name().matches("number")).findFirst();
-	assertTrue(numberOpt.isPresent());
 	UIAttributeData number = checkAttribute(attributes, "number", "42");
 	assertTrue("Attribute number should be editable", number.isEditable());
 
 	// let's modify the values
 	text.eraseValueInField();
-	text.enterTextDirect("foo");
+	text.tabIntoEnterText("foo");
 	number.enterTextNext("66");
 	dataEditor.clickSave();
 
@@ -108,7 +106,7 @@ public void editCellAndDismiss() {
 
 	// let's modify the values (this is brittle as it needs to be done in order
 	text.eraseValueInField();
-	text.enterTextDirect("foo");
+	text.tabIntoEnterText("foo");
 	number.enterTextNext("66");
 
 	dataEditor.clickDiscard();

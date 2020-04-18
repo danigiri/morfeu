@@ -100,7 +100,7 @@ public void documentSaveTest() throws Exception {
 	
 	UICellEditor cellEditor = data.edit().shouldAppear();
 	assertNotNull(cellEditor);
-	cellEditor.cellData().attribute("number").enterTextDirect("66");
+	cellEditor.cellData().attribute("number").tabIntoEnterText("66");
 	cellEditor.clickSave();
 	assertEquals("66", cellData.attribute("number").value());
 

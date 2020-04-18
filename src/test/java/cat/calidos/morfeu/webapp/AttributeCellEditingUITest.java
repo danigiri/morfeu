@@ -75,14 +75,14 @@ public void addAttributeTest() throws Exception {
 
 	UIAttributeData number = attributes.get(0);
 	assertEquals("42", number.value());
-	
+
 	// now we add the missing attribute, will get the default value and the total of present attributes will be 2
 	UICellEditor dataEditor = data.edit();
 	UICellData dataEditorCellData = dataEditor.cellData();
 	List<UIAttributeData> nonPresentAttributes = dataEditorCellData.notPresentAttributes();
 	assertNotNull(nonPresentAttributes);
 	assertEquals("We should only have one attribute missing", 1, nonPresentAttributes.size());
-	
+
 	Optional<UIAttributeData> notPresentAttribute = dataEditorCellData.notPresentAttribute("text");
 	assertTrue("Text attribute is not present yet", notPresentAttribute.isPresent());	// a bit of a contradiction
 	
@@ -95,7 +95,7 @@ public void addAttributeTest() throws Exception {
 	assertTrue(textAttribute.isPresent());
 	assertTrue(textAttribute.hasValue());
 	assertEquals("Default value for text (from global)", textAttribute.value());
-	
+
 	dataEditorCellData = dataEditor.cellData();
 	assertEquals("We have now two attributes", 2, dataEditorCellData.attributes().size()); // awesome!
 

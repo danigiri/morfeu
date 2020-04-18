@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 import com.codeborne.selenide.SelenideElement;
@@ -17,6 +18,8 @@ import com.codeborne.selenide.SelenideElement;
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICellEditor extends UIWidget<UICellEditor> {
+
+private static final String SAVE_BUTTON = "#cell-editor-save-button";
 
 private static final String CATEGORY_LINK = ".cell-editor-category-link";
 
@@ -43,9 +46,14 @@ public static void shouldNotBeVisible() {
 }
 
 
+public boolean canSave() {
+	return $(SAVE_BUTTON).isEnabled();
+}
+
+
 public UICellEditor clickSave() {
 
-	$("#cell-editor-save-button").click();	// can access from global id
+	$(SAVE_BUTTON).click();	// can access from global id
 
 	return this;
 

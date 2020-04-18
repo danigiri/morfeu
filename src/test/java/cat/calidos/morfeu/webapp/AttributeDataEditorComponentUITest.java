@@ -67,7 +67,7 @@ public void testColorValidation() {
 
 	// we enter valid color
 	String validColor = "ff00aa";
-	color.enterTextDirect(validColor);
+	color.tabIntoEnterText(validColor);
 	assertAll("finally we are ok",
 		() -> assertEquals(validColor, color.value(), "attribute should have the new value"),
 		() -> assertTrue(color.validates(), "attribute should not validate now")

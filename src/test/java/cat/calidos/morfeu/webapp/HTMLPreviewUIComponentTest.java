@@ -93,7 +93,7 @@ public void testPreviewLiveUpdates() {
 	);
 
 	String enteredExpectedValue = "";
-	text.enterTextDirect(enteredExpectedValue);
+	text.tabIntoEnterText(enteredExpectedValue);
 	UIAttributeData enteredText = editor.cellData().attribute("text");
 	assertAll("Interactive change sets preview value",
 		() -> assertNotNull(enteredText),
