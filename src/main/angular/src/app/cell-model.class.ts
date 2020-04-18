@@ -16,7 +16,9 @@ export class CellModel implements NameValue, FamilyMember {
 
 static readonly DEFAULT_EMPTY_VALUE = "";
 public static readonly DEFAULT_PRESENTATION_TYPE = "IMG";
+public static readonly ATTR_TEXT_PRESENTATION = 'CELL';
 public static readonly ATTR_BOOLEAN_PRESENTATION = 'BOOLEAN';
+public static readonly ATTR_LIST_PRESENTATION = 'LIST';
 
 id: string;
 isExpanded: boolean;
@@ -60,7 +62,7 @@ init() {
 
 	this.id = this.URI;	 // this is guaranteed to be unique 
 	this.isExpanded = true;
-	if (this.type_.regex) {
+	if (this.type_?.regex) {
 		this.type_.regexCompiled = new RegExp(this.type_.regex);
 	}
 
@@ -219,8 +221,8 @@ findCellModel(uri: string): CellModel {
 /** return true if the current value (or supplied parameter) is a valid value given our model */
 public validates(v: string): boolean {
 
-	const regexp = this.type_.regexCompiled;
-	const possibleValues = this.type_.possibleValues;
+	const regexp = this.type_?.regexCompiled;
+	const possibleValues = this.type_?.possibleValues;
 	if (!regexp && !possibleValues) {
 		return true;
 	}
