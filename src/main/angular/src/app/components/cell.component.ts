@@ -26,7 +26,7 @@ import { EventService } from '../services/event.service';
 
 @Component({
 	selector: 'cell',
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	//changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './cell.component.html',
 	styleUrls: ['./cell.component.css', './presentation/presentation.css']
 	// encapsulation: ViewEncapsulation.Emulated,
@@ -139,7 +139,7 @@ ngOnInit() {
 
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -154,7 +154,7 @@ focusOn(cell: Cell) {
 	// to make that happen we can associate the cell-model.class with the component (view) and just do it
 	// without events
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -166,7 +166,7 @@ focusOff(cell: Cell) {
 	this.becomeInactive(cell);
 	this.events.service.publish(new CellDeactivatedEvent(cell));
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -212,7 +212,7 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	}
 	this.cell.adopt(newCell, position);
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -230,7 +230,7 @@ becomeActive(cell: Cell) {
 
 	//console.debug('[becomeActive]>%s, %s', this.cell.getAdoptionName(), this.cell.getAdoptionURI());
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -243,7 +243,7 @@ becomeInactive(cell: Cell) {
 	this.activeReadonly = false;
 	this.dragEnabled = false;
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -308,7 +308,7 @@ select(position: number) {
 		this.clearSelection();	 // out of bounds, sorry, clear
 	}
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -354,7 +354,7 @@ private remove() {
 		parent.remove(this.cell);
 	}
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
