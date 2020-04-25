@@ -22,7 +22,7 @@
 		<jackson-2-version>2.10.3</jackson-2-version>
 		<jetty-version>9.4.24.v20191120</jetty-version>
 		<jtwig-version>5.87.0.RELEASE</jtwig-version>
-		<selenide-version>5.9.0</selenide-version>
+		<selenide-version>5.11.1</selenide-version>
 		<selenium-version>3.141.59</selenium-version>
 		<jupiter-version>5.5.2</jupiter-version>
 		<junit-platform-version>1.5.2</junit-platform-version>
@@ -461,7 +461,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.2.4</version>
+			<version>3.3.3</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -469,7 +469,7 @@
 		<dependency>	<!-- web driver manager -->
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>3.7.1</version>
+			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -527,7 +527,7 @@
 		<dependency>
 			<groupId>org.xmlunit</groupId>
 			<artifactId>xmlunit-core</artifactId>
-			<version>2.6.3</version>
+			<version>2.6.4</version>
 		</dependency>
 
 	</dependencies>
