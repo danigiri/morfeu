@@ -1,7 +1,7 @@
 {
 	"name": "morfeu",
 	"version": "0.6.2",
-	"license": "Apache License -	Version 2.0",
+	"license": "Apache License - Version 2.0",
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve --open --port 3000 --proxy-config proxy.conf.json",

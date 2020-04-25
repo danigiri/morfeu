@@ -27,7 +27,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.bouncycastle.asn1.est.AttrOrOID;
 import org.junit.jupiter.api.BeforeEach;
 
 import cat.calidos.morfeu.model.Metadata;
