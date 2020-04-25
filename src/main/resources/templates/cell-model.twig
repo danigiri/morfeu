@@ -21,7 +21,7 @@
 		,"isSimple": {{cm.type.isSimple}}
 		,"desc": "{{cm.type.metadata.desc | trim}}"
 		{%if cm.type.regex.isPresent %}
-		,"regex":"{{cm.type.regex.get}}"{%endif%}
+		,"regex":"{{jsona(cm.type.regex.get)}}"{%endif%}
 		{%if cm.type.possibleValues.size > 0 %}
 		,"possibleValues":[{% for pv in cm.type.possibleValues %}"{{pv}}"{%if (loop.last)%}{%else%} ,{%endif%}{%endfor%}]{%endif%}
 	}
