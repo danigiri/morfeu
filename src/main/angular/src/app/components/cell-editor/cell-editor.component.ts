@@ -204,14 +204,17 @@ private createValue() {
 	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {
 		this.cell.createValue();
-		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.CREATED_VALUE));
+		const valid = this.cell.cellModel.validates(this.cell.value);
+		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.CREATED_VALUE, valid));
 	});
 
 }
 
 
 private modifiedValue(e) {
-	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.MODIFIED_VALUE));
+
+	const valid = this.cell.cellModel.validates(this.cell.value);
+	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.MODIFIED_VALUE, valid));
 }
 
 
@@ -220,7 +223,7 @@ private removeValue() {
 	console.log("[UI] Removing value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {
 		this.cell.removeValue();
-		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.REMOVED_VALUE));
+		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.REMOVED_VALUE, true));
 	});
 
 }
@@ -253,7 +256,7 @@ private attributeChange(attribute: Cell, what: CellChange, isValid: boolean) {
 			canBeSaved = isValid;
 		break;
 		case CellChange.REMOVED_VALUE:
-			canBeSaved = true;
+			canBeSaved = isValid;
 		break;
 		default:
 			console.error('Unknown attribute change');
@@ -261,7 +264,8 @@ private attributeChange(attribute: Cell, what: CellChange, isValid: boolean) {
 	Promise.resolve(null).then(() => this.canSave = canBeSaved);
 	// changes now are done, we notify any listeners that the cell is now in the state it should be
 	// so we can do things like change the presentation, etc
-	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.COMPLETED, attribute, isValid));
+	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.COMPLETED, isValid, attribute));
+
 }
 
 

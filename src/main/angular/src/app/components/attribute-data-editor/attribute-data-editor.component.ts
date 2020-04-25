@@ -61,7 +61,7 @@ ngOnInit() {
 	// if we have a value at the beginning
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
 	const valid = this.updateValidity(this.value);
-	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.INIT_ATTRIBUTE, attr, valid));
+	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.INIT_ATTRIBUTE, valid, attr));
 
 }
 
@@ -104,7 +104,7 @@ private add() {
 		const attr = this.cellModel.generateCell();
 		//this.parentCell.adopt(attr);
 		const valid = this.updateValidity(attr.value);	// default value could be valid from the start
-		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.ADD_ATTRIBUTE, attr, valid));
+		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.ADD_ATTRIBUTE, valid, attr));
 	});
 
 }
@@ -114,7 +114,7 @@ private modified(e) {
 
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
 	const valid = this.updateValidity(attr.value);
-	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.MODIFIED_ATTRIBUTE, attr, valid));
+	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.MODIFIED_ATTRIBUTE, valid, attr));
 
 }
 
@@ -128,7 +128,7 @@ private delete() {
 		const attr = this.parentCell.getAttribute(this.cellModel.name);
 		const valid = true;	// we assume a delete is valid==true, given we cannot delete nonmandatory attributes
 		this.validates = true;
-		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.REMOVE_ATTRIBUTE, attr, valid));
+		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.REMOVE_ATTRIBUTE, valid, attr));
 	});
 
 }
