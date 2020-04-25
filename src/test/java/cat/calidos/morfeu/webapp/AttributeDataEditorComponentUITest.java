@@ -72,7 +72,6 @@ public void testColorValidation() {
 	);
 	assertThrows(IllegalStateException.class, () -> color.validationWarning());
 
-
 }
 
 

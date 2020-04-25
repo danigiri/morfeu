@@ -73,6 +73,7 @@ public static EnvironmentConfiguration defaultConfiguration() {
 												.add(yamlc)
 												.add(yamla)
 												.add(substr)
+												.add(jsona)
 											.and()
 											.build();
 
@@ -113,18 +114,18 @@ final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
 	public Object execute(FunctionRequest request) {
 
 			request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-    		int n = request.getEnvironment()
-    						.getValueEnvironment()
-    						.getNumberConverter()
-    						.convert(request.get(0))
-    						.get()
-    						.intValue();
-    		List<Integer> range = new ArrayList<Integer>(n);
-    		for (int i=0; i<n; i++) {
-    			range.add(i);
-    		} 
+			int n = request.getEnvironment()
+							.getValueEnvironment()
+							.getNumberConverter()
+							.convert(request.get(0))
+							.get()
+							.intValue();
+			List<Integer> range = new ArrayList<Integer>(n);
+			for (int i=0; i<n; i++) {
+				range.add(i);
+			} 
 
-    		return range;
+			return range;
 	}
 
 };
@@ -132,18 +133,18 @@ final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
 /** remove last char */
 final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
 
-    @Override
-    public String name() {
-        return "chop";
-    }
+	@Override
+	public String name() {
+		return "chop";
+	}
 
 	@Override
 	public Object execute(FunctionRequest request) {
 
-    		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-    		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+			request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+			String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
 
-    		return s.substring(0, s.length()-1);
+			return s.substring(0, s.length()-1);
 	}
 
 };
@@ -333,13 +334,13 @@ final static SimpleJtwigFunction xmla = new SimpleJtwigFunction() {
 		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
 
 		s = s.replace("&", "&amp;");
-		
+
 		if (s.startsWith("\"") && s.endsWith("\"")) {	// these are delimiters
 			s = s.substring(1, s.length()-1);
 			s = s.replace("\\\"", "&quot;");	// yaml escaped
 			s = s.replace("\"", "&quot;");		// not yaml escaped
 			s = "\""+s+"\"";
-			
+
 		} else {
 			s = s.replace("\\\"", "&quot;");	// yaml escaped
 			s = s.replace("\"", "&quot;");		// not yaml escaped
@@ -464,16 +465,45 @@ final static SimpleJtwigFunction substr = new SimpleJtwigFunction() {
 };
 
 
+
+/** returns safe json attribute scaping \ --> \\ */
+final static SimpleJtwigFunction jsona = new SimpleJtwigFunction() {
+
+	@Override
+	public String name() {
+
+		return "jsona";
+	}
+
+
+	@Override
+	public Object execute(FunctionRequest request) {
+
+		request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
+		String s = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+
+		s = s.replace("\\", "\\\\");
+
+		return s;
+
+
+	}
+
+};
+
+
+
+
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *	Copyright 2019 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *	   http://www.apache.org/licenses/LICENSE-2.0
  *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,

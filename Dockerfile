@@ -1,9 +1,8 @@
 FROM openjdk:13-alpine AS build
 
-MAINTAINER Daniel Giribet "dani [at] calidos [.] cat"
+LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 
 # variables build stage
-ENV VERSION 0.6.2
 ENV MAVEN_URL https://apache.brunneis.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 ENV MAVEN_HOME /usr/share/maven
 

@@ -14,10 +14,10 @@ protected selectionSubscription: Subscription;
 protected selectionClearSubscription: Subscription;
 
 
-abstract select(position:number);
+abstract select(position:number): void;
 
 
-abstract subscribeToSelection();
+abstract subscribeToSelection(): void;
 
 
 clearSelection() {

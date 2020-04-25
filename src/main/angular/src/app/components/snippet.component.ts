@@ -98,8 +98,6 @@ subscribeToSelection() {
 }
 
 
-//unsubscribeFromSelection() {}
-
 }
 
 /*

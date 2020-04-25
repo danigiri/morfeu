@@ -1,9 +1,8 @@
 // CELL - EDITOR . COMPONENT . TS
 
 import { filter } from 'rxjs/operators';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
