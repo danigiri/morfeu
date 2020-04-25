@@ -1,8 +1,8 @@
 // CELL - MODEL . COMPONENT . TS
 
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable ,  Subscription } from 'rxjs';
-import {filter} from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { TreeNode } from 'angular-tree-component';
 
@@ -159,7 +159,7 @@ select(position: number) {
 		this.selected = true;
 		this.unsubscribeFromSelection();
 		// cleverly, we now subscribe to cellmodel activation events that may be triggered by shortcuts
-		this.subscribeToActivation();
+		//this.subscribeToActivation(); WE ARE ALWAYS SUBSCRIBED TO ACTIVATION, THIS SHOULD NOT BE NEEDED
 
 		// We temporarly unsubscribe from clear, send a clear event and re-subscribe
 		// This means we are the only ones selected now (previous parent will be unselected, for instance)
@@ -185,7 +185,7 @@ subscribeToSelection() {
 										.subscribe(cs => this.select(cs.position))
 	);
 	this.subscribeToSelectionClear();  // if we are selectable we are also clearable
-	
+
 }
 
 
@@ -201,26 +201,22 @@ unsubscribeFromSelection() {
 
 
 clickDown() {
-
 	this.becomeActive(false);
 	// this.events.service.publish(new CellModelActivatedEvent(cellModel));
-
 }
 
 
 clickUp() {
-	
 	this.becomeInactive(false);
-	// this.events.service.publish(new CellModelDeactivatedEvent(cellModel));	  
-
+	// this.events.service.publish(new CellModelDeactivatedEvent(cellModel));
 }
 
 
 dragEnd() {
-	
+
 	console.log("[UI] CellModelComponent::dragEnd()");
 	this.becomeInactive(false);
-	
+
 }
 
 
@@ -234,26 +230,26 @@ getThumb(): string {
 }
 
 
-private subscribeToActivation() {
-	
+/*private subscribeToActivation() {
+
 	console.log("[UI] CellModelComponent::subscribeToActivation("+this.cellModel.name+")");
 	this.activationSubscription = this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 		.pipe(filter( activated => activated.cellModel==undefined && this.selected))	 // no cell model
-		.subscribe( activated => this.becomeActive(false) )
+		.subscribe(() => this.becomeActive(false) )
 	);
 
 }
 
 
 private unsubscribeFromActivation() {
-	
+
 	if (this.activationSubscription) {
 		this.unsubscribe(this.activationSubscription);
 	}
-	
+
 }
 
-
+*/
 private subscribeToNewCellFromModel() {
 
 	if (!this.newCellSubscription) {

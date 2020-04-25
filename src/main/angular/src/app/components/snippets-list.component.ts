@@ -108,10 +108,11 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 
 	const uri = Configuration.BACKEND_PREF+snippetStub.uri;
 	console.log("Loading snippet document %s", uri);
-	this.snippetDocumentService.get<CellDocument>(uri).subscribe(
-			snippetDoc => this.loadSnippetContent(snippetDoc, index),
-			error => this.events.problem(error.message),
-			() => {}
+	this.register(this.snippetDocumentService.get<CellDocument>(uri).subscribe(
+					snippetDoc => this.loadSnippetContent(snippetDoc, index),
+					error => this.events.problem(error.message),
+					() => {}
+		)
 	);
 
 }
@@ -121,29 +122,30 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 
 	const snippetURI = Configuration.BACKEND_PREF+"/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
 	console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
-	this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
-		// we set the document with the content, associate it with the model
-		snippet.content = snippetContent;
-		console.debug("Stripping snippet content context %s", snippet.contentURI);
-		snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
-		console.debug("Associating snippet content with model");
-		snippet.content.associate(this.normalisedModel);
+	this.register(
+			this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
+				// we set the document with the content, associate it with the model
+				snippet.content = snippetContent;
+				console.debug("Stripping snippet content context %s", snippet.contentURI);
+				snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
+				console.debug("Associating snippet content with model");
+				snippet.content.associate(this.normalisedModel);
 
-		// we have the content, so we can push the snippet document so it can de displayed
-		this._snippets.push(snippet);
-		this._snippetsSubject.next(this._snippets);
-	},
-	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
-	() => {
-		if (index<this.snippetStubs.length-1) {
-			this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
-		} else {
-			this.events.service.publish(new StatusEvent("Fetching snippets", StatusEvent.DONE));
-			this.unsubscribe(this.snippetDocumentSubs);
-			this.events.ok();	// this means we don't see errors for that long unfortunately
-		}
-	});
-
+				// we have the content, so we can push the snippet document so it can de displayed
+				this._snippets.push(snippet);
+				this._snippetsSubject.next(this._snippets);
+			},
+			error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
+			() => {
+				if (index<this.snippetStubs.length-1) {
+					this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
+				} else {
+					this.events.service.publish(new StatusEvent("Fetching snippets", StatusEvent.DONE));
+					this.unsubscribe(this.snippetDocumentSubs);
+					this.events.ok();	// this means we don't see errors for that long unfortunately
+				}
+			})
+	);
 }
 
 

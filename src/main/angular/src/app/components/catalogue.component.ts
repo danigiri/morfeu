@@ -1,7 +1,6 @@
 // CATALOGUE . COMPONENT . TS
 
 import { Component, Inject, OnInit } from '@angular/core';
-import { Subscription }	from 'rxjs';
 
 import { Catalogue } from '../catalogue.class';
 
@@ -82,21 +81,23 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 
 	this.selectedDocumentURI = null;
 	this.events.service.publish(new StatusEvent("Fetching catalogue"));
-	this.catalogueService.get<Catalogue>(selectedCatalogueUri).subscribe(
-			c => {
-				this.catalogue = c;
-				this.events.service.publish(new CatalogueLoadedEvent(c));
-				this.events.ok();
-			},
-			error => {
-				this.events.problem(error.message); // error is of the type HttpErrorResponse
-				this.catalogue = null;
-			},
-			// FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??
-			() => {
-				this.events.service.publish(new CellDocumentClearEvent());	// also clear document
-				this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE));
-			}
+	this.register(
+		this.catalogueService.get<Catalogue>(selectedCatalogueUri).subscribe(
+				c => {
+					this.catalogue = c;
+					this.events.service.publish(new CatalogueLoadedEvent(c));
+					this.events.ok();
+				},
+				error => {
+					this.events.problem(error.message); // error is of the type HttpErrorResponse
+					this.catalogue = null;
+				},
+				// FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??
+				() => {
+					this.events.service.publish(new CellDocumentClearEvent());	// also clear document
+					this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE));
+				}
+		)
 	);
 
 }

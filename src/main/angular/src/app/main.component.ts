@@ -162,7 +162,7 @@ ngAfterViewInit() {
 	);
 
 	// we need to subscribe to the query params to override possible configuration
-	this.route.queryParams.subscribe(
+	this.register(this.route.queryParams.subscribe(
 			params => {
 				if (params.config && params.config!==undefined) {
 					console.log("Configuration to be bootstrapped from config url '%s'", params.config);
@@ -174,7 +174,7 @@ ngAfterViewInit() {
 					console.debug('Configuration loaded event fired');
 				}
 			}
-	);
+	));
 
 }
 

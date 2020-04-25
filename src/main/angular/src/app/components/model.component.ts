@@ -73,7 +73,6 @@ constructor(eventService: EventService,
 			remoteEventService: RemoteEventService,
 			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
 	super(eventService, remoteEventService);
-	// super(eventService, hotkeysService);
 }
 
 
@@ -112,18 +111,20 @@ loadModel(document: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Fetching model"));
 	const modelURI = Configuration.BACKEND_PREF+"/dyn/models/"+document.modelURI;
-	this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
-			console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
-			this.displayModel(model);	// not firing a load event yet if not needed
-			document.model = model;	 // associating the document with the recently loaded model
-			// now that we have loaded the model we can safely load the content (as both are related
-			this.events.service.publish(new ModelLoadedEvent(model));
-			this.events.remote.publish(new ContentRequestEvent(document, model));
-			this.events.ok();
-	},
-	// TODO: check for network errors (see https://angular.io/guide/http)
-	error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
-	() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
+	this.register(
+			this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
+				console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
+				this.displayModel(model);	// not firing a load event yet if not needed
+				document.model = model;	 // associating the document with the recently loaded model
+				// now that we have loaded the model we can safely load the content (as both are related
+				this.events.service.publish(new ModelLoadedEvent(model));
+				this.events.remote.publish(new ContentRequestEvent(document, model));
+				this.events.ok();
+			},
+			// TODO: check for network errors (see https://angular.io/guide/http)
+			error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
+			() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
+			)
 	);
 
 }
@@ -135,7 +136,7 @@ displayModel(m: Model) {
 //	let i = 0;
 //	m.cellModels.forEach(cm => cm.activateEventService(this.events.service, i++));
 
-	let uri = m.getURI();
+	const uri = m.getURI();
 	this.displayName = uri.substring(uri.lastIndexOf("/"), uri.length);
 	this.model = m;
 	this.registerKeyPressedEvents();
@@ -247,6 +248,7 @@ ngOnDestroy() {
 	console.log("ModelComponent::ngOnDestroy()");
 	super.ngOnDestroy();
 }
+
 
 }
 

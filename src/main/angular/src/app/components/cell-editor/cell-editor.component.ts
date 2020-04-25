@@ -34,13 +34,11 @@ import { EventService } from '../../services/event.service';
 })
 
 
-export class CellEditorComponent extends EventListener implements OnInit, OnDestroy {
+export class CellEditorComponent extends EventListener implements OnInit {
 
 @ViewChild('editor') editor: ElementRef;
 //@ViewChild('form_', {static: false}) ngForm: NgForm;
 private form: NgForm;
-
-private formSubscription: Subscription;
 
 cell: Cell;
 cellBackup: Cell;
@@ -265,15 +263,6 @@ private attributeChange(attribute: Cell, what: CellChange, isValid: boolean) {
 	// changes now are done, we notify any listeners that the cell is now in the state it should be
 	// so we can do things like change the presentation, etc
 	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.COMPLETED, isValid, attribute));
-
-}
-
-
-ngOnDestroy() {
-
-	if (this.formSubscription) {
-		this.formSubscription.unsubscribe();
-	}
 
 }
 

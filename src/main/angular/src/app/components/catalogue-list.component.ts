@@ -79,17 +79,18 @@ fetchCatalogues(url: string) {
 
 	this.events.service.publish(new StatusEvent("Fetching catalogues"));
 	// TODO: make this configurable and into an event
-	this.catalogueService.getAll<Catalogue>(url).subscribe(
-			c => {
-				console.debug('Fetched catalogues from %s', url);
-				this.catalogues = c;
-				this.events.service.publish(new CataloguesLoadedEvent(c));
-				this.events.ok();
-			},
-			error => this.events.problem(error.message), // error is of the type HttpErrorResponse
-			() => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
+	this.register(
+			this.catalogueService.getAll<Catalogue>(url).subscribe(
+					c => {
+						console.debug('Fetched catalogues from %s', url);
+						this.catalogues = c;
+						this.events.service.publish(new CataloguesLoadedEvent(c));
+						this.events.ok();
+					},
+					error => this.events.problem(error.message), // error is of the type HttpErrorResponse
+					() => this.events.service.publish(new StatusEvent("Fetching catalogues", StatusEvent.DONE))
+			)
 	);
-
 }
 
 
@@ -104,6 +105,7 @@ clickOnCatalogue(c: Catalogue) {
 markCatalogueAsSelected(uri: string) {
 	this.selectedCatalogueURI = uri;
 }
+
 
 }
 

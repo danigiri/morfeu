@@ -109,7 +109,6 @@ private updateHTMLPresentation() {
 	console.debug('PresentationComponent::updateHTMLPresentation()');
 	const presentationURL = this.getCellPresentation(); //'/dyn/preview/html/aaa;color=ff00ff';
 
-	// MEMORY LEAK HERE
 	let presentationContent$: Observable<String>;
 	if (this.getCellPresentationMethod()=='POST') {
 		const allPresentationContent = this.getCellPresentationAllContent();

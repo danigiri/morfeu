@@ -73,10 +73,10 @@ numberPressed_ = (event: KeyboardEvent): boolean => {
 
 keyPressed_ = (event: KeyboardEvent): boolean => {
 
-	let key = event.key
+	const key = event.key
 
 	console.log("KeyCaptureComponent::keyPressed(%s) %s", key, event.shiftKey ? "[SHIFT]":"");
-	
+
 	if (event.shiftKey) {
 		this.events.service.publish(new KeyPressedEvent(key.toUpperCase()));
 	} else {

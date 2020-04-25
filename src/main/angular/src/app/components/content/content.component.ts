@@ -65,10 +65,10 @@ protected commandKeys: string[] = ["c", "a", "d", "t", "e", "R", "i", "u"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
-private cellSelectionClearSubscription: Subscription;
 private cellSelectingMode = false;
 private dropAreaSelectingMode = false;
 private configuration: Configuration;
+
 
 constructor(eventService: EventService,
 			remoteEventService: RemoteEventService,
@@ -138,21 +138,23 @@ fetchContentFor(document_: CellDocument, model: Model) {
 	contentURI = this.configuration?.loadFilters ? contentURI+'&filters='+this.configuration.loadFilters : contentURI;
 
 	console.debug("ContentComponent::fetchContent() About to fetch content from '%s'", contentURI);
-	this.contentService.get(contentURI, Content).subscribe( (content: Content) => {
-			console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
-			// we associate the content with the document and the model so it all fits together
-			document_.content = content;
-			// as we want the model to have all references, we create a copy, as this may have
-			// an infinite recursion structure
-			const MODEL = Object.create(Model.prototype); // to simulate a static call
-			this.model = MODEL.fromJSON(model.toJSON());
-			this.model.normaliseReferences();
-			content.associateFromRoot(this.model);
-			this.displayContent(content);
-			this.events.ok();
-		},
-		error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
-		() =>	 this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
+	this.register(
+			this.contentService.get(contentURI, Content).subscribe( (content: Content) => {
+					console.log("ContentComponent::fetchContent() Got content from Morfeu service ('%s')", uri);
+					// we associate the content with the document and the model so it all fits together
+					document_.content = content;
+					// as we want the model to have all references, we create a copy, as this may have
+					// an infinite recursion structure
+					const MODEL = Object.create(Model.prototype); // to simulate a static call
+					this.model = MODEL.fromJSON(model.toJSON());
+					this.model.normaliseReferences();
+					content.associateFromRoot(this.model);
+					this.displayContent(content);
+					this.events.ok();
+				},
+				error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
+				() =>	 this.events.service.publish(new StatusEvent("Fetching content", StatusEvent.DONE))
+			)
 	);
 
 }
@@ -237,17 +239,18 @@ saveContent(document_: CellDocument) {
 	const content = document_.content.toJSON();
 	console.log("ContentComponent::saveContent('%s')", postURI);
 
-	this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
-				console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
-				//this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
-				// we send a remote event so the backend knows we've modified the content
-				// this will also allow to reload the content if configured thus
-				this.events.remote.publish(new ContentSavedEvent(document_));
-			},
-			error => this.events.problem(error.message),	 // error is of the type HttpErrorResponse
-			() => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
+	this.register(
+		this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
+					console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
+					//this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
+					// we send a remote event so the backend knows we've modified the content
+					// this will also allow to reload the content if configured thus
+					this.events.remote.publish(new ContentSavedEvent(document_));
+				},
+				error => this.events.problem(error.message),	 // error is of the type HttpErrorResponse
+				() => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
+		)
 	);
-
 }
 
 
@@ -348,6 +351,7 @@ private subscribeChildrenToCellSelection () {
 	// we ensure there were no previous selections, avoiding double or triple selects
 	this.unsubscribeChildrenFromCellSelection();
 	this.childrenCellComponents.forEach(c => c.subscribeToSelection());
+
 }
 
 

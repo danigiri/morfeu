@@ -1,8 +1,9 @@
 // STATUS . COMPONENT . TS
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
+import { EventListener } from '../events/event-listener.class';
 import { EventService } from '../services/event.service';
 import { StatusEvent } from '../events/status.event';
 
@@ -34,7 +35,7 @@ import { StatusEvent } from '../events/status.event';
 	]
 })
 
-export class StatusComponent implements OnInit, OnDestroy {
+export class StatusComponent extends EventListener implements OnInit {
 
 readonly MAX_BARS = 4;
 private readonly HIDDEN = 0;
@@ -46,9 +47,12 @@ visibility = 'hidden';
 state = this.HIDDEN;
 statuses: StatusEvent[];		// what is shown
 pendingStatuses: StatusEvent[]; // what is pending to be shown given that statuses is full
-eventSubscription: Subscription;
 
-constructor(private eventService: EventService) {}
+
+constructor(eventService: EventService) {
+	super(eventService);
+}
+
 
 ngOnInit() {
 
@@ -56,10 +60,7 @@ ngOnInit() {
 	this.statuses = new Array();
 	this.pendingStatuses = new Array();
 
-	this.eventSubscription = this.eventService.of<StatusEvent>(StatusEvent).subscribe(s =>
-		// console.log("-> status component gets new status '"+s.message+"' ["+s.percentage+"]");
-																				this.newStatusReceived(s)
-	);
+	this.register(this.events.service.of<StatusEvent>(StatusEvent).subscribe(s => this.newStatusReceived(s)));
 
 }
 
@@ -224,12 +225,6 @@ private addToPendingStatuses(status: StatusEvent) {
 		this.pendingStatuses.push(status);
 	}
 
-}
-
-
-// TODO: move to event listener
-ngOnDestroy() {
-	this.eventSubscription.unsubscribe();
 }
 
 

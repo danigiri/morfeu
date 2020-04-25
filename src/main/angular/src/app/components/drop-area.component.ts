@@ -102,7 +102,7 @@ ngOnInit() {
 				}
 			})
 	);
-	
+
 	this.register(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.subscribe(d => {
 				if (this.matchesCellmodel(d.cellModel)) {

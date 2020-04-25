@@ -1,6 +1,6 @@
 // MODEL - AREA . COMPONENT . TS
 
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 
 import { NgbTabset, NgbTabChangeEvent } from "@ng-bootstrap/ng-bootstrap";
@@ -15,7 +15,6 @@ import { Model } from "../model.class";
 import { CatalogueLoadedEvent } from "../events/catalogue-loaded.event";
 import { CellDocumentClearEvent } from "../events/cell-document-clear.event";
 import { CellDocumentLoadedEvent } from "../events/cell-document-loaded.event";
-import { KeyPressedEvent } from "../events/keypressed.event";
 import { ModelDisplayEvent } from "../events/model-display.event";
 import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
 import { ModelRequestEvent } from "../events/model-request.event";
@@ -57,7 +56,6 @@ snippets?: CellDocument[];
 protected commandKeys: string[] = ["m", "s"];
 
 @ViewChild("tabs") tabs: NgbTabset;
-@ViewChild(ModelComponent) private modelComponent: ModelComponent;
 @ViewChild(SnippetsListComponent) private snippetListComponent: SnippetsListComponent;
 
 private modelDisplayReadySubscription: Subscription;
