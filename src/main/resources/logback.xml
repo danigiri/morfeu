@@ -12,6 +12,7 @@
 
 	<logger name="cat.calidos.morfeu.model.injection" level="WARN"/>
 	<logger name="cat.calidos.morfeu.control.MorfeuServletListener" level="INFO"/>
+	<logger name="cat.calidos.morfeu.control.MorfeuServlet" level="INFO"/>
 	<logger name="cat.calidos.morfeu.control" level="WARN"/>
 	<logger name="cat.calidos.morfeu.control.ContentSaveControl" level="TRACE"/>
 	<logger name="cat.calidos.morfeu.control.injection" level="TRACE"/>	
