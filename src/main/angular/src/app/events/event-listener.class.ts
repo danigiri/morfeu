@@ -1,11 +1,11 @@
 // EVENT - LISTENER . CLASS . TS
 
-import {OnDestroy} from "@angular/core";
-import {Subscription} from "rxjs";
+import { OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
 
-import {EventService} from "../services/event.service";
-import {RemoteEventService} from "../services/remote-event.service";
-import {Events} from "./events.class";
+import { EventService } from "../services/event.service";
+import { RemoteEventService } from "../services/remote-event.service";
+import { Events } from "./events.class";
 
 
 export class EventListener implements OnDestroy {
@@ -23,9 +23,10 @@ constructor(private eventService: EventService, private remoteEventService?: Rem
 
 
 // at some point we will have to handle unsubscriptions more effectively
-subscribe(s: Subscription): Subscription {
+register(s: Subscription): Subscription {
 
 	this.subscriptions.push(s);
+
 	return s;
 
 }

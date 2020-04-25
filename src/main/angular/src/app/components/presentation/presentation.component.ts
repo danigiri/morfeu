@@ -17,11 +17,16 @@ import { EventService } from '../../services/event.service';
 @Component({
 	selector: 'presentation',
 	template: `
-		<!-- TODO: add inner html type? -->
 		<iframe *ngIf="this.getPresentationType()==='IFRAME'"
-			class="cell cell-html"
-			[src]="getCellPresentation() | safe: 'resourceUrl' "
+				class="cell cell-html"
+				[src]="getCellPresentation() | safe: 'resourceUrl' "
 		></iframe>
+		<!--div class="embed-responsive embed-responsive-16by9">
+			<iframe *ngIf="this.getPresentationType()==='IFRAME'"
+				class="cell cell-html embed-responsive-item"
+				[src]="getCellPresentation() | safe: 'resourceUrl' "
+			></iframe>
+		</div-->
 		<div class="cell cell-html" *ngIf="this.getPresentationType()==='HTML'">
 			<div [innerHTML]="html$ | async | safe: 'html'"></div>
 		</div>
@@ -49,9 +54,9 @@ constructor(eventService: EventService,
 
 ngAfterViewInit() {
 
-	//console.debug('PresentationComponent::ngAfterViewInit() - %s', this.cell ? this.cell.getURI() : '');
-
-	if (this.getPresentationType()==='HTML') {
+	console.debug('PresentationComponent::ngAfterViewInit() - %s', this.cell ? this.cell.getURI() : '');
+	const presentationType = this.getPresentationType();
+	if (presentationType==='HTML') {
 
 		//console.debug('PresentationComponent::ngAfterViewInit() HTML pres (%s)', this.getPresentationMethod());
 		this.html$ = new Subject();
@@ -63,8 +68,9 @@ ngAfterViewInit() {
 
 		// FIXME: is there a potential race condition where this
 		// method calls pile up on each other on the get text?
-			this.subscribe(this.events.service.of<CellChangeEvent>(CellChangeEvent)
-					.pipe(filter(change => (change.what===CellChange.COMPLETED)))
+			this.register(this.events.service.of<CellChangeEvent>(CellChangeEvent)
+					.pipe(filter(change => change.what===CellChange.COMPLETED),
+							filter(change => change.cell.getURI()===this.cell?.getURI()))
 					.subscribe(() => this.updateHTMLPresentation())
 			);
 		}
@@ -100,16 +106,18 @@ private getCellPresentationMethod(): string {
 
 private updateHTMLPresentation() {
 
+	console.debug('PresentationComponent::updateHTMLPresentation()');
 	const presentationURL = this.getCellPresentation(); //'/dyn/preview/html/aaa;color=ff00ff';
 
-	let presentationContent: Observable<String>;
+	// MEMORY LEAK HERE
+	let presentationContent$: Observable<String>;
 	if (this.getCellPresentationMethod()=='POST') {
 		const allPresentationContent = this.getCellPresentationAllContent();
-		presentationContent = this.cellPresentationService.postText(presentationURL, allPresentationContent);
+		presentationContent$ = this.cellPresentationService.postText(presentationURL, allPresentationContent);
 	} else {
-		presentationContent = this.cellPresentationService.getText(presentationURL);
+		presentationContent$ = this.cellPresentationService.getText(presentationURL);
 	}
-	presentationContent.subscribe(
+	presentationContent$.subscribe(
 			innnerHTML => Promise.resolve(null).then(() => this.html$.next(innnerHTML)),
 			error => console.error('Could not get HTML presentation at %s', presentationURL)
 	);

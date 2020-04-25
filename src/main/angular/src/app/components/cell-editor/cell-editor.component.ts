@@ -60,14 +60,14 @@ constructor(eventService: EventService, private modalService: NgbModal) {
 ngOnInit() {
 
 	// trigger cell edits from keyboard, clicking...
-	this.subscribe(this.events.service.of<CellEditEvent>(CellEditEvent)
+	this.register(this.events.service.of<CellEditEvent>(CellEditEvent)
 			.pipe(filter(edit => edit.cell!==undefined && !this.editing))
 			.subscribe(edit => this.edit(edit.cell))
 	);
 
 	// attributes or values are being edited (using the filter), so we act accordingly
 	// we are not interested in the COMPLETED subevent given we generate it, it's for other components
-	this.subscribe(this.events.service.of<CellChangeEvent>(CellChangeEvent)
+	this.register(this.events.service.of<CellChangeEvent>(CellChangeEvent)
 			.pipe(filter(changed => changed.what!==CellChange.COMPLETED))
 			.pipe(filter(changed => this.editing))
 			.subscribe(changed => this.attributeChange(changed.attribute, changed.what, changed.valid))

@@ -105,8 +105,6 @@ describe('cell-model.class', () => {
 
 	});
 
-
-
 });
 
 /*

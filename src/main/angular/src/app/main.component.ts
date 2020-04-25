@@ -31,7 +31,6 @@ import { RemoteEventService } from './services/remote-event.service';
 		<div class="card">
 			<div class="card-body">
 				<h1 class="card-title">Morfeu application</h1>
-				<hotkeys-cheatsheet></hotkeys-cheatsheet>
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-3">
@@ -102,20 +101,20 @@ ngAfterViewInit() {
 	console.debug("AppComponent::ngAfterViewInit()");
 
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	const foo = !environment.production && false;
+	const foo = !environment.production && true;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
-		this.cataloguesLoadedEventSubscription = this.subscribe(this.events.service.of<CataloguesLoadedEvent>(CataloguesLoadedEvent)
+		this.cataloguesLoadedEventSubscription = this.register(this.events.service.of<CataloguesLoadedEvent>(CataloguesLoadedEvent)
 				.subscribe(loaded => {
 						this.unsubscribe(this.cataloguesLoadedEventSubscription);
 						const catalogue = loaded.catalogues[0].uri;
 						this.events.service.publish(new CatalogueSelectionEvent(catalogue));
 				})
 		);
-		this.catalogueLoadedEventSubscription = this.subscribe(this.events.service.of<CatalogueLoadedEvent>(CatalogueLoadedEvent)
+		this.catalogueLoadedEventSubscription = this.register(this.events.service.of<CatalogueLoadedEvent>(CatalogueLoadedEvent)
 				.subscribe(loaded => {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
-						const document = loaded.catalogue.documents[0].uri;
+						const document = loaded.catalogue.documents[4].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
 							this.events.service.publish(new CellDocumentSelectionEvent(document))
 						);
@@ -147,7 +146,7 @@ ngAfterViewInit() {
 	// This should be ok as we assume the subscriptions should be done at the ngOnInit event, to ensure that
 	// events can use binding properties that have been setup properly
 
-	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
+	this.register(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
 			.subscribe(loaded => {
 				if (loaded===undefined || loaded===null) {
 					console.warn('Got an empty configuration loaded event');

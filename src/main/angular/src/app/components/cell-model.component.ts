@@ -1,7 +1,5 @@
 // CELL - MODEL . COMPONENT . TS
 
-
-
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable ,  Subscription } from 'rxjs';
 import {filter} from 'rxjs/operators';
@@ -108,13 +106,13 @@ ngOnInit() {
 	this.cellModel = this.node.data as CellModel;
 	this.cellModel.component = this;
 
-	this.subscribe(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
+	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
 		.pipe(filter(deactivated => this.isCompatibleWith(deactivated.cell)))
 		.subscribe(() => this.becomeInactive(true))
 				// console.log("-> cell-model comp gets cell deactivated event for '"+deactivated.cell.name+"'");
 	);
 
-	this.subscribe(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
+	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
 			.pipe(filter(activated => this.isCompatibleWith(activated.cell)))
 			.subscribe(() => this.becomeActive(true))
 				// console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
@@ -183,7 +181,7 @@ select(position: number) {
 
 subscribeToSelection() {
 
-	this.selectionSubscription = this.subscribe(this.events.service.of<CellSelectEvent>(CellSelectEvent)
+	this.selectionSubscription = this.register(this.events.service.of<CellSelectEvent>(CellSelectEvent)
 										.subscribe(cs => this.select(cs.position))
 	);
 	this.subscribeToSelectionClear();  // if we are selectable we are also clearable
@@ -239,7 +237,7 @@ getThumb(): string {
 private subscribeToActivation() {
 	
 	console.log("[UI] CellModelComponent::subscribeToActivation("+this.cellModel.name+")");
-	this.activationSubscription = this.subscribe(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
+	this.activationSubscription = this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 		.pipe(filter( activated => activated.cellModel==undefined && this.selected))	 // no cell model
 		.subscribe( activated => this.becomeActive(false) )
 	);
@@ -259,7 +257,7 @@ private unsubscribeFromActivation() {
 private subscribeToNewCellFromModel() {
 
 	if (!this.newCellSubscription) {
-		this.newCellSubscription = this.subscribe(this.events.service.of<NewCellFromModelEvent>(NewCellFromModelEvent) 
+		this.newCellSubscription = this.register(this.events.service.of<NewCellFromModelEvent>(NewCellFromModelEvent) 
 				.subscribe( nc => {
 					if (this.active && this.cellModel.canGenerateNewCell()) {
 						console.log("-> cell model widget gets new cell event and will try to create one :)");

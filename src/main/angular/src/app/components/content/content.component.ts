@@ -83,30 +83,28 @@ ngOnInit() {
 
 	console.log("ContentComponent::ngOnInit()");
 
-	this.subscribe(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
-		.subscribe(() => this.clear())
-	);
+	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent).subscribe(() => this.clear()));
 
-	this.subscribe(this.events.service.of<ContentRequestEvent>(ContentRequestEvent)
+	this.register(this.events.service.of<ContentRequestEvent>(ContentRequestEvent)
 			.subscribe(requested => this.fetchContentFor(requested.document, requested.model))
 	);
 
-	this.subscribe(this.events.service.of<ContentSaveEvent>(ContentSaveEvent)
+	this.register(this.events.service.of<ContentSaveEvent>(ContentSaveEvent)
 			.subscribe(save => this.saveContent(save.document))
 	);
 
 	// we subscribe to fragment editing events
-	this.subscribe(this.events.service.of<ContentFragmentDisplayEvent>(ContentFragmentDisplayEvent)
+	this.register(this.events.service.of<ContentFragmentDisplayEvent>(ContentFragmentDisplayEvent)
 			.subscribe(fragment => this.displayContentFragment(fragment.cell))
 	);
 
 	// we subscribe to the configuration service to get the save filters
-	this.subscribe(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
+	this.register(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
 			.subscribe(loaded => {
 				this.configuration = loaded.configuration;
 				// if we are configured to reload on save, we subscribe to the relevant event and trigger a reload
 				if (this.configuration.reloadOnSave) {
-					this.subscribe(this.events.service.of<ContentSavedEvent>(ContentSavedEvent)
+					this.register(this.events.service.of<ContentSavedEvent>(ContentSavedEvent)
 							.subscribe(saved => this.fetchContentFor(saved.document, saved.document.model)));
 				}
 			})

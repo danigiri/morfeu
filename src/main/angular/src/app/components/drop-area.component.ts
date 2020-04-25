@@ -3,7 +3,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import { filter } from 'rxjs/operators';
 
-
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
 import { CellModel } from '../cell-model.class';
@@ -86,7 +85,7 @@ ngOnInit() {
 
 	// we check for null of parent as we're not getting the binding set at the beginning for some reason
 	// IDEA: we could use the function of the drop enabled (gets cell as input) though it's less interactive
-	this.subscribe(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
+	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
 			.subscribe(deactivated => {
 				if (this.matchesCell(deactivated.cell)) {
 					//console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
@@ -95,7 +94,7 @@ ngOnInit() {
 			})
 	);
  
-	this.subscribe(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
+	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
 			.subscribe( activated => {
 				if (this.parent && this.parent.canAdopt(activated.cell)) {
 					// console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
@@ -104,7 +103,7 @@ ngOnInit() {
 			})
 	);
 	
-	this.subscribe(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
+	this.register(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.subscribe(d => {
 				if (this.matchesCellmodel(d.cellModel)) {
 					//console.log("-> drop comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
@@ -113,7 +112,7 @@ ngOnInit() {
 			})
 	);
 
-	this.subscribe(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
+	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 			.subscribe( a => {
 				if (a.cellModel && this.matchesCellmodel(a.cellModel)) {
 					// console.debug("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
@@ -122,7 +121,7 @@ ngOnInit() {
 			})
 	);
 
-	this.subscribe(this.events.service.of<CellDropEvent>(CellDropEvent)
+	this.register(this.events.service.of<CellDropEvent>(CellDropEvent)
 			.pipe(filter(cd => this.selected && cd.newParent==undefined))
 			.subscribe( cd => {
 				console.log("-> drop comp gets cell drop event from '"+cd.cell.name+"'");
@@ -130,7 +129,7 @@ ngOnInit() {
 			})
 	);
 
-	this.subscribe(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe( mode => this.info = mode.active));
+	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe( mode => this.info = mode.active));
 
 }
 
@@ -162,7 +161,7 @@ select(position:number) {
 
 subscribeToSelection() {
 
-	this.selectionSubscription = this.subscribe(this.events.service.of<DropAreaSelectEvent>(DropAreaSelectEvent)
+	this.selectionSubscription = this.register(this.events.service.of<DropAreaSelectEvent>(DropAreaSelectEvent)
 			.subscribe(das => this.select(das.position))
 	);
 	this.subscribeToSelectionClear();  // if we are selectable we are also clearable

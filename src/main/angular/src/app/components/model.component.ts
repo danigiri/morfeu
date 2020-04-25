@@ -82,15 +82,15 @@ ngOnInit() {
 	console.log("ModelComponent::ngOnInit()"); 
 
 	// if we are in a tab area this is redundant, as the parent will remove us from the component tree
-	this.subscribe(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
+	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
 			.subscribe(() => this.clearModel())
 	);
 
-	this.subscribe(this.events.service.of<ModelDisplayEvent>(ModelDisplayEvent)
+	this.register(this.events.service.of<ModelDisplayEvent>(ModelDisplayEvent)
 			.subscribe(display => this.displayModel(display.model))
 	);
 
-	this.subscribe(this.events.service.of<ModelRequestEvent>(ModelRequestEvent)
+	this.register(this.events.service.of<ModelRequestEvent>(ModelRequestEvent)
 			.subscribe(requested => this.loadModel(requested.document))
 	);
 

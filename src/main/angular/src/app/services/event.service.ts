@@ -40,7 +40,7 @@ public publish(event: MorfeuEvent): void {
 public of<T extends MorfeuEvent>(type_: Constructor<T>): Observable<T> {
 
 	const k = new type_().eventName;
-	//console.debug("\tSubscribing to event "+channel_);
+	//console.debug("\tSubscribing to event "+k);
 	return this.subject(k).map(m => m.data);
 
 }
