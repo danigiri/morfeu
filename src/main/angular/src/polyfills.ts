@@ -42,8 +42,10 @@ import '@angular/localize/init';
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
 
 /** Evergreen browsers require these. **/
-import "core-js/es6/reflect";
-import "core-js/es7/reflect";
+// changed by dani after getting Module not found: Error: Can't resolve 'core-js/es6/reflect'
+//import "core-js/es6/reflect";
+//import "core-js/es7/reflect";
+import "core-js/es/reflect";
 
 
 /**
