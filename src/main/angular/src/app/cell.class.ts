@@ -376,6 +376,19 @@ adopt(orphan: Cell, position?: number) {
 										// TODO: DOUBLE CHECK FOR SNIPPET ADOPTION AS THERE IS NO CONTEXT
 										//       DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK DOUBLE CHECK
 
+		// if we are moving cells from a parent were we have cell model differences (like maxOccurs) then we need to
+		// point to that model, for example
+		// <a>
+		//	<b (maxOccurs=1)
+		// </a>
+		// moved to:
+		// <x>
+		//	<b (here b has maxOccurs=2)
+		// </x>
+		// model of orphan b moves from /a/b to /x/b
+		orphan.cellModel = this.cellModel.child(orphan.cellModel.getAdoptionName());
+		orphan.cellModelURI = orphan.cellModelURI;
+
 		if (!this.children) {
 			this.children = [ orphan ];
 		} else if (this.children.length <= position) { //> //> // works for empty list and also append at the end
