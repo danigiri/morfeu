@@ -10,14 +10,16 @@ import { Events } from "./events.class";
 
 export class EventListener implements OnDestroy {
 
+private readonly SUSPICIOUS_SUBSCRIPTION_COUNT = 50;
+
 protected events: Events;
-private subscriptions: Subscription[];
+private subscriptions: Set<Subscription>;
 
 
 constructor(private eventService: EventService, private remoteEventService?: RemoteEventService) {
 
 	this.events = new Events(this.eventService, this.remoteEventService);
-	this.subscriptions = [];
+	this.subscriptions = new Set<Subscription>();
 
 }
 
@@ -25,32 +27,39 @@ constructor(private eventService: EventService, private remoteEventService?: Rem
 // at some point we will have to handle unsubscriptions more effectively
 register(s: Subscription): Subscription {
 
-	this.subscriptions.push(s);
+	this.subscriptions.add(s);
 
 	return s;
 
 }
 
 
-unsubscribe(s: Subscription) {
+unsubscribe(s: Subscription): boolean {
 
 	if (!s) {
 		console.error("Trying to unsubscribe an undefined subscription");
 	}
-	// unsusbscribe and then remove this subscription from the list
+	// unsusbscribe and then remove this subscription from the set
 	s.unsubscribe();
-	this.subscriptions = this.subscriptions.filter(sub => sub!==s);
+
+	return this.subscriptions.delete(s);
 
 }
 
 
 subscriptionCount(): number {
-	return this.subscriptions.length;
+	return this.subscriptions.size;
 }
 
 
 ngOnDestroy() {
+
+	const count = this.subscriptionCount();
+	if (count>this.SUSPICIOUS_SUBSCRIPTION_COUNT) {
+		console.warn('Suspiciously big number of subscriptions %d in ngOnDestroy', count);
+	}
 	this.subscriptions.forEach(s => s.unsubscribe());
+
 }
 
 

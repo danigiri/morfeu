@@ -3,8 +3,6 @@
 *  As there is no license on the site we should be ok.
 */
 
-import { map, filter } from 'rxjs/operators';
-
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 
@@ -18,9 +16,8 @@ interface _Event {
 @Injectable()
 export class EventService {
 
-private events$: Map<string, Subject<_Event>> = new  Map<string, Subject<_Event>>();
+private events$: Map<string, Subject<_Event>> = new Map<string, Subject<_Event>>();
 private eventCounter = 0;
-private subscriptionCounter = 0;
 
 
 public publish(event: MorfeuEvent): void {
@@ -29,6 +26,7 @@ public publish(event: MorfeuEvent): void {
 	//console.debug("\tSending event "+k+" -> ("+event.toString()+")");
 	this.subject(k).next({ channel: k, data: event });
 	this.eventCounter++;
+
 }
 
 
@@ -41,23 +39,26 @@ public of<T extends MorfeuEvent>(type_: Constructor<T>): Observable<T> {
 }
 
 
-public incrementSubscriptions() {
-	this.subscriptionCounter++;
-}
-
-
-public decrementSubscriptions() {
-	this.subscriptionCounter--;
-}
-
-
-public subscriptionCount():number {
-	return this.subscriptionCounter;
-}
-
-
 public eventCount(): number {
 	return this.eventCounter;
+}
+
+
+public subscriptionCount(): number {
+
+	let count = 0;
+	this.events$.forEach((s: Subject<_Event>) => count +=s.observers.length);
+
+	return count;
+}
+
+
+public toString = (): string => {
+
+	let out = "{\n";
+	this.events$.forEach((s: Subject<_Event>, k: string) => out+='"'+k+'":'+(s.observers.length+',').padStart(3)+"\n");
+
+	return out+"\n}";
 }
 
 

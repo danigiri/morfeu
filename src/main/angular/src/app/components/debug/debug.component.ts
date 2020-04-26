@@ -11,7 +11,10 @@ import { EventService } from '../../services/event.service';
 	template: `
 				<p *ngIf="info" class="card-text"
 				>
-					<small>#events: {{eventCounter()}}, #subscriptions: {{subscriptionCounter()}}</small>
+					<small>{{subscriptionBreakdown()}}</small>
+					<small>
+						<strong>#events: {{eventCounter()}}, #subscriptions: {{subscriptionCounter()}}</strong>
+					</small>
 				</p>
 	`,
 })
@@ -38,6 +41,10 @@ public eventCounter(): number {
 
 public subscriptionCounter(): number {
 	return this.events.service.subscriptionCount()
+}
+
+public subscriptionBreakdown():string {
+	return this.events.service.toString();
 }
 
 }
