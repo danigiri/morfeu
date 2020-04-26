@@ -31,6 +31,7 @@ import { RemoteEventService } from './services/remote-event.service';
 		<div class="card">
 			<div class="card-body">
 				<h1 class="card-title">Morfeu application</h1>
+				<debug></debug>
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-3">

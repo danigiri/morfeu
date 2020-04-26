@@ -23,6 +23,8 @@ import { CollapsibleComponent } from './components/collapsible.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CellModelComponent } from './components/cell-model.component';
 import { CellDataComponent } from './components/cell-data.component';
+import { DebugComponent } from './components/debug/debug.component';
+
 import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
@@ -45,18 +47,19 @@ import { StatusComponent } from './components/status.component';
 				TreeModule.forRoot()
 	],
 	declarations: [
-					AppComponent
-					, CatalogueListComponent
-					, CatalogueComponent
-					, CollapsibleComponent
-					, CellDocumentComponent
-					, CellDataComponent
-					, CellModelComponent
-					, MainComponent
-					, ModelAreaComponent
-					, ModelComponent
-					, ProblemComponent
-					, StatusComponent 
+					AppComponent,
+					CatalogueListComponent,
+					CatalogueComponent,
+					CollapsibleComponent,
+					CellDocumentComponent,
+					CellDataComponent,
+					CellModelComponent,
+					DebugComponent,
+					MainComponent,
+					ModelAreaComponent,
+					ModelComponent,
+					ProblemComponent,
+					StatusComponent,
 	],
 	bootstrap:	[AppComponent]
 })

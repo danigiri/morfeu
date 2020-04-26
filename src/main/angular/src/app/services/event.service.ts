@@ -18,14 +18,9 @@ interface _Event {
 @Injectable()
 export class EventService {
 
-private events$: Map<string, Subject<_Event>>;
-
-
-constructor() {
-
-	this.events$ = new  Map<string, Subject<_Event>>();
-
-}
+private events$: Map<string, Subject<_Event>> = new  Map<string, Subject<_Event>>();
+private eventCounter = 0;
+private subscriptionCounter = 0;
 
 
 public publish(event: MorfeuEvent): void {
@@ -33,7 +28,7 @@ public publish(event: MorfeuEvent): void {
 	const k = event.eventName;
 	//console.debug("\tSending event "+k+" -> ("+event.toString()+")");
 	this.subject(k).next({ channel: k, data: event });
-
+	this.eventCounter++;
 }
 
 
@@ -43,6 +38,26 @@ public of<T extends MorfeuEvent>(type_: Constructor<T>): Observable<T> {
 	//console.debug("\tSubscribing to event "+k);
 	return this.subject(k).map(m => m.data);
 
+}
+
+
+public incrementSubscriptions() {
+	this.subscriptionCounter++;
+}
+
+
+public decrementSubscriptions() {
+	this.subscriptionCounter--;
+}
+
+
+public subscriptionCount():number {
+	return this.subscriptionCounter;
+}
+
+
+public eventCount(): number {
+	return this.eventCounter;
 }
 
 
