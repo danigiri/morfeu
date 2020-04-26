@@ -105,7 +105,11 @@ ngOnInit() {
 				// if we are configured to reload on save, we subscribe to the relevant event and trigger a reload
 				if (this.configuration.reloadOnSave) {
 					this.register(this.events.service.of<ContentSavedEvent>(ContentSavedEvent)
-							.subscribe(saved => this.fetchContentFor(saved.document, saved.document.model)));
+							.subscribe(saved => {
+													this.clear();
+													this.fetchContentFor(saved.document, saved.document.model);
+												}
+					));
 				}
 			})
 	);
@@ -191,6 +195,7 @@ displayContentFragment(cell: Cell) {
 		this.isFragment = true;
 
 		this.cellSelectingMode = true;
+
 	});
 
 }
@@ -239,7 +244,7 @@ saveContent(document_: CellDocument) {
 	const content = document_.content.toJSON();
 	console.log("ContentComponent::saveContent('%s')", postURI);
 
-	this.register(
+	const subs = this.register(
 		this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
 					console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
 					//this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
@@ -248,7 +253,10 @@ saveContent(document_: CellDocument) {
 					this.events.remote.publish(new ContentSavedEvent(document_));
 				},
 				error => this.events.problem(error.message),	 // error is of the type HttpErrorResponse
-				() => this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE))
+				() => {
+					this.events.service.publish(new StatusEvent("Saving content", StatusEvent.DONE));
+					this.unsubscribe(subs);	// avoid memory leak every time we save
+				}
 		)
 	);
 }

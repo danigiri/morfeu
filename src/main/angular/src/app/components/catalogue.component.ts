@@ -81,7 +81,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 
 	this.selectedDocumentURI = null;
 	this.events.service.publish(new StatusEvent("Fetching catalogue"));
-	this.register(
+	const subs = this.register(
 		this.catalogueService.get<Catalogue>(selectedCatalogueUri).subscribe(
 				c => {
 					this.catalogue = c;
@@ -96,6 +96,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 				() => {
 					this.events.service.publish(new CellDocumentClearEvent());	// also clear document
 					this.events.service.publish(new StatusEvent("Fetching catalogue", StatusEvent.DONE));
+					this.unsubscribe(subs); // avoid memory leak every time we get a catalogue
 				}
 		)
 	);
