@@ -12,7 +12,7 @@ export interface FamilyMember {
 
 /** unique location */
 getURI(): string;
-	
+
 /** name of element in respect to creating new family members or adopting ones, in the example 'bar' */
 getAdoptionName(): string;
 

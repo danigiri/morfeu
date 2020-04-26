@@ -1,0 +1,9 @@
+<small>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li *ngIf="documentName" class="breadcrumb-item" aria-current="document name">{{documentName}}</li>
+			<li *ngFor="let e of uriElements" class="breadcrumb-item" aria-current="e">{{e}}</li>
+			<li *ngIf="name" class="breadcrumb-item" aria-current="name"><strong>{{name}}</strong></li>
+		</ol>
+	</nav>
+</small>
