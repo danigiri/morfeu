@@ -6,7 +6,7 @@ export const _readonly = `
 {
 	"schema": 0,
 	"URI": "target/test-classes/test-resources/documents/readonly.xml",
-	"name": "",
+	"name": "readonly.xml",
 	"desc": "DESC",
 	"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd",
 	"isSimple": false,
@@ -205,7 +205,7 @@ export const _types = `
 {
 	"schema": 0,
 	"URI": "target/test-classes/test-resources/documents/types.xml",
-	"name": "",
+	"name": "types.xml",
 	"desc": "",
 	"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd",
 	"isSimple": false,

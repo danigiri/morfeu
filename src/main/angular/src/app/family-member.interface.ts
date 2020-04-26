@@ -14,27 +14,30 @@ export interface FamilyMember {
 getURI(): string;
 	
 /** name of element in respect to creating new family members or adopting ones, in the example 'bar' */
-getAdoptionName():string;
+getAdoptionName(): string;
 
 /** URI in respect of creating new family members ar adopting ones, in the example '/model/bar' */
-getAdoptionURI():string;
+getAdoptionURI(): string;
 
 /** are we the same? (used to highlight siblings), to cells of equal name and model, match */
-matches(e:FamilyMember):boolean;
+matches(e:FamilyMember): boolean;
 
 /** can we adopt this new family member? (usually means can have children with given name and adoption uri) */
-canAdopt(newMember:FamilyMember):boolean;
+canAdopt(newMember:FamilyMember): boolean;
 
 //canRemoveAsChild(cell:Cell):boolean;
 
 /** return the number of children */
-childrenCount():number;
+childrenCount(): number;
 
 /** reference to the parent */
-getParent():FamilyMember;
+getParent(): FamilyMember;
+
+/** returns a list of ancestors, starting with the parent and up to the content */
+getAncestors(): FamilyMember[];
 
 /** exactly the same? */
-equals(m:FamilyMember):boolean;
+equals(m:FamilyMember): boolean;
 
 }
 

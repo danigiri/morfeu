@@ -16,8 +16,6 @@ import cat.calidos.morfeu.problems.ValidationException;
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Document extends ComplexCell implements Validable {
 
-public static final String ROOT_NAME = "";
-
 protected String kind;
 protected URI prefix;
 protected URI modelURI;
@@ -127,9 +125,7 @@ public URI getFetchableModelURI() {
 
 @JsonProperty("fetchableModelURI") 
 public void setFetchableModelURI(URI uri) {
-	
 	this.fetchableModelURI = uri;
-	
 }
 
 

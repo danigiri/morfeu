@@ -347,9 +347,10 @@ private replaceCellPresentationVariables(input: string): string {
 
 canBeModified(): boolean {
 
-	return !this.cellModel?.readonly ?? true;
+	return !this.cellModel?.readonly ?? true;	// TODO: move to capabilities
 
 }
+
 
 //// Adopter ////
 
@@ -530,6 +531,21 @@ childrenCount(): number {
 getParent(): FamilyMember {
 	return this.parent;
 }
+
+
+getAncestors(): FamilyMember[] {
+
+	let ancestors: FamilyMember[] = [];
+
+	if (this.parent) {
+		ancestors = this.parent.getAncestors();
+		ancestors.unshift(this.parent);
+	}
+
+	return ancestors;
+
+}
+
 
 
 equals(m: FamilyMember) {

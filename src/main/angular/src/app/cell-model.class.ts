@@ -276,6 +276,11 @@ getParent(): FamilyMember {
 	return undefined;	// TODO: we do not need to setup the parent yet
 }
 
+getAncestors(): FamilyMember[] {
+	return undefined	// TODO: not needed yet
+}
+
+
 
 equals(m: FamilyMember) {
 	return this.getURI()==m.getURI();

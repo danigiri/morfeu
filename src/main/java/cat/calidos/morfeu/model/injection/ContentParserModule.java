@@ -2,6 +2,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Optional;
 
@@ -39,6 +40,7 @@ protected final static Logger log = LoggerFactory.getLogger(ContentParserModule.
 
 @Produces
 public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
+												@Named("RootCellName") String rootCellName,
 												@Named("ContentNode") Node node,
 												@Named("CellModel") CellModel cellModel,
 												@Named("CellModelFilter") Optional<URI> cellModelFilter)
@@ -55,11 +57,21 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 										.build()
 										.createCell();
 	if (!cellModelFilter.isPresent()) {	// we have a root node which is this cell, which is an empty root cell
-		cell.setName(Document.ROOT_NAME);
+		cell.setName(rootCellName);
 	}
 	contentCells.addChild(cell.getName(), cell);
 
 	return contentCells;
+
+}
+
+
+@Produces @Named("RootCellName") 
+String rootCellName(@Named("ContentURI") URI uri) {
+
+	String[] pathElems = uri.getPath().split("/");
+
+	return pathElems[pathElems.length-1];
 
 }
 

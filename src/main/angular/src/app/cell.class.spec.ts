@@ -101,7 +101,21 @@ describe('cell.class', () => {
 
 	});
 
+	it('should provide a suitable list of ancestors', () => {
 
+		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
+		const types = typesContent.findCellWithURI(uri);
+		expect(types).toBeDefined();
+
+		const ancestors = types.getAncestors();
+		expect(ancestors).toBeDefined();
+		expect(ancestors.length).toBe(4);
+		expect(ancestors[0].getAdoptionName()).toBe('col');
+		expect(ancestors[1].getAdoptionName()).toBe('row');
+		expect(ancestors[2].getAdoptionName()).toBe('test');
+		expect(ancestors[3].getAdoptionName()).toBe('types.xml');
+
+	});
 
 });
 

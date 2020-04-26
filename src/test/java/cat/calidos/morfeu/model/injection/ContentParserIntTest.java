@@ -89,7 +89,7 @@ public void testProduceContent() throws Exception {
 															.build()
 															.content()
 															.get();
-	testDocument1Content(content);
+	testDocument1Content(content, "document1.xml");
 
 }
 
@@ -109,7 +109,7 @@ public void testProduceJSONContent() throws Exception {
 															.build()
 															.content()
 															.get();
-	testDocument1Content(content);
+	testDocument1Content(content, "document1-json-content.json");
 
 }
 
@@ -135,7 +135,7 @@ public void testFilteredContent() throws Exception {
 															.build()
 															.content()
 															.get();
-	testDocument1Content(content);
+	testDocument1Content(content, "filtered.xml");
 
 	// testing with backreferences for more robust handling
 
@@ -150,12 +150,12 @@ public void testFilteredContent() throws Exception {
 														.build()
 														.content()
 														.get();
-	testDocument1Content(content2);
+	testDocument1Content(content2, "filtered.xml");
 
 }
 
 
-private void testDocument1Content(Composite<Cell> content) {
+private void testDocument1Content(Composite<Cell> content, String documentName) {
 
 	assertNotNull(content);
 	assertEquals(1, content.size());
@@ -163,7 +163,7 @@ private void testDocument1Content(Composite<Cell> content) {
 	// empty root node
 	Cell rootNode = content.child(0);
 	assertNotNull(rootNode);
-	assertEquals(Document.ROOT_NAME, rootNode.getName());
+	assertEquals(documentName, rootNode.getName());
 	assertTrue(rootNode.isComplex());
 
 	Cell testNode = rootNode.asComplex().children().child("test(0)");
