@@ -38,12 +38,11 @@ constructor(private eventService: EventService,
 						console.debug("Remote Event Service loaded the configuration");
 						this.configuration = loaded.configuration;
 						// in optimisation mode we keep receiving this event
-						Promise.resolve(null).then(() => {
-							console.debug("Remote Event Service unsubscribing");
-							this.configurationSubscription.unsubscribe();
-							this.configurationSubscription = null;
-						});
-			});
+						},
+						error => console.error(error),
+						() => this.configurationSubscription.unsubscribe()
+			);
+
 }
 
 
@@ -55,9 +54,10 @@ publish(event: MorfeuEvent): void {
 
 	// we iterate through our attributes
 	console.debug("Calling server event '%s'", eventURL);
-	this.remoteEventService.get<RemoteEventResponse>(eventURL).subscribe(
+	const reg = this.remoteEventService.get<RemoteEventResponse>(eventURL).subscribe(
 			response => console.debug("Server responded to event with '%s' - '%s'", response.result, response.desc),
-			error => console.error("Server responded to event with an error '%'", error)
+			error => console.error("Server responded to event with an error '%'", error),
+			() => reg.unsubscribe() // avoid memory leak
 	);
 
 }

@@ -2,7 +2,7 @@
 
 import { filter } from 'rxjs/operators';
 import { AfterViewInit, Component, Inject, Input, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 
 import { RemoteDataService } from '../../services/remote-data.service';
@@ -116,10 +116,13 @@ private updateHTMLPresentation() {
 	} else {
 		presentationContent$ = this.cellPresentationService.getText(presentationURL);
 	}
-	presentationContent$.subscribe(
+
+	console.debug('$$$$ %d', this.subscriptionCount());
+	const reg = this.register(presentationContent$.subscribe(
 			innnerHTML => Promise.resolve(null).then(() => this.html$.next(innnerHTML)),
-			error => console.error('Could not get HTML presentation at %s', presentationURL)
-	);
+							() => console.error('Could not get HTML presentation at %s', presentationURL),
+							() => this.unsubscribe(reg)	// avoid memory leak
+	));
 
 }
 
