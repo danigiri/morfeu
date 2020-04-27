@@ -1,6 +1,8 @@
+// REMOTE - DATA . SERVICE . TS
 
-import { catchError, delay, take, retryWhen } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 

@@ -101,16 +101,20 @@ loadDocument(url: string) {
 	// notice we're using the enriched url here, as we want to display the JSON enriched data
 	const documentURI = Configuration.BACKEND_PREF+'/dyn/documents/'+url;
 	console.debug("DocumentComponent::loadDocument() About to fetch document from '%s'", documentURI);
-	this.register(
+	const subs = this.register(
 		this.documentService.get(documentURI, CellDocument).subscribe(
 				d => this.documentLoaded(d),
 				error => {
 					console.log("DocumentComponent::loadDocument() itself got an error");
-					this.problem(error.message);	 // error is of the type HttpErrorResponse
+					this.events.problem(error.message); // error is of the type HttpErrorResponse
+					console.error("Could not get document '%s' (%s)", url, error.message);
 					this.events.remote.publish(new CellDocumentClearEvent());	// also clear document
 					this.document = null;			 // we have no document loaded at all, so no show here
 				},
-				() => this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE))
+				() => {
+					this.events.service.publish(new StatusEvent("Fetching document", StatusEvent.DONE));
+					this.unsubscribe(subs);	// avoid memory leak every time we load a document
+				}
 		)
 	);
 
@@ -148,6 +152,7 @@ enableSave() {
 saveDocument() {
 
 	console.log("[UI] User clicked on save document, let's go!!!");
+	this.disableSave();	// avoid double submits and similar
 	this.events.service.publish(new ContentSaveEvent(this.document));
 
 }
@@ -165,17 +170,9 @@ private documentLoaded(d: CellDocument) {
 		this.events.ok();
 	} else {
 		// after clearing we show the problem message and the problematic document stub
-		this.problem(d.problem);   // document loaded but was problematic
-		this.document = d;		   // we still show whatever was answered back
+		this.events.problem(d.problem);	// document loaded but was problematic
+		this.document = d;				// we still show whatever was answered back
 	}
-
-}
-
-
-private problem(message: String) {
-
-	console.log("[UI] CellDocumentComponent::problem()");
-	this.events.problem(message);
 
 }
 

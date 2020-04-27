@@ -1,10 +1,11 @@
-// REMOTE OBJECT SERVICE . TS
+// REMOTE - BJECT SERVICE . TS
 
-import { take, delay, map, retryWhen } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
 
 import { SerialisableToJSON } from '../serialisable-to-json.interface';
 
@@ -24,18 +25,22 @@ get(uri: string, type_: Constructor<T>): Observable<T> {
 	console.log('[SERVICE] RemoteObjectService::get(%s)', uri);
 
 	// TODO: handle errors with .catch here
-	return this.http.get<J>(uri)//, { observe: 'response' })
-						.pipe(	retryWhen(errors => errors.pipe(delay(200),take(5))),
-	// .concat(Observable.throw(new Error("Too many retries")))
-								map(response => <T>createInstance(type_).fromJSON(response)));
+	return this.http.get<J>(uri).pipe(
+									map(response => <T>createInstance(type_).fromJSON(response)),
+									catchError(e => throwError(e))
+								);
 
+							//retryWhen(errors => errors.pipe(delay(200),take(5))),
 }
 
 post(uri: string, content: any, type_: Constructor<T>): Observable<T> {
 
 	console.log('[SERVICE] RemoteObjectService::post("%s")', uri);
 
-	return this.http.post<J>(uri, content).map(response => <T>createInstance(type_).fromJSON(response));
+	return this.http.post<J>(uri, content).pipe(
+											map(response => <T>createInstance(type_).fromJSON(response)),
+											catchError(e => throwError(e))
+											);
 
 }
 
