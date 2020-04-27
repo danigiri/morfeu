@@ -2,8 +2,7 @@
 
 import { filter } from 'rxjs/operators';
 import { AfterViewInit, Component, Inject, Input, OnDestroy } from '@angular/core';
-import { Observable, Subject, Subscription } from 'rxjs';
-
+import { Observable, Subject } from 'rxjs';
 
 import { RemoteDataService } from '../../services/remote-data.service';
 

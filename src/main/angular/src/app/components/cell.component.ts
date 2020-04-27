@@ -1,13 +1,13 @@
 // CELL . COMPONENT . TS
 
-import { filter } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { filter } from 'rxjs/operators';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
 import { CellModel } from '../cell-model.class';
 
-import  {DropAreaComponent } from './drop-area.component';
+import {DropAreaComponent } from './drop-area.component';
 import {SelectableWidget } from '../selectable-widget.class';
 
 import { CellActivateEvent } from '../events/cell-activate.event';
@@ -100,9 +100,9 @@ ngOnInit() {
 	);
 
 	// a different cell was activated and we are active at this moment
-	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent).pipe(
-				filter(a => this.active && a.cell!==this.cell)
-			).subscribe(() => {
+	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
+			.pipe(filter(a => this.active && a.cell!==this.cell))
+			.subscribe(() => {
 				console.log('-> cell comp gets cell activated event from other cell, we were active, clear');
 				this.becomeInactive(this.cell);
 			})

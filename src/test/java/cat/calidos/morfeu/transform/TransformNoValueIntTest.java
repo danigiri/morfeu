@@ -5,7 +5,6 @@ package cat.calidos.morfeu.transform;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,7 +13,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
@@ -28,6 +26,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 public class TransformNoValueIntTest extends TransformTezt {
 
 private String content;
+
 
 @Before
 public void setup() throws Exception {

@@ -50,7 +50,7 @@ interface Builder {
 	@BindsInstance Builder andExistingGlobals(Map<String, CellModel> globals);
 
 	CellModelComponent build();
-	
+
 }
 
 }

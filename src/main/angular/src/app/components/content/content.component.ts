@@ -1,7 +1,6 @@
 // CONTENT . COMPONENT . TS
 
 import { Component, Inject, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import Stack from 'ts-data.stack';
 
@@ -81,7 +80,7 @@ constructor(eventService: EventService,
 
 ngOnInit() {
 
-	console.log("ContentComponent::ngOnInit()");
+	console.trace("ContentComponent::ngOnInit()");
 
 	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent).subscribe(() => this.clear()));
 
