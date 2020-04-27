@@ -90,6 +90,7 @@ loadCatalogueAt(selectedCatalogueUri: string) {
 				},
 				error => {
 					this.events.problem(error.message); // error is of the type HttpErrorResponse
+					console.error("Could not get catalog '%s' (%s)", selectedCatalogueUri, error.message);
 					this.catalogue = null;
 				},
 				// FIXME: in case of error, the completed lambda is not ran, so the status bar is not updated ??

@@ -82,12 +82,11 @@ public void catalogueDetailErrorTest() {
 	catalogueEntries.get(CATALOGUE_NOT_FOUND_INDEX).click();
 
 	UIProblem problem = UIProblem.problem().shouldAppear();
-	//assertTrue(problem.getText().contains("Not Found"));	// may disappear too fast
+	assertTrue(problem.getText().contains("Not Found"));
 	UIContent.shouldNotBeVisible();
 
 	catalogueEntries.get(0).click();
-	//problem.shouldDisappear();
-	new UIContent().shouldAppear();
+	problem.shouldDisappear();
 
 }
 

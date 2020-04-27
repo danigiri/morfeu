@@ -1,8 +1,8 @@
 
-import {take, delay, retryWhen } from 'rxjs/operators';
-import {Injectable } from "@angular/core";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {Observable} from 'rxjs';
+import { catchError, delay, take, retryWhen } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 
 
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead */
@@ -28,8 +28,7 @@ get<T>(uri: string): Observable<T> {
 	console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
 	// TODO: handle errors with .catch here
 
-	return this.http.get<T>(uri).pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
-	//.concat(Observable.throw(new Error("Too many retries")))
+	return this.http.get<T>(uri).pipe(catchError(e => throwError(e)));
 
 }
 
@@ -38,7 +37,7 @@ getText(uri: string): Observable<String> {
 
 	// console.log("[SERVICE] RemoteDataService::getText('%s')", uri);
 
-	return this.http.get(uri, {responseType: 'text'}).pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
+	return this.http.get(uri, {responseType: 'text'}).pipe(catchError(e => throwError(e)));
 	//.catch((err: HttpErrorResponse) => this.handleError(err.error));
 }
 
@@ -47,9 +46,8 @@ postText(uri: string, content: string): Observable<String> {
 
 	// console.log("[SERVICE] RemoteDataService::postText('%s')", uri);
 
-	return this.http.post(uri, content, {responseType: 'text'}); // no retries on post
+	return this.http.post(uri, content, {responseType: 'text'}).pipe(catchError(e => throwError(e)));
 	//.pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
-	//.catch((err: HttpErrorResponse) => this.handleError(err.error));
 
 }
 
