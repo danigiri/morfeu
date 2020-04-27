@@ -21,7 +21,7 @@ import { UXEvent } from '../events/ux.event';
 
 @Component({
 	selector: 'drop-area',
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	//changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 			<div	class="drop-area" 
 					[class.drop-area-active]="active && !selected" 
@@ -31,7 +31,11 @@ import { UXEvent } from '../events/ux.event';
 					dnd-droppable
 					[dropEnabled]="active"
 					 (onDropSuccess)="dropSuccess($event)"
-			><small>{{position}}</small><small *ngIf="info">[active={{active}}, selected={{selected}}]</small></div>
+			><small>{{position}}</small>
+				<small *ngIf="info">
+					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
+				</small>
+			</div>
 		`,
 	styles:[`
 				.drop-area {
@@ -86,21 +90,16 @@ ngOnInit() {
 	// we check for null of parent as we're not getting the binding set at the beginning for some reason
 	// IDEA: we could use the function of the drop enabled (gets cell as input) though it's less interactive
 	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
-			.subscribe(deactivated => {
-				if (this.matchesCell(deactivated.cell)) {
+			.pipe(filter(deactivated => this.matchesCell(deactivated.cell)))
+			.subscribe(() => this.becomeInactive())
 					//console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
-					this.becomeInactive();
-				}
-			})
+
 	);
  
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
-			.subscribe( activated => {
-				if (this.parent && this.parent.canAdopt(activated.cell)) {
+			.pipe(filter(activated => this.parent && this.parent.canAdopt(activated.cell)))
+			.subscribe( () => this.becomeActive())
 					// console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
-					this.becomeActive();
-				}
-			})
 	);
 
 	this.register(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
@@ -113,12 +112,8 @@ ngOnInit() {
 	);
 
 	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
-			.subscribe( a => {
-				if (a.cellModel && this.matchesCellmodel(a.cellModel)) {
-					// console.debug("-> drop comp gets cellmodel activated event for '"+a.cellModel.name+"'");
-					this.becomeActive();
-				}
-			})
+			.pipe(filter(activated => activated.cellModel && this.matchesCellmodel(activated.cellModel)))
+			.subscribe(() => this.becomeActive())
 	);
 
 	this.register(this.events.service.of<CellDropEvent>(CellDropEvent)
@@ -170,17 +165,14 @@ subscribeToSelection() {
 
 
 becomeInactive() {
-
 	this.active = false;
-	this.cdr.markForCheck();
-
+	//this.cdr.markForCheck();
 }
 
 
 becomeActive() {
-
 	this.active = true;
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
@@ -209,7 +201,7 @@ performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 	// the document is now dirty
 	this.events.service.publish(new UXEvent(UXEvent.DOCUMENT_DIRTY));
 
-	this.cdr.markForCheck();
+	//this.cdr.markForCheck();
 
 }
 
