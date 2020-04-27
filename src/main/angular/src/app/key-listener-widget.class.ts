@@ -1,6 +1,6 @@
 // KEY LISTENER WIDGET . CLASS . TS
 
-import {filter} from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { Subscription } from "rxjs";
 
 import { KeyPressedEvent } from "./events/keypressed.event";
