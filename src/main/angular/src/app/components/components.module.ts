@@ -11,6 +11,7 @@ import { PipesModule } from '../pipes/pipes.module';
 
 import { AttributeDataEditorComponent } from './attribute-data-editor/attribute-data-editor.component';
 import { AttributeDataInfoComponent } from './attribute-data-info/attribute-data-info.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { CellComponent } from './cell.component';
 import { CellEditorComponent } from './cell-editor/cell-editor.component';
 import { CellHeaderComponent } from './cell-header.component';
@@ -41,6 +42,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 	declarations: [
 					AttributeDataEditorComponent,
 					AttributeDataInfoComponent,
+					BreadcrumbComponent,
 					CellComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
@@ -54,6 +56,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 	exports: [
 					AttributeDataEditorComponent,
 					AttributeDataInfoComponent,
+					BreadcrumbComponent,
 					CellComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
