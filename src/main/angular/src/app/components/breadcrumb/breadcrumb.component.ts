@@ -1,12 +1,10 @@
 // BREADCRUMP . COMPONENT . TS
 
-import { Component,OnInit } from '@angular/core';
-import { filter } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
 
 import { Cell } from '../../cell.class';
 
 import { CellActivatedEvent } from '../../events/cell-activated.event';
-import { CellActivateEvent } from '../../events/cell-activate.event';
 import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
 import { CellDocumentClearEvent } from '../../events/cell-document-clear.event';
 import { CellDocumentLoadedEvent } from '../../events/cell-document-loaded.event';
@@ -17,7 +15,8 @@ import { EventService } from '../../services/event.service';
 	selector: 'breadcrumb',
 	templateUrl: './breadcrumb.component.html',
 	styles: [`
-		#breadcrumb {}
+		#breadcrumb_ {},
+		#breadcrumb-document: {}
 	`]
 })
 
@@ -26,6 +25,7 @@ export class BreadcrumbComponent extends EventListener implements OnInit {
 documentName: string;
 uriElements: string[];
 name: string;
+
 
 constructor(eventService: EventService) {
 	super(eventService);

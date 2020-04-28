@@ -10,6 +10,7 @@ import { ComponentsModule } from '../components/components.module';
 import { AttributeDataEditorTestComponent } 
 	from '../components/attribute-data-editor/attribute-data-editor-test.component';
 import { AttributeDataInfoTestComponent } from '../components/attribute-data-info/attribute-data-info-test.component';
+import { BreadcrumbTestComponent } from '../components/breadcrumb/breadcrumb-test.component';
 import { CellEditorTestComponent } from '../components/cell-editor/cell-editor-test.component';
 import { ContentTestComponent } from '../components/content/content-test.component';
 import { PresentationTestComponent } from '../components/presentation/presentation-test.component';
@@ -17,6 +18,7 @@ import { PresentationTestComponent } from '../components/presentation/presentati
 const routes: Routes = [
 						{path: 'attribute-data-editor-test/:case_', component: AttributeDataEditorTestComponent},
 						{path: 'attribute-data-info-test/:case_', component: AttributeDataInfoTestComponent},
+						{path: 'breadcrumb-test/:case_', component: BreadcrumbTestComponent},
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
 						{path: 'presentation-test/:case_', component: PresentationTestComponent},
 						{path: 'content-test/:case_', component: ContentTestComponent}
@@ -33,6 +35,7 @@ const routes: Routes = [
 	declarations: [
 					AttributeDataEditorTestComponent,
 					AttributeDataInfoTestComponent,
+					BreadcrumbTestComponent,
 					CellEditorTestComponent,
 					ContentTestComponent,
 					PresentationTestComponent
