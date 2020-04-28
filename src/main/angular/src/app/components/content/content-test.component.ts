@@ -7,6 +7,7 @@ import { CellDocument } from '../../cell-document.class';
 import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
+import { _readonlyDocument } from '../../test.data';
 import { TestComponent } from '../../test/test-component.class';
 
 import { RemoteObjectService } from '../../services/remote-object.service';
@@ -50,15 +51,8 @@ protected test(case_: string) {
 
 private readonly() {
 
-	const docContent = `{
-							"name": "Readonly test doc"
-							,"desc": "Readonly content"
-							,"kind": "xml"
-							,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
-							,"contentURI": "target/test-classes/test-resources/documents/readonly.xml"
-	}`;
 	const DOCUMENT = Object.create(CellDocument.prototype); // to simulate a static call
-	this.document = DOCUMENT.fromJSON(docContent);
+	this.document = DOCUMENT.fromJSON(_readonlyDocument);
 	this.loadModel(this.document.modelURI);
 
 }

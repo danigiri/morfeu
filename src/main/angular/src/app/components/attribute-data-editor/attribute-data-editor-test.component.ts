@@ -1,6 +1,5 @@
 // ATTRIBUTE - DATA - EDITOR - TEST . COMPONENT . TS
 
-
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,7 +13,6 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 import { TestComponent } from '../../test/test-component.class';
 
 import { EventService } from '../../services/event.service';
-
 
 @Component({
 	selector: 'attribute-data-editor-test',

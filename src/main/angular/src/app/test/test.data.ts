@@ -2,6 +2,16 @@ export const _typesPrefix = 'target/test-classes/test-resources/documents/types.
 export const _readonlyPrefix = 'target/test-classes/test-resources/documents/readonly.xml';
 
 //wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
+
+export const _readonlyDocument = `
+{
+	"name": "Readonly test doc"
+	,"desc": "Readonly content"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/documents/readonly.xml"
+}`;
+
 export const _readonly = `
 {
 	"schema": 0,
