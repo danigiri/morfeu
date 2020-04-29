@@ -12,6 +12,7 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 import { _readonlyDocument } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
+import { CellActivatedEvent } from '../../events/cell-activated.event';
 import { CellDocumentLoadedEvent } from '../../events/cell-document-loaded.event';
 import { EventService } from '../../services/event.service';
 
@@ -21,6 +22,8 @@ import { EventService } from '../../services/event.service';
 })
 
 export class BreadcrumbTestComponent extends TestComponent {
+
+private cellPath  = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
 
 
 constructor(eventService: EventService,
@@ -45,11 +48,20 @@ protected test(case_: string): void {
 }
 
 
+protected loaded(model: Model, content: Content): void {
+
+	const cell = content.findCellWithURI(content.getURI()+this.cellPath);
+	cell.associateWith(model, cell.cellModelURI);
+	this.events.service.publish(new CellActivatedEvent(cell));
+
+}
+
+
+
 private displayDocument() {
 
 	const DOCUMENT = Object.create(CellDocument.prototype); // to simulate a static call
 	const document = DOCUMENT.fromJSON(_readonlyDocument);
-
 	this.events.service.publish(new CellDocumentLoadedEvent(document));
 
 }
@@ -58,6 +70,11 @@ private displayDocument() {
 private displayAll() {
 
 	this.displayDocument();
+
+	const docLocation = 'target/test-classes/test-resources/documents/document1.xml';
+	const modelLocation =  'target/test-classes/test-resources/models/test-model.xsd';
+	this.load(docLocation, modelLocation);
+
 
 }
 
