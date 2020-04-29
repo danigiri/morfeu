@@ -151,6 +151,10 @@ enableSave() {
 
 saveDocument() {
 
+	if (this.saveDisabled) {
+		return;
+	}
+
 	console.log("[UI] User clicked on save document, let's go!!!");
 	this.disableSave();	// avoid double submits and similar
 	this.events.service.publish(new ContentSaveEvent(this.document));
