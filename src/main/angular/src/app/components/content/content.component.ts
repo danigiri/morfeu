@@ -80,7 +80,7 @@ constructor(eventService: EventService,
 
 ngOnInit() {
 
-	console.trace("ContentComponent::ngOnInit()");
+	console.debug("ContentComponent::ngOnInit()");
 
 	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent).subscribe(() => this.clear()));
 
@@ -170,7 +170,9 @@ displayContent(content: Content) {
 	this.isFragment = false;
 	this.content = content;
 	this.cellSelectingMode = true;
-	this.registerKeyPressedEvents();
+	if (!this.areKeyPressedEventsRegistered()) {	// if showing or coming back from a fragment we are already
+		this.registerKeyPressedEvents();			// registered so we should not register again
+	}
 	this.events.service.publish(new ContentRefreshedEvent(this.content));
 
 }
@@ -188,7 +190,7 @@ displayContentFragment(cell: Cell) {
 		this.contentStack.push(this.content);
 		this.content = null;
 
-		this.cellStack.push(cell);
+		this.cellStack.push(cell);					// we can decide here to modify the original and not the copy
 		let cellClone = cell.deepClone();
 		let content = Content.fromCell(cellClone);
 		this.content = content;

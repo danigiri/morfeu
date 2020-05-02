@@ -15,6 +15,11 @@ protected numberPressedSubscription: Subscription;
 
 registerKeyPressedEvents() {
 
+	if (this.areKeyPressedEventsRegistered()) {
+		console.error('Trying to register to keypress events when we are already registered');
+		return;
+	}
+
 	this.commandPressedSubscription = this.register(this.events.service.of<KeyPressedEvent>(KeyPressedEvent)
 			.pipe(filter(key => key.isCommand()))
 			.subscribe(key => {
@@ -33,11 +38,14 @@ registerKeyPressedEvents() {
 
 }
 
+
 /** This will be called when a key registered in commandKeys is triggered */
 commandPressedCallback(command: string) {}
 
+
 /** This will be called when a key is triggered that is not registered in commandKeys */
 commandNotRegisteredCallback(command: string) {}
+
 
 numberPressedCallback(num: number) {}
 
@@ -46,11 +54,18 @@ unregisterKeyPressedEvents() {
 
 		if (this.commandPressedSubscription) {
 			this.unsubscribe(this.commandPressedSubscription);
+			this.commandPressedSubscription = undefined;
 		}
 		if (this.numberPressedSubscription) {
 			this.unsubscribe(this.numberPressedSubscription);
+			this.numberPressedSubscription = undefined;
 		}
 
+}
+
+
+areKeyPressedEventsRegistered(): boolean {
+	return this.commandPressedSubscription!==undefined && this.numberPressedSubscription!==undefined;
 }
 
 
