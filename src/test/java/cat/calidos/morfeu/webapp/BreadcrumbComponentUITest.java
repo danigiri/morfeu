@@ -16,42 +16,22 @@ import cat.calidos.morfeu.webapp.ui.UIBreadcrumb;
 public class BreadcrumbComponentUITest extends UITezt {
 
 
-@Test @DisplayName("Show document name only")
-public void testDocumentName() {
-
-	open(appBaseURL+"test/breadcrumb-test/display-document");
-	UIBreadcrumb breadcrumb = new UIBreadcrumb();
-	assertAll("basic checks",
-		() -> assertNotNull(breadcrumb),
-		() -> assertTrue(breadcrumb.documentName().isPresent()),
-		() -> assertEquals("Readonly test doc", breadcrumb.documentName().get())
-	);
-
-}
-
-
 @Test @DisplayName("Show full breadcrumb")
 public void testCellBreadcrumb() {
 
-	open(appBaseURL+"test/breadcrumb-test/display-all");
-	UIBreadcrumb breadcrumb = new UIBreadcrumb();
-	assertAll("basic checks",
-		() -> assertNotNull(breadcrumb),
-		() -> assertTrue(breadcrumb.documentName().isPresent()),
-		() -> assertEquals("Readonly test doc", breadcrumb.documentName().get())
-	);
+	open(appBaseURL+"test/breadcrumb-test/display");
+	UIBreadcrumb breadcrumb = new UIBreadcrumb().shouldAppear();
 
 	List<String> elements = breadcrumb.elements();
 	assertAll("element checks",
 		() -> assertNotNull(elements),
-		() -> assertEquals(7, elements.size()),
-		() -> assertEquals("Readonly test doc", elements.get(0)),
-		() -> assertEquals("test(0)", elements.get(1)),
-		() -> assertEquals("row(0)", elements.get(2)),
-		() -> assertEquals("col(1)", elements.get(3)),
-		() -> assertEquals("row(0)", elements.get(4)),
-		() -> assertEquals("col(1)", elements.get(5)),
-		() -> assertEquals("data2(1)", elements.get(6))
+		() -> assertEquals(6, elements.size()),
+		() -> assertEquals("test(0)", elements.get(0)),
+		() -> assertEquals("row(0)", elements.get(1)),
+		() -> assertEquals("col(1)", elements.get(2)),
+		() -> assertEquals("row(0)", elements.get(3)),
+		() -> assertEquals("col(1)", elements.get(4)),
+		() -> assertEquals("data2(1)", elements.get(5))
 	);
 
 	assertAll("active checks",
@@ -59,6 +39,22 @@ public void testCellBreadcrumb() {
 			() -> assertTrue(breadcrumb.activeName().isPresent()),
 			() -> assertEquals("data2(1)", breadcrumb.activeName().get())
 	);
+
+}
+
+@Test @DisplayName("Show and hide breadcrumb")
+public void testShowAndHideBreadcrumb() {
+
+	open(appBaseURL+"test/breadcrumb-test/display-and-hide");
+	UIBreadcrumb breadcrumb = new UIBreadcrumb().shouldAppear();
+	assertAll("active checks",
+			() -> assertNotNull(breadcrumb),
+			() -> assertTrue(breadcrumb.activeName().isPresent()),
+			() -> assertEquals("data2(1)", breadcrumb.activeName().get())
+	);
+
+	waitOneSec();
+	assertFalse(breadcrumb.activeName().isPresent());
 
 }
 

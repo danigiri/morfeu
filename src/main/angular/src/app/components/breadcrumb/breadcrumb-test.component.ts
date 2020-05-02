@@ -3,7 +3,7 @@
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CellDocument } from '../../cell-document.class';
+import { Cell } from '../../cell.class';
 import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
@@ -13,7 +13,8 @@ import { _readonlyDocument } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
 import { CellActivatedEvent } from '../../events/cell-activated.event';
-import { CellDocumentLoadedEvent } from '../../events/cell-document-loaded.event';
+import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
+import { ContentRefreshedEvent, ContentRefreshed } from '../../events/content-refreshed.event';
 import { EventService } from '../../services/event.service';
 
 @Component({
@@ -22,6 +23,9 @@ import { EventService } from '../../services/event.service';
 })
 
 export class BreadcrumbTestComponent extends TestComponent {
+
+private cell: Cell;
+
 
 constructor(eventService: EventService,
 			route: ActivatedRoute,
@@ -33,47 +37,45 @@ constructor(eventService: EventService,
 
 protected test(case_: string): void {
 	switch (case_) {
-		case 'display-document':
-			this.displayDocument();
+		case 'display':
+			this.display();
 		break;
-		case 'display-all':
-			this.displayAll();
+		case 'display-and-hide':
+			this.displayAndDisappear();
 		break;
 		default:
-		this.displayDocument();
+			this.display();
 	}
 }
 
 
 protected loaded(model: Model, content: Content): void {
 
-	 const cellPath  = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
+	const cellPath  = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
 
-	const cell = content.findCellWithURI(content.getURI()+cellPath);
-	cell.associateWith(model, cell.cellModelURI);
-	this.events.service.publish(new CellActivatedEvent(cell));
-
-}
-
-
-
-private displayDocument() {
-
-	const DOCUMENT = Object.create(CellDocument.prototype); // to simulate a static call
-	const document = DOCUMENT.fromJSON(_readonlyDocument);
-	this.events.service.publish(new CellDocumentLoadedEvent(document));
+	this.cell = content.findCellWithURI(content.getURI()+cellPath);
+	this.cell.associateWith(model, this.cell.cellModelURI);
+	this.events.service.publish(new ContentRefreshedEvent(content));
+	this.events.service.publish(new CellActivatedEvent(this.cell));
 
 }
 
 
-private displayAll() {
-
-	this.displayDocument();
+private display() {
 
 	const docLocation = 'target/test-classes/test-resources/documents/document1.xml';
 	const modelLocation =  'target/test-classes/test-resources/models/test-model.xsd';
 	this.load(docLocation, modelLocation);
 
+}
+
+
+private displayAndDisappear() {
+
+	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
+			.subscribe(() => setTimeout(() => this.events.service.publish(new CellDeactivatedEvent(this.cell)), 600))
+	);
+	this.display();
 
 }
 

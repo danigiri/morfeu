@@ -3,10 +3,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Cell } from '../../cell.class';
-import { CellDocument } from '../../cell-document.class';
+import { Content } from '../../content.class';
 
 import { CellActivatedEvent } from '../../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
+import { CellDocumentClearEvent } from '../../events/cell-document-clear.event';
+import { ContentRefreshedEvent, ContentRefreshed } from '../../events/content-refreshed.event';
 import { EventListener } from "../../events/event-listener.class";
 import { EventService } from '../../services/event.service';
 
@@ -23,8 +25,10 @@ import { EventService } from '../../services/event.service';
 
 export class BreadcrumbComponent extends EventListener implements OnInit {
 
-@Input() document_: CellDocument;
-uriElements: string[];
+visible = false;
+isFragment = false;
+root: Cell;
+uriElements: string[] = [];
 name: string;
 
 
@@ -39,7 +43,15 @@ ngOnInit() {
 			.subscribe(activated => this.displayBreadcrumb(activated.cell))
 	);
 
+	this.register(this.events.service.of<ContentRefreshedEvent>(ContentRefreshedEvent)
+			.subscribe(refreshed => this.setDisplayMode(refreshed.content, refreshed.what))
+	);
+
 	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent).subscribe(() => this.clear()));
+
+	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
+			.subscribe(() => this.visible = false));
+
 
 }
 
@@ -47,7 +59,7 @@ ngOnInit() {
 private clear() {
 
 	this.name = undefined;
-	this.uriElements = undefined;
+	this.uriElements = [];
 
 }
 
@@ -56,11 +68,27 @@ private displayBreadcrumb(cell: Cell): void {
 
 	this.name = this.lastURIPart(cell.getURI());
 	let ancestors = cell.getAncestors();
-	ancestors.pop();	// we don't want to show the root node (the doc name is more usable)
-	this.uriElements = ancestors.reverse().map(a => this.lastURIPart(a.getURI()));
+	ancestors.pop();	// we don't want to show the root node
+	// we filter until the root node, adding in reverse order
+	this.uriElements = []
+	ancestors.forEach(a => {
+							const uri = a.getURI();
+							if (uri!==this.root?.getURI()) {
+								this.uriElements.unshift(this.lastURIPart(uri));	// we add in reverse order
+							}
+	});
 
 }
 
+
+
+private setDisplayMode(content: Content, what: ContentRefreshed) {
+
+	this.root = content;
+	this.isFragment = what===ContentRefreshed.FRAGMENT;
+	this.visible = true;
+
+}
 
 private lastURIPart(u: string) {
 

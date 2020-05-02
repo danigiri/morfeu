@@ -6,11 +6,17 @@ import { Content } from "../content.class";
 export class ContentRefreshedEvent extends MorfeuEvent {
 
 
-constructor(public content: Content) {
+
+constructor(public content: Content, public what: ContentRefreshed = ContentRefreshed.CONTENT) {
 	super('ContentRefreshedEvent');
 }
 
 
+}
+
+export enum ContentRefreshed {
+	CONTENT,
+	FRAGMENT
 }
 
 /*

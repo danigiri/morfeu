@@ -1,15 +1,15 @@
-<small>
+<small *ngIf="visible">
 	<nav id="breadcrumb_" aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li id="breadcrumb-document"
-				class="breadcrumb-item" 
-				aria-current="document name"
-			>{{document_.name}}</li>
-			<li *ngFor="let e of uriElements" class="breadcrumb-item" aria-current="e">{{e}}</li>
+			<li *ngFor="let e of uriElements" 
+				class="breadcrumb-item breadcrumb-element" 
+				aria-current="e"
+			>{{e}}</li>
 			<li *ngIf="name" 
 				id="breadcrumb-active-name"
-				class="breadcrumb-item"
+				class="breadcrumb-item breadcrumb-element"
 				aria-current="name"><strong>{{name}}</strong></li>
+			<li lass="breadcrumb-item">&nbsp;</li>	<!-- to always have the same height -->
 		</ol>
 	</nav>
 </small>

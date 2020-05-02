@@ -27,7 +27,7 @@ import { CellSelectEvent } from '../../events/cell-select.event';
 import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
 import { ConfigurationLoadedEvent } from '../../events/configuration-loaded.event';
 import { ContentFragmentDisplayEvent } from '../../events/content-fragment-display.event';
-import { ContentRefreshedEvent } from '../../events/content-refreshed.event';
+import { ContentRefreshedEvent, ContentRefreshed } from '../../events/content-refreshed.event';
 import { ContentRequestEvent } from '../../events/content-request.event';
 import { ContentSaveEvent} from '../../events/content-save.event';
 import { ContentSavedEvent } from '../../events/content-saved.event';
@@ -53,7 +53,6 @@ import { RemoteEventService } from '../../services/remote-event.service';
 
 export class ContentComponent extends KeyListenerWidget implements OnInit, AfterViewInit {
 
-document_: CellDocument;	// basically needed for the breadcrumb
 content: Content;
 contentStack: Stack<Content> = new Stack<Content>();
 cellStack: Stack<Cell> = new Stack<Cell>();
@@ -93,7 +92,7 @@ ngOnInit() {
 			.subscribe(save => this.save(save.document))
 	);
 
-	// we subscribe to fragment editing events
+	// we subscribe to fragment editing events so we can display the appropriate content / fragment
 	this.register(this.events.service.of<ContentFragmentDisplayEvent>(ContentFragmentDisplayEvent)
 			.subscribe(fragment => this.displayContentFragment(fragment.cell))
 	);
@@ -127,7 +126,7 @@ ngAfterViewInit() {
 			this.subscribeChildrenToCellSelection();
 			// if we send the event immediately in the binding changing callback we'll probably be affecting the
 			// component binding values after they have been read, we trigger it outside the callback then:
-			Promise.resolve(null).then(() => this.events.service.publish(new ContentRefreshedEvent(this.content)));
+			//Promise.resolve(null).then(() => this.events.service.publish(new ContentRefreshedEvent(this.content)));
 		}
 	});
 
@@ -153,7 +152,7 @@ fetchContentFor(document_: CellDocument, model: Model) {
 					this.model = MODEL.fromJSON(model.toJSON());
 					this.model.normaliseReferences();
 					content.associateFromRoot(this.model);
-					this.displayContent(content, document_);
+					this.displayContent(content);
 					this.events.ok();
 				},
 				error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
@@ -164,15 +163,15 @@ fetchContentFor(document_: CellDocument, model: Model) {
 }
 
 
-displayContent(content: Content, document_: CellDocument) {
+displayContent(content: Content) {
 
 	console.debug("[UI] ContentComponent::displayContent()");
 
 	this.isFragment = false;
-	this.document_ = document_;
 	this.content = content;
 	this.cellSelectingMode = true;
 	this.registerKeyPressedEvents();
+	this.events.service.publish(new ContentRefreshedEvent(this.content));
 
 }
 
@@ -196,6 +195,7 @@ displayContentFragment(cell: Cell) {
 		this.isFragment = true;
 
 		this.cellSelectingMode = true;
+		this.events.service.publish(new ContentRefreshedEvent(this.content, ContentRefreshed.FRAGMENT));
 
 	});
 
@@ -228,7 +228,6 @@ unstackContentFromFragment(save: boolean) {
 clear() {
 
 	console.debug("[UI] ContentComponent::clearContent()");
-	this.document_ = null;
 	this.cellSelectingMode = false;
 	this.unregisterKeyPressedEvents();
 	this.content = null;
@@ -315,7 +314,7 @@ commandPressedCallback(command: string) {
 			break;
 		case "u":
 			console.debug("[UI] ContentComponent::unstacking content");
-		 	this.unstackContentFromFragment(true);	// we save the changes
+		 	this.unstackContentFromFragment(true);	// we save the changes for now
 		break;
 	}
 
