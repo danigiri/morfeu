@@ -58,7 +58,7 @@ public void testCellBreadcrumb() {
 			() -> assertNotNull(breadcrumb),
 			() -> assertTrue(breadcrumb.activeName().isPresent()),
 			() -> assertEquals("data2(1)", breadcrumb.activeName().get())
-		);
+	);
 
 }
 

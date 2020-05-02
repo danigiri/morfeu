@@ -1,13 +1,12 @@
 // BREADCRUMP . COMPONENT . TS
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { Cell } from '../../cell.class';
+import { CellDocument } from '../../cell-document.class';
 
 import { CellActivatedEvent } from '../../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
-import { CellDocumentClearEvent } from '../../events/cell-document-clear.event';
-import { CellDocumentLoadedEvent } from '../../events/cell-document-loaded.event';
 import { EventListener } from "../../events/event-listener.class";
 import { EventService } from '../../services/event.service';
 
@@ -24,7 +23,7 @@ import { EventService } from '../../services/event.service';
 
 export class BreadcrumbComponent extends EventListener implements OnInit {
 
-documentName: string;
+@Input() document_: CellDocument;
 uriElements: string[];
 name: string;
 
@@ -35,15 +34,6 @@ constructor(eventService: EventService) {
 
 
 ngOnInit() {
-
-
-	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
-			.subscribe(() => this.documentName = undefined)
-	);
-
-	this.register(this.events.service.of<CellDocumentLoadedEvent>(CellDocumentLoadedEvent)
-			.subscribe(loaded => this.documentName = loaded.document.name )
-	);
 
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
 			.subscribe(activated => this.displayBreadcrumb(activated.cell))

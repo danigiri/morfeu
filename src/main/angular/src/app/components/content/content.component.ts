@@ -53,6 +53,7 @@ import { RemoteEventService } from '../../services/remote-event.service';
 
 export class ContentComponent extends KeyListenerWidget implements OnInit, AfterViewInit {
 
+document_: CellDocument;	// basically needed for the breadcrumb
 content: Content;
 contentStack: Stack<Content> = new Stack<Content>();
 cellStack: Stack<Cell> = new Stack<Cell>();
@@ -89,7 +90,7 @@ ngOnInit() {
 	);
 
 	this.register(this.events.service.of<ContentSaveEvent>(ContentSaveEvent)
-			.subscribe(save => this.saveContent(save.document))
+			.subscribe(save => this.save(save.document))
 	);
 
 	// we subscribe to fragment editing events
@@ -152,7 +153,7 @@ fetchContentFor(document_: CellDocument, model: Model) {
 					this.model = MODEL.fromJSON(model.toJSON());
 					this.model.normaliseReferences();
 					content.associateFromRoot(this.model);
-					this.displayContent(content);
+					this.displayContent(content, document_);
 					this.events.ok();
 				},
 				error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
@@ -163,11 +164,12 @@ fetchContentFor(document_: CellDocument, model: Model) {
 }
 
 
-displayContent(content: Content) {
+displayContent(content: Content, document_: CellDocument) {
 
 	console.debug("[UI] ContentComponent::displayContent()");
 
 	this.isFragment = false;
+	this.document_ = document_;
 	this.content = content;
 	this.cellSelectingMode = true;
 	this.registerKeyPressedEvents();
@@ -226,7 +228,7 @@ unstackContentFromFragment(save: boolean) {
 clear() {
 
 	console.debug("[UI] ContentComponent::clearContent()");
-
+	this.document_ = null;
 	this.cellSelectingMode = false;
 	this.unregisterKeyPressedEvents();
 	this.content = null;
@@ -235,7 +237,7 @@ clear() {
 }
 
 
-saveContent(document_: CellDocument) {
+save(document_: CellDocument) {
 
 	this.events.service.publish(new StatusEvent("Saving content"));
 	let postURI = Configuration.BACKEND_PREF+"/dyn/content/"+document_.contentURI+"?model="+document_.model.getURI();
