@@ -3,6 +3,8 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +29,38 @@ public void testDocumentName() {
 
 }
 
+
+@Test @DisplayName("Show full breadcrumb")
+public void testCellBreadcrumb() {
+
+	open(appBaseURL+"test/breadcrumb-test/display-all");
+	UIBreadcrumb breadcrumb = new UIBreadcrumb();
+	assertAll("basic checks",
+		() -> assertNotNull(breadcrumb),
+		() -> assertTrue(breadcrumb.documentName().isPresent()),
+		() -> assertEquals("Readonly test doc", breadcrumb.documentName().get())
+	);
+
+	List<String> elements = breadcrumb.elements();
+	assertAll("element checks",
+		() -> assertNotNull(elements),
+		() -> assertEquals(7, elements.size()),
+		() -> assertEquals("Readonly test doc", elements.get(0)),
+		() -> assertEquals("test(0)", elements.get(1)),
+		() -> assertEquals("row(0)", elements.get(2)),
+		() -> assertEquals("col(1)", elements.get(3)),
+		() -> assertEquals("row(0)", elements.get(4)),
+		() -> assertEquals("col(1)", elements.get(5)),
+		() -> assertEquals("data2(1)", elements.get(6))
+	);
+
+	assertAll("active checks",
+			() -> assertNotNull(breadcrumb),
+			() -> assertTrue(breadcrumb.activeName().isPresent()),
+			() -> assertEquals("data2(1)", breadcrumb.activeName().get())
+		);
+
+}
 
 
 }

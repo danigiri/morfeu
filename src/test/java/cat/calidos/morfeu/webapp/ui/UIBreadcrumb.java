@@ -20,10 +20,11 @@ public UIBreadcrumb() {
 
 
 public UIBreadcrumb(SelenideElement element) {
-		super(element);
+	super(element);
 }
 
 
+/**	@return all elements of the breadcrumb (includind doc name and active cell name) */
 public List<String> elements() {
 	return element.$$(".breadcrumb-item").stream().map(e -> e.text()).collect(Collectors.toList());
 }
@@ -38,10 +39,9 @@ public Optional<String> documentName() {
 }
 
 
+public Optional<String> activeName() {
 
-public Optional<String> currentName() {
-
-	SelenideElement e = element.$("#breadcrumb-name");
+	SelenideElement e = element.$("#breadcrumb-active-name");
 
 	return  e.exists() ? Optional.of(e.text()) : Optional.empty();
 

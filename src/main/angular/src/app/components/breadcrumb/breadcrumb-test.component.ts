@@ -23,9 +23,6 @@ import { EventService } from '../../services/event.service';
 
 export class BreadcrumbTestComponent extends TestComponent {
 
-private cellPath  = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
-
-
 constructor(eventService: EventService,
 			route: ActivatedRoute,
 			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
@@ -50,7 +47,9 @@ protected test(case_: string): void {
 
 protected loaded(model: Model, content: Content): void {
 
-	const cell = content.findCellWithURI(content.getURI()+this.cellPath);
+	 const cellPath  = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
+
+	const cell = content.findCellWithURI(content.getURI()+cellPath);
 	cell.associateWith(model, cell.cellModelURI);
 	this.events.service.publish(new CellActivatedEvent(cell));
 

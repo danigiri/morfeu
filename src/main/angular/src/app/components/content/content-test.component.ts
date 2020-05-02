@@ -7,7 +7,7 @@ import { CellDocument } from '../../cell-document.class';
 import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
-import { _readonlyDocument } from '../../test.data';
+import { _readonlyDocument } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
 import { RemoteObjectService } from '../../services/remote-object.service';

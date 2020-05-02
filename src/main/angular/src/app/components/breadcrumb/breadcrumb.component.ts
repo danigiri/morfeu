@@ -17,6 +17,8 @@ import { EventService } from '../../services/event.service';
 	styles: [`
 		#breadcrumb_ {},
 		#breadcrumb-document: {}
+		.breadcrumb-element: {}
+		#breadcrumb-active-name {}
 	`]
 })
 
