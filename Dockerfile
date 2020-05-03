@@ -46,8 +46,7 @@ RUN curl ${JETTY_URL} | tar zxf - -C ${JETTY_HOME} --strip-components 1
 RUN apk add --no-cache freetype fontconfig ttf-ubuntu-font-family
 
 # create jetty-base folder and add the configuration
-RUN mkdir -p ${JETTY_BASE}/webapps
-RUN mkdir -p ${JETTY_BASE}/logs
+RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/logs
 COPY --from=build ./target/classes/jetty /jetty-base
 
 # add war
