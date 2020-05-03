@@ -16,6 +16,8 @@ import cat.calidos.morfeu.problems.ValidationException;
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Document extends ComplexCell implements Validable {
 
+public static String ROOT_NAME = "";
+
 protected String kind;
 protected URI prefix;
 protected URI modelURI;

@@ -113,7 +113,7 @@ describe('cell.class', () => {
 		expect(ancestors[0].getAdoptionName()).toBe('col');
 		expect(ancestors[1].getAdoptionName()).toBe('row');
 		expect(ancestors[2].getAdoptionName()).toBe('test');
-		expect(ancestors[3].getAdoptionName()).toBe('types.xml');
+		expect(ancestors[3].getAdoptionName()).toBe('');
 
 	});
 
