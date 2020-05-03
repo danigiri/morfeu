@@ -8,14 +8,7 @@
 .row-well {
 	background-color: rgba(255, 0, 0, .05);
 }
-.col-well {
-	/*
-	padding-right: 0;
-	padding-left: 0;
-	max-width: 100%;
-	width: 100%;
-	*/
-}
+.col-well {}
 .show-grid	{
 	background-color: rgba(200, 200, 200, .05);
 	border: 3px solid #c8c8c8;
@@ -44,47 +37,6 @@
 .drag-active {
 	opacity: .9;
 }
-/*
-.cell-col-1 {
-	max-width: 8.3%;
-	width: 8.3%;
-}
-.cell-col-2 {
-	max-width: 16.6%;
-width: 16.6%;
-}
-.cell-col-3 {
-	 max-width: 25%;
-width: 25%;
-}
-.cell-col-4 {
-	max-width: 33%;
-	width: 33%;
-}
-.cell-col-6 {
-	max-width: 41.6%;
-	width: 41.6%;
-}
-.cell-col-7 {
-	max-width: 58.3%;
-	width: 58.3%;
-}
-.cell-col-8 {
-	width: 66%;
- }
- .cell-col-9 {
-	 max-width: 75%;
- }
- .cell-col-10 {
-	 max-width: 75%;
- }
- .cell-col-11 {
-	 max-width: 91.6%;
- }
-.cell-col-12 {
-	max-width: 100%;
-}
-*/
 .cell-level-0 {}
 .cell-level-1 {}
 .cell-level-2 {}

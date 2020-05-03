@@ -22,11 +22,11 @@
 			[class.cell-selected]="selected"
 		>
 			<!-- drop area to be able to add new rows to this well -->
-			<div class="row">
-				<div class="col">
+			<!--div class="row">
+				<div class="col-md-12"-->
 					<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
-				</div>
-			</div>
+				<!--/div>
+			</div-->
 			<cell *ngFor="let c of cell.children; let i=index" 
 					[cell]="c"
 					[parent]="cell"
@@ -69,17 +69,17 @@
 			></cell>
 		</div>
 		<!-- drop area to be able to add new row after this one -->
-		<div class="row">
-			<div class="col">
+		<!--div class="row">
+			<div class="col-md-12"-->
 				<drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
-			</div>
-		</div>
+			<!-- /div>
+		</div-->
 	</ng-container>
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
 		<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
 		<div id="{{cell.URI}}"
-			class="col-well col show-grid cell-level-{{level}} rounded"
+			class="col-well col{{getColSizePostfix()}} show-grid cell-level-{{level}} rounded"
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"

@@ -18,7 +18,7 @@ import { EventService } from '../../services/event.service';
 @Component({
 	selector: 'content-test',
 	template: `
-		<div>
+		<div class="container-fluid">
 			<content></content>
 			<key-capture></key-capture>
 			<cell-editor></cell-editor>

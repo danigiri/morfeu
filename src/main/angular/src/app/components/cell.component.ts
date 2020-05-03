@@ -35,6 +35,7 @@ import { EventService } from '../services/event.service';
 export class CellComponent extends SelectableWidget implements OnInit {
 
 private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues with too long presentation
+private static readonly COL_SIZE_ATTRIBUTE = 'size';	// attribute that shows the column size
 
 @Input() parent?: FamilyMember;	// may not have a parent if we are a snippet
 @Input() cell: Cell;
@@ -337,6 +338,16 @@ getCellPresentation() {
 	}
 
 	return pres;
+
+}
+
+
+/** we return the column size '-6', '-12' depending on the size of the column so it can be appended */
+getColSizePostfix() {
+
+	const size = this.cell.getAttribute(CellComponent.COL_SIZE_ATTRIBUTE)?.value;
+
+	return size!==undefined ? '-sm-'+size : '';
 
 }
 
