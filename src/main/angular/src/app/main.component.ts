@@ -39,7 +39,6 @@ import { RemoteEventService } from './services/remote-event.service';
 							<document></document>
 						</div>
 						<div class="col">
-							<breadcrumb></breadcrumb>
 							<content></content>
 						</div>
 						<div class="col-3">
@@ -103,7 +102,7 @@ ngAfterViewInit() {
 	console.debug("AppComponent::ngAfterViewInit()");
 
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
-	const foo = !environment.production && false;
+	const foo = !environment.production && true;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.register(this.events.service.of<CataloguesLoadedEvent>(CataloguesLoadedEvent)
@@ -116,7 +115,7 @@ ngAfterViewInit() {
 		this.catalogueLoadedEventSubscription = this.register(this.events.service.of<CatalogueLoadedEvent>(CatalogueLoadedEvent)
 				.subscribe(loaded => {
 						this.unsubscribe(this.catalogueLoadedEventSubscription);
-						const document = loaded.catalogue.documents[0].uri;
+						const document = loaded.catalogue.documents[1].uri;
 						Promise.resolve(null).then(() =>  // run this after that catalogue clears doc select
 							this.events.service.publish(new CellDocumentSelectionEvent(document))
 						);

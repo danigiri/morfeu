@@ -116,7 +116,6 @@ private updateHTMLPresentation() {
 		presentationContent$ = this.cellPresentationService.getText(presentationURL);
 	}
 
-	console.debug('$$$$ %d', this.subscriptionCount());
 	const reg = this.register(presentationContent$.subscribe(
 			innnerHTML => Promise.resolve(null).then(() => this.html$.next(innnerHTML)),
 							() => console.error('Could not get HTML presentation at %s', presentationURL),
