@@ -1,26 +1,26 @@
 // SNIPPETS - LIST . COMPONENT . TS
 
-import { Component, AfterViewInit, Inject, Input, OnInit } from "@angular/core";
-import { Observable, Subject, Subscription } from "rxjs";
+import { Component, AfterViewInit, Inject, Input, OnInit } from '@angular/core';
+import { Observable, Subject, Subscription } from 'rxjs';
 
-import { RemoteDataService } from "../services/remote-data.service";
-import { RemoteObjectService } from "../services/remote-object.service";
+import { RemoteDataService } from '../../services/remote-data.service';
+import { RemoteObjectService } from '../../services/remote-object.service';
 
-import { Configuration } from '../config/configuration.class';
+import { Configuration } from '../../config/configuration.class';
 
-import { CellDocument } from "../cell-document.class";
-import { Content, ContentJSON } from "../content.class";
-import { Model } from "../model.class";
+import { CellDocument } from '../../cell-document.class';
+import { Content, ContentJSON } from '../../content.class';
+import { Model } from '../../model.class';
 
-import { KeyListenerWidget } from "../key-listener-widget.class";
-import { SnippetComponent } from "./snippet.component";
+import { KeyListenerWidget } from '../../key-listener-widget.class';
+import { SnippetComponent } from './../snippet.component';
 
-import { CellActivateEvent } from "../events/cell-activate.event";
-import { CellSelectEvent } from "../events/cell-select.event";
-import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
-import { SnippetDocumentRequestEvent } from "../events/snippet-document-request.event";
-import { StatusEvent } from "../events/status.event";
-import { EventService } from "../services/event.service";
+import { CellActivateEvent } from '../../events/cell-activate.event';
+import { CellSelectEvent } from '../../events/cell-select.event';
+import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
+import { SnippetDocumentRequestEvent } from '../../events/snippet-document-request.event';
+import { StatusEvent } from '../../events/status.event';
+import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: "snippets",

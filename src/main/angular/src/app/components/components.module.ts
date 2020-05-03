@@ -20,7 +20,7 @@ import { DropAreaComponent } from './drop-area.component';
 import { KeyCaptureComponent } from '../components/key-capture.component';
 import { PresentationComponent } from './presentation/presentation.component';
 import { SnippetComponent } from './snippet.component';
-import { SnippetsListComponent } from './snippets-list.component';
+import { SnippetsListComponent } from './snippets-list/snippets-list.component';
 
 import { RemoteDataService } from '../services/remote-data.service';
 import { RemoteObjectService } from '../services/remote-object.service';

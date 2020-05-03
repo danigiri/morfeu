@@ -1,25 +1,24 @@
 // MODEL - AREA . COMPONENT . TS
 
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { NgbTabset, NgbTabChangeEvent } from "@ng-bootstrap/ng-bootstrap";
+import { NgbTabset, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
-import { KeyListenerWidget } from "../key-listener-widget.class";
-import { ModelComponent } from "./model.component";
-import { SnippetsListComponent } from "./snippets-list.component";
+import { KeyListenerWidget } from '../key-listener-widget.class';
+import { SnippetsListComponent } from './snippets-list/snippets-list.component';
 
-import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
+import { CellDocument } from '../cell-document.class';
+import { Model } from '../model.class';
 
-import { CatalogueLoadedEvent } from "../events/catalogue-loaded.event";
-import { CellDocumentClearEvent } from "../events/cell-document-clear.event";
-import { CellDocumentLoadedEvent } from "../events/cell-document-loaded.event";
-import { ModelDisplayEvent } from "../events/model-display.event";
-import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
-import { ModelRequestEvent } from "../events/model-request.event";
-import { ModelLoadedEvent } from "../events/model-loaded.event";
-import { EventService } from "../services/event.service";
+import { CatalogueLoadedEvent } from '../events/catalogue-loaded.event';
+import { CellDocumentClearEvent } from '../events/cell-document-clear.event';
+import { CellDocumentLoadedEvent } from '../events/cell-document-loaded.event';
+import { ModelDisplayEvent } from '../events/model-display.event';
+import { ModelDisplayReadyEvent } from '../events/model-display-ready.event';
+import { ModelRequestEvent } from '../events/model-request.event';
+import { ModelLoadedEvent } from '../events/model-loaded.event';
+import { EventService } from '../services/event.service';
 
 @Component({
 	selector: "model-area",
@@ -47,15 +46,15 @@ import { EventService } from "../services/event.service";
 
 export class ModelAreaComponent extends KeyListenerWidget implements OnInit {
 
-private static MODEL_TAB = "model-tab";
-private static SNIPPETS_TAB = "snippets-tab";
+private static readonly MODEL_TAB = 'model-tab';
+private static SNIPPETS_TAB = 'snippets-tab';
 
 model?: Model;
 snippets?: CellDocument[];
 
 protected commandKeys: string[] = ["m", "s"];
 
-@ViewChild("tabs") tabs: NgbTabset;
+@ViewChild('tabs') tabs: NgbTabset;
 @ViewChild(SnippetsListComponent) private snippetListComponent: SnippetsListComponent;
 
 private modelDisplayReadySubscription: Subscription;
