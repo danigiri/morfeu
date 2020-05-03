@@ -101,7 +101,7 @@ public String processRequest() {
 	} catch (TransformException e) {
 		problem = "Problem transforming in '"+operation+"' ("+e.getMessage()+")";
 	}
-		
+
 	if (problem.length()==0) {
 		parsedResult = render(template, result, problem);
 	} else {

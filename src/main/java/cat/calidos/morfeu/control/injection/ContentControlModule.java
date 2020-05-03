@@ -75,6 +75,9 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 		String path = pathElems.get(1);		// normalised already
 		String modelPath = params.get("model");
 		String content = params.get(GenericHttpServlet.POST_VALUE);
+		if (content==null || content.length()==0) {
+			log.warn("Empty POST content");
+		}
 		Optional<String> filters = Optional.ofNullable(params.get("filters"));
 		log.trace("ContentControlModule::content POST [{}]{}, model: {}", resourcesPrefix, path, modelPath);
 

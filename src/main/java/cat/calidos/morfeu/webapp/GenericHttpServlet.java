@@ -19,12 +19,10 @@ package cat.calidos.morfeu.webapp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
@@ -39,9 +37,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.util.UriEncoder;
 
-import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
@@ -69,7 +65,7 @@ protected String defaultContentType = "application/json";
 
 @Override
 public void init(ServletConfig config) throws ServletException {
-	
+
 	super.init(config);
 
 	//TODO: add the servlet init params as part of the config so a proper merge can be done
@@ -186,7 +182,7 @@ public ControlComponent generateGetControlComponent(HttpServletRequest req, Stri
 
 	String path = pathInfo;
 	log.trace("GenericHttpServlet::doGet {}", path);
-	
+
 	Map<String, String> params = normaliseParams(req.getParameterMap());
 	params.put(METHOD, req.getMethod());
 	params = processParams(params);
@@ -213,18 +209,22 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 		log.error("Could not read input stream in POST servlet code, using empty input", e);
 	}
 	params.put(POST_VALUE, content);
-	try {
-		// FIXME: it seems we'll have to write our own parsser
-		URI tmpURI = DaggerURIComponent.builder().from("http://localhost/?"+content).build().uri().get();
-		List<NameValuePair> contentAsVars = URLEncodedUtils.parse(tmpURI, Config.DEFAULT_NIO_CHARSET);
-		log.trace("::doPost() number of vars in input {}", contentAsVars.size());
-		for (NameValuePair v : contentAsVars) {
-			params.put(v.getName(), v.getValue());
+	if (req.getContentType().equalsIgnoreCase("application/x-www-form-urlencoded"))	{
+		try {
+			// FIXME: this is an ugly hack, do we have to write our own parser?
+			log.trace("About to parse the content as variables");
+			URI tmpURI = DaggerURIComponent.builder().from("http://localhost/?"+content).build().uri().get();
+			List<NameValuePair> contentAsVars = URLEncodedUtils.parse(tmpURI, Config.DEFAULT_NIO_CHARSET);
+			log.trace("::doPost() number of vars in input {}", contentAsVars.size());
+			for (NameValuePair v : contentAsVars) {
+				params.put(v.getName(), v.getValue());
+			}
+		} catch (Exception e) {
+			log.warn("Could not read input stream as variables in POST servlet code, no variables added", e);
 		}
-	} catch (Exception e) {
-		log.error("Could not read input stream as variables in POST servlet code, no variables added", e);
 	}
 	params = processParams(params);
+	log.trace("POST param keys:", params.keySet().toString());
 
 	ControlComponent controlComponent = postControl(path, params);
 

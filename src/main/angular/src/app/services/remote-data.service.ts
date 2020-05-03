@@ -4,12 +4,15 @@ import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 
 
 /** This only creates plain JSON structures, not object instances, use RemoteObjectService instead */
 @Injectable()
 export class RemoteDataService {
+
+public static readonly URLENCODED = 'application/x-www-form-urlencoded';
+public static readonly JSON = 'application/json; charset=UTF-8';
 
 
 constructor(private http: HttpClient) {}
@@ -27,7 +30,7 @@ getAll<T>(uri: string): Observable<T[]> {
 
 get<T>(uri: string): Observable<T> {
 
-	console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
+	//console.log("[SERVICE] RemoteDataService::get('%s')", uri); 
 	// TODO: handle errors with .catch here
 
 	return this.http.get<T>(uri).pipe(catchError(e => throwError(e)));
@@ -46,7 +49,7 @@ getText(uri: string): Observable<String> {
 
 postText(uri: string, content: string): Observable<String> {
 
-	// console.log("[SERVICE] RemoteDataService::postText('%s')", uri);
+	//console.log("[SERVICE] RemoteDataService::postText('%s'), body size=%d", uri, content.length);
 
 	return this.http.post(uri, content, {responseType: 'text'}).pipe(catchError(e => throwError(e)));
 	//.pipe(retryWhen(errors => errors.pipe(delay(200),take(5))));
@@ -54,13 +57,19 @@ postText(uri: string, content: string): Observable<String> {
 }
 
 
-post<T>(uri: string, content: any): Observable<T> {
+post<T>(uri: string, content: any, encoding = RemoteDataService.URLENCODED): Observable<T> {
 
 	// console.log("[SERVICE] RemoteDataService::post('%s')", uri);
 	// TODO: handle errors here
 
-	return this.http.post<T>(uri, content);	// no retries on post
+	return this.http.post<T>(uri, content, {headers:new HttpHeaders({'Content-Type':  encoding})});	// no retry on post
 
+}
+
+
+
+postAsJSON<T>(uri: string, content: any): Observable<T> {
+	return this.post<T>(uri, content, RemoteDataService.JSON);
 }
 
 

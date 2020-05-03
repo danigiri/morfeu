@@ -16,7 +16,7 @@ export const _readonly = `
 {
 	"schema": 0,
 	"URI": "target/test-classes/test-resources/documents/readonly.xml",
-	"name": "readonly.xml",
+	"name": "",
 	"desc": "DESC",
 	"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd",
 	"isSimple": false,
@@ -215,7 +215,7 @@ export const _types = `
 {
 	"schema": 0,
 	"URI": "target/test-classes/test-resources/documents/types.xml",
-	"name": "types.xml",
+	"name": "",
 	"desc": "",
 	"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd",
 	"isSimple": false,

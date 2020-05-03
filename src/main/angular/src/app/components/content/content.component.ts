@@ -255,7 +255,7 @@ save(document_: CellDocument) {
 	console.log("ContentComponent::saveContent('%s')", postURI);
 
 	const subs = this.register(
-		this.contentSaverService.post<OperationResult>(postURI, content).subscribe(op => {	// YAY!
+		this.contentSaverService.postAsJSON<OperationResult>(postURI, content).subscribe(op => {	// YAY!
 					console.log("ContentComponent::saveContent: saved in %s milliseconds ", op.operationTime);
 					//this.events.service.publish(new CellDocumentSelectionEvent(document_.uri));
 					// we send a remote event so the backend knows we've modified the content
