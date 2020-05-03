@@ -47,6 +47,7 @@ RUN apk add --no-cache freetype fontconfig ttf-ubuntu-font-family
 
 # create jetty-base folder and add the configuration
 RUN mkdir -p ${JETTY_BASE}/webapps
+RUN mkdir -p ${JETTY_BASE}/logs
 COPY --from=build ./target/classes/jetty /jetty-base
 
 # add war
