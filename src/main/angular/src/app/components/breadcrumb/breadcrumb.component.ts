@@ -8,6 +8,7 @@ import { Content } from '../../content.class';
 import { CellActivatedEvent } from '../../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
 import { CellDocumentClearEvent } from '../../events/cell-document-clear.event';
+import { ContentFragmentBackEvent } from '../../events/content-fragment-back.event';
 import { ContentRefreshedEvent, ContentRefreshed } from '../../events/content-refreshed.event';
 import { EventListener } from "../../events/event-listener.class";
 import { EventService } from '../../services/event.service';
@@ -20,6 +21,7 @@ import { EventService } from '../../services/event.service';
 		#breadcrumb-document: {}
 		.breadcrumb-element: {}
 		#breadcrumb-active-name {}
+		#breadcrumb-fragment-back {}
 	`]
 })
 
@@ -29,6 +31,7 @@ visible = false;
 isFragment = false;
 root: Cell;
 uriElements: string[] = [];
+cell: Cell;
 name: string;
 
 
@@ -56,8 +59,13 @@ ngOnInit() {
 }
 
 
+fragmentBack() {
+	this.events.service.publish(new ContentFragmentBackEvent(this.cell));	// we save the changes for now
+}
+
 private clear() {
 
+	this.cell = undefined;
 	this.name = undefined;
 	this.uriElements = [];
 
@@ -66,17 +74,22 @@ private clear() {
 
 private displayBreadcrumb(cell: Cell): void {
 
-	this.name = this.lastURIPart(cell.getURI());
-	let ancestors = cell.getAncestors();
-	ancestors.pop();	// we don't want to show the root node
-	// we filter until the root node, adding in reverse order
+	this.cell = cell;
+	this.name = this.lastURIPart(this.cell.getURI());
+
+	const ancestors = cell.getAncestors();
+	// we filter until the root node, and add in reverse order
 	this.uriElements = []
-	ancestors.forEach(a => {
-							const uri = a.getURI();
-							if (uri!==this.root?.getURI()) {
-								this.uriElements.unshift(this.lastURIPart(uri));	// we add in reverse order
-							}
-	});
+	let found = false;
+	let i = 0;
+	while (!found && i<ancestors.length) {
+		const a = ancestors[i++];
+		const uri = a.getURI();
+		found = uri===this.root?.getURI();
+		if (!found) {
+			this.uriElements.unshift(this.lastURIPart(uri));
+		}
+	}
 
 }
 
@@ -86,9 +99,11 @@ private setDisplayMode(content: Content, what: ContentRefreshed) {
 
 	this.root = content;
 	this.isFragment = what===ContentRefreshed.FRAGMENT;
+	this.clear();
 	this.visible = true;
 
 }
+
 
 private lastURIPart(u: string) {
 

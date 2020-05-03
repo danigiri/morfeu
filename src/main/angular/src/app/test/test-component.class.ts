@@ -17,6 +17,9 @@ import { EventService } from '../services/event.service';
 export abstract class TestComponent extends EventListener implements AfterViewInit {
 
 
+protected case: string;
+
+
 constructor(eventService: EventService,
 			private route: ActivatedRoute,
 			@Inject("ContentService") protected contentService: RemoteObjectService<Content, ContentJSON>,
@@ -26,7 +29,10 @@ constructor(eventService: EventService,
 
 
 ngAfterViewInit() {
-	this.route.paramMap.subscribe(params => this.test(params.get('case_')));
+	this.route.paramMap.subscribe(params => {
+												this.case = params.get('case_');
+												this.test(this.case);
+	});
 }
 
 

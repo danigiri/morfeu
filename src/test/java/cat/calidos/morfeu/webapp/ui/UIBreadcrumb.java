@@ -48,6 +48,11 @@ public Optional<String> activeName() {
 }
 
 
+public boolean isFragment() {
+	return element.$("#breadcrumb-fragment-back").exists();
+}
+
+
 }
 
 

@@ -26,6 +26,7 @@ import { CellRemoveEvent } from '../../events/cell-remove.event';
 import { CellSelectEvent } from '../../events/cell-select.event';
 import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
 import { ConfigurationLoadedEvent } from '../../events/configuration-loaded.event';
+import { ContentFragmentBackEvent } from '../../events/content-fragment-back.event';
 import { ContentFragmentDisplayEvent } from '../../events/content-fragment-display.event';
 import { ContentRefreshedEvent, ContentRefreshed } from '../../events/content-refreshed.event';
 import { ContentRequestEvent } from '../../events/content-request.event';
@@ -90,6 +91,11 @@ ngOnInit() {
 
 	this.register(this.events.service.of<ContentSaveEvent>(ContentSaveEvent)
 			.subscribe(save => this.save(save.document))
+	);
+
+	// coming back from fragment editing (clicked on the UI)
+	this.register(this.events.service.of<ContentFragmentBackEvent>(ContentFragmentBackEvent)
+			.subscribe(fragment => this.unstackContentFromFragment(fragment.save))
 	);
 
 	// we subscribe to fragment editing events so we can display the appropriate content / fragment
@@ -204,10 +210,11 @@ displayContentFragment(cell: Cell) {
 }
 
 
-unstackContentFromFragment(save: boolean) {
+unstackContentFromFragment(save: boolean) {	// we ignore the save flag for now and always save
 
 	Promise.resolve(null).then(() => {
 		if (!this.cellStack.isEmpty()) {
+
 			let fragmentCell = this.cellStack.pop();
 
 			// TODO: create a replace method as this is duplicate code ****************************
@@ -221,6 +228,7 @@ unstackContentFromFragment(save: boolean) {
 
 			// need to find the previous cell to apply changes
 			Promise.resolve(null).then(() => this.displayContent(this.contentStack.pop()));
+
 		}
 	});
 
@@ -316,7 +324,7 @@ commandPressedCallback(command: string) {
 			break;
 		case "u":
 			console.debug("[UI] ContentComponent::unstacking content");
-		 	this.unstackContentFromFragment(true);	// we save the changes for now
+		 	this.events.service.publish(new ContentFragmentBackEvent(this.content));	// we save the changes for now
 		break;
 	}
 

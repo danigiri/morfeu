@@ -17,10 +17,14 @@ public class BreadcrumbComponentUITest extends UITezt {
 
 
 @Test @DisplayName("Show full breadcrumb")
-public void testCellBreadcrumb() {
+public void testFullBreadcrumb() {
 
 	open(appBaseURL+"test/breadcrumb-test/display");
 	UIBreadcrumb breadcrumb = new UIBreadcrumb().shouldAppear();
+	assertAll("basic checks",
+		() -> assertNotNull(breadcrumb),
+		() -> assertFalse(breadcrumb.isFragment())
+	);
 
 	List<String> elements = breadcrumb.elements();
 	assertAll("element checks",
@@ -58,6 +62,19 @@ public void testShowAndHideBreadcrumb() {
 
 }
 
+
+
+@Test @DisplayName("Show fragment breadcrumb")
+public void testFragmentlBreadcrumb() {
+
+	open(appBaseURL+"test/breadcrumb-test/display-fragment");
+	UIBreadcrumb breadcrumb = new UIBreadcrumb().shouldAppear();
+	assertAll("basic checks",
+			() -> assertNotNull(breadcrumb),
+			() -> assertTrue(breadcrumb.isFragment())
+	);
+
+}
 
 }
 

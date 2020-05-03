@@ -35,6 +35,7 @@ constructor(eventService: EventService,
 }
 
 
+
 protected test(case_: string): void {
 	switch (case_) {
 		case 'display':
@@ -42,6 +43,9 @@ protected test(case_: string): void {
 		break;
 		case 'display-and-hide':
 			this.displayAndDisappear();
+		break;
+		case 'display-fragment':
+			this.fragment();
 		break;
 		default:
 			this.display();
@@ -55,7 +59,12 @@ protected loaded(model: Model, content: Content): void {
 
 	this.cell = content.findCellWithURI(content.getURI()+cellPath);
 	this.cell.associateWith(model, this.cell.cellModelURI);
-	this.events.service.publish(new ContentRefreshedEvent(content));
+	if (this.case=='display-fragment') {
+		const fragmentRoot = Content.fromCell(content.findCellWithURI(content.getURI()+'/test(0)/row(0)/col(1)'));
+		this.events.service.publish(new ContentRefreshedEvent(fragmentRoot, ContentRefreshed.FRAGMENT));
+	} else {
+		this.events.service.publish(new ContentRefreshedEvent(content));
+	}
 	this.events.service.publish(new CellActivatedEvent(this.cell));
 
 }
@@ -77,6 +86,11 @@ private displayAndDisappear() {
 	);
 	this.display();
 
+}
+
+
+private fragment() {
+	this.display();
 }
 
 

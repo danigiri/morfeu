@@ -1,6 +1,13 @@
 <small *ngIf="visible">
 	<nav id="breadcrumb_" aria-label="breadcrumb">
 		<ol class="breadcrumb">
+			<li *ngIf="isFragment" class="breadcrumb-item">
+				<a	id="breadcrumb-fragment-back"
+					href="#" 
+					role="button"
+					(click)="fragmentBack()"
+				><span class="sr-only">(Back)</span><span aria-hidden="true">«««</span></a>
+			</li>
 			<li *ngFor="let e of uriElements" 
 				class="breadcrumb-item breadcrumb-element" 
 				aria-current="e"
