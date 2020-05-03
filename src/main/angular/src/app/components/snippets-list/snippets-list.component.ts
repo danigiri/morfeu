@@ -26,7 +26,7 @@ import { EventService } from '../../services/event.service';
 	selector: "snippets",
 	template: `
 		<div id="snippets" class="list-group">
-			<snippet *ngFor="let s of snippets | async; let i=index"
+			<snippet *ngFor="let s of snippets$ | async; let i=index"
 				class="list-group-item"
 				[snippet]="s"
 				[model]="normalisedModel"
@@ -46,14 +46,15 @@ export class SnippetsListComponent extends KeyListenerWidget implements AfterVie
 @Input() snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
 normalisedModel: Model;
-snippets: Observable<Array<CellDocument>>;			// snippets document observable, for async display
-_snippets: Array<CellDocument>;						// snippets document list
-_snippetsSubject: Subject<Array<CellDocument>>;		// snippets document subject, to push new documents into
+snippets$: Observable<CellDocument[]>;			// snippets list observable, for async display
+_snippets: CellDocument[];						// snippets list
+_snippetCategories: Map<string, CellDocument[]>;// snippets grouped by categories
+_snippetsSubject: Subject<CellDocument[]>;		// snippets document subject, to push new documents into
 
 protected commandKeys: string[] = ["a"];	// activation
 private snippetSelectingMode = false;
 
-protected snippetDocumentSubs: Subscription;
+protected snippetSubs: Subscription;
 
 snippetComponents: SnippetComponent[];	// this will be populated by the snippets themselves
 
@@ -88,9 +89,9 @@ private fetchSnippets() {
 		// we initialise the snippet structures
 		this._snippets = [];
 		this._snippetsSubject = new Subject();
-		this.snippets = this._snippetsSubject.asObservable();
+		this.snippets$ = this._snippetsSubject.asObservable();
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
-		this.snippetDocumentSubs = this.register(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
+		this.snippetSubs = this.register(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
 										.subscribe(
 											req => this.loadSnippetDocument(this.snippetStubs[req.index], req.index)
 										)
@@ -109,7 +110,7 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 	const uri = Configuration.BACKEND_PREF+snippetStub.uri;
 	console.log("Loading snippet document %s", uri);
 	this.register(this.snippetDocumentService.get<CellDocument>(uri).subscribe(
-					snippetDoc => this.loadSnippetContent(snippetDoc, index),
+					snippetDoc => this.requestSnippetContent(snippetDoc, index),
 					error => this.events.problem(error.message),
 					() => {}
 		)
@@ -118,22 +119,13 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 }
 
 
-private loadSnippetContent(snippet: CellDocument, index: number) {
+private requestSnippetContent(snippet: CellDocument, index: number) {
 
 	const snippetURI = Configuration.BACKEND_PREF+"/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
 	console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
 	this.register(
 			this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
-				// we set the document with the content, associate it with the model
-				snippet.content = snippetContent;
-				console.debug("Stripping snippet content context %s", snippet.contentURI);
-				snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
-				console.debug("Associating snippet content with model");
-				snippet.content.associate(this.normalisedModel);
-
-				// we have the content, so we can push the snippet document so it can de displayed
-				this._snippets.push(snippet);
-				this._snippetsSubject.next(this._snippets);
+				this.storeSnippetContent(snippet, snippetContent);
 			},
 			error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
 			() => {
@@ -141,11 +133,34 @@ private loadSnippetContent(snippet: CellDocument, index: number) {
 					this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
 				} else {
 					this.events.service.publish(new StatusEvent("Fetching snippets", StatusEvent.DONE));
-					this.unsubscribe(this.snippetDocumentSubs);
+					this.unsubscribe(this.snippetSubs);
 					this.events.ok();	// this means we don't see errors for that long unfortunately
 				}
 			})
 	);
+}
+
+
+private storeSnippetContent(snippet: CellDocument, snippetContent: Content) {
+
+	// we set the document with the content, associate it with the model
+	snippet.content = snippetContent;
+	console.debug("Stripping snippet content context %s", snippet.contentURI);
+	snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
+	console.debug("Associating snippet content with model");
+	snippet.content.associate(this.normalisedModel);
+	this._snippets.push(snippet);
+
+	// we have the content, so we can push the snippet document so it can de displayed
+	this._snippetsSubject.next(this._snippets);
+
+	// now we do this by categories
+
+	if (!this._snippetCategories.has(snippet.kind)) {
+		this._snippetCategories.set(snippet.kind, []);
+	}
+	this._snippetCategories.get(snippet.kind).push(snippet);
+
 }
 
 

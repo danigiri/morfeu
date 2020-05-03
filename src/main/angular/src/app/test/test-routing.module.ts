@@ -14,6 +14,7 @@ import { BreadcrumbTestComponent } from '../components/breadcrumb/breadcrumb-tes
 import { CellEditorTestComponent } from '../components/cell-editor/cell-editor-test.component';
 import { ContentTestComponent } from '../components/content/content-test.component';
 import { PresentationTestComponent } from '../components/presentation/presentation-test.component';
+import { SnippetsListTestComponent } from '../components/snippets-list/snippets-list-test.component';
 
 const routes: Routes = [
 						{path: 'attribute-data-editor-test/:case_', component: AttributeDataEditorTestComponent},
@@ -21,7 +22,8 @@ const routes: Routes = [
 						{path: 'breadcrumb-test/:case_', component: BreadcrumbTestComponent},
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
 						{path: 'presentation-test/:case_', component: PresentationTestComponent},
-						{path: 'content-test/:case_', component: ContentTestComponent}
+						{path: 'content-test/:case_', component: ContentTestComponent},
+						{path: 'snippets-list/:case_', component: SnippetsListTestComponent}
 ];
 
 @NgModule({
@@ -38,7 +40,8 @@ const routes: Routes = [
 					BreadcrumbTestComponent,
 					CellEditorTestComponent,
 					ContentTestComponent,
-					PresentationTestComponent
+					PresentationTestComponent,
+					SnippetsListTestComponent
 	]
 })
 

@@ -52,7 +52,7 @@ private static SNIPPETS_TAB = 'snippets-tab';
 model?: Model;
 snippets?: CellDocument[];
 
-protected commandKeys: string[] = ["m", "s"];
+protected commandKeys: string[] = ['m', 's'];
 
 @ViewChild('tabs') tabs: NgbTabset;
 @ViewChild(SnippetsListComponent) private snippetListComponent: SnippetsListComponent;

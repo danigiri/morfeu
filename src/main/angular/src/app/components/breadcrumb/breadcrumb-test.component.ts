@@ -1,13 +1,10 @@
 // BREADCRUMB - TEST . COMPONENT . TS
 
 import { Component, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { Cell } from '../../cell.class';
 import { Content, ContentJSON } from '../../content.class';
-import { Model, ModelJSON } from '../../model.class';
-
-import { RemoteObjectService } from '../../services/remote-object.service';
+import { Model } from '../../model.class';
 
 import { _readonlyDocument } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
@@ -15,7 +12,6 @@ import { TestComponent } from '../../test/test-component.class';
 import { CellActivatedEvent } from '../../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
 import { ContentRefreshedEvent, ContentRefreshed } from '../../events/content-refreshed.event';
-import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'breadcrumb-test',

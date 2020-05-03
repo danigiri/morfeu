@@ -1,4 +1,4 @@
-// TESTABLE - COMPONENT . INTERFACE . TS
+// TEST - COMPONENT . CLASS . TS
 
 import { Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
