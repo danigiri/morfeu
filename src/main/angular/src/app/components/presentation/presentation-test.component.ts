@@ -1,19 +1,13 @@
 // PRESENTATION - TEST . COMPONENT . TS
 
-import { AfterViewInit, Component, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Inject } from '@angular/core';
 
 import { Configuration } from '../../config/configuration.class';
 import { TestComponent } from '../../test/test-component.class';
 
 import { Cell } from '../../cell.class';
 import { CellModel } from '../../cell-model.class';
-import { Content, ContentJSON } from '../../content.class';
-import { Model, ModelJSON } from '../../model.class';
-
-import { RemoteObjectService } from '../../services/remote-object.service';
-
-import { EventService } from '../../services/event.service';
+import { Model } from '../../model.class';
 
 @Component({
 	selector: 'presentation-test',
@@ -26,14 +20,6 @@ export class PresentationTestComponent extends TestComponent {
 private readonly modelURI = Configuration.BACKEND_PREF+'/dyn/models/target/test-classes/test-resources/models/test-model.xsd';
 model: CellModel;
 cell: Cell;
-
-
-constructor(eventService: EventService,
-			route: ActivatedRoute,
-			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
-	super(eventService, route, contentService, modelService);
-}
 
 
 protected test(case_: string) {

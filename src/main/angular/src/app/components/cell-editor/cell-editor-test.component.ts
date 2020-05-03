@@ -1,17 +1,13 @@
 // CELL - EDITOR - TEST . COMPONENT . TS
 
 import { Component, Inject, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
 import { TestComponent } from '../../test/test-component.class';
 
-import { RemoteObjectService } from '../../services/remote-object.service';
-
 import { CellEditEvent } from '../../events/cell-edit.event';
-import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'cell-editor-test',
@@ -23,13 +19,6 @@ export class CellEditorTestComponent extends TestComponent {
 private readonly model = 'target/test-classes/test-resources/models/test-model.xsd';
 private cellPath: string;
 
-
-constructor(eventService: EventService,
-			route: ActivatedRoute,
-			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
-	super(eventService, route, contentService, modelService);
-}
 
 
 protected test(case_: string) {

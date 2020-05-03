@@ -1,4 +1,4 @@
-
+// BREADCRUMB - TEST . COMPONENT . TS
 
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -25,15 +25,6 @@ import { EventService } from '../../services/event.service';
 export class BreadcrumbTestComponent extends TestComponent {
 
 private cell: Cell;
-
-
-constructor(eventService: EventService,
-			route: ActivatedRoute,
-			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
-	super(eventService, route, contentService, modelService);
-}
-
 
 
 protected test(case_: string): void {
