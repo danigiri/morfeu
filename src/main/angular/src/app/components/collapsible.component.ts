@@ -92,8 +92,7 @@ unfold() {
 
 
 toggle() {
-
-	console.log("[UI] toggling collapsible '%s'", this.folded);
+	//console.log("[UI] toggling collapsible '%s'", this.folded);
 	this.folded = !this.folded;
 }
 

@@ -1,7 +1,5 @@
 // FAMILY - MEMBER . INTERFACE . TS
 
-import { Cell } from './cell.class';
-
 /**	 we can have /test(0)/foo(1)
 *	 which accepts children named 'bar' of type /model/bar
 *	 AdoptionName is 'bar', and model (adoption uri) is '/model/bar'
