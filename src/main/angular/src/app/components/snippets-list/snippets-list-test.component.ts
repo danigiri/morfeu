@@ -3,6 +3,7 @@
 import { Inject, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { CellDocument } from '../../cell-document.class';
 import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
@@ -18,6 +19,8 @@ import { EventService } from '../../services/event.service';
 })
 
 export class SnippetsListTestComponent extends TestComponent {
+
+snippets: CellDocument[];
 
 
 constructor(eventService: EventService,
