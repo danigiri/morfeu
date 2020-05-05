@@ -10,6 +10,8 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import cat.calidos.morfeu.model.Document;
+
 /** Testing the API to get content and doing some basic tests on it
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +29,7 @@ public void testContent() throws Exception {
 	JsonNode root = parseJson(content);
 	assertNotNull(root);
 	assertEquals("Wrong document schema", 0, root.get("schema").asInt());
-	assertEquals("document1.xml", root.get("name").asText());
+	assertEquals(Document.ROOT_NAME, root.get("name").asText());
 	assertTrue("/children is not an array and it should be", root.get("children").isArray());
 	assertEquals("/children/test(0) has a wrong name", "test", root.get("children").get(0).get("name").asText());
 

@@ -49,12 +49,16 @@ import cat.calidos.morfeu.webapp.injection.DaggerServletConfigComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public abstract class GenericHttpServlet extends HttpServlet {
 
+
 protected final static Logger log = LoggerFactory.getLogger(GenericHttpServlet.class);
 
+public static final String URLENCODED = "application/x-www-form-urlencoded";
 public static final String INTERNAL_PARAM_PREFIX = "__";	// internal params start with this
 public static final String METHOD = "__METHOD";
 public static final String POST_VALUE = "__POST";
 public static final String __CONFIG = "__CONFIG";
+
+
 
 
 protected Properties configuration;
@@ -209,7 +213,7 @@ public ControlComponent generatePostControlComponent(HttpServletRequest req, Str
 		log.error("Could not read input stream in POST servlet code, using empty input", e);
 	}
 	params.put(POST_VALUE, content);
-	if (req.getContentType().equalsIgnoreCase("application/x-www-form-urlencoded"))	{
+	if (req.getContentType().equalsIgnoreCase(URLENCODED))	{
 		try {
 			// FIXME: this is an ugly hack, do we have to write our own parser?
 			log.trace("About to parse the content as variables");

@@ -1,18 +1,16 @@
+// POST PRESENTATION INT TEST . JAVA
+
 package cat.calidos.morfeu.model.injection;
 
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
-import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import cat.calidos.morfeu.api.APITezt;
 import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.utils.MorfeuUtils;
 
 /**
 *	@author daniel giribet

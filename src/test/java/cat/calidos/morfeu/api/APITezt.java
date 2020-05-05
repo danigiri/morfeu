@@ -33,6 +33,7 @@ import org.junit.Before;
 
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Tezt;
+import cat.calidos.morfeu.webapp.GenericHttpServlet;
 
 /**
 * @author daniel giribet
@@ -84,7 +85,7 @@ public InputStream postToRemote(String location, String content) throws Exceptio
 	URI u = new URI(uri);
 	HttpPost request = new HttpPost(u);
 	StringEntity params = new StringEntity(content, Config.DEFAULT_CHARSET);
-	params.setContentType("application/json");
+	params.setContentType(GenericHttpServlet.URLENCODED);
 	request.setEntity(params);
 
 	return client.execute(request).getEntity().getContent();
