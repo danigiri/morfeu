@@ -1,6 +1,6 @@
 // SNIPPET . COMPONENT . TS
 
-import { Component, Input, OnInit, ViewChildren } from "@angular/core";
+import { Component, Input, AfterViewInit, ViewChildren } from "@angular/core";
 
 import { CellDocument } from "../cell-document.class";
 import { Model } from "../model.class";
@@ -10,6 +10,7 @@ import { SelectableWidget } from "../selectable-widget.class";
 import { SnippetsListComponent } from './snippets-list/snippets-list.component';
 
 import { CellSelectEvent } from "../events/cell-select.event";
+import { SnippetDisplayedEvent } from '../events/snippet-displayed.event';
 import { EventService } from "../services/event.service";
 
 @Component({
@@ -41,7 +42,7 @@ import { EventService } from "../services/event.service";
 	`]
 })
 
-export class SnippetComponent extends SelectableWidget implements OnInit {
+export class SnippetComponent extends SelectableWidget implements AfterViewInit {
 
 @Input() model: Model;
 @Input() snippet: CellDocument;
@@ -61,11 +62,21 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	console.log("SnippetComponent::ngOnInit()");
+	console.debug("SnippetComponent::ngOnInit()");
 
-	// the idea here is that we set ourselves in the parent children list as this component is async
-	this.parent.snippetComponents.push(null);				// as long as the array ops are reentrant
-	this.parent.snippetComponents[this.position] = this;	// this will set the reference OK
+	// the idea here is that we set ourselves in the parent children list as this component may be async
+	while (this.parent.snippetComponents.length<this.position) {	// if async loading this component
+		this.parent.snippetComponents.push(null);					// we may create a few more spaces than needed
+	}																// but a small, constant, capped number
+	this.parent.snippetComponents[this.position] = this;	// this will set the reference OK as position
+															// is guaranteed to be unique
+}
+
+
+ngAfterViewInit () {
+
+	//console.debug("SnippetComponent::ngAfterViewInit()");
+	this.events.service.publish(new SnippetDisplayedEvent(this.snippet, this.position));
 
 }
 

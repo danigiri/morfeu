@@ -1,7 +1,9 @@
 // SNIPPETS - LIST . COMPONENT . TS
 
-import { Component, AfterViewInit, Inject, Input, OnInit } from '@angular/core';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Component, AfterViewInit, Inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { NgbAccordion, NgbPanel, NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 import { RemoteDataService } from '../../services/remote-data.service';
 import { RemoteObjectService } from '../../services/remote-object.service';
@@ -26,13 +28,23 @@ import { EventService } from '../../services/event.service';
 	selector: "snippets",
 	template: `
 		<div id="snippets" class="list-group">
-			<snippet *ngFor="let s of snippets$ | async; let i=index"
-				class="list-group-item"
-				[snippet]="s"
-				[model]="normalisedModel"
-				[position]="i"
-				[parent]="this"
-			></snippet>
+			<ngb-accordion 
+				*ngIf="snippetCategoryNames.length>0" 
+				[closeOthers]="true"
+			>
+				<ngb-panel *ngFor="let c of snippetCategoryNames;let i=index" [id]="c" [title]="c">
+					<ng-template ngbPanelContent>
+						<snippet *ngFor="let s of snippetsByCategory.get(c); let j=index"
+							class="list-group-item"
+							[snippet]="s"
+							[model]="normalisedModel"
+							[position]="j"
+							[parent]="this"
+							(panelChange)="beforeToggle($event)"
+						></snippet>
+					</ng-template>
+				</ngb-panel>
+			</ngb-accordion>
 		</div>
 	`,
 	styles: [`
@@ -45,24 +57,26 @@ export class SnippetsListComponent extends KeyListenerWidget implements AfterVie
 @Input() model: Model;
 @Input() snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
-normalisedModel: Model;
-snippets$: Observable<CellDocument[]>;			// snippets list observable, for async display
-_snippets: CellDocument[];						// snippets list
-_snippetCategories: Map<string, CellDocument[]>;// snippets grouped by categories
-_snippetsSubject: Subject<CellDocument[]>;		// snippets document subject, to push new documents into
+@ViewChild(NgbAccordion) accordion: NgbAccordion;
+snippetComponents: SnippetComponent[];				// this list is maintained manually and updated by the children
 
-protected commandKeys: string[] = ["a"];	// activation
-private snippetSelectingMode = false;
+normalisedModel: Model;
+
+snippetCategoryNames: string[] = [];
+snippetsByCategory: Map<string, CellDocument[]>; // snippets grouped by categories
+currentCategory: string;
+
+protected commandKeys: string[] = ["a"];		// activation keybinding
+private snippetCategorySelectingMode = false;	// are we selecting categories
+private snippetSelectingMode = false;			// or snippets?
 
 protected snippetSubs: Subscription;
 
-snippetComponents: SnippetComponent[];	// this will be populated by the snippets themselves
 
 
 constructor(eventService: EventService,
 			@Inject("RemoteJSONDataService") private snippetDocumentService: RemoteDataService,
-			@Inject("SnippetContentService") private snippetContentService: RemoteObjectService<Content, ContentJSON>
-			) {
+			@Inject("SnippetContentService") private snippetContentService: RemoteObjectService<Content, ContentJSON>) {
 	super(eventService);
 }
 
@@ -71,13 +85,14 @@ ngAfterViewInit() {
 
 	console.log("SnippetsListComponent::ngAfterViewInit()");
 	this.snippetComponents = [];
+
 	Promise.resolve(null).then(() => this.fetchSnippets());
 
 }
 
 
 // fetch all snippet documents
-private fetchSnippets() {
+public fetchSnippets() {
 
 	if (this.snippetStubs.length>0) {
 
@@ -87,9 +102,14 @@ private fetchSnippets() {
 		this.normalisedModel.normaliseReferences();
 
 		// we initialise the snippet structures
-		this._snippets = [];
-		this._snippetsSubject = new Subject();
-		this.snippets$ = this._snippetsSubject.asObservable();
+		this.snippetCategoryNames = [];
+		this.snippetsByCategory = new Map<string, CellDocument[]>();
+		this.snippetStubs.map(s => s.kind).forEach(c => {
+															if (!this.snippetsByCategory.has(c)) {
+																this.createSnippetCategory(c)
+															}
+		});
+
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
 		this.snippetSubs = this.register(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
 										.subscribe(
@@ -100,6 +120,33 @@ private fetchSnippets() {
 	} else {
 		console.warn('Empty snippets list from catalogue');
 	}
+
+}
+
+
+public currentSnippets(): CellDocument[] {
+	return this.snippetsByCategory.get(this.currentCategory) ?? [];
+}
+
+
+public beforeToggle($event: NgbPanelChangeEvent) {
+
+	if ($event.nextState) {
+		this.currentCategory = $event.panelId;
+	} else if (this.snippetSelectingMode || this.snippetCategorySelectingMode) {
+		this.deactivateSnippetSelectingMode();		// if we close the tab and we were in selection mode we are not
+													// able to select the snippet children anymore
+		this.snippetCategorySelectingMode = true;	// but we want to be able to toggle the categories now
+
+	}
+
+}
+
+
+private createSnippetCategory(category: string) {
+
+	this.snippetCategoryNames.push(category);
+	this.snippetsByCategory.set(category, []);
 
 }
 
@@ -121,8 +168,8 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 
 private requestSnippetContent(snippet: CellDocument, index: number) {
 
-	const snippetURI = Configuration.BACKEND_PREF+"/dyn/snippets/"+snippet.contentURI+"?model="+snippet.modelURI;
-	console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
+	const snippetURI = Configuration.BACKEND_PREF+'/dyn/snippets/'+snippet.contentURI+"?model="+snippet.modelURI;
+	//console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
 	this.register(
 			this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 				this.storeSnippetContent(snippet, snippetContent);
@@ -143,23 +190,21 @@ private requestSnippetContent(snippet: CellDocument, index: number) {
 
 private storeSnippetContent(snippet: CellDocument, snippetContent: Content) {
 
-	// we set the document with the content, associate it with the model
+	// we set the document with the content, associate it with the model, as we modify the list the view will be
+	// updated after this method
 	snippet.content = snippetContent;
-	console.debug("Stripping snippet content context %s", snippet.contentURI);
+	console.debug("Stripping snippet content context %s and associating with model", snippet.contentURI);
 	snippet.content = snippet.content.stripPrefixFromURIs(snippet.contentURI);
-	console.debug("Associating snippet content with model");
 	snippet.content.associate(this.normalisedModel);
-	this._snippets.push(snippet);
 
-	// we have the content, so we can push the snippet document so it can de displayed
-	this._snippetsSubject.next(this._snippets);
+	const category = snippet.kind;
+	this.snippetsByCategory.get(category).push(snippet);
 
-	// now we do this by categories
-
-	if (!this._snippetCategories.has(snippet.kind)) {
-		this._snippetCategories.set(snippet.kind, []);
+	const defaultCategory = this.snippetCategoryNames[0];
+	if (!this.accordion.isExpanded(defaultCategory) && category===defaultCategory) {
+		this.currentCategory = defaultCategory;
+		Promise.resolve(null).then(() => this.accordion.expand(defaultCategory));	// the toggle will do a next()
 	}
-	this._snippetCategories.get(snippet.kind).push(snippet);
 
 }
 
@@ -171,7 +216,7 @@ commandPressedCallback(command: string) {
 	switch (command) {
 		case "a":
 		if (this.snippetSelectingMode) {
-			console.log("[UI] SnippetsListComponent::activating current selection");
+			console.log('[UI] SnippetsListComponent::activating current selection');
 			this.events.service.publish(new CellActivateEvent());
 		}
 		break;
@@ -182,10 +227,26 @@ commandPressedCallback(command: string) {
 numberPressedCallback(num: number) {
 
 	if (this.snippetSelectingMode) {
-		console.log("[UI] SnippetsListComponent::numberPressed(%i) [cellSelectingMode]", num);
+		console.debug("[UI] SnippetsListComponent::numberPressed(%i) [cellSelectingMode]", num);
 		this.events.service.publish(new CellSelectEvent(num));
+	} else if (this.snippetCategorySelectingMode) {
+		const categories: NgbPanel[] = this.accordion.panels.toArray();
+		if (num<categories.length) {
+			console.debug('[UI] SnippetsListComponent::numberPressed(%i) [snippetCategorySelectingMode]', num);
+			this.snippetCategorySelectingMode = false;
+			this.snippetSelectingMode = true;
+			// now we check if the category was not already toggled (no action needed then)
+			const category = categories[num].id;
+			if (!this.accordion.isExpanded(category)) {
+				this.accordion.toggle(category);
+				this.beforeToggle({panelId: category, nextState: true, preventDefault: undefined});
+			}
+			// only now can the children be selected, and we do it later so we have time to display
+			Promise.resolve(null).then(() => this.subscribeChildrenToCellSelection());
+		} else {
+			console.debug("[UI] SnippetsListComponent::numberPressed(%i) [cellSelectingMode] out of bounds", num);
+		}
 	}
-
 }
 
 
@@ -202,18 +263,18 @@ commandNotRegisteredCallback(command: string) {
 // we clear any existing selections, we subscribe our snippet children to selection and wait for numberic keypresses
 activateSnippetSelectingMode() {
 
-	console.log("[UI] SnippetsListComponent::activateSnippetSelectingMode()");
+	console.log('[UI] SnippetsListComponent::activateSnippetSelectingMode()');
 
 	this.events.service.publish(new CellSelectionClearEvent()); // clear any other subscriptions, happens in any case
-	if (!this.snippetSelectingMode) {
-		this.snippetSelectingMode = true;
-		this.snippetSelectingMode = true;
-		this.subscribeChildrenToCellSelection();
+	if (!this.snippetSelectingMode && !this.snippetCategorySelectingMode) {
+		this.snippetCategorySelectingMode = true;
 		this.registerKeyPressedEvents();	// we can now receive keypresses :)
 	} else {
 		// double toggle: we deselect the model
 		this.snippetSelectingMode = false;
+		this.snippetCategorySelectingMode = true;
 	}
+
 }
 
 
@@ -222,22 +283,25 @@ deactivateSnippetSelectingMode() {
 	this.unregisterKeyPressedEvents();
 	this.unsubscribeChildrenFromCellSelection();
 	this.snippetSelectingMode = false;
+	this.snippetCategorySelectingMode = false;
 
 }
 
 
+
+
 private subscribeChildrenToCellSelection () {
 
-	console.log("SnippetsListComponent::subscribeChildrenToCellSelection()");
+	console.log('SnippetsListComponent::subscribeChildrenToCellSelection() {%i}', this.snippetComponents.length);
 	this.unsubscribeChildrenFromCellSelection();
-	this.snippetComponents.forEach( sc => sc.subscribeToSelection() );
+	this.snippetComponents.forEach(sc => sc.subscribeToSelection());
 }
 
 
 private unsubscribeChildrenFromCellSelection() {
 
-	console.log("SnippetsListComponent::subscribeChildrenToCellSelection()");
-	this.snippetComponents.forEach( sc => sc.unsubscribeFromSelection() );
+	console.log('SnippetsListComponent::unsubscribeChildrenToCellSelection() {%i}', this.snippetComponents.length);
+	this.snippetComponents.forEach(sc => sc.unsubscribeFromSelection());
 
 }
 

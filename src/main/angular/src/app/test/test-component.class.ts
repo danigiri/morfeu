@@ -3,6 +3,7 @@
 import { Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { CellDocument, CellDocumentJSON } from '../cell-document.class';
 import { Content, ContentJSON } from '../content.class';
 import { Model, ModelJSON } from '../model.class';
 
@@ -50,10 +51,29 @@ protected load(contentURI: string, model: string) {
 
 }
 
-protected loadModel(model: string): void {
 
-	const modelURI = ModelComponent.modelURIFrom(model);
+protected loadModel(url: string): void {
+
+	const modelURI = ModelComponent.modelURIFrom(url);
 	this.modelService.get(modelURI, Model).subscribe((m: Model) => this.loadedModel(m));
+
+}
+
+
+protected createModel(model: string): Model {
+
+	const MODEL = Object.create(Model.prototype); // to simulate static call 
+
+	return MODEL.fromJSON(model);
+
+}
+
+
+protected createSnippets(snippets: string[]): CellDocument[] {
+
+	const CELLDOCUMENT = Object.create(CellDocument.prototype); // to simulate static call 
+
+	return snippets.map(s => CELLDOCUMENT.fromJSON(s));
 
 }
 

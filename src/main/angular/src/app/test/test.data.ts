@@ -1219,3 +1219,13 @@ export const _model = `{
 	} ],
 	"valid" : true
 }`;
+
+
+export const _snippets = [
+	`{ "name": "Stuff 1", "kind": "simple", "uri": "/test-resources/snippets/stuff.json"}`
+	,`{ "name": "Data 1", "kind": "simple", "uri": "/test-resources/snippets/data.json"}`
+	,`{ "name": "Data 2", "kind": "simple", "uri": "/test-resources/snippets/data2.json"}`
+	,`{ "name": "Data 3", "kind": "simple", "uri": "/test-resources/snippets/data3.json"}`
+	,`{ "name": "Data 4", "kind": "simple", "uri": "/test-resources/snippets/data4.json"}`
+	,`{ "name": "Row", "kind": "complex", "uri": "/test-resources/snippets/row.json"}`
+];
