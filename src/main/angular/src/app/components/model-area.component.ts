@@ -39,8 +39,8 @@ import { EventService } from '../services/event.service';
 		</div>
 	`,
 	styles: [`
-	        #model-tab {}
-	        #snippets-tab {}
+				#model-tab {}
+				#snippets-tab {}
 	 `]
 })
 

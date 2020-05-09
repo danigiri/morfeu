@@ -38,13 +38,13 @@ export class AttributeDataEditorComponent extends EventListener implements OnIni
 @Input() parentCell: Cell;
 @Input() index: number;
 
+@ViewChild('input') input: ElementRef;
+
 isText: boolean = true;
 isBoolean: boolean = false;
 isList: boolean = false;
 validates: boolean;
 validationWarning: string;
-
-@ViewChild('input') input: ElementRef;
 
 
 constructor(eventService: EventService) {

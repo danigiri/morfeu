@@ -55,7 +55,6 @@ public void testSnippetCategories() {
 			() -> assertEquals("Row 6,6", complexSnippets.get(0).name())
 	);
 
-
 }
 
 

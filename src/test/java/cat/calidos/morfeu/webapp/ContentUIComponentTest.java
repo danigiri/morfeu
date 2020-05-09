@@ -1,3 +1,5 @@
+// CONTENT UI COMPONENT TEST . JAVA
+
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
