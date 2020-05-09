@@ -66,6 +66,7 @@ public List<UICell> children() {
 public UISnippetEntry select() {
 
 	snippets.pressKey(UISnippetsArea.SNIPPETS_KEY);
+	snippets.pressKey("0");							// at the moment we can only select from the first category
 	snippets.pressKey(position()+"");
 
 	return this;
