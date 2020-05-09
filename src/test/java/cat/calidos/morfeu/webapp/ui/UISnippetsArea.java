@@ -20,6 +20,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,17 +35,45 @@ public static final String ACTIVATE_KEY = "a";
 
 
 public UISnippetsArea() {
-	super($("#snippets-tab"));
+	super($("#snippets"));
 }
+
 
 public static void shouldNotBeVisible() {
 	$("#snippets-tab").shouldNotBe(visible);
 }
 
 
+public List<String> categories() {
+	return element.$$("div[role=tab]")
+					.stream()
+					.filter(e -> e.attr("class")!=null)
+					.filter(e -> e.attr("id").endsWith("-header"))
+					.map(e -> e.text())
+					.collect(Collectors.toList());
+}
+
+
+public UISnippetsArea clickOnCategory(String name) {
+
+	Optional<String> category = categories().stream().filter(c -> c.equals(c)).findAny();
+	if (category.isEmpty()) {
+		throw new NoSuchElementException("No snippet category with name "+name);
+	}
+
+
+	element.$("#"+name+"-header").scrollTo().$("button").click();
+
+	return this;
+
+}
+
+
 public List<UISnippetEntry> snippets() {
 	return $$(".snippet").stream().map(e -> new UISnippetEntry(e, this)).collect(Collectors.toList());
 }
+
+
 
 
 public UISnippetEntry snippet(int pos) {

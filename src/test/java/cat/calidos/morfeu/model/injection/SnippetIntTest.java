@@ -21,7 +21,7 @@ public class SnippetIntTest extends ModelTezt {
 
 @Test
 public void testSnippet() throws Exception {
-	
+
 	String contentPath = "test-resources/snippets/stuff.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff";
@@ -43,7 +43,7 @@ public void testSnippet() throws Exception {
 	Optional<String> stuffValue = stuff.getValue();
 	assertTrue(stuffValue.isPresent());
 	assertEquals("Stuff content", stuffValue.get());
-	
+
 	CellModel stuffModel = stuff.getCellModel();
 	assertEquals("stuff", stuffModel.getName());
 
