@@ -17,6 +17,7 @@
 		<jetty-context-path>/</jetty-context-path>
 		<webapp-prefix>http://localhost:${jetty-http-port}${jetty-context-path}/</webapp-prefix>
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
+		<build-client>true</build-client>
 		<async-timeout>2000</async-timeout>
 		<dagger-2-version>2.27</dagger-2-version>
 		<jackson-2-version>2.10.3</jackson-2-version>
@@ -121,6 +122,7 @@
 							<arguments>
 								<argument>-c</argument>
 								<argument>
+									${build-client} &amp;&amp; \
 									chmod a+x ${project.build.directory}/scripts/angular.sh &amp;&amp; \
 									${project.build.directory}/scripts/angular.sh
 								</argument>
