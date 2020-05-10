@@ -4,6 +4,7 @@ LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 
 # variables build stage
 ARG MAVEN_URL=https://apache.brunneis.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+ARG MAVEN_OPTS=
 ENV MAVEN_HOME /usr/share/maven
 
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
@@ -18,14 +19,14 @@ RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
 # we add the pom and validate the project (does nothing), but some of the downloads will be cached
 COPY pom.xml pom.xml
-RUN /usr/bin/mvn validate
+RUN /usr/bin/mvn validate ${MAVEN_OPTS}
 
 # add code
 COPY src src
 
 # and build (two steps to reuse the lengthy maven download)
-RUN /usr/bin/mvn compile
-RUN /usr/bin/mvn test package
+RUN /usr/bin/mvn compile ${MAVEN_OPTS}
+RUN /usr/bin/mvn test package ${MAVEN_OPTS}
 
 
 FROM openjdk:13-alpine AS main
