@@ -18,6 +18,7 @@ RUN curl ${MAVEN_URL} | tar zxf - -C ${MAVEN_HOME} --strip-components 1
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
 # we add the pom and validate the project (does nothing), but some of the downloads will be cached
+RUN echo 'Using maven options ${MAVEN_OPTS}'
 COPY pom.xml pom.xml
 RUN /usr/bin/mvn validate ${MAVEN_OPTS}
 
@@ -25,6 +26,7 @@ RUN /usr/bin/mvn validate ${MAVEN_OPTS}
 COPY src src
 
 # and build (two steps to reuse the lengthy maven download)
+RUN echo 'Using maven options ${MAVEN_OPTS}'
 RUN /usr/bin/mvn compile ${MAVEN_OPTS}
 RUN /usr/bin/mvn test package ${MAVEN_OPTS}
 
