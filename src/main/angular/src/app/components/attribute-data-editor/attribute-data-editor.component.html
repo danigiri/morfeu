@@ -1,36 +1,34 @@
-<li class="attribute-data-editor list-group-item"
+<div class="attribute-data-editor"
 	[class.attribute-data]="isPresent()"
 	[class.attribute-not-present]="!isPresent()"
 	[class.attribute-data-boolean] = "isBoolean"
 	[class.attribute-data-list] = "isList"
 	[attr._index]="index"
 >
-	<div *ngIf="isPresent()" class="form-group input-group-sm row">
-		<label 	class="col-sm-2 col-form-label col-form-label-sm attribute-data-name"
+	<div *ngIf="isPresent()" class="form-group">
+		<label 	class="attribute-data-name"
 				for="{{cellModel.name}}"
 				[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier===cellModel"
-		>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:
+		>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:&nbsp;
 		</label>
 		<ng-container [ngSwitch]="true">
 			<ng-container *ngSwitchCase="isText">
-				<div class="col-sm-8">
-					<input 	type="text"
-							id="{{cellModel.name}}"
-							class="attribute-data-value form-control-sm"
-							attr.aria-label="{{cellModel.name}}"
-							attr.aria-describedby="{{cellModel.desc}}"
-							[(ngModel)]="this.value"
-							(change)="modified($event)"
-							(input)="modified($event)"
-					/>
-					<small *ngIf="!validates" class="form-text attribute-data-validation-warning"
-					>{{validationWarning}}</small>
-				</div>
+				<input 	type="text"
+						id="{{cellModel.name}}"
+						class="attribute-data-value form-control form-control-sm"
+						attr.aria-label="{{cellModel.name}}"
+						attr.aria-describedby="{{cellModel.desc}}"
+						[(ngModel)]="this.value"
+						(change)="modified($event)"
+						(input)="modified($event)"
+				/>
+				<small *ngIf="!validates" class="form-text attribute-data-validation-warning"
+				>{{validationWarning}}</small>
 			</ng-container>
 			<ng-container *ngSwitchCase="isBoolean">
 				<input 	type="checkbox"
 						id="{{cellModel.name}}"
-						class="attribute-data-value form-control-sm"
+						class="attribute-data-value form-control form-control-sm"
 						attr.aria-label="{{cellModel.name}}"
 						attr.aria-describedby="{{cellModel.desc}}"
 						[(ngModel)]="this.booleanValue"
@@ -51,20 +49,19 @@
 				</select>
 			</ng-container>
 		</ng-container>
-		<div *ngIf="cellModel.minOccurs==0" class="col-sm-2">
-			<img	class="btn float-right attribute-data-delete"
-					src="assets/images/open-iconic/circle-x.svg"
-					(click)="delete()"
-			/>
+		<img *ngIf="cellModel.minOccurs==0"
+				class="btn float-right attribute-data-delete"
+				src="assets/images/open-iconic/circle-x.svg"
+				(click)="delete()"
+		/>
+		<div *ngIf="!isPresent()" class="list-group-item">
+			<small class="attribute-data-name">{{cellModel.name}}</small>
+			<span class="badge float-right">
+				<img class="btn float-right attribute-data-add"
+					src="assets/images/open-iconic/plus.svg"
+					(click)="add()"
+				/>
+			</span>
 		</div>
 	</div>
-	<div *ngIf="!isPresent()" class="list-group-item">
-		<small class="attribute-data-name">{{cellModel.name}}</small>
-		<span class="badge float-right">
-			<img class="btn float-right attribute-data-add"
-				src="assets/images/open-iconic/plus.svg"
-				(click)="add()"
-			/>
-		</span>
-	</div>
-</li>
+</div>

@@ -2,7 +2,7 @@
 	<div id="cell-editor" class="card mt-2 modal-body">
 		<cell-header [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
 		<div class="card-body">
-			<form #form_="ngForm"> {{formCallback(form_)}}
+			<form class="form-inline" #form_="ngForm"> {{formCallback(form_)}}
 				<textarea *ngIf="cell.value!=undefined && showValue()"
 					class="cell-editor-value form-control"
 					rows="textAreaRows()"
