@@ -5,6 +5,8 @@ LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 # variables build stage
 ARG MAVEN_URL=https://apache.brunneis.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 ARG MAVEN_OPTS=
+ARG HTTP_PROXY_=
+ENV http_proxy=${HTTP_PROXY_}
 ENV MAVEN_HOME /usr/share/maven
 
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
