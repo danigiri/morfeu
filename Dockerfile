@@ -5,12 +5,17 @@ LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 # variables build stage
 ARG MAVEN_URL=https://apache.brunneis.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 ARG MAVEN_OPTS=
-ARG HTTP_PROXY_=
-ENV http_proxy=${HTTP_PROXY_}
-ENV MAVEN_HOME /usr/share/maven
+ARG PROXY=
+ARG PROXY_ENABLED=false
+ARG PROXY_HOST=
+ARG PROXY_PORT=
+ARG MAVEN_HOME=/usr/share/maven
+ARG MAVEN_SETTINGS=${MAVEN_HOME}/settings.xml
+ENV http_proxy=${PROXY}
 
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
-RUN apk add --no-cache curl bash ncurses git
+# and sed for the proxy configuration
+RUN apk add --no-cache curl bash ncurses git sed
 RUN apk add --no-cache --update nodejs npm
 RUN npm install -g @angular/cli
 
@@ -21,16 +26,23 @@ RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
 # we add the pom and validate the project (does nothing), but some of the downloads will be cached
 RUN echo 'Using maven options ${MAVEN_OPTS}'
+
+# setup the proxy configuration from ARGs
+COPY ./src/main/resources/docker-resources/maven-settings.xml ${MAVEN_SETTINGS}
+RUN sed -i s/PROXY_ACTIVE/${PROXY_ENABLED}/g ${MAVEN_SETTINGS} && \
+	sed -i s/PROXY_HOST/${PROXY_HOST}/g ${MAVEN_SETTINGS} && \
+	sed -i s/PROXY_PORT/${PROXY_PORT}/g ${MAVEN_SETTINGS}
+
 COPY pom.xml pom.xml
-RUN /usr/bin/mvn validate ${MAVEN_OPTS}
+RUN /usr/bin/mvn validate --settings=${MAVEN_SETTINGS} ${MAVEN_OPTS}
 
 # add code
 COPY src src
 
-# and build (two steps to reuse the lengthy maven download)
+# and build (two steps to try to reuse the lengthy maven download)
 RUN echo 'Using maven options ${MAVEN_OPTS}'
-RUN /usr/bin/mvn compile ${MAVEN_OPTS}
-RUN /usr/bin/mvn test package ${MAVEN_OPTS}
+RUN /usr/bin/mvn --settings=${MAVEN_SETTINGS} compile ${MAVEN_OPTS}
+RUN /usr/bin/mvn --settings=${MAVEN_SETTINGS} test package ${MAVEN_OPTS}
 
 
 FROM openjdk:13-alpine AS main
