@@ -1,0 +1,11 @@
+<settings>
+	<proxies>
+		<proxy>
+			<id>build-proxy</id>
+			<active>PROXY_ENABLED</active>
+			<protocol>http</protocol>
+			<host>PROXY_HOST</host>
+			<port>PROXY_PORT</port>
+		</proxy>
+	</proxies>
+</settings>
