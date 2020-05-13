@@ -40,7 +40,6 @@ ARG VERSION=0.6.2-SNAPSHOT
 ENV JETTY_HOME /var/lib/jetty
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.24.v20191120/jetty-distribution-9.4.24.v20191120.tar.gz
 ARG JETTY_BASE=/jetty-base
-ENV JETTY_BASE_ENV=${JETTY_BASE}
 
 RUN apk add --no-cache curl
 RUN mkdir -p ${JETTY_HOME}
@@ -60,6 +59,6 @@ COPY --from=build ./target/morfeu-webapp-${VERSION}.war ${JETTY_BASE}/webapps/ro
 RUN mkdir -p ${JETTY_HOME}/target/test-classes/test-resources
 COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test-classes/test-resources
 
-# start (see that for some reason, the env variable expansion was not making jetty happy, hardcoding path)
+# start (configuration seems not to be loading
 WORKDIR ${JETTY_HOME}
-ENTRYPOINT ["/bin/bash", "-c", "java -jar ./start.jar jetty.base=${JETTY_BASE_ENV}"]
+ENTRYPOINT ["java", "-jar", "./start.jar", "jetty.base=/jetty-base", "--module=http", "jetty.http.port=8990"]
