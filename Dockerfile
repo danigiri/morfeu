@@ -30,7 +30,7 @@ COPY src src
 RUN echo 'Using maven options ${MAVEN_OPTS}'
 RUN /usr/bin/mvn compile ${MAVEN_OPTS}
 RUN /usr/bin/mvn test package ${MAVEN_OPTS}
-RUN 'Build finished'
+RUN echo 'build finished'
 
 
 FROM openjdk:13-alpine AS main
