@@ -30,6 +30,7 @@ COPY src src
 RUN echo 'Using maven options ${MAVEN_OPTS}'
 RUN /usr/bin/mvn compile ${MAVEN_OPTS}
 RUN /usr/bin/mvn test package ${MAVEN_OPTS}
+RUN 'Build finished'
 
 
 FROM openjdk:13-alpine AS main
@@ -37,8 +38,6 @@ FROM openjdk:13-alpine AS main
 # arguments and variables run stage
 ARG VERSION=0.6.2-SNAPSHOT
 ENV JETTY_HOME /var/lib/jetty
-ENV RESOURCES_PREFIX=file://${JETTY_HOME}/
-ENV PROXY_PREFIX=
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.24.v20191120/jetty-distribution-9.4.24.v20191120.tar.gz
 ENV JETTY_BASE /jetty-base
 
@@ -62,5 +61,4 @@ COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test
 
 # start
 WORKDIR ${JETTY_HOME}
-ENTRYPOINT java -jar ./start.jar jetty.base=${JETTY_BASE} \
-	-D__RESOURCES_PREFIX=${RESOURCES_PREFIX} -D__PROXY_PREFIX=${PROXY_PREFIX}
+ENTRYPOINT ["java", "-jar", "./start.jar", "jetty.base=${JETTY_BASE}"]
