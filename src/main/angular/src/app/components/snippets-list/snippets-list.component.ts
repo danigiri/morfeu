@@ -198,6 +198,11 @@ private storeSnippetContent(snippet: CellDocument, snippetContent: Content) {
 	snippet.content.associate(this.normalisedModel);
 
 	const category = snippet.kind;
+	if (!this.snippetsByCategory.has(category)) {	// not strictly needed, but to protect from the common error
+		this.snippetsByCategory.set(category, []);	// of having the stubs out of sync of the snippet categories
+		this.snippetCategoryNames.push(category);
+		console.warn('category %s was in the snippet details but not on the catalogue', category);
+	}
 	this.snippetsByCategory.get(category).push(snippet);
 
 	const defaultCategory = this.snippetCategoryNames[0];
