@@ -36,7 +36,7 @@ RUN echo 'build finished'
 FROM openjdk:13-alpine AS main
 
 # arguments and variables run stage
-ARG VERSION=0.6.2-SNAPSHOT
+ARG VERSION=0.7.0-SNAPSHOT
 ENV JETTY_HOME /var/lib/jetty
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.24.v20191120/jetty-distribution-9.4.24.v20191120.tar.gz
 ARG JETTY_BASE=/jetty-base

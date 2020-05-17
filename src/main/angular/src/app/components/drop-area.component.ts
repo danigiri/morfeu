@@ -196,6 +196,10 @@ dropSuccess($event: any) {
 
 performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 
+	if (!cell || !newParent || !newPosition) {
+		console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
+	}
+
 	console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
 	this.events.service.publish(new CellDropEvent(cell, this.parent, this.position));
 	// the document is now dirty
