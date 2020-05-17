@@ -4,11 +4,8 @@ import { MorfeuEvent } from './morfeu-event.class';
 
 export class UXEvent extends MorfeuEvent {
 
-public static DOCUMENT_DIRTY: number = 100;
-public static TOGGLE_COLLAPSABLE: number = 200;
 
-
-constructor(public readonly type: number, public readonly payload?: any) {
+constructor(public readonly type: UXEventType, public readonly payload?: any) {
 	super('UXEvent');
 }
 
@@ -17,20 +14,28 @@ public toString = () : string => {
 
 	let message: string;
 	switch (this.type) {
-		case UXEvent.DOCUMENT_DIRTY:
+		case UXEventType.DOCUMENT_DIRTY:
 			message = "DOCUMENT_DIRTY";
 			break;
 		default:
 			message = "UNKNOWN";
 			break;
 	}
-	
+
 	return "UXEvent:{'"+message+"'}";
 
 }
 
 
 }
+
+export enum UXEventType {
+	DOCUMENT_DIRTY = 100,
+	TOGGLE_COLLAPSABLE = 200,
+	START_DRAG = 301,
+	END_DRAG = 302
+}
+
 
 /*
  *	  Copyright 2018 Daniel Giribet

@@ -14,7 +14,7 @@ import { CellChangeEvent, CellChange } from '../../events/cell-change.event';
 import { CellEditEvent } from '../../events/cell-edit.event';
 import { ContentFragmentDisplayEvent } from '../../events/content-fragment-display.event';
 import { EventListener } from '../../events/event-listener.class';
-import { UXEvent } from '../../events/ux.event';
+import { UXEvent, UXEventType } from '../../events/ux.event';
 import { EventService } from '../../services/event.service';
 
 @Component({
@@ -152,7 +152,7 @@ private button(result: string) {
 	if (result==="Save") {
 		console.log("[UI] Saved cell");
 		// the document is now dirty
-		this.events.service.publish(new UXEvent(UXEvent.DOCUMENT_DIRTY));
+		this.events.service.publish(new UXEvent(UXEventType.DOCUMENT_DIRTY));
 	} else {
 		this.rollbackChanges();
 	}

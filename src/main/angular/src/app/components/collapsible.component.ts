@@ -5,7 +5,7 @@ import {Component, Input} from "@angular/core";
 
 import {EventListener} from "../events/event-listener.class";
 import {EventService} from "../services/event.service";
-import {UXEvent} from "../events/ux.event";
+import {UXEvent, UXEventType} from "../events/ux.event";
 
 
 @Component({
@@ -74,7 +74,7 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 	this.register(this.events.service.of<UXEvent>(UXEvent)
-			.pipe(	filter(e => e.type==UXEvent.TOGGLE_COLLAPSABLE),
+			.pipe(	filter(e => e.type==UXEventType.TOGGLE_COLLAPSABLE),
 					filter(e => e.payload && (e.payload==="*" || e.payload===this.id_)))
 			.subscribe(() => this.toggle())
 	);

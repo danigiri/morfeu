@@ -13,7 +13,7 @@ import { CellDocumentClearEvent } from '../events/cell-document-clear.event';
 import { CellDocumentLoadedEvent } from '../events/cell-document-loaded.event';
 import { ContentSaveEvent } from '../events/content-save.event';
 import { StatusEvent } from '../events/status.event';
-import { UXEvent } from '../events/ux.event';
+import { UXEvent, UXEventType } from '../events/ux.event';
 import { EventListener } from '../events/event-listener.class';
 import { EventService } from '../services/event.service';
 import { RemoteEventService } from '../services/remote-event.service';
@@ -87,7 +87,7 @@ ngOnInit() {
 
 	// when the document is dirty we can save, this will be notified by someone elsem (content area, etc)
 	this.register(this.events.service.of<UXEvent>(UXEvent)
-			.pipe(filter(e => e.type===UXEvent.DOCUMENT_DIRTY))
+			.pipe(filter(e => e.type===UXEventType.DOCUMENT_DIRTY))
 			.subscribe(() => this.enableSave())
 	);
 
