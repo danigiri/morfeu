@@ -26,7 +26,7 @@ private UIContent content;
 @BeforeEach
 public void setup() {
 
-	open(appBaseURL+"test/content-test/readonly");
+	open(appBaseURL+"test/content/readonly");
 	content = new UIContent();
 	content.shouldBeVisible();
 

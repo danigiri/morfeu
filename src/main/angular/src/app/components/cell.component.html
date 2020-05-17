@@ -10,10 +10,6 @@
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
-			dnd-draggable
-			[dragEnabled]="dragEnabled"
-			(onDragEnd)="dragEnd(cell)"
-			[dragData]="cellDragData()"
 		/>
 		<div id="{{cell.URI}}"
 			class="well container-fluid show-grid cell-level-{{level}} rounded"
@@ -48,10 +44,6 @@
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
-			dnd-draggable
-			[dragEnabled]="dragEnabled"
-			(onDragEnd)="dragEnd(cell)"
-			[dragData]="cellDragData()"
 		/>
 		<div id="{{cell.URI}}"
 			class="row-well row show-grid cell-level-{{level}} rounded"
@@ -83,6 +75,8 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
+			cdkDropList
+			(cdkDropListDropped)="dropSuccess($event)"
 			><!--COL-{{this.cell.columnFieldValue()}}-->
 			<!-- drop area here to add anything at the beginning of the column -->
 			<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
@@ -98,6 +92,7 @@
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
+		[{{this.position}}]dragging={{dragging}},someoneElseIsDragging={{whoIsDragging?.cell.name}}
 		<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
 			[class.cell-img]="!active && !activeReadonly && !selected"
 			[class.cell-active]="active"
@@ -107,11 +102,11 @@
 			src="{{getCellPresentation()}}"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
-			dnd-draggable
-			[dragEnabled]="dragEnabled"
-			(onDragEnd)="dragEnd(cell)"
-			[dragData]="cellDragData()"
+			(mousedown)="mouseDown()"
+			(mouseup)="mouseUp()"
 			(dblclick)="doubleClick()"
+			cdkDrag
+			[cdkDragData]="this.cell"
 		/>
 		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
 			class="cell cell-img-size cell-level-{{level}}"
@@ -120,10 +115,6 @@
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
-			dnd-draggable
-			[dragEnabled]="dragEnabled"
-			(onDragEnd)="dragEnd(cell)"
-			[dragData]="cellDragData()"
 			(dblclick)="doubleClick()"
 		>
 		<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->

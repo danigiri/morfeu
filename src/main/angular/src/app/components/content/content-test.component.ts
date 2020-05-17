@@ -5,7 +5,7 @@ import { Component, Inject } from '@angular/core';
 import { CellDocument } from '../../cell-document.class';
 import { Model } from '../../model.class';
 
-import { _readonlyDocument } from '../../test/test.data';
+import { _readonlyDocument, _document3Document } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
 import { ContentRequestEvent } from '../../events/content-request.event';
@@ -29,7 +29,8 @@ document: CellDocument;
 protected test(case_: string) {
 
 	switch (case_) {
-		//case 'post' : this.loadPOST(); break;
+		case 'readonly' : this.readonly(); break;
+		case 'dnd-1' : this.dragAndDrop1(); break;
 		default: this.readonly();
 	}
 
@@ -38,8 +39,17 @@ protected test(case_: string) {
 
 private readonly() {
 
-	const DOCUMENT = Object.create(CellDocument.prototype); // to simulate a static call
-	this.document = DOCUMENT.fromJSON(_readonlyDocument);
+	console.debug('Readonly test')
+	this.document = this.createDocument(_readonlyDocument);
+	this.loadModel(this.document.modelURI);
+
+}
+
+
+private dragAndDrop1() {
+
+	console.debug('Drag and Drop 1 test')
+	this.document = this.createDocument(_document3Document);
 	this.loadModel(this.document.modelURI);
 
 }

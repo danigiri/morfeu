@@ -16,8 +16,8 @@ import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.even
 import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
 import { DropAreaSelectEvent } from '../events/drop-area-select.event';
 import { InfoModeEvent } from '../events/info-mode.event';
+import { UXEvent, UXEventType } from '../events/ux.event';
 import { EventService } from '../services/event.service';
-import { UXEvent } from '../events/ux.event';
 
 @Component({
 	selector: 'drop-area',
@@ -28,9 +28,6 @@ import { UXEvent } from '../events/ux.event';
 					[class.drop-area-inactive]="!active"
 					[class.drop-area-selected]="selected"
 					[class.drop-area-info]="info"
-					dnd-droppable
-					[dropEnabled]="active"
-					 (onDropSuccess)="dropSuccess($event)"
 			><small>{{position}}</small>
 				<small *ngIf="info">
 					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
@@ -203,7 +200,7 @@ performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 	console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
 	this.events.service.publish(new CellDropEvent(cell, this.parent, this.position));
 	// the document is now dirty
-	this.events.service.publish(new UXEvent(UXEvent.DOCUMENT_DIRTY));
+	this.events.service.publish(new UXEvent(UXEventType.DOCUMENT_DIRTY));
 
 	//this.cdr.markForCheck();
 

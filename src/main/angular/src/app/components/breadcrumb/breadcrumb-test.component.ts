@@ -3,7 +3,7 @@
 import { Component, Inject } from '@angular/core';
 
 import { Cell } from '../../cell.class';
-import { Content, ContentJSON } from '../../content.class';
+import { Content } from '../../content.class';
 import { Model } from '../../model.class';
 
 import { _readonlyDocument } from '../../test/test.data';

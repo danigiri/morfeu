@@ -3,6 +3,127 @@ export const _readonlyPrefix = 'target/test-classes/test-resources/documents/rea
 
 //wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
 
+
+export const _document3Document = `
+{
+	"name" : "Document 3",
+	"desc" : "Third document",
+	"kind": "xml",
+	"modelURI": "target/test-classes/test-resources/models/test-model.xsd",
+	"contentURI": "target/test-classes/test-resources/documents/document3.xml"
+}
+`;
+
+export const _document3 = `
+{
+	"schema" : 0,
+	"URI" : "target/test-classes/test-resources/documents/document3.xml",
+	"name" : "",
+	"desc" : "",
+	"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd",
+	"isSimple" : false,
+	"attributes" : [ ],
+	"internalAttributes" : [ ],
+	"children" : [ {
+		"schema" : 0,
+		"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)",
+		"name" : "test",
+		"desc" : "",
+		"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test",
+		"isSimple" : false,
+		"attributes" : [ ],
+		"internalAttributes" : [ {
+			"schema" : 0,
+			"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)@xmlns:xsi",
+			"name" : "xmlns:xsi",
+			"desc" : "",
+			"value" : "http://www.w3.org/2001/XMLSchema-instance",
+			"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test",
+			"isSimple" : true
+		}, {
+			"schema" : 0,
+			"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)@xsi:noNamespaceSchemaLocation",
+			"name" : "xsi:noNamespaceSchemaLocation",
+			"desc" : "",
+			"value" : "../models/test-model.xsd",
+			"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test",
+			"isSimple" : true
+		} ],
+		"children" : [ {
+			"schema" : 0,
+			"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)",
+			"name" : "row",
+			"desc" : "",
+			"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row",
+			"isSimple" : false,
+			"attributes" : [ ],
+			"internalAttributes" : [ ],
+			"children" : [ {
+				"schema" : 0,
+				"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)",
+				"name" : "col",
+				"desc" : "",
+				"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+				"isSimple" : false,
+				"attributes" : [ {
+					"schema" : 0,
+					"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)@size",
+					"name" : "size",
+					"desc" : "",
+					"value" : "12",
+					"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+					"isSimple" : true
+				} ],
+				"internalAttributes" : [ ],
+				"children" : [ {
+					"schema" : 0,
+					"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)/stuff(0)",
+					"name" : "stuff",
+					"desc" : "",
+					"value" : "Stuff content",
+					"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff",
+					"isSimple" : true
+				}, {
+					"schema" : 0,
+					"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)/stuff(1)",
+					"name" : "stuff",
+					"desc" : "",
+					"value" : "Stuff content 2",
+					"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff",
+					"isSimple" : true
+				}, {
+					"schema" : 0,
+					"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)/stuff(2)",
+					"name" : "stuff",
+					"desc" : "",
+					"value" : "Multiline stuff\ncontent\n",
+					"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff",
+					"isSimple" : true
+				}, {
+					"schema" : 0,
+					"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)/data(3)",
+					"name" : "data",
+					"desc" : "",
+					"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data",
+					"isSimple" : false,
+					"attributes" : [ {
+						"schema" : 0,
+						"URI" : "target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)/data(3)@number",
+						"name" : "number",
+						"desc" : "",
+						"value" : "33",
+						"cellModelURI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data@number",
+						"isSimple" : true
+					} ],
+					"internalAttributes" : [ ],
+					"children" : [ ]
+				} ]
+			} ]
+		} ]
+	} ]
+}
+`;
+
 export const _readonlyDocument = `
 {
 	"name": "Readonly test doc"

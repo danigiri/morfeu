@@ -22,7 +22,7 @@ const routes: Routes = [
 						{path: 'breadcrumb-test/:case_', component: BreadcrumbTestComponent},
 						{path: 'cell-editor-test/:case_', component: CellEditorTestComponent},
 						{path: 'presentation-test/:case_', component: PresentationTestComponent},
-						{path: 'content-test/:case_', component: ContentTestComponent},
+						{path: 'content/:case_', component: ContentTestComponent},
 						{path: 'snippets-list/:case_', component: SnippetsListTestComponent}
 ];
 

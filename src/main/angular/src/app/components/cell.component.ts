@@ -1,7 +1,9 @@
 // CELL . COMPONENT . TS
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -22,6 +24,7 @@ import { CellSelectEvent } from '../events/cell-select.event';
 import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
 import { InfoModeEvent } from '../events/info-mode.event';
+import { UXEvent, UXEventType } from '../events/ux.event';
 import { EventService } from '../services/event.service';
 
 @Component({
@@ -49,6 +52,10 @@ dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
 info = false;
+dragging = false;
+whoIsDragging: CellComponent;
+
+dragSubscription: Subscription;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -137,6 +144,18 @@ ngOnInit() {
 			})
 	);
 
+	this.subscribeToStartDragging();
+	this.register(this.events.service.of<UXEvent>(UXEvent)
+			.pipe(filter(e => e.type===UXEventType.END_DRAG))
+			.subscribe(e => {
+								if (this.dragging) {
+									this.dragging = false;
+								} else {
+									this.whoIsDragging = undefined;
+								}
+			})
+	);
+	
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
 	//this.cdr.markForCheck();
@@ -144,10 +163,29 @@ ngOnInit() {
 }
 
 
+private subscribeToStartDragging() {
+		// we want to know if anyone is dragging so we ignore mouseleave/enter events
+	this.dragSubscription = this.register(this.events.service.of<UXEvent>(UXEvent)
+			.pipe(filter(e => e.type===UXEventType.START_DRAG))
+			.subscribe(e => this.whoIsDragging = e.payload)
+	);
+}
+
+private unsubscribeFromStartDragging() {
+	if (this.dragSubscription) {
+		this.unsubscribe(this.dragSubscription);
+		this.dragSubscription = undefined;
+	}
+}
+
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell: Cell) {
 
-	// console.log('[UI] CellComponent::focusOn()');
+	if (this.whoIsDragging || this.whoIsDragging===this) {
+		console.debug('[UI] CellComponent::focusOn(%i,) - cancel,'+this.dragging, this.position, this.cell.URI);
+	}
+
+	console.debug('[UI] CellComponent::focusOn(%i),'+this.dragging, this.position, this.cell.URI);
 	this.events.service.publish(new CellActivatedEvent(cell));
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -162,7 +200,12 @@ focusOn(cell: Cell) {
 // notify all interested in this type of cell that we do not have the focus any longer, remove highlight
 focusOff(cell: Cell) {
 
-	// console.log('[UI] CellComponent::focusOff()');
+
+	if (this.whoIsDragging) {	// someone is dragging, we will ignore until our mouseup or end drag clears
+		console.debug('[UI] CellComponent::focusOff(%i) - cancel,'+this.dragging, this.position, this.cell.URI);
+	}
+
+	console.debug('[UI] CellComponent::focusOff(%i),'+this.dragging, this.position, this.cell.URI);
 	this.becomeInactive(cell);
 	this.events.service.publish(new CellDeactivatedEvent(cell));
 
@@ -190,6 +233,7 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	// must be an orphan before adopting
 	if (newCell.parent) {
 		newCell.parent.remove(newCell);
+		newCell.parent = undefined;
 	}
 
 	// if we are adopting a cell that is actually a move and we are moving at the end, 'position' is now 'position--'
@@ -382,6 +426,43 @@ private doubleClick() {
 	if (this.isEditable()) {
 		this.events.service.publish(new CellEditEvent(this.cell));
 	}
+
+}
+
+/** we drop here as we are only droppeable if we are active, and that's model validated */
+dropSuccess($event: CdkDragDrop<Cell[]>) {
+
+	const cell = $event.item.data;
+	const newPosition = $event.currentIndex;
+	const newParent = this.cell;
+	console.log("[UI] CellComponent::dropSuccess("+$event.item.data.name+") -->", newPosition);
+
+	if (!cell || !newParent || newPosition===undefined || newPosition<0) {
+		console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent, newPosition);
+	}
+
+	this.events.service.publish(new CellDropEvent(cell, newParent, newPosition));
+	console.debug('-> stop drag');
+	this.events.service.publish(new UXEvent(UXEventType.END_DRAG));	// this will set this.dragging = false
+
+	//this.cdr.markForCheck();
+
+}
+
+mouseDown() {
+
+	console.debug('down -> start drag');
+	this.unsubscribeFromStartDragging();
+	this.events.service.publish(new UXEvent(UXEventType.START_DRAG, this));
+	this.dragging = true;
+
+}
+
+mouseUp() {
+
+	console.debug('up -> stop drag');
+	this.events.service.publish(new UXEvent(UXEventType.END_DRAG));
+	this.dragging = false;
 
 }
 
