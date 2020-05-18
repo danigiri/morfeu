@@ -8,8 +8,9 @@ export class CellDropEvent extends MorfeuEvent {
 
 
 constructor(public cell:Cell,
-			public newParent: FamilyMember = undefined, 
-			public newPosition: number = undefined) {
+			public newParent: FamilyMember = undefined,
+			public newPosition: number = undefined,
+			public cellActive: boolean = false) {	// if the dropped cell should be active
 	super('CellDropEvent');
 			}
 

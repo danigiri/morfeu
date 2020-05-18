@@ -24,7 +24,6 @@ import { CellSelectEvent } from '../events/cell-select.event';
 import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
 import { InfoModeEvent } from '../events/info-mode.event';
-import { UXEvent, UXEventType } from '../events/ux.event';
 import { EventService } from '../services/event.service';
 
 @Component({
@@ -52,10 +51,7 @@ dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
 info = false;
-dragging = false;
-whoIsDragging: CellComponent;
-
-dragSubscription: Subscription;
+acceptMouseEvents = true;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -68,7 +64,7 @@ constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
 
 ngOnInit() {
 
-	// console.log('[UI] CellComponent::ngOnInit()');
+	//console.debug('[UI] CellComponent::ngOnInit()');
 	this.canBeDeleted = this.cell.canBeDeleted();
 	this.canBeModified = this.cell.canBeModified();
 
@@ -79,6 +75,16 @@ ngOnInit() {
 				console.log('-> cell comp gets dropcell event moving '+dc.cell.name+' to '
 							+this.cell.URI+' at position ('+dc.newPosition+')');
 				this.adoptCellAtPosition(dc.cell, dc.newPosition);
+			})
+	);
+	this.register(this.events.service.of<CellDropEvent>(CellDropEvent)
+			.pipe(filter(dc =>dc.cell && dc.cell===this.cell && this.canBeModified))
+			.subscribe( dc => {
+								if (dc.cellActive) {
+									this.becomeActive(dc.cell);
+								} else {
+									this.becomeInactive(dc.cell);
+								}
 			})
 	);
 
@@ -100,20 +106,41 @@ ngOnInit() {
 	this.register(this.events.service.of<CellActivateEvent>(CellActivateEvent)
 			.pipe(filter(() => this.selected && this.canBeActivated()))
 			.subscribe(() => {
-				console.log('-> cell comp gets cell activate event and proceeds to focus :)');
+				//console.debug('-> cell comp gets cell activate event and proceeds to focus :)');
 				// FIXMWE: this allows for multiple activations when conflicting with rollover
 				this.focusOn(this.cell);
 			})
 	);
 
-	// a different cell was activated and we are active at this moment
+	// a different cell was activated, we deactivate if active, stop mouseenter and mouseleave events
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
-			.pipe(filter(a => this.active && a.cell!==this.cell))
-			.subscribe(() => {
-				console.log('-> cell comp gets cell activated event from other cell, we were active, clear');
-				this.becomeInactive(this.cell);
+			.subscribe(a => {
+				if (a.cell && a.cell!==this.cell) {		// a cell has activated and it's not this one //
+
+					if (this.active) {					// if we were active then, we deactivate
+						this.becomeInactive(this.cell);
+					}
+					this.acceptMouseEvents = false;		// no mouse events accepted, only for the active cell somewhere
+
+				} else if (a.cell===undefined) {		// no cell is activated, probably drag outside accepted areas //
+					this.acceptMouseEvents = true;		// now mouse events are accepted everywhere
+					if (this.active) {					// but if we were active, we also need to deactivate
+						this.becomeInactive(this.cell);
+					}
+
+				}
 			})
 	);
+	// a different cell was deactivated, we are now accepting mouseenter amd mouseleave
+	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
+			.subscribe(deactivated => {
+										if (deactivated.cell===this.cell) {
+											this.becomeInactive(deactivated.cell);
+										}
+										this.acceptMouseEvents = true;
+			})
+	);
+
 
 	// external component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.register(this.events.service.of<CellDragEvent>(CellDragEvent)
@@ -144,18 +171,6 @@ ngOnInit() {
 			})
 	);
 
-	this.subscribeToStartDragging();
-	this.register(this.events.service.of<UXEvent>(UXEvent)
-			.pipe(filter(e => e.type===UXEventType.END_DRAG))
-			.subscribe(e => {
-								if (this.dragging) {
-									this.dragging = false;
-								} else {
-									this.whoIsDragging = undefined;
-								}
-			})
-	);
-	
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
 	//this.cdr.markForCheck();
@@ -163,29 +178,14 @@ ngOnInit() {
 }
 
 
-private subscribeToStartDragging() {
-		// we want to know if anyone is dragging so we ignore mouseleave/enter events
-	this.dragSubscription = this.register(this.events.service.of<UXEvent>(UXEvent)
-			.pipe(filter(e => e.type===UXEventType.START_DRAG))
-			.subscribe(e => this.whoIsDragging = e.payload)
-	);
-}
-
-private unsubscribeFromStartDragging() {
-	if (this.dragSubscription) {
-		this.unsubscribe(this.dragSubscription);
-		this.dragSubscription = undefined;
-	}
-}
-
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell: Cell) {
 
-	if (this.whoIsDragging || this.whoIsDragging===this) {
-		console.debug('[UI] CellComponent::focusOn(%i,) - cancel,'+this.dragging, this.position, this.cell.URI);
+	if (!this.acceptMouseEvents) {
+		return;
 	}
 
-	console.debug('[UI] CellComponent::focusOn(%i),'+this.dragging, this.position, this.cell.URI);
+	//console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+')');
 	this.events.service.publish(new CellActivatedEvent(cell));
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -201,12 +201,11 @@ focusOn(cell: Cell) {
 focusOff(cell: Cell) {
 
 
-	if (this.whoIsDragging) {	// someone is dragging, we will ignore until our mouseup or end drag clears
-		console.debug('[UI] CellComponent::focusOff(%i) - cancel,'+this.dragging, this.position, this.cell.URI);
+	if (!this.acceptMouseEvents) {
+		return;
 	}
 
-	console.debug('[UI] CellComponent::focusOff(%i),'+this.dragging, this.position, this.cell.URI);
-	this.becomeInactive(cell);
+	//console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+')');
 	this.events.service.publish(new CellDeactivatedEvent(cell));
 
 	//this.cdr.markForCheck();
@@ -430,39 +429,27 @@ private doubleClick() {
 }
 
 /** we drop here as we are only droppeable if we are active, and that's model validated */
-dropSuccess($event: CdkDragDrop<Cell[]>) {
+dropped($event: CdkDragDrop<Cell[]>) {
 
 	const cell = $event.item.data;
-	const newPosition = $event.currentIndex;
-	const newParent = this.cell;
-	console.log("[UI] CellComponent::dropSuccess("+$event.item.data.name+") -->", newPosition);
+	if ($event.previousIndex!==$event.currentIndex) {	// did we drop it somewhere different than where it was?
+		const newPosition = $event.currentIndex;
+		const newParent = this.cell;
+		console.debug($event);
+		console.log("[UI] CellComponent::dropoped("+$event.item.data.name+") -->", newPosition);
 
-	if (!cell || !newParent || newPosition===undefined || newPosition<0) {
-		console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent, newPosition);
+		if (!cell || !newParent || newPosition===undefined || newPosition<0) {
+			console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent, newPosition);
+		}
+
+		const droppedCellActive = $event.isPointerOverContainer;
+		this.events.service.publish(new CellDropEvent(cell, newParent, newPosition, droppedCellActive));
+
+	} else if (!$event.isPointerOverContainer) {	// we left it at the same place, releasing outside draggable areas
+		this.events.service.publish(new CellDeactivatedEvent(cell));
+
 	}
-
-	this.events.service.publish(new CellDropEvent(cell, newParent, newPosition));
-	console.debug('-> stop drag');
-	this.events.service.publish(new UXEvent(UXEventType.END_DRAG));	// this will set this.dragging = false
-
 	//this.cdr.markForCheck();
-
-}
-
-mouseDown() {
-
-	console.debug('down -> start drag');
-	this.unsubscribeFromStartDragging();
-	this.events.service.publish(new UXEvent(UXEventType.START_DRAG, this));
-	this.dragging = true;
-
-}
-
-mouseUp() {
-
-	console.debug('up -> stop drag');
-	this.events.service.publish(new UXEvent(UXEventType.END_DRAG));
-	this.dragging = false;
 
 }
 
