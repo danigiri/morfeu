@@ -118,6 +118,11 @@ ngOnInit() {
 				// console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
 	);
 
+	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
+		.pipe(filter( activated => activated.cellModel==undefined && this.selected))	 // no cell model, if selected
+		.subscribe(() => this.becomeActive(false))										// we will activate
+	);
+
 }
 
 
