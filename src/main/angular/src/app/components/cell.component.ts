@@ -187,6 +187,7 @@ focusOn(cell: Cell) {
 
 	//console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+')');
 	this.events.service.publish(new CellActivatedEvent(cell));
+	//TODO: move the become active to event sending only, like we have done with focusoff
 	this.becomeActive(cell);
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
 	// to make that happen we can associate the cell-model.class with the component (view) and just do it
