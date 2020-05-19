@@ -1,12 +1,15 @@
 // DROP - AREA . COMPONENT . TS
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { filter } from 'rxjs/operators';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
 import { CellModel } from '../cell-model.class';
 import { SelectableWidget } from '../selectable-widget.class';
+
+import { CellComponent } from './cell.component';
 
 import { CellActivatedEvent } from '../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
@@ -24,13 +27,14 @@ import { EventService } from '../services/event.service';
 	//changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 			<div	class="drop-area" 
-					[class.drop-area-active]="active && !selected" 
-					[class.drop-area-inactive]="!active"
+					[class.drop-area-active]="active && !selected && !forbidden"
+					[class.drop-area-inactive]="!active && !forbidden"
 					[class.drop-area-selected]="selected"
+					[class.drop-area-forbidden]="forbidden"
 					[class.drop-area-info]="info"
 			><small>{{position}}</small>
 				<small *ngIf="info">
-					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
+					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}, forbidden={{forbidden}}]
 				</small>
 			</div>
 		`,
@@ -42,7 +46,7 @@ import { EventService } from '../services/event.service';
 				.drop-area-active {
 					padding-top: 0px;
 					padding-bottom: 0px;
-					border: 2px dotted #080;
+					border: 2px dotted #0f0;
 					border-radius: 5px;
 					opacity: 0.8;
 				}
@@ -53,6 +57,13 @@ import { EventService } from '../services/event.service';
 					padding-top: 0px;
 					padding-bottom: 0px;
 					border: 2px dashed #00f;
+					border-radius: 5px;
+				}
+				.drop-area-forbidden {
+					padding-top: 0px;
+					padding-bottom: 0px;
+					border: 2px #f00;
+					background-color:red;
 					border-radius: 5px;
 				}
 				.drop-area-info {
@@ -73,7 +84,7 @@ export class DropAreaComponent extends SelectableWidget implements OnInit {
 active = false;
 selected = false;			// are we selected?
 info = false;
-
+forbidden = false;
 
 constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
 	super(eventService);
@@ -87,15 +98,27 @@ ngOnInit() {
 	// we check for null of parent as we're not getting the binding set at the beginning for some reason
 	// IDEA: we could use the function of the drop enabled (gets cell as input) though it's less interactive
 	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
-			.pipe(filter(deactivated => this.matchesCell(deactivated.cell)))
-			.subscribe(() => this.becomeInactive())
+			//.pipe(filter(deactivated => this.matchesCell(deactivated.cell)))
+			.subscribe(deactivated => { 
+										if (this.matchesCell(deactivated.cell)) {
+											this.becomeInactive();
+										} else {
+											this.becomeAllowed();
+										}
+			})
 					//console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
 
 	);
  
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
-			.pipe(filter(activated => this.parent && this.parent.canAdopt(activated.cell)))
-			.subscribe( () => this.becomeActive())
+			//.pipe(filter(activated => this.parent && this.parent.canAdopt(activated.cell)))
+			.subscribe(activated => {
+										if (this.parent && this.parent.canAdopt(activated.cell)) {
+											this.becomeActive()
+										} else {
+											this.becomeForbidden();
+										}
+			})
 					// console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
 	);
 
@@ -104,13 +127,21 @@ ngOnInit() {
 				if (this.matchesCellmodel(d.cellModel)) {
 					//console.log("-> drop comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 					this.becomeInactive();
+				} else {
+					this.becomeAllowed();
 				}
 			})
 	);
 
 	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
-			.pipe(filter(activated => activated.cellModel && this.matchesCellmodel(activated.cellModel)))
-			.subscribe(() => this.becomeActive())
+			.pipe(filter(activated => activated.cellModel!==undefined))	// we only care for defined cell active models
+			.subscribe(activated => {
+										if (this.matchesCellmodel(activated.cellModel)) {
+											this.becomeActive()
+										} else {
+											this.becomeForbidden();
+										}
+			})
 	);
 
 	this.register(this.events.service.of<CellDropEvent>(CellDropEvent)
@@ -162,7 +193,9 @@ subscribeToSelection() {
 
 
 becomeInactive() {
+
 	this.active = false;
+	this.becomeAllowed();
 	//this.cdr.markForCheck();
 }
 
@@ -173,6 +206,14 @@ becomeActive() {
 
 }
 
+becomeForbidden() {
+	this.forbidden = true;
+}
+
+
+becomeAllowed() {
+	this.forbidden = false;
+}
 
 matchesCell(cell: Cell): boolean {
 	return this.parent && this.parent.canAdopt(cell);
@@ -186,26 +227,37 @@ matchesCellmodel(cellModel: CellModel): boolean {
 
 
 /** we drop here as we are only droppeable if we are active, and that's model validated */
-dropSuccess($event: any) {
-	this.performDropHere($event.dragData, this.parent, this.position);
+dropped($event: CdkDragDrop<Cell[]>) {
+
+	const cell = $event.item.data;
+	if ($event.previousIndex!==$event.currentIndex) {	// did we drop it somewhere different than where it was?
+
+		const newPosition = this.position;
+		console.log("[UI] DropAreaComponent::dropped("+cell.name+") -->", newPosition);
+		const droppedCellActive = $event.isPointerOverContainer;
+		this.performDropHere(cell, this.parent, this.position, droppedCellActive);
+
+	} else if (!$event.isPointerOverContainer) {	// we left it at the same place, releasing outside draggable areas
+		this.events.service.publish(new CellDeactivatedEvent(cell));
+
+	}
+
 }
 
-
-performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
+performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number, droppedCellActive: boolean = true) {
 
 	if (!cell || !newParent || !newPosition) {
 		console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
 	}
 
-	console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
-	this.events.service.publish(new CellDropEvent(cell, this.parent, this.position));
+	console.log("[UI] DropAreaComponent::performDropHere("+cell.URI+")");
+	this.events.service.publish(new CellDropEvent(cell, this.parent, this.position, droppedCellActive));
 	// the document is now dirty
 	this.events.service.publish(new UXEvent(UXEventType.DOCUMENT_DIRTY));
 
 	//this.cdr.markForCheck();
 
 }
-
 
 }
 

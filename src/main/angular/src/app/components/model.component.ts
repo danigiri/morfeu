@@ -167,8 +167,8 @@ commandPressedCallback(command: string) {
 		break;
 	case "a":
 		if (this.cellModelSelectingMode) {
-			this.events.service.publish(new CellModelActivatedEvent());	 // will activate the 
-			this.cellModelSelectingMode = false;						   // current selection (if any)
+			this.events.service.publish(new CellModelActivatedEvent());	// will activate the 
+			this.cellModelSelectingMode = false;						// current selection (if any)
 		}
 		break;
 	case "n":

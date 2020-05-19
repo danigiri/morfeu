@@ -75,8 +75,9 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
-			cdkDropList
-			(cdkDropListDropped)="dropped($event)"
+			cdkDropList 
+			(cdkDropListDropped)="dropped($event)" 
+			
 			><!--COL-{{this.cell.columnFieldValue()}}-->
 			<!-- drop area here to add anything at the beginning of the column -->
 			<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
@@ -92,8 +93,9 @@
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
-		<div cdkDrag [cdkDragData]="this.cell">
-			<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
+		<div cdkDrag [cdkDragData]="cell">
+			<img *ngIf="cellPresentationIsIMG()" 
+				id={{cell.URI}} 
 				[class.cell-img]="!active && !activeReadonly && !selected"
 				[class.cell-active]="active"
 				[class.cell-active-readonly]="activeReadonly"
