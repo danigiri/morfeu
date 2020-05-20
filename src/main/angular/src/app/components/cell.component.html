@@ -93,7 +93,16 @@
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
-		<div cdkDrag [cdkDragData]="cell">
+		<!-- 
+		-->
+		<div 
+				cdkDrag [cdkDragData]="cell"
+				(mouseenter)="focusOn()"
+				(mouseleave)="focusOff()"
+				(mousedown)="mouseDown()"
+				(mouseup)="mouseUp()"
+				(dblclick)="doubleClick()"
+		>
 			<img *ngIf="cellPresentationIsIMG()" 
 				id={{cell.URI}} 
 				[class.cell-img]="!active && !activeReadonly && !selected"
@@ -102,9 +111,6 @@
 				[class.cell-selected]="selected"
 				class="cell cell-img-size img-fluid cell-level-{{level}}"
 				src="{{getCellPresentation()}}"
-				(mouseenter)="focusOn(cell)"
-				(mouseleave)="focusOff(cell)"
-				(dblclick)="doubleClick()"
 			/>
 			<img *cdkDragPlaceholder src="{{getCellPresentation()}}" class="img-dnd-placeholder" />
 		</div>
@@ -113,8 +119,8 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
-			(mouseenter)="focusOn(cell)"
-			(mouseleave)="focusOff(cell)"
+			(mouseenter)="focusOn()"
+			(mouseleave)="focusOff()"
 			(dblclick)="doubleClick()"
 		>
 		<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->

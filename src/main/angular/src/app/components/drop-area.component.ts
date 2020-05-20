@@ -1,15 +1,12 @@
 // DROP - AREA . COMPONENT . TS
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { filter } from 'rxjs/operators';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
 import { CellModel } from '../cell-model.class';
 import { SelectableWidget } from '../selectable-widget.class';
-
-import { CellComponent } from './cell.component';
 
 import { CellActivatedEvent } from '../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
@@ -63,7 +60,6 @@ import { EventService } from '../services/event.service';
 					padding-top: 0px;
 					padding-bottom: 0px;
 					border: 2px #f00;
-					background-color:red;
 					border-radius: 5px;
 				}
 				.drop-area-info {
@@ -207,12 +203,12 @@ becomeActive() {
 }
 
 becomeForbidden() {
-	this.forbidden = true;
+	//this.forbidden = true;
 }
 
 
 becomeAllowed() {
-	this.forbidden = false;
+	//this.forbidden = false;
 }
 
 matchesCell(cell: Cell): boolean {
@@ -225,24 +221,6 @@ matchesCellmodel(cellModel: CellModel): boolean {
 	return this.parent && this.parent.canAdopt(cellModel);
 }
 
-
-/** we drop here as we are only droppeable if we are active, and that's model validated */
-dropped($event: CdkDragDrop<Cell[]>) {
-
-	const cell = $event.item.data;
-	if ($event.previousIndex!==$event.currentIndex) {	// did we drop it somewhere different than where it was?
-
-		const newPosition = this.position;
-		console.log("[UI] DropAreaComponent::dropped("+cell.name+") -->", newPosition);
-		const droppedCellActive = $event.isPointerOverContainer;
-		this.performDropHere(cell, this.parent, this.position, droppedCellActive);
-
-	} else if (!$event.isPointerOverContainer) {	// we left it at the same place, releasing outside draggable areas
-		this.events.service.publish(new CellDeactivatedEvent(cell));
-
-	}
-
-}
 
 performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number, droppedCellActive: boolean = true) {
 

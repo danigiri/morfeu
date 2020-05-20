@@ -1,9 +1,8 @@
 // CELL . COMPONENT . TS
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { filter } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -52,6 +51,7 @@ canBeDeleted = true;
 canBeModified = true;
 info = false;
 acceptMouseEvents = true;
+isMouseDown = false;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -77,13 +77,16 @@ ngOnInit() {
 				this.adoptCellAtPosition(dc.cell, dc.newPosition);
 			})
 	);
+
+	// this cell was just dropped, register the mouse as up and continue active if the dragged cell was active
 	this.register(this.events.service.of<CellDropEvent>(CellDropEvent)
 			.pipe(filter(dc =>dc.cell && dc.cell===this.cell && this.canBeModified))
 			.subscribe( dc => {
+								this.isMouseDown = false;
 								if (dc.cellActive) {
-									this.becomeActive(dc.cell);
+									this.becomeActive();
 								} else {
-									this.becomeInactive(dc.cell);
+									this.becomeInactive();
 								}
 			})
 	);
@@ -91,14 +94,14 @@ ngOnInit() {
 	// a cell model was deactivated that is compatible with this cell
 	this.register(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.pipe(filter(d => d.cellModel && this.isCompatibleWith(d.cellModel)))
-			.subscribe(() => this.becomeInactive(this.cell))
+			.subscribe(() => this.becomeInactive())
 				// console.log('-> cell comp gets cellmodel deactivated event for ''+d.cellModel.name+''');
 	);
 
 	// a cell model activated that is compatible with this cell
 	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 			.pipe(filter( a => a.cellModel && this.isCompatibleWith(a.cellModel)))
-			.subscribe(() => this.becomeActive(this.cell))
+			.subscribe(() => this.becomeActive())
 				//console.log('-> cell comp gets cellmodel activated event for ''+a.cellModel.name+'''); 
 	);
 
@@ -108,7 +111,7 @@ ngOnInit() {
 			.subscribe(() => {
 				//console.debug('-> cell comp gets cell activate event and proceeds to focus :)');
 				// FIXMWE: this allows for multiple activations when conflicting with rollover
-				this.focusOn(this.cell);
+				this.focusOn();
 			})
 	);
 
@@ -116,31 +119,31 @@ ngOnInit() {
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
 			.subscribe(a => {
 				if (a.cell && a.cell!==this.cell) {		// a cell has activated and it's not this one //
-
 					if (this.active) {					// if we were active then, we deactivate
-						this.becomeInactive(this.cell);
+						this.becomeInactive();
 					}
 					this.acceptMouseEvents = false;		// no mouse events accepted, only for the active cell somewhere
+					console.debug('--> CellActivated (1)')
 
 				} else if (a.cell===undefined) {		// no cell is activated, probably drag outside accepted areas //
 					this.acceptMouseEvents = true;		// now mouse events are accepted everywhere
 					if (this.active) {					// but if we were active, we also need to deactivate
-						this.becomeInactive(this.cell);
+						this.becomeInactive();
 					}
+					console.debug('--> CellActivated (2)')
 
 				}
 			})
 	);
-	// a different cell was deactivated, we are now accepting mouseenter amd mouseleave
+	// a cell was deactivated (may be us), we are now accepting mouseenter amd mouseleave
 	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
 			.subscribe(deactivated => {
 										if (deactivated.cell===this.cell) {
-											this.becomeInactive(deactivated.cell);
+											this.becomeInactive();
 										}
 										this.acceptMouseEvents = true;
 			})
 	);
-
 
 	// external component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.register(this.events.service.of<CellDragEvent>(CellDragEvent)
@@ -179,47 +182,23 @@ ngOnInit() {
 
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
-focusOn(cell: Cell) {
+focusOn() {
 
-	if (!this.acceptMouseEvents) {
+	if (!this.acceptMouseEvents || this.isMouseDown) {
+		console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+') CANCEL', this.acceptMouseEvents, this.isMouseDown);
 		return;
 	}
 
-	//console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+')');
-	this.events.service.publish(new CellActivatedEvent(cell));
+	console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+')', this.acceptMouseEvents);
+	this.events.service.publish(new CellActivatedEvent(this.cell));
+	console.debug('UI] CellComponent::focusOn() event sent');
 	//TODO: move the become active to event sending only, like we have done with focusoff
-	this.becomeActive(cell);
+	this.becomeActive();
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
 	// to make that happen we can associate the cell-model.class with the component (view) and just do it
 	// without events
 
 	//this.cdr.markForCheck();
-
-}
-
-
-// notify all interested in this type of cell that we do not have the focus any longer, remove highlight
-focusOff(cell: Cell) {
-
-
-	if (!this.acceptMouseEvents) {
-		return;
-	}
-
-	//console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+')');
-	this.events.service.publish(new CellDeactivatedEvent(cell));
-
-	//this.cdr.markForCheck();
-
-}
-
-
-// we drag outside any interesting area, we remove focus
-dragEnd(cell: Cell) {
-
-	console.log('[UI] CellComponent::dragEnd()');
-	// this.isBeingDragged = false;
-	this.focusOff(cell);
 
 }
 
@@ -262,7 +241,7 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 
 
 // UI method to highlight the cell
-becomeActive(cell: Cell) {
+becomeActive() {
 
 	const activate = this.canBeDeleted && this.canBeModified;
 	// console.log('[UI] CellComponent::becomeActive('+cell.URI+')');
@@ -280,7 +259,7 @@ becomeActive(cell: Cell) {
 
 
 // UI method to no longer be highlighted
-becomeInactive(cell: Cell) {
+becomeInactive() {
 
 	// console.log('[UI] CellComponent::becomeInactive('+cell.URI+')');
 	this.active = false;
@@ -311,7 +290,7 @@ select(position: number) {
 
 		// if we were activated we deactivate ourselves and become selectable again
 		if (this.active) {
-			this.becomeInactive(this.cell);
+			this.becomeInactive();
 		}
 
 		// we were waiting for a selection and we've matched the position, so we select ourselves
@@ -368,7 +347,7 @@ subscribeToSelection() {
 }
 
 
-private cellPresentationIsIMG(): boolean {
+cellPresentationIsIMG(): boolean {
 	return this.cell.cellModel.getCellPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
@@ -382,6 +361,62 @@ getCellPresentation() {
 
 	return pres;
 
+}
+
+
+
+/** we drop here as we are only droppeable if we are active, and that's model validated */
+dropped($event: CdkDragDrop<Cell[]>) {
+
+	const cell = $event.item.data;
+	if ($event.previousIndex!==$event.currentIndex) {	// did we drop it somewhere different than where it was?
+		const newPosition = $event.currentIndex;
+		const newParent = this.cell;
+		//console.debug($event);
+		console.log("[UI] CellComponent::dropped("+$event.item.data.name+") -->", newPosition);
+
+		if (!cell || !newParent || newPosition===undefined || newPosition<0) {
+			console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent, newPosition);
+		}
+
+		const droppedCellActive = $event.isPointerOverContainer;
+		this.events.service.publish(new CellDropEvent(cell, newParent, newPosition, droppedCellActive));
+
+	} else if (!$event.isPointerOverContainer) {	// we left it at the same place, releasing outside draggable areas
+		this.events.service.publish(new CellDeactivatedEvent(cell));
+
+	}
+	//this.cdr.markForCheck();
+
+}
+
+
+// notify all interested in this type of cell that we do not have the focus any longer, remove highlight
+// Drag and drop bug, in safari/chrome this is called when dragging and rolling over a different draggable div
+// which is incorrect, as we never lost focus on this div, leading to erratic behaviour
+// (not reproduced in Firefox)
+focusOff() {
+
+	if (!this.acceptMouseEvents || this.isMouseDown) {
+		console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+') CANCEL', this.acceptMouseEvents, this.isMouseDown);
+		return;
+	}
+
+	console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+')', this.acceptMouseEvents, this.isMouseDown);
+	this.events.service.publish(new CellDeactivatedEvent(this.cell));
+
+	//this.cdr.markForCheck();
+
+}
+
+
+mouseDown() {
+	this.isMouseDown = true;
+}
+
+
+mouseUp() {
+	this.isMouseDown = false;
 }
 
 
@@ -426,31 +461,6 @@ private doubleClick() {
 	if (this.isEditable()) {
 		this.events.service.publish(new CellEditEvent(this.cell));
 	}
-
-}
-
-/** we drop here as we are only droppeable if we are active, and that's model validated */
-dropped($event: CdkDragDrop<Cell[]>) {
-
-	const cell = $event.item.data;
-	if ($event.previousIndex!==$event.currentIndex) {	// did we drop it somewhere different than where it was?
-		const newPosition = $event.currentIndex;
-		const newParent = this.cell;
-		console.debug($event);
-		console.log("[UI] CellComponent::dropoped("+$event.item.data.name+") -->", newPosition);
-
-		if (!cell || !newParent || newPosition===undefined || newPosition<0) {
-			console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent, newPosition);
-		}
-
-		const droppedCellActive = $event.isPointerOverContainer;
-		this.events.service.publish(new CellDropEvent(cell, newParent, newPosition, droppedCellActive));
-
-	} else if (!$event.isPointerOverContainer) {	// we left it at the same place, releasing outside draggable areas
-		this.events.service.publish(new CellDeactivatedEvent(cell));
-
-	}
-	//this.cdr.markForCheck();
 
 }
 
