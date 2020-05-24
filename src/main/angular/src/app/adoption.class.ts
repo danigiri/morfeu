@@ -35,7 +35,8 @@ public static isModelCompatible(cell: Cell, newMember: FamilyMember, position: n
 	in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
 */
 public static isNotOurSingleChild(cell: Cell, newMember: FamilyMember): boolean {
-	return cell.children && cell.parent && !(cell.children.length==1 && cell.equals(newMember.getParent()));
+	return cell.children===undefined || 
+			!(cell.children && cell.children.length==1 && cell.equals(newMember.getParent()));
 }
 
 /** we check the allowed count (if we have no children we assume zero so we should be able to add) */
