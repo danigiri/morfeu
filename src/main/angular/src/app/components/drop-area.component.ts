@@ -109,7 +109,7 @@ ngOnInit() {
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
 			//.pipe(filter(activated => this.parent && this.parent.canAdopt(activated.cell)))
 			.subscribe(activated => {
-										if (this.parent && this.parent.canAdopt(activated.cell)) {
+										if (this.parent && this.parent.canAdopt(activated.cell, this.position)) {
 											this.becomeActive()
 										} else {
 											this.becomeForbidden();
@@ -212,13 +212,13 @@ becomeAllowed() {
 }
 
 matchesCell(cell: Cell): boolean {
-	return this.parent && this.parent.canAdopt(cell);
+	return this.parent && this.parent.canAdopt(cell, this.position);
 }
 
 
 matchesCellmodel(cellModel: CellModel): boolean {
 	//console.debug("matching with %s, this.parent="+(this.parent&& true)+",canAdopt="+this.parent && this.parent.canAdopt(cellModel), cellModel.getAdoptionName());
-	return this.parent && this.parent.canAdopt(cellModel);
+	return this.parent && this.parent.canAdopt(cellModel, this.position);
 }
 
 

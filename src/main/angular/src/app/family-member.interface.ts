@@ -21,7 +21,7 @@ getAdoptionURI(): string;
 matches(e:FamilyMember): boolean;
 
 /** can we adopt this new family member? (usually means can have children with given name and adoption uri) */
-canAdopt(newMember:FamilyMember): boolean;
+canAdopt(newMember:FamilyMember, position: number): boolean;
 
 //canRemoveAsChild(cell:Cell):boolean;
 

@@ -263,7 +263,7 @@ matches(e: FamilyMember): boolean {
 }
 
 
-canAdopt(element: FamilyMember): boolean {
+canAdopt(element: FamilyMember, position: number): boolean {
 	return this.children.some(c => c.matches(element));
 }
 
