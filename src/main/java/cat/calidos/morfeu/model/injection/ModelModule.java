@@ -65,6 +65,7 @@ public static Model model(@Named("ModelURI") URI u,
 						1,
 						Optional.empty(),
 						metadata.getCategory(),
+						true,					// root is considered ordered
 						metadata,
 						attributes,
 						schemaSet,

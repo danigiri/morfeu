@@ -22,7 +22,6 @@ import { CatalogueComponent } from './components/catalogue.component';
 import { CollapsibleComponent } from './components/collapsible.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CellModelComponent } from './components/cell-model.component';
-import { CellDataComponent } from './components/cell-data.component';
 import { DebugComponent } from './components/debug/debug.component';
 
 import { MainComponent } from './main.component';
@@ -52,7 +51,6 @@ import { StatusComponent } from './components/status.component';
 					CatalogueComponent,
 					CollapsibleComponent,
 					CellDocumentComponent,
-					CellDataComponent,
 					CellModelComponent,
 					DebugComponent,
 					MainComponent,

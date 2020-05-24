@@ -19,7 +19,7 @@ import com.codeborne.selenide.SelenideElement;
 public class UICellData extends UIWidget<UICellData>{
 
 
-UICellData() {
+public UICellData() {
 	super($(".cell-data"));
 }
 
@@ -46,6 +46,10 @@ public String desc() {
 
 public String URI() {
 	return element.$(".cell-header-uri").text();
+}
+
+public List<String> extraInfo() {
+	return element.$$(".cell-data-extra-info").stream().map(e -> e.text()).collect(Collectors.toList());
 }
 
 

@@ -110,11 +110,9 @@
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:choice>
-		</xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">	<!-- choice here means elements can be in any order -->
+			<xs:element name="row" type="rowCell" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attribute name="text" type="textField" />
 	</xs:complexType>
 
@@ -230,9 +228,9 @@
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:choice>
 				<xs:element name="col" type="colCell" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="number" type="numberField" />
 	</xs:complexType>
 

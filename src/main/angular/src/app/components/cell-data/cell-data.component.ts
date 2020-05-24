@@ -3,15 +3,15 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { filter } from 'rxjs/operators';
 
-import { Cell } from '../cell.class';
-import { CellModel } from '../cell-model.class';
+import { Cell } from '../../cell.class';
+import { CellModel } from '../../cell-model.class';
 
-import { CellActivatedEvent } from '../events/cell-activated.event';
-import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
-import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
-import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
-import { EventListener } from '../events/event-listener.class';
-import { EventService } from '../services/event.service';
+import { CellActivatedEvent } from '../../events/cell-activated.event';
+import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
+import { CellModelActivatedEvent } from '../../events/cell-model-activated.event';
+import { CellModelDeactivatedEvent } from '../../events/cell-model-deactivated.event';
+import { EventListener } from '../../events/event-listener.class';
+import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: "cell-data",
@@ -52,8 +52,21 @@ import { EventService } from '../services/event.service';
 					[isFromModel]="cell==undefined"
 					[index]="i"
 				></attribute-data-info>
-				<li *ngIf="cell!=undefined && remainingAttributes()==1" class="list-group-item"><small><em>[1 attribute not used]</em></small></li>
-				<li *ngIf="cell!=undefined && remainingAttributes()>1" class="list-group-item"><small><em>[{{remainingAttributes()}} attributes not used]</em></small></li>
+				<li *ngIf="cell!=undefined && remainingAttributes()==1"
+					class="list-group-item cell-data-extra-info"
+				>
+					<small><em>[1 attribute not used]</em></small>
+				</li>
+				<li *ngIf="cell!=undefined && remainingAttributes()>1" 
+					class="list-group-item cell-data-extra-info"
+				>
+					<small><em>[{{remainingAttributes()}} attributes not used]</em></small>
+				</li>
+				<li *ngIf="cellModel.areChildrenOrdered" 
+					class="list-group-item cell-data-extra-info"
+				>
+					<small><em>[Children need to be in order]</em></small>
+				</li>
 			</ul>
 		</div>
 				`,
@@ -65,6 +78,7 @@ import { EventService } from '../services/event.service';
 				.cell-data-uri {}
 				.cell-data-source-model {}
 				.cell-data-source-cell {}
+				.cell-data-extra-info {}
 	`]
 })
 

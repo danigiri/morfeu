@@ -1,9 +1,9 @@
 // CELL - EDITOR - TEST . COMPONENT . TS
 
-import { Component, Inject, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { Content, ContentJSON } from '../../content.class';
-import { Model, ModelJSON } from '../../model.class';
+import { Content } from '../../content.class';
+import { Model } from '../../model.class';
 
 import { TestComponent } from '../../test/test-component.class';
 

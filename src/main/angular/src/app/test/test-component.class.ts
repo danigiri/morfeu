@@ -69,11 +69,25 @@ protected createDocument(document: string): CellDocument {
 }
 
 
+protected createContent(content: ContentJSON | string, model?: Model): Content {
+
+	const CONTENT = Object.create(Content.prototype); // to simulate static call 
+
+	let c = CONTENT.fromJSON(content);
+	c.associateFromRoot(model);
+
+	return c;
+}
+
+
 protected createModel(model: string): Model {
 
 	const MODEL = Object.create(Model.prototype); // to simulate static call 
 
-	return MODEL.fromJSON(model);
+	let m = MODEL.fromJSON(model);
+	m.normaliseReferences();
+
+	return m;
 
 }
 

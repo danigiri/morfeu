@@ -55,7 +55,7 @@ protected Object process()
 
 	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).build().uri().get();
-	
+
 	return DaggerModelComponent.builder().identifiedBy(uri).fromFetchable(fetchableURI).build().model().get();
 
 }

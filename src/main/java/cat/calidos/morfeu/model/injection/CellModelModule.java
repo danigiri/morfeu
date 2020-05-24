@@ -152,6 +152,7 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 															Optional<String> defaultValue,
 															Metadata metadata,
 															Provider<Attributes<CellModel>> attributesProvider,
+															Provider<Boolean> areChildrenOrderedProvider,
 															Provider<Composite<CellModel>> childrenProvider,
 															@Named("isReference") boolean isReference,
 															@Named("reference")Provider<CellModel> referenceProvider,
@@ -170,7 +171,7 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 		}
 
 		// Attributes are the same as the reference but may have different metatata, so we use our own provided attribs
-		newComplexCellModel = new ComplexCellModel(u, 
+		newComplexCellModel = new ComplexCellModel(u,
 													name,
 													desc,
 													t,
@@ -189,16 +190,17 @@ public static ComplexCellModel buildComplexCellModelFrom(URI u,
 		// attributes and children. This means that if a child references an already defined CellModel (which could
 		// include this very one), there will be no infinite loops and the child will be created as a reference to this
 		// one we've just created.
-		// This means that the cell model instance is 'mutable', but we mutate it within this small scope
+		// This means that the cell model instance is 'mutable', but we mutate it only within this small scope
 
 		newComplexCellModel = new ComplexCellModel(u,
 													name,
-													desc, 
+													desc,
 													t,
 													minOccurs, 
 													maxOccurs,
 													defaultValue,
 													category,
+													areChildrenOrderedProvider.get().booleanValue(),
 													metadata,
 													EMPTY_ORDERED_MAP,	// empty attribs
 													EMPTY_ORDERED_MAP);	// empty children
@@ -255,6 +257,31 @@ public Optional<String> category(Metadata metadata) {
 }
 
 
+@Provides
+public Boolean areChildrenOrdered(XSElementDecl elem, Type t) {
+
+
+	boolean areChildrenOrdered = false;
+	if (!t.isSimple()) {
+		XSComplexType complexType = elem.getType().asComplexType();
+		XSContentType contentType = complexType.getContentType();
+		if (contentType.asEmpty()==null) {
+		XSParticle particle = contentType.asParticle();
+			if (particle.getTerm().isModelGroup()) {
+
+				// TODO: we need to see what to do when we have more complex groups like unions and stuff 
+				// at the moment we only consider the first level, that is, if we are a sequence of elements or not
+				XSModelGroup typeModelGroup = particle.getTerm().asModelGroup();
+				areChildrenOrdered = typeModelGroup.getCompositor().toString().endsWith("sequence");
+
+			}
+		}
+	}
+
+	return areChildrenOrdered;
+
+}
+
 
 // given the XSD type, we get our own domain type instance
 @Provides
@@ -309,7 +336,7 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 												URI u,
 												Map<String, CellModel> globals,
 												Map<URI, Metadata> globalMetadata) {
-	
+
 	// Magic happens here: 
 	// BASE CASES:
 	//	if we are a simple type we are at a leaf
@@ -334,11 +361,9 @@ public static Composite<CellModel> childrenOf(XSElementDecl elem,
 	while (!termTypes.isEmpty()) {
 		particle = termTypes.removeFirst();
 
-		if (particle.getTerm().isModelGroup()) {
-
-			// FIXME: we need to see what to do when we have more complex groups like unions and stuff 
-			XSModelGroup typeModelGroup = particle.getTerm().asModelGroup();
-			typeModelGroup.iterator().forEachRemaining(m -> termTypes.add(m.asParticle()));
+		if (particle.getTerm().isModelGroup()) {	// we get rid of nestings with xsd:sequence, xsd:choice, or xsd:group
+													// and flatten all of them in a list
+			particle.getTerm().asModelGroup().iterator().forEachRemaining(m -> termTypes.add(m.asParticle()));
 
 		} else {
 

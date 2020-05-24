@@ -45,6 +45,7 @@ constructor(public schema: number,
 			public isSimple: boolean, 
 			public type_: CellType,
 			public minOccurs: number,
+			public areChildrenOrdered?: boolean,
 			public readonly?: boolean,
 			public isAttribute?: boolean,
 			public maxOccurs?: number,
@@ -429,6 +430,7 @@ isSimple: boolean;
 isReference: boolean;
 type_: CellType;
 minOccurs: number;
+areChildrenOrdered?: boolean;
 readonly?: boolean;
 maxOccurs?: number;
 isAttribute?: boolean;
