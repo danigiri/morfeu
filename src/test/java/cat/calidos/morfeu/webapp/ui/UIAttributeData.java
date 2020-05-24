@@ -40,7 +40,7 @@ public UIAttributeData(SelenideElement element, UICellData parent) {
 /** @return the normalised name, without any UI embellishments or clarifications */
 public String name() {
 
-	String name = name_();
+	String name = name_().trim();											// get rid of spaces
 	name = name.endsWith(":") ? name.substring(0, name.length()-1) : name;	// the UI has a colon after the name
 	name = name.endsWith("*") ? name.substring(0, name.length()-1) : name;	// if the attribute is mandatory
 
