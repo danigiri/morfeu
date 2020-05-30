@@ -20,8 +20,8 @@ public static canBeModified(cell: Cell): boolean {
 }
 
 
-public static isModelCompatible(cell: Cell, newMember: FamilyMember, position: number): boolean {
-	return cell.cellModel.canAdopt(newMember, position);
+public static isModelCompatible(cell: Cell, newMember: FamilyMember): boolean {
+	return cell.cellModel.canAdopt(newMember);
 }
 
 
@@ -38,6 +38,7 @@ public static isNotOurSingleChild(cell: Cell, newMember: FamilyMember): boolean 
 	return cell.children===undefined || 
 			!(cell.children && cell.children.length==1 && cell.equals(newMember.getParent()));
 }
+
 
 /** we check the allowed count (if we have no children we assume zero so we should be able to add) */
 public static weHaveRoomForOneMore(cell: Cell, newMember: FamilyMember): boolean {

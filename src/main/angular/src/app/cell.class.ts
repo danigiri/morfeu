@@ -470,7 +470,7 @@ matches(e: FamilyMember): boolean {
 canAdopt(newMember: FamilyMember, position: number): boolean {
 	return (Adoption.hasCellModel(this) &&
 			Adoption.canBeModified(this) &&
-			Adoption.isModelCompatible(this, newMember, position) && // we check the model compatibility first
+			Adoption.isModelCompatible(this, newMember) && // we check the model 
 			Adoption.isNotOurSingleChild(this, newMember) &&
 			Adoption.weHaveRoomForOneMore(this, newMember) &&
 			Adoption.itsTheRightPosition(this, newMember, position));

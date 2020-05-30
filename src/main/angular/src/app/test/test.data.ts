@@ -1,8 +1,307 @@
 export const _typesPrefix = 'target/test-classes/test-resources/documents/types.xml';
 export const _readonlyPrefix = 'target/test-classes/test-resources/documents/readonly.xml';
-
+export const _document1Prefix = 'target/test-classes/test-resources/documents/document1.xml';
+export const _document3Prefix = 'target/test-classes/test-resources/documents/document3.xml';
 //wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
 
+
+export const _content1 = {
+	"schema": 0,
+	"URI": "target/test-classes/test-resources/documents/document1.xml",
+	"name": "",
+	"desc": "",
+	"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd",
+	"isSimple": false,
+	"attributes": [],
+	"internalAttributes": [],
+	"children": [
+		{
+			"schema": 0,
+			"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)",
+			"name": "test",
+			"desc": "",
+			"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
+			"isSimple": false,
+			"attributes": [],
+			"internalAttributes": [
+				{
+					"schema": 0,
+					"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)@xmlns:xsi",
+					"name": "xmlns:xsi",
+					"desc": "",
+					"value": "http://www.w3.org/2001/XMLSchema-instance",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
+					"isSimple": true
+				},
+				{
+					"schema": 0,
+					"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)@xsi:noNamespaceSchemaLocation",
+					"name": "xsi:noNamespaceSchemaLocation",
+					"desc": "",
+					"value": "../models/test-model.xsd",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
+					"isSimple": true
+				}
+			],
+			"children": [
+				{
+					"schema": 0,
+					"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)",
+					"name": "row",
+					"desc": "",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row",
+					"isSimple": false,
+					"attributes": [],
+					"internalAttributes": [],
+					"children": [
+						{
+							"schema": 0,
+							"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)",
+							"name": "col",
+							"desc": "",
+							"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+							"isSimple": false,
+							"attributes": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)@size",
+									"name": "size",
+									"desc": "",
+									"value": "4",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+									"isSimple": true
+								}
+							],
+							"internalAttributes": [],
+							"children": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)",
+									"name": "data",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)@number",
+											"name": "number",
+											"desc": "",
+											"value": "42",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data@number",
+											"isSimple": true
+										},
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)@text",
+											"name": "text",
+											"desc": "",
+											"value": "blahblah",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data@text",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								}
+							]
+						},
+						{
+							"schema": 0,
+							"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)",
+							"name": "col",
+							"desc": "",
+							"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+							"isSimple": false,
+							"attributes": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)@size",
+									"name": "size",
+									"desc": "",
+									"value": "8",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+									"isSimple": true
+								}
+							],
+							"internalAttributes": [],
+							"children": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)",
+									"name": "row",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/row",
+									"isSimple": false,
+									"attributes": [],
+									"internalAttributes": [],
+									"children": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)",
+											"name": "col",
+											"desc": "",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+											"isSimple": false,
+											"attributes": [
+												{
+													"schema": 0,
+													"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)@size",
+													"name": "size",
+													"desc": "",
+													"value": "6",
+													"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+													"isSimple": true
+												}
+											],
+											"internalAttributes": [],
+											"children": [
+												{
+													"schema": 0,
+													"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data(0)",
+													"name": "data",
+													"desc": "",
+													"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data",
+													"isSimple": false,
+													"attributes": [
+														{
+															"schema": 0,
+															"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data(0)@number",
+															"name": "number",
+															"desc": "",
+															"value": "42",
+															"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data@number",
+															"isSimple": true
+														}
+													],
+													"internalAttributes": [],
+													"children": []
+												},
+												{
+													"schema": 0,
+													"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data2(1)",
+													"name": "data2",
+													"desc": "",
+													"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2",
+													"isSimple": false,
+													"attributes": [
+														{
+															"schema": 0,
+															"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data2(1)@number",
+															"name": "number",
+															"desc": "",
+															"value": "42",
+															"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@number",
+															"isSimple": true
+														},
+														{
+															"schema": 0,
+															"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data2(1)@text",
+															"name": "text",
+															"desc": "",
+															"value": "blahblah",
+															"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@text",
+															"isSimple": true
+														}
+													],
+													"internalAttributes": [],
+													"children": []
+												}
+											]
+										},
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)",
+											"name": "col",
+											"desc": "",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+											"isSimple": false,
+											"attributes": [
+												{
+													"schema": 0,
+													"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)@size",
+													"name": "size",
+													"desc": "",
+													"value": "6",
+													"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+													"isSimple": true
+												}
+											],
+											"internalAttributes": [],
+											"children": [
+												{
+													"schema": 0,
+													"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(0)",
+													"name": "data2",
+													"desc": "",
+													"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2",
+													"isSimple": false,
+													"attributes": [
+														{
+															"schema": 0,
+															"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(0)@number",
+															"name": "number",
+															"desc": "",
+															"value": "42",
+															"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@number",
+															"isSimple": true
+														},
+														{
+															"schema": 0,
+															"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(0)@text",
+															"name": "text",
+															"desc": "",
+															"value": "blahblah",
+															"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@text",
+															"isSimple": true
+														}
+													],
+													"internalAttributes": [],
+													"children": []
+												},
+												{
+													"schema": 0,
+													"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)",
+													"name": "data2",
+													"desc": "",
+													"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2",
+													"isSimple": false,
+													"attributes": [
+														{
+															"schema": 0,
+															"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)@number",
+															"name": "number",
+															"desc": "",
+															"value": "42",
+															"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@number",
+															"isSimple": true
+														},
+														{
+															"schema": 0,
+															"URI": "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)@text",
+															"name": "text",
+															"desc": "",
+															"value": "blahblah",
+															"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/data2@text",
+															"isSimple": true
+														}
+													],
+													"internalAttributes": [],
+													"children": []
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
+;
 
 export const _document3Document = `
 {
