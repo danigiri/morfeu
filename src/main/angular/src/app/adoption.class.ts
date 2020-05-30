@@ -57,18 +57,36 @@ public static weHaveRoomForOneMore(cell: Cell, newMember: FamilyMember): boolean
 	return true;
 }
 
-/**	we check if we have more than one element but we are in the same droppable parent which means
-	that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
-	<col>
-		[drop area 0]
-		<thingie/>
-		[drop area 1]  // TODO: if we want to move the first thingie, areas 0 and 1 are not needed :)
-		<thingie/>
-		[drop area 2]
-	</col>
- */
-public static itsTheRightPosition(cell: Cell, newMember: FamilyMember, position: number): boolean {
-	return cell.children!==undefined && cell.parent!==undefined;
+
+public static itsTheRightOrder(cell: Cell, newMember: FamilyMember, position: number): boolean {
+
+	let ok = false;
+
+	const childrenCount = cell.childrenCount();
+	const model = cell.cellModel;
+	if (childrenCount>0 && model.children!==undefined && model.areChildrenOrdered) {
+
+		if (childrenCount===position) {	//  we are at the end and the last children model matches with the new member
+			ok = model.children[model.childrenCount()-1].matches(newMember);
+		} else if (position===0) { 		// if we are moving to the beginning check if first children model matches
+			ok = model.children[0].matches(newMember);
+		} else if (cell.children[position].matches(newMember)) {	// add to list of same model cells
+			ok = cell.children[position].URI!==newMember.getURI();	// no-op move
+		} else {
+			const index = model.children.findIndex(cm => cm.matches(newMember));
+			const nextCellModel = index+1<model.childrenCount() ? model.children[index+1] : undefined;
+			if (nextCellModel===undefined) {
+				console.error('next cell model should never be undefined');
+			}
+			ok = nextCellModel.matches(cell.children[position]);
+		}
+
+
+	} else {
+		ok = true;
+	}
+
+	return ok;	
 }
 
 
