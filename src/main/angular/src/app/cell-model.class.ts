@@ -27,6 +27,7 @@ attributes?: CellModel[];
 children: CellModel[];
 isReference: boolean;
 referenceURI?: string;
+order?: number;		// only relevant if our parent has ordered children
 
 // //// COMPONENT STUFF										////
 // to circumvent limitations of the angular tree, we establish a relationship with the cell model component //
@@ -258,6 +259,11 @@ getAdoptionURI(): string {	// we try to work out using a reference (works for mo
 }
 
 
+getAdoptionOrder(): number {
+	return this.order;
+}
+
+
 matches(e: FamilyMember): boolean {
 	return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
@@ -340,6 +346,8 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 		if (json.children) {
 			cellModel = Object.assign(cellModel, 
 									  {children: json.children.map(c => CellModel.fromJSON(c))});
+			//let i = 0;
+			cellModel.children.forEach((c: CellModel, index: number) => c.order = index);
 		} else {
 			cellModel = Object.assign(cellModel, {children: []});  // empty as the Tree class requires it
 		}

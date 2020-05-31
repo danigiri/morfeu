@@ -17,6 +17,9 @@ getAdoptionName(): string;
 /** URI in respect of creating new family members ar adopting ones, in the example '/model/bar' */
 getAdoptionURI(): string;
 
+/** if adoption is done in order, this will be the order of this kind (model) of family members, or undefined */
+getAdoptionOrder(): number;
+
 /** are we the same? (used to highlight siblings), to cells of equal name and model, match */
 matches(e:FamilyMember): boolean;
 

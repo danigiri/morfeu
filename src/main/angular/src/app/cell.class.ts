@@ -461,6 +461,11 @@ getAdoptionURI(): string {
 }
 
 
+getAdoptionOrder(): number {
+	return this.cellModel.order;
+}
+
+
 matches(e: FamilyMember): boolean {
 	return this.getAdoptionName()===e.getAdoptionName() && this.getAdoptionURI()===e.getAdoptionURI();
 }
@@ -468,12 +473,14 @@ matches(e: FamilyMember): boolean {
 
 // FIXME: need to check that we are not moving the same cell around in the same col (for instance change order)
 canAdopt(newMember: FamilyMember, position: number): boolean {
-	return (Adoption.hasCellModel(this) &&
+	return Adoption.hasCellModel(this) &&
 			Adoption.canBeModified(this) &&
 			Adoption.isModelCompatible(this, newMember) && // we check the model 
-			Adoption.isNotOurSingleChild(this, newMember) &&
 			Adoption.weHaveRoomForOneMore(this, newMember) &&
-			Adoption.itsTheRightPosition(this, newMember, position));
+			(position===undefined || 
+				(Adoption.isNotAdjacentPosition(this, newMember, position) &&
+				Adoption.itsTheRightOrder(this, newMember, position))
+			);
 }
 
 
