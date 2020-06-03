@@ -123,14 +123,14 @@ ngOnInit() {
 						this.becomeInactive();
 					}
 					this.acceptMouseEvents = false;		// no mouse events accepted, only for the active cell somewhere
-					console.debug('--> CellActivated (1)')
+					//console.debug('--> CellActivated (1)')
 
 				} else if (a.cell===undefined) {		// no cell is activated, probably drag outside accepted areas //
 					this.acceptMouseEvents = true;		// now mouse events are accepted everywhere
 					if (this.active) {					// but if we were active, we also need to deactivate
 						this.becomeInactive();
 					}
-					console.debug('--> CellActivated (2)')
+					//console.debug('--> CellActivated (2)')
 
 				}
 			})
@@ -185,13 +185,13 @@ ngOnInit() {
 focusOn() {
 
 	if (!this.acceptMouseEvents || this.isMouseDown) {
-		console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+') CANCEL', this.acceptMouseEvents, this.isMouseDown);
+		//console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+') CANCEL', this.acceptMouseEvents, this.isMouseDown);
 		return;
 	}
 
-	console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+')', this.acceptMouseEvents);
+	//console.debug('[UI] CellComponent::focusOn('+this.position+','+this.cell.URI+')', this.acceptMouseEvents);
 	this.events.service.publish(new CellActivatedEvent(this.cell));
-	console.debug('UI] CellComponent::focusOn() event sent');
+	//console.debug('UI] CellComponent::focusOn() event sent');
 	//TODO: move the become active to event sending only, like we have done with focusoff
 	this.becomeActive();
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
@@ -209,11 +209,6 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	console.log('[UI] CellComponent::adoptCellAtPosition('+position+')');
 	// deactivate based on old location
 	this.events.service.publish(new CellDeactivatedEvent(newCell));
-	// must be an orphan before adopting
-	if (newCell.parent) {
-		newCell.parent.remove(newCell);
-		newCell.parent = undefined;
-	}
 
 	// if we are adopting a cell that is actually a move and we are moving at the end, 'position' is now 'position--'
 	// (or childrencount) as we have zero based arrays =)
@@ -227,12 +222,18 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	// [position=2] <--/
 	//
 	// As we have removed cell0 temporarily the parent has only one cell, so the actual target position is 1 and not 2
-	// TODO: this may apply to more cases than moving at the end 
+	// FIXME: this may apply to more cases than moving at the end, this code is mostly broken 
 	
 	//if (newCell.parent.getAdoptionURI()===this.cell.getAdoptionURI()) {
 	if (newCell.parent===this.cell && position>this.cell.childrenCount()) {
 		position = this.cell.childrenCount();	// logically equivalent to 'position--;'
 	}
+	// must be an orphan before adopting
+	if (newCell.parent) {
+		newCell.parent.remove(newCell);
+		newCell.parent = undefined;
+	}
+
 	this.cell.adopt(newCell, position);
 
 	//this.cdr.markForCheck();
@@ -365,7 +366,19 @@ getCellPresentation() {
 
 
 
-/** we drop here as we are only droppeable if we are active, and that's model validated */
+/** we drop here as we are only droppeable if we are active, and that's model validated 
+	The position things are dropped into is convoluted and non-intuitive
+	[0]			<-- will have position=0
+	<thingie0/>
+	[1]			<-- will have position=1	// there seems no way to distinguish between this one
+	<thingie0/>
+	[2]			<-- will have position=1	// and this one
+	<thingie0/>
+	[3]			<-- will have position=2
+	<thingie0/>
+	[4]			<-- will have position=4
+
+*/
 dropped($event: CdkDragDrop<Cell[]>) {
 
 	const cell = $event.item.data;
@@ -373,15 +386,18 @@ dropped($event: CdkDragDrop<Cell[]>) {
 		const newPosition = $event.currentIndex;
 		const newParent = this.cell;
 		//console.debug($event);
-		console.log("[UI] CellComponent::dropped("+$event.item.data.name+") -->", newPosition);
 
 		if (!cell || !newParent || newPosition===undefined || newPosition<0) {
 			console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent, newPosition);
 		}
 
+		console.log("[UI] CellComponent::dropped("+$event.item.data.name+") -->", newPosition);
 		const droppedCellActive = $event.isPointerOverContainer;
-		this.events.service.publish(new CellDropEvent(cell, newParent, newPosition, droppedCellActive));
-
+		if (this.cell.canAdopt(cell, newPosition)) {
+			this.events.service.publish(new CellDropEvent(cell, newParent, newPosition, droppedCellActive));
+		} else {
+			// TODO: reverse animation or something
+		}
 	} else if (!$event.isPointerOverContainer) {	// we left it at the same place, releasing outside draggable areas
 		this.events.service.publish(new CellDeactivatedEvent(cell));
 
@@ -398,11 +414,11 @@ dropped($event: CdkDragDrop<Cell[]>) {
 focusOff() {
 
 	if (!this.acceptMouseEvents || this.isMouseDown) {
-		console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+') CANCEL', this.acceptMouseEvents, this.isMouseDown);
+		//console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+') CANCEL', this.acceptMouseEvents, this.isMouseDown);
 		return;
 	}
 
-	console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+')', this.acceptMouseEvents, this.isMouseDown);
+	//console.debug('[UI] CellComponent::focusOff('+this.position+','+this.cell.URI+')', this.acceptMouseEvents, this.isMouseDown);
 	this.events.service.publish(new CellDeactivatedEvent(this.cell));
 
 	//this.cdr.markForCheck();

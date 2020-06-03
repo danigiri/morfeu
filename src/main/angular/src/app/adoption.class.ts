@@ -10,7 +10,6 @@ export class Adoption {
 
 
 public static hasCellModel(cell: Cell): boolean {
-	console.debug("foo")
 	return cell.cellModel!==undefined; // this will be true for the root node, though this can be refactored
 }
 
@@ -62,7 +61,8 @@ public static isNotAdjacentPosition(cell: Cell, newMember: FamilyMember, positio
 	}
 	const child = cell.children.find(c => c.getURI()===newMember.getURI());
 
-	return position!=child.position && position!=child.position+1;
+	//return position!=child.position && position!=child.position+1;	// non inuitive drop position from CDK
+	return true;
 
 }
 

@@ -99,7 +99,6 @@ ngOnInit() {
 										if (this.matchesCell(deactivated.cell)) {
 											this.becomeInactive();
 										} else {
-											this.becomeAllowed();
 										}
 			})
 					//console.log("-> drop-area comp gets cell deactivated event for '"+deactivated.cell.name+"'");
@@ -112,7 +111,6 @@ ngOnInit() {
 										if (this.parent && this.parent.canAdopt(activated.cell, this.position)) {
 											this.becomeActive()
 										} else {
-											this.becomeForbidden();
 										}
 			})
 					// console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
@@ -124,7 +122,6 @@ ngOnInit() {
 					//console.log("-> drop comp gets cellmodel deactivated event for '"+d.cellModel.name+"'");
 					this.becomeInactive();
 				} else {
-					this.becomeAllowed();
 				}
 			})
 	);
@@ -135,7 +132,6 @@ ngOnInit() {
 										if (this.matchesCellmodel(activated.cellModel)) {
 											this.becomeActive()
 										} else {
-											this.becomeForbidden();
 										}
 			})
 	);
@@ -144,7 +140,7 @@ ngOnInit() {
 			.pipe(filter(cd => this.selected && cd.newParent==undefined))
 			.subscribe( cd => {
 				console.log("-> drop comp gets cell drop event from '"+cd.cell.name+"'");
-				this.performDropHere(cd.cell, this.parent, this.position);
+				this.performDropHere(cd.cell, this.parent);
 			})
 	);
 
@@ -191,7 +187,6 @@ subscribeToSelection() {
 becomeInactive() {
 
 	this.active = false;
-	this.becomeAllowed();
 	//this.cdr.markForCheck();
 }
 
@@ -202,14 +197,6 @@ becomeActive() {
 
 }
 
-becomeForbidden() {
-	//this.forbidden = true;
-}
-
-
-becomeAllowed() {
-	//this.forbidden = false;
-}
 
 matchesCell(cell: Cell): boolean {
 	return this.parent && this.parent.canAdopt(cell, this.position);
@@ -222,14 +209,25 @@ matchesCellmodel(cellModel: CellModel): boolean {
 }
 
 
-performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number, droppedCellActive: boolean = true) {
+performDropHere(cell:Cell, newParent: FamilyMember, droppedCellActive: boolean = true) {
 
-	if (!cell || !newParent || !newPosition) {
-		console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
+	if (!cell || !newParent) {
+		console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent);
 	}
 
-	console.log("[UI] DropAreaComponent::performDropHere("+cell.URI+")");
-	this.events.service.publish(new CellDropEvent(cell, this.parent, this.position, droppedCellActive));
+	// except on zero, we have to consider that the position array and the droparea array are not the same
+	// therefore we substract one from the target position
+	// TODO: to be determined if we want to substract from the last one
+	// [0]
+	// <thing(0)/>
+	// [1]
+	// <thing(1)/>
+	// [2]
+	// <thing(2)/>
+	// [3]
+	const newPosition = this.position===0 ? 0 : this.position-1;
+	console.log('[UI] DropAreaComponent::performDropHere(%s, %i)', cell.URI, newPosition);
+	this.events.service.publish(new CellDropEvent(cell, this.parent, newPosition, droppedCellActive));
 	// the document is now dirty
 	this.events.service.publish(new UXEvent(UXEventType.DOCUMENT_DIRTY));
 
