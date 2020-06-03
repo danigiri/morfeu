@@ -62,7 +62,7 @@ public static isNotAdjacentPosition(cell: Cell, newMember: FamilyMember, positio
 	const child = cell.children.find(c => c.getURI()===newMember.getURI());
 
 	//return position!=child.position && position!=child.position+1;	// non inuitive drop position from CDK
-	return true;
+	return true;														// so we cannot really check this reliably
 
 }
 
