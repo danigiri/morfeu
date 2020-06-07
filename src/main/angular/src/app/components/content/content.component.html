@@ -8,11 +8,13 @@
 				<div class="col">
 					<drop-area [parent]="content" [position]="0"></drop-area>
 				</div>
-			</div>
+			</div>G$
 			<cell *ngFor="let cell of content.children; let i=index"
 				[parent]="content" 
-				[cell]="cell" [level]="0" 
+				[cell]="cell" 
+				[level]="0" 
 				[position]="i"
+				[dropList]="dropList"
 			></cell>
 		</ng-container>
 		<ng-container *ngIf="isFragment">
@@ -21,6 +23,7 @@
 				[parent]="content.parent" 
 				[cell]="content" [level]="0" 
 				[position]="0"
+				[dropList]="dropList"
 				[isFragment]="true"
 		></cell>
 		</ng-container>

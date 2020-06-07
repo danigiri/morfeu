@@ -16,6 +16,9 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
+			cdkDropList
+			[cdkDropListConnectedTo]="dropList"
+			(cdkDropListDropped)="dropped($event)" 
 		>
 			<!-- drop area to be able to add new rows to this well -->
 			<div class="row">
@@ -29,6 +32,7 @@
 					[level]="level+1"
 					[position]="i"
 					[snippet]="snippet"
+					[dropList]="dropList"
 			></cell>
 		</div>
 		<!-- TODO: we probable want a drop area here to be able to add new wells -->
@@ -42,8 +46,13 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
-			(mouseenter)="focusOn(cell)"
-			(mouseleave)="focusOff(cell)"
+			cdkDrag 
+			[cdkDragData]="cell"
+			(mouseenter)="focusOn()"
+			(mouseleave)="focusOff()"
+			(mousedown)="mouseDown()"
+			(mouseup)="mouseUp()"
+			(dblclick)="doubleClick()"
 		/>
 		<div id="{{cell.URI}}"
 			class="row-well row show-grid cell-level-{{level}} rounded"
@@ -58,6 +67,7 @@
 						[level]="level+1"
 						[position]="i"
 						[snippet]="snippet"
+						[dropList]="dropList"
 			></cell>
 		</div>
 		<!-- drop area to be able to add new row after this one -->
@@ -76,9 +86,10 @@
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
 			cdkDropList 
+			[cdkDropListConnectedTo]="dropList"
 			(cdkDropListDropped)="dropped($event)" 
-			
-			><!--COL-{{this.cell.columnFieldValue()}}-->
+			>
+			<!--COL-{{this.cell.columnFieldValue()}}-->
 			<!-- drop area here to add anything at the beginning of the column -->
 			<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
 			<cell *ngFor="let c of cell.children; let i=index"
@@ -87,23 +98,22 @@
 					[level]="level+1"
 					[position]="i"
 					[snippet]="snippet"
+					[dropList]="dropList"
 			></cell>
 		</div>
 	</ng-container>
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
-		<!-- TODO: check the model and the content as well (counts, etc.) -->
-		<!-- 
-		-->
-		<div 
-				cdkDrag [cdkDragData]="cell"
+		<div *ngIf="cellPresentationIsIMG()" 
+				cdkDrag 
+				[cdkDragData]="cell"
 				(mouseenter)="focusOn()"
 				(mouseleave)="focusOff()"
 				(mousedown)="mouseDown()"
 				(mouseup)="mouseUp()"
 				(dblclick)="doubleClick()"
 		>
-			<img *ngIf="cellPresentationIsIMG()" 
+			<img
 				id={{cell.URI}} 
 				[class.cell-img]="!active && !activeReadonly && !selected"
 				[class.cell-active]="active"
@@ -119,8 +129,12 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
+			cdkDrag 
+			[cdkDragData]="cell"
 			(mouseenter)="focusOn()"
 			(mouseleave)="focusOff()"
+			(mousedown)="mouseDown()"
+			(mouseup)="mouseUp()"
 			(dblclick)="doubleClick()"
 		>
 		<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->

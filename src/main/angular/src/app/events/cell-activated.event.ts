@@ -11,7 +11,7 @@ constructor(public cell: Cell) {
 
 
 public toString = (): string => {
-	return "CellActivatedEvent:{cell:'"+this.cell.URI+"'}";
+	return "CellActivatedEvent:{cell:'"+this.cell?.URI+"'}";
 }
 
 

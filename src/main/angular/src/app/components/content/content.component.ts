@@ -60,6 +60,7 @@ cellStack: Stack<Cell> = new Stack<Cell>();
 model: Model;
 info = false;
 isFragment = false;
+dropList = [];
 
 protected commandKeys: string[] = ["c", "a", "d", "t", "e", "R", "i", "u"];
 

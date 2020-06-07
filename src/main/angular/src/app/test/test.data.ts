@@ -2,8 +2,18 @@ export const _typesPrefix = 'target/test-classes/test-resources/documents/types.
 export const _readonlyPrefix = 'target/test-classes/test-resources/documents/readonly.xml';
 export const _document1Prefix = 'target/test-classes/test-resources/documents/document1.xml';
 export const _document3Prefix = 'target/test-classes/test-resources/documents/document3.xml';
+export const _document5Prefix = 'target/test-classes/test-resources/documents/document5.xml';
 //wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
 
+export const _document1Document = `
+{
+	"name": "Document 1"
+	,"desc": "First document"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd?not=used"
+	,"contentURI": "target/test-classes/test-resources/documents/document1.xml"
+}
+`;
 
 export const _content1 = {
 	"schema": 0,
@@ -529,6 +539,17 @@ export const _document3 = `
 			} ]
 		} ]
 	} ]
+}
+`;
+
+
+export const _document5Document = `
+{
+	"name": "Document 5"
+	,"desc": "Fifth document - ids"
+	,"kind": "xml"
+	,"modelURI": "target/test-classes/test-resources/models/test-model.xsd"
+	,"contentURI": "target/test-classes/test-resources/documents/document5.xml"
 }
 `;
 

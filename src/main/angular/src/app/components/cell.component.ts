@@ -1,6 +1,7 @@
 // CELL . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, OnDestroy, QueryList, ViewChild, 
+			ViewChildren } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { filter } from 'rxjs/operators';
 
@@ -43,6 +44,8 @@ private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues 
 @Input() isFragment?: boolean;
 @Input() level: number;
 @Input() position: number;
+@Input() dropList: string[];
+@Input() path: string;
 
 active = false;
 activeReadonly = false;
@@ -63,6 +66,8 @@ constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
 
 
 ngOnInit() {
+
+	this.dropList.push(this.cell.URI);
 
 	//console.debug('[UI] CellComponent::ngOnInit()');
 	this.canBeDeleted = this.cell.canBeDeleted();
@@ -367,7 +372,7 @@ getCellPresentation() {
 
 
 /** we drop here as we are only droppeable if we are active, and that's model validated 
-	The position things are dropped into is convoluted and non-intuitive
+	The position things are dropped intoby CDK is non-intuitive
 	[0]			<-- will have position=0
 	<thingie0/>
 	[1]			<-- will have position=1	// there seems no way to distinguish between this one
@@ -376,27 +381,30 @@ getCellPresentation() {
 	<thingie0/>
 	[3]			<-- will have position=2
 	<thingie0/>
-	[4]			<-- will have position=4
-
+	[4]			<-- will have position=3
+	so it is very challenging to handle this, therefore we artificially modify that position
 */
 dropped($event: CdkDragDrop<Cell[]>) {
 
 	const cell = $event.item.data;
-	if ($event.previousIndex!==$event.currentIndex) {	// did we drop it somewhere different than where it was?
-		const newPosition = $event.currentIndex;
+	//if ($event.previousIndex!==$event.currentIndex && $event.container!==$event.previousContainer) {
+	if ($event.isPointerOverContainer)  {
 		const newParent = this.cell;
+		const childrenCount = this.cell.childrenCount();
+		const newPosition = $event.currentIndex>=childrenCount-1 ? childrenCount : $event.currentIndex;
+		console.log("[UI] CellComponent::dropped("+$event.item.data.name+") -->", newPosition);
 		//console.debug($event);
 
 		if (!cell || !newParent || newPosition===undefined || newPosition<0) {
 			console.error('DropAreaComponent::performDropHere parameter issue ', cell, newParent, newPosition);
 		}
 
-		console.log("[UI] CellComponent::dropped("+$event.item.data.name+") -->", newPosition);
 		const droppedCellActive = $event.isPointerOverContainer;
 		if (this.cell.canAdopt(cell, newPosition)) {
 			this.events.service.publish(new CellDropEvent(cell, newParent, newPosition, droppedCellActive));
 		} else {
-			// TODO: reverse animation or something
+			// we have dropped in a non-authorized area, skip updating the model and therefore the drop will be reversed 
+			this.events.service.publish(new CellDeactivatedEvent(cell));	// reverse means we do not activate
 		}
 	} else if (!$event.isPointerOverContainer) {	// we left it at the same place, releasing outside draggable areas
 		this.events.service.publish(new CellDeactivatedEvent(cell));
@@ -435,6 +443,13 @@ mouseUp() {
 	this.isMouseDown = false;
 }
 
+
+ngOnDestroy() {
+
+	super.ngOnDestroy();
+	this.dropList = this.dropList.filter(e => e!==this.cell.URI);	// this is not effective
+
+}
 
 private isEditable(): boolean {
 	return (this.active || this.activeReadonly)
@@ -479,6 +494,8 @@ private doubleClick() {
 	}
 
 }
+
+
 
 
 }
