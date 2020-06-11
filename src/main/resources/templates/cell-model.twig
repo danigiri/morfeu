@@ -29,6 +29,9 @@
 	{% if cm.maxOccurs.isPresent %}
 		,"maxOccurs": {{cm.maxOccurs.getAsInt}}
 	{% endif %}
+	{% if cm.isComplex %}
+		,"areChildrenOrdered":  {{cm.areChildrenOrdered}}
+	{% endif %}
 	{% if cm.metadata.isReadonly().orElse(false) %}
 		,"readonly": true
 	{% endif %}
@@ -55,4 +58,3 @@
 						{% endfor %}]
 		{% endif %}
 	{% endif %}
-

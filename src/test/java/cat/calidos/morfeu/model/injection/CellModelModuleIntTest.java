@@ -67,6 +67,7 @@ public void testProvideCellModel() throws Exception {
 	assertNotNull(testComplex);
 	assertEquals(1, testComplex.attributes().size());
 	assertEquals(1, testComplex.children().size());
+	assertTrue(testComplex.areChildrenOrdered());
 
 	CellModel textAttribute = testComplex.attributes().attribute("text");		// TEST . TEXT
 	checkAttribute(textAttribute, "text", "textField", modelURI+"/test@text");
@@ -81,6 +82,7 @@ public void testProvideCellModel() throws Exception {
 	assertNotNull(rowComplex);
 	assertEquals(1, rowComplex.attributes().size());
 	assertEquals(1, rowComplex.children().size());
+	assertFalse(rowComplex.areChildrenOrdered());	// all children of rows are cols, no strict need to be ordered
 
 	CellModel numberAttribute = rowComplex.attributes().attribute("number");	// TEST -> ROW . NUMBER
 	checkAttribute(numberAttribute, "number","numberField", modelURI+"/test/row@number");
@@ -98,6 +100,8 @@ public void testProvideCellModel() throws Exception {
 	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
 	int childrenCount = colComplex.children().size();
 	assertEquals("Column should have 9 children, not "+childrenCount, EXPECTED_COL_CHILDREN_COUNT, childrenCount);
+	assertTrue(colComplex.areChildrenOrdered());
+
 
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	String dataDesc = "Globally provided description of 'data'";

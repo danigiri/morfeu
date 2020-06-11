@@ -3,7 +3,10 @@ package cat.calidos.morfeu.proxy;
 import java.net.URI;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.utils.URIUtils;
 import org.mitre.dsmiley.httpproxy.ProxyServlet;
 import org.slf4j.Logger;
@@ -22,7 +25,7 @@ private static final String __PROXY_PREFIX = "__PROXY_PREFIX";
 
 @Override
 protected void initTarget() throws ServletException {
-	
+
 	try {
 		super.initTarget();
 	} catch (Exception e) {
@@ -44,7 +47,7 @@ protected void initTarget() throws ServletException {
 		targetUri = targetUri.substring(0, varStart)+varValue+targetUri.substring(varEnd+1);
 		log.info("** Using {} for proxy target uri", targetUri);
 	}
- 	
+ 
 	try {
 		targetUriObj = new URI(targetUri);
 	} catch (Exception e2) {
@@ -53,6 +56,21 @@ protected void initTarget() throws ServletException {
 	targetHost = URIUtils.extractHost(targetUriObj);
 
 }
+
+
+/*
+@Override
+protected void copyResponseHeaders(HttpResponse proxyResponse, HttpServletRequest servletRequest,
+		HttpServletResponse servletResponse) {
+
+	super.copyResponseHeaders(proxyResponse, servletRequest, servletResponse);
+
+	// to help with preview if needed
+	servletResponse.addHeader("X-Content-Type-Options", "nosniff");
+
+}
+
+*/
 
 
 }

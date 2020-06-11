@@ -24,7 +24,7 @@ public void testColorValidation() {
 
 	// this will display 'target/test-classes/test-resources/documents/document5.xml/test(0)/row(0)/col(0)/data3(0)'
 	// which has the color attribute
-	open(appBaseURL+"test/cell-editor-test/document5");
+	open(appBaseURL+"test/cell-editor/document5");
 	UICellEditor editor = UICellEditor.testInstance();
 	editor.shouldBeVisible();
 	assertFalse(editor.canSave());
@@ -44,7 +44,7 @@ public void testColorValidation() {
 @Test @DisplayName("Categories")
 public void testReadonlyCells() {
 
-	open(appBaseURL+"test/cell-editor-test/categories-all");
+	open(appBaseURL+"test/cell-editor/categories-all");
 	UICellEditor editor = UICellEditor.testInstance();
 	editor.shouldBeVisible();
 	assertFalse(editor.canSave());
@@ -101,4 +101,3 @@ private Optional<UIAttributeData> findAttribute(List<UIAttributeData> attributes
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-

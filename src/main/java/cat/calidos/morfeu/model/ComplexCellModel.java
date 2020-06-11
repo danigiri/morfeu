@@ -24,10 +24,25 @@ import java.util.Optional;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ComplexCellModel extends BasicCellModel {
 
+private boolean areChildrenOrdered;
 private Attributes<CellModel> attributes;
 private Composite<CellModel> children;
 
 
+/** Create a complex cell model from scratch
+*	@param u URL
+*	@param name of the cell model
+*	@param desc short description
+*	@param type associated type
+*	@param minOccurs minimum number of occurrences (0, 1, 2...)
+*	@param maxOccurs max number of occurrences
+*	@param defaultValue
+*	@param category
+*	@param areChildrenOrdered
+*	@param meta
+*	@param attributes
+*	@param children
+*/
 public ComplexCellModel(URI u,
 						String name,
 						String desc,
@@ -36,6 +51,7 @@ public ComplexCellModel(URI u,
 						int maxOccurs,
 						Optional<String> defaultValue,
 						Optional<String> category,
+						boolean areChildrenOrdered,
 						Metadata meta,
 						Attributes<CellModel> attributes,
 						Composite<CellModel> children) {
@@ -43,6 +59,7 @@ public ComplexCellModel(URI u,
 	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, category, meta);
 
 	this.attributes = attributes;
+	this.areChildrenOrdered = areChildrenOrdered;
 	this.children = children;
 	this.isSimple = false;
 
@@ -50,20 +67,21 @@ public ComplexCellModel(URI u,
 
 
 public ComplexCellModel(URI u, 
-						String name, 
-						String desc, 
-						Type type, 
-						int minOccurs, 
+						String name,
+						String desc,
+						Type type,
+						int minOccurs,
 						int maxOccurs,
 						Optional<String> defaultValue,
 						Optional<String> category,
-						Metadata meta, 
+						Metadata meta,
 						Attributes<CellModel> attributes, 
 						ComplexCellModel ref) {
 
 	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, category, meta, ref);
 
-	this.attributes = attributes;		// attributes are the same as the reference, but may have different metadata
+	this.attributes = attributes;	// attributes are the same as the reference, but may have different metadata
+	this.areChildrenOrdered = ref.areChildrenOrdered;
 	this.children = null;			// we will use the ones from the reference to ensure they are the same
 	this.isSimple = false;
 
@@ -82,6 +100,16 @@ public void setAttributes(Attributes<CellModel> attributes) {
 
 public Composite<CellModel> children() {
 	return isReference() ? getReference().get().asComplex().children() : children;
+}
+
+
+public void setChildren(Composite<CellModel> children) {
+	this.children = children;
+}
+
+
+public boolean areChildrenOrdered() {
+	return areChildrenOrdered;
 }
 
 
@@ -124,11 +152,6 @@ public static ComplexCellModel from(CellModel m) {
 		throw new IllegalArgumentException("Tried to extract complex cell model from a simple one ("+m.getName()+"");
 	}
 
-}
-
-
-public void setChildren(Composite<CellModel> children) {
-	this.children = children;
 }
 
 

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';	// new angular 5 http client
 import { NgModule } from '@angular/core';
 
+
 import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -13,6 +14,7 @@ import { AttributeDataEditorComponent } from './attribute-data-editor/attribute-
 import { AttributeDataInfoComponent } from './attribute-data-info/attribute-data-info.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { CellComponent } from './cell.component';
+import { CellDataComponent } from './cell-data/cell-data.component';
 import { CellEditorComponent } from './cell-editor/cell-editor.component';
 import { CellHeaderComponent } from './cell-header.component';
 import { ContentComponent } from './content/content.component';
@@ -44,6 +46,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					AttributeDataInfoComponent,
 					BreadcrumbComponent,
 					CellComponent,
+					CellDataComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
 					ContentComponent,
@@ -58,6 +61,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					AttributeDataInfoComponent,
 					BreadcrumbComponent,
 					CellComponent,
+					CellDataComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
 					ContentComponent,

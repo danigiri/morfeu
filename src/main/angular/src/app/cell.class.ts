@@ -1,6 +1,7 @@
 // CELL . CLASS . TS
 
 import { Adopter } from './adopter.interface';
+import { Adoption } from './adoption.class';
 import { Lifecycle } from './lifecycle.interface';
 import { FamilyMember } from './family-member.interface';
 import { CellModel } from './cell-model.class';
@@ -422,7 +423,7 @@ remove(child: Cell) {
 
 	if (child.cellModel.isAttribute) {
 
-		this.attributes =  this.attributes.filter( a => a.getURI()!==child.getURI());
+		this.attributes =  this.attributes.filter(a => a.getURI()!==child.getURI());
 
 	} else {	// assuming child
 		const position = child.position;
@@ -460,66 +461,26 @@ getAdoptionURI(): string {
 }
 
 
+getAdoptionOrder(): number {
+	return this.cellModel.order;
+}
+
+
 matches(e: FamilyMember): boolean {
 	return this.getAdoptionName()===e.getAdoptionName() && this.getAdoptionURI()===e.getAdoptionURI();
 }
 
 
 // FIXME: need to check that we are not moving the same cell around in the same col (for instance change order)
-canAdopt(newMember: FamilyMember): boolean {
-
-	// we will do all checks one by one and return to optimise speed
-
-	if (!this.cellModel) {	// this will be true for the root node, though this can be refactored to point to the model
-		return false;
-	}
-	if (!this.canBeModified()) {
-		return false;
-	}
-	// we check the model compatibility first
-	if (!this.cellModel.canAdopt(newMember)) {
-		return false;
-	}
-
-	// next we check that if we are a lone cell in a droppable parent, we cannot drop to end up in the same
-	// place, example:
-	//	<col>
-	//		[drop area 0]
-	//		<thingie/>
-	//		[drop area 1]
-	//	</col>
-	// in this case, <thingie/> does not make sense to activate drop areas 0 and 1 as cell ends up the same
-	if (this.children && this.children.length==1 && this.parent && this.equals(newMember.getParent())) {
-		return false;
-	}
-
-	// next, we check if we have more than one element but we are in the same droppable parent which means
-	// that we can actually reorder stuff around, as we will not be modifying counts, then we allow drops
-	//	<col>
-	//		[drop area 0]
-	//		<thingie/>
-	//		[drop area 1]  // TODO: if we want to move the first thingie, areas 0 and 1 are not needed :)
-	//		<thingie/>
-	//		[drop area 2]
-	//	</col>
-	if (this.children && this.parent && this.equals(newMember.getParent())) {
-		return true;
-	}
-
-	// next, we check the allowed count (if we have no children we assume zero so we should be able to add)
-	let matchingChildren: Cell[] = this.children ? this.children.filter(c => c.matches(newMember)) : [];
-	const childCount = matchingChildren.length;
-	if (childCount>0) {
-		// we are not considering the problem of the childcount being less than the minimum
-		//TODO: add check: are we able to remove this cell as child?
-		let matchingCellModel:CellModel = matchingChildren[0].cellModel;
-		if (matchingCellModel.maxOccurs && childCount >= matchingCellModel.maxOccurs) { // notice we use '>=' as we are adding one more
-			return false;
-		}
-	}
-
-	return true;	// apologies for the long method (mostly comments ^^')
-
+canAdopt(newMember: FamilyMember, position: number): boolean {
+	return Adoption.hasCellModel(this) &&
+			Adoption.canBeModified(this) &&
+			Adoption.isModelCompatible(this, newMember) && // we check the model 
+			Adoption.weHaveRoomForOneMore(this, newMember) &&
+			(position===undefined || 
+				(Adoption.isNotAdjacentPosition(this, newMember, position) &&
+				Adoption.itsTheRightOrder(this, newMember, position))
+			);
 }
 
 

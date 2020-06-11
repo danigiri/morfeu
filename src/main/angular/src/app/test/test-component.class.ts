@@ -3,7 +3,7 @@
 import { Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CellDocument, CellDocumentJSON } from '../cell-document.class';
+import { CellDocument } from '../cell-document.class';
 import { Content, ContentJSON } from '../content.class';
 import { Model, ModelJSON } from '../model.class';
 
@@ -60,11 +60,34 @@ protected loadModel(url: string): void {
 }
 
 
+protected createDocument(document: string): CellDocument {
+
+	const DOCUMENT = Object.create(CellDocument.prototype); // to simulate a static call
+
+	return DOCUMENT.fromJSON(document);
+
+}
+
+
+protected createContent(content: ContentJSON | string, model?: Model): Content {
+
+	const CONTENT = Object.create(Content.prototype); // to simulate static call 
+
+	let c = CONTENT.fromJSON(content);
+	c.associateFromRoot(model);
+
+	return c;
+}
+
+
 protected createModel(model: string): Model {
 
 	const MODEL = Object.create(Model.prototype); // to simulate static call 
 
-	return MODEL.fromJSON(model);
+	let m = MODEL.fromJSON(model);
+	m.normaliseReferences();
+
+	return m;
 
 }
 
@@ -82,8 +105,6 @@ protected loaded(model: Model, content: Content): void {}
 
 
 protected loadedModel(model: Model): void {}
-
-
 
 
 }

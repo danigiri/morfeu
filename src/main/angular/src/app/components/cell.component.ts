@@ -187,10 +187,6 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	console.log('[UI] CellComponent::adoptCellAtPosition('+position+')');
 	// deactivate based on old location
 	this.events.service.publish(new CellDeactivatedEvent(newCell));
-	// must be an orphan before adopting
-	if (newCell.parent) {
-		newCell.parent.remove(newCell);
-	}
 
 	// if we are adopting a cell that is actually a move and we are moving at the end, 'position' is now 'position--'
 	// (or childrencount) as we have zero based arrays =)
@@ -205,11 +201,17 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	//
 	// As we have removed cell0 temporarily the parent has only one cell, so the actual target position is 1 and not 2
 	// TODO: this may apply to more cases than moving at the end 
-	
+
 	//if (newCell.parent.getAdoptionURI()===this.cell.getAdoptionURI()) {
 	if (newCell.parent===this.cell && position>this.cell.childrenCount()) {
 		position = this.cell.childrenCount();	// logically equivalent to 'position--;'
 	}
+
+	// must be an orphan before adopting
+	if (newCell.parent) {
+		newCell.parent.remove(newCell);
+	}
+
 	this.cell.adopt(newCell, position);
 
 	//this.cdr.markForCheck();

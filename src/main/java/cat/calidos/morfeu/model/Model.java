@@ -4,7 +4,6 @@ package cat.calidos.morfeu.model;
 
 import java.net.URI;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import com.sun.xml.xsom.XSComplexType;
@@ -23,17 +22,18 @@ public Model(URI u,
 				String name,
 				String desc,
 				Type type,
-				int minOccurs,
-				int maxOccurs,
+				int min,
+				int max,
 				Optional<String> defaultValue,
 				Optional<String> category,
+				boolean areChildrenOrdered,
 				Metadata meta,
 				Attributes<CellModel> attributes,
 				XSSchemaSet s,
 				Composite<CellModel> children) {
 
 	// TODO: fetch description from annotation
-	super(u, name, desc, type, minOccurs, maxOccurs, defaultValue, category, meta,  attributes, children);
+	super(u, name, desc, type, min, max, defaultValue, category, areChildrenOrdered, meta,  attributes, children);
 
 	this.schema = s;
 

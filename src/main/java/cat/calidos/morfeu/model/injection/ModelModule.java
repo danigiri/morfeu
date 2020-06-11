@@ -65,6 +65,7 @@ public static Model model(@Named("ModelURI") URI u,
 						1,
 						Optional.empty(),
 						metadata.getCategory(),
+						true,					// root is considered ordered
 						metadata,
 						attributes,
 						schemaSet,
@@ -195,4 +196,3 @@ private static CellModel buildCellModel(XSElementDecl elem,
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
