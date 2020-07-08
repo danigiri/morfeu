@@ -1,7 +1,9 @@
 // CELL . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { filter } from 'rxjs/operators';
+
+import * as InteractJS from 'interactjs/dist/interact.js';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -54,7 +56,7 @@ info = false;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
 
 
-constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
+constructor(eventService: EventService, private element: ElementRef, private cdr: ChangeDetectorRef) {
 	super(eventService);
 }
 
@@ -143,6 +145,43 @@ ngOnInit() {
 
 }
 
+
+ngAfterViewInit() {
+	if (this.cell.cellModel.presentation.startsWith('CELL')) {
+		InteractJS(this.element.nativeElement.children[0]).draggable({
+	    // enable inertial throwing
+	    inertia: true,
+	    // keep the element within the area of it's parent
+	
+	    // enable autoScroll
+	    autoScroll: true,
+	
+	    listeners: {
+	      // call this function on every dragmove event
+	      move: this.dragMoveListener
+	    }
+	  });
+
+
+	}
+}
+
+
+dragMoveListener (event) {
+  var target = event.target
+  // keep the dragged position in the data-x/data-y attributes
+  var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+  // translate the element
+  target.style.webkitTransform =
+    target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)'
+
+  // update the posiion attributes
+  target.setAttribute('data-x', x)
+  target.setAttribute('data-y', y)
+}
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell: Cell) {

@@ -28,10 +28,13 @@ import { UXEvent } from '../events/ux.event';
 					[class.drop-area-inactive]="!active"
 					[class.drop-area-selected]="selected"
 					[class.drop-area-info]="info"
+			>
+			<!--
 					dnd-droppable
 					[dropEnabled]="active"
 					 (onDropSuccess)="dropSuccess($event)"
-			><small>{{position}}</small>
+			-->
+			<small>{{position}}</small>
 				<small *ngIf="info">
 					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
 				</small>
