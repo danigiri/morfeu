@@ -79,7 +79,7 @@
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
 		<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
 		<div id="{{cell.URI}}"
-			class="col-well col show-grid cell-level-{{level}} rounded"
+			class="col-well col show-grid cell-level-{{level}} rounded container"
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
@@ -98,21 +98,25 @@
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
+		<div class="dropzone draggable-dropzone--occupied">
 		<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
 			[class.cell-img]="!active && !activeReadonly && !selected"
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
-			class="cell cell-img-size img-fluid cell-level-{{level}}"
+			class="cell cell-img-size img-fluid cell-level-{{level}} draggable-source"
 			src="{{getCellPresentation()}}"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
+			(dblclick)="doubleClick()"
+		/>
+		</div>
+<!--		
 			dnd-draggable
 			[dragEnabled]="dragEnabled"
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
-			(dblclick)="doubleClick()"
-		/>
+-->
 		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
 			class="cell cell-img-size cell-level-{{level}}"
 			[class.cell-active]="active"
@@ -120,12 +124,14 @@
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn(cell)"
 			(mouseleave)="focusOff(cell)"
+			(dblclick)="doubleClick()"
+		>
+<!-- 
 			dnd-draggable
 			[dragEnabled]="dragEnabled"
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
-			(dblclick)="doubleClick()"
-		>
+ -->
 		<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->
 			<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
 			<presentation *ngIf="!cellPresentationIsIMG()" [cell]="cell" ></presentation>

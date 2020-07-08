@@ -1,19 +1,24 @@
 // CELL . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, AfterViewInit, QueryList, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { filter } from 'rxjs/operators';
+
+import { Droppable  } from '@shopify/draggable';
+import { Draggable } from '@shopify/draggable';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
 import { CellModel } from '../cell-model.class';
 
-import {DropAreaComponent } from './drop-area.component';
-import {SelectableWidget } from '../selectable-widget.class';
+import { DropAreaComponent } from './drop-area.component';
+import { SelectableWidget } from '../selectable-widget.class';
 
 import { CellActivateEvent } from '../events/cell-activate.event';
 import { CellActivatedEvent } from '../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
 import { CellDragEvent } from '../events/cell-drag.event';
+import { CellDraggingEvent } from '../events/cell-dragging.event';
 import { CellDropEvent } from '../events/cell-drop.event';
 import { CellEditEvent } from '../events/cell-edit.event';
 import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
@@ -49,12 +54,17 @@ dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
 info = false;
+canFocus = true;
+
+droppable: Droppable;
+draggable: Draggable;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
-@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
+@ViewChild(DropAreaComponent) dropArea: DropAreaComponent;						// we only have one of those!!!
+//@ViewChild(DropAreaComponent) dropAreaElement:QueryList<DropAreaComponent>;	// we only have one of those!!!
 
 
-constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
+constructor(eventService: EventService, private cdr: ChangeDetectorRef, public element: ElementRef) {
 	super(eventService);
 }
 
@@ -140,6 +150,64 @@ ngOnInit() {
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
 	//this.cdr.markForCheck();
+	
+	this.register(this.events.service.of<CellDraggingEvent>(CellDraggingEvent)
+			.subscribe((dragging) =>{
+								if (dragging.status === CellDraggingEvent.STARTED) {
+									this.canFocus = false;
+								}	 else {
+									this.canFocus = true;
+								}
+			})
+	);
+
+
+}
+
+
+
+ngAfterViewInit () {
+
+	if (this.cell.cellModel.presentation === 'COL-WELL') {
+		let childrenElements = this.children.map(c => c.element.nativeElement);
+		//if (this.dropArea.length>0) {
+			childrenElements.push(this.dropArea.element.nativeElement);
+		//}
+	/*	this.droppable = new Droppable(childrenElements, { //classes: {'source:dragging' : '.cell-is-dragging'},
+			mirror: {constrainDimensions: true},
+			draggable: '.draggable-source',
+			//dropzone: '.drop-area'
+		 });
+		this.droppable.on('drag:start', (event) => {
+			console.debug('START', event);
+			this.events.service.publish(new CellDraggingEvent(CellDraggingEvent.STARTED));
+		});
+		this.droppable.on('droppable:dropped', (event) => {
+			console.debug('STOP', event);
+			this.events.service.publish(new CellDraggingEvent(CellDraggingEvent.FINISHED));
+		});
+	}*/
+		console.debug('children', childrenElements);
+		this.draggable = new Droppable(childrenElements, { //classes: {'source:dragging' : '.cell-is-dragging'},
+			mirror: {constrainDimensions: true},
+			draggable: '.draggable-source',
+			dropzone: '.dropzone'
+		 });
+		this.draggable.on('drag:start', (event) => {
+			console.debug('START', event);
+			this.events.service.publish(new CellDraggingEvent(CellDraggingEvent.STARTED));
+		});
+		this.draggable.on('droppable:dropped', (event) => {
+			console.debug('DROPPED', event);
+		});
+		this.draggable.on('droppable:returned', (event) => {
+			console.debug('RETURNED', event);
+		});
+		this.draggable.on('drag:stop', (event) => {
+			console.debug('STOP', event);
+			this.events.service.publish(new CellDraggingEvent(CellDraggingEvent.FINISHED));
+		});
+	}
 
 }
 
@@ -147,9 +215,11 @@ ngOnInit() {
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell: Cell) {
 
-	// console.log('[UI] CellComponent::focusOn()');
-	this.events.service.publish(new CellActivatedEvent(cell));
-	this.becomeActive(cell);
+	if (this.canFocus) {
+		// console.log('[UI] CellComponent::focusOn()');
+		this.events.service.publish(new CellActivatedEvent(cell));
+		this.becomeActive(cell);
+	}
 	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
 	// to make that happen we can associate the cell-model.class with the component (view) and just do it
 	// without events
@@ -162,10 +232,11 @@ focusOn(cell: Cell) {
 // notify all interested in this type of cell that we do not have the focus any longer, remove highlight
 focusOff(cell: Cell) {
 
-	// console.log('[UI] CellComponent::focusOff()');
-	this.becomeInactive(cell);
-	this.events.service.publish(new CellDeactivatedEvent(cell));
-
+	if (this.canFocus) {
+		// console.log('[UI] CellComponent::focusOff()');
+		this.becomeInactive(cell);
+		this.events.service.publish(new CellDeactivatedEvent(cell));
+	}
 	//this.cdr.markForCheck();
 
 }

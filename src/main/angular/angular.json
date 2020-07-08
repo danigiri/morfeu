@@ -25,7 +25,9 @@
 							"node_modules/bootstrap/dist/css/bootstrap.min.css",
 							"src/styles.css"
 						],
-						"scripts": []
+						"scripts": [
+							"node_modules/@shopify/draggable/lib/es5/draggable.bundle.js"
+						]
 					},
 					"configurations": {
 						"production": {

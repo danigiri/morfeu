@@ -1,6 +1,6 @@
 // DROP - AREA . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit} from '@angular/core';
 import { filter } from 'rxjs/operators';
 
 import { FamilyMember } from '../family-member.interface';
@@ -23,15 +23,20 @@ import { UXEvent } from '../events/ux.event';
 	selector: 'drop-area',
 	//changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
-			<div	class="drop-area" 
+			<div	class="drop-area dropzone"
 					[class.drop-area-active]="active && !selected" 
 					[class.drop-area-inactive]="!active"
 					[class.drop-area-selected]="selected"
 					[class.drop-area-info]="info"
+					[class.dropzone]="active"
+			>{{active}}
+<!--
 					dnd-droppable
 					[dropEnabled]="active"
 					 (onDropSuccess)="dropSuccess($event)"
-			><small>{{position}}</small>
+-->			
+			
+			<small>{{position}}</small>
 				<small *ngIf="info">
 					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
 				</small>
@@ -78,7 +83,7 @@ selected = false;			// are we selected?
 info = false;
 
 
-constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
+constructor(eventService: EventService, public element: ElementRef, private cdr: ChangeDetectorRef) {
 	super(eventService);
 }
 

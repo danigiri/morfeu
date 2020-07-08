@@ -1,23 +1,27 @@
 import { MorfeuEvent } from './morfeu-event.class';
 
 
-export class CellDragEvent extends MorfeuEvent {
+export class CellDraggingEvent extends MorfeuEvent {
 
 
-constructor() {
-	super('CellDragEvent');
+public static readonly STARTED = 0;
+public static readonly FINISHED = 1;
+ 
+
+constructor(public status: number) {
+	super('CellDraggingEvent');
 }
 
 
 public toString = (): string => {
-	return "CellDragEvent:{currently active}";
+	return 'CellDraggingEvent:{'+(this.status===CellDraggingEvent.STARTED ? 'STARTED' : 'FINISHED')+'}';
 }
 
 
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2020 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

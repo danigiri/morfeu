@@ -4,7 +4,6 @@ import { Cell } from './cell.class';
 import { CellModel } from './cell-model.class';
 import { FamilyMember } from './family-member.interface';
 
-
 /** logic class to hold adoption logic */
 export class Adoption {
 
