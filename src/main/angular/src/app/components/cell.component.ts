@@ -51,6 +51,7 @@ dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
 info = false;
+listenToMouseEvents = true;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -147,40 +148,41 @@ ngOnInit() {
 
 
 ngAfterViewInit() {
+
+	const c = this.cell;
 	if (this.cell.cellModel.presentation.startsWith('CELL')) {
 		InteractJS(this.element.nativeElement.children[0]).draggable({
-	    // enable inertial throwing
-	    inertia: true,
-	    // keep the element within the area of it's parent
-	
-	    // enable autoScroll
-	    autoScroll: true,
-	
-	    listeners: {
-	      // call this function on every dragmove event
-	      move: this.dragMoveListener
-	    }
-	  });
-
-
+			inertia: true,
+			autoScroll: true,
+			listeners: {
+				start: function(event) {
+					event.interactable.model = c;
+				},
+				move: this.dragMoveListener,	// call this function on every dragmove event
+				end: function (event) {
+					console.debug('drop end');
+				}
+			}
+		});
 	}
+
 }
 
 
 dragMoveListener (event) {
-  var target = event.target
-  // keep the dragged position in the data-x/data-y attributes
-  var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
 
-  // translate the element
-  target.style.webkitTransform =
-    target.style.transform =
-      'translate(' + x + 'px, ' + y + 'px)'
+	var target = event.target;
+	// keep the dragged position in the data-x/data-y attributes
+	var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+	var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-  // update the posiion attributes
-  target.setAttribute('data-x', x)
-  target.setAttribute('data-y', y)
+	// translate the element
+	target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+	// update the posiion attributes
+	target.setAttribute('data-x', x);
+	target.setAttribute('data-y', y);
+
 }
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it

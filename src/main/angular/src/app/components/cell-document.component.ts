@@ -62,6 +62,7 @@ export class CellDocumentComponent extends EventListener implements OnInit {
 document: CellDocument;
 saveDisabled = true;
 
+
 constructor(eventService: EventService,
 			remoteEventService: RemoteEventService,
 			@Inject("CellDocumentService") private documentService: RemoteObjectService<CellDocument, CellDocumentJSON>
@@ -73,7 +74,7 @@ constructor(eventService: EventService,
 ngOnInit() {
 
 	console.log("DocumentComponent::ngOnInit()");
-
+	
 	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
 		.subscribe(() => {
 			this.clear();

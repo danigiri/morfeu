@@ -1,7 +1,9 @@
 // DROP - AREA . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Component, Input, OnInit} from '@angular/core';
 import { filter } from 'rxjs/operators';
+
+import * as InteractJS from 'interactjs/dist/interact.js';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -81,7 +83,7 @@ selected = false;			// are we selected?
 info = false;
 
 
-constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
+constructor(eventService: EventService, private element: ElementRef, private cdr: ChangeDetectorRef) {
 	super(eventService);
 }
 
@@ -170,12 +172,25 @@ subscribeToSelection() {
 becomeInactive() {
 	this.active = false;
 	//this.cdr.markForCheck();
+	InteractJS(this.element.nativeElement.children[0]).unset();
+
 }
 
 
 becomeActive() {
 	this.active = true;
 	//this.cdr.markForCheck();
+	const t = this;
+	InteractJS(this.element.nativeElement.children[0]).dropzone({
+		// Require a 75% element overlap for a drop to be possible
+		overlap: 0.1,
+		// listen for drop related events:
+		ondrop: function(event) {
+			console.debug(event.draggable.model, t.parent, t.position);
+			event.target.style.webkitTransform = event.target.style.transform =  'translate(0, 0)';
+			t.performDropHere(event.draggable.model, t.parent, t.position);
+		},
+	});
 
 }
 
@@ -191,16 +206,10 @@ matchesCellmodel(cellModel: CellModel): boolean {
 }
 
 
-/** we drop here as we are only droppeable if we are active, and that's model validated */
-dropSuccess($event: any) {
-	this.performDropHere($event.dragData, this.parent, this.position);
-}
-
-
 performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 
 	if (!cell || !newParent || !newPosition) {
-		console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
+		//console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
 	}
 
 	console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
