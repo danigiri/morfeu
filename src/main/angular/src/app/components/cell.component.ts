@@ -154,11 +154,32 @@ ngAfterViewInit() {
 		InteractJS(this.element.nativeElement.children[0]).draggable({
 			inertia: true,
 			autoScroll: true,
+			manualStart: true,
 			listeners: {
-				start: function(event) {
-					event.interactable.model = c;
+				move: function (event)  {
+
+					let interaction = event.interaction;
+
+					if (interaction.pointerIsDown && !interaction.interacting()) {
+						console.debug('START');
+						event.interactable.model = c;
+						const clone = event.currentTarget.cloneNode(true);
+
+						document.body.appendChild(clone);
+
+				      // start a drag interaction targeting the clone
+				      interaction.start({ name: 'drag' }, event.interactable, clone);
+					}
+					const target = event.target;
+					// keep the dragged position in the data-x/data-y attributes
+					const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+					const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+					// translate the element
+					target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+					// update the posiion attributes
+					target.setAttribute('data-x', x);
+					target.setAttribute('data-y', y);
 				},
-				move: this.dragMoveListener,	// call this function on every dragmove event
 				end: function (event) {
 					console.debug('drop end');
 				}
@@ -168,22 +189,6 @@ ngAfterViewInit() {
 
 }
 
-
-dragMoveListener (event) {
-
-	var target = event.target;
-	// keep the dragged position in the data-x/data-y attributes
-	var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-	var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-	// translate the element
-	target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-
-	// update the posiion attributes
-	target.setAttribute('data-x', x);
-	target.setAttribute('data-y', y);
-
-}
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell: Cell) {
