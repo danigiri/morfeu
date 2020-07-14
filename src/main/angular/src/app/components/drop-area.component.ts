@@ -31,11 +31,6 @@ import { UXEvent } from '../events/ux.event';
 					[class.drop-area-selected]="selected"
 					[class.drop-area-info]="info"
 			>
-			<!--
-					dnd-droppable
-					[dropEnabled]="active"
-					 (onDropSuccess)="dropSuccess($event)"
-			-->
 			<small>{{position}}</small>
 				<small *ngIf="info">
 					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
@@ -170,27 +165,27 @@ subscribeToSelection() {
 
 
 becomeInactive() {
+
 	this.active = false;
-	//this.cdr.markForCheck();
 	InteractJS(this.element.nativeElement.children[0]).unset();
+	//this.cdr.markForCheck();
 
 }
 
 
 becomeActive() {
+
 	this.active = true;
-	//this.cdr.markForCheck();
 	const t = this;
 	InteractJS(this.element.nativeElement.children[0]).dropzone({
-		// Require a 75% element overlap for a drop to be possible
 		overlap: 0.1,
-		// listen for drop related events:
 		ondrop: function(event) {
-			console.debug(event.draggable.model.URI, t.parent, t.position);
-			//event.target.style.webkitTransform = event.target.style.transform =  'translate(0, 0)';
+			console.debug('END DRAG DROPAREA');
+			
 			t.performDropHere(event.draggable.model, t.parent, t.position);
 		},
 	});
+	//this.cdr.markForCheck();
 
 }
 

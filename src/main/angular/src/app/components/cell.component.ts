@@ -1,7 +1,7 @@
 // CELL . COMPONENT . TS
 
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { filter } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { debug, filter } from 'rxjs/operators';
 
 import * as InteractJS from 'interactjs/dist/interact.js';
 
@@ -16,6 +16,8 @@ import { CellActivateEvent } from '../events/cell-activate.event';
 import { CellActivatedEvent } from '../events/cell-activated.event';
 import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
 import { CellDragEvent } from '../events/cell-drag.event';
+import { CellDragEndedEvent } from '../events/cell-drag-ended.event';
+import { CellDragStartedEvent } from '../events/cell-drag-started.event';
 import { CellDropEvent } from '../events/cell-drop.event';
 import { CellEditEvent } from '../events/cell-edit.event';
 import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
@@ -98,7 +100,7 @@ ngOnInit() {
 			.subscribe(() => {
 				console.log('-> cell comp gets cell activate event and proceeds to focus :)');
 				// FIXMWE: this allows for multiple activations when conflicting with rollover
-				this.focusOn(this.cell);
+				this.focusOn();
 			})
 	);
 
@@ -140,6 +142,15 @@ ngOnInit() {
 			})
 	);
 
+
+	// we listen for other drags so we do not accept mouseover events
+	this.register(this.events.service.of<CellDragEndedEvent>(CellDragEndedEvent)
+//			.subscribe(() => Promise.resolve(null).then(() => this.listenToMouseEvents = true)));
+			.subscribe(() => this.listenToMouseEvents = true));
+	this.register(this.events.service.of<CellDragStartedEvent>(CellDragStartedEvent)
+			.subscribe(() => this.listenToMouseEvents = false));
+
+
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
 	//this.cdr.markForCheck();
@@ -147,57 +158,20 @@ ngOnInit() {
 }
 
 
-ngAfterViewInit() {
-
-	const c = this.cell;
-	if (this.cell.cellModel.presentation.startsWith('CELL')) {
-		InteractJS(this.element.nativeElement.children[0]).draggable({
-			inertia: true,
-			autoScroll: true,
-			listeners: {
-				start: function(event) {
-					event.interactable.model = c
-				},
-				move: this.dragMoveListener,	// call this function on every dragmove event
-				end: function (event) {
-					console.debug('drop end');
-					const target = event.target;
-					target.style.webkitTransform = target.style.transform = 'translate(0,0)';
-					target.removeAttribute('data-x');
-					target.removeAttribute('data-y');
-				}
-			}
-		});
-	}
-
-}
-
-
-dragMoveListener (event) {
-
-	const target = event.target;
-	// keep the dragged position in the data-x/data-y attributes
-	const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-	const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-	// translate the element
-	target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-
-	// update the posiion attributes
-	target.setAttribute('data-x', x);
-	target.setAttribute('data-y', y);
-
-}
 
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
-focusOn(cell: Cell) {
+focusOn() {
 
-	// console.log('[UI] CellComponent::focusOn()');
-	this.events.service.publish(new CellActivatedEvent(cell));
-	this.becomeActive(cell);
-	// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
-	// to make that happen we can associate the cell-model.class with the component (view) and just do it
-	// without events
+	if (this.listenToMouseEvents) {
+
+		// console.log('[UI] CellComponent::focusOn()');
+		this.events.service.publish(new CellActivatedEvent(this.cell));
+		this.becomeActive(this.cell);
+		// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
+		// to make that happen we can associate the cell-model.class with the component (view) and just do it
+		// without events
+
+	}
 
 	//this.cdr.markForCheck();
 
@@ -205,25 +179,30 @@ focusOn(cell: Cell) {
 
 
 // notify all interested in this type of cell that we do not have the focus any longer, remove highlight
-focusOff(cell: Cell) {
+focusOff() {
 
-	// console.log('[UI] CellComponent::focusOff()');
-	this.becomeInactive(cell);
-	this.events.service.publish(new CellDeactivatedEvent(cell));
+	if (this.listenToMouseEvents) {
+
+		console.log('[UI] CellComponent::focusOff(%s)', this.cell.URI);
+		this.becomeInactive(this.cell);
+		this.events.service.publish(new CellDeactivatedEvent(this.cell));
+
+	}
 
 	//this.cdr.markForCheck();
 
 }
 
-
-// we drag outside any interesting area, we remove focus
-dragEnd(cell: Cell) {
-
-	console.log('[UI] CellComponent::dragEnd()');
-	// this.isBeingDragged = false;
-	this.focusOff(cell);
-
+mouseDown() {
+	console.debug('mouse down');
+	this.listenToMouseEvents = false;
 }
+
+mouseUp() {
+	console.debug('mouse up');
+	this.listenToMouseEvents = true;
+}
+
 
 
 // the drop-area is sending us a cell to adopt
@@ -245,24 +224,20 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	if (position>=this.cell.childrenCount()) {
 		position = this.cell.childrenCount();
 	}
-	
-	// if we move from the same parent, we have to check the position logic
-	// As we have removed cell0 temporarily the parent has only one cell, so the actual target position is 1 and not 2
-
-	//if (newCell.parent.getAdoptionURI()===this.cell.getAdoptionURI()) {
+	// if we move from the same parent, we have to check the position logic, below us, position is unchanged, above us
+	// means that the destination subarray is shifted by -1
 	if (newCell.parent===this.cell) {
-		if (position===newCell.position || position<newCell.position) { // no op
-		} else {														// we are moving
+		if (position===newCell.position || position<newCell.position) { // no op in this case
+		} else {														// we are moving above our current position
 			position--;
 		}
-}
+	}
 
 	// must be an orphan before adopting
 	if (newCell.parent) {
 		newCell.parent.remove(newCell);
 		newCell.parent = undefined;
 	}
-
 	this.cell.adopt(newCell, position);
 
 	//this.cdr.markForCheck();
@@ -278,6 +253,9 @@ becomeActive(cell: Cell) {
 	this.active = activate;
 	this.activeReadonly = !activate;
 	this.dragEnabled = this.canBeModified;	// can only be dragged if it's modifiable'
+	if (this.dragEnabled) {
+		this.enableDrag();
+	}
 	// once we become active, selections are cleared, for instance to select the drag and drop destination
 	this.events.service.publish(new CellSelectionClearEvent());
 
@@ -294,7 +272,10 @@ becomeInactive(cell: Cell) {
 	// console.log('[UI] CellComponent::becomeInactive('+cell.URI+')');
 	this.active = false;
 	this.activeReadonly = false;
-	this.dragEnabled = false;
+	if (this.dragEnabled) {
+		this.dragEnabled = false;
+		this.disableDrag();
+	}
 
 	//this.cdr.markForCheck();
 
@@ -377,7 +358,7 @@ subscribeToSelection() {
 }
 
 
-private cellPresentationIsIMG(): boolean {
+cellPresentationIsIMG(): boolean {
 	return this.cell.cellModel.getCellPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
@@ -412,7 +393,40 @@ private remove() {
 }
 
 
-// data that is being dragged (and potentially dropped)
+
+private enableDrag() {
+
+	const this_ = this;
+	if (this.cell.cellModel.presentation.startsWith('CELL')) {
+		InteractJS(this.element.nativeElement.children[0]).draggable({
+			inertia: false,
+			autoScroll: true,
+			listeners: {
+				start: function(event) {
+					const cell =  this_.cellDragData();
+					event.interactable.model = cell;
+					this_.listenToMouseEvents = false;
+					this_.events.service.publish(new CellDragStartedEvent(cell));
+				},
+				move: this.dragMoveListener,	// call this function on every dragmove event
+				end: function(event) {
+						const target = event.target;
+						console.debug('END DRAG CELL ');
+						target.style.webkitTransform = target.style.transform = 'translate(0,0)';
+						target.removeAttribute('data-x');
+						target.removeAttribute('data-y');
+						this_.listenToMouseEvents = true;
+						this_.events.service.publish(new CellDragEndedEvent(event.interactable.model));
+						//this_.focusOff(this_.cell);
+				}
+			}
+		});
+	}
+
+}
+
+
+// data that is being dragged (and potentially dropped), either from a cell or a snippet
 private cellDragData() {
 
 	let cellDragData: Cell;
@@ -428,6 +442,34 @@ private cellDragData() {
 	return cellDragData;
 
 }
+
+
+private disableDrag() {
+	console.debug('DISABLE DRAG');
+	InteractJS(this.element.nativeElement.children[0]).unset();
+}
+
+
+private dragMoveListener (event) {
+
+	const target = event.target;
+	const datax = 'data-x';
+	const datay = 'data-y';
+
+	// keep the dragged position in the data-x/data-y attributes
+	const x = (parseFloat(target.getAttribute(datax)) || 0) + event.dx;
+	const y = (parseFloat(target.getAttribute(datay)) || 0) + event.dy;
+
+	// translate the element
+	target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+	// update the posiion attributes
+	target.setAttribute(datax, x);
+	target.setAttribute(datay, y);
+
+}
+
+
 
 
 private doubleClick() {
