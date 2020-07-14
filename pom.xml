@@ -166,7 +166,8 @@
 				</dependencies>
 				<configuration>
 					<dumpOnStart>false</dumpOnStart> <!-- set to true for debugging -->
-					<scanIntervalSeconds>1</scanIntervalSeconds>
+					<!--scanIntervalSeconds>0</scanIntervalSeconds-->
+<reload>manual</reload>
 					<stopPort>${jetty-stop-port}</stopPort>
 					<stopKey>STOP</stopKey>
 					<useTestScope>true</useTestScope>

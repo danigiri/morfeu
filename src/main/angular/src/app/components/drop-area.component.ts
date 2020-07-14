@@ -186,8 +186,8 @@ becomeActive() {
 		overlap: 0.1,
 		// listen for drop related events:
 		ondrop: function(event) {
-			console.debug(event.draggable.model, t.parent, t.position);
-			event.target.style.webkitTransform = event.target.style.transform =  'translate(0, 0)';
+			console.debug(event.draggable.model.URI, t.parent, t.position);
+			//event.target.style.webkitTransform = event.target.style.transform =  'translate(0, 0)';
 			t.performDropHere(event.draggable.model, t.parent, t.position);
 		},
 	});
