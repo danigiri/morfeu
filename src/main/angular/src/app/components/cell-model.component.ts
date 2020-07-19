@@ -21,7 +21,7 @@ import { NewCellFromModelEvent } from '../events/new-cell-from-model.event';
 import { EventService } from '../services/event.service';
 
 @Component({
-	selector: "cell-model",
+	selector: 'cell-model',
 	template: `
 		<div id="{{node.data.id}}"
 			 class="cell-model-entry cell-model-level-{{node.level}} cell-model-position-{{index}}">

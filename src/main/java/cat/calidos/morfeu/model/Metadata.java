@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
-* @author daniel giribet
+/** Describes the metadata that enriches the model of a cell
+*	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Metadata implements Locatable {
 
@@ -168,7 +168,6 @@ public URI getURI() {
 
 @Override
 public String getName() {
-
 	// TODO Auto-generated method stub
 	return null;
 }
