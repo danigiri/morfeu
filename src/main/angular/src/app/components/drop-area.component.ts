@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Component, Input, OnInit} from '@angular/core';
 import { filter } from 'rxjs/operators';
 
-import * as InteractJS from 'interactjs/dist/interact.js';
+import * as Draggabilly from 'draggabilly/draggabilly.js';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -177,6 +177,7 @@ becomeActive() {
 
 	this.active = true;
 	const this_ = this;
+/*	
 	InteractJS(this.element.nativeElement.children[0]).dropzone({
 //		overlap: 0.1,
 		ondrop: function(event) {
@@ -184,6 +185,7 @@ becomeActive() {
 			this_.performDropHere(event.draggable.model, this_.parent, this_.position);
 		},
 	});
+*/
 	//this.cdr.markForCheck();
 
 }

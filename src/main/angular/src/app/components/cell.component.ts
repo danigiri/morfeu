@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { filter } from 'rxjs/operators';
 
-import * as InteractJS from 'interactjs/dist/interact.js';
+import * as Draggabilly from 'draggabilly/draggabilly.js';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -51,6 +51,7 @@ active = false;
 activeReadonly = false;
 dragEnabled = false;
 dragging = false;
+draggabilly: Draggabilly;
 canBeDeleted = true;
 canBeModified = true;
 info = false;
@@ -394,6 +395,12 @@ private enableDrag() {
 
 	const this_ = this;
 	if (this.cell.cellModel.presentation.startsWith('CELL')) {
+		if (!this.draggabilly) {
+			this.draggabilly =  new Draggabilly(this.element.nativeElement.children[0]);
+		} else {
+			this.draggabilly.enable();
+		}
+/*
 		InteractJS(this.element.nativeElement.children[0]).draggable({
 			inertia: false,
 			autoScroll: true,
@@ -425,8 +432,8 @@ private enableDrag() {
 				}
 			}
 		});
+*/
 	}
-
 }
 
 
@@ -449,32 +456,8 @@ private cellDragData() {
 
 
 private disableDrag() {
-	InteractJS(this.element.nativeElement.children[0]).unset();
+	this.draggabilly.disable();
 }
-
-
-private dragMoveListener(event) {
-
-	const target = event.target;
-	const datax = 'data-x';
-	const datay = 'data-y';
-
-	// keep the dragged position in the data-x/data-y attributes
-	const x = (parseFloat(target.getAttribute(datax)) || 0) + event.dx;
-	const y = (parseFloat(target.getAttribute(datay)) || 0) + event.dy;
-
-target.style.zIndex = '9999';
-//target.style.position = 'relative';
-	// translate the element
-	target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-
-	// update the posiion attributes
-	target.setAttribute(datax, x);
-	target.setAttribute(datay, y);
-
-}
-
-
 
 
 private doubleClick() {
