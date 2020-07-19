@@ -16,7 +16,7 @@ import { EventService } from "../services/event.service";
 @Component({
 	selector: "snippet",
 	template: `
-		<a href="#" class="list-group-item list-group-item-action flex-column align-items-start snippet"
+		<div class="list-group-item list-group-item-action flex-column align-items-start snippet"
 			[attr._position]="position"
 			[class.snippet-selected]="selected"
 		>
@@ -30,7 +30,7 @@ import { EventService } from "../services/event.service";
 					[snippet]="true"
 				></cell>
 			</div>
-		</a>
+		</div>
 	`,
 	styles: [`
 				.snippet {}

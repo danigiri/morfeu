@@ -10,13 +10,11 @@
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn()"
 			(mouseleave)="focusOff()"
-		/>
-		<!-- 
 			dnd-draggable
 			[dragEnabled]="dragEnabled"
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
-		 -->
+		/>
 		<div id="{{cell.URI}}"
 			class="well container-fluid show-grid cell-level-{{level}} rounded"
 			[class.cell-active]="active"
@@ -50,13 +48,11 @@
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn()"
 			(mouseleave)="focusOff()"
-		/>
-		<!-- 
 			dnd-draggable
 			[dragEnabled]="dragEnabled"
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
-		 -->
+		/>
 		<div id="{{cell.URI}}"
 			class="row-well row show-grid cell-level-{{level}} rounded"
 			[class.cell-active]="active"
@@ -111,6 +107,10 @@
 			src="{{getCellPresentation()}}"
 			(mouseenter)="focusOn()"
 			(mouseleave)="focusOff()"
+			dnd-draggable
+			[dragEnabled]="dragEnabled"
+			(onDragEnd)="dragEnd(cell)"
+			[dragData]="cellDragData()"
 		/>
 		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
 			class="cell cell-img-size cell-level-{{level}}"
@@ -119,6 +119,10 @@
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn()"
 			(mouseleave)="focusOff()"
+			dnd-draggable
+			[dragEnabled]="dragEnabled"
+			(onDragEnd)="dragEnd(cell)"
+			[dragData]="cellDragData()"
 		>
 		<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->
 			<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>

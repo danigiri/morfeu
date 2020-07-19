@@ -1,9 +1,7 @@
 // DROP - AREA . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import { filter } from 'rxjs/operators';
-
-import * as InteractJS from 'interactjs/dist/interact.js';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -30,8 +28,10 @@ import { UXEvent } from '../events/ux.event';
 					[class.drop-area-inactive]="!active"
 					[class.drop-area-selected]="selected"
 					[class.drop-area-info]="info"
-			>
-			<small>{{position}}</small>
+					dnd-droppable
+					[dropEnabled]="active"
+					 (onDropSuccess)="dropSuccess($event)"
+			><small>{{position}}</small>
 				<small *ngIf="info">
 					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
 				</small>
@@ -78,7 +78,7 @@ selected = false;			// are we selected?
 info = false;
 
 
-constructor(eventService: EventService, private element: ElementRef, private cdr: ChangeDetectorRef) {
+constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
 	super(eventService);
 }
 
@@ -165,25 +165,13 @@ subscribeToSelection() {
 
 
 becomeInactive() {
-
 	this.active = false;
-	InteractJS(this.element.nativeElement.children[0]).unset();
 	//this.cdr.markForCheck();
-
 }
 
 
 becomeActive() {
-
 	this.active = true;
-	const this_ = this;
-	InteractJS(this.element.nativeElement.children[0]).dropzone({
-//		overlap: 0.1,
-		ondrop: function(event) {
-			// console.debug('END DRAG DROPAREA', event);
-			this_.performDropHere(event.draggable.model, this_.parent, this_.position);
-		},
-	});
 	//this.cdr.markForCheck();
 
 }
@@ -200,10 +188,16 @@ matchesCellmodel(cellModel: CellModel): boolean {
 }
 
 
+/** we drop here as we are only droppeable if we are active, and that's model validated */
+dropSuccess($event: any) {
+	this.performDropHere($event.dragData, this.parent, this.position);
+}
+
+
 performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 
 	if (!cell || !newParent || !newPosition) {
-		//console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
+		console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
 	}
 
 	console.log("[UI] DropAreaComponent::dropSuccess("+cell.URI+")");
@@ -233,4 +227,3 @@ performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
- 
