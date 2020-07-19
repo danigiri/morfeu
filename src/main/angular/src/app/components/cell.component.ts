@@ -1,7 +1,9 @@
 // CELL . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { filter } from 'rxjs/operators';
+
+import * as InteractJS from 'interactjs/dist/interact.js';
 
 import { FamilyMember } from '../family-member.interface';
 import { Cell } from '../cell.class';
@@ -54,7 +56,7 @@ info = false;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
 
 
-constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
+constructor(eventService: EventService, private element: ElementRef, private cdr: ChangeDetectorRef) {
 	super(eventService);
 }
 
@@ -144,6 +146,43 @@ ngOnInit() {
 }
 
 
+ngAfterViewInit() {
+	if (this.cell.cellModel.presentation.startsWith('CELL')) {
+		InteractJS(this.element.nativeElement.children[0]).draggable({
+	    // enable inertial throwing
+	    inertia: true,
+	    // keep the element within the area of it's parent
+	
+	    // enable autoScroll
+	    autoScroll: true,
+	
+	    listeners: {
+	      // call this function on every dragmove event
+	      move: this.dragMoveListener
+	    }
+	  });
+
+
+	}
+}
+
+
+dragMoveListener (event) {
+  var target = event.target
+  // keep the dragged position in the data-x/data-y attributes
+  var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+  // translate the element
+  target.style.webkitTransform =
+    target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)'
+
+  // update the posiion attributes
+  target.setAttribute('data-x', x)
+  target.setAttribute('data-y', y)
+}
+
 // we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
 focusOn(cell: Cell) {
 
@@ -187,10 +226,6 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	console.log('[UI] CellComponent::adoptCellAtPosition('+position+')');
 	// deactivate based on old location
 	this.events.service.publish(new CellDeactivatedEvent(newCell));
-	// must be an orphan before adopting
-	if (newCell.parent) {
-		newCell.parent.remove(newCell);
-	}
 
 	// if we are adopting a cell that is actually a move and we are moving at the end, 'position' is now 'position--'
 	// (or childrencount) as we have zero based arrays =)
@@ -205,11 +240,17 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	//
 	// As we have removed cell0 temporarily the parent has only one cell, so the actual target position is 1 and not 2
 	// TODO: this may apply to more cases than moving at the end 
-	
+
 	//if (newCell.parent.getAdoptionURI()===this.cell.getAdoptionURI()) {
 	if (newCell.parent===this.cell && position>this.cell.childrenCount()) {
 		position = this.cell.childrenCount();	// logically equivalent to 'position--;'
 	}
+
+	// must be an orphan before adopting
+	if (newCell.parent) {
+		newCell.parent.remove(newCell);
+	}
+
 	this.cell.adopt(newCell, position);
 
 	//this.cdr.markForCheck();
