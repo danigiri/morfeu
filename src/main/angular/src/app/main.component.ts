@@ -1,7 +1,7 @@
 // MAIN . COMPONENT . TS
 
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { isDevMode, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';	// new angular 5 http client
