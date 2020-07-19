@@ -176,13 +176,12 @@ becomeInactive() {
 becomeActive() {
 
 	this.active = true;
-	const t = this;
+	const this_ = this;
 	InteractJS(this.element.nativeElement.children[0]).dropzone({
 		overlap: 0.1,
 		ondrop: function(event) {
-			console.debug('END DRAG DROPAREA');
-			
-			t.performDropHere(event.draggable.model, t.parent, t.position);
+			// console.debug('END DRAG DROPAREA', event);
+			this_.performDropHere(event.draggable.model, this_.parent, this_.position);
 		},
 	});
 	//this.cdr.markForCheck();

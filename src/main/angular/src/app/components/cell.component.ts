@@ -1,7 +1,7 @@
 // CELL . COMPONENT . TS
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { debug, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import * as InteractJS from 'interactjs/dist/interact.js';
 
@@ -83,14 +83,14 @@ ngOnInit() {
 	// a cell model was deactivated that is compatible with this cell
 	this.register(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.pipe(filter(d => d.cellModel && this.isCompatibleWith(d.cellModel)))
-			.subscribe(() => this.becomeInactive(this.cell))
+			.subscribe(() => this.becomeInactive())
 				// console.log('-> cell comp gets cellmodel deactivated event for ''+d.cellModel.name+''');
 	);
 
 	// a cell model activated that is compatible with this cell
 	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 			.pipe(filter( a => a.cellModel && this.isCompatibleWith(a.cellModel)))
-			.subscribe(() => this.becomeActive(this.cell))
+			.subscribe(() => this.becomeActive())
 				//console.log('-> cell comp gets cellmodel activated event for ''+a.cellModel.name+'''); 
 	);
 
@@ -109,7 +109,7 @@ ngOnInit() {
 			.pipe(filter(a => this.active && a.cell!==this.cell))
 			.subscribe(() => {
 				console.log('-> cell comp gets cell activated event from other cell, we were active, clear');
-				this.becomeInactive(this.cell);
+				this.becomeInactive();
 			})
 	);
 
@@ -145,8 +145,14 @@ ngOnInit() {
 
 	// we listen for other drags so we do not accept mouseover events
 	this.register(this.events.service.of<CellDragEndedEvent>(CellDragEndedEvent)
-//			.subscribe(() => Promise.resolve(null).then(() => this.listenToMouseEvents = true)));
-			.subscribe(() => this.listenToMouseEvents = true));
+			.subscribe(dragged => Promise.resolve(null).then(() => {
+					this.listenToMouseEvents = true;
+					if (this.cell===dragged.cell) {
+						this.becomeActive();
+					}
+				})
+			)
+	);
 	this.register(this.events.service.of<CellDragStartedEvent>(CellDragStartedEvent)
 			.subscribe(() => this.listenToMouseEvents = false));
 
@@ -164,9 +170,9 @@ focusOn() {
 
 	if (this.listenToMouseEvents) {
 
-		// console.log('[UI] CellComponent::focusOn()');
+		console.debug('[UI] CellComponent::focusOn()');
 		this.events.service.publish(new CellActivatedEvent(this.cell));
-		this.becomeActive(this.cell);
+		this.becomeActive();
 		// TODO: OPTIMISATION we could precalculate the event receptor and do a O(k) if needed
 		// to make that happen we can associate the cell-model.class with the component (view) and just do it
 		// without events
@@ -183,8 +189,8 @@ focusOff() {
 
 	if (this.listenToMouseEvents) {
 
-		console.log('[UI] CellComponent::focusOff(%s)', this.cell.URI);
-		this.becomeInactive(this.cell);
+		console.debug('[UI] CellComponent::focusOff(%s)', this.cell.URI);
+		this.becomeInactive();
 		this.events.service.publish(new CellDeactivatedEvent(this.cell));
 
 	}
@@ -192,17 +198,6 @@ focusOff() {
 	//this.cdr.markForCheck();
 
 }
-
-mouseDown() {
-	console.debug('mouse down');
-	this.listenToMouseEvents = false;
-}
-
-mouseUp() {
-	console.debug('mouse up');
-	this.listenToMouseEvents = true;
-}
-
 
 
 // the drop-area is sending us a cell to adopt
@@ -246,7 +241,7 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 
 
 // UI method to highlight the cell
-becomeActive(cell: Cell) {
+becomeActive() {
 
 	const activate = this.canBeDeleted && this.canBeModified;
 	// console.log('[UI] CellComponent::becomeActive('+cell.URI+')');
@@ -267,7 +262,7 @@ becomeActive(cell: Cell) {
 
 
 // UI method to no longer be highlighted
-becomeInactive(cell: Cell) {
+becomeInactive() {
 
 	// console.log('[UI] CellComponent::becomeInactive('+cell.URI+')');
 	this.active = false;
@@ -301,7 +296,7 @@ select(position: number) {
 
 		// if we were activated we deactivate ourselves and become selectable again
 		if (this.active) {
-			this.becomeInactive(this.cell);
+			this.becomeInactive();
 		}
 
 		// we were waiting for a selection and we've matched the position, so we select ourselves
@@ -416,7 +411,9 @@ private enableDrag() {
 						target.removeAttribute('data-x');
 						target.removeAttribute('data-y');
 						this_.listenToMouseEvents = true;
+						console.debug('END DRAG CELL --> cell drag ended event START');
 						this_.events.service.publish(new CellDragEndedEvent(event.interactable.model));
+						console.debug('END DRAG CELL --> cell drag ended event END');
 						//this_.focusOff(this_.cell);
 				}
 			}

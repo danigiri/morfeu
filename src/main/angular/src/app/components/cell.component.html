@@ -8,8 +8,8 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
-			(mouseenter)="focusOn(cell)"
-			(mouseleave)="focusOff(cell)"
+			(mouseenter)="focusOn()"
+			(mouseleave)="focusOff()"
 		/>
 		<!-- 
 			dnd-draggable
@@ -48,8 +48,8 @@
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
-			(mouseenter)="focusOn(cell)"
-			(mouseleave)="focusOff(cell)"
+			(mouseenter)="focusOn()"
+			(mouseleave)="focusOff()"
 		/>
 		<!-- 
 			dnd-draggable
@@ -102,7 +102,6 @@
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
-		{{listenToMouseEvents}}
 		<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
 			[class.cell-img]="!active && !activeReadonly && !selected"
 			[class.cell-active]="active"
@@ -112,16 +111,14 @@
 			src="{{getCellPresentation()}}"
 			(mouseenter)="focusOn()"
 			(mouseleave)="focusOff()"
-			(mouseup)="mouseUp()"
-			(mousedown)="mouseDown()"
 		/>
 		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
 			class="cell cell-img-size cell-level-{{level}}"
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
-			(mouseenter)="focusOn(cell)"
-			(mouseleave)="focusOff(cell)"
+			(mouseenter)="focusOn()"
+			(mouseleave)="focusOff()"
 		>
 		<!-- TODO: maybe change into an image to make it more elegant? But image drag is weird -->
 			<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
