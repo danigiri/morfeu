@@ -38,9 +38,6 @@
 }
 .cell-readonly {}
 
-.cell-dragged {
-	opacity: .2;
-}
 .drag-inactive {
 	opacity: .6;
 }

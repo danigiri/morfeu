@@ -50,6 +50,7 @@ private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues 
 active = false;
 activeReadonly = false;
 dragEnabled = false;
+dragging = false;
 canBeDeleted = true;
 canBeModified = true;
 info = false;
@@ -398,23 +399,29 @@ private enableDrag() {
 			autoScroll: true,
 			listeners: {
 				start: function(event) {
+					console.debug(event);
 					const cell =  this_.cellDragData();
+					const target = event.target;
 					event.interactable.model = cell;
 					this_.listenToMouseEvents = false;
 					this_.events.service.publish(new CellDragStartedEvent(cell));
+					this_.dragging = true;
+					event.target.style.zIndex = '-1';
+
 				},
 				move: this.dragMoveListener,	// call this function on every dragmove event
 				end: function(event) {
+
 						const target = event.target;
-						console.debug('END DRAG CELL ');
 						target.style.webkitTransform = target.style.transform = 'translate(0,0)';
 						target.removeAttribute('data-x');
 						target.removeAttribute('data-y');
 						this_.listenToMouseEvents = true;
-						console.debug('END DRAG CELL --> cell drag ended event START');
+						this_.dragging = false;
+						event.target.style.zIndex = 'auto';
 						this_.events.service.publish(new CellDragEndedEvent(event.interactable.model));
-						console.debug('END DRAG CELL --> cell drag ended event END');
 						//this_.focusOff(this_.cell);
+
 				}
 			}
 		});
@@ -442,12 +449,11 @@ private cellDragData() {
 
 
 private disableDrag() {
-	console.debug('DISABLE DRAG');
 	InteractJS(this.element.nativeElement.children[0]).unset();
 }
 
 
-private dragMoveListener (event) {
+private dragMoveListener(event) {
 
 	const target = event.target;
 	const datax = 'data-x';
@@ -457,6 +463,8 @@ private dragMoveListener (event) {
 	const x = (parseFloat(target.getAttribute(datax)) || 0) + event.dx;
 	const y = (parseFloat(target.getAttribute(datay)) || 0) + event.dy;
 
+target.style.zIndex = '9999';
+//target.style.position = 'relative';
 	// translate the element
 	target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
 
