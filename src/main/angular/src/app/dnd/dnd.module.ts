@@ -29,7 +29,7 @@ export let providers = [
 
 })
 export class DndModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<DndModule> {
         return {
             ngModule: DndModule,
             providers: providers

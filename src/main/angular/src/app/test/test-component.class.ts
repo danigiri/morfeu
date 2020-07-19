@@ -1,6 +1,6 @@
 // TEST - COMPONENT . CLASS . TS
 
-import { Inject, AfterViewInit } from '@angular/core';
+import { Inject, AfterViewInit, Directive } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CellDocument } from '../cell-document.class';
@@ -15,6 +15,7 @@ import { RemoteObjectService } from '../services/remote-object.service';
 import { EventListener } from '../events/event-listener.class';
 import { EventService } from '../services/event.service';
 
+@Directive()
 export abstract class TestComponent extends EventListener implements AfterViewInit {
 
 

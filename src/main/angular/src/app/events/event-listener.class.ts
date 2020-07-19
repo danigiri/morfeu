@@ -1,6 +1,6 @@
 // EVENT - LISTENER . CLASS . TS
 
-import { OnDestroy } from "@angular/core";
+import { OnDestroy, Component } from "@angular/core";
 import { Subscription } from "rxjs";
 
 import { EventService } from "../services/event.service";
@@ -8,6 +8,8 @@ import { RemoteEventService } from "../services/remote-event.service";
 import { Events } from "./events.class";
 
 
+// TODO: Add Angular decorator.
+@Component({template:''})
 export class EventListener implements OnDestroy {
 
 private readonly SUSPICIOUS_SUBSCRIPTION_COUNT = 50;
