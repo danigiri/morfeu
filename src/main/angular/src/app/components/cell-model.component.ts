@@ -34,13 +34,11 @@ import { EventService } from '../services/event.service';
 				(mouseup)="clickUp()"
 				(mouseenter)="clickDown()"
 				(mouseleave)="clickUp()"
-			/>
-				<!-- 
 				dnd-draggable
 				[dragEnabled]="dragEnabled"
 				(onDragEnd)="dragEnd()"
 				[dragData]="node.data.generateCell()"
-				-->
+			/>
 			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
 		</div>
 		`,

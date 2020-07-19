@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';	// new angular 5 http client
 import { NgModule } from '@angular/core';
 
+import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PipesModule } from '../pipes/pipes.module';
@@ -34,6 +35,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 @NgModule({
 	imports: [
 				CommonModule,
+				DndModule,
 				NgbModule,
 				FormsModule,
 				PipesModule
