@@ -2,8 +2,9 @@
 	<div id="cell-editor" class="card mt-2 modal-body">
 		<cell-header [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
 		<div class="card-body">
-			<form class="form-inline" #form_="ngForm"> {{formCallback(form_)}}
-				<textarea *ngIf="cell.value!=undefined && showValue()"
+			<!-- class="form-inline" -->
+			<form  #form_="ngForm"> {{formCallback(form_)}}
+				<textarea *ngIf="cell.value!=undefined && showText()"
 					class="cell-editor-value form-control"
 					rows="textAreaRows()"
 					name="{{cell.cellModel.name}}.value"
@@ -13,6 +14,9 @@
 					(change)="modifiedValue($event)"
 					(input)="modifiedValue($event)"
 				></textarea>
+					<div  *ngIf="cell.value!=undefined && showCode()">
+						<code-editor [code]="cell.value"></code-editor>
+					</div>
 					<!-- create new value button -->
 					<img  *ngIf="cell.value==undefined && showValue()"
 						id="cell-editor-create-value-button"
@@ -27,7 +31,6 @@
 						src="assets/images/open-iconic/circle-x.svg"
 						(click)="removeValue()"
 					/>
-
 				<!-- show attributes -->
 				<ul *ngIf="showAttributes" class="list-group list-group-flush">
 					<attribute-data-editor *ngFor="let a of cell.cellModel.attributes; let i = index"

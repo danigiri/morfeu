@@ -20,11 +20,11 @@ private readonly model = 'target/test-classes/test-resources/models/test-model.x
 private cellPath: string;
 
 
-
 protected test(case_: string) {
 	switch (case_) {
 		case 'document5' : this.document5(); break;
 		case 'categories-all' : this.categoriesAll(); break;
+		case 'code' : this.code(); break;
 		default: this.document1();
 	}
 }
@@ -45,12 +45,21 @@ private document5() {
 
 }
 
+
 private categoriesAll() {
 
 	this.cellPath = '/test(0)/row(0)/col(0)/row(0)/col(0)/categ(0)';
 	this.load('target/test-classes/test-resources/documents/categories.xml', this.model);
 
 }
+
+private code() {
+
+	this.cellPath = '/test(0)/row(0)/col(0)/code(0)';
+	this.load('target/test-classes/test-resources/documents/code.xml', this.model);
+
+}
+
 
 protected loaded(model: Model, content: Content): void {
 

@@ -7,7 +7,6 @@ import { EventService } from "../services/event.service";
 import { RemoteEventService } from "../services/remote-event.service";
 import { Events } from "./events.class";
 
-
 // TODO: Add Angular decorator.
 @Component({template:''})
 export class EventListener implements OnDestroy {

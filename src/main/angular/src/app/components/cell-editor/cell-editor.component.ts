@@ -49,6 +49,7 @@ defaultCategoryAttributes: CellModel[];
 attributesByCategory: Map<string, CellModel[]>;
 canSave: boolean = false;
 
+
 constructor(eventService: EventService, private modalService: NgbModal) {
 	super(eventService);
 }
@@ -87,7 +88,16 @@ formCallback(f: NgForm) {
 
 
 private showValue() {
+	return this.showText() || this.showCode();
+}
+
+
+private showText() {
 	return this.cell.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
+}
+
+private showCode() {
+	return this.cell.cellModel.presentation.includes("CODE"); // if we need to show the text area or not	
 }
 
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="../models/test-model.xsd"
+>
+	<row>
+		<col size="12">
+			<code>
+SELECT *
+FROM users
+WHERE group_name IS NOT NULL
+ORDER BY group_name DESC
+					</code>
+		</col>
+	</row>
+</test>
