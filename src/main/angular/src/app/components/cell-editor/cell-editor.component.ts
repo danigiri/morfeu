@@ -68,7 +68,7 @@ ngOnInit() {
 	this.register(this.events.service.of<CellChangeEvent>(CellChangeEvent)
 			.pipe(filter(changed => changed.what!==CellChange.COMPLETED))
 			.pipe(filter(changed => this.editing))
-			.subscribe(changed => this.attributeChange(changed.attribute, changed.what, changed.valid))
+			.subscribe(changed => this.editorChange(changed.attribute, changed.what, changed.valid))
 	);
 
 }
@@ -236,7 +236,7 @@ private removeValue() {
 }
 
 
-private attributeChange(attribute: Cell, what: CellChange, isValid: boolean) {
+private editorChange(attribute: Cell, what: CellChange, isValid: boolean) {
 
 	let canBeSaved: boolean;
 	switch(what) {

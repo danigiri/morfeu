@@ -31,7 +31,7 @@
 
 		<xs:restriction base="xs:integer">
 			<xs:minInclusive value="1"/>
-	      	<xs:maxInclusive value="12"/>
+			<xs:maxInclusive value="12"/>
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -71,7 +71,7 @@
 
 		<xs:restriction base="xs:boolean" />
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="textContent">
 		<xs:annotation>
 			<xs:appinfo>
@@ -84,6 +84,20 @@
 
 		<xs:restriction base="xs:string" />
 	</xs:simpleType>
+
+	<xs:simpleType name="codeContent">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>textContent is a multiple line text area for simple content</mf:desc>
+					<mf:presentation>CELL-CODE</mf:presentation>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
 
 	<xs:simpleType name="textContentOneLine">
 		<xs:annotation>
