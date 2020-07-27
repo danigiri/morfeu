@@ -1,10 +1,9 @@
 // CODE - EDITOR - TEST . COMPONENT . TS
 
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Cell } from '../../cell.class';
-import { CellModel } from '../../cell-model.class';
 import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
@@ -12,24 +11,39 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 
 import { TestComponent } from '../../test/test-component.class';
 
+import { CellChangeEvent, CellChange } from '../../events/cell-change.event';
 import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'code-editor-test',
-	template: '<code-editor *ngIf="cell" [cell]="cell"></code-editor>'
+	template: `
+		<code-editor *ngIf="cell" [cell]="cell"></code-editor>
+		<textarea [(ngModel)]="output"></textarea>
+	`
 })
 
-export class CodeEditorTestComponent extends TestComponent {
+export class CodeEditorTestComponent extends TestComponent implements OnInit  {
 
 private readonly model = 'target/test-classes/test-resources/models/test-model.xsd';
 private cellPath: string;
 cell: Cell;
+output: string = '';
+
 
 constructor(eventService: EventService,
 			route: ActivatedRoute,
 			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
 	super(eventService, route, contentService, modelService);
+}
+
+
+ngOnInit() {
+
+		this.register(this.events.service.of<CellChangeEvent>(CellChangeEvent)
+			.subscribe(e => this.output = this.output.concat(e.toString()+'\n'))
+	);
+
 }
 
 

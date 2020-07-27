@@ -13,9 +13,38 @@ constructor(public cell: Cell, public what: CellChange, public valid?: boolean, 
 
 
 public toString = (): string => {
-	return 'CellChangedEvent:{'+this.cell?.URI+','+this.what+'}';
+	return 'CellChangedEvent:{'+this.cell?.name+','+this.changeToString()+'}';
 }
 
+
+protected changeToString():string {
+	switch(this.what) {
+		case CellChange.INIT_ATTRIBUTE:
+			return 'INIT_ATTRIBUTE';
+		break;
+		case CellChange.ADD_ATTRIBUTE:
+			return 'ADD_ATTRIBUTE';
+		break;
+		case CellChange.MODIFIED_ATTRIBUTE:
+			return 'MODIFIED_ATTRIBUTE';
+		break;
+		case CellChange.REMOVE_ATTRIBUTE:
+			return 'REMOVE_ATTRIBUTE';
+		break;
+		case CellChange.CREATED_VALUE:
+			return 'CREATED_VALUE';
+		break;
+		case CellChange.MODIFIED_VALUE:
+			return 'MODIFIED_VALUE';
+		break;
+		case CellChange.REMOVED_VALUE:
+			return 'REMOVED_VALUE';
+		break;
+		case CellChange.COMPLETED:
+			return 'COMPLETED';
+		break;
+	}
+}
 
 }
 

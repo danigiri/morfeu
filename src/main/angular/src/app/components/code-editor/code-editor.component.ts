@@ -16,7 +16,7 @@ import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'code-editor',
-	template: `<div class="code-editor form-control" #code></div>`
+	template: '<div class="code-editor form-control" #code></div>'
 })
 
 export class CodeEditorComponent extends EventListener implements AfterContentChecked {
@@ -36,7 +36,6 @@ constructor(eventService: EventService) {
 ngAfterContentChecked() {
 
 	if (!this.codeEditor) {
-		console.debug('aaa');
 		Promise.resolve(null).then(() => {
 			const editorOptions: Partial<ace.Ace.EditorOptions> = {
 					highlightActiveLine: true,
