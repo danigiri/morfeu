@@ -1,15 +1,15 @@
 // CODE - EDITOR . COMPONENT . TS
 
-import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, AfterContentChecked } from '@angular/core';
 
 import * as ace from 'ace-builds/src-min-noconflict/ace';
 import 'ace-builds/src-min-noconflict/mode-sql';
-import 'ace-builds/src-min-noconflict/theme-github';
-import 'ace-builds/src-min-noconflict/theme-chrome';
 import 'ace-builds/src-min-noconflict/theme-clouds';
-//import 'ace-builds/src-min-noconflict/worker-javascript.js'
 import 'ace-builds/src-noconflict/ext-language_tools';
 
+import { Cell } from '../../cell.class';
+
+import { CellChangeEvent, CellChange } from '../../events/cell-change.event';
 import { EventListener } from '../../events/event-listener.class';
 import { EventService } from '../../services/event.service';
 
@@ -19,41 +19,45 @@ import { EventService } from '../../services/event.service';
 	template: `<div class="code-editor form-control" #code></div>`
 })
 
-export class CodeEditorComponent extends EventListener implements OnInit, AfterViewInit {
+export class CodeEditorComponent extends EventListener implements AfterContentChecked {
 
-@Input() code: string;
+@Input() cell: Cell;
 
 @ViewChild('code') editor: ElementRef;
 
 private codeEditor: ace.Ace.Editor;
 
-ngOnInit() {
 
+constructor(eventService: EventService) {
+	super(eventService);
 }
 
 
-ngAfterViewInit() {
+ngAfterContentChecked() {
 
-Promise.resolve(null).then(() => {
-	console.debug('foo');
+	if (!this.codeEditor) {
+		console.debug('aaa');
+		Promise.resolve(null).then(() => {
+			const editorOptions: Partial<ace.Ace.EditorOptions> = {
+					highlightActiveLine: true,
+					minLines: 10,
+					maxLines: Infinity,
+			};
+			editorOptions.enableBasicAutocompletion = true;
+			editorOptions.enableLiveAutocompletion = true
 
-	// : Partial<ace.Ace.EditorOptions>
- 	const editorOptions = {
-			highlightActiveLine: true,
-			minLines: 10,
-			maxLines: Infinity,
-			cursorStyle: 'wide',
-			enableBasicAutocompletion: true,
-			enableLiveAutocompletion: true
-	};
-	this.codeEditor = ace.edit(this.editor.nativeElement, editorOptions);
+			this.codeEditor = ace.edit(this.editor.nativeElement, editorOptions)
+			this.codeEditor.setTheme('ace/theme/clouds');
+			this.codeEditor.getSession().setMode('ace/mode/sql');
 
-	this.codeEditor.setTheme('ace/theme/clouds');
-	this.codeEditor.getSession().setMode('ace/mode/sql');
-	this.codeEditor.setValue(this.code);
-	this.codeEditor.resize();
-});
-
+			const this_ = this;
+			this.codeEditor.getSession().on('change',function() {
+				const valid = this_.cell.cellModel.validates(this_.cell.value);
+				this_.events.service.publish(new CellChangeEvent(this_.cell, CellChange.MODIFIED_VALUE, valid));
+			});
+			this.codeEditor.setValue(this.cell.value);
+		});
+	}
 }
 
 

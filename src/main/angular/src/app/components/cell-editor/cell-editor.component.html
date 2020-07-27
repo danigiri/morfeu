@@ -14,8 +14,8 @@
 					(change)="modifiedValue($event)"
 					(input)="modifiedValue($event)"
 				></textarea>
-					<div  *ngIf="cell.value!=undefined && showCode()">
-						<code-editor [code]="cell.value"></code-editor>
+					<div *ngIf="cell.value!=undefined && showCode()">
+						<code-editor [cell]="cell"></code-editor>
 					</div>
 					<!-- create new value button -->
 					<img  *ngIf="cell.value==undefined && showValue()"
