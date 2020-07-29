@@ -32,6 +32,11 @@
 					<mf:thumb>assets/images/keyvalue-thumb.svg</mf:thumb>
 					<mf:cell-presentation>assets/images/keyvalue-cell.svg</mf:cell-presentation>
 				</mf:metadata>
+				<mf:metadata uri="test/row/col/code">
+					<mf:desc>Code demo (using SQL)</mf:desc>
+					<mf:thumb>assets/images/code-thumb.svg</mf:thumb>
+					<mf:cell-presentation type="HTML" method="POST">/dyn/preview/code/</mf:cell-presentation>
+				</mf:metadata>
 			</mf:extra-metadata>
 		</xs:appinfo>
 	</xs:annotation>
