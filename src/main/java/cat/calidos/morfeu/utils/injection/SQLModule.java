@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.view.injection;
+package cat.calidos.morfeu.utils.injection;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
+
 import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import cat.calidos.morfeu.problems.ParsingException;
 
@@ -30,6 +31,12 @@ public static List<List<String>> query(Statement statement, @Named("SQL") String
 		ResultSetMetaData rsmd = resultSet.getMetaData();
 		int columnCount = rsmd.getColumnCount();
 		rows = new ArrayList<List<String>>();
+		List<String> header = new ArrayList<String>(columnCount);
+		for (int i = 1; i <= columnCount; i++ ) {
+			header.add(rsmd.getColumnLabel(i));			
+		}
+		rows.add(header);
+
 		while (resultSet.next()) {
 			List<String> row = new ArrayList<String>(columnCount);
 			for (int i = 1; i <= columnCount; i++ ) {
@@ -37,6 +44,7 @@ public static List<List<String>> query(Statement statement, @Named("SQL") String
 			}
 			rows.add(row);
 		}
+
 	} catch (SQLException e) {
 		throw new ParsingException("Problem running query '"+query+"'", e);
 	}
@@ -46,8 +54,8 @@ public static List<List<String>> query(Statement statement, @Named("SQL") String
 }
 
 
-@Produces @Named("update") 
-public static int update(Statement statement, @Named("SQL") String update)  throws ParsingException  {
+@Produces
+public static Integer update(Statement statement, @Named("SQL") String update)  throws ParsingException  {
 	try {
 		return statement.executeUpdate(update);//==0 ? "" : "";
 	} catch (SQLException e) {
