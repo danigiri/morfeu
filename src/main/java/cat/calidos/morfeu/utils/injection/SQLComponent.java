@@ -1,24 +1,25 @@
 // SQL VIEW COMPONENT . JAVA
 
-package cat.calidos.morfeu.view.injection;
+package cat.calidos.morfeu.utils.injection;
 
 import java.sql.Connection;
 import java.util.List;
 
 import javax.inject.Named;
 
-import cat.calidos.morfeu.problems.MorfeuRuntimeException;
-import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
+import com.google.common.util.concurrent.ListenableFuture;
+
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
+import cat.calidos.morfeu.problems.ParsingException;
 
-@ProductionComponent(modules= {SQLModule.class,  ListeningExecutorServiceModule.class})
+@ProductionComponent(modules={SQLModule.class,  ListeningExecutorServiceModule.class})
 public interface SQLComponent {
 
-List<List<String>> query() throws ParsingException, MorfeuRuntimeException;
-@Named("update") int update() throws ParsingException, MorfeuRuntimeException;
+ListenableFuture<List<List<String>>> query() throws ParsingException, MorfeuRuntimeException;
+ListenableFuture<Integer> update() throws ParsingException, MorfeuRuntimeException;
 
 @ProductionComponent.Builder
 interface Builder {
