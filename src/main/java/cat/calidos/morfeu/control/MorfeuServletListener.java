@@ -49,6 +49,8 @@ public void contextDestroyed(ServletContextEvent sce) {
 		}
 	}
 
+	//TODO: call control component cleanup functions here
+	
 }
 
 

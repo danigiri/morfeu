@@ -6,11 +6,19 @@
 
 {%- else -%}
 		<div>
-			<table>
+			<table class="table table-sm">
 				{%- for r in v.results -%}
+				{%- if (loop.first) -%}
+				<thead>
+					<tr>
+						{%- for c in r %}<th scope="col">{{c}}</ht>{% endfor -%}
+					</tr>
+				</thead>
+				 {%- else -%}
 				<tr>
 					{%- for c in r %}<td>{{c}}</td>{% endfor -%}
 				</tr>
+				{%- endif -%}
 				{%- endfor -%}
 			</table>
 		</div>

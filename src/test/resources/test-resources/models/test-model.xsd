@@ -35,7 +35,7 @@
 				<mf:metadata uri="test/row/col/code">
 					<mf:desc>Code demo (using SQL)</mf:desc>
 					<mf:thumb>assets/images/code-thumb.svg</mf:thumb>
-					<mf:cell-presentation type="HTML" method="POST">/dyn/preview/code/</mf:cell-presentation>
+					<mf:cell-presentation type="HTML">/dyn/preview/code/?sql=$_VALUE</mf:cell-presentation>
 				</mf:metadata>
 			</mf:extra-metadata>
 		</xs:appinfo>

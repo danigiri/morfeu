@@ -41,8 +41,7 @@ public void teardown() throws Exception {
 
 
 protected void dropPersonsTable() throws ParsingException {
-
-	int update = SQLModule.update(statement, "DROP TABLE IF EXISTS Persons");
+	SQLModule.update(statement, "DROP TABLE IF EXISTS Persons");
 }
 
 

@@ -35,15 +35,18 @@ public void testRender() throws Exception {
 	assertEquals(1, update);
 	update = SQLModule.update(statement, "INSERT INTO Persons VALUES (1, 'Doe', 'Daisy', 'bar', 'fairyland')");
 	assertEquals(1, update);
-	
+
 	String query = "SELECT * FROM Persons";
 	SQLComponent sql = SQLViewModule.sql(connection, query);
 	String table = SQLViewModule.render(sql, false);
 	//System.err.println(table);
 	assertAll("select * asserts",
 		() -> assertNotNull(table),
-		() -> assertTrue(table.contains("PERSONS")),
-		() -> assertTrue(table.contains("PUBLIC"))
+		() -> assertTrue(table.contains("PERSONID")),
+		() -> assertTrue(table.contains("LASTNAME")),
+		() -> assertTrue(table.contains("FIRSTNAME")),
+		() -> assertTrue(table.contains("ADDRESS")),
+		() -> assertTrue(table.contains("CITY"))
 	);
 
 }

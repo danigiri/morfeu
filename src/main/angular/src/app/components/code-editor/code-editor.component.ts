@@ -51,6 +51,7 @@ ngAfterContentChecked() {
 
 			const this_ = this;
 			this.codeEditor.getSession().on('change',function() {
+				this_.cell.value =  this_.codeEditor.getSession().getValue();	// manual binding
 				const valid = this_.cell.cellModel.validates(this_.cell.value);
 				this_.events.service.publish(new CellChangeEvent(this_.cell, CellChange.MODIFIED_VALUE, valid));
 			});
