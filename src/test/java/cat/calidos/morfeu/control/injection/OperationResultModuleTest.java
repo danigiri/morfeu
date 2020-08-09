@@ -2,8 +2,6 @@ package cat.calidos.morfeu.control.injection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.concurrent.ExecutionException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
