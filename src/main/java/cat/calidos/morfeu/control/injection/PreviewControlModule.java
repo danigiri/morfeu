@@ -102,11 +102,7 @@ public BiFunction<List<String>, Map<String, String>, String> getCodePreview(@Nul
 
 		Connection connection = (Connection)context.getAttribute("connection");
 		initDatabase(connection, context);	//FIXME: we need to listen to servlet state and clean the connection up!!!
-
-		System.err.println(params);
 		String query = params.get("sql");
-		System.err.println(query);
-
 		return DaggerSQLViewComponent.builder().query(query).isUpdate(false).andConnection(connection).build().render();
 
 	};
