@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
 	<artifactId>morfeu-webapp</artifactId>	
-	<version>0.7.0-SNAPSHOT</version>
+	<version>0.8.0</version>
 	<packaging>war</packaging>
 
 	<name>Morfeu web application</name>
 	<!-- find . -name "*.ts" -exec bash -c 'unexpand -t 4 "$0" > /tmp/a && mv -v /tmp/a "$0"' {} \; -->
-	<description>TBD</description>
+	<description>Morfeu is an application to manage multiple APIs represented as YAML, JSON, JSX or XML documents</description>
 	<inceptionYear>2016</inceptionYear>
 
 	<properties>
@@ -68,30 +68,6 @@
 					<generatedSourcesDirectory>target/generated-sources/annotations</generatedSourcesDirectory>
 				</configuration>
 			</plugin>
-<!-- plugin>
-  <groupId>org.bsc.maven</groupId>
-  <artifactId>maven-processor-plugin</artifactId>
-  <version>3.3.3</version>
-  <executions>
-    <execution>
-      <id>process</id>
-      <goals>
-        <goal>process</goal>
-      </goals>
-      <phase>generate-sources</phase>
-      <configuration>
-        <outputDirectory>target/generated-sources/annotations</outputDirectory>
-      <processors>
-                            <processor>com.google.dagger.*</processor>
-                        </processors>
-      </configuration> 
-      
-    </execution>
-  </executions>
-</plugin-->
-
-
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -347,11 +323,6 @@
 			<artifactId>jetty-server</artifactId>
 			<version>${jetty-version}</version>
 		</dependency>
-		<!-- dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-			<version>1.7</version>
-		</dependency-->
 
 		<!-- HELPERS -->
 		<dependency>
@@ -429,9 +400,9 @@
 			<version>1.11</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.zeroturnaround</groupId>
-		    <artifactId>zt-process-killer</artifactId>
-		    <version>1.10</version>
+			<groupId>org.zeroturnaround</groupId>
+			<artifactId>zt-process-killer</artifactId>
+			<version>1.10</version>
 		</dependency>
 
 		<!-- UNIT TESTING -->
