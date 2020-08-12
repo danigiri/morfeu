@@ -1,15 +1,23 @@
 # Morfeu
 
 Morfeu is an application to manage multiple APIs represented as [YAML](http://yaml.org), JSON, JSX or XML documents. 
-It features a browser-based visual editor that can group heterogeneous APIs together. APIs are defined formally and enriched with 
-metadata, which enables Morfeu to present a common UI.
+It features a browser-based visual editor that can group heterogeneous APIs together. APIs are defined formally and 
+enriched with metadata, which enables Morfeu to present a workable UI.
 
-YAML and JSON-based APIs are commonly used in many domains to represent complex API configurations, and Morfeu makes it easier 
-for users to engage and experiment with those APIs. [Eurinome](https://github.com/danigiri/eurinome) is a sister project 
-that applies the Morfeu concept to the Kubernetes ecosystem using Helm.
+YAML and JSON-based APIs are commonly used in many domains to represent complex API configurations, and Morfeu makes it
+easier 
+for users to engage and experiment with those APIs. Using a microservices approach, other services can be developed
+and run a a sidecars to support different environments, systems and APIs. The sidecars in question are lightweight 
+layers that are ran alongside existing complex systems.
+
+- [snow-package](https://github.com/danigiri/snow-package) is a demo project that lets you manage pages written in JSX, 
+  for instance your typical React web application. An example site can be found in the
+  [snowpackage-site](https://github.com/danigiri/snow-package) repo, which implements a trivial test site.
+- [eurinome](https://github.com/danigiri/eurinome) is another project that applies the Morfeu concept to the Kubernetes
+  ecosystem using Helm
 
 Morfeu is flexible and can work with any YAML, JSON or XML API once a schema is for that API is created and added to the 
-system.
+system.It can even work with JSX markup code given it is an structured language that can be parsed.
 
 It is licensed under the Apache 2 open-source license and is under heavy development.
 
@@ -55,7 +63,8 @@ In this short video we showcase a Morfeu editing session with a simple YAML-base
 
 ### Installation
 
-Morfeu requires [Java 8](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 9](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests
+Morfeu requires [Java 11](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 10](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests. Docker images are
+available.
 
 ### Tests
 
@@ -78,7 +87,7 @@ Often, organisations that expose a rich API that is showing naturally end up dev
 
 This problem is compounded when the underlying systems interact between themselves. It is even more complex to create all-encompassing or modular UIs that handle APIs created by different teams, crossing domain and organisational boundaries.
 
-Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure).
+Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure). JSX support was added with minimal effort.
 
 
 ## Concepts
@@ -86,8 +95,8 @@ Morfeu proposes a generic browser-based UI to handle multiple APIs at the same t
 
 ### Catalogue
 
-Logical organisational unit, it is expected all documents contained share the same model
-It also contains templates
+Convenience grouping of documents of a given API, it is expected all documents contained share the same API, model,
+preview functionality, etc. It will also contain a list of snippets for convenience.
 
 ## Templates
 
@@ -111,6 +120,13 @@ Metadata related to the above items to increase usability, add some semantics an
 ### Document
 
 Instances of an usage of an API, DSL or abstraction layer
+
+### Snippet
+
+Convenience fragment of a document, with pre-filled values. Useful as a starting point for complex API usage and for begginner 
+users. Necessarily tied to the model though it may not always validate (given it may be a fragment that needs to sit within a given
+structure.
+
 
 ### Cell
 
