@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { TreeNode } from 'angular-tree-component';
+import { TreeNode } from '@circlon/angular-tree-component';
 
 import { CellModel } from '../cell-model.class';
 import { FamilyMember } from '../family-member.interface';

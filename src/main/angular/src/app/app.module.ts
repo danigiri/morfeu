@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';  // new angular 5 http 
 import { DndModule } from './dnd/dnd.module';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TreeModule } from 'angular-tree-component';
+import { TreeModule } from '@circlon/angular-tree-component';
 
 import { ComponentsModule } from './components/components.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -43,7 +43,7 @@ import { StatusComponent } from './components/status.component';
 				HotkeyModule.forRoot(),
 				NgbModule, 
 				PipesModule,
-				TreeModule.forRoot()
+				TreeModule
 	],
 	declarations: [
 					AppComponent,

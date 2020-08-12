@@ -2,7 +2,7 @@
 
 import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
 
-import { TreeComponent } from "angular-tree-component";
+import { TreeComponent } from '@circlon/angular-tree-component';
 
 import { Configuration } from '../config/configuration.class';
 
