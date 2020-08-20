@@ -155,20 +155,22 @@ private static Optional<String> extractHeaderFrom(Map<String, String> params) {
 private void initDatabase(Connection conn, ServletContext context) {
 
 	try {
+		log.info("Creating test database...");
 		String tables = "SHOW TABLES";
 		List<List<String>> pt = DaggerSQLComponent.builder().sql(tables).andConnection(conn).build().query().get();
-		if (!pt.get(1).contains("PERSONS")) {
+		if (!contains(pt, "PERSONS")) {
 			String create = "CREATE TABLE Persons (\n" + 
-				"    PersonID int,\n" + 
-				"    LastName varchar(255),\n" + 
-				"    FirstName varchar(255),\n" + 
-				"    Address varchar(255),\n" + 
-				") ";
+							"	PersonID int,\n" + 
+							"	LastName varchar(255),\n" + 
+							"	FirstName varchar(255),\n" + 
+							"	Address varchar(255)\n," + 
+							"	City varchar(255) " +
+				")";
 			DaggerSQLComponent.builder().sql(create).andConnection(conn).build().update().get();
 		}
 		String count = "SELECT COUNT(*) FROM Persons";
 		List<List<String>> c = DaggerSQLComponent.builder().sql(count).andConnection(conn).build().query().get();
-		if (!c.get(1).get(0).equals("2")) {
+		if (!contains(c, "2")) {
 			String insert = "INSERT INTO Persons VALUES (1, 'Doe', 'John', 'foo', 'fairyland')";
 			DaggerSQLComponent.builder().sql(insert).andConnection(conn).build().update().get();
 			insert = "INSERT INTO Persons VALUES (1, 'Doe', 'Daisy', 'bar', 'fairyland')";
@@ -178,6 +180,12 @@ private void initDatabase(Connection conn, ServletContext context) {
 		log.error("Problem creating test database ", e.getMessage());
 		e.printStackTrace();
 	}
+
+}
+
+
+private boolean contains(List<List<String>> result, String toFind) {
+	return result.stream().anyMatch(list -> list.stream().anyMatch(s -> s.equals(toFind)));
 }
 
 
