@@ -62,7 +62,57 @@ In this short video we showcase a Morfeu editing session with a simple YAML-base
 
 ## How it works
 
+### Main idea
+
 ![Diagram of Morfeu basic architecture](./src/site/img/how-it-works.png)
+
+As shown in the diagram, YAML, JSON, XML, or JSX files or  _documents_  are parsed into an [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) and presented to the user as a generic drag and drop UI, the UI can have a realtime interactive feedback loop when manipulating the different elements of the API. When the user is satisfied the document content is OK the AST is converted back to its original format.
+
+### How it looks
+
+![How the UI looks](./src/site/img/ui.png)
+
+
+### Conceptual model
+
+![How the different elements are defined](./src/site/img/concepts.png)
+
+
+#### Catalogue
+
+Convenience grouping of documents of a given API, it is expected all documents contained share the same API, model,
+preview functionality, etc. It will also contain a list of snippets for convenience.
+
+#### Document
+
+Instances of an usage of an API, DSL or abstraction layer, it is composed of a number of cells
+
+### Snippet
+
+Convenience fragment of a document, with pre-filled values. Useful as a starting point for complex API usage and for begginner 
+users. Necessarily tied to the model though it may not always validate (given it may be a fragment that needs to sit within a given
+structure.
+
+#### Model
+
+Model represeting an API, a DSL or an abstraction layer
+
+#### CellModel
+
+Elements within the model
+Can have cardinality, high level rules
+
+#### Type
+
+Low level types, basic rules
+
+#### Metadata
+
+Metadata related to the above items to increase usability, add some semantics and enrich models
+
+#### Cell
+
+Elements within a document, tied to cell models
 
 
 ## Rationale
@@ -75,13 +125,12 @@ This problem is compounded when the underlying systems interact between themselv
 
 Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure). JSX support was added with minimal effort.
 
-## Installation
+## Development
+
+### Dependencies
 
 Morfeu requires [Java 11](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 10](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests. Docker images are
 available.
-
-
-## Development
 
 ### Tests
 
@@ -94,58 +143,6 @@ This will run unit tests and general integration tests (see next command for UI 
 To launch UI Selenium integration tests you can do:
 
     mvn test failsafe:integration-test -Dit.test='*IntTest' -Dapp-url='http://localhost:3000/'
-
-
-
-
-
-## Concepts
-
-
-### Catalogue
-
-Convenience grouping of documents of a given API, it is expected all documents contained share the same API, model,
-preview functionality, etc. It will also contain a list of snippets for convenience.
-
-## Templates
-
-### Model
-
-Model represeting an API, a DSL or an abstraction layer
-
-## CellModel
-
-Elements within the model
-Can have cardinality, high level rules
-
-## Type
-
-Low level types, basic rules
-
-## Metadata
-
-Metadata related to the above items to increase usability, add some semantics and enrich models
-
-### Document
-
-Instances of an usage of an API, DSL or abstraction layer
-
-### Snippet
-
-Convenience fragment of a document, with pre-filled values. Useful as a starting point for complex API usage and for begginner 
-users. Necessarily tied to the model though it may not always validate (given it may be a fragment that needs to sit within a given
-structure.
-
-
-### Cell
-
-Elements within a document, tied to cell models
-
-## Architecture
-
-Architecture diagrams go here
-
-## Deployment
 
 ## Contributing
 
