@@ -1,8 +1,6 @@
 # Morfeu
 
-Morfeu is an application to manage multiple APIs represented as [YAML](http://yaml.org), JSON, JSX or XML documents. 
-It features a browser-based visual editor that can group heterogeneous APIs together. APIs are defined formally and 
-enriched with metadata, which enables Morfeu to present a workable UI.
+Morfeu is an application to visually manage APIs represented as [YAML](http://yaml.org), [JSON](https://www.json.org/json-en.html), [JSX](https://facebook.github.io/jsx/) or [XML](https://www.w3.org/XML/) documents. APIs are defined formally and enriched with metadata, which enables Morfeu to present a practical generic UI. Morfeu treats the original document as source of truth, is fully compatible with manual editing, git workflows and requires no dependencies in the API implementation.
 
 YAML and JSON-based APIs are commonly used in many domains to represent complex API configurations, and Morfeu makes it
 easier 
@@ -55,16 +53,35 @@ http://<ip>:8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernete
 ```
 
 
-### Demo
+## Demo
 
 [![Introduction to Morfeu fundamentals](http://img.youtube.com/vi/yjCPwHbjsVA/0.jpg)](https://youtu.be/jiqDp8Wzsjs "Morfeu introduction")
 
 In this short video we showcase a Morfeu editing session with a simple YAML-based API.
 
-### Installation
+
+## How it works
+
+![Diagram of Morfeu basic architecture](./src/site/img/how-it-works.png)
+
+
+## Rationale
+
+APIs are complex to design, develop and use. Many organisations have an ever-growing list of APIs that gets bigger and bigger over time, having poorly-documented APIs, with contracts that are hard to use for novices and challenging for experts. This problem is exacerbated when APIs are acting in combination, or they are produced by different teams with different styles, granularity levels, etc.
+
+Often, organisations that expose a rich API that is showing naturally end up developing a custom UI (often browser-based) that makes it easier to interact with that API. This is a valid strategy, but rich APIs are complex to develop and maintain, also requiring specific sets of skills that typical backend API developers may not have. In practice, building a complex UI for every single API is too resource and time-consuming, restricting the feasibility of custom UIs to the most popular APIs. 
+
+This problem is compounded when the underlying systems interact between themselves. It is even more complex to create all-encompassing or modular UIs that handle APIs created by different teams, crossing domain and organisational boundaries.
+
+Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure). JSX support was added with minimal effort.
+
+## Installation
 
 Morfeu requires [Java 11](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 10](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests. Docker images are
 available.
+
+
+## Development
 
 ### Tests
 
@@ -79,15 +96,7 @@ To launch UI Selenium integration tests you can do:
     mvn test failsafe:integration-test -Dit.test='*IntTest' -Dapp-url='http://localhost:3000/'
 
 
-## Rationale
 
-APIs are complex to design, develop and use. Many organisations have an ever-growing list of APIs that gets bigger and bigger over time, having poorly-documented APIs, with contracts that are hard to use for novices and challenging for experts. This problem is exacerbated when APIs are acting in combination, or they are produced by different teams with different styles, granularity levels, etc.
-
-Often, organisations that expose a rich API that is showing naturally end up developing a custom UI (often browser-based) that makes it easier to interact with that API. This is a valid strategy, but rich APIs are complex to develop and maintain, also requiring specific sets of skills that typical backend API developers may not have. In practice, building a complex UI for every single API is too resource and time-consuming, restricting the feasibility of custom UIs to the most popular APIs. 
-
-This problem is compounded when the underlying systems interact between themselves. It is even more complex to create all-encompassing or modular UIs that handle APIs created by different teams, crossing domain and organisational boundaries.
-
-Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure). JSX support was added with minimal effort.
 
 
 ## Concepts
