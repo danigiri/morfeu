@@ -80,50 +80,47 @@ As shown in the diagram, YAML, JSON, XML, or JSX files or  _documents_  are pars
 
 #### Catalogue
 
-Convenience grouping of documents of a given API, it is expected all documents contained share the same API, model,
-preview functionality, etc. It will also contain a list of snippets for convenience.
+Logical grouping of documents of a given API, it is expected all documents contained share the same API, model,
+preview functionality, etc. It will also contain a list of snippets for convenience. Catalogues are defined as simple JSON files. The include a list of documents and a list of snippets.
 
 #### Document
 
-Instances of an usage of an API, DSL or abstraction layer, it is composed of a number of cells
+A document is an instances of an usage of an API, DSL or abstraction layer, it is composed of a number of cells, containing attributes, values, etc. The basic information of a document is defined as a JSON file but the content is represented as a YAML, JSON, XML or JSX blob (can be stored in a file or come from a configurable endpoint) that is controlled by the API owner.
 
 ### Snippet
 
-Convenience fragment of a document, with pre-filled values. Useful as a starting point for complex API usage and for begginner 
-users. Necessarily tied to the model though it may not always validate (given it may be a fragment that needs to sit within a given
-structure.
+Convenience fragment of a document, with pre-filled values. Useful as a starting point for complex API usage and for begginner users. Necessarily tied to the model though it may not always validate (given it may be a fragment that needs to sit within a given structure). The basic information of a snippet is stored in a plain JSON file but the actual content is a YAML, JSON, XML or JSX blob that is expected to follow the specified model.
 
 #### Model
 
-Model represeting an API, a DSL or an abstraction layer
+Model represeting an API, a DSL or an abstraction layer, its implementation is completely up to the API owner but Morfeu requires the owner to create a bunch of [XML Schema](https://www.w3.org/TR/xmlschema11-1/) definition files with some extra metadata to assist in the presentation and (de)-serialisation of the document contents handled by the application. Can be though of the _schema_ of the API and is totally controlled. A subset of the XML Schema is used for implementation and definition simplicity.
 
 #### CellModel
 
-Elements within the model
-Can have cardinality, high level rules
+Definition of specific  _cells_  within the model, what values and attributes they can take, if they have children, etc. The definition includes how the cell is presented to the user in Morfeu, a description, possible values (regexp), if it has attributes the type and ordering of any children it may have in the model. It is designed to be very flexible and accommodate many scenarios like recursive definitions, format specific serialisation directives, specific cardinality, inheritance, type reusability, etc.
 
 #### Type
 
-Low level types, basic rules
+Low level types as defined in the model, like integers, strings, etc.
 
 #### Metadata
 
-Metadata related to the above items to increase usability, add some semantics and enrich models
+Extra information added to CellModels to increase their usability and other functions like helping with (de)-serialisation, formatting, etc.
 
 #### Cell
 
-Elements within a document, tied to cell models
+Specific instance of an API object within a document, must comply with a specific cell model, it can include values, attributes and children cells.
 
 
 ## Rationale
 
-APIs are complex to design, develop and use. Many organisations have an ever-growing list of APIs that gets bigger and bigger over time, having poorly-documented APIs, with contracts that are hard to use for novices and challenging for experts. This problem is exacerbated when APIs are acting in combination, or they are produced by different teams with different styles, granularity levels, etc.
+APIs are complex to design, develop and use. Many organisations have an ever-growing list of APIs that gets bigger and bigger over time, sometimes are poorly-documented, with contracts that are hard to use for novices and challenging for experts. This problem is exacerbated when APIs are acting in combination, or they are produced by different teams with different styles, granularity levels, etc.
 
-Often, organisations that expose a rich API that is showing naturally end up developing a custom UI (often browser-based) that makes it easier to interact with that API. This is a valid strategy, but rich APIs are complex to develop and maintain, also requiring specific sets of skills that typical backend API developers may not have. In practice, building a complex UI for every single API is too resource and time-consuming, restricting the feasibility of custom UIs to the most popular APIs. 
+Often, organisations employing rich internal APIs end up developing a custom UI (often browser-based) that makes it easier to interact with that API and increase productivity. This is a valid strategy, but rich APIs are complex to develop and maintain, also requiring specific sets of skills that typical backend API developers may not have. In practice, building a complex UI for every single API is too resource and time-consuming, restricting the feasibility of developing custom UIs to the most popular APIs. 
 
-This problem is compounded when the underlying systems interact between themselves. It is even more complex to create all-encompassing or modular UIs that handle APIs created by different teams, crossing domain and organisational boundaries.
+This problem is compounded when the underlying systems interact between themselves or expose complex semantics. It is even more complex to create all-encompassing or modular UIs that handle APIs created by different teams, crossing domain and organisational boundaries.
 
-Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure). JSX support was added with minimal effort.
+Morfeu proposes a generic browser-based UI to handle multiple APIs at the same time, maintaining boundaries and making it easier for engineers to test and interact with YAML, JSON and XML-based APIs (other formats can be added as long as there is a way to transform to and from a DOM-like tree structure). It is designed to be very flexible and JSX support was added with minimal effort.
 
 ## Development
 
