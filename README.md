@@ -72,11 +72,13 @@ As shown in the diagram, YAML, JSON, XML, or JSX files or  _documents_  are pars
 
 ![How the UI looks](./src/site/img/ui.png)
 
+On the left panel we have the catalogue list, the list of documents of the selected catalogue and some information on the currently open document. In the middle we have the content with the cellsbeing manipulated. On the right hand side we have both the current document model as well as a tab to access the snippets of the current catalogue.
 
 ### Conceptual model
 
 ![How the different elements are defined](./src/site/img/concepts.png)
 
+A description of the different elements follows:
 
 #### Catalogue
 
@@ -93,7 +95,7 @@ Convenience fragment of a document, with pre-filled values. Useful as a starting
 
 #### Model
 
-Model represeting an API, a DSL or an abstraction layer, its implementation is completely up to the API owner but Morfeu requires the owner to create a bunch of [XML Schema](https://www.w3.org/TR/xmlschema11-1/) definition files with some extra metadata to assist in the presentation and (de)-serialisation of the document contents handled by the application. Can be though of the _schema_ of the API and is totally controlled. A subset of the XML Schema is used for implementation and definition simplicity.
+Model represeting an API, a DSL or an abstraction layer, its implementation is completely up to the API owner but Morfeu requires the owner to create a bunch of [XML Schema](https://www.w3.org/TR/xmlschema11-1/) definition files with some extra metadata to assist in the presentation and (de)-serialisation of the document contents handled by the application. Can be though of the  _schema_  of the API and is totally controlled. A subset of the XML Schema is used for implementation and definition simplicity.
 
 #### CellModel
 
@@ -111,6 +113,14 @@ Extra information added to CellModels to increase their usability and other func
 
 Specific instance of an API object within a document, must comply with a specific cell model, it can include values, attributes and children cells.
 
+### Software components
+
+![Diagram of Morfeu software components and packages](./src/site/img/software-components.png)
+
+In the frontend, events are used to change the state of components and inter-component message passing. Also, the application specific logic is contained in pure Typescript classes that have no external dependencies. Frontend components are also standalone and extensively tested using Selenide test suites.
+
+In the backend, dependency injection is used extensively to break down application logic, provide encapsulation, etc. Components can be extended and or their implementation changed with relative ease. There is an extensive number of integration and unit tests.
+
 
 ## Rationale
 
@@ -126,8 +136,7 @@ Morfeu proposes a generic browser-based UI to handle multiple APIs at the same t
 
 ### Dependencies
 
-Morfeu requires [Java 11](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 10](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests. Docker images are
-available.
+Morfeu requires [Java 11](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 10](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests. A [dockerfile](./Dockerfile) is available for convenience.
 
 ### Tests
 
@@ -140,6 +149,10 @@ This will run unit tests and general integration tests (see next command for UI 
 To launch UI Selenium integration tests you can do:
 
     mvn test failsafe:integration-test -Dit.test='*IntTest' -Dapp-url='http://localhost:3000/'
+
+A small number of frontend tests is also available, to launch them you can do:
+
+    cd src/main/angular && ng test
 
 ## Contributing
 
