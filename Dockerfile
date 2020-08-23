@@ -36,7 +36,6 @@ RUN echo 'build finished'
 FROM openjdk:13-alpine AS main
 
 # arguments and variables run stage
-ARG VERSION=0.7.0-SNAPSHOT
 ENV JETTY_HOME /var/lib/jetty
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.24.v20191120/jetty-distribution-9.4.24.v20191120.tar.gz
 ARG JETTY_BASE=/jetty-base
@@ -53,7 +52,7 @@ RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/logs
 COPY --from=build ./target/classes/jetty /jetty-base
 
 # add war
-COPY --from=build ./target/morfeu-webapp-${VERSION}.war ${JETTY_BASE}/webapps/root.war
+COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
 
 # add test data
 RUN mkdir -p ${JETTY_HOME}/target/test-classes/test-resources
