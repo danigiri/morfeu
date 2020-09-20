@@ -19,8 +19,8 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
-/**
-* @author daniel giribet
+/** Given the URI, get the document (cells), having applied a set of optional filters
+*	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={DocumentModule.class, HttpClientModule.class, MapperModule.class, 
 								DefaultModelURIModule.class, ListeningExecutorServiceModule.class})

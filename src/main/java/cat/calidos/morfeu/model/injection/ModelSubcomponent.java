@@ -1,3 +1,29 @@
+
+package cat.calidos.morfeu.model.injection;
+
+import java.util.concurrent.ExecutionException;
+
+import com.google.common.util.concurrent.ListenableFuture;
+
+import cat.calidos.morfeu.model.Model;
+import cat.calidos.morfeu.problems.ValidationException;
+import dagger.producers.ProductionSubcomponent;
+
+/**	Subcomponent to provide the model
+* 	@author daniel giribet
+*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionSubcomponent(modules={ModelModule.class})
+public interface ModelSubcomponent {
+
+ListenableFuture<Model> model() throws ValidationException, ExecutionException;
+
+@ProductionSubcomponent.Builder
+interface Builder {
+	ModelSubcomponent builder();
+}
+
+}
+
 /*
  *    Copyright 2018 Daniel Giribet
  *
@@ -13,28 +39,3 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-package cat.calidos.morfeu.model.injection;
-
-import java.util.concurrent.ExecutionException;
-
-import com.google.common.util.concurrent.ListenableFuture;
-
-import cat.calidos.morfeu.model.Model;
-import cat.calidos.morfeu.problems.ValidationException;
-import dagger.producers.ProductionSubcomponent;
-
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionSubcomponent(modules={ModelModule.class})
-public interface ModelSubcomponent {
-
-ListenableFuture<Model> model() throws ValidationException, ExecutionException;
-
-@ProductionSubcomponent.Builder
-interface Builder {
-	ModelSubcomponent builder();
-}
-
-}

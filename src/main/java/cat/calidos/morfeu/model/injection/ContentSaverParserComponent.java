@@ -25,8 +25,8 @@ import cat.calidos.morfeu.utils.injection.SaverModule;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
-/**
-* @author daniel giribet
+/** Save this content (apply a set of filters optionally before saving). Will performa a model validation.
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, StringToParsedModule.class, ContentTransformModule.class,
 								MapperModule.class, SaverModule.class, ModelModule.class, ValidatorModule.class,

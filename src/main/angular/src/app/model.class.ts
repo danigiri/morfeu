@@ -1,8 +1,8 @@
 // MODEL . CLASS . TS
 
-import {CellType} from './cell-type.class';
-import {CellModel, CellModelJSON} from './cell-model.class';
-import {SerialisableToJSON} from './serialisable-to-json.interface';
+import { CellType } from './cell-type.class';
+import { CellModel, CellModelJSON } from './cell-model.class';
+import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 /** Root cell model, also called Model */
 export class Model extends CellModel implements SerialisableToJSON<Model, ModelJSON> {

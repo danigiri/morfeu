@@ -61,8 +61,8 @@ public static Model model(@Named("ModelURI") URI u,
 						ROOT_NAME,
 						desc,
 						type,
-						1,
-						1,
+						1,			// min
+						1,			// max
 						Optional.empty(),
 						metadata.getCategory(),
 						true,					// root is considered ordered

@@ -15,7 +15,7 @@ import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 /**
-* @author daniel giribet
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionSubcomponent(modules={ContentParserModule.class, URIToParsedModule.class, ModelModule.class, 
 									CellModelsFilterModule.class, ValidatorModule.class,

@@ -28,7 +28,7 @@ public void testDocument1YAMLTransform() throws Exception {
 	assertEquals("Wrong document schema", 0, root.get("schema").asInt());
 	assertEquals("Root node has a wrong name", "document1.yaml", root.get("name").asText());
 	assertTrue("/children is not an array and it should be", root.get("children").isArray());
-	
+
 	JsonNode test = root.get("children").get(0);				// /test(0)
 	assertEquals("/children/test(0) has a wrong name", "test", test.get("name").asText());
 

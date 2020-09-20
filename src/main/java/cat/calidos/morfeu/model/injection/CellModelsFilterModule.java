@@ -17,8 +17,9 @@ import dagger.BindsOptionalOf;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-/**
-* @author daniel giribet
+/** Either return the provided cell model or a model down in the hierarchy given an optional filter. This will be useful
+*	for snippets, as they are cells that can reference a model down in the hierarcy and not a complete document.
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public abstract class CellModelsFilterModule {
@@ -26,7 +27,12 @@ public abstract class CellModelsFilterModule {
 protected final static Logger log = LoggerFactory.getLogger(CellModelsFilterModule.class);
 
 
-// it may be that we want to match content with a cell model deep down the hierarchy
+/**	it may be that we want to match content with a cell model deep down the hierarchy
+*	@param model
+*	@param cellModelFilter optional, URI of the cellmodel we may want to find in the 'model' 
+*	@return 'model' if no filter is present, or the cell model corresponding to the filter
+*	@throws ParsingException if the filter URI cannot be found in the model children
+*/
 @Produces @Named("CellModel") 
 public static CellModel filterCellModels(Model model, 
 									@Named("CellModelFilter") Optional<URI> cellModelFilter) throws ParsingException  {
@@ -36,10 +42,10 @@ public static CellModel filterCellModels(Model model,
 		URI filter = cellModelFilter.get();
 		log.trace("*** Looking for cell model filter "+filter);
 		CellModel cellModel = model.children().stream()
-												.map(cm -> lookForCellModel(cm,filter))
+												.map(cm -> lookForCellModel(cm, filter))
 												.findFirst()
 												.get()
-												.orElseThrow(() ->  new ParsingException("Wrong filter "+filter));
+												.orElseThrow(() -> new ParsingException("Wrong filter "+filter));
 
 		return cellModel;
 

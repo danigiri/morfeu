@@ -30,8 +30,9 @@ import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.utils.injection.RemoteModule;
 
 
-/** TODO: ensure all this is actually asynchronous
-* @author daniel giribet
+/**  Module to get the document cell content
+* 	TODO: ensure all this is actually asynchronous
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule(subcomponents={ModelSubcomponent.class, ContentParserSubcomponent.class})
 public class DocumentModule extends RemoteModule {

@@ -110,7 +110,7 @@ ngOnInit() {
 
 	// external component (like a keyboard shortcut) wants to drag this cell somewhere
 	this.register(this.events.service.of<CellDragEvent>(CellDragEvent)
-			.pipe(filter(() => this.active  && this.canBeModified))
+			.pipe(filter(() => this.active && this.canBeModified))
 			.subscribe(() => {
 				console.log('-> cell comp gets cell drag event and will try to drop to a selection :)');
 				this.events.service.publish(new CellDropEvent(this.cell));

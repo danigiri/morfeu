@@ -24,19 +24,20 @@ import dagger.producers.Produces;
 
 import cat.calidos.morfeu.problems.ConfigurationException;
 
-/**
-* @author daniel giribet
+/**	Produce a bunch of XML parsing objects needed to parse content
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class ModelParserModule {
 
 protected final static Logger log = LoggerFactory.getLogger(ModelParserModule.class);
-		
+
+
 @Produces
 public static SAXParserFactory produceSAXParserFactory() throws ConfigurationException {
 
 	log.trace("[Producing saxParserFactory]");
-	
+
 	//TODO: double-check which parser to use that implements security like we want
 	SAXParserFactory factory = SAXParserFactory.newInstance();
 	factory.setNamespaceAware(true);
@@ -59,11 +60,11 @@ public static XSOMParser produceSchemaParser(SAXParserFactory factory,
 
 	log.trace("[Producing XSOMParser] with custom error handler and annotation parser");
 
-    XSOMParser parser = new XSOMParser(factory);
-    parser.setErrorHandler(parserErrorHandler);
-    parser.setAnnotationParser(annotationParserFactory);
+	XSOMParser parser = new XSOMParser(factory);
+	parser.setErrorHandler(parserErrorHandler);
+	parser.setAnnotationParser(annotationParserFactory);
 
-    return parser;
+	return parser;
 
 }
 
@@ -94,14 +95,14 @@ private static final class LoggingSchemaParserErrorHandler implements ErrorHandl
 		log.error("Fatal problem SAXParseException {} at {}", e.getMessage(), e.getSystemId());
 		throw e;
 	}
-	
-	
+
+
 	@Override
 	public void error(SAXParseException e) throws SAXException {
 		log.error("Problem SAXParseException {} at {}", e.getMessage(), e.getSystemId());
 		throw e;
 	}
-	
+
 }
 
 

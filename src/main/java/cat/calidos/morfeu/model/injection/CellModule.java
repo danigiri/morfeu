@@ -1,18 +1,4 @@
-/*
- *    Copyright 2019 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// CELL MODULE . JAVA
 
 package cat.calidos.morfeu.model.injection;
 
@@ -44,8 +30,8 @@ import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.utils.OrderedMap;
 
 
-/**
-* @author daniel giribet
+/** Module to create cell content from dom nodes
+*	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class CellModule {
@@ -119,14 +105,14 @@ public static Optional<String> valueFrom(Node node) {
 	//	node (TEXT_NODE)
 	// and this last node is the one having the content
 	// we ignore whitespace, or just a newline without any content (several newlines are kept)
-	
+
 	String value = null;
 	if (node.hasChildNodes() && node.getFirstChild().getNodeType()==Node.TEXT_NODE) {
-		
+
 		Text textNode = (Text)node.getFirstChild();
 		if (!textNode.isElementContentWhitespace()) {	// TODO: add metadata so we can control this process better
 			value = textNode.getTextContent();
-			value = value.replace("\n", "\\n");
+			value = value.replace("\n", "\\n");			// this is definitely hardcoded and needs a lot of improvement
 			value = value.replace("\"", "\\\"");
 			value = value.trim();
 			if (value.equals("\\n")) {
@@ -303,8 +289,25 @@ private static CellModel findAttributeWithName(ComplexCellModel cellModel, Strin
 	}
 
 	return matchedAttribute.orElse(cellModel);
-	
+
 }
 
 
 }
+
+/*
+ *    Copyright 2019 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+

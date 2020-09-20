@@ -21,7 +21,7 @@ import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
-/**
+/** With the URIs, fetchable URIs (usually absolute) and an optional set of filter swe get the content and validator
 * 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 
@@ -62,3 +62,4 @@ interface Builder {
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+

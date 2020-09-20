@@ -21,7 +21,8 @@ import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
-/**
+/** Component to get cell data from a snippet (can be optionally filtered), needs the cellmodel (within th emodel
+*	the model hierarchy). Very similar to the regular content parser component 
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 

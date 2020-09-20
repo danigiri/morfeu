@@ -2,7 +2,6 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Optional;
 

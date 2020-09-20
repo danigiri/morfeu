@@ -14,8 +14,8 @@ import cat.calidos.morfeu.problems.ConfigurationException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-/**
-* @author daniel giribet
+/**	Module to extract a cell model filter from a URL, for instance to use in snippets
+*	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class SnippetCellModelModule {
@@ -25,15 +25,15 @@ protected final static Logger log = LoggerFactory.getLogger(SnippetCellModelModu
 
 @Produces @Named("ModelURI")
 public static URI modelURI(@Named("FilteredModelURI") URI uri) throws ConfigurationException {
-	
+
 	log.trace("Filtering cell model URI "+uri);
-	
+
 	String modelURI = uri.toString();
 	int queryIndex = modelURI.indexOf("?filter=");
 	if (queryIndex==-1) {
 		throw new ConfigurationException("Filtered model uri did not have '?filter=' ("+modelURI+")");		
 	}
-	
+
 	try {
 		return new URI(modelURI.substring(0, queryIndex));
 	} catch (URISyntaxException e) {

@@ -14,7 +14,7 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 
 
-/** Cell: content element, related to a cell model
+/** Cell: content element, always related to a cell model
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules=CellModule.class)

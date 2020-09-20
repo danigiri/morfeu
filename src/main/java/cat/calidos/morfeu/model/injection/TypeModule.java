@@ -25,13 +25,14 @@ import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Type;
 import cat.calidos.morfeu.model.metadata.injection.DaggerModelMetadataComponent;
 
-/**
-* @author daniel giribet
+/** Module to create the Type instance from the XML Schema XSType
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class TypeModule {
 
 protected final static Logger log = LoggerFactory.getLogger(TypeModule.class);
+
 
 @Provides
 public static Type type(@Named("EffectiveURI") URI uri,

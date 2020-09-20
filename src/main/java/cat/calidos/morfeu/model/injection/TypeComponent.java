@@ -14,8 +14,8 @@ import dagger.Component;
 
 import cat.calidos.morfeu.model.Type;
 
-/**
-* @author daniel giribet
+/** Create a Type instance from a XSType instance from the model xml schema
+* 	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules=TypeModule.class)
 public interface TypeComponent {
