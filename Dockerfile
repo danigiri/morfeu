@@ -3,7 +3,7 @@ FROM openjdk:13-alpine AS build
 LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 
 # variables build stage
-ARG MAVEN_URL=https://apache.brunneis.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+ARG MAVEN_URL=https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 ARG MAVEN_OPTS=
 ARG MAVEN_HOME=/usr/share/maven
 
