@@ -11,7 +11,7 @@ import { Events } from "./events.class";
 @Component({template:''})
 export class EventListener implements OnDestroy {
 
-private readonly SUSPICIOUS_SUBSCRIPTION_COUNT = 50;
+private readonly SUSPICIOUS_SUBSCRIPTION_COUNT = 100;
 
 protected events: Events;
 private subscriptions: Set<Subscription>;
