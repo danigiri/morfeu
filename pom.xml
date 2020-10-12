@@ -33,7 +33,7 @@
 		<developer.id_>danigiri</developer.id_>
 	</properties>
 
-	<scm>	<!-- mvn release:prepare release:perform -Darguments="-DaltDeploymentRepository=REPO::default::file:/$HOME/.m2/repository" -->
+	<scm>	<!-- mvn release:prepare release:perform -Darguments="-DskipITs -Djetty.skip -DaltDeploymentRepository=REPO::default::file:/$HOME/.m2/repository" -->
 		<connection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</connection>
 		<url>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</url>
 		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</developerConnection>
@@ -200,6 +200,30 @@
 						<port>${jetty-http-port}</port>
 					</httpConnector>
 				</configuration>
+				<executions>
+					<execution>	<!-- start jetty when target is integration testing -->
+					<id>start-jetty-integration-test</id>
+					<phase>pre-integration-test</phase>
+					<goals>
+						<goal>run</goal>
+					</goals>
+					<configuration>
+						<scanIntervalSeconds>0</scanIntervalSeconds>
+						<daemon>true</daemon>
+					</configuration>
+					</execution>
+					<execution>	<!-- stop jetty when completed integration testing-->
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+						<configuration>
+							<stopKey>STOP</stopKey>
+							<stopPort>${jetty-stop-port}</stopPort>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
