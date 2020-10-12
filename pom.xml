@@ -104,23 +104,6 @@
 				<version>3.0.0</version>
 				<executions>
 					<execution>
-						<id>build-helpers</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>bash</executable>
-							<workingDirectory />
-							<arguments>
-								<argument>-c</argument>
-								<argument>chmod a+x ${project.build.directory}/scripts/build-helpers.sh &amp;&amp; \
-											${project.build.directory}/scripts/build-helpers.sh
-								</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
 						<id>build-angular</id>
 						<phase>prepare-package</phase>
 						<goals>
