@@ -29,7 +29,16 @@
 		<junit-platform-version>1.5.2</junit-platform-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<scm.host_>github.com</scm.host_>
+		<developer.id_>danigiri</developer.id_>
 	</properties>
+
+	<scm>	<!-- mvn release:prepare release:perform -Darguments='-DaltDeploymentRepository=REPO::default::file:/xxx/.m2/repository' -->
+		<connection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</connection>
+		<url>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</url>
+		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</developerConnection>
+		<tag>HEAD</tag>
+</scm>
 
 	<build>
 
