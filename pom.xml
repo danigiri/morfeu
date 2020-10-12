@@ -34,9 +34,9 @@
 	</properties>
 
 	<scm>	<!-- mvn release:prepare release:perform -Darguments="-DskipITs -Djetty.skip -DaltDeploymentRepository=REPO::default::file:/$HOME/.m2/repository" -->
-		<connection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</connection>
-		<url>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</url>
-		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</developerConnection>
+		<connection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</connection>
+		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
+		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
 		<tag>HEAD</tag>
 </scm>
 
