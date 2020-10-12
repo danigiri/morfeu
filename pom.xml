@@ -200,30 +200,6 @@
 						<port>${jetty-http-port}</port>
 					</httpConnector>
 				</configuration>
-				<executions>
-					<execution>	<!-- start jetty when target is integration testing -->
-					<id>start-jetty-integration-test</id>
-					<phase>pre-integration-test</phase>
-					<goals>
-						<goal>run</goal>
-					</goals>
-					<configuration>
-						<scanIntervalSeconds>0</scanIntervalSeconds>
-						<daemon>true</daemon>
-					</configuration>
-					</execution>
-					<execution>	<!-- stop jetty when completed integration testing-->
-						<id>stop-jetty</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-						<configuration>
-							<stopKey>STOP</stopKey>
-							<stopPort>${jetty-stop-port}</stopPort>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
