@@ -32,7 +32,7 @@
 		<developer.id_>danigiri</developer.id_>
 	</properties>
 
-	<scm>	<!-- mvn release:prepare release:perform -Darguments=" -Dskip-build-client=true -DskipITs -Djetty.skip -DaltDeploymentRepository=REPO::default::file://$HOME/.m2/repository" -->
+	<scm>	<!-- mvn -B release:prepare release:perform -Darguments=" -Dskip-build-client=true -DskipITs -Djetty.skip -DaltDeploymentRepository=REPO::default::file://$HOME/.m2/repository" -->
 		<connection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</connection>
 		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
 		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
