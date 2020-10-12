@@ -7,12 +7,15 @@
 .classpath
 /build/
 
-# angular 2 stuff
-node_modules
-/.apt_generated/
-src/main/typescript/src/app/**/*.js
-src/main/typescript/src/app/**/*.js.map
-src/main/typescript/dist
+# other
 .README.md.html
 *.dtwig
 .externalToolBuilders
+
+
+# angular stuff
+node_modules
+/.apt_generated/
+src/main/angular/src/app/**/*.js
+src/main/angular/src/app/**/*.js.map
+src/main/angular/dist

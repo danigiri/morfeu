@@ -37,25 +37,29 @@
 		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
 		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
 		<tag>HEAD</tag>
-</scm>
+	</scm>
 
 	<build>
 
 		<resources>	<!-- skip moving node modules about -->
 			<resource>
-				<directory>src/main/resources</directory>	<!-- this is probably not needed -->
-			</resource>										<!--  and causes duplicates -->
+				<directory>src/main/resources</directory>
+				<excludes>	<!-- avoid duplicates -->
+					<exclude>angular/</exclude>
+					<exclude>metadata/</exclude>
+				</excludes>
+			</resource>
 			<resource>
 				<directory>src/test/resources</directory>
 			</resource>
-			<resource>											<!-- folder for angular app distribution -->
-				<directory>src/main/angular/dist</directory>	<!-- will create any empty dist dir in target -->
-				<targetPath>${project.build.directory}/dist</targetPath>
-			</resource>
-			<resource>
+			<resource>	<!-- helper scripts, for instance to help with the release process -->
 				<directory>src/main/scripts</directory>
 				<filtering>true</filtering>
 				<targetPath>${project.build.directory}/scripts</targetPath>
+			</resource>
+			<resource>	<!-- angular release dist folder extra materials  -->
+				<directory>src/main/resources/angular</directory>
+				<targetPath>${project.build.directory}/dist</targetPath>
 			</resource>
 			<resource>	<!--  application metadata, like the version -->
 				<directory>src/main/resources/metadata</directory>
@@ -128,6 +132,9 @@
 					<webResources>
 						<resource>
 							<directory>${project.build.directory}/dist</directory> <!-- add build distribution to root of WAR -->
+							<excludes>
+								<exclude>README</exclude>	<!-- originally in the empty dist folder, not needed -->
+							</excludes>
 						</resource>
 						<resource>
 							<directory>${project.build.outputDirectory}/test-resources</directory>	<!-- test material for dev env compatibility -->
