@@ -35,8 +35,8 @@
 
 		<resources>	<!-- skip moving node modules about -->
 			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
+				<directory>src/main/resources</directory>	<!-- this is probably not needed -->
+			</resource>										<!--  and causes duplicates -->
 			<resource>
 				<directory>src/test/resources</directory>
 			</resource>
@@ -48,6 +48,11 @@
 				<directory>src/main/scripts</directory>
 				<filtering>true</filtering>
 				<targetPath>${project.build.directory}/scripts</targetPath>
+			</resource>
+			<resource>	<!--  application metadata, like the version -->
+				<directory>src/main/resources/metadata</directory>
+				<filtering>true</filtering>
+				<targetPath>${project.build.outputDirectory}</targetPath>
 			</resource>
 		</resources>
 
