@@ -33,7 +33,7 @@
 		<developer.id_>danigiri</developer.id_>
 	</properties>
 
-	<scm>	<!-- mvn release:prepare release:perform -Darguments='-DaltDeploymentRepository=REPO::default::file:/xxx/.m2/repository' -->
+	<scm>	<!-- mvn release:prepare release:perform -Darguments="-DaltDeploymentRepository=REPO::default::file:/$HOME/.m2/repository" -->
 		<connection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</connection>
 		<url>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</url>
 		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/${project.artifactId}.git</developerConnection>
