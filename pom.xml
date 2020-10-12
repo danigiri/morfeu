@@ -61,10 +61,10 @@
 				<directory>src/main/resources/angular</directory>
 				<targetPath>${project.build.directory}/dist</targetPath>
 			</resource>
-			<resource>	<!--  application metadata, like the version -->
+			<resource>	<!--  application metadata, like the version, goes to the webapp root -->
 				<directory>src/main/resources/metadata</directory>
 				<filtering>true</filtering>
-				<targetPath>${project.build.outputDirectory}</targetPath>
+				<targetPath>${project.build.outputDirectory}/metadata</targetPath>
 			</resource>
 		</resources>
 
@@ -143,6 +143,10 @@
 						<resource>
 							<directory>${project.build.outputDirectory}/test-resources</directory>	<!-- test material for dev env compatibility -->
 							<targetPath>test-resources</targetPath>
+						</resource>
+						<resource>
+							<directory>${project.build.outputDirectory}/metadata</directory>	<!-- metadata -->
+							<targetPath>metadata</targetPath>
 						</resource>
 					</webResources>
 					<attachClasses>true</attachClasses>	<!-- creates a jar with the classes and attaches an artifact -->
