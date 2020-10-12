@@ -1,7 +1,7 @@
 package cat.calidos.morfeu.transform;
 
 
-/** A transformation processor, given context of type <T,O>
+/** A transformation processor, given context of type &lt;T,O&gt;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public interface Processor<T, O> {

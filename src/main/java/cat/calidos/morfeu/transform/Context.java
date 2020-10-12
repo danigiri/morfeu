@@ -21,7 +21,7 @@ O output();
 *	@param output new output
 *	@return previous output
 */
-O setOutput(O o);
+O setOutput(O output);
 
 
 /** Append to output, depends on the output implementation
@@ -46,7 +46,6 @@ Processor<T,O> push(Processor<T,O> item);
 
 
 }
-
 
 /*
  *    Copyright 2019 Daniel Giribet

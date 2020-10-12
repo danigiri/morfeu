@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
-/**	This creates a simple xml text node witjout any attributes <foo>bar</foo>
+/**	This creates a simple xml text node witjout any attributes &lt;foo&gt;bar&lt;/foo&gt;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class YAMLTextualToXMLProcessor  extends PrefixProcessor<JsonNodeCellModel, String> {
@@ -57,7 +57,6 @@ public String toString() {
 
 
 }
-
 
 /*
  *    Copyright 2019 Daniel Giribet
