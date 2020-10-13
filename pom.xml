@@ -10,7 +10,7 @@
 	<description>Morfeu is an application to manage multiple APIs represented as YAML, JSON, JSX or XML documents</description>
 	<inceptionYear>2016</inceptionYear>
 
-	<properties>
+	<properties> 
 		<jetty-http-port>8980</jetty-http-port>
 		<jetty-stop-port>8981</jetty-stop-port>
 		<jetty-context-path>/</jetty-context-path>
