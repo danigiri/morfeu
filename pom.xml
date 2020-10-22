@@ -41,7 +41,7 @@
 
 	<build>
 
-		<resources>	<!-- skip moving node modules about -->
+		<resources>		<!-- skip moving node modules about -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>	<!-- avoid duplicates -->
