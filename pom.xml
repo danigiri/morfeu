@@ -37,7 +37,7 @@
 		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
 		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
 		<tag>HEAD</tag>
-	</scm>
+	</scm>	
 
 	<build>
 
