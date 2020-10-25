@@ -31,7 +31,7 @@ public Type(URI u, String name) {
 }
 
 
-public Type(URI u, String name, 			
+public Type(URI u, String name,
 			XSType xsType,
 			String regex,
 			Set<String> possibleValues,
