@@ -24,12 +24,20 @@ RUN echo 'Using maven options ${MAVEN_OPTS}'
 COPY pom.xml pom.xml
 RUN /usr/bin/mvn dependency:go-offline ${MAVEN_OPTS}
 
+# cache some node stuff to speed up builds
+COPY src/main/angular/*.json /cache/
+COPY src/main/angular/*.js /cache/
+WORKDIR /cache/
+RUN npm install
+
 # add code
 COPY src src
 
-# and build (two steps to try to reuse the lengthy maven download)
+# and build (in multiple steps steps to try to reuse the lengthy maven download)
 RUN echo 'Using maven options ${MAVEN_OPTS}'
 RUN /usr/bin/mvn compile ${MAVEN_OPTS}
+# copy cached node modules before the package
+RUN cp -r /cache/node_modules /src/main/angular/node_modules
 RUN /usr/bin/mvn test package ${MAVEN_OPTS}
 RUN echo 'build finished'
 
