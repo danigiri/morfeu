@@ -18,10 +18,13 @@ RUN mkdir -p ${MAVEN_HOME}
 RUN curl ${MAVEN_URL} | tar zxf - -C ${MAVEN_HOME} --strip-components 1
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
-# we add the pom and validate the project (does nothing), but some of the downloads will be cached
+# we add the cache pom and validate the project (does nothing), but some of the downloads will be cached
 RUN echo 'Using maven options ${MAVEN_OPTS}'
+COPY src/main/resources/build /cache
+RUN /usr/bin/mvn dependency:go-offline -f /cache/cache-pom.xml ${MAVEN_OPTS}
+
+# now start build proper
 COPY pom.xml pom.xml
-RUN /usr/bin/mvn dependency:go-offline ${MAVEN_OPTS}
 
 # add code
 COPY src src
