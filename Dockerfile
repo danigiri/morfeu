@@ -27,8 +27,7 @@ RUN /usr/bin/mvn dependency:go-offline ${MAVEN_OPTS}
 # cache some node stuff to speed up builds
 COPY src/main/angular/*.json /cache/
 COPY src/main/angular/*.js /cache/
-WORKDIR /cache/
-RUN npm install
+RUN cd /cache/ && npm install
 
 # add code
 COPY src src
