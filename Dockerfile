@@ -20,8 +20,8 @@ RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
 
 # we also cache the node modules of the angular project
-COPY src/main/angular/*.json src/main/angular
-COPY src/main/angular/*.js src/main/angular
+COPY src/main/angular/*.json src/main/angular/
+COPY src/main/angular/*.js src/main/angular/
 WORKDIR /src/main/angular
 RUN npm install
 
