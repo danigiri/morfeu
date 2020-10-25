@@ -18,13 +18,6 @@ RUN mkdir -p ${MAVEN_HOME}
 RUN curl ${MAVEN_URL} | tar zxf - -C ${MAVEN_HOME} --strip-components 1
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
-
-# we also cache the node modules of the angular project
-COPY src/main/angular/*.json src/main/angular/
-COPY src/main/angular/*.js src/main/angular/
-WORKDIR /src/main/angular
-RUN npm install
-
 # we add the pom and validate the project (does nothing), but some of the downloads will be cached
 # and this layer will not be built unless the pom is changed
 RUN echo 'Using maven options ${MAVEN_OPTS}'
