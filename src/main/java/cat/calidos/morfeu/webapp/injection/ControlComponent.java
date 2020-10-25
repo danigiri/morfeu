@@ -13,7 +13,7 @@ import dagger.Component;
 
 import cat.calidos.morfeu.control.injection.PingControlModule;
 
-/** Component that aggregates all controlers modules, it is passed the path, method and a map of parameters 
+/** Component that aggregates all controlers modules, it is passed the path, method and a map of parameters
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = {ControlModule.class, PingControlModule.class})
