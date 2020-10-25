@@ -290,6 +290,28 @@
 
 	</dependencies>
 
+	<repositories>
+		<!--repository>
+			<id>Maven-Central</id>
+			<name>Maven central</name>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository-->
+		<repository>
+			<id>Apache-releases</id>
+			<name>Apache releases</name>
+			<url>https://repository.apache.org/content/repositories/releases</url>
+		</repository>
+		<repository>
+			<id>RedHat-GA</id>
+			<name>RedHat GA repository</name>
+			<url>https://maven.repository.redhat.com/ga/</url>
+		</repository>
+		<repository>
+			<id>jcenter</id>
+			<url>https://jcenter.bintray.com/</url>
+		</repository>
+	</repositories>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
