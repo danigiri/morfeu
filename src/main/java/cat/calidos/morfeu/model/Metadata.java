@@ -42,11 +42,13 @@ private String cellPresentationMethod;
 private String thumb;
 private Optional<String> identifier;
 private Optional<Boolean> readonly;			// important to distinguish between no readonly definition and false
+private Optional<String> valueLocator;
 private Map<String, String> defaultValues;
 private Map<String, Set<String>> directives;
 private Map<String, Set<String>> attributes;
 private Optional<String> category;
 private Map<String, Set<String>> categories;
+
 
 
 public Metadata(URI uri,
@@ -58,6 +60,7 @@ public Metadata(URI uri,
 				String thumb,
 				String identifier,
 				Optional<Boolean> readonly,
+				String valueLocator,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes,
@@ -73,6 +76,7 @@ public Metadata(URI uri,
 			Optional.ofNullable(thumb),
 			Optional.ofNullable(identifier),
 			readonly,
+			Optional.ofNullable(valueLocator),
 			defaultValues,
 			directives,
 			attributes,
@@ -91,6 +95,7 @@ public Metadata(URI uri,
 				Optional<String> thumb,
 				Optional<String> identifier,
 				Optional<Boolean> readonly,
+				Optional<String> valueLocator,
 				Map<String, String> defaultValues,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes,
@@ -106,6 +111,7 @@ public Metadata(URI uri,
 	this.thumb = thumb.orElse(DEFAULT_THUMB);
 	this.identifier = identifier;
 	this.readonly = readonly;
+	this.valueLocator = valueLocator;
 	this.defaultValues = defaultValues;
 	this.directives = directives;
 	this.attributes = attributes;
@@ -152,6 +158,11 @@ public Optional<String> getIdentifier() {
 
 public Optional<Boolean> isReadonly() {
 	return readonly;
+}
+
+
+public Optional<String> getValueLocator() {
+	return valueLocator;
 }
 
 
@@ -245,15 +256,18 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 	String thumb = morePriority.getThumb();
 	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
 
-	String identifier = morePriority.getIdentifier().isPresent() ? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
+	String identifier = morePriority.getIdentifier().isPresent() 
+						? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
 
-	// if we have metadata defined in a type (like readonlyCell) with readonly = true and we merge with the 
-	// metadata of an element (like xs:element="readonly") that has null annotaiton, we need to distinguish
+	// if we have metadata defined in a type (like readonlyCell) with readonly==true and we merge with the 
+	// metadata of an element (like xs:element="readonly") that has null annotatiton, we need to distinguish
 	// between no defined readonly property and false
-	Optional<Boolean> readonly = morePriority.isReadonly().isPresent() ? 
+	Optional<Boolean> readonly = morePriority.isReadonly().isPresent() ?
 									morePriority.isReadonly() : lessPriority.isReadonly();
 
- 	Map<String,String> newDefaultValues = new HashMap<String, String>();
+	String valueLocator = morePriority.getValueLocator().isPresent()
+									? morePriority.getValueLocator().get() : lessPriority.getValueLocator().orElse(null);
+	Map<String,String> newDefaultValues = new HashMap<String, String>();
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
 
@@ -272,6 +286,7 @@ public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority
 						thumb,
 						identifier,
 						readonly,
+						valueLocator,
 						newDefaultValues,
 						directives,
 						attributes,

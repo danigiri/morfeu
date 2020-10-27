@@ -63,7 +63,7 @@
 		<xs:attribute name="text" use="required" type="textField" />
 		<xs:attribute name="color" type="colorField" />
 	</xs:complexType>
-	
+
 
 	<xs:complexType name="testEmptyCell">
 		<xs:annotation>
@@ -169,6 +169,7 @@
 		</xs:annotation>
 		<xs:attribute name="bool" type="booleanField" />
 		<xs:attribute name="list" type="listField" />
+		<xs:attribute name="locator" type="locatorField" />
 	</xs:complexType>
 
 	<xs:simpleType name="listField">
@@ -187,6 +188,18 @@
 		</xs:restriction>
 	</xs:simpleType>
 
+	<xs:simpleType name="locatorField">
+		<xs:annotation>
+			<xs:appinfo>
+				<mf:metadata>
+					<mf:desc>List of possible values taken fron a uri reference</mf:desc>
+					<mf:presentation>VALUELOCATOR</mf:presentation>
+					<mf:valueLocator></mf:valueLocator>
+				</mf:metadata>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
 
 
 	<xs:complexType name="colCell">

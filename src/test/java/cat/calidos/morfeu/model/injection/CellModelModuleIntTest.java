@@ -270,6 +270,7 @@ public void testAttributesDefaultValues() {
 											"thumb",
 											null,
 											Optional.empty(),
+											"valueLocator",
 											defaultValues,
 											null,
 											null,

@@ -68,6 +68,7 @@ private static final String IDENTIFIER_FIELD_PREFIX = "@";
 private static final String READONLY_FIELD = "mf:readonly";
 private static final String TRUE = "true";
 private static final String YES = "yes";
+private static final String VALUELOCATOR_FIELD = "mf:valueLocator";
 
 // attribute categorisation
 private static final String CATEGORY_TAG = "mf:category";
@@ -83,6 +84,7 @@ private static final String TRANSFORM_CASE_ATTR = "case";
 
 
 
+
 @Provides
 public static Metadata provideMetadata(URI uri,
 										@Named("desc") Optional<String> desc,
@@ -93,6 +95,7 @@ public static Metadata provideMetadata(URI uri,
 										@Named("thumb") Optional<String> thumb,
 										@Named("identifier") Optional<String> identifier,
 										@Named("readonly") Optional<Boolean> readonly,
+										@Named("valueLocator") Optional<String> valueLocator,
 										Map<String, String> defaultValues,
 										@Named("Directives") Map<String, Set<String>> directives,
 										@Named("Attributes") Map<String, Set<String>> attributes,
@@ -107,6 +110,7 @@ public static Metadata provideMetadata(URI uri,
 						thumb,
 						identifier, 
 						readonly,
+						valueLocator,
 						defaultValues, 
 						directives, 
 						attributes,
@@ -215,7 +219,7 @@ public static Optional<String> identifier(@Nullable XSAnnotation annotation) {
 
 @Provides @Named("readonlyValue") 
 public static Optional<String> readonlyValue(@Nullable XSAnnotation annotation) {
-	return annotationTaggedAs(annotation, READONLY_FIELD);
+	return annotationTaggedAs(annotation, VALUELOCATOR_FIELD);
 }
 
 
@@ -233,6 +237,11 @@ public static Optional<Boolean> readonly(@Named("readonlyValue") Optional<String
 
 }
 
+
+@Provides @Named("valueLocator") 
+public static Optional<String> valueLocator(@Nullable XSAnnotation annotation) {
+	return annotationTaggedAs(annotation, READONLY_FIELD);
+}
 
 @Provides
 public static Map<String, String> defaultValues(@Nullable XSAnnotation annotation) {

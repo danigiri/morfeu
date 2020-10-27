@@ -47,7 +47,6 @@ public static Composite<Cell> produceContent(@Named("ContentURI") URI uri,
 	//FIXME: this is a quite repetitive from cellmodule, not following DRY	
 	Composite<Cell> contentCells = new OrderedMap<Cell>();
 
-
 	Cell cell = DaggerCellComponent.builder()
 										.withURI(uri)
 										.fromNode(node)

@@ -53,6 +53,7 @@ public void setup() throws Exception {
 									"THUMB",
 									null,
 									Optional.empty(),
+									"valueLocator",
 									emptyDefaultValues,
 									directives,
 									attributes,

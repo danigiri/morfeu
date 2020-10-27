@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// METADATA TEST . JAVA
 
 package cat.calidos.morfeu.model.metadata;
 
@@ -57,14 +43,15 @@ public void setup() throws Exception {
 	Map<String, Set<String>> attributeCategories = new HashMap<String, Set<String>>(0);
 	Metadata priorityMetadata = new Metadata(priorityURI,
 												"descA",
-												"A", 
-												"ACP", 
+												"A",
+												"ACP",
 												"IMG",
 												"GET",
-												"DEFAULT", 
-												"idA", 
+												"DEFAULT",
+												"idA",
 												readonly,
-												priorityDefaultValues, 
+												"valueLocatorA",
+												priorityDefaultValues,
 												directives,
 												attributes,
 												null,
@@ -86,7 +73,7 @@ public void setup() throws Exception {
 	categoryY.add("b");
 	attributeCategories2.put("X", categoryX);
 	attributeCategories2.put("Y", categoryY);
-	Metadata metadata = new Metadata(metadataURI, 
+	Metadata metadata = new Metadata(metadataURI,
 										"descB", 
 										"B", 
 										"BCP", 
@@ -95,6 +82,7 @@ public void setup() throws Exception {
 										"THUMB", 
 										"idB", 
 										Optional.of(false),
+										"valueLocatorB",
 										metadataDefaultValues, 
 										directives, 
 										attributes2,
@@ -121,6 +109,8 @@ public void testMergeMetadataBasic() {
 		() -> assertTrue(merged.getIdentifier().isPresent()),
 		() -> assertTrue(merged.isReadonly().isPresent()),
 		() -> assertTrue(merged.isReadonly().get()),
+		() -> assertTrue(merged.getValueLocator().isPresent()),
+		() -> assertEquals("valueLocatorA", merged.getValueLocator().get()),
 		() -> assertEquals("idA", merged.getIdentifier().get())
 	);
 

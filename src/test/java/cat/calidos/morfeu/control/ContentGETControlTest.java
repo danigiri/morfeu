@@ -43,7 +43,6 @@ public void contentGET() throws Exception {
 @Test @DisplayName("Content GET filtered test")
 public void contentGETFiltered() throws Exception {
 
-
 	String prefix = testAwareFullPathFrom(".");
 	String path = "test-resources/documents/filtered.xml";
 	String model = "test-resources/models/test-model.xsd";

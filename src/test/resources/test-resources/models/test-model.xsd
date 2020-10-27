@@ -41,9 +41,9 @@
 		</xs:appinfo>
 	</xs:annotation>
 
-	 <xs:include schemaLocation="test-types.xsd" />
-	 <xs:include schemaLocation="test-cells.xsd" />
-	
+	<xs:include schemaLocation="test-types.xsd" />
+	<xs:include schemaLocation="test-cells.xsd" />
+
 	<xs:element name="test">
 		<xs:annotation>
 			<xs:appinfo>
