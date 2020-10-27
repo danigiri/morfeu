@@ -27,7 +27,7 @@ public void setup() {
 
 @Test
 public void testDragCell() {
-	
+
 	UIContent content = UICatalogues.openCatalogues()
 										.shouldAppear()
 										.clickOn(0)

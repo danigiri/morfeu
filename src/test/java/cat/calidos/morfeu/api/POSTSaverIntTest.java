@@ -24,7 +24,7 @@ public void testPostToPing() throws Exception {
 
 	CloseableHttpClient client = HttpClientModule.produceHttpClient();
 	final URI uri = new URI(webappPrefix+"ping");
-	Map<String, String >content = new HashMap<String, String>(2);
+	Map<String, String>content = new HashMap<String, String>(2);
 	content.put("foo", "bar");
 	POSTSaver postSaver = new POSTSaver(client, uri, content);
 

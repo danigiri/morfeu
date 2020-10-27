@@ -23,7 +23,6 @@ import cat.calidos.morfeu.webapp.ui.UIProblem;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UITezt extends Tezt {
 
-protected static final String URL_PROPERTY = "app-url";
 protected static final String DRIVER_PROPERTY = "driver";
 protected static final String BROWSER_PROPERTY = "selenide.browser";
 protected static final String DEFAULT_CHROME = "chrome";

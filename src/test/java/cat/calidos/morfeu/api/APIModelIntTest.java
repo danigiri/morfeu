@@ -27,18 +27,17 @@ public void testModel() throws Exception {
 
 	JsonNode model = parseJson(content);
 	assertNotNull(model);
-	
+
 	assertEquals("Wrong model schema", 0, model.get("schema").asInt());
 	assertTrue("/children is not an array and it should be", model.get("children").isArray());
 	assertEquals("Wrong model name", "", model.get("name").asText());
 	assertEquals("Wrong model desc", "Description of test model", model.get("desc").asText());
 	assertEquals("/children/test(0) has a wrong name", "test", model.get("children").get(0).get("name").asText());
-	
-}
-
 
 }
 
+
+}
 
 /*
  *    Copyright 2019 Daniel Giribet

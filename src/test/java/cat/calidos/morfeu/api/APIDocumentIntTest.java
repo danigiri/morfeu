@@ -1,18 +1,4 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+// API DOCUMENT INT TEST . JAVA
 
 package cat.calidos.morfeu.api;
 
@@ -87,11 +73,11 @@ public void testNonValidModelDocument() throws Exception {
 
 @Test
 public void testNotFoundModelDocument() throws Exception {
-	
+
 	InputStream content = fetchRemoteInputStreamFrom(
 							"documents/"+pathPrefix+"documents/document-with-notfound-model.json");
 	assertNotNull(content);
-	
+
 	JsonNode doc = parseJson(content);
 	assertEquals("Problematic document", doc.get("name").asText());
 	assertFalse(doc.get("valid").asBoolean());
@@ -102,15 +88,32 @@ public void testNotFoundModelDocument() throws Exception {
 
 @Test
 public void testMalformedDocument() throws Exception {
-	
+
 	InputStream content = fetchRemoteInputStreamFrom("documents/"+pathPrefix+"documents/malformed-document.json");
 	assertNotNull(content);
-	
+
 	JsonNode doc = parseJson(content);
 	assertEquals("Problematic document", doc.get("name").asText());
 	assertFalse(doc.get("valid").asBoolean());
 	assertTrue(doc.get("problem").asText().contains("Problem with the json format"));
-	
-}
 
 }
+
+
+}
+
+/*
+ *    Copyright 2018 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

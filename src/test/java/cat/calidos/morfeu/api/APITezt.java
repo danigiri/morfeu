@@ -40,7 +40,6 @@ import cat.calidos.morfeu.webapp.GenericHttpServlet;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APITezt extends Tezt {
 
-public static final String WEBAPP_BASE_URL = "webapp-prefix";
 protected static String DEFAULT_WEBAPP_BASE_URL = DEFAULT_URL+"/dyn/";
 protected CloseableHttpClient client;
 protected String webappPrefix;
@@ -51,7 +50,7 @@ protected String pathPrefix = "target/test-classes/test-resources/";
 public void setup() {
 
 	client = HttpClients.createDefault();
-	webappPrefix = getConfigurationVariable(WEBAPP_BASE_URL, DEFAULT_WEBAPP_BASE_URL);
+	webappPrefix = getConfigurationVariable(URL_PROPERTY, DEFAULT_WEBAPP_BASE_URL);
 
 }
 
