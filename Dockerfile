@@ -4,7 +4,6 @@ LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 
 # variables build stage
 ARG MAVEN_URL=https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-ARG MAVEN_OPTS=
 ARG MAVEN_HOME=/usr/share/maven
 
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
@@ -20,9 +19,8 @@ RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
 # we add the pom and validate the project (does nothing), but some of the downloads will be cached
 # and this layer will not be built unless the pom is changed
-RUN echo 'Using maven options ${MAVEN_OPTS}'
 COPY pom.xml pom.xml
-RUN /usr/bin/mvn dependency:go-offline ${MAVEN_OPTS}
+RUN /usr/bin/mvn dependency:go-offline
 
 # cache some node stuff to speed up builds
 COPY src/main/angular/*.json /cache/
@@ -33,11 +31,10 @@ RUN cd /cache/ && npm install
 COPY src src
 
 # and build (in multiple steps steps to try to reuse the lengthy maven download)
-RUN echo 'Using maven options ${MAVEN_OPTS}'
-RUN /usr/bin/mvn compile ${MAVEN_OPTS}
+RUN /usr/bin/mvn compile
 # copy cached node modules before the package
 RUN cp -r /cache/node_modules /src/main/angular/node_modules
-RUN /usr/bin/mvn test package ${MAVEN_OPTS}
+RUN /usr/bin/mvn test package
 RUN echo 'build finished'
 
 
