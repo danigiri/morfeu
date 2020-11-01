@@ -81,7 +81,7 @@
 							<artifactId>dagger-compiler</artifactId>
 							<version>${dagger-2-version}</version>
 						</path>
-					</annotationProcessorPaths>
+					</annotationProcessorPaths>	<!-- FIXME: NEED TO DOUBLE CHECK THIS IS IN CLASSPATH -->
 					<generatedSourcesDirectory>target/generated-sources/annotations</generatedSourcesDirectory>
 				</configuration>
 			</plugin>
