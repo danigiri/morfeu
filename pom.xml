@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
-	<artifactId>morfeu-webapp</artifactId>	
-	<version>0.8.9</version>
+	<artifactId>morfeu-webapp</artifactId>
+	<version>0.8.9-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Morfeu web application</name>
@@ -37,7 +37,7 @@
 		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
 		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
 		<tag>v0.8.9</tag>
-	</scm>	
+	</scm>
 
 	<build>
 
@@ -382,7 +382,7 @@
 					<groupId>xml-apis</groupId>
 					<artifactId>xml-apis-ext</artifactId>
 				</exclusion>
-			</exclusions> 
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
