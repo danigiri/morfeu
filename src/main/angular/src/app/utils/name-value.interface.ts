@@ -1,3 +1,10 @@
+// NAME VALUE . INTERFACE . TS
+
+export interface NameValue {
+	name: string;
+	value?: string;
+}
+
 /*
  *	  Copyright 2018 Daniel Giribet
  *
@@ -13,8 +20,3 @@
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
  */
-
-export interface NameValue {
-	name: string;
-	value?: string;
-}

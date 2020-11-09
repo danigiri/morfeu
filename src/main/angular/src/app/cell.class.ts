@@ -6,9 +6,9 @@ import { Lifecycle } from './lifecycle.interface';
 import { FamilyMember } from './family-member.interface';
 import { CellModel } from './cell-model.class';
 import { Model } from './model.class';
-import { NameValue } from './name-value.interface';
+import { NameValue } from './utils/name-value.interface';
 
-import { VariableParser } from './variable-parser.class';
+import { VariableParser } from './utils/variable-parser.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 
 export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {

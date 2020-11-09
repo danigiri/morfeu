@@ -2,10 +2,10 @@
 
 import { Cell } from "./cell.class";
 import { FamilyMember } from "./family-member.interface";
-import { NameValue } from "./name-value.interface";
+import { NameValue } from "./utils/name-value.interface";
 import { CellType } from "./cell-type.class";
 
-import { VariableParser } from "./variable-parser.class";
+import { VariableParser } from "./utils/variable-parser.class";
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
