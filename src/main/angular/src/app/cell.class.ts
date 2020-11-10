@@ -8,8 +8,9 @@ import { CellModel } from './cell-model.class';
 import { Model } from './model.class';
 import { NameValue } from './utils/name-value.interface';
 
-import { VariableParser } from './utils/variable-parser.class';
+import { CellLocator } from './utils/cell-locator.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
+import { VariableParser } from './utils/variable-parser.class';
 
 export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
@@ -93,21 +94,7 @@ columnFieldValue(): string {
 
 /** find a cell that has this URI or return undefined */
 findCellWithURI(uri: string): Cell {
-
-	let cell: Cell;
-	let pending: Cell[] = [this];
-
-	while (!cell && pending.length>0) {
-		const currentCell = pending.pop();
-		if (currentCell.getURI()===uri) {
-			cell = currentCell;
-		} else if (currentCell.childrenCount()>0) {
-			currentCell.children.forEach(c => pending.push(c));
-		}
-	}
-
-	return cell;
-
+	return Locator.findCellWithURI(this, uri);
 }
 
 

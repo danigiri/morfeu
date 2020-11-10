@@ -11,6 +11,7 @@ describe('cell.class', () => {
 	let readonly: Cell;
 	let typesContent: Cell;
 
+
 	beforeEach(() => {
 
 		const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
