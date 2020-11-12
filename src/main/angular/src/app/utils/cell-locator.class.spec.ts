@@ -4,7 +4,8 @@
 import { Cell } from '../cell.class';
 import { Model } from '../model.class';
 
-import { _model, _readonlyPrefix, _readonly, _typesPrefix, _types } from '../test/test.data';
+import { _model, _typesPrefix, _types } from '../test/test.data';
+import { CellLocator } from './cell-locator.class';
 
 
 describe('locator.class', () => {
@@ -18,11 +19,23 @@ describe('locator.class', () => {
 		const MODEL: Model = Object.create(Model.prototype); // to simulate static call
 
 		const model = MODEL.fromJSON(_model);
- 
+
 		typesContent = CELL.fromJSON(_types);
 		typesContent.associateWith(model, typesContent.cellModelURI);
 
 	});
+
+
+	it('shoould find cell with URI', () => {
+
+		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
+		const types2 = CellLocator.findCellWithURI(typesContent, uri);
+		expect(types2).toBeDefined();
+		expect(types2.getURI()).toBe(uri);
+
+	});
+
+
 
 
 });

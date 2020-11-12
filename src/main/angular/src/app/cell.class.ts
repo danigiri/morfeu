@@ -94,7 +94,7 @@ columnFieldValue(): string {
 
 /** find a cell that has this URI or return undefined */
 findCellWithURI(uri: string): Cell {
-	return Locator.findCellWithURI(this, uri);
+	return CellLocator.findCellWithURI(this, uri);
 }
 
 
