@@ -25,6 +25,30 @@ static findCellWithURI(startingCell: Cell, uri: string): Cell {
 }
 
 
+/** Use a locator to find a set of values
+*	@param startingCell is the starting point where to start looking
+*	@param locator is the pattern to find
+*	There are different types of locator
+*		a)  {@literal *}{@literal *}/name --&gt; all cell values of the name
+*		b) {@literal *}{@literal *}/name{@literal @}attribute --&gt; all attributes of cells with name and attribute
+*/
+static findCellsWithLocator(startingCell: Cell, locator: string): string[] {
+
+	let values: string[] = [];
+	let pending: Cell[] = [startingCell];
+
+	while (pending.length>0) {
+		const currentCell = pending.pop();
+		if (false) {
+		} else if (currentCell.childrenCount()>0) {
+			currentCell.children.forEach(c => pending.push(c));
+		}
+	}
+
+	return values;
+
+}
+
 
 }
 
