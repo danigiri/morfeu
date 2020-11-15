@@ -26,7 +26,7 @@ describe('locator.class', () => {
 	});
 
 
-	it('shoould find cell with URI', () => {
+	it('should find cell with URI', () => {
 
 		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
 		const types2 = CellLocator.findCellWithURI(typesContent, uri);
@@ -35,6 +35,15 @@ describe('locator.class', () => {
 
 	});
 
+
+	it('should find values with locator', () => {
+
+		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
+		const types2 = CellLocator.findCellWithURI(typesContent, uri);
+		expect(types2).toBeDefined();
+		expect(types2.getURI()).toBe(uri);
+
+	});
 
 
 

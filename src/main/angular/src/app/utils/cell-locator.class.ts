@@ -37,6 +37,9 @@ static findCellsWithLocator(startingCell: Cell, locator: string): string[] {
 	let values: string[] = [];
 	let pending: Cell[] = [startingCell];
 
+	// now we find out what type of locator we have
+
+
 	while (pending.length>0) {
 		const currentCell = pending.pop();
 		if (false) {
