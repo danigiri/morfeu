@@ -42,12 +42,13 @@ protected void initTarget() throws ServletException {
 	if (varStart>=0 && varEnd>0 && varStart<varEnd) {
 		String var = targetUri.substring(varStart, varEnd);
 		String varValue = getServletContext().getInitParameter(__PROXY_PREFIX);
+		log.info("** __PROXY_PREFIX='{}' (from init parameter)", varValue);
 		varValue = System.getProperty(__PROXY_PREFIX, varValue);
-		log.info("** __PROXY_PREFIX='{}'", varValue);
+		log.info("** __PROXY_PREFIX='{}' (after system property)", varValue);
 		targetUri = targetUri.substring(0, varStart)+varValue+targetUri.substring(varEnd+1);
 		log.info("** Using {} for proxy target uri", targetUri);
 	}
- 
+
 	try {
 		targetUriObj = new URI(targetUri);
 	} catch (Exception e2) {
