@@ -4,7 +4,7 @@
 import { Cell } from '../cell.class';
 import { Model } from '../model.class';
 
-import { _model, _typesPrefix, _types } from '../test/test.data';
+import { _model, _typesPrefix, _types, _readonly } from '../test/test.data';
 import { CellLocator } from './cell-locator.class';
 
 
@@ -36,12 +36,19 @@ describe('locator.class', () => {
 	});
 
 
-	it('should find values with locator', () => {
+	it('should find anything with unsupported locator', () => {
 
-		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
-		const types2 = CellLocator.findCellWithURI(typesContent, uri);
-		expect(types2).toBeDefined();
-		expect(types2.getURI()).toBe(uri);
+		const values = CellLocator.findVacluesWithLocator(typesContent, 'WHATEVER');
+		expect(values).toBeDefined();
+		expect(values).toEqual([]);
+
+	});
+
+
+	it('should find stuff values', () => {
+
+		const values = CellLocator.findVacluesWithLocator(typesContent, '**/stuff');
+		expect(values).toBeDefined();
 
 	});
 
