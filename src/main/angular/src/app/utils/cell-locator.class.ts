@@ -25,6 +25,11 @@ static findCellWithURI(startingCell: Cell, uri: string): Cell {
 }
 
 
+private static readonly ANYWHERE = '**';
+//private static readonly ANY = '*';	// not supported (yet)
+private static readonly ATTR_SEPARATOR = '@';
+private static readonly LOCATOR_SEPARATOR = '/';
+
 /** Use a locator to find a set of values
 *	@param startingCell is the starting point where to start looking
 *	@param locator is the pattern to find
@@ -32,15 +37,28 @@ static findCellWithURI(startingCell: Cell, uri: string): Cell {
 *		a)  {@literal *}{@literal *}/name --&gt; all cell values of the name
 *		b) {@literal *}{@literal *}/name{@literal @}attribute --&gt; all attributes of cells with name and attribute
 */
-static findVacluesWithLocator(startingCell: Cell, expression: string): string[] {
+static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
 
-	if (startingCell===null || expression===null) {
+	if (startingCell===null || expr===null) {
 		console.error('CellLocator::findCellsWithLocator - Null parameter(s)');
 	}
+	
+	//// first, we parse the expression			////
+	// do we start with '/' (mandatory), which also guarantees we have at least one item
+	if (expr.indexOf(CellLocator.LOCATOR_SEPARATOR)!=0) {
+		return [];
+	}
 
-	let values: string[] = [];
-	let pending: Cell[] = [];
+	let tokens = CellLocator.parseLocatorExpression(expr);
+	const firstToken = tokens.pop();
+	const start = startingCell.childrenCount()>0 ? startingCell.children : [startingCell];
 
+	return CellLocator._findValuesWithLocator(start, tokens, firstToken);
+
+}
+
+
+/*
 	// now we find out what type of locator we have
 	const locator = new Locator(expression);
 	if (locator.type()===LocatorType.UNKNOWN) {
@@ -53,71 +71,84 @@ static findVacluesWithLocator(startingCell: Cell, expression: string): string[] 
 		const nextBatch = CellLocator.matchLocator(currentCell, values, locator);
 		nextBatch.forEach(c => pending.push(c));
 	}
+*/
+
+
+
+private static parseLocatorExpression(expr: string): string[] {
+
+	// we parse the expression so we turn '/aa/bb/**/cc/*/a@b' to ['aa','bb','**','cc','*','a','@b']
+	let expressions = expr.split(CellLocator.LOCATOR_SEPARATOR);
+	const last = expressions.pop();
+	const attributeSeparatorIndex = last.lastIndexOf(CellLocator.ATTR_SEPARATOR);
+	if (attributeSeparatorIndex===-1) {	// no attribute, we add the last token back
+		expressions.push(last);
+	} else {							// attribute marker on the last token, we split it into two, put it back
+		const name = last.substr(0, attributeSeparatorIndex);
+		const attribute = last.substr(attributeSeparatorIndex);
+		expressions.push(name);
+		expressions.push(attribute);
+	}
+
+	expressions = expressions.reverse();// top is now at the end, so it's easier to pop 
+	expressions.pop();					// remove what is now the last empty string, coming from the split
+
+	return expressions;
+
+}
+
+
+private static _findValuesWithLocator(pending: Cell[], tokens: string[], token: string): string[] {
+
+
+	// this is fun, we ahve to major modes of operation, 'any mode' with '/**' and 'precise mode' with '/foo'
+	// depending on which one we are at, we perform one operation or the other
+
+	let values: string[] = [];
+
+	while (pending.length>0) {
+
+		if (token===CellLocator.ANYWHERE) {				//// ANY MODE		////
+
+			if (tokens.length<=1) {
+				console.error('Using "%s" at the end of a locator is not supported yet', CellLocator.ANYWHERE);
+				return [];
+			}
+			// now we consume until we find instance of the next token, when we find it, it will be added
+			// to the pending cells list
+			const nextToken = tokens[tokens.length-1];
+			pending = CellLocator._anywhereMode(pending, nextToken);
+
+		} else {										//// PRECISE MODE	////
+			return [];	// TO BE IMPLEMENTED
+		}
+	}
 
 	return values;
 
 }
 
 
-private static matchLocator(cell: Cell, values: string[], locator: Locator):  Cell[] {
+private static _anywhereMode(pending: Cell[], nextToken: string): Cell[] {
 
-/*
-	let nextBatch: Cell[] = [];
-	if (cell.childrenCount()>0) {
-		cell.children.forEach(c => pending.push(c));
-	}
-*/
-
-
-return [];
-
-}
-
-
-}
-
-class Locator {
-
-private static readonly ANYWHERE = '**';
-//private static readonly ANY = '*';	// not supported (yet)
-private static readonly ATTR_SEPARATOR = '@';
-private static readonly LEVEL_SEPARATOR = '/';
-
-private readonly _type: LocatorType;
-private readonly _name: string;
-private readonly _attribute: string;
-
-
-constructor(private readonly expr: string)  {
-
-	if (expr.startsWith(Locator.ANYWHERE)) {
-		this._type = (expr.indexOf(Locator.ATTR_SEPARATOR)==-1) ? LocatorType.BASIC : LocatorType.BASIC_ATTR;
-	} else {
-		this._type = LocatorType.UNKNOWN;
-	}
-	const lastSlashIndex = expr.lastIndexOf(Locator.LEVEL_SEPARATOR);
-	if (lastSlashIndex==-1) {
-		console.error('Locator "%s" does not contain any "%s" separator', expr, Locator.LEVEL_SEPARATOR);
+	let newPending = [];
+	
+	while (pending.length>0) {
+		const currentCell = pending.pop();
+		if (currentCell.getAdoptionName()===nextToken) {
+			newPending.push(currentCell);
+		} else if (currentCell.childrenCount()>0) {
+			currentCell.children.forEach(c => pending.push(c));
+		}
 	}
 
-	const criteria = expr.substr(lastSlashIndex);
-	//this._name = this._type===LocatorType.BASIC ? criteria : 
+	return newPending;
 
-}
-
-
-type(): LocatorType {
-	return this._type;
 }
 
 
 }
 
-enum LocatorType {
-	BASIC,			// **/name
-	BASIC_ATTR,		// **/name@attribute
-	UNKNOWN			// unsupported or unknown
-}
 
 /*
  *	Copyright 2020 Daniel Giribet

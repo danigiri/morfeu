@@ -36,18 +36,22 @@ describe('locator.class', () => {
 	});
 
 
-	it('should find anything with unsupported locator', () => {
+	it('should find anything with unsupported locators', () => {
 
-		const values = CellLocator.findVacluesWithLocator(typesContent, 'WHATEVER');
+		const values = CellLocator.findValuesWithLocator(typesContent, '/WHATEVER');
 		expect(values).toBeDefined();
 		expect(values).toEqual([]);
+
+		const values2 = CellLocator.findValuesWithLocator(typesContent, 'ERRONEOUS');
+		expect(values2).toBeDefined();
+		expect(values2).toEqual([]);
 
 	});
 
 
 	it('should find stuff values', () => {
 
-		const values = CellLocator.findVacluesWithLocator(typesContent, '**/stuff');
+		const values = CellLocator.findValuesWithLocator(typesContent, '/**/stuff');
 		expect(values).toBeDefined();
 
 	});
