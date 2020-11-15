@@ -772,137 +772,260 @@ export const _types = `
 	"attributes": [],
 	"internalAttributes": [],
 	"children": [
-	{
-		"schema": 0,
-		"URI": "target/test-classes/test-resources/documents/types.xml/test(0)",
-		"name": "test",
-		"desc": "",
-		"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
-		"isSimple": false,
-		"attributes": [],
-		"internalAttributes": [
 		{
 			"schema": 0,
-			"URI": "target/test-classes/test-resources/documents/types.xml/test(0)@xmlns:xsi",
-			"name": "xmlns:xsi",
+			"URI": "target/test-classes/test-resources/documents/types.xml/test(0)",
+			"name": "test",
 			"desc": "",
-			"value": "http://www.w3.org/2001/XMLSchema-instance",
 			"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
-			"isSimple": true
-		},
-		{
-			"schema": 0,
-			"URI": "target/test-classes/test-resources/documents/types.xml/test(0)@xsi:noNamespaceSchemaLocation",
-			"name": "xsi:noNamespaceSchemaLocation",
-			"desc": "",
-			"value": "../models/test-model.xsd",
-			"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
-			"isSimple": true
-		}
-		],
-		"children": [
-		{
-			"schema": 0,
-			"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)",
-			"name": "row",
-			"desc": "",
-			"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row",
 			"isSimple": false,
 			"attributes": [],
-			"internalAttributes": [],
-			"children": [
-			{
-				"schema": 0,
-				"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)",
-				"name": "col",
-				"desc": "",
-				"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
-				"isSimple": false,
-				"attributes": [
+			"internalAttributes": [
 				{
 					"schema": 0,
-					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)@size",
-					"name": "size",
+					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)@xmlns:xsi",
+					"name": "xmlns:xsi",
 					"desc": "",
-					"value": "12",
-					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+					"value": "http://www.w3.org/2001/XMLSchema-instance",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
+					"isSimple": true
+				},
+				{
+					"schema": 0,
+					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)@xsi:noNamespaceSchemaLocation",
+					"name": "xsi:noNamespaceSchemaLocation",
+					"desc": "",
+					"value": "../models/test-model.xsd",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test",
 					"isSimple": true
 				}
-				],
-				"internalAttributes": [],
-				"children": [
+			],
+			"children": [
 				{
 					"schema": 0,
-					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(0)",
-					"name": "types",
+					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)",
+					"name": "row",
 					"desc": "",
-					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row",
 					"isSimple": false,
-					"attributes": [
-					{
-						"schema": 0,
-						"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(0)@bool",
-						"name": "bool",
-						"desc": "",
-						"value": "true",
-						"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@bool",
-						"isSimple": true
-					}
-					],
+					"attributes": [],
 					"internalAttributes": [],
-					"children": []
+					"children": [
+						{
+							"schema": 0,
+							"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)",
+							"name": "col",
+							"desc": "",
+							"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+							"isSimple": false,
+							"attributes": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)@size",
+									"name": "size",
+									"desc": "",
+									"value": "12",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+									"isSimple": true
+								}
+							],
+							"internalAttributes": [],
+							"children": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(0)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(0)@bool",
+											"name": "bool",
+											"desc": "",
+											"value": "true",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@bool",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(1)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(1)@bool",
+											"name": "bool",
+											"desc": "",
+											"value": "false",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@bool",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(2)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(2)@list",
+											"name": "list",
+											"desc": "",
+											"value": "A0",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@list",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								}
+							]
+						}
+					]
 				},
 				{
 					"schema": 0,
-					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(1)",
-					"name": "types",
+					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)",
+					"name": "row",
 					"desc": "",
-					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row",
 					"isSimple": false,
-					"attributes": [
-					{
-						"schema": 0,
-						"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(1)@bool",
-						"name": "bool",
-						"desc": "",
-						"value": "false",
-						"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@bool",
-						"isSimple": true
-					}
-					],
+					"attributes": [],
 					"internalAttributes": [],
-					"children": []
-				},
-				{
-					"schema": 0,
-					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(2)",
-					"name": "types",
-					"desc": "",
-					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
-					"isSimple": false,
-					"attributes": [
-					{
-						"schema": 0,
-						"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(0)/col(0)/types(2)@list",
-						"name": "list",
-						"desc": "",
-						"value": "A0",
-						"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@list",
-						"isSimple": true
-					}
-					],
-					"internalAttributes": [],
-					"children": []
+					"children": [
+						{
+							"schema": 0,
+							"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)",
+							"name": "col",
+							"desc": "",
+							"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+							"isSimple": false,
+							"attributes": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)@size",
+									"name": "size",
+									"desc": "",
+									"value": "12",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+									"isSimple": true
+								}
+							],
+							"internalAttributes": [],
+							"children": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/stuff(0)",
+									"name": "stuff",
+									"desc": "",
+									"value": "V0",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff",
+									"isSimple": true
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/stuff(1)",
+									"name": "stuff",
+									"desc": "",
+									"value": "V1",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff",
+									"isSimple": true
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/stuff(2)",
+									"name": "stuff",
+									"desc": "",
+									"value": "V2",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff",
+									"isSimple": true
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/types(3)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/types(3)@list",
+											"name": "list",
+											"desc": "",
+											"value": "A0",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@list",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/types(4)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/types(4)@list",
+											"name": "list",
+											"desc": "",
+											"value": "A1",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@list",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/types(5)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(1)/col(0)/types(5)@list",
+											"name": "list",
+											"desc": "",
+											"value": "A2",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@list",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								}
+							]
+						}
+					]
 				}
-				]
-			}
 			]
 		}
-		]
-	}
 	]
-}
-`;
+}`;
 
 export const _model = `{
 	"schema" : 0,
@@ -1798,7 +1921,7 @@ export const _snippets = [
 
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *		Copyright 2018 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
