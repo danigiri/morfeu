@@ -10,4 +10,15 @@
 			<types list="A0" />
 		</col>
 	</row>
+	<row>
+		<col size="12">
+			<stuff>V0</stuff>
+			<stuff>V1</stuff>
+			<stuff>V2</stuff>
+			<types list="A0" />
+			<types list="A1" />
+			<types list="A2" />
+		</col>
+	</row>
+	
 </test>
