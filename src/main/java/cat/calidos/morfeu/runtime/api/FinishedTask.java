@@ -5,7 +5,7 @@ public interface FinishedTask extends Task {
 
 
 default public boolean failed() { 
-	return !isOK(); 
+	return !isOK();
 }
 
 public void waitFor() throws InterruptedException;
