@@ -118,14 +118,14 @@ describe('locator.class', () => {
 	it('should find attributes', () => {
 
 		const values = CellLocator.findValuesWithLocator(typesContent, '/test/row/col/types@list');
-		/*
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(4);
 		expect(values).toContain("A0");
 		expect(values).toContain("A1");
-		expect(values).toContain("V2");
-	*/
+		expect(values).toContain("A2");
+		expect(values.filter(v => v==="A0").length).toBe(2);
+
 	});
 
 });

@@ -142,6 +142,7 @@ private static _findValuesWithLocator(pending: Cell[], tokens: string[]): string
 				values = pending.filter(cell => cell.value!==undefined).map(cell => cell.value);
 			} else if (tokens.length===1 && tokens[0].startsWith(CellLocator.ATTR_SEPARATOR)) {
 				values = CellLocator._getAttributeValues(pending, tokens[0]);
+				tokens = [];	// we have consumed the last attribute token by this operation, we are done
 			} else {
 				pending = CellLocator._nextChildren(pending);
 			}
