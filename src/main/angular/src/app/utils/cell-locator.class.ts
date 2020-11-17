@@ -44,16 +44,13 @@ static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
 	}
 	
 	//// first, we parse the expression			////
-	// do we start with '/' (mandatory), which also guarantees we have at least one item
+	// do we start with '/' (mandatory), which also guarantees we have at least one item and we are not empty string 
 	if (expr.indexOf(CellLocator.LOCATOR_SEPARATOR)!=0) {
 		return [];
 	}
 
-	let tokens = CellLocator.parseLocatorExpression(expr);
-	const firstToken = tokens.pop();
-	const start = startingCell.childrenCount()>0 ? startingCell.children : [startingCell];
-
-	return CellLocator._findValuesWithLocator(start, tokens, firstToken);
+	const tokens = CellLocator.parseLocatorExpression(expr);
+	return CellLocator._findValuesWithLocator([startingCell], tokens);
 
 }
 
@@ -77,7 +74,7 @@ static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
 
 private static parseLocatorExpression(expr: string): string[] {
 
-	// we parse the expression so we turn '/aa/bb/**/cc/*/a@b' to ['aa','bb','**','cc','*','a','@b']
+	// we parse the expression so we turn '/aa/bb/**/cc/*/a@b' to ['', 'aa','bb','**','cc','*','a','@b']
 	let expressions = expr.split(CellLocator.LOCATOR_SEPARATOR);
 	const last = expressions.pop();
 	const attributeSeparatorIndex = last.lastIndexOf(CellLocator.ATTR_SEPARATOR);
@@ -90,39 +87,67 @@ private static parseLocatorExpression(expr: string): string[] {
 		expressions.push(attribute);
 	}
 
-	expressions = expressions.reverse();// top is now at the end, so it's easier to pop 
-	expressions.pop();					// remove what is now the last empty string, coming from the split
+	expressions = expressions.reverse();	// top is now at the end, so it's easier to pop 
+	// IMPORTANT: 
+	// we keep the last empty string (first in the token list), as it will match with the empty name of the root
+	//	expressions.pop();					// remove what is now the last empty string, coming from the split
+	// '/foo/bar' --> ["", "foo", "bar"]
+	// which will match with
+	// '' (root node with emtpy name)
+	//		"foo(0)"
+	//			"bar(0)"
+	//			"bar(1)"
+
 
 	return expressions;
 
 }
 
 
-private static _findValuesWithLocator(pending: Cell[], tokens: string[], token: string): string[] {
+private static _findValuesWithLocator(pending: Cell[], tokens: string[]): string[] {
 
-
-	// this is fun, we ahve to major modes of operation, 'any mode' with '/**' and 'precise mode' with '/foo'
+	// this is fun, we ahve to major modes of operation, 'any mode' with '/**' and 'filter mode' with '/foo'
 	// depending on which one we are at, we perform one operation or the other
+	// 'any' means we just gobble cells until either finished or find the next token
+	// 'filter' means we continue filtering matching tokens until we
+	//		a) go back to 'any'
+	//		b) reach the end of the tokens list, then we return the list of values or attribute values
 
 	let values: string[] = [];
 
-	while (pending.length>0) {
+	while (pending.length>0 && tokens.length>0) {
 
+		const token = tokens.pop();
 		if (token===CellLocator.ANYWHERE) {				//// ANY MODE		////
 
-			if (tokens.length<=1) {
+			// we skip any chained **/** as they are equivalent to **
+			let nextToken = tokens[tokens.length-1];
+			while (nextToken===CellLocator.ANYWHERE && tokens.length>0) {
+				nextToken = tokens[tokens.length-1];
+			}
+			if (tokens.length===0) {
 				console.error('Using "%s" at the end of a locator is not supported yet', CellLocator.ANYWHERE);
 				return [];
 			}
 			// now we consume until we find instance of the next token, when we find it, it will be added
 			// to the pending cells list
-			const nextToken = tokens[tokens.length-1];
 			pending = CellLocator._anywhereMode(pending, nextToken);
 
 		} else {										//// PRECISE MODE	////
-			return [];	// TO BE IMPLEMENTED
+
+			// filter out cells that do not match the current token
+			pending = pending.filter(cell => token===cell.getAdoptionName());
+			// then look for the end (length=0 for values and length=1 for attributes )
+			if (tokens.length===0) {	// we are at the end, we get the values of all the pending items
+				values = pending.filter(cell => cell.value!==undefined).map(cell => cell.value);
+			} else if (tokens.length===1 && tokens[0].startsWith(CellLocator.ATTR_SEPARATOR)) {
+				values = CellLocator._getAttributeValues(pending, tokens[0]);
+			} else {
+				pending = CellLocator._nextChildren(pending);
+			}
 		}
-	}
+
+	} 
 
 	return values;
 
@@ -131,16 +156,38 @@ private static _findValuesWithLocator(pending: Cell[], tokens: string[], token: 
 
 private static _anywhereMode(pending: Cell[], nextToken: string): Cell[] {
 
+	// we do a breadth-first approach to find the nextToken, we stop when found, but as we are in '**' it means we do an
+	// exhaustive search
+
 	let newPending = [];
-	
 	while (pending.length>0) {
 		const currentCell = pending.pop();
 		if (currentCell.getAdoptionName()===nextToken) {
 			newPending.push(currentCell);
 		} else if (currentCell.childrenCount()>0) {
-			currentCell.children.forEach(c => pending.push(c));
+			currentCell.children.forEach(cell => pending.push(cell));
 		}
 	}
+
+	return newPending;
+
+}
+
+
+private static _getAttributeValues(cells: Cell[], attributeName: string): string [] {
+
+	// get all attributes, filter out undefineds when the attribute is not present, get the value, filter nonpresent
+	const name = attributeName.substr(CellLocator.ATTR_SEPARATOR.length); 
+
+	return cells.map(c => c.getAttribute(name)).filter(a => a!==undefined).map(a => a.value).filter(a => a!==undefined);
+
+}
+
+private static _nextChildren(cells: Cell[]) {
+
+	const newPending: Cell[] = []; 
+	let next = cells.filter(cell => cell.childrenCount()>0);
+	next.forEach(c => c.children.forEach(cell => newPending.push(cell)));
 
 	return newPending;
 
