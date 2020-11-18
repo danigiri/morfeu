@@ -4,14 +4,14 @@
 import { Cell } from '../cell.class';
 import { Model } from '../model.class';
 
-import { _model, _typesPrefix, _types, _readonly } from '../test/test.data';
+import { _model, _typesPrefix, _types, _readonly, _content1 } from '../test/test.data';
 import { CellLocator } from './cell-locator.class';
 
 
 describe('locator.class', () => {
 
 	let typesContent: Cell;
-
+	let document1Content: Cell;
 
 	beforeEach(() => {
 
@@ -22,6 +22,9 @@ describe('locator.class', () => {
 
 		typesContent = CELL.fromJSON(_types);
 		typesContent.associateWith(model, typesContent.cellModelURI);
+
+		document1Content = CELL.fromJSON(_content1);
+		document1Content.associateWith(model, document1Content.cellModelURI);
 
 	});
 
@@ -115,6 +118,7 @@ describe('locator.class', () => {
 
 	});
 
+
 	it('should find attributes', () => {
 
 		const values = CellLocator.findValuesWithLocator(typesContent, '/test/row/col/types@list');
@@ -127,6 +131,39 @@ describe('locator.class', () => {
 		expect(values.filter(v => v==="A0").length).toBe(2);
 
 	});
+
+
+	it('should find nested content', () => {
+
+		const values = CellLocator.findValuesWithLocator(document1Content, '/test/row/col/data@text');
+		expect(values).toBeDefined();
+		expect(values.length).toBeDefined();
+		expect(values.length).toBe(1);
+		expect(values[0]).toBe("blahblah");
+
+	});
+
+
+	it('should find nested content after ** with attributes', () => {
+
+		const values = CellLocator.findValuesWithLocator(document1Content, '/**/col/data@text');
+		expect(values).toBeDefined();
+		expect(values.length).toBeDefined();
+		expect(values.length).toBe(1);
+		expect(values[0]).toBe("blahblah");
+
+	});
+
+	it('should find nested content after ** with attributes', () => {
+
+		const values = CellLocator.findValuesWithLocator(document1Content, '/**/col/data@number');
+		expect(values).toBeDefined();
+		expect(values.length).toBeDefined();
+		expect(values.length).toBe(2);
+		expect(values.filter(v => v==="42").length).toBe(2);
+
+	});
+
 
 });
 
