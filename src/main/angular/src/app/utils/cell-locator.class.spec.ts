@@ -93,7 +93,7 @@ describe('locator.class', () => {
 	});
 
 
-	it('should find stuff values using ** and filters', () => {
+	it('should find stuff values using ** and filters (2)', () => {
 
 		const values = CellLocator.findValuesWithLocator(typesContent, '/**/col/stuff');
 		expect(values).toBeDefined();
@@ -106,7 +106,7 @@ describe('locator.class', () => {
 	});
 
 
-	it('should find stuff values using ** and filters (2)', () => {
+	it('should find stuff values using ** and filters (3)', () => {
 
 		const values = CellLocator.findValuesWithLocator(typesContent, '/test/row/**/stuff');
 		expect(values).toBeDefined();
@@ -155,7 +155,7 @@ describe('locator.class', () => {
 	});
 
 
-	it('should find nested content after ** with attributes', () => {
+	it('should find nested content after ** with attributes (2)', () => {
 
 		const values = CellLocator.findValuesWithLocator(document1Content, '/**/col/data@number');
 		expect(values).toBeDefined();
