@@ -154,6 +154,7 @@ describe('locator.class', () => {
 
 	});
 
+
 	it('should find nested content after ** with attributes', () => {
 
 		const values = CellLocator.findValuesWithLocator(document1Content, '/**/col/data@number');

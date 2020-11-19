@@ -36,43 +36,33 @@ private static readonly LOCATOR_SEPARATOR = '/';
 *	There are different types of locator
 *		a)  {@literal *}{@literal *}/name --&gt; all cell values of the name
 *		b) {@literal *}{@literal *}/name{@literal @}attribute --&gt; all attributes of cells with name and attribute
+*	They can be combined, for instance /foo/{@literal *}{@literal *}/name
 */
 static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
 
 	if (startingCell===null || expr===null) {
 		console.error('CellLocator::findCellsWithLocator - Null parameter(s)');
 	}
-	
+
 	//// first, we parse the expression			////
 	// do we start with '/' (mandatory), which also guarantees we have at least one item and we are not empty string 
 	if (expr.indexOf(CellLocator.LOCATOR_SEPARATOR)!=0) {
 		return [];
 	}
 
-	const tokens = CellLocator.parseLocatorExpression(expr);
-	return CellLocator._findValuesWithLocator([startingCell], tokens);
+	const prefix = startingCell.getURI();					// locators are calculated relative to the top URI
+	const tokens = CellLocator._parseLocatorExpression(expr);
+	const target = CellLocator._getTarget(tokens);
+	const targetAttribute = CellLocator._getTargetAttribute(tokens);
+	if (targetAttribute) {
+		tokens.pop();		// we do not want the attribute '@foo' in the matching tokens, for convenience
+	}
+	return CellLocator._findValuesWithLocator([startingCell], prefix, tokens, target, targetAttribute);
 
 }
 
 
-/*
-	// now we find out what type of locator we have
-	const locator = new Locator(expression);
-	if (locator.type()===LocatorType.UNKNOWN) {
-		console.error('CellLocator::findCellsWithLocator with unsupported locator, returning empty list');
-	} else {
-		pending.push(startingCell);
-	}
-	while (pending.length>0) {
-		const currentCell = pending.pop();
-		const nextBatch = CellLocator.matchLocator(currentCell, values, locator);
-		nextBatch.forEach(c => pending.push(c));
-	}
-*/
-
-
-
-private static parseLocatorExpression(expr: string): string[] {
+private static _parseLocatorExpression(expr: string): string[] {
 
 	// we parse the expression so we turn '/aa/bb/**/cc/*/a@b' to ['', 'aa','bb','**','cc','*','a','@b']
 	let expressions = expr.split(CellLocator.LOCATOR_SEPARATOR);
@@ -87,10 +77,9 @@ private static parseLocatorExpression(expr: string): string[] {
 		expressions.push(attribute);
 	}
 
-	expressions = expressions.reverse();	// top is now at the end, so it's easier to pop 
+	//expressions = expressions.reverse();	// end of the token list is now at the beginning, for easier traversal
 	// IMPORTANT: 
-	// we keep the last empty string (first in the token list), as it will match with the empty name of the root
-	//	expressions.pop();					// remove what is now the last empty string, coming from the split
+	// we keep the first empty string (first in the orginal list), as it will match with the empty name of the root
 	// '/foo/bar' --> ["", "foo", "bar"]
 	// which will match with
 	// '' (root node with emtpy name)
@@ -103,97 +92,113 @@ private static parseLocatorExpression(expr: string): string[] {
 
 }
 
+private static _getTarget(tokens: string[]): string {
 
-private static _findValuesWithLocator(pending: Cell[], tokens: string[]): string[] {
+	// when we have .../foo@bar, return 'foo', when we have ../whatever, return 'whatever'
+	const length = tokens.length;
 
-	// this is fun, we ahve to major modes of operation, 'any mode' with '/**' and 'filter mode' with '/foo'
-	// depending on which one we are at, we perform one operation or the other
-	// 'any' means we just gobble cells until either finished or find the next token
-	// 'filter' means we continue filtering matching tokens until we
-	//		a) go back to 'any'
-	//		b) reach the end of the tokens list, then we return the list of values or attribute values
+	return (length>1 && tokens[length-1].startsWith(CellLocator.ATTR_SEPARATOR)) ? tokens[length-2] : tokens[length-1];
+
+}
+
+
+private static _getTargetAttribute(tokens: string[]): string {
+
+	// when we have .../foo@bar, return 'bar', when we have ../whatever, return undefined
+	const attr = tokens[tokens.length-1];
+
+	return (attr.startsWith(CellLocator.ATTR_SEPARATOR)) ? attr.substr(CellLocator.ATTR_SEPARATOR.length) : undefined;
+
+}
+
+
+private static _findValuesWithLocator(pending: Cell[], 
+										prefix: string, 
+										tokens: string[], 
+										target: string, 
+										attribute: string): string[] {
 
 	let values: string[] = [];
 
-	while (pending.length>0 && tokens.length>0) {
+	// find targets first, namely all cells that have the target
+	let candidates: Cell[] = [];
 
-		const token = tokens.pop();
-		if (token===CellLocator.ANYWHERE) {				//// ANY MODE		////
-
-			// we skip any chained **/** as they are equivalent to **
-			let nextToken = tokens[tokens.length-1];
-			while (nextToken===CellLocator.ANYWHERE && tokens.length>0) {
-				nextToken = tokens[tokens.length-1];
-			}
-			if (tokens.length===0) {
-				console.error('Using "%s" at the end of a locator is not supported yet', CellLocator.ANYWHERE);
-				return [];
-			}
-			// now we consume until we find instance of the next token, when we find it, it will be added
-			// to the pending cells list
-			pending = CellLocator._anywhereMode(pending, nextToken);
-
-		} else {										//// PRECISE MODE	////
-
-			// filter out cells that do not match the current token
-			pending = pending.filter(cell => token===cell.getAdoptionName());
-			// then look for the end (length=0 for values and length=1 for attributes )
-			if (tokens.length===0) {	// we are at the end, we get the values of all the pending items
-				values = pending.filter(cell => cell.value!==undefined).map(cell => cell.value);
-			} else if (tokens.length===1 && tokens[0].startsWith(CellLocator.ATTR_SEPARATOR)) {
-				values = CellLocator._getAttributeValues(pending, tokens[0]);
-				tokens = [];	// we have consumed the last attribute token by this operation, we are done
-			} else {
-				pending = CellLocator._nextChildren(pending);
-			}
+	while (pending.length>0) {
+		const candidate = pending.pop();
+		if (candidate.getAdoptionName()===target) {
+			candidates.push(candidate);
 		}
+		// as we do not semantically examine the expression, we have no guarantee that children of the current
+		// candidate will not have matching nodes, therefore we have to do a complete sweep of the tree
+		if (candidate.childrenCount()>0) {
+			candidate.children.forEach(c => pending.push(c));
+		}
+	}
 
-	} 
+	// second, for each cell, we see if the tokens can be matched to it, and if so, add the necessary value
+	values = candidates.filter(c => CellLocator._locatorMatch(c.getURI(), prefix, tokens)).map(cell => {
+		if (attribute) {
+			return cell.getAttribute(attribute)?.value;
+		} else {
+			return cell.value;
+		}
+	}).filter(value => value!==undefined);
 
 	return values;
 
 }
 
 
-private static _anywhereMode(pending: Cell[], nextToken: string): Cell[] {
+public static _locatorMatch(uri: string, prefix: string, tokens: string[]): boolean {
 
-	// we do a breadth-first approach to find the nextToken, we stop when found, but as we are in '**' it means we do an
-	// exhaustive search
+	// given the cell uri [prefix]/foo(0)/bar(1)/waz(0) and a set of tokens like ["","foo", "bar", "waz"] we return
+	// true if the tokens can be matched to the cell uri, in reverse, for efficiency
+	// Note that matching is done ignoring the prefix, as that is usually context specific and long, like
+	// URIs are commonly [prefix=http://xxx.yyy.com]/whatever.yaml/foo(1)/bar(0)/waz(0)
+	// so a locator would be /foo/bar/waz
 
-	let newPending = [];
-	while (pending.length>0) {
-		const currentCell = pending.pop();
-		if (currentCell.getAdoptionName()===nextToken) {
-			newPending.push(currentCell);
-		} else if (currentCell.childrenCount()>0) {
-			currentCell.children.forEach(cell => pending.push(cell));
+	// this is fun, we ahve to major modes of operation, 'any mode' with '/**' and 'filter mode' with '/foo'
+	// depending on which one we are at, we perform one operation or the other
+	// 'any' means we just gobble uri bits until we find a matching tokens or reach the root (in root return true)
+	// 'filter' means we continue filtering matching tokens until we
+	//		a) go back to 'any'
+	//		b) reach the root, then we return true
+
+
+
+	const uriTokens = uri.substr(prefix.length).split(CellLocator.LOCATOR_SEPARATOR);
+	const _tokens  = Object.assign([], tokens);	// we do not want to mutate input parameters!!!
+
+	let finished = false;
+	while (!finished && _tokens.length>0 && uriTokens.length>0) {
+
+		let token = _tokens.pop();
+		let uriToken = CellLocator._getName(uriTokens.pop());
+		if (token===CellLocator.ANYWHERE) {		//// any mode 		////
+			token = _tokens.pop();
+			while (token===CellLocator.ANYWHERE) {	// while we have '**' one after the other, we skip them
+				token = _tokens.pop();
+			}
+			while (uriTokens.length>0 && token!==uriToken) {		// we continue to gobble uri tokens until found
+				uriToken = CellLocator._getName(uriTokens.pop());	// or reach the root
+			}
+		} else {								//// precise mode 	////
+			if (token!==uriToken) {
+				finished = true;
+			}
 		}
+
 	}
 
-	return newPending;
+	return _tokens.length===0 && uriTokens.length===0;
 
 }
 
 
-private static _getAttributeValues(cells: Cell[], attributeName: string): string [] {
 
-	// get all attributes, filter out undefineds when the attribute is not present, get the value, filter nonpresent
-	const name = attributeName.substr(CellLocator.ATTR_SEPARATOR.length); 
-
-	return cells.map(c => c.getAttribute(name)).filter(a => a!==undefined).map(a => a.value).filter(a => a!==undefined);
-
+private static _getName(s: string): string {
+	return s.length>0 ? s.substr(0, s.indexOf("(")) : s;
 }
-
-private static _nextChildren(cells: Cell[]) {
-
-	const newPending: Cell[] = []; 
-	let next = cells.filter(cell => cell.childrenCount()>0);
-	next.forEach(c => c.children.forEach(cell => newPending.push(cell)));
-
-	return newPending;
-
-}
-
 
 }
 
