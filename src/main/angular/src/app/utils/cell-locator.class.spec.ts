@@ -166,6 +166,27 @@ describe('locator.class', () => {
 	});
 
 
+	it('should find content with *', () => {
+
+		const values = CellLocator.findValuesWithLocator(document1Content, '/test/row/*/data@text');
+		expect(values).toBeDefined();
+		expect(values.length).toBeDefined();
+		expect(values.length).toBe(1);
+		expect(values[0]).toBe('blahblah');
+
+	});
+
+
+	it('should handle */** edge case', () => {
+
+		const values = CellLocator.findValuesWithLocator(document1Content, '/test/*/**/data@number');
+		expect(values).toBeDefined();
+		expect(values.length).toBeDefined();
+		expect(values.length).toBe(2);
+		expect(values.filter(v => v==="42").length).toBe(2);
+
+	});
+
 });
 
 /*

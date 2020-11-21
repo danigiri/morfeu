@@ -26,6 +26,7 @@ static findCellWithURI(startingCell: Cell, uri: string): Cell {
 
 
 private static readonly ANYWHERE = '**';
+private static readonly ANY = '*';
 //private static readonly ANY = '*';	// not supported (yet)
 private static readonly ATTR_SEPARATOR = '@';
 private static readonly LOCATOR_SEPARATOR = '/';
@@ -34,8 +35,9 @@ private static readonly LOCATOR_SEPARATOR = '/';
 *	@param startingCell is the starting point where to start looking
 *	@param locator is the pattern to find
 *	There are different types of locator
-*		a)  {@literal *}{@literal *}/name --&gt; all cell values of the name
+*		a) {@literal *}{@literal *}/name --&gt; all cell values of the name
 *		b) {@literal *}{@literal *}/name{@literal @}attribute --&gt; all attributes of cells with name and attribute
+*		c) {@literal *}/name --&gt; values of the name that have any name as parent
 *	They can be combined, for instance /foo/{@literal *}{@literal *}/name
 */
 static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
@@ -77,7 +79,6 @@ private static _parseLocatorExpression(expr: string): string[] {
 		expressions.push(attribute);
 	}
 
-	//expressions = expressions.reverse();	// end of the token list is now at the beginning, for easier traversal
 	// IMPORTANT: 
 	// we keep the first empty string (first in the orginal list), as it will match with the empty name of the root
 	// '/foo/bar' --> ["", "foo", "bar"]
@@ -157,9 +158,10 @@ public static _locatorMatch(uri: string, prefix: string, tokens: string[]): bool
 	// URIs are commonly [prefix=http://xxx.yyy.com]/whatever.yaml/foo(1)/bar(0)/waz(0)
 	// so a locator would be /foo/bar/waz
 
-	// this is fun, we ahve to major modes of operation, 'any mode' with '/**' and 'filter mode' with '/foo'
+	// this is fun, we ahve thre cases, 'any' with '/**', 'skip' with '/*' and 'filter' with '/foo'
 	// depending on which one we are at, we perform one operation or the other
 	// 'any' means we just gobble uri bits until we find a matching tokens or reach the root (in root return true)
+	// 'skip' means we gobble the next uri bit and then we move on
 	// 'filter' means we continue filtering matching tokens until we
 	//		a) go back to 'any'
 	//		b) reach the root, then we return true
@@ -174,15 +176,17 @@ public static _locatorMatch(uri: string, prefix: string, tokens: string[]): bool
 
 		let token = _tokens.pop();
 		let uriToken = CellLocator._getName(uriTokens.pop());
-		if (token===CellLocator.ANYWHERE) {		//// any mode 		////
+		if (token===CellLocator.ANYWHERE) {			//// any case 		////
 			token = _tokens.pop();
-			while (token===CellLocator.ANYWHERE) {	// while we have '**' one after the other, we skip them
-				token = _tokens.pop();
+			while (token===CellLocator.ANYWHERE || token===CellLocator.ANY) {
+				token = _tokens.pop(); // while we have '**' or '*' one after the other, we skip them
 			}
 			while (uriTokens.length>0 && token!==uriToken) {		// we continue to gobble uri tokens until found
 				uriToken = CellLocator._getName(uriTokens.pop());	// or reach the root
 			}
-		} else {								//// precise mode 	////
+		} else if (token===CellLocator.ANY) {		//// skip case		////
+			// no op, we do not have to do a check agains the current uriToken
+		} else {									//// precise case 	////
 			if (token!==uriToken) {
 				finished = true;
 			}
