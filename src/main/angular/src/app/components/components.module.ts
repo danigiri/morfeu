@@ -2,6 +2,7 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';	// new angular 5 http client
+import { KeyboardShortcutsModule } from 'ng-keyboard-shortcuts';
 import { NgModule } from '@angular/core';
 
 import { DndModule } from '../dnd/dnd.module';
@@ -37,6 +38,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 	imports: [
 				CommonModule,
 				DndModule,
+				KeyboardShortcutsModule,
 				NgbModule,
 				FormsModule,
 				PipesModule

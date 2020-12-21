@@ -8,7 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';  // new angular 5 http client module
 
 import { DndModule } from './dnd/dnd.module';
-import { HotkeyModule } from 'angular2-hotkeys';
+// may want to use https://netbasal.com/diy-keyboard-shortcuts-in-your-angular-application-4704734547a2
+//import { HotkeyModule } from 'angular2-hotkeys';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TreeModule } from '@circlon/angular-tree-component';
 
@@ -40,7 +42,8 @@ import { StatusComponent } from './components/status.component';
 				DndModule.forRoot(),
 				FormsModule,
 				HttpClientModule,
-				HotkeyModule.forRoot(),
+//				HotkeyModule.forRoot(),
+				//KeyboardShortcutsModule.forRoot(),
 				NgbModule, 
 				PipesModule,
 				TreeModule
