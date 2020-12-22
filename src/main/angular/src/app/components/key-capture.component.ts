@@ -24,21 +24,10 @@ public readonly ALL_KEYS: string[] = [	"'", "a", "b", "c", "d", "e", "f", "g", "
 										"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 										];
 public readonly ALL_NUMBERS: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-//private readonly keyMap: {[key: number]: string} = {39:"'", 97:"a", 98:"b", 99:"c", 100:"d", 101:"e", 102:"f"
-//													,103:"g", 104:"h", 105:"i", 106:"j", 107:"k", 108:"l"
-//													,109:"m", 110:"n", 111:"o", 112:"p", 113:"q", 114:"r"
-//													,115:"s", 116:"t", 117:"u", 118:"v", 119:"w", 120:"x"
-//													,121:"y", 122:"z"
-//												};
-
-//@Input() commands?: string[];
 
 shortcuts: ShortcutInput[] = [];
-//private numberHotkey: Hotkey | Hotkey[];
-//private commandHotkey: Hotkey | Hotkey[];
 
 
-//constructor(eventService: EventService, public hotkeysService: HotkeysService) {
 constructor(eventService: EventService) { //},  private keyboard: KeyboardShortcutsService) {
 	super(eventService);
 }
@@ -56,11 +45,9 @@ public registerKeyShortcuts() {
 
 	console.log("KeyCaptureComponent::registerKeyShortcuts()");
 
-	this.ALL_KEYS.forEach(k => this.shortcuts.push({key: k, command: e => this.keyPressed_(e)}));
+	// the prevent default is to prevent ehe edit shortcut 'e' to send an event to the first cell field 
+	this.ALL_KEYS.forEach(k => this.shortcuts.push({key: k, preventDefault: true, command: e => this.keyPressed_(e)}));
 	this.ALL_NUMBERS.forEach(n => this.shortcuts.push({key: n, command: e => this.numberPressed_(e)}));
-
-//	this.numberHotkey = this.hotkeysService.add(new Hotkey(numbers, this.numberPressed_));
-//	this.commandHotkey = this.hotkeysService.add(new Hotkey(this.ALL_KEYS, this.keyPressed_)); 
 
 }
 
@@ -71,7 +58,7 @@ numberPressed_ = (event: ShortcutEventOutput) => {
 
 	const key: string = Array.isArray(event.key) ? event.key[0] : event.key;
 	const num = parseInt(key, 10);
-	console.log("KeyCaptureComponent::numberPressed(%s)", key);
+	//console.log("KeyCaptureComponent::numberPressed(%s)", key);
 	this.events.service.publish(new KeyPressedEvent(key, num));
 
 	//return false;	// prevent event from bubbling
@@ -82,29 +69,14 @@ numberPressed_ = (event: ShortcutEventOutput) => {
 keyPressed_ = (event: ShortcutEventOutput) => {
 
 	const key: string = Array.isArray(event.key) ? event.key[0] : event.key;
-
-	console.log("KeyCaptureComponent::keyPressed(%s) %s", key); //, event.shiftKey ? "[SHIFT]":"");
-
-//	if (event.shiftKey) {
-//		this.events.service.publish(new KeyPressedEvent(key.toUpperCase()));
-//	} else {
-		this.events.service.publish(new KeyPressedEvent(key));
-//	}
-
-	//return false;	// prevent event from bubbling
+	//console.log("KeyCaptureComponent::keyPressed(%s) %s", key); //, event.shiftKey ? "[SHIFT]":"");
+	this.events.service.publish(new KeyPressedEvent(key));
 
 }
 
 
 public unregisterKeyShortcuts() {
-
-//	this.hotkeysService.remove(this.numberHotkey);
-//	this.hotkeysService.remove(this.commandHotkey);
-
-//	this.ALL_KEYS.forEach(k => this.keyboard.remove(k));
-//	this.ALL_NUMBERS.forEach(n => this.keyboard.remove(n));
-	
-	Promise.resolve(null).then(() => this.shortcuts = []);
+	this.shortcuts = [];
 }
 
 
