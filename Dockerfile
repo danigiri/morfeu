@@ -42,7 +42,7 @@ FROM openjdk:13-alpine AS main
 
 # arguments and variables run stage
 ENV JETTY_HOME /var/lib/jetty
-ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.24.v20191120/jetty-distribution-9.4.24.v20191120.tar.gz
+ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/10.0.0.beta1/jetty-distribution-10.0.0.beta1.tar.gz
 ARG JETTY_BASE=/jetty-base
 
 RUN apk add --no-cache curl
