@@ -197,7 +197,7 @@ dropSuccess($event: any) {
 
 performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 
-	if (!cell || !newParent || !newPosition) {
+	if (!cell || !newParent || newPosition===undefined) {
 		console.error('DropAreaComponent::performDropHere parameter issue ',cell, newParent, newPosition);
 	}
 

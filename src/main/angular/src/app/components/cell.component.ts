@@ -199,12 +199,24 @@ adoptCellAtPosition(newCell: Cell, position: number) {
 	// cell1           |
 	// [position=2] <--/
 	//
-	// As we have removed cell0 temporarily the parent has only one cell, so the actual target position is 1 and not 2
-	// TODO: this may apply to more cases than moving at the end 
+	// As we have removed cell0 temporarily the parent will have only one cell, so the target position is 1 and not 2
+	// This is just an example of a general situation
+	// if in the same parent, we are moving to a position that has a higher position than the current one then we are ok
+	// on the other hand, if we are moving to position that is lower than the current one, we do not decrement
+	// as from the local perspective of the sublist of children until the new cell position, positions do not change
+	// by orphaning the new cell.
+	// Another way of seeing it, in the same parent:
+	// if we move a cell later in the list, the positions of all the items post the new orphan will shift by one
+	// given that the orphaning of the cell will move everything by one element,
+	// c(0) -----\
+	// c(1)		 |								will become c(0) when orphaning c(0)
+	// c(2)	   <-/ (position is 2 originally)	will become c(1)						so position needs to be 2-1=1
+	// c(3)										will become c(2)
+	// if we move it earlier in the list, the positions of all children preceding the new orphan remain the same
+	// when moving from a different parent, this problem does not manifest, as orphaning happens in the original parent
 
-	//if (newCell.parent.getAdoptionURI()===this.cell.getAdoptionURI()) {
-	if (newCell.parent===this.cell && position>this.cell.childrenCount()) {
-		position = this.cell.childrenCount();	// logically equivalent to 'position--;'
+	if (newCell.parent===this.cell && position>newCell.position) {
+		position = position-1;
 	}
 
 	// must be an orphan before adopting
