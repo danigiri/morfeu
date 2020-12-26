@@ -4,7 +4,7 @@ export const _document1Prefix = 'target/test-classes/test-resources/documents/do
 export const _document3Prefix = 'target/test-classes/test-resources/documents/document3.xml';
 export const _document5Prefix = 'target/test-classes/test-resources/documents/document5.xml';
 //wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
-
+//wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/types.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > types.json
 export const _document1Document = `
 {
 	"name": "Document 1"
@@ -1021,11 +1021,109 @@ export const _types = `
 							]
 						}
 					]
+				},
+				{
+					"schema": 0,
+					"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)",
+					"name": "row",
+					"desc": "",
+					"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row",
+					"isSimple": false,
+					"attributes": [],
+					"internalAttributes": [],
+					"children": [
+						{
+							"schema": 0,
+							"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)",
+							"name": "col",
+							"desc": "",
+							"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col",
+							"isSimple": false,
+							"attributes": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)@size",
+									"name": "size",
+									"desc": "",
+									"value": "12",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col@size",
+									"isSimple": true
+								}
+							],
+							"internalAttributes": [],
+							"children": [
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)/types(0)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)/types(0)@locator",
+											"name": "locator",
+											"desc": "",
+											"value": "V0",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@locator",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)/types(1)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)/types(1)@locator",
+											"name": "locator",
+											"desc": "",
+											"value": "V1",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@locator",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								},
+								{
+									"schema": 0,
+									"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)/types(2)",
+									"name": "types",
+									"desc": "",
+									"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types",
+									"isSimple": false,
+									"attributes": [
+										{
+											"schema": 0,
+											"URI": "target/test-classes/test-resources/documents/types.xml/test(0)/row(2)/col(0)/types(2)@locator",
+											"name": "locator",
+											"desc": "",
+											"value": "V1",
+											"cellModelURI": "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@locator",
+											"isSimple": true
+										}
+									],
+									"internalAttributes": [],
+									"children": []
+								}
+							]
+						}
+					]
 				}
 			]
 		}
 	]
-}`;
+}
+`;
 
 export const _model = `{
 	"schema" : 0,

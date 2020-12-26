@@ -94,6 +94,9 @@ set booleanValue(v: boolean) {
 }
 
 
+get possibleValues(): string[] {
+	return this.parentCell.getAttribute(this.cellModel.name).getPossibleValues();
+}
 
 
 // add current attribute with empty or default value

@@ -45,7 +45,7 @@
 						[(ngModel)]="this.value"
 						(change)="modified($event)"
 				>
-					<option	*ngFor="let o of cellModel.type_.possibleValues" [selected]="o===this.value">{{o}}</option>
+					<option	*ngFor="let o of possibleValues" [selected]="o===this.value">{{o}}</option>
 				</select>
 			</ng-container>
 		</ng-container>

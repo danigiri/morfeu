@@ -35,6 +35,9 @@
 	{% if cm.metadata.isReadonly().orElse(false) %}
 		,"readonly": true
 	{% endif %}
+	{% if cm.metadata.valueLocator.isPresent %}
+		,"valueLocator": "{{cm.metadata.valueLocator.get}}"
+	{% endif %}
 	{% if cm.getCategory().orElse(false) %}
 		,"category": "{{cm.getCategory().get}}"
 	{% endif %}

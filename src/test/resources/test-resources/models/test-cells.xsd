@@ -194,7 +194,7 @@
 				<mf:metadata>
 					<mf:desc>List of possible values taken fron a uri reference</mf:desc>
 					<mf:presentation>VALUELOCATOR</mf:presentation>
-					<mf:valueLocator></mf:valueLocator>
+					<mf:valueLocator>/test/**/stuff</mf:valueLocator>
 				</mf:metadata>
 			</xs:appinfo>
 		</xs:annotation>

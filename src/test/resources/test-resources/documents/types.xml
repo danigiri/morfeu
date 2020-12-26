@@ -20,5 +20,11 @@
 			<types list="A2" />
 		</col>
 	</row>
-	
+		<row>
+		<col size="12">
+			<types locator="V0"/>
+			<types locator="V1"/>
+			<types locator="V1"/>
+		</col>
+	</row>
 </test>

@@ -91,6 +91,11 @@ columnFieldValue(): string {
 
 }
 
+/** @returns the list of possible values this cell can take, mostly useful for list-like stuff, undefined otherwise */
+getPossibleValues(): string[] {
+	return this.cellModel.type_.possibleValues;
+}
+
 
 /** find a cell that has this URI or return undefined */
 findCellWithURI(uri: string): Cell {

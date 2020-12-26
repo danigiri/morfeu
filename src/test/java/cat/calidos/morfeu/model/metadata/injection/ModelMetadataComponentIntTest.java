@@ -2,19 +2,21 @@
 
 package cat.calidos.morfeu.model.metadata.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.Set;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+
+import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.injection.ModelTezt;
@@ -62,7 +64,7 @@ public void testTransformAttributes() {
 
 	Set<String> ytxAttributes = meta.getAttributesFor("yaml-to-xml");
 	assertNotNull(ytxAttributes);
-	assertEquals("We should have two yaml-to-xml attributes", 2, ytxAttributes.size());
+	assertEquals(2, ytxAttributes.size(), "We should have two yaml-to-xml attributes");
 	assertTrue(ytxAttributes.contains("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""));
 	assertTrue(ytxAttributes.contains("xsi:noNamespaceSchemaLocation=\"../models/test-model.xsd\""));
 
@@ -79,12 +81,40 @@ public void testTransformDirectives() {
 
 	Set<String> directives = meta.getDirectivesFor("obj-to-yaml");
 	assertNotNull(directives);
-	assertEquals("We should have one xml-to-yaml directive", 1, directives.size());
+	assertEquals(1, directives.size(), "We should have one xml-to-yaml directive");
 
 	String directive = directives.iterator().next();
-	assertEquals("Wrong directives for xml-to-yaml",  "ATTRIBUTES-ONLY", directive);
+	assertEquals("ATTRIBUTES-ONLY", directive, "Wrong directives for xml-to-yaml");
 
 }
+
+
+@Test @DisplayName("Test value locator")
+public void testValueLocator() throws Exception {
+
+	Metadata locator = cellModelFrom(modelURI, "test").asComplex()
+														.children()
+														.child("row")
+														.asComplex()
+														.children()
+														.child("col")
+														.asComplex()
+														.children()
+														.child("types")
+														.asComplex()
+														.attributes()
+														.attribute("locator")
+														.getMetadata();
+	assertNotNull(locator);
+	
+	assertAll("test locator stuff",
+		() -> assertTrue(locator.getValueLocator().isPresent()),
+		() -> assertEquals("/test/**/stuff", locator.getValueLocator().get())
+
+	);
+
+}
+
 
 
 }

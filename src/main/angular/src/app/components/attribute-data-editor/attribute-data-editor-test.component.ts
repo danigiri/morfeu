@@ -45,9 +45,18 @@ constructor(eventService: EventService,
 
 protected test(case_: string): void {
 	switch (case_) {
-		case 'boolean-true' : this.boolean(); break;
-		case 'color-validation' : this.colorValidation(); break;
-		case 'list' : this.listValidation(); break;
+		case 'boolean-true': 
+			this.boolean(); 
+			break;
+		case 'color-validation': 
+			this.colorValidation(); 
+			break;
+		case 'list':
+			this.listValidation(); 
+			break;
+		case 'locator': 
+			this.locatorValidation();
+			break;
 		default: this.boolean();
 	}
 }
@@ -79,6 +88,14 @@ listValidation() {
 
 }
 
+
+locatorValidation() {
+
+	this.cellPath = '/test(0)/row(2)/col(0)/types(0)';	// this has a list attribute
+	this.attributeName = 'locator';
+	this.load('target/test-classes/test-resources/documents/types.xml', this.model);
+
+}
 
 protected loaded(model: Model, content: Content): void {
 
