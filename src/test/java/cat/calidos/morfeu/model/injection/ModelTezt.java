@@ -43,7 +43,7 @@ public class ModelTezt extends Tezt {
 
 @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-public  static final int EXPECTED_COL_CHILDREN_COUNT = 12;
+public  static final int EXPECTED_COL_CHILDREN_COUNT = 13;
 
 
 protected Document produceDocumentFromPath(String path)
