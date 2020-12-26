@@ -2,7 +2,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.Collection;
@@ -11,15 +11,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 
 import dagger.Lazy;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import cat.calidos.morfeu.model.Attributes;
 import cat.calidos.morfeu.model.CellModel;
@@ -42,7 +43,7 @@ private URI modelURI;
 private XSSchemaSet schemaSet;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	modelURI = new URI("target/classes/test-resources/models/test-model.xsd");
@@ -58,8 +59,8 @@ public void testProvideCellModel() throws Exception {
 	// default name for anonymous types is <elem>-type
 	checkComplexCellModel(test, "test", "Root cell-model desc", "test-type", modelURI+"/test");
 	assertEquals("WELL", test.getMetadata().getPresentation());
-	assertEquals("test root cell model should be min 1", 1, test.getMinOccurs());
-	assertEquals("test root cell model should be max 1", 1, test.getMaxOccurs().getAsInt());
+	assertEquals(1, test.getMinOccurs(), "test root cell model should be min 1");
+	assertEquals(1, test.getMaxOccurs().getAsInt(), "test root cell model should be max 1");
 	assertTrue(test.getMetadata().isReadonly().isEmpty());
 	assertTrue(test.getCategory().isEmpty());
 
@@ -74,8 +75,8 @@ public void testProvideCellModel() throws Exception {
 
 	CellModel row = testComplex.children().child("row");						// TEST -> ROW
 	checkComplexCellModel(row, "row", "rowCell desc", "rowCell", modelURI+"/test/row");	// getting desc from type
-	assertEquals("/test/row cell model should be min 0", 0, row.getMinOccurs());
-	assertFalse("/test/row cell model should be unbounded", row.getMaxOccurs().isPresent());
+	assertEquals(0, row.getMinOccurs(), "/test/row cell model should be min 0");
+	assertFalse(row.getMaxOccurs().isPresent(), "/test/row cell model should be unbounded");
 
 
 	ComplexCellModel rowComplex = row.asComplex();
@@ -96,18 +97,18 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(1, colComplex.attributes().size());
 	CellModel sizeAttribute = colComplex.attributes().attribute("size");
 	assertTrue(sizeAttribute.isAttribute());
-	assertEquals("Size attribute of columns should be compulsory", 1, sizeAttribute.getMinOccurs());
+	assertEquals(1, sizeAttribute.getMinOccurs(), "Size attribute of columns should be compulsory");
 	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
 	int childrenCount = colComplex.children().size();
-	assertEquals("Column should have 9 children, not "+childrenCount, EXPECTED_COL_CHILDREN_COUNT, childrenCount);
+	assertEquals(EXPECTED_COL_CHILDREN_COUNT, childrenCount, "Column should have 9 children, not "+childrenCount);
 	assertTrue(colComplex.areChildrenOrdered());
 
 
 	CellModel data = colComplex.children().child("data");						// TEST -> ROW -> COL -> DATA
 	String dataDesc = "Globally provided description of 'data'";
 	checkComplexCellModel(data, "data", dataDesc, "testCell", modelURI+"/test/row/col/data");
-	assertEquals("/test/row/col/data cell model should be min 0", 0, data.getMinOccurs());
-	assertFalse("/test/row/col/data cell model should be unbounded", data.getMaxOccurs().isPresent());
+	assertEquals(0, data.getMinOccurs(), "/test/row/col/data cell model should be min 0");
+	assertFalse(data.getMaxOccurs().isPresent(), "/test/row/col/data cell model should be unbounded");
 	ComplexCellModel dataComplex = data.asComplex();
 	String defaultTextAttributeFromGlobal = "Default value for text (from global)";
 	assertEquals(defaultTextAttributeFromGlobal, dataComplex.attributes().attribute("text").getDefaultValue().get());
@@ -117,14 +118,14 @@ public void testProvideCellModel() throws Exception {
 	CellModel data2 = colComplex.children().child("data2");						// TEST -> ROW -> COL -> DATA2
 	String data2Desc = "Globally provided description of 'data2'";
 	checkComplexCellModel(data2, "data2", data2Desc, "testCell", modelURI+"/test/row/col/data2");
-	assertEquals("/test/row/col/data2 cell model should be min 0", 0, data2.getMinOccurs());
+	assertEquals(0, data2.getMinOccurs(), "/test/row/col/data2 cell model should be min 0");
 	// model references keep local max counts
-	assertEquals("/test/row/col/data2 cell model should be max 2", 2, data2.getMaxOccurs().getAsInt());
+	assertEquals(2, data2.getMaxOccurs().getAsInt(), "/test/row/col/data2 cell model should be max 2");
 	// we only have the type default and nothing from global
 	ComplexCellModel data2Complex = data2.asComplex();
 	assertEquals("11", data2Complex.attributes().attribute("number").getDefaultValue().get());	// type default
 	textAttribute = data2Complex.attributes().attribute("text");
-	assertFalse("Should not have default", textAttribute.getDefaultValue().isPresent());
+	assertFalse(textAttribute.getDefaultValue().isPresent(), "Should not have default");
 
 	assertTrue(data.isReference() || data2.isReference());
 
@@ -160,7 +161,7 @@ public void testColAndRowReference() throws Exception {
 	// we check the reference from row to col and so forth
 	CellModel rowRef = col.asComplex().children().child("row");				// TEST -> ROW -> COL -> ref(ROW)
 	assertTrue(rowRef.isReference());
-	assertEquals("Row reference in col does not reference original", row, rowRef.getReference().get());
+	assertEquals(row, rowRef.getReference().get(), "Row reference in col does not reference original");
 
 	// the row reference should have the same children as the original row
 	assertTrue(rowRef.isComplex());
@@ -284,8 +285,8 @@ public void testAttributesDefaultValues() {
 	CellModel textAttribute = attributes.attribute("text");
 	assertNotNull(textAttribute);
 	Optional<String> defaultValue = textAttribute.getDefaultValue();
-	assertTrue("We should have a default value in this test", defaultValue.isPresent());
-	assertEquals("Wrong default value in this test", "foo", defaultValue.get());
+	assertTrue(defaultValue.isPresent(), "We should have a default value in this test");
+	assertEquals("foo", defaultValue.get(), "Wrong default value in this test");
 
 }
 
