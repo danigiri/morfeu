@@ -21,7 +21,6 @@ import cat.calidos.morfeu.model.Composite;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellModuleIntTest extends ModelTezt {
 
-
 private Document document;
 private URI modelURI;
 private URI contentURI;
@@ -84,28 +83,28 @@ public void testAttributesFrom() throws Exception {
 	assertNotNull(cell);
 	assertTrue(cell.isComplex());
 	ComplexCell complexCell = cell.asComplex();
-	
+
 	// ensure order is also cool, to do that, we assume there are two column children, access the first and compare
-	
+
 	assertEquals("Accessing children by index and not name fails, order is not preserved", 
 				 children.child("row(0)").asComplex().children().child("col(0)"), 
 				 children.child("row(0)").asComplex().children().child(0));
-	
+
 	// extra order check
 	List<Cell> cols = children.child("row(0)").asComplex().children().asList();
 	assertEquals("Order not preserved", children.child("row(0)").asComplex().children().child(0), cols.get(0));
 	assertEquals("Order not preserved", children.child("row(0)").asComplex().children().child(1), cols.get(1));
-	
+
 	Attributes<Cell> attributes = complexCell.attributes();
 	assertNotNull(attributes);
 	assertEquals(2, attributes.size());
-	
+
 	Cell number = attributes.attribute("number");
 	assertNotNull(number);
 	assertEquals("42", number.getValue().get());
 	assertEquals("number", number.getCellModel().getName());
 	assertEquals("numberField", number.getCellModel().getType().getName());
-	
+
 	Cell text = attributes.attribute("text");
 	assertNotNull(text);
 	assertEquals("blahblah", text.getValue().get());
@@ -117,7 +116,7 @@ public void testAttributesFrom() throws Exception {
 
 @Test
 public void testInternalAttributes() throws Exception {
-	
+
 	Attributes<Cell> attributes = CellModule.internalAttributesFrom(document.getDocumentElement(), 
 																	contentURI,
 																	testCellModel);
