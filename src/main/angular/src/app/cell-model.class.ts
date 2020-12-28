@@ -48,6 +48,7 @@ constructor(public schema: number,
 			public minOccurs: number,
 			public areChildrenOrdered?: boolean,
 			public readonly?: boolean,
+			public valueLocator?: string,
 			public isAttribute?: boolean,
 			public maxOccurs?: number,
 			public defaultValue?: string,
@@ -221,7 +222,7 @@ findCellModel(uri: string): CellModel {
 
 
 /** return true if the current value (or supplied parameter) is a valid value given our model */
-public validates(v: string): boolean {
+validates(v: string): boolean {
 
 	const regexp = this.type_?.regexCompiled;
 	const possibleValues = this.type_?.possibleValues;
@@ -440,6 +441,7 @@ type_: CellType;
 minOccurs: number;
 areChildrenOrdered?: boolean;
 readonly?: boolean;
+valueLocator?: string,
 maxOccurs?: number;
 isAttribute?: boolean;
 defaultValue?: string;
