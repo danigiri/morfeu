@@ -24,7 +24,6 @@
     "@circlon/angular-tree-component": "^10.0.0",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "ace-builds": "^1.4.12",
-    "angular2-hotkeys": "^2.2.0",
     "bootstrap": "^4.5.2",
     "core-js": "^3.6.5",
     "cryptiles": "^4.1.3",
