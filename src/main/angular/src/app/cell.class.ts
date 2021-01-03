@@ -100,9 +100,9 @@ getPossibleValues(): string[] {
 
 	const cm = this.cellModel;
 	const locator = cm.valueLocator;
+	const root = this.getRootAncestor().asCell();
 
-	return cm.valueLocator ? 
-			CellLocator.findValuesWithLocator(this.getRootAncestor().asCell(), locator) :  cm.getPossibleValues();
+	return cm.valueLocator ? CellLocator.findValuesWithLocator(root, locator) : cm.getPossibleValues();
 
 }
 
@@ -562,7 +562,11 @@ fromJSON(json: CellJSON | string): Cell {
 	cell = Object.assign(cell, json);
 
 	if (json.attributes) {
-		cell = Object.assign(cell, {attributes: json.attributes.map(a => CELL.fromJSON(a))});
+		cell = Object.assign(cell, {attributes: json.attributes.map(a => {
+			let attribute = CELL.fromJSON(a);
+			attribute.parent = cell;
+			return attribute;
+		})});
 	}
 	if (json.internalAttributes) {
 		cell = Object.assign(cell, {internalAttributes: json.internalAttributes.map(a => CELL.fromJSON(a))});

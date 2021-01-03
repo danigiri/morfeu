@@ -136,6 +136,37 @@ describe('cell.class', () => {
 
 	});
 
+
+	it('attributes should also have parent information', () => {
+
+		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(1)';
+		const locator = typesContent.findCellWithURI(uri).attributes[0];
+		expect(locator).toBeDefined();
+
+		const parent = locator.getParent();
+		expect(parent).toBeDefined();
+
+		const root = locator.getRootAncestor();
+		expect(root).toBeDefined();
+		expect(root.getAdoptionName()).toBe('');
+		expect(root.getURI()).toBe('target/test-classes/test-resources/documents/types.xml');
+
+	});
+
+
+	it('should give good values for a locator', () => {
+
+
+		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(1)';
+		const types = typesContent.findCellWithURI(uri);
+		expect(types).toBeDefined();
+
+		const locatorAttribute = types.attributes[0];
+		expect(locatorAttribute).toBeDefined();
+
+		//const values: string[] = loca
+
+	});
 });
 
 /*
