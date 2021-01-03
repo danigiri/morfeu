@@ -153,20 +153,25 @@ describe('cell.class', () => {
 
 	});
 
-
 	it('should give good values for a locator', () => {
 
-
-		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(1)';
+		const uri = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
 		const types = typesContent.findCellWithURI(uri);
 		expect(types).toBeDefined();
 
-		const locatorAttribute = types.attributes[0];
+		const locatorAttribute = types.getAttribute('locator');
 		expect(locatorAttribute).toBeDefined();
 
-		//const values: string[] = loca
+		const values: string[] = locatorAttribute.getPossibleValues();
+		expect(values).toBeDefined();
+		expect(values.length).toBe(3);
+		expect(values.includes('V0')).toBeTrue();
+		expect(values.includes('V1')).toBeTrue();
+		expect(values.includes('V2')).toBeTrue();
 
 	});
+
+
 });
 
 /*
