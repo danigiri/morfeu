@@ -6,13 +6,14 @@ import { Content } from './content.class';
 import { Model } from './model.class';
 
 import { _model, _readonly, _readonlyPrefix, _content1, _document1Prefix, _content3, 
-		_document3Prefix  } from './test/test.data';
+		_document3Prefix } from './test/test.data';
 
 
 describe('adoption.class', () => {
 
 	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 	const MODEL: Model = Object.create(Model.prototype); // to simulate static call
+
 	let model: Model;
 	let content1: Content;
 	let content3: Content;
@@ -149,7 +150,6 @@ describe('adoption.class', () => {
 		expect(Adoption.itsTheRightOrder(col, data2, 2)).toBeTrue();	//
 
 	});
-
 
 });
 

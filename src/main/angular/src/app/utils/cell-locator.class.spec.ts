@@ -52,7 +52,7 @@ describe('locator.class', () => {
 	});
 
 
-	it('should find stuff values', () => {
+	it('should find stuff cells and values', () => {
 
 		const cells = CellLocator.findCellsWithLocator(types, '/test/row/col/stuff');
 		expect(cells).toBeDefined();
@@ -73,7 +73,6 @@ describe('locator.class', () => {
 		expect(values).toContain("V0");
 		expect(values).toContain("V1");
 		expect(values).toContain("V2");
-
 
 	});
 

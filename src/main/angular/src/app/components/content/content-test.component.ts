@@ -67,12 +67,12 @@ private dragAndDrop1() {
 
  private dragAndDrop5() {
 
- 	console.debug('Drag and Drop 35test')
+	console.debug('Drag and Drop 35test')
 	this.document = this.createDocument(_document5Document);
 	this.loadModel(this.document.modelURI);			this.loadModel(this.document.modelURI);
 
+}
 
- }
 
 protected loadedModel(model: Model): void {
 	this.events.service.publish(new ContentRequestEvent(this.document, model))

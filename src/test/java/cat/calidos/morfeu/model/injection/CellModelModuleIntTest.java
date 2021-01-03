@@ -18,7 +18,6 @@ import com.sun.xml.xsom.XSSchemaSet;
 import dagger.Lazy;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -245,7 +244,6 @@ public void testPossibleValues() throws Exception {
 	assertTrue(possibleValues.contains("A2"));
 
 }
-
 
 
 @Test
