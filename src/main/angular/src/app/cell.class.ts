@@ -459,7 +459,14 @@ getAdoptionOrder(): number {
 }
 
 
-// FIXME: need to check that we are not moving the same cell around in the same col (for instance change order)
+/*
+	 console.debug(this.URI, Adoption.hasCellModel(this), Adoption.canBeModified(this),
+			Adoption.isModelCompatible(this, newMember), Adoption.weHaveRoomForOneMore(this, newMember),
+			(position===undefined || 
+				(Adoption.isNotAdjacentPosition(this, newMember, position) &&
+				Adoption.itsTheRightOrder(this, newMember, position))
+			));
+*/
 canAdopt(newMember: FamilyMember, position: number): boolean {
 	return Adoption.hasCellModel(this) &&
 			Adoption.canBeModified(this) &&

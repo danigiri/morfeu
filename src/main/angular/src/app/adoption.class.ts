@@ -4,7 +4,6 @@ import { Cell } from './cell.class';
 import { CellModel } from './cell-model.class';
 import { FamilyMember } from './family-member.interface';
 
-
 /** logic class to hold adoption logic */
 export class Adoption {
 
@@ -27,7 +26,12 @@ public static isModelCompatible(cell: Cell, newMember: FamilyMember): boolean {
 /** we check the allowed count (if we have no children we assume zero so we should be able to add) */
 public static weHaveRoomForOneMore(cell: Cell, newMember: FamilyMember): boolean {
 
-	let matchingChildren: Cell[] = cell.children ? cell.children.filter(c => c.matches(newMember)) : [];
+	// if the newMember is part of the children we always have room for one more
+	if (cell===newMember.getParent()) {
+		return true;
+	}
+
+	const matchingChildren: Cell[] = cell.children ? cell.children.filter(c => c.matches(newMember)) : [];
 	const childCount = matchingChildren.length;
 	if (childCount>0) {
 		// we are not considering the problem of the childcount being less than the minimum

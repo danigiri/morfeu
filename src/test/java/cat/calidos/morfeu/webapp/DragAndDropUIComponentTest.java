@@ -1,3 +1,4 @@
+// DRAG AND DROP UI COMPONENT TEST . JAVA
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -5,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,11 +17,6 @@ import cat.calidos.morfeu.webapp.ui.UIContent;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DragAndDropUIComponentTest extends UITezt {
-
-
-//@BeforeEach
-//public void setup() {
-//}
 
 
 @Test @DisplayName("Drag and drop stuff test")
@@ -39,13 +34,11 @@ public void testDragAndDropStuff() {
 
 	stuff0.hover();
 	assertAll("active areas",
-	//	() -> assertFalse(col.dropArea(0).isActive()),	// cannot check due to unreliable CDK drop values
-	//	() -> assertFalse(col.dropArea(1).isActive()),
-		() -> assertTrue(col.dropArea(0).isActive()),
-		() -> assertTrue(col.dropArea(1).isActive()),
-		() -> assertTrue(col.dropArea(2).isActive()),
-		() -> assertTrue(col.dropArea(3).isActive()),
-		() -> assertFalse(col.dropArea(4).isActive())
+		() -> assertFalse(col.dropArea(0).isActive()),	// adjacent, noop
+		() -> assertFalse(col.dropArea(1).isActive()),	// adjacent, noop
+		() -> assertTrue(col.dropArea(2).isActive()),	// is ok
+		() -> assertTrue(col.dropArea(3).isActive()),	// is ok
+		() -> assertFalse(col.dropArea(4).isActive())	// disallowed, breaks order
 	);
 
 	stuff0.dragTo(col.dropArea(2));

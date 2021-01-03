@@ -50,7 +50,7 @@ private readonly() {
 
 private dragAndDrop1() {
 	console.debug('Drag and Drop 1 test')
-	this.document = this.createDocument(_document1Document);
+	this.document = this.createDocument(_document3Document);
 	this.loadModel(this.document.modelURI);
 
  }
