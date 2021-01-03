@@ -54,14 +54,14 @@
 				src="assets/images/open-iconic/circle-x.svg"
 				(click)="delete()"
 		/>
-		<div *ngIf="!isPresent()" class="list-group-item">
-			<small class="attribute-data-name">{{cellModel.name}}</small>
-			<span class="badge float-right">
-				<img class="btn float-right attribute-data-add"
-					src="assets/images/open-iconic/plus.svg"
-					(click)="add()"
-				/>
-			</span>
-		</div>
+	</div>
+	<div *ngIf="!isPresent()" class="list-group-item">
+		<small class="attribute-data-name">{{cellModel.name}}</small>
+		<span class="badge float-right">
+			<img class="btn float-right attribute-data-add"
+				src="assets/images/open-iconic/plus.svg"
+				(click)="add()"
+			/>
+		</span>
 	</div>
 </div>
