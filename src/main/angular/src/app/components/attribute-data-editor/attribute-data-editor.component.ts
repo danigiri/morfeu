@@ -110,7 +110,7 @@ private add() {
 	console.log("[UI] adding cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
 		const attr = this.cellModel.generateCell();
-		//this.parentCell.adopt(attr);
+		this.parentCell.adopt(attr);				// generated cell has no parent, we set it correctly
 		const valid = this.updateValidity(attr.value);	// default value could be valid from the start
 		this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.ADD_ATTRIBUTE, valid, attr));
 	});

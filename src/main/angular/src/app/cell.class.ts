@@ -359,18 +359,18 @@ canBeModified(): boolean {
 
 adopt(orphan: Cell, position?: number) {
 
+	// notice that we are adopting only orphan cells as we do not want this method to have side effects on
+	// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
+	// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
+	if (orphan.parent) {
+		console.error("Adopting cell that was not an orphan!!");
+	}
+	orphan.parent = this;
 
 	if (orphan.cellModel.isAttribute) {
 		this.attributes.push(orphan);	//TODO: we should check if the attribute exists...
 	} else {
 
-		// notice that we are adopting only orphan cells as we do not want this method to have side effects on
-		// the old parent (otherwise it's a non-intuitive method call that alters state of the orphan, this cell
-		// and the old parent, this last change would be non-intuitive), therefore we only accept orphans
-		if (orphan.parent) {
-			console.error("Adopting cell that was not an orphan!!");
-		}
-		orphan.parent = this;
 		if (position===undefined) {
 			console.error("Adopting child without a position!!!");
 		}
