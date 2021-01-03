@@ -205,7 +205,7 @@ public static Optional<String> identifier(@Nullable XSAnnotation annotation) {
 
 @Provides @Named("readonlyValue") 
 public static Optional<String> readonlyValue(@Nullable XSAnnotation annotation) {
-	return annotationTaggedAs(annotation, VALUELOCATOR_FIELD);
+	return annotationTaggedAs(annotation, READONLY_FIELD);
 }
 
 
