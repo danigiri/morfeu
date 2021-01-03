@@ -38,6 +38,7 @@ import cat.calidos.morfeu.model.metadata.injection.GlobalModelMetadataModule;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class GlobalMetadataModuleIntTest extends ModelTezt {
 
+private static final int GLOBAL_METADATA_COUNT = 5;
 
 private URI modelURI;
 private String uri;
@@ -61,7 +62,7 @@ public void testGlobalMetadataFromModel() throws Exception {
 
 	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, modelURI);
 	assertNotNull("global metadata parser should not return null", globalMetadata);
-	assertEquals("global metadata should have 4 entries", 4, globalMetadata.size());
+	assertEquals("global metadata should have 5 entries", GLOBAL_METADATA_COUNT, globalMetadata.size());
 
 	URI dataURI = new URI(uri+"/test/row/col/data");
 	Metadata dataMetadata = globalMetadata.get(dataURI);	
