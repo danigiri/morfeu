@@ -10,8 +10,8 @@ import { CellLocator } from './cell-locator.class';
 
 describe('locator.class', () => {
 
-	let typesContent: Cell;
-	let document1Content: Cell;
+	let types: Cell;
+	let document1: Cell;
 
 	beforeEach(() => {
 
@@ -20,11 +20,11 @@ describe('locator.class', () => {
 
 		const model = MODEL.fromJSON(_model);
 
-		typesContent = CELL.fromJSON(_types);
-		typesContent.associateWith(model, typesContent.cellModelURI);
+		types = CELL.fromJSON(_types);
+		types.associateWith(model, types.cellModelURI);
 
-		document1Content = CELL.fromJSON(_content1);
-		document1Content.associateWith(model, document1Content.cellModelURI);
+		document1 = CELL.fromJSON(_content1);
+		document1.associateWith(model, document1.cellModelURI);
 
 	});
 
@@ -32,7 +32,7 @@ describe('locator.class', () => {
 	it('should find cell with URI', () => {
 
 		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
-		const types2 = CellLocator.findCellWithURI(typesContent, uri);
+		const types2 = CellLocator.findCellWithURI(types, uri);
 		expect(types2).toBeDefined();
 		expect(types2.getURI()).toBe(uri);
 
@@ -41,11 +41,11 @@ describe('locator.class', () => {
 
 	it('should find anything with unsupported locators', () => {
 
-		const values = CellLocator.findValuesWithLocator(typesContent, '/WHATEVER');
+		const values = CellLocator.findValuesWithLocator(types, '/WHATEVER');
 		expect(values).toBeDefined();
 		expect(values).toEqual([]);
 
-		const values2 = CellLocator.findValuesWithLocator(typesContent, 'ERRONEOUS');
+		const values2 = CellLocator.findValuesWithLocator(types, 'ERRONEOUS');
 		expect(values2).toBeDefined();
 		expect(values2).toEqual([]);
 
@@ -54,7 +54,19 @@ describe('locator.class', () => {
 
 	it('should find stuff values', () => {
 
-		const values = CellLocator.findValuesWithLocator(typesContent, '/test/row/col/stuff');
+		const cells = CellLocator.findCellsWithLocator(types, '/test/row/col/stuff');
+		expect(cells).toBeDefined();
+		expect(cells.length).toBeDefined();
+		expect(cells.length).toBe(3);
+
+		const stuff0 = types.findCellWithURI(_typesPrefix+'/test(0)/row(1)/col(0)/stuff(0)');
+		const stuff1 = types.findCellWithURI(_typesPrefix+'/test(0)/row(1)/col(0)/stuff(1)');
+		const stuff2 = types.findCellWithURI(_typesPrefix+'/test(0)/row(1)/col(0)/stuff(2)');
+		expect(cells).toContain(stuff0);
+		expect(cells).toContain(stuff1);
+		expect(cells).toContain(stuff2);
+
+		const values = CellLocator.flattenValues(cells);
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(3);
@@ -68,7 +80,7 @@ describe('locator.class', () => {
 
 	it('should find stuff values using **', () => {
 
-		const values = CellLocator.findValuesWithLocator(typesContent, '/**/stuff');
+		const values = CellLocator.findValuesWithLocator(types, '/**/stuff');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(3);
@@ -82,7 +94,7 @@ describe('locator.class', () => {
 
 	it('should find stuff values using ** and filters', () => {
 
-		const values = CellLocator.findValuesWithLocator(typesContent, '/test/**/stuff');
+		const values = CellLocator.findValuesWithLocator(types, '/test/**/stuff');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(3);
@@ -95,7 +107,7 @@ describe('locator.class', () => {
 
 	it('should find stuff values using ** and filters (2)', () => {
 
-		const values = CellLocator.findValuesWithLocator(typesContent, '/**/col/stuff');
+		const values = CellLocator.findValuesWithLocator(types, '/**/col/stuff');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(3);
@@ -108,7 +120,7 @@ describe('locator.class', () => {
 
 	it('should find stuff values using ** and filters (3)', () => {
 
-		const values = CellLocator.findValuesWithLocator(typesContent, '/test/row/**/stuff');
+		const values = CellLocator.findValuesWithLocator(types, '/test/row/**/stuff');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(3);
@@ -121,7 +133,7 @@ describe('locator.class', () => {
 
 	it('should find attributes', () => {
 
-		const values = CellLocator.findValuesWithLocator(typesContent, '/test/row/col/types@list');
+		const values = CellLocator.findValuesWithLocator(types, '/test/row/col/types@list');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(4);
@@ -135,7 +147,9 @@ describe('locator.class', () => {
 
 	it('should find nested content', () => {
 
-		const values = CellLocator.findValuesWithLocator(document1Content, '/test/row/col/data@text');
+		const cells = CellLocator.findCellsWithLocator(document1, '/test/row/col/data@text');
+		expect(cells).toBeDefined();
+		const values = CellLocator.flattenValues(cells);
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(1);
@@ -146,7 +160,7 @@ describe('locator.class', () => {
 
 	it('should find nested content after ** with attributes', () => {
 
-		const values = CellLocator.findValuesWithLocator(document1Content, '/**/col/data@text');
+		const values = CellLocator.findValuesWithLocator(document1, '/**/col/data@text');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(1);
@@ -157,7 +171,7 @@ describe('locator.class', () => {
 
 	it('should find nested content after ** with attributes (2)', () => {
 
-		const values = CellLocator.findValuesWithLocator(document1Content, '/**/col/data@number');
+		const values = CellLocator.findValuesWithLocator(document1, '/**/col/data@number');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(2);
@@ -168,7 +182,7 @@ describe('locator.class', () => {
 
 	it('should find content with *', () => {
 
-		const values = CellLocator.findValuesWithLocator(document1Content, '/test/row/*/data@text');
+		const values = CellLocator.findValuesWithLocator(document1, '/test/row/*/data@text');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(1);
@@ -179,7 +193,7 @@ describe('locator.class', () => {
 
 	it('should handle */** edge case', () => {
 
-		const values = CellLocator.findValuesWithLocator(document1Content, '/test/*/**/data@number');
+		const values = CellLocator.findValuesWithLocator(document1, '/test/*/**/data@number');
 		expect(values).toBeDefined();
 		expect(values.length).toBeDefined();
 		expect(values.length).toBe(2);

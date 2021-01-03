@@ -31,7 +31,7 @@ private static readonly ANY = '*';
 private static readonly ATTR_SEPARATOR = '@';
 private static readonly LOCATOR_SEPARATOR = '/';
 
-/** Use a locator to find a set of values
+/** Use a locator to find a set of cells
 *	@param startingCell is the starting point where to start looking
 *	@param locator is the pattern to find
 *	There are different types of locator
@@ -39,8 +39,9 @@ private static readonly LOCATOR_SEPARATOR = '/';
 *		b) {@literal *}{@literal *}/name{@literal @}attribute --&gt; all attributes of cells with name and attribute
 *		c) {@literal *}/name --&gt; values of the name that have any name as parent
 *	They can be combined, for instance /foo/{@literal *}{@literal *}/name
+* 	@returns the list of cells that matches the locator pattern
 */
-static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
+static findCellsWithLocator(startingCell: Cell, expr: string): Cell[] {
 
 	if (startingCell===null || expr===null) {
 		console.error('CellLocator::findCellsWithLocator - Null parameter(s)');
@@ -59,8 +60,20 @@ static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
 	if (targetAttribute) {
 		tokens.pop();		// we do not want the attribute '@foo' in the matching tokens, for convenience
 	}
-	return CellLocator._findValuesWithLocator([startingCell], prefix, tokens, target, targetAttribute);
+	return CellLocator._findCellsWithLocator([startingCell], prefix, tokens, target, targetAttribute);
 
+}
+
+
+/**  @returns a list of values from each cell, skipping undefineds */
+static flattenValues(cells: Cell[]): string[] {
+	return cells.map(c => c.value).filter(v => v!==undefined);
+}
+
+
+/** convenience method that returns the flattened values */
+static findValuesWithLocator(startingCell: Cell, expr: string): string[] {
+	return CellLocator.flattenValues(CellLocator.findCellsWithLocator(startingCell, expr));
 }
 
 
@@ -113,13 +126,13 @@ private static _getTargetAttribute(tokens: string[]): string {
 }
 
 
-private static _findValuesWithLocator(pending: Cell[], 
+private static _findCellsWithLocator(pending: Cell[], 
 										prefix: string, 
 										tokens: string[], 
 										target: string, 
-										attribute: string): string[] {
+										attribute: string): Cell[] {
 
-	let values: string[] = [];
+	let values: Cell[] = [];
 
 	// find targets first, namely all cells that have the target
 	let candidates: Cell[] = [];
@@ -139,11 +152,11 @@ private static _findValuesWithLocator(pending: Cell[],
 	// second, for each cell, we see if the tokens can be matched to it, and if so, add the necessary value
 	values = candidates.filter(c => CellLocator._locatorMatch(c.getURI(), prefix, tokens)).map(cell => {
 		if (attribute) {
-			return cell.getAttribute(attribute)?.value;
+			return cell.getAttribute(attribute);
 		} else {
-			return cell.value;
+			return cell;
 		}
-	}).filter(value => value!==undefined);
+	}).filter(c => c!==undefined);	// this will filter out undefineds coming from not found attributes
 
 	return values;
 
