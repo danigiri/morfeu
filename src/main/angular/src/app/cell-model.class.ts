@@ -281,7 +281,6 @@ getParent(): FamilyMember {
 }
 
 
-
 isCellModel(): boolean {
 	return true;
 }

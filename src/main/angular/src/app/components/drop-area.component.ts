@@ -98,8 +98,8 @@ ngOnInit() {
 	);
  
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
-			.pipe(filter(activated => this.parent && this.parent.canAdopt(activated.cell)))
-			.subscribe( () => this.becomeActive())
+			.pipe(filter(activated => this.parent && this.parent.canAdopt(activated.cell, this.position)))
+			.subscribe(() => this.becomeActive())
 					// console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
 	);
 
@@ -112,6 +112,7 @@ ngOnInit() {
 			})
 	);
 
+	// TODO: the matches cell model does not take the position into account
 	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
 			.pipe(filter(activated => activated.cellModel && this.matchesCellmodel(activated.cellModel)))
 			.subscribe(() => this.becomeActive())
