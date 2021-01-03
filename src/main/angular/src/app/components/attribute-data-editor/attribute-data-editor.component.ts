@@ -7,6 +7,7 @@ import { CellModel } from '../../cell-model.class';
 
 import { EventListener } from '../../events/event-listener.class';
 import { CellChangeEvent, CellChange } from '../../events/cell-change.event';
+import { InfoModeEvent } from '../../events/info-mode.event';
 import { EventService } from '../../services/event.service';
 
 @Component({
@@ -45,6 +46,7 @@ isBoolean: boolean = false;
 isList: boolean = false;
 validates: boolean;
 validationWarning: string;
+info = false;
 
 
 constructor(eventService: EventService) {
@@ -54,14 +56,17 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	this.isBoolean = this.cellModel.presentation === CellModel.ATTR_BOOLEAN_PRESENTATION;
-	this.isList = this.cellModel.presentation === CellModel.ATTR_LIST_PRESENTATION;
-	this.isText = !this.isBoolean &&!this.isList;
+	const pres = this.cellModel.presentation;
+	this.isBoolean = pres === CellModel.ATTR_BOOLEAN_PRESENTATION;
+	this.isList = pres === CellModel.ATTR_LIST_PRESENTATION || pres === CellModel.ATTR_LOCATOR_PRESENTATION;
+	this.isText = !this.isBoolean && !this.isList;
 
 	// if we have a value at the beginning
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
 	const valid = this.updateValidity(this.value);
 	this.events.service.publish(new CellChangeEvent(this.parentCell, CellChange.INIT_ATTRIBUTE, valid, attr));
+
+	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
 }
 
@@ -73,7 +78,7 @@ isPresent(): boolean {
 
 
 get value(): string {
-	return this.parentCell.getAttribute(this.cellModel.name).value;
+	return this.parentCell.getAttribute(this.cellModel.name)?.value;
 }
 
 

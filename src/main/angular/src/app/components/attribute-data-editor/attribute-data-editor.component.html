@@ -10,6 +10,7 @@
 				for="{{cellModel.name}}"
 				[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier===cellModel"
 		>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:&nbsp;
+		<ng-container *ngIf="info">isText:{{isText}},isBoolean:{{isBoolean}},isList:{{isList}}</ng-container>
 		</label>
 		<ng-container [ngSwitch]="true">
 			<ng-container *ngSwitchCase="isText">
