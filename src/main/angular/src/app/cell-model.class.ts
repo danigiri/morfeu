@@ -1,18 +1,19 @@
 // CELL-MODEL . CLASS . TS
 
-import { Cell } from "./cell.class";
-import { FamilyMember } from "./family-member.interface";
-import { NameValue } from "./utils/name-value.interface";
-import { CellType } from "./cell-type.class";
+import { BasicFamilyMember } from './basic-family-member.class';
+import { Cell } from './cell.class';
+import { CellType } from './cell-type.class';
+import { FamilyMember } from './family-member.interface';
+import { NameValue } from './utils/name-value.interface';
 
-import { VariableParser } from "./utils/variable-parser.class";
+import { VariableParser } from './utils/variable-parser.class';
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
 import { CellModelComponent } from "./components/cell-model.component";
 // ////														////
 
-export class CellModel implements NameValue, FamilyMember {
+export class CellModel extends BasicFamilyMember implements NameValue {
 
 static readonly DEFAULT_EMPTY_VALUE = "";
 public static readonly DEFAULT_PRESENTATION_TYPE = "IMG";
@@ -27,6 +28,7 @@ attributes?: CellModel[];
 children: CellModel[];
 isReference: boolean;
 referenceURI?: string;
+parent?: FamilyMember;
 order?: number;		// only relevant if our parent has ordered children
 
 // //// COMPONENT STUFF										////
@@ -55,6 +57,7 @@ constructor(public schema: number,
 			public category?: string,
 			public identifier?: CellModel
 			) {
+	super(URI, name);
 	this.init();
 }
 
@@ -141,6 +144,7 @@ getCellPresentation() {
 
 }
 
+
 /** we return all the possible content for presentation (not much, given models have no data) */
 getCellPresentationAllContent() {
 	return '_name='+this.name;
@@ -149,6 +153,12 @@ getCellPresentationAllContent() {
 
 getCellPresentationType() {
 	return this.cellPresentationType;
+}
+
+
+/** @returns the list of possible values this model can take, mostly useful for list-like stuff, undefined otherwise */
+getPossibleValues(): string[] {
+	return this.type_.possibleValues;
 }
 
 
@@ -245,15 +255,6 @@ validates(v: string): boolean {
 
 //// FamilyMember ////
 
-getURI(): string {
-	return this.URI;
-}
-
-
-getAdoptionName(): string {
-	return this.name;
-}
-
 
 getAdoptionURI(): string {	// we try to work out using a reference (works for model but not for snippets)
 	return !this.isReference ? this.URI : this.referenceURI;
@@ -262,11 +263,6 @@ getAdoptionURI(): string {	// we try to work out using a reference (works for mo
 
 getAdoptionOrder(): number {
 	return this.order;
-}
-
-
-matches(e: FamilyMember): boolean {
-	return this.getAdoptionName()==e.getAdoptionName() && this.getAdoptionURI()==e.getAdoptionURI();
 }
 
 
@@ -281,17 +277,18 @@ childrenCount(): number {
 
 
 getParent(): FamilyMember {
-	return undefined;	// TODO: we do not need to setup the parent yet
-}
-
-getAncestors(): FamilyMember[] {
-	return undefined	// TODO: not needed yet
+	return this.parent;
 }
 
 
 
-equals(m: FamilyMember) {
-	return this.getURI()==m.getURI();
+isCellModel(): boolean {
+	return true;
+}
+
+
+asCellModel(): CellModel {
+	return this;
 }
 
 
@@ -300,6 +297,10 @@ equals(m: FamilyMember) {
 toJSON(): CellModelJSON {
 
 	let serialisedCellModel: CellModelJSON = Object.assign({}, this);
+
+	// we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
+	// belong to the serialised object
+	delete serialisedCellModel["parent"];
 
 	if (serialisedCellModel.identifier) {
 		serialisedCellModel.identifier = this.identifier.name;	// we serialise to the (attribute) name
@@ -345,8 +346,11 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 		}
 
 		if (json.children) {
-			cellModel = Object.assign(cellModel, 
-									  {children: json.children.map(c => CellModel.fromJSON(c))});
+			cellModel = Object.assign(cellModel, {children: json.children.map(c => {
+				let cm = CellModel.fromJSON(c);
+				cm.parent = cellModel;
+				return cm;
+			})});
 			//let i = 0;
 			cellModel.children.forEach((c: CellModel, index: number) => c.order = index);
 		} else {

@@ -2,9 +2,10 @@
 
 import { Adopter } from './adopter.interface';
 import { Adoption } from './adoption.class';
-import { Lifecycle } from './lifecycle.interface';
-import { FamilyMember } from './family-member.interface';
+import { BasicFamilyMember } from './basic-family-member.class';
 import { CellModel } from './cell-model.class';
+import { FamilyMember } from './family-member.interface';
+import { Lifecycle } from './lifecycle.interface';
 import { Model } from './model.class';
 import { NameValue } from './utils/name-value.interface';
 
@@ -12,7 +13,8 @@ import { CellLocator } from './utils/cell-locator.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 import { VariableParser } from './utils/variable-parser.class';
 
-export class Cell implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
+export class Cell extends BasicFamilyMember
+	implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
 private static readonly VALUE_FIELD = 'value';
 private static readonly _NAME = "$_NAME";
@@ -33,7 +35,9 @@ constructor(public schema: number,
 			public name: string,
 			public desc: string,
 			public cellModelURI: string,
-			public isSimple: boolean) {}
+			public isSimple: boolean) {
+	super(URI, name);
+}
 
 
 /** We associate this cell with the given model, optionally specifying a deep uri within the model */
@@ -93,7 +97,13 @@ columnFieldValue(): string {
 
 /** @returns the list of possible values this cell can take, mostly useful for list-like stuff, undefined otherwise */
 getPossibleValues(): string[] {
-	return this.cellModel.type_.possibleValues;
+
+	const cm = this.cellModel;
+	const locator = cm.valueLocator;
+
+	return cm.valueLocator ? 
+			CellLocator.findValuesWithLocator(this.getRootAncestor().asCell(), locator) :  cm.getPossibleValues();
+
 }
 
 
@@ -438,15 +448,6 @@ remove(child: Cell) {
 
 // FamilyMember ////
 
-getURI(): string {
-	return this.URI;
-}
-
-
-getAdoptionName(): string {
-	return this.name;
-}
-
 
 getAdoptionURI(): string {
 	return this.cellModel.getAdoptionURI();	// it could be that our model is a reference so we need the adoption uri
@@ -454,12 +455,7 @@ getAdoptionURI(): string {
 
 
 getAdoptionOrder(): number {
-	return this.cellModel.order;
-}
-
-
-matches(e: FamilyMember): boolean {
-	return this.getAdoptionName()===e.getAdoptionName() && this.getAdoptionURI()===e.getAdoptionURI();
+	return this.cellModel.getAdoptionOrder();
 }
 
 
@@ -486,23 +482,20 @@ getParent(): FamilyMember {
 }
 
 
-getAncestors(): FamilyMember[] {
+/*
+equals(m: FamilyMember) {
+	return m && this.getURI()===m.getURI();	// FIXME: at the beginning, if m is a model, it is undefined
+}
+*/
 
-	let ancestors: FamilyMember[] = [];
 
-	if (this.parent) {
-		ancestors = this.parent.getAncestors();
-		ancestors.unshift(this.parent);
-	}
-
-	return ancestors;
-
+isCell(): boolean {
+	return true;
 }
 
 
-
-equals(m: FamilyMember) {
-	return m && this.getURI()===m.getURI();	// FIXME: at the beginning, if m is a model, it is undefined
+asCell(): Cell {
+	return this;
 }
 
 
@@ -539,8 +532,8 @@ toJSON(): CellJSON {
 
 	// we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
 	// belong to the serialised object
-	delete serialisedCell["cellModel"];
-	delete serialisedCell["parent"];
+	delete serialisedCell['cellModel'];
+	delete serialisedCell['parent'];
 
 	// TODO: add sanity checks for reference to avoid future infinite loops 
 	if (this.attributes) {

@@ -118,6 +118,24 @@ describe('cell.class', () => {
 
 	});
 
+	it('as a family member it should behave like a cell', () => {
+
+		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(1)';
+		const types = typesContent.findCellWithURI(uri);
+		expect(types).toBeDefined();
+
+		expect(types.isCell()).toBeTrue();
+		expect(types.isCellModel()).toBeFalse();
+		expect(types.asCell()).toBe(types);
+		expect(types.asCellModel()).toBeUndefined();
+
+		const root = types.getRootAncestor();
+		expect(root).toBeDefined();
+		expect(root.getAdoptionName()).toBe('');
+		expect(root.getURI()).toBe('target/test-classes/test-resources/documents/types.xml');
+
+	});
+
 });
 
 /*

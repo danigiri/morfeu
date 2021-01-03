@@ -78,7 +78,7 @@ findCellModel(uri: string): CellModel {
 //// SerialisableToJSON ////
 // check out this excellent post http://choly.ca/post/typescript-json/ to find out how to deserialize objects
 toJSON(): ModelJSON {
-	return Object.assign({}, this, {cellModels: this.children.map(cm => cm.toJSON()) });
+	return Object.assign({}, this, {cellModels: this.children.map(cm => cm.toJSON())});
 }
 
 
@@ -92,7 +92,11 @@ fromJSON(json: ModelJSON|string): Model {
 
 	let model = Object.create(Model.prototype);
 
-	return Object.assign(model, json, {children: json.children.map( cm => CellModel.fromJSON(cm))});
+	return Object.assign(model, json, {children: json.children.map( c => {
+		let cm = CellModel.fromJSON(c);
+		cm.parent = model;
+		return cm;
+	})});
 
 }
 

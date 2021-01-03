@@ -3,8 +3,10 @@ export const _readonlyPrefix = 'target/test-classes/test-resources/documents/rea
 export const _document1Prefix = 'target/test-classes/test-resources/documents/document1.xml';
 export const _document3Prefix = 'target/test-classes/test-resources/documents/document3.xml';
 export const _document5Prefix = 'target/test-classes/test-resources/documents/document5.xml';
-//wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
-//wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/types.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > types.json
+// wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/readonly.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > foo.json
+// wget -O - http://localhost:3000/dyn/content/target/test-classes/test-resources/documents/types.xml\?model\=target/test-classes/test-resources/models/test-model.xsd | jq > types.json
+// wget -O - http://localhost:3000/dyn/models/target/test-classes/test-resources/models/test-model.xsd | jq > model.json
+
 export const _document1Document = `
 {
 	"name": "Document 1"
@@ -1125,7 +1127,8 @@ export const _types = `
 }
 `;
 
-export const _model = `{
+export const _model = `
+{
 	"schema" : 0,
 	"URI" : "target/test-classes/test-resources/models/test-model.xsd",
 	"name" : "",
@@ -1133,7 +1136,7 @@ export const _model = `{
 	"presentation" : "ROOT",
 	"thumb" : "",
 	"cellPresentation" : "",
-	"cellPresentationType" : "IMG",
+	"cellPresentationType" : "HTML",
 	"cellPresentationMethod" : "GET",
 	"isSimple" : false,
 	"type_" : {
@@ -1419,7 +1422,7 @@ export const _model = `{
 					"presentation" : "CELL",
 					"thumb" : "assets/images/data3-thumb.svg",
 					"identifier" : "text",
-					"cellPresentation" : "/dyn/preview/html/\${text}?color=\${color}",
+					"cellPresentation" : "/dyn/preview/html/$\{text}?color=$\{color}",
 					"cellPresentationType" : "HTML",
 					"cellPresentationMethod" : "GET",
 					"isSimple" : false,
@@ -1917,6 +1920,27 @@ export const _model = `{
 					"isReference" : false,
 					"attributes" : [ {
 						"schema" : 0,
+						"URI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@locator",
+						"name" : "locator",
+						"desc" : "List of possible values taken fron a uri reference",
+						"presentation" : "VALUELOCATOR",
+						"thumb" : "DEFAULT",
+						"cellPresentation" : "DEFAULT",
+						"cellPresentationType" : "IMG",
+						"cellPresentationMethod" : "GET",
+						"isSimple" : true,
+						"type_" : {
+							"name" : "locatorField",
+							"isSimple" : true,
+							"desc" : "List of possible values taken fron a uri reference"
+						},
+						"minOccurs" : 0,
+						"maxOccurs" : 1,
+						"valueLocator" : "/test/**/stuff",
+						"isAttribute" : true,
+						"isReference" : false
+					}, {
+						"schema" : 0,
 						"URI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/types@list",
 						"name" : "list",
 						"desc" : "List of possible values",
@@ -1959,6 +1983,24 @@ export const _model = `{
 						"isReference" : false
 					} ],
 					"children" : [ ]
+				}, {
+					"schema" : 0,
+					"URI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/code",
+					"name" : "code",
+					"desc" : "Code demo (using SQL)",
+					"presentation" : "CELL-CODE",
+					"thumb" : "assets/images/code-thumb.svg",
+					"cellPresentation" : "/dyn/preview/code/?sql=$_VALUE",
+					"cellPresentationType" : "HTML",
+					"cellPresentationMethod" : "GET",
+					"isSimple" : true,
+					"type_" : {
+						"name" : "codeContent",
+						"isSimple" : true,
+						"desc" : "textContent is a multiple line text area for simple content"
+					},
+					"minOccurs" : 0,
+					"isReference" : false
 				}, {
 					"schema" : 0,
 					"URI" : "target/test-classes/test-resources/models/test-model.xsd/test/row/col/row",
@@ -2005,7 +2047,8 @@ export const _model = `{
 		} ]
 	} ],
 	"valid" : true
-}`;
+}
+`;
 
 
 export const _snippets = [

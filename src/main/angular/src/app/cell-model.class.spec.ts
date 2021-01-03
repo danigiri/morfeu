@@ -105,6 +105,23 @@ describe('cell-model.class', () => {
 
 	});
 
+	it('as a family member it should behave like a cell model', () => {
+
+		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/types');
+		expect(cm).toBeDefined();
+
+		expect(cm.isCell()).toBeFalse();
+		expect(cm.isCellModel()).toBeTrue();
+		expect(cm.asCellModel()).toBe(cm);
+		expect(cm.asCell()).toBeUndefined();
+
+		const root = cm.getRootAncestor();
+		expect(root).toBeDefined();
+		expect(root.getAdoptionName()).toBe('');
+		expect(root.getURI()).toBe('target/test-classes/test-resources/models/test-model.xsd');
+		
+	});
+
 });
 
 /*

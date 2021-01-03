@@ -6,6 +6,10 @@
 *	 Elements named 'fubar' of model '/model/bar' are not accepted into the family
 *	 So would be elements named 'bar' but with model '/model/whatever'
 */
+
+import { Cell } from './cell.class';
+import { CellModel } from './cell-model.class';
+
 export interface FamilyMember {
 
 /** unique location */
@@ -28,17 +32,32 @@ canAdopt(newMember:FamilyMember, position?: number): boolean;
 
 //canRemoveAsChild(cell:Cell):boolean;
 
-/** return the number of children */
+/** @returns the number of children */
 childrenCount(): number;
 
 /** reference to the parent */
 getParent(): FamilyMember;
 
-/** returns a list of ancestors, starting with the parent and up to the content */
+/** @returns a list of ancestors, starting with the parent and up to the content */
 getAncestors(): FamilyMember[];
+
+/** @returns the root ancestor, if it's already the root, returns itself */
+getRootAncestor(): FamilyMember;
 
 /** exactly the same? */
 equals(m:FamilyMember): boolean;
+
+/** @returns true if it's a cell instance' */
+isCell(): boolean;
+
+/** @returns true if it's a cell model instance' */
+isCellModel(): boolean;
+
+/** @returns the cell instance, or undefined if it's not a cell instance' */
+asCell(): Cell;
+
+/** @returns the cell model instance, or undefined if it's not a cell model instance' */
+asCellModel(): CellModel;
 
 }
 
