@@ -25,7 +25,7 @@ public final static ExecutorService executor = Executors.newCachedThreadPool();
 @Production
 public static Executor executor() {
 	// this has been used to prove that the 'protected final static' means that we reuse the thread pool, yay!
-	log.info("[Executor producer called] ({})", executor.hashCode());
+	log.trace("[Executor producer called] ({})", executor.hashCode());
 	return executor;
 }
 

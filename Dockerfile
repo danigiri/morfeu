@@ -65,4 +65,4 @@ COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test
 
 # start (configuration seems not to be loading
 WORKDIR ${JETTY_HOME}
-ENTRYPOINT ["java", "-jar", "./start.jar", "jetty.base=/jetty-base", "--module=http", "jetty.http.port=8980"]
+ENTRYPOINT ["java", "-jar", "./start.jar", "jetty.base=/jetty-base"]
