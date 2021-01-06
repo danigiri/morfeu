@@ -52,9 +52,12 @@ RUN curl ${JETTY_URL} | tar zxf - -C ${JETTY_HOME} --strip-components 1
 # installing freetype, fontconfig and some fonts so we can generate the SVGs, bash for the entrypoing
 RUN apk add --no-cache freetype fontconfig ttf-ubuntu-font-family bash
 
-# create jetty-base folder and add the configuration
-RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/logs
+# create jetty-base folder and add the jetty configuration and folder structure
 COPY --from=build ./target/classes/jetty /jetty-base
+RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/resources
+COPY --from=build ./target/classes/jetty-logging.properties /jetty-base/resources
+# create logs folder if we want to persist them
+# RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/logs
 
 # add war
 COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
