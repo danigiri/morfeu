@@ -56,7 +56,7 @@ RUN apk add --no-cache freetype fontconfig ttf-ubuntu-font-family bash
 COPY --from=build ./target/classes/jetty /jetty-base
 RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/resources
 COPY --from=build ./target/classes/jetty-logging.properties /jetty-base/resources
-# create logs folder if we want to persist them
+# uncomment to create logs folder if we want to persist them (also enable the module)
 # RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/logs
 
 # add war
