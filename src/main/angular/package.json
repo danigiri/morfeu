@@ -33,7 +33,6 @@
     "ng-keyboard-shortcuts": "^10.1.17",
     "npm": "^7.3.0",
     "rxjs": "^6.6.3",
-    "rxjs-compat": "^6.6.3",
     "ts-data.stack": "^1.0.6",
     "tslib": "^2.0.1",
     "web-animations-js": "^2.3.2",
