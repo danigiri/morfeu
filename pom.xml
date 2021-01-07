@@ -206,14 +206,6 @@
 							<name>__ASYNC_TIMEOUT</name>
 							<value>${async-timeout}</value>
 						</systemProperty>
-						<systemProperty>
-							<name>org.eclipse.jetty.util.log.Log</name>
-							<value>org.eclipse.jetty.util.log.Slf4jLog</value>
-						</systemProperty>
-						<systemProperty>
-							<name>logback.configurationFile</name>
-							<value>src/main/resources/logback.xml</value>
-						</systemProperty>
 					</systemProperties>
 					<httpConnector>
 						<port>${jetty-http-port}</port>
