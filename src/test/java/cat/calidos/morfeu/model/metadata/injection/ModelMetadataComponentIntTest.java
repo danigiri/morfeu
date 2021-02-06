@@ -106,7 +106,7 @@ public void testValueLocator() throws Exception {
 														.attribute("locator")
 														.getMetadata();
 	assertNotNull(locator);
-	
+
 	assertAll("test locator stuff",
 		() -> assertTrue(locator.getValueLocator().isPresent()),
 		() -> assertEquals("/test/**/stuff", locator.getValueLocator().get())
