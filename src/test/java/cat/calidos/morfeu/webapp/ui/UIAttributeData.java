@@ -4,6 +4,11 @@ package cat.calidos.morfeu.webapp.ui;
 
 import static com.codeborne.selenide.Selenide.$;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.openqa.selenium.By;
+
 import com.codeborne.selenide.SelenideElement;
 import com.google.common.base.Optional;
 
@@ -80,14 +85,19 @@ public boolean isNotPresent() {
 }
 
 
-private String name_() {
-
-	return element.$(".attribute-data-name").text();
+public String value() {
+	return isEditable() ? element.$(ATTRIBUTE_DATA_VALUE).getValue() : element.$(ATTRIBUTE_DATA_VALUE).innerText();
 }
 
 
-public String value() {
-	return isEditable() ? element.$(ATTRIBUTE_DATA_VALUE).getValue() : element.$(ATTRIBUTE_DATA_VALUE).innerText();
+public List<String> possibleValues() {
+
+	if (!isList()) {
+		throw new RuntimeException("Tried to get a list of possible valus from a non-list ("+name()+")");
+	}
+
+	return element.$$(By.xpath(".//option")).stream().map(e -> e.innerText()).collect(Collectors.toList());
+
 }
 
 
@@ -237,6 +247,12 @@ public UIAttributeData clickOnCreate() {
 
 	return parent.get().attribute(this.name());		// and we now have new element, so we recreate ourselves
 
+}
+
+
+private String name_() {
+
+	return element.$(".attribute-data-name").text();
 }
 
 

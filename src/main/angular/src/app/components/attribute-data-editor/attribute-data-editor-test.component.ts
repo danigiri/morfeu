@@ -97,6 +97,7 @@ locatorValidation() {
 
 }
 
+
 protected loaded(model: Model, content: Content): void {
 
 	const cell = content.findCellWithURI(content.getURI()+this.cellPath);

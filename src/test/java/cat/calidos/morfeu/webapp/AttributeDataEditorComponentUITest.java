@@ -4,6 +4,8 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -92,7 +94,33 @@ public void testSelectDropdown() {
 
 	list.select("A1");
 	assertEquals("A1", list.value(), "attribute should have the right value at first");
-	
+
+}
+
+
+@Test @DisplayName("Locator dropdown test")
+public void locatorDropdownTest() {
+
+	open(appBaseURL+"test/attribute-data-editor-test/locator");
+
+	UIAttributeData list = new UIAttributeData();
+	assertAll("check basics at first",
+		() -> assertNotNull(list),
+		() -> assertEquals("V0", list.value(), "locator attribute should have the right value at first"),
+		() -> assertTrue(list.isList(), "locator attribut should be a (dropdown) list"),
+		() -> assertTrue(list.isEditable(), "locator attribute should be editable"),
+		() -> assertTrue(list.validates(), "locator attribute should validate at first and show no warning")
+	);
+
+	List<String> possibleValues = list.possibleValues();
+	assertAll("checking locator possible values",
+		() -> assertNotNull(possibleValues),
+		() -> assertEquals(3, possibleValues.size()),
+		() -> assertTrue(possibleValues.contains("V0")),
+		() -> assertTrue(possibleValues.contains("V1")),
+		() -> assertTrue(possibleValues.contains("V2"))
+	);
+
 }
 
 
