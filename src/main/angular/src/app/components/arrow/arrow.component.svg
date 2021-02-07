@@ -1,0 +1,11 @@
+<svg:svg xmlns:svg="http://www.w3.org/2000/svg"
+	viewBox="0 0 360 240"
+	style="width: 360, height: 240"
+	stroke="#000"
+	fill="#000"
+	strokeWidth="3"
+>
+	<svg:circle attr.cx="{{arrow.sx}}" attr.cy="{{arrow.sy}}" r="4"></circle>
+	<svg:path attr.d="{{arrow.path}}" fill="none"></path>
+	<svg:polygon points="0,-6 12,0, 0,6" attr.transform="{{arrow.transform}}"></polygon>
+</svg>
