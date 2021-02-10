@@ -1,16 +1,9 @@
 // ARROW - TEST . COMPONENT . TS
-import { Component, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
 
 import { Arrow } from './arrow.class';
-import { Content, ContentJSON } from '../../content.class';
-import { Model, ModelJSON } from '../../model.class';
-
-import { RemoteObjectService } from '../../services/remote-object.service';
 
 import { TestComponent } from '../../test/test-component.class';
-
-import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'arrow-test',
@@ -32,7 +25,9 @@ protected test(case_: string): void {
 
 
 private showArrow() {
-	Promise.resolve(null).then(() => this.arrow_ = new Arrow(4, 4, 720/4+10, 480/4, 720/2-10, 480/2-10, 0.5, 1, 1));
+	const w = 720;
+	const h = 480;
+	Promise.resolve(null).then(() => this.arrow_ = new Arrow(4, 4, w/4+10, h/4, w/2-10, h/2-10, 0.5, 1, 1, w/2, h/2));
 }
 
 
