@@ -1,20 +1,34 @@
-// ATTRIBUTE DATA EDITOR . COMPONENT . TS
-
-import { Component, Input } from '@angular/core';
+// ARROW - TEST . COMPONENT . TS
+import { Component } from '@angular/core';
 
 import { Arrow } from './arrow.class';
 
+import { TestComponent } from '../../test/test-component.class';
+
 @Component({
-	selector: 'arrow',
-	templateUrl: './arrow.component.svg'
+	selector: 'arrow-test',
+	template: `
+	<div><arrow *ngIf="arrow_" [arrow]="arrow_"></arrow></div>`
 })
 
-export class ArrowComponent {
+export class ArrowContainerTestComponent extends TestComponent {
 
-@Input() arrow: Arrow;
+public arrow_: Arrow;
 
-constructor() {}
 
+protected test(case_: string): void {
+	switch (case_) {
+		case 'arrow' : this.showArrow(); break;
+		default: this.showArrow();
+	}
+}
+
+
+private showArrow() {
+	const w = 720;
+	const h = 480;
+	Promise.resolve(null).then(() => this.arrow_ = new Arrow(4, 4, w/4+10, h/4, w/2-10, h/2-10, 0.5, 1, 1, w/2, h/2));
+}
 
 
 }

@@ -10,7 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PipesModule } from '../pipes/pipes.module';
 
-import { ArrowComponent } from './arrow/arrow.component';
+import { ArrowContainerComponent } from './arrow-container/arrow-container.component';
 import { AttributeDataEditorComponent } from './attribute-data-editor/attribute-data-editor.component';
 import { AttributeDataInfoComponent } from './attribute-data-info/attribute-data-info.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -45,7 +45,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 				PipesModule
 	],
 	declarations: [
-					ArrowComponent,
+					ArrowContainerComponent,
 					AttributeDataEditorComponent,
 					AttributeDataInfoComponent,
 					BreadcrumbComponent,
@@ -62,7 +62,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					SnippetsListComponent
 	],
 	exports: [
-					ArrowComponent,
+					ArrowContainerComponent,
 					AttributeDataEditorComponent,
 					AttributeDataInfoComponent,
 					BreadcrumbComponent,

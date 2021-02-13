@@ -7,7 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ComponentsModule } from '../components/components.module';
 
-import { ArrowTestComponent } from '../components/arrow/arrow-test.component';
+import { ArrowContainerTestComponent } from '../components/arrow/arrow-container-test.component';
 import { AttributeDataEditorTestComponent } 
 	from '../components/attribute-data-editor/attribute-data-editor-test.component';
 import { AttributeDataInfoTestComponent } from '../components/attribute-data-info/attribute-data-info-test.component';
@@ -20,7 +20,7 @@ import { PresentationTestComponent } from '../components/presentation/presentati
 import { SnippetsListTestComponent } from '../components/snippets-list/snippets-list-test.component';
 
 const routes: Routes = [
-						{path: 'arrow-test/:case_', component: ArrowTestComponent},
+						{path: 'arrow-container-test/:case_', component: ArrowTestComponent},
 						{path: 'attribute-data-editor-test/:case_', component: AttributeDataEditorTestComponent},
 						{path: 'attribute-data-info-test/:case_', component: AttributeDataInfoTestComponent},
 						{path: 'breadcrumb-test/:case_', component: BreadcrumbTestComponent},
