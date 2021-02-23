@@ -46,13 +46,13 @@ hasValue_(): boolean {
 }
 
 
-private isIdentifier(): boolean {
+isIdentifier(): boolean {
 	return this.parentCell?.cellModel.identifier!=undefined 
 			&& this.parentCell.cellModel.identifier==this.cellModel;
 }
 
 
-private getValue(): string {
+getValue(): string {
 	return this.parentCell?.getAttribute(this.cellModel.name).value;
 }
 

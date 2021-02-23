@@ -105,7 +105,7 @@ get possibleValues(): string[] {
 
 
 // add current attribute with empty or default value
-private add() {
+add() {
 
 	console.log("[UI] adding cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {
@@ -118,7 +118,7 @@ private add() {
 }
 
 
-private modified(e) {
+modified(e) {
 
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
 	const valid = this.updateValidity(attr.value);
@@ -128,7 +128,7 @@ private modified(e) {
 
 
 // delete current value
-private delete() {
+delete() {
 
 	console.log("[UI] deleting cell attribute ", this.cellModel.name);
 	Promise.resolve(null).then(() => {

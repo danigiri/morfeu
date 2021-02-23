@@ -87,16 +87,17 @@ formCallback(f: NgForm) {
 }
 
 
-private showValue() {
+showValue() {
 	return this.showText() || this.showCode();
 }
 
 
-private showText() {
+showText() {
 	return this.cell.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
 }
 
-private showCode() {
+
+showCode() {
 	return this.cell.cellModel.presentation.includes("CODE"); // if we need to show the text area or not	
 }
 
@@ -142,17 +143,17 @@ private edit(cell: Cell) {
 
 
 //TODO: this is duplicated code, should refactor
-private cellPresentationIsIMG(): boolean {
+cellPresentationIsIMG(): boolean {
 	return this.cell.cellModel.getCellPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
 
-private showPresentation() {
+showPresentation() {
 	return this.cell.cellModel.presentation.startsWith("CELL");
 }
 
 
-private getPresentation(): string {
+getPresentation(): string {
 	return this.cell===undefined ? this.cell.cellModel.getCellPresentation() : this.cell.getCellPresentation();
 }
 
@@ -206,7 +207,7 @@ private clear() {
 }
 
 
-private createValue() {
+createValue() {
 
 	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {
@@ -218,14 +219,14 @@ private createValue() {
 }
 
 
-private modifiedValue(e) {
+modifiedValue(e) {
 
 	const valid = this.cell.cellModel.validates(this.cell.value);
 	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.MODIFIED_VALUE, valid));
 }
 
 
-private removeValue() {
+removeValue() {
 
 	console.log("[UI] Removing value for '%s'", this.cell.URI);
 	Promise.resolve(null).then(() => {

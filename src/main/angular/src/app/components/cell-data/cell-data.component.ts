@@ -112,7 +112,7 @@ ngOnInit() {
 }
 
 
-private showCellInformation(cell: Cell) {
+showCellInformation(cell: Cell) {
 
 	this.uri = cell.URI;
 	this.cell = cell;
@@ -138,13 +138,13 @@ private hideCellInformation() {
 }
 
 
-private remainingAttributes() {
+remainingAttributes() {
 	return this.cellModel.attributes ? this.cellModel.attributes.length - this.cell.attributes.length : 0;
 }
 
 
 // TODO: this is duplicated code, should refactor
-private cellPresentationIsIMG(): boolean {
+cellPresentationIsIMG(): boolean {
 
 	let cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
 
@@ -153,17 +153,17 @@ private cellPresentationIsIMG(): boolean {
 }
 
 
-private showCellPresentation() {
+showCellPresentation() {
 	return this.cellModel.presentation.startsWith("CELL");
 }
 
 
-private getCellPresentation(): string {
+getCellPresentation(): string {
 	return this.cell===undefined ? this.cellModel.getCellPresentation() : this.cell.getCellPresentation();
 }
 
 
-private showValue() {
+showValue() {
 	return this.cellModel.presentation.includes("TEXT"); // if we need to show the text area or not
 }
 

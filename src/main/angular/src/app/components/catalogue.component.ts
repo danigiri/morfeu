@@ -121,7 +121,7 @@ markDocumentAsSelected(uri: string) {
 }
 
 
-private preview(d: CellDocument) {
+preview(d: CellDocument) {
 	return d.presentation ? d.presentation : 'assets/images/open-iconic/file.svg';
 }
 

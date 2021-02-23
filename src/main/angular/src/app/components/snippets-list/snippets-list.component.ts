@@ -129,10 +129,10 @@ public currentSnippets(): CellDocument[] {
 }
 
 
-public beforeToggle($event: NgbPanelChangeEvent) {
-
-	if ($event.nextState) {
-		this.currentCategory = $event.panelId;
+public beforeToggle($event: unknown) {
+	const $e = $event as NgbPanelChangeEvent;
+	if ($e.nextState) {
+		this.currentCategory = $e.panelId;
 	} else if (this.snippetSelectingMode || this.snippetCategorySelectingMode) {
 		this.deactivateSnippetSelectingMode();		// if we close the tab and we were in selection mode we are not
 													// able to select the snippet children anymore

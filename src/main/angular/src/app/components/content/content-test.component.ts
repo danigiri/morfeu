@@ -69,7 +69,8 @@ private dragAndDrop1() {
 
 	console.debug('Drag and Drop 35test')
 	this.document = this.createDocument(_document5Document);
-	this.loadModel(this.document.modelURI);			this.loadModel(this.document.modelURI);
+	this.loadModel(this.document.modelURI);
+	//this.loadModel(this.document.modelURI);
 
 }
 

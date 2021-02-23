@@ -87,7 +87,7 @@ getPresentationType(): string {
 }
 
 
-private getCellPresentation(): string {
+getCellPresentation(): string {
 	return this.cell===undefined ? this.cellModel.getCellPresentation() : this.cell.getCellPresentation();
 }
 

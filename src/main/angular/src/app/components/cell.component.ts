@@ -338,7 +338,7 @@ subscribeToSelection() {
 }
 
 
-private cellPresentationIsIMG(): boolean {
+cellPresentationIsIMG(): boolean {
 	return this.cell.cellModel.getCellPresentationType()===CellModel.DEFAULT_PRESENTATION_TYPE;
 }
 
@@ -374,7 +374,7 @@ private remove() {
 
 
 // data that is being dragged (and potentially dropped)
-private cellDragData() {
+cellDragData() {
 
 	let cellDragData: Cell;
 	if (this.snippet) {	// If we are cloning, we deep clone the cell and remove the parent ref
@@ -391,7 +391,7 @@ private cellDragData() {
 }
 
 
-private doubleClick() {
+doubleClick() {
 
 	if (this.isEditable()) {
 		this.events.service.publish(new CellEditEvent(this.cell));
