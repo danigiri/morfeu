@@ -6,12 +6,12 @@ import { Arrow } from './arrow.class';
 
 @Component({
 	selector: 'arrow',
-	templateUrl: './arrow-container.component.svg'
+	templateUrl: './arrows.component.svg'
 })
 
-export class ArrowContainerComponent {
+export class ArrowsComponent {
 
-@Input() arrow: Arrow;
+@Input() arrows: Arrow[];
 
 constructor() {}
 

@@ -6,7 +6,7 @@ public static readonly PI180 = 180 / Math.PI;
 
 public path: string;
 public transform: string;
-public viewBox: string;
+
 
 constructor(public sx: number, 		// The x position of the (padded) starting point
 			public sy: number, 		// The y position of the (padded) starting point
@@ -17,13 +17,11 @@ constructor(public sx: number, 		// The x position of the (padded) starting poin
 			public ae: number,		// The angle (in radians) for an ending arrowhead
 			public as: number,		// The angle (in radians) for a starting arrowhead
 			public ec: number,		// The angle (in radians) for a center arrowhead
-			public vbWidth: number,	// view box width
-			public vbHeight: number	// view box height
 			) {
 
 	this.path =  'M'+sx+','+sy+' Q'+cx+','+cy+' '+ex+','+ey;
 	this.transform = 'translate('+ex+','+ey+') rotate('+ae*Arrow.PI180+')';
-	this.viewBox = '0 0 '+vbWidth+' '+vbHeight;
+
 }
 
 

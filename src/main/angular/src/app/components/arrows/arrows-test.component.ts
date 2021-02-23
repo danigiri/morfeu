@@ -3,17 +3,19 @@ import { Component } from '@angular/core';
 
 import { Arrow } from './arrow.class';
 
+import { _types } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
 @Component({
 	selector: 'arrow-test',
 	template: `
-	<div><arrow *ngIf="arrow_" [arrow]="arrow_"></arrow></div>`
+		<arrow *ngIf="arrows.length>0" [arrows]="arrows"></arrow>
+	`
 })
 
-export class ArrowContainerTestComponent extends TestComponent {
+export class ArrowsTestComponent extends TestComponent {
 
-public arrow_: Arrow;
+public arrows: Arrow[] = [];
 
 
 protected test(case_: string): void {
@@ -27,7 +29,7 @@ protected test(case_: string): void {
 private showArrow() {
 	const w = 720;
 	const h = 480;
-	Promise.resolve(null).then(() => this.arrow_ = new Arrow(4, 4, w/4+10, h/4, w/2-10, h/2-10, 0.5, 1, 1, w/2, h/2));
+	Promise.resolve(null).then(() => this.arrows.push(new Arrow(4, 4, w/4+10, h/4, w/2-10, h/2-10, 0.5, 1, 1)));
 }
 
 
