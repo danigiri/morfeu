@@ -27,9 +27,10 @@ protected test(case_: string): void {
 
 
 private showArrow() {
-	const w = 720;
-	const h = 480;
-	Promise.resolve(null).then(() => this.arrows.push(new Arrow(4, 4, w/4+10, h/4, w/2-10, h/2-10, 0.5, 1, 1)));
+	const w = 1024;
+	const h = 768;
+//	Promise.resolve(null).then(() => this.arrows.push(new Arrow(4, 4, w/4+10, h/4, w/2-10, h/2-10, 0.5, 1, 1)));
+	Promise.resolve(null).then(() => this.arrows.push(new Arrow(4, 4, w, h)));
 }
 
 

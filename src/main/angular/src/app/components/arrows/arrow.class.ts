@@ -1,29 +1,38 @@
 /// ARROW . CLASS . TS
+import { getArrow } from 'perfect-arrows';
 
+/** Arrow class that takes start and end coordinates */
 export class Arrow {
 
 public static readonly PI180 = 180 / Math.PI;
 
-public path: string;
 public transform: string;
+public cx: number;
+public cy: number;
+public ae: number;
+public pi180 = Arrow.PI180;	// so we can access it from the template
 
+/**
+ * @param sx The x position of the starting point
+ * @param sy The y position of the (padded) starting point
+ * @param ex The x position of the (padded) ending point
+ * @param ey The y position of the (padded) ending point
+ */
+constructor(public sx: number, public sy: number, public ex: number, public ey: number) {
 
-constructor(public sx: number, 		// The x position of the (padded) starting point
-			public sy: number, 		// The y position of the (padded) starting point
-			public cx: number,		// The x position of the (padded) center point
-			public cy: number,		// The y position of the (padded) center point
-			public ex: number, 		// The x position of the (padded) ending point
-			public ey: number,		// The y position of the (padded) ending point
-			public ae: number,		// The angle (in radians) for an ending arrowhead
-			public as: number,		// The angle (in radians) for a starting arrowhead
-			public ec: number,		// The angle (in radians) for a center arrowhead
-			) {
-
-	this.path =  'M'+sx+','+sy+' Q'+cx+','+cy+' '+ex+','+ey;
-	this.transform = 'translate('+ex+','+ey+') rotate('+ae*Arrow.PI180+')';
+	const [sx_, sy_, cx_, cy_, ex_, ey_, ae_, as_, ec_] = getArrow(sx, sy, ex, ey);
+	this.cx = cx_;
+	this.cy = cy_;
+	this.ex = ex_;
+	this.ey = ey_;
+	this.ae = ae_;
+	this.transform = `translate(${ex_},${ey_}) rotate(${ae_ * Arrow.PI180})`;
 
 }
 
+equals(a: Arrow): boolean {
+	return this.sx===a.sx && this.sy===a.sy && this.ex===a.ex && this.ey===a.ey;
+}
 
 }
 

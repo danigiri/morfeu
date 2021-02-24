@@ -20,7 +20,7 @@ import { PresentationTestComponent } from '../components/presentation/presentati
 import { SnippetsListTestComponent } from '../components/snippets-list/snippets-list-test.component';
 
 const routes: Routes = [
-						{path: 'arrow-container/:case_', component: ArrowsTestComponent},
+						{path: 'arrows/:case_', component: ArrowsTestComponent},
 						{path: 'attribute-data-editor-test/:case_', component: AttributeDataEditorTestComponent},
 						{path: 'attribute-data-info-test/:case_', component: AttributeDataInfoTestComponent},
 						{path: 'breadcrumb-test/:case_', component: BreadcrumbTestComponent},

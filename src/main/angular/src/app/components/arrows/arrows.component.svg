@@ -1,13 +1,13 @@
 <svg:svg xmlns:svg="http://www.w3.org/2000/svg"
-	attr.viewBox="0 0 720 480"
-	style="width: 360, height: 140"
+	viewBox="0 0 1024 768"
+	style="width: 1024, height: 768"
 	stroke="#000"
 	fill="#000"
 	strokeWidth="3"
 >
 	<ng-container *ngFor="let arrow of arrows">
 		<svg:circle attr.cx="{{arrow.sx}}" attr.cy="{{arrow.sy}}" r="4"></svg:circle>
-		<svg:path attr.d="{{arrow.path}}" fill="none"></svg:path>
-		<svg:polygon points="0,-6 12,0, 0,6" attr.transform="{{arrow.transform}}"></svg:polygon>
+		<svg:path attr.d="M{{arrow.sx}},{{arrow.sy}} Q{{arrow.cx}},{{arrow.cy}} {{arrow.ex}},{{arrow.ey}}" fill="none"></svg:path>
+		<svg:polygon points="0,-6 12,0, 0,6" attr.transform="translate({{arrow.ex}},{{arrow.ey}}) rotate({{arrow.ae*arrow.pi180}})"></svg:polygon>
 	</ng-container>
 </svg:svg>
