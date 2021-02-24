@@ -1,7 +1,6 @@
 
 // ARROWS . CLASS . TS
 
-import { removeAllListeners } from 'process';
 import Stack from 'ts-data.stack';
 
 import { Arrow } from './arrow.class';
