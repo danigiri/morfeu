@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 
 import { Arrow } from './arrow.class';
+import { Arrows } from './arrows.class';
 
 import { _types } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
@@ -9,13 +10,13 @@ import { TestComponent } from '../../test/test-component.class';
 @Component({
 	selector: 'arrow-test',
 	template: `
-		<arrow *ngIf="arrows.length>0" [arrows]="arrows"></arrow>
+		<arrows *ngIf="arrows.length>0" [arrows]="arrows"></arrows>
 	`
 })
 
 export class ArrowsTestComponent extends TestComponent {
 
-public arrows: Arrow[] = [];
+public arrows: Arrows = new Arrows();
 
 
 protected test(case_: string): void {

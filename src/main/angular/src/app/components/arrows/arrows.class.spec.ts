@@ -9,41 +9,41 @@ it('should add selectively', () => {
 
     let arrows = new Arrows();
     const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
-    expect(arrows.add(a0)).toBeTrue();
+    expect(arrows.push(a0)).toBeTrue();
     expect(arrows.arrows.length).toBe(1);
-    expect(arrows.add(a0)).toBeFalse();
+    expect(arrows.push(a0)).toBeFalse();
     expect(arrows.arrows.length).toBe(1);
 
     const a1 = new Arrow (0.0, 0.0, 1.0, 2.0);
-    expect(arrows.add(a1)).toBeFalse();
+    expect(arrows.push(a1)).toBeFalse();
     expect(arrows.arrows.length).toBe(1);
 
     const a2 = new Arrow (0.0, 0.0, 0.1, 0.1);
-    expect(arrows.add(a2)).toBeTrue();
+    expect(arrows.push(a2)).toBeTrue();
     expect(arrows.arrows.length).toBe(2);
 
-
 });
+
 
 it('should handle min and max', () => {
 
     let arrows = new Arrows();
     const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
-    expect(arrows.add(a0)).toBeTrue();
+    expect(arrows.push(a0)).toBeTrue();
     expect(arrows.minX).toBe(0.0);
     expect(arrows.minY).toBe(0.0);
     expect(arrows.maxX).toBe(1.0);
     expect(arrows.maxY).toBe(2.0);
 
     const a1 = new Arrow (0.0, 0.0, 0.1, 0.1);
-    expect(arrows.add(a1)).toBeTrue();
+    expect(arrows.push(a1)).toBeTrue();
     expect(arrows.minX).toBe(0.0);
     expect(arrows.minY).toBe(0.0);
     expect(arrows.maxX).toBe(1.0);
     expect(arrows.maxY).toBe(2.0);
 
     const a2 = new Arrow (-1.0, 0.0, 1.1, 0.1);
-    expect(arrows.add(a2)).toBeTrue();
+    expect(arrows.push(a2)).toBeTrue();
     expect(arrows.minX).toBe(-1.0);
     expect(arrows.minY).toBe(0.0);
     expect(arrows.maxX).toBe(1.1);
@@ -54,6 +54,7 @@ it('should handle min and max', () => {
     expect(arrows.minY).toBe(0.0);
     expect(arrows.maxX).toBe(1.0);
     expect(arrows.maxY).toBe(2.0);
+
 });
 
 

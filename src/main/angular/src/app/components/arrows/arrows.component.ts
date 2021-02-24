@@ -2,19 +2,16 @@
 
 import { Component, Input } from '@angular/core';
 
-import { Arrow } from './arrow.class';
+import { Arrows } from './arrow.class';
 
 @Component({
-	selector: 'arrow',
+	selector: 'arrows',
 	templateUrl: './arrows.component.svg'
 })
 
 export class ArrowsComponent {
 
-@Input() arrows: Arrow[];
-
-constructor() {}
-
+@Input() arrows: Arrows;
 
 
 }

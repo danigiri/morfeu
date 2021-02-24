@@ -19,7 +19,10 @@ export class Arrows {
 constructor() {}
 
 
-add(a: Arrow): boolean {
+/** push this arrow if it has not been added already, updates min and max if need be
+ *  @returns true if we added the arrow
+ */
+push(a: Arrow): boolean {
 
     let addition = false;
     if (!this.alreadyHave(a)) {
@@ -40,6 +43,9 @@ add(a: Arrow): boolean {
 }
 
 
+/** remove this arrow if it exists in the list, updates min and max if need be 
+ *  @returns true if we removed the arrow
+*/
 remove(a: Arrow): boolean {
     
     let removal = false;
@@ -110,6 +116,10 @@ private removeMaxStack(s: Stack<number>, v: number): boolean {
     return this.removeMinStack(s, v);   // the implementation is the same but will change if needed
 }
 
+
+get length(): number {
+    return this.#arrows.length;
+}
 
 
 get arrows(): Arrow[] {
