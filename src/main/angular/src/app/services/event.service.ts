@@ -1,10 +1,11 @@
 /* Credit for original idea should go to
 *  http://www.processinginfinity.com/weblog/2016/08/18/MessageBus-Pattern-in-Angular2-TypeScript
-*  As there is no license on the site we should be ok.
+*  As there is no license on the site we should be ok. It has been modified and streamlined from the original code.
 */
 
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
+import { map } from 'rxjs/operators';
 
 import { MorfeuEvent } from '../events/morfeu-event.class';
 
@@ -19,8 +20,8 @@ export class EventService {
 private events$: Map<string, Subject<_Event>> = new Map<string, Subject<_Event>>();
 private eventCounter = 0;
 
-
-public publish(event: MorfeuEvent): void {
+/** @param event publish this event */
+public publish(event: MorfeuEvent) {
 
 	const k = event.eventName;
 	//console.debug("\tSending event "+k+" -> ("+event.toString()+")");
@@ -34,7 +35,7 @@ public of<T extends MorfeuEvent>(type_: Constructor<T>): Observable<T> {
 
 	const k = new type_().eventName;
 	//console.debug("\tSubscribing to event "+k);
-	return this.subject(k).map(m => m.data);
+	return this.subject(k).pipe(map(m => m.data));
 
 }
 

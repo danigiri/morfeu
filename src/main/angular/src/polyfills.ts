@@ -61,9 +61,6 @@ import "core-js/es/reflect";
  */
 import "zone.js/dist/zone";	 // Included with Angular CLI.
 
-
-import "rxjs-compat";   // Rx6
-
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */

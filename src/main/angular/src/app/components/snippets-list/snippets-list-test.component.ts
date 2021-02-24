@@ -2,6 +2,7 @@
 
 import { Inject, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 import { CellDocument } from '../../cell-document.class';
 import { Content, ContentJSON } from '../../content.class';
@@ -49,7 +50,7 @@ constructor(eventService: EventService,
 ngOnInit() {
 	// when we are finished loading we are ready for keypresses
 	this.register(this.events.service.of<SnippetDisplayedEvent>(SnippetDisplayedEvent)
-			.filter(displayed => displayed.position===this.snippetsComponent.currentSnippets().length-1)
+			.pipe(filter(displayed => displayed.position===this.snippetsComponent.currentSnippets().length-1))
 			.subscribe(() => this.snippetsComponent.activateSnippetSelectingMode())
 	);
 }
