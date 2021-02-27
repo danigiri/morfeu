@@ -121,7 +121,7 @@ get length(): number {
 }
 
 
-get arrows(): Arrow[] {
+get list(): Arrow[] {
     return this.#arrows;
 }
 

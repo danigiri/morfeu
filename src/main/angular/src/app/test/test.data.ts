@@ -763,6 +763,17 @@ export const _readonly = `
 		`;
 
 
+		export const _typesDocument = `
+		{
+			"name": "Types"
+			,"desc": "Types document"
+			,"kind": "xml"
+			,"modelURI": "target/test-classes/test-resources/models/test-model.xsd?not=used"
+			,"contentURI": "target/test-classes/test-resources/documents/types.xml"
+		}
+		`;
+		
+
 export const _types = `
 {
 	"schema": 0,

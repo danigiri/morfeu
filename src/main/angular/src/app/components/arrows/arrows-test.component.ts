@@ -1,16 +1,20 @@
 // ARROW - TEST . COMPONENT . TS
 import { Component } from '@angular/core';
 
-import { Arrow } from './arrow.class';
+import { CellDocument } from '../../cell-document.class';
+import { Model } from '../../model.class';
+
 import { Arrows } from './arrows.class';
 
-import { _types } from '../../test/test.data';
+import { _typesDocument } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
+
+import { ContentRequestEvent } from '../../events/content-request.event';
 
 @Component({
 	selector: 'arrow-test',
 	template: `
-		<arrows *ngIf="arrows.length>0" [arrows]="arrows"></arrows>
+		<content></content>
 	`
 })
 
@@ -18,6 +22,7 @@ export class ArrowsTestComponent extends TestComponent {
 
 public arrows: Arrows = new Arrows();
 
+document: CellDocument;
 
 protected test(case_: string): void {
 	switch (case_) {
@@ -28,12 +33,16 @@ protected test(case_: string): void {
 
 
 private showArrow() {
-	const w = 1024;
-	const h = 768;
-//	Promise.resolve(null).then(() => this.arrows.push(new Arrow(4, 4, w/4+10, h/4, w/2-10, h/2-10, 0.5, 1, 1)));
-	Promise.resolve(null).then(() => this.arrows.push(new Arrow(4, 4, w, h)));
+
+	console.debug('Show arrows test');
+	this.document = this.createDocument(_typesDocument);
+	this.loadModel(this.document.modelURI);
+
 }
 
+protected loadedModel(model: Model): void {
+	this.events.service.publish(new ContentRequestEvent(this.document, model))
+}
 
 }
 

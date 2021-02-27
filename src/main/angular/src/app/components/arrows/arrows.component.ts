@@ -1,8 +1,9 @@
 // ATTRIBUTE DATA EDITOR . COMPONENT . TS
 
 import { Component, Input } from '@angular/core';
+import { zip } from 'rxjs/operators';
 
-import { Arrows } from './arrow.class';
+import { Arrows } from './arrows.class';
 
 @Component({
 	selector: 'arrows',
