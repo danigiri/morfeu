@@ -3,32 +3,32 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { filter } from 'rxjs/operators';
 
-import { FamilyMember } from '../family-member.interface';
-import { Cell } from '../cell.class';
-import { CellModel } from '../cell-model.class';
+import { FamilyMember } from '../../family-member.interface';
+import { Cell } from '../../cell.class';
+import { CellModel } from '../../cell-model.class';
 
-import { DropAreaComponent } from './drop-area.component';
-import { SelectableWidget } from '../selectable-widget.class';
+import { DropAreaComponent } from '../drop-area.component';
+import { SelectableWidget } from '../../selectable-widget.class';
 
-import { CellActivateEvent } from '../events/cell-activate.event';
-import { CellActivatedEvent } from '../events/cell-activated.event';
-import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
-import { CellDragEvent } from '../events/cell-drag.event';
-import { CellDropEvent } from '../events/cell-drop.event';
-import { CellEditEvent } from '../events/cell-edit.event';
-import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
-import { CellRemoveEvent } from '../events/cell-remove.event';
-import { CellSelectEvent } from '../events/cell-select.event';
-import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
-import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
-import { InfoModeEvent } from '../events/info-mode.event';
-import { EventService } from '../services/event.service';
+import { CellActivateEvent } from '../../events/cell-activate.event';
+import { CellActivatedEvent } from '../../events/cell-activated.event';
+import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
+import { CellDragEvent } from '../../events/cell-drag.event';
+import { CellDropEvent } from '../../events/cell-drop.event';
+import { CellEditEvent } from '../../events/cell-edit.event';
+import { CellModelDeactivatedEvent } from '../../events/cell-model-deactivated.event';
+import { CellRemoveEvent } from '../../events/cell-remove.event';
+import { CellSelectEvent } from '../../events/cell-select.event';
+import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
+import { CellModelActivatedEvent } from '../../events/cell-model-activated.event';
+import { InfoModeEvent } from '../../events/info-mode.event';
+import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'cell',
 	//changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './cell.component.html',
-	styleUrls: ['./cell.component.css', './presentation/presentation.css']
+	styleUrls: ['./cell.component.css', '../presentation/presentation.css']
 	// encapsulation: ViewEncapsulation.Emulated,
 })
 
@@ -381,7 +381,7 @@ cellDragData() {
 						// as cloning will also clone the reference to the parent.
 						// Then it's effectively an orphan when the adoption takes place
 		cellDragData = this.cell.deepClone();
-		delete cellDragData['parent'];
+		delete cellDragData['parent'];			// TODO: replace with orphaning generic call
 	} else {
 		cellDragData = this.cell;
 	}

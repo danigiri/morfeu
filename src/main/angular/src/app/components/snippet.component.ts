@@ -5,7 +5,7 @@ import { Component, Input, AfterViewInit, ViewChildren } from "@angular/core";
 import { CellDocument } from "../cell-document.class";
 import { Model } from "../model.class";
 
-import { CellComponent } from "./cell.component";
+import { CellComponent } from "./cell/cell.component";
 import { SelectableWidget } from "../selectable-widget.class";
 import { SnippetsListComponent } from './snippets-list/snippets-list.component';
 

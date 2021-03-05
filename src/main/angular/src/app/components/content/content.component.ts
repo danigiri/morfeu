@@ -15,7 +15,7 @@ import { RemoteDataService } from '../../services/remote-data.service';
 import { RemoteObjectService } from '../../services/remote-object.service';
 import { OperationResult } from '../../services/operation-result.class';
 
-import { CellComponent } from '../cell.component';
+import { CellComponent } from '../cell/cell.component';
 import { KeyListenerWidget } from '../../key-listener-widget.class';
 
 import { CellActivateEvent } from '../../events/cell-activate.event';
