@@ -1,6 +1,7 @@
 // LOCATOR . CLASS . SPEC . TS
 
 
+import { hasUncaughtExceptionCaptureCallback } from 'process';
 import { Cell } from '../cell.class';
 import { Model } from '../model.class';
 
@@ -90,7 +91,6 @@ describe('locator.class', () => {
 	});
 
 
-
 	it('should find stuff values using ** and filters', () => {
 
 		const values = CellLocator.findValuesWithLocator(types, '/test/**/stuff');
@@ -100,6 +100,20 @@ describe('locator.class', () => {
 		expect(values).toContain("V0");
 		expect(values).toContain("V1");
 		expect(values).toContain("V2");
+
+	});
+
+
+	it('should find the cell with a locator and a value', () => {
+
+		const v1 = CellLocator.findCellWithLocatorAndValue(types, '/test/**/stuff','V1');
+		expect(v1).toBeDefined();
+		const uri = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(1)';
+		const expectedV1 = CellLocator.findCellWithURI(types, uri);
+		expect(v1).toBe(expectedV1);
+	
+		const notFound = CellLocator.findCellWithLocatorAndValue(types, '/test/**/stuff','VX');
+		expect(notFound).toBeUndefined();
 
 	});
 
@@ -140,6 +154,27 @@ describe('locator.class', () => {
 		expect(values).toContain("A1");
 		expect(values).toContain("A2");
 		expect(values.filter(v => v==="A0").length).toBe(2);
+
+	});
+
+	it('should find the cell with a locator attribute and a value', () => {
+
+		console.log('foo')
+		const a1 = CellLocator.findCellWithLocatorAndValue(types, '/test/row/col/types@list', 'A1');
+		expect(a1).toBeDefined();
+		expect(a1.getParent().getAdoptionName()).toBe('types');
+
+	});
+
+
+
+	it('should know if locator is attribute or not', () => {
+		
+		const hasAttribute = CellLocator.hasAttribute('/foo/bar@attr');
+		expect(hasAttribute).toBeTrue();
+
+		const hasNoAttribute = CellLocator.hasAttribute('/foo/bar');
+		expect(hasNoAttribute).toBeFalse();
 
 	});
 

@@ -33,7 +33,7 @@ private static readonly LOCATOR_SEPARATOR = '/';
 
 /** Use a locator to find a set of cells
 *	@param startingCell is the starting point where to start looking
-*	@param locator is the pattern to find
+*	@param expr is the pattern to find
 *	There are different types of locator
 *		a) {@literal *}{@literal *}/name --&gt; all cell values of the name
 *		b) {@literal *}{@literal *}/name{@literal @}attribute --&gt; all attributes of cells with name and attribute
@@ -57,11 +57,28 @@ static findCellsWithLocator(startingCell: Cell, expr: string): Cell[] {
 	const tokens = CellLocator._parseLocatorExpression(expr);
 	const target = CellLocator._getTarget(tokens);
 	const targetAttribute = CellLocator._getTargetAttribute(tokens);
-	if (targetAttribute) {
+	if (targetAttribute) {	// if the pattern ends with the attribute name (say, @foo),
 		tokens.pop();		// we do not want the attribute '@foo' in the matching tokens, for convenience
 	}
+
 	return CellLocator._findCellsWithLocator([startingCell], prefix, tokens, target, targetAttribute);
 
+}
+
+
+/** Return one cell that matches the value or attribute in the locator expression, there are no guarantees which one
+*	will be returned if there are more than one matching.
+*	Note that if the locator expression is attribute based /xxx/(like @literal @}foo), we return the attribute cell
+*	@param startingCell is the starting point where to start looking
+*	@param expr is the pattern to find
+* 	@param value return a cell that matches the value or attribute in the expression
+*/
+static findCellWithLocatorAndValue(startingCell: Cell, expr: string, value: string): Cell {
+	return CellLocator.findCellsWithLocator(startingCell, expr)?.find(c => c.value===value);;
+}
+
+static hasAttribute(expr: string): boolean {
+	return CellLocator._getTargetAttribute(CellLocator._parseLocatorExpression(expr))!==undefined;
 }
 
 
@@ -171,7 +188,7 @@ public static _locatorMatch(uri: string, prefix: string, tokens: string[]): bool
 	// URIs are commonly [prefix=http://xxx.yyy.com]/whatever.yaml/foo(1)/bar(0)/waz(0)
 	// so a locator would be /foo/bar/waz
 
-	// this is fun, we ahve thre cases, 'any' with '/**', 'skip' with '/*' and 'filter' with '/foo'
+	// this is fun, we have thre cases, 'any' with '/**', 'skip' with '/*' and 'filter' with '/foo'
 	// depending on which one we are at, we perform one operation or the other
 	// 'any' means we just gobble uri bits until we find a matching tokens or reach the root (in root return true)
 	// 'skip' means we gobble the next uri bit and then we move on
