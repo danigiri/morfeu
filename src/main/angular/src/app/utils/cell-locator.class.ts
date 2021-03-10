@@ -77,6 +77,18 @@ static findCellWithLocatorAndValue(startingCell: Cell, expr: string, value: stri
 	return CellLocator.findCellsWithLocator(startingCell, expr)?.find(c => c.value===value);;
 }
 
+
+/** Return all cells that match the value or attribute in the locator expression
+*	Note that if the locator expression is attribute based /xxx/(like @literal @}foo), we return the attribute cells
+*	@param startingCell is the starting point where to start looking
+*	@param expr is the pattern to find
+* 	@param value return the cells that matches the value or attribute in the expression
+*/
+static findCellsWithLocatorAndValue(startingCell: Cell, expr: string, value: string): Cell[] {
+	return CellLocator.findCellsWithLocator(startingCell, expr)?.filter(c => c.value===value);;
+}
+
+/** @returns true if this locator refers to attribute values */
 static hasAttribute(expr: string): boolean {
 	return CellLocator._getTargetAttribute(CellLocator._parseLocatorExpression(expr))!==undefined;
 }

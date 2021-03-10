@@ -118,6 +118,21 @@ describe('locator.class', () => {
 	});
 
 
+	it('should find the cells with a locator and a value', () => {
+
+		const v1 = CellLocator.findCellsWithLocatorAndValue(types, '/test/**/stuff','V1');
+		expect(v1).toBeDefined();
+		const uri = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(1)';
+		const expectedV1 = [CellLocator.findCellWithURI(types, uri)];
+		expect(v1).toEqual(expectedV1);
+	
+		const notFound = CellLocator.findCellWithLocatorAndValue(types, '/test/**/stuff','VX');
+		expect(notFound).toBeUndefined();
+
+	});
+
+	
+
 	it('should find stuff values using ** and filters (2)', () => {
 
 		const values = CellLocator.findValuesWithLocator(types, '/**/col/stuff');
@@ -157,6 +172,7 @@ describe('locator.class', () => {
 
 	});
 
+
 	it('should find the cell with a locator attribute and a value', () => {
 
 		console.log('foo')
@@ -165,7 +181,6 @@ describe('locator.class', () => {
 		expect(a1.getParent().getAdoptionName()).toBe('types');
 
 	});
-
 
 
 	it('should know if locator is attribute or not', () => {
