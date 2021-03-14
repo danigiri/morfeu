@@ -19,3 +19,4 @@ node_modules
 src/main/angular/src/app/**/*.js
 src/main/angular/src/app/**/*.js.map
 src/main/angular/dist
+.vscode
