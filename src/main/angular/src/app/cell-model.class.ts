@@ -16,10 +16,12 @@ import { CellModelComponent } from "./components/cell-model.component";
 export class CellModel extends BasicFamilyMember implements NameValue {
 
 static readonly DEFAULT_EMPTY_VALUE = '';
+// cell presentation constants
 public static readonly DEFAULT_PRESENTATION_TYPE = 'IMG';
 public static readonly ATTR_TEXT_PRESENTATION = 'CELL';
 public static readonly ATTR_BOOLEAN_PRESENTATION = 'BOOLEAN';
 public static readonly ATTR_LIST_PRESENTATION = 'LIST';
+// presentation constants
 public static readonly ATTR_LOCATOR_PRESENTATION = 'VALUELOCATOR';
 
 id: string;
@@ -58,8 +60,10 @@ constructor(public schema: number,
 			public category?: string,
 			public identifier?: CellModel
 			) {
+
 	super(URI, name);
 	this.init();
+
 }
 
 

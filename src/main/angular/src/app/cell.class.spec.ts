@@ -162,12 +162,26 @@ describe('cell.class', () => {
 		const locatorAttribute = types.getAttribute('locator');
 		expect(locatorAttribute).toBeDefined();
 
-		const values: string[] = locatorAttribute.getPossibleValues();
+		const values = locatorAttribute.getPossibleValues();
 		expect(values).toBeDefined();
 		expect(values.length).toBe(3);
 		expect(values.includes('V0')).toBeTrue();
 		expect(values.includes('V1')).toBeTrue();
 		expect(values.includes('V2')).toBeTrue();
+		
+	});	
+
+	it('locator based attribute should have a link to the right cell', () => {
+	
+		const uri = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
+		const locatorAttribute = typesContent.findCellWithURI(uri).getAttribute('locator');
+		const links = locatorAttribute.links;
+		expect(links).toBeDefined();
+		expect(links.length).toBe(1);
+		
+		const stuffURI = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(0)';
+		const stuff = typesContent.findCellWithURI(stuffURI);
+		expect(links[0]).toBe(stuff);
 
 	});
 

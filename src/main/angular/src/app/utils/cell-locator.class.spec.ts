@@ -175,7 +175,6 @@ describe('locator.class', () => {
 
 	it('should find the cell with a locator attribute and a value', () => {
 
-		console.log('foo')
 		const a1 = CellLocator.findCellWithLocatorAndValue(types, '/test/row/col/types@list', 'A1');
 		expect(a1).toBeDefined();
 		expect(a1.getParent().getAdoptionName()).toBe('types');

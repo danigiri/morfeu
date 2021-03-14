@@ -13,6 +13,7 @@ import { CellLocator } from './utils/cell-locator.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 import { VariableParser } from './utils/variable-parser.class';
 
+/**	Cell class, contains a unit of content, can be moved, adopted, cloned, serialised, deseralised, etc. */
 export class Cell extends BasicFamilyMember
 	implements NameValue, Adopter, Lifecycle, SerialisableToJSON<Cell, CellJSON> {
 
@@ -21,14 +22,14 @@ private static readonly _NAME = "$_NAME";
 private static readonly _VALUE = "$_VALUE";
 private static readonly _ATTRIBUTES = "$_ATTRIBUTES";
 
-value?: string;
-attributes?: Cell[];
-internalAttributes?: Cell[];
-children?: Cell[];
-cellModel?: CellModel;
-parent?: Adopter;
-position?: number;
-
+value?: string;					// current value of the cell
+attributes?: Cell[];			// attributes list, if any
+internalAttributes?: Cell[];	// internal attributes list
+children?: Cell[];				// children, if any
+cellModel?: CellModel;			// reference to the model of this cell
+parent?: Adopter;				// runtime reference to the parent
+position?: number;				// runtime position reference
+links?: Cell[];					// runtime reference to other cells
 
 constructor(public schema: number,
 			public URI: string,
@@ -303,6 +304,7 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 		}
 
 	this.cellModel = cellModel;
+	this.generateLinks();		// at this moment if our model is locator based we can generate the cell links
 
 	}
 
@@ -334,6 +336,7 @@ getCellPresentationAllContent(): string {
 
 
 private replaceCellPresentationVariables(input: string): string {
+
 	let output = input;
 	// expand special variables, like name, value and the attributes as GET params
 	output = VariableParser.expand(output, Cell._NAME , this.name);
@@ -539,8 +542,7 @@ toJSON(): CellJSON {
 
 	// we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
 	// belong to the serialised object
-	delete serialisedCell['cellModel'];
-	delete serialisedCell['parent'];
+	this.removeRuntimeData();
 
 	// TODO: add sanity checks for reference to avoid future infinite loops 
 	if (this.attributes) {
@@ -567,10 +569,12 @@ fromJSON(json: CellJSON | string): Cell {
 	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
 	let cell: Cell = Object.create(Cell.prototype);
 	cell = Object.assign(cell, json);
+	// runtime information
 
 	if (json.attributes) {
 		cell = Object.assign(cell, {attributes: json.attributes.map(a => {
 			let attribute = CELL.fromJSON(a);
+			// runtime information
 			attribute.parent = cell;
 			return attribute;
 		})});
@@ -584,6 +588,7 @@ fromJSON(json: CellJSON | string): Cell {
 		let i = 0;
 		cell = Object.assign(cell, {children: json.children.map(c => {
 			let fullCell: Cell = CELL.fromJSON(c);
+			// runtime information, like position, parent cell and any links
 			fullCell.position = i++;
 			fullCell.parent = cell;
 			return fullCell;
@@ -604,6 +609,26 @@ static reviver(key: string, value: any): any {
 }
 
 //// SerialisableToJSON [end] ////
+
+
+private generateLinks() {
+	
+	if (this.cellModel?.presentation===CellModel.ATTR_LOCATOR_PRESENTATION) {
+		const ancestor = this.getRootAncestor().asCell();
+		this.links = CellLocator.findCellsWithLocatorAndValue(ancestor, this.cellModel.valueLocator, this.value);
+	}
+
+}
+
+
+private removeRuntimeData() {
+
+	delete this['cellModel'];
+	delete this['parent'];
+	delete this['links'];
+
+}
+
 
 }
 
