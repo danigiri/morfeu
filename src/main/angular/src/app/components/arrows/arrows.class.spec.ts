@@ -10,17 +10,17 @@ it('should add selectively', () => {
     let arrows = new Arrows();
     const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
     expect(arrows.push(a0)).toBeTrue();
-    expect(arrows.arrows.length).toBe(1);
+    expect(arrows.list.length).toBe(1);
     expect(arrows.push(a0)).toBeFalse();
-    expect(arrows.arrows.length).toBe(1);
+    expect(arrows.list.length).toBe(1);
 
     const a1 = new Arrow (0.0, 0.0, 1.0, 2.0);
     expect(arrows.push(a1)).toBeFalse();
-    expect(arrows.arrows.length).toBe(1);
+    expect(arrows.list.length).toBe(1);
 
     const a2 = new Arrow (0.0, 0.0, 0.1, 0.1);
     expect(arrows.push(a2)).toBeTrue();
-    expect(arrows.arrows.length).toBe(2);
+    expect(arrows.list.length).toBe(2);
 
 });
 

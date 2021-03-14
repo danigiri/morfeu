@@ -13,9 +13,7 @@ import { ContentRequestEvent } from '../../events/content-request.event';
 
 @Component({
 	selector: 'arrow-test',
-	template: `
-		<content></content>
-	`
+	template: `<content></content>`
 })
 
 export class ArrowsTestComponent extends TestComponent {
@@ -24,15 +22,16 @@ public arrows: Arrows = new Arrows();
 
 document: CellDocument;
 
+
 protected test(case_: string): void {
 	switch (case_) {
-		case 'arrow' : this.showArrow(); break;
-		default: this.showArrow();
+		case 'arrow' : this.showArrowsOnLoad(); break;
+		default: this.showArrowsOnLoad();
 	}
 }
 
 
-private showArrow() {
+private showArrowsOnLoad() {
 
 	console.debug('Show arrows test');
 	this.document = this.createDocument(_typesDocument);
@@ -40,9 +39,11 @@ private showArrow() {
 
 }
 
+
 protected loadedModel(model: Model): void {
 	this.events.service.publish(new ContentRequestEvent(this.document, model))
 }
+
 
 }
 
