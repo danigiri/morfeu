@@ -1,19 +1,25 @@
-// ATTRIBUTE DATA EDITOR . COMPONENT . TS
+import org.openqa.selenium.Point;
 
-import { Component, Input } from '@angular/core';
-import { zip } from 'rxjs/operators';
+// UI ARROW . JAVA
 
-import { Arrows } from './arrows.class';
+/** UI testing widget for a svg arrow, not terribly efficient but practical for testing */
+public class UIArrow {
 
-@Component({
-	selector: 'arrows',
-	templateUrl: './arrows.component.svg'
-})
+private UIArrows parent;
+private int index;
 
-export class ArrowsComponent {
+public UIArrow(UIArrows parent, int index) {
 
-@Input() id: string;
-@Input() arrows: Arrows;
+	this.parent = parent;
+	this.index = index;
+	
+}
+
+
+public Point start() {
+	return parent.arrowStart(index);
+}
+
 
 }
 

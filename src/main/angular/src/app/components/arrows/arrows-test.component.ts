@@ -13,27 +13,38 @@ import { ContentRequestEvent } from '../../events/content-request.event';
 
 @Component({
 	selector: 'arrow-test',
-	template: `<content></content>`
+	template: `
+		<arrows *ngIf="arrows" [arrows]="arrows" [id]="'test'"></arrows>
+		<content *ngIf="document"></content>
+	`
 })
 
 export class ArrowsTestComponent extends TestComponent {
 
-public arrows: Arrows = new Arrows();
-
+arrows: Arrows;
 document: CellDocument;
 
 
 protected test(case_: string): void {
 	switch (case_) {
-		case 'arrow' : this.showArrowsOnLoad(); break;
+		case 'arrow' : this.showArrow(); break;
+		case 'load' : this.showArrowsOnLoad(); break;
 		default: this.showArrowsOnLoad();
 	}
 }
 
 
+private showArrow() {
+
+	console.debug('Show arrows on load test');
+	this.arrows	= new Arrows();
+
+}
+
+
 private showArrowsOnLoad() {
 
-	console.debug('Show arrows test');
+	console.debug('Show arrows on load test');
 	this.document = this.createDocument(_typesDocument);
 	this.loadModel(this.document.modelURI);
 

@@ -1,20 +1,9 @@
-// ATTRIBUTE DATA EDITOR . COMPONENT . TS
+// ARROWS UI TEST . JAVA
 
-import { Component, Input } from '@angular/core';
-import { zip } from 'rxjs/operators';
+package cat.calidos.morfeu.webapp;
 
-import { Arrows } from './arrows.class';
-
-@Component({
-	selector: 'arrows',
-	templateUrl: './arrows.component.svg'
-})
-
-export class ArrowsComponent {
-
-@Input() id: string;
-@Input() arrows: Arrows;
-
+public class ArrowsUITest {
+	
 }
 
 /*
