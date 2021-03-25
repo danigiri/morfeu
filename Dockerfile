@@ -3,7 +3,7 @@ FROM openjdk:13-alpine AS build
 LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 
 # variables build stage
-ARG MAVEN_URL=https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 ARG MAVEN_HOME=/usr/share/maven
 
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
