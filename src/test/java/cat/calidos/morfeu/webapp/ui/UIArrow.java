@@ -1,6 +1,8 @@
-import org.openqa.selenium.Point;
-
 // UI ARROW . JAVA
+
+package cat.calidos.morfeu.webapp.ui;
+
+import org.openqa.selenium.Point;
 
 /** UI testing widget for a svg arrow, not terribly efficient but practical for testing */
 public class UIArrow {

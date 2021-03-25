@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 
-/** UI testing widgets for the arrows svg container component */
+/** UI testing widget for the arrows svg container component */
 public class UIArrows extends UIWidget<UIArrows> {
 
 private static final String CX = "cx";
