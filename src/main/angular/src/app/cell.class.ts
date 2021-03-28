@@ -161,7 +161,7 @@ deepClone(): Cell {
 	let clone = CELL.fromJSON(this.toJSON()); // easy peasy cloning :)
 
 	// let's not forget the runtime information
-	clone = this.cloneRuntimeInformationInto(clone, this.parent);
+	clone = this.cloneRuntimeDataInto(clone, this.parent);
 
 	return clone;
 
@@ -239,7 +239,7 @@ private cellsEqualValues(a: Cell[], b: Cell[]) {
 
 
 // assign runtime information to the 'clone', including parenthood, position, cellmodel, and then recursively
-private cloneRuntimeInformationInto(clone: Cell, parent: Adopter): Cell {
+private cloneRuntimeDataInto(clone: Cell, parent: Adopter): Cell {
 
 	if (parent) {
 		clone.parent = parent;
@@ -251,14 +251,17 @@ private cloneRuntimeInformationInto(clone: Cell, parent: Adopter): Cell {
 	if (this.cellModel) {
 		clone.cellModel = this. cellModel;
 	}
+	if (this.links) {
+		clone.links = [...this.links];	// this copies the reference arrays
+	}
 
 	// for the attributes, we go through them and we assign the runtime information to the clone's attributes
 	if (this.attributes) {
-		this.attributes.forEach((a, i) => a.cloneRuntimeInformationInto(clone.attributes[i], clone));
+		this.attributes.forEach((a, i) => a.cloneRuntimeDataInto(clone.attributes[i], clone));
 	}
 	// for the children we do the same, also keeping the parent
 	if (this.children) {
-		this.children.forEach((c, i) => c.cloneRuntimeInformationInto(clone.children[i], clone));
+		this.children.forEach((c, i) => c.cloneRuntimeDataInto(clone.children[i], clone));
 	}
 
 	return clone;
@@ -540,9 +543,9 @@ toJSON(): CellJSON {
 
 	let serialisedCell: CellJSON = Object.assign({}, this);
 
-	// we ensure that we do not serialised unwanted properties (like pointers to other structurea) that do not 
+	// we ensure that we do not keep serialised unwanted properties (like pointers to other structurea) that do not 
 	// belong to the serialised object
-	this.removeRuntimeData();
+	Cell.removeRuntimeData(serialisedCell);
 
 	// TODO: add sanity checks for reference to avoid future infinite loops 
 	if (this.attributes) {
@@ -611,21 +614,21 @@ static reviver(key: string, value: any): any {
 //// SerialisableToJSON [end] ////
 
 
+static removeRuntimeData(o: any) {
+
+	delete o['cellModel'];
+	delete o['parent'];
+	delete o['links'];
+
+}
+
+
 private generateLinks() {
 	
 	if (this.cellModel?.presentation===CellModel.ATTR_LOCATOR_PRESENTATION) {
 		const ancestor = this.getRootAncestor().asCell();
 		this.links = CellLocator.findCellsWithLocatorAndValue(ancestor, this.cellModel.valueLocator, this.value);
 	}
-
-}
-
-
-private removeRuntimeData() {
-
-	delete this['cellModel'];
-	delete this['parent'];
-	delete this['links'];
 
 }
 

@@ -185,6 +185,17 @@ describe('cell.class', () => {
 
 	});
 
+	it('should deep clone cells correctly', () => {
+
+		const uri = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
+		const types = typesContent.findCellWithURI(uri);
+		const typesClone = types.deepClone();
+		console.log(types);
+		console.log(typesClone);
+		expect(typesClone).toEqual(types);
+
+	});
+
 
 });
 
