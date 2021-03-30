@@ -10,6 +10,7 @@ import { _typesDocument } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
 import { ContentRequestEvent } from '../../events/content-request.event';
+import { Arrow } from './arrow.class';
 
 @Component({
 	selector: 'arrow-test',
@@ -38,6 +39,7 @@ private showArrow() {
 
 	console.debug('Show arrows on load test');
 	this.arrows	= new Arrows();
+	this.arrows.push(new Arrow(0,0, 128, 128));
 
 }
 

@@ -14,9 +14,14 @@ import org.openqa.selenium.Point;
 /** UI testing widget for the arrows svg container component */
 public class UIArrows extends UIWidget<UIArrows> {
 
-private static final String CX = "cx";
-private static final String CY = "cy";
-private static final String CIRCLE = "circle";
+	private static final String CX = "cx";
+	private static final String CY = "cy";
+	private static final String CIRCLE = "circle";
+	private static final String POLYGON = "poly";			// arrow parsing constants
+	private static final String TRANSFORM = "transform";
+	private static final String SPACE = " ";
+	private static final int TRANSLATE_LENGTH = "translate(".length();
+	private static final String COMMA = ",";
 
 private String id;
 private int size = 0;
@@ -37,11 +42,6 @@ public UIArrows(SelenideElement e) {
 }
 
 
-public int arrowCount() {
-	return size;
-}
-
-
 public List<UIArrow> arrows() {
 	
 	AtomicInteger i = new AtomicInteger(-1);
@@ -52,25 +52,52 @@ public List<UIArrow> arrows() {
 }
 
 
-public Point arrowStart(int index) {
+public UIArrow get(int index) {
+	return checkBounds(index).arrows().get(index);
+}
+
+
+
+public int size() {
+	return size;
+}
+
+
+public Point start(int index) {
 
 	checkBounds(index);
 
-    
-	By circleID = By.id(id+CIRCLE);
-	int x = Integer.parseInt(element.$$(circleID).get(index).attr(CX));
-	int y = Integer.parseInt(element.$$(circleID).get(index).attr(CY));
+	SelenideElement circle = element.$$(By.id(id+CIRCLE)).get(index);
+	int x = Integer.parseInt(circle.attr(CX));
+	int y = Integer.parseInt(circle.attr(CY));
 
 	return new Point(x, y);
 
 }
 
 
-private void checkBounds(int index) {
+public Point end(int index) {
+
+	checkBounds(index);
+
+	SelenideElement arrow = element.$$(By.id(id+POLYGON)).get(index);
+	// parse the transform that moves the arrow polygon to the destination
+	String translate = arrow.attr(TRANSFORM).split(SPACE)[0].substring(TRANSLATE_LENGTH);
+	String[] coords = translate.split(COMMA);
+	int x = Integer.parseInt(coords[0]);
+	int y = Integer.parseInt(coords[1].substring(0, coords[1].length()-1));
+
+	return new Point(x, y);
+
+}
+
+private UIArrows checkBounds(int index) {
 
 	if (index>=size) {
 		throw new ArrayIndexOutOfBoundsException("We do not have an arrow at index "+index);
 	}
+
+	return this;
 
 }
 

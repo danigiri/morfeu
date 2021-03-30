@@ -10,6 +10,7 @@ public class UIArrow {
 private UIArrows parent;
 private int index;
 
+
 public UIArrow(UIArrows parent, int index) {
 
 	this.parent = parent;
@@ -19,7 +20,12 @@ public UIArrow(UIArrows parent, int index) {
 
 
 public Point start() {
-	return parent.arrowStart(index);
+	return parent.start(index);
+}
+
+
+public Point end() {
+	return parent.end(index);
 }
 
 

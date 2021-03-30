@@ -2,8 +2,41 @@
 
 package cat.calidos.morfeu.webapp;
 
-public class ArrowsUITest {
-	
+import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import cat.calidos.morfeu.webapp.ui.UIArrow;
+import cat.calidos.morfeu.webapp.ui.UIArrows;
+
+public class ArrowsUITest extends UITezt {
+
+
+@Test @DisplayName("Test show one arrow")
+public void testShowArrow() {
+
+	open(appBaseURL+"test/arrows/arrow");
+
+	UIArrows arrows = new UIArrows("test");
+	assertAll("test arrows",
+		() -> assertNotNull(arrows),
+		() -> assertEquals(1, arrows.size())
+	);
+
+	UIArrow arrow = arrows.get(0);
+	assertAll("check created arrow",
+		() -> assertNotNull(arrow),
+		() -> assertEquals(0, arrow.start().getX()),
+		() -> assertEquals(0, arrow.start().getY()),
+		() -> assertEquals(128, arrow.end().getX()),
+		() -> assertEquals(128, arrow.end().getY())
+	);
+
+}
+
+
 }
 
 /*

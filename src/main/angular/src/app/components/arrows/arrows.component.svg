@@ -9,6 +9,8 @@
 	<ng-container *ngFor="let a of arrows.list">
 		<svg:circle [id]="id+'circle'" attr.cx="{{a.sx}}" attr.cy="{{a.sy}}" r="4"></svg:circle>
 		<svg:path attr.d="M{{a.sx}},{{a.sy}} Q{{a.cx}},{{a.cy}} {{a.ex}},{{a.ey}}" fill="none"></svg:path>
-		<svg:polygon points="0,-6 12,0, 0,6" attr.transform="translate({{a.ex}},{{a.ey}}) rotate({{a.ae*a.pi180}})"></svg:polygon>
+		<svg:polygon 	[id]="id+'poly'" 
+						points="0,-6 12,0, 0,6" 
+						attr.transform="translate({{a.ex}},{{a.ey}}) rotate({{a.ae*a.pi180}})"></svg:polygon>
 	</ng-container>
 </svg:svg>
