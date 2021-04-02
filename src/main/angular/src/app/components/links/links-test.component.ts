@@ -1,26 +1,26 @@
-// ARROW - TEST . COMPONENT . TS
+// LINKS - TEST . COMPONENT . TS
 import { Component } from '@angular/core';
 
 import { CellDocument } from '../../cell-document.class';
 import { Model } from '../../model.class';
 
+import { Arrow } from './arrow.class';
 import { Arrows } from './arrows.class';
 
 import { _typesDocument } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
 import { ContentRequestEvent } from '../../events/content-request.event';
-import { Arrow } from './arrow.class';
 
 @Component({
 	selector: 'arrow-test',
 	template: `
-		<arrows *ngIf="arrows" [arrows]="arrows" [id]="'test'"></arrows>
+		<links *ngIf="arrows" [arrows]="arrows" [id]="'test'"></links>
 		<content *ngIf="document"></content>
 	`
 })
 
-export class ArrowsTestComponent extends TestComponent {
+export class LinksTestComponent extends TestComponent {
 
 arrows: Arrows;
 document: CellDocument;
@@ -29,22 +29,22 @@ document: CellDocument;
 protected test(case_: string): void {
 	switch (case_) {
 		case 'arrow' : this.showArrow(); break;
-		case 'load' : this.showArrowsOnLoad(); break;
-		default: this.showArrowsOnLoad();
+		case 'load' : this.showLinksOnLoad(); break;
+		default: this.showLinksOnLoad();
 	}
 }
 
 
 private showArrow() {
 
-	console.debug('Show arrows on load test');
+	console.debug('Show arrow test');
 	this.arrows	= new Arrows();
 	this.arrows.push(new Arrow(0,0, 128, 128));
 
 }
 
 
-private showArrowsOnLoad() {
+private showLinksOnLoad() {
 
 	console.debug('Show arrows on load test');
 	this.document = this.createDocument(_typesDocument);

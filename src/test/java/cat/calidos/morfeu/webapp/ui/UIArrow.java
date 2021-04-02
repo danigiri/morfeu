@@ -7,11 +7,11 @@ import org.openqa.selenium.Point;
 /** UI testing widget for a svg arrow, not terribly efficient but practical for testing */
 public class UIArrow {
 
-private UIArrows parent;
+private UILinks parent;
 private int index;
 
 
-public UIArrow(UIArrows parent, int index) {
+public UIArrow(UILinks parent, int index) {
 
 	this.parent = parent;
 	this.index = index;

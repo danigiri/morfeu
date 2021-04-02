@@ -1,16 +1,15 @@
-// ATTRIBUTE DATA EDITOR . COMPONENT . TS
+// LINKS . COMPONENT . TS
 
 import { Component, Input } from '@angular/core';
-import { zip } from 'rxjs/operators';
 
 import { Arrows } from './arrows.class';
 
 @Component({
-	selector: 'arrows',
-	templateUrl: './arrows.component.svg'
+	selector: 'links',
+	templateUrl: './links.component.svg'
 })
 
-export class ArrowsComponent {
+export class LinksComponent {
 
 @Input() id: string;
 @Input() arrows: Arrows;

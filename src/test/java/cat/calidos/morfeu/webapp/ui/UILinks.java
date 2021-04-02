@@ -1,3 +1,5 @@
+// UI LINKS . JAVA
+
 package cat.calidos.morfeu.webapp.ui;
 
 import com.codeborne.selenide.SelenideElement;
@@ -12,7 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 
 /** UI testing widget for the arrows svg container component */
-public class UIArrows extends UIWidget<UIArrows> {
+public class UILinks extends UIWidget<UILinks> {
 
 	private static final String CX = "cx";
 	private static final String CY = "cy";
@@ -27,7 +29,7 @@ private String id;
 private int size = 0;
 
 
-public UIArrows(String id) {
+public UILinks(String id) {
 
 	super($(By.id(id)));
 
@@ -37,12 +39,12 @@ public UIArrows(String id) {
 }
     
 
-public UIArrows(SelenideElement e) {
+public UILinks(SelenideElement e) {
 	super(e);
 }
 
 
-public List<UIArrow> arrows() {
+public List<UIArrow>arrows() {
 	
 	AtomicInteger i = new AtomicInteger(-1);
 	By circle = By.id(id+CIRCLE);
@@ -91,7 +93,7 @@ public Point end(int index) {
 
 }
 
-private UIArrows checkBounds(int index) {
+private UILinks checkBounds(int index) {
 
 	if (index>=size) {
 		throw new ArrayIndexOutOfBoundsException("We do not have an arrow at index "+index);

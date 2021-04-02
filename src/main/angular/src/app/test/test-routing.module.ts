@@ -7,20 +7,20 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ComponentsModule } from '../components/components.module';
 
-import { ArrowsTestComponent } from '../components/arrows/arrows-test.component';
 import { AttributeDataEditorTestComponent } 
-	from '../components/attribute-data-editor/attribute-data-editor-test.component';
+from '../components/attribute-data-editor/attribute-data-editor-test.component';
 import { AttributeDataInfoTestComponent } from '../components/attribute-data-info/attribute-data-info-test.component';
 import { BreadcrumbTestComponent } from '../components/breadcrumb/breadcrumb-test.component';
 import { CellDataTestComponent } from '../components/cell-data/cell-data-test.component';
 import { CellEditorTestComponent } from '../components/cell-editor/cell-editor-test.component';
 import { CodeEditorTestComponent } from '../components/code-editor/code-editor-test.component';
 import { ContentTestComponent } from '../components/content/content-test.component';
+import { LinksTestComponent } from '../components/links/links-test.component';
 import { PresentationTestComponent } from '../components/presentation/presentation-test.component';
 import { SnippetsListTestComponent } from '../components/snippets-list/snippets-list-test.component';
 
 const routes: Routes = [
-						{path: 'arrows/:case_', component: ArrowsTestComponent},
+						{path: 'links/:case_', component: LinksTestComponent},
 						{path: 'attribute-data-editor-test/:case_', component: AttributeDataEditorTestComponent},
 						{path: 'attribute-data-info-test/:case_', component: AttributeDataInfoTestComponent},
 						{path: 'breadcrumb-test/:case_', component: BreadcrumbTestComponent},
@@ -41,7 +41,7 @@ const routes: Routes = [
 	],
 	exports: [RouterModule],
 	declarations: [
-					ArrowsTestComponent,
+					LinksTestComponent,
 					AttributeDataEditorTestComponent,
 					AttributeDataInfoTestComponent,
 					BreadcrumbTestComponent,

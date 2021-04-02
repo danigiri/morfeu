@@ -9,9 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UIArrow;
-import cat.calidos.morfeu.webapp.ui.UIArrows;
+import cat.calidos.morfeu.webapp.ui.UILinks;
 
-public class ArrowsUITest extends UITezt {
+public class LinksUITest extends UITezt {
 
 
 @Test @DisplayName("Test show one arrow")
@@ -19,13 +19,13 @@ public void testShowArrow() {
 
 	open(appBaseURL+"test/arrows/arrow");
 
-	UIArrows arrows = new UIArrows("test");
+	UILinks links = new UILinks("test");
 	assertAll("test arrows",
-		() -> assertNotNull(arrows),
-		() -> assertEquals(1, arrows.size())
+		() -> assertNotNull(links),
+		() -> assertEquals(1, links.size())
 	);
 
-	UIArrow arrow = arrows.get(0);
+	UIArrow arrow = links.get(0);
 	assertAll("check created arrow",
 		() -> assertNotNull(arrow),
 		() -> assertEquals(0, arrow.start().getX()),
