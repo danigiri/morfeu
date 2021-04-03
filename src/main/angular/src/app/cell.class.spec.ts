@@ -194,6 +194,17 @@ describe('cell.class', () => {
 
 	});
 
+
+	it('should remove the position information from a name', () => {
+		
+		const name = Cell.removePositionFromName('foo(0)')
+		expect(name).toBe('foo');
+
+		const name2 =  Cell.removePositionFromName('foo(1234)');
+		expect(name2).toBe('foo');
+		
+	});
+
 });
 
 /*
