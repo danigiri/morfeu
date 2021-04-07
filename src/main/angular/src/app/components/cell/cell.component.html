@@ -98,7 +98,7 @@
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
-		<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()"
+		<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()" #cellElement
 			[class.cell-img]="!active && !activeReadonly && !selected"
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
@@ -113,7 +113,7 @@
 			[dragData]="cellDragData()"
 			(dblclick)="doubleClick()"
 		/>
-		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" 
+		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" #cellElement
 			class="cell cell-img-size cell-level-{{level}}"
 			[class.cell-active]="active"
 			[class.cell-active-readonly]="activeReadonly"
@@ -130,6 +130,7 @@
 			<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
 			<presentation *ngIf="!cellPresentationIsIMG()" [cell]="cell" ></presentation>
 		</div>
+		<links *ngIf="cell.links" [source]="cell" [element]="cellElement"></links>
 		<!-- the position of the drop area is always where droped cells will go -->
 		<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 	</ng-container>

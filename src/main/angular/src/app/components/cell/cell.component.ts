@@ -3,26 +3,28 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { filter } from 'rxjs/operators';
 
-import { FamilyMember } from '../../family-member.interface';
-import { Cell } from '../../cell.class';
-import { CellModel } from '../../cell-model.class';
+import { FamilyMember } from 'app/family-member.interface';
+import { Cell } from 'app/cell.class';
+import { CellModel } from 'app/cell-model.class';
 
 import { DropAreaComponent } from '../drop-area.component';
-import { SelectableWidget } from '../../selectable-widget.class';
+import { SelectableWidget } from 'app/selectable-widget.class';
 
-import { CellActivateEvent } from '../../events/cell-activate.event';
-import { CellActivatedEvent } from '../../events/cell-activated.event';
-import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
-import { CellDragEvent } from '../../events/cell-drag.event';
-import { CellDropEvent } from '../../events/cell-drop.event';
-import { CellEditEvent } from '../../events/cell-edit.event';
-import { CellModelDeactivatedEvent } from '../../events/cell-model-deactivated.event';
-import { CellRemoveEvent } from '../../events/cell-remove.event';
-import { CellSelectEvent } from '../../events/cell-select.event';
-import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
-import { CellModelActivatedEvent } from '../../events/cell-model-activated.event';
-import { InfoModeEvent } from '../../events/info-mode.event';
-import { EventService } from '../../services/event.service';
+import { CellActivateEvent } from 'app/events/cell-activate.event';
+import { CellActivatedEvent } from 'app/events/cell-activated.event';
+import { CellDeactivatedEvent } from 'app/events/cell-deactivated.event';
+import { CellDragEvent } from 'app/events/cell-drag.event';
+import { CellDropEvent } from 'app/events/cell-drop.event';
+import { CellEditEvent } from 'app/events/cell-edit.event';
+import { CellLinkEvent } from 'app/events/cell-link.event';
+import { CellModelDeactivatedEvent } from 'app/events/cell-model-deactivated.event';
+import { CellRemoveEvent } from 'app/events/cell-remove.event';
+import { CellSelectEvent } from 'app/events/cell-select.event';
+import { CellSelectionClearEvent } from 'app/events/cell-selection-clear.event';
+import { CellModelActivatedEvent } from 'app/events/cell-model-activated.event';
+import { InfoModeEvent } from 'app/events/info-mode.event';
+import { EventService } from 'app/services/event.service';
+import { Rect } from 'app/utils/rect.class';
 
 @Component({
 	selector: 'cell',
@@ -32,7 +34,7 @@ import { EventService } from '../../services/event.service';
 	// encapsulation: ViewEncapsulation.Emulated,
 })
 
-export class CellComponent extends SelectableWidget implements OnInit {
+export class CellComponent extends SelectableWidget implements OnInit, AfterViewInit {
 
 private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues with too long presentation
 
@@ -50,8 +52,10 @@ canBeDeleted = true;
 canBeModified = true;
 info = false;
 
+
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
+@ViewChild('cellElement') cellElement: ElementRef;
 
 
 constructor(eventService: EventService, private element: ElementRef, private cdr: ChangeDetectorRef) {
@@ -137,6 +141,12 @@ ngOnInit() {
 			})
 	);
 
+	this.register(this.events.service.of<CellLinkEvent>(CellLinkEvent)
+			.pipe(filter(link => link.source===this.cell && link.destRect===undefined))
+			.subscribe(link => this.linkToThisCell(link))
+	);
+
+	// show additional debugging information if the user requests it
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
 	//this.cdr.markForCheck();
@@ -144,7 +154,10 @@ ngOnInit() {
 }
 
 
-// we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it
+ngAfterViewInit() {}
+
+
+/**  we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it */
 focusOn(cell: Cell) {
 
 	// console.log('[UI] CellComponent::focusOn()');
@@ -159,7 +172,7 @@ focusOn(cell: Cell) {
 }
 
 
-// notify all interested in this type of cell that we do not have the focus any longer, remove highlight
+/** notify all interested in this type of cell that we do not have the focus any longer, remove highlight */
 focusOff(cell: Cell) {
 
 	// console.log('[UI] CellComponent::focusOff()');
@@ -355,24 +368,6 @@ getCellPresentation() {
 }
 
 
-private isEditable(): boolean {
-	return (this.active || this.activeReadonly)
-			&& this.canBeModified && !this.snippet && !this.cell.cellModel.presentation.includes('COL-WELL');
-}
-
-
-private remove() {
-
-	let parent = this.cell.parent;
-	if (parent) {
-		parent.remove(this.cell);
-	}
-
-	//this.cdr.markForCheck();
-
-}
-
-
 // data that is being dragged (and potentially dropped)
 cellDragData() {
 
@@ -396,6 +391,40 @@ doubleClick() {
 	if (this.isEditable()) {
 		this.events.service.publish(new CellEditEvent(this.cell));
 	}
+
+}
+
+
+private isEditable(): boolean {
+	return (this.active || this.activeReadonly)
+			&& this.canBeModified && !this.snippet && !this.cell.cellModel.presentation.includes('COL-WELL');
+}
+
+
+private remove() {
+
+	let parent = this.cell.parent;
+	if (parent) {
+		parent.remove(this.cell);
+	}
+
+	//this.cdr.markForCheck();
+
+}
+
+/** called when we receive a request to link to this cell, we bounce it back with the filled link event */
+private linkToThisCell(link: CellLinkEvent): void {
+
+	const elemRect = this.cellElement.nativeElement.getBoundingClientRect();
+	const scrollTop = document.documentElement.scrollTop;
+	const x = elemRect.x;
+	const y = elemRect.y + scrollTop;
+	const right = elemRect.right;
+	const bottom = elemRect.top + scrollTop;
+
+	link.destRect = new Rect(x, y, right, bottom);
+	console.log(link.destRect);
+	this.events.service.publish(link);
 
 }
 

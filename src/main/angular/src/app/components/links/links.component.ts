@@ -1,18 +1,53 @@
 // LINKS . COMPONENT . TS
 
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit } from '@angular/core';
+import { filter } from 'rxjs/operators';
+
 
 import { Arrows } from './arrows.class';
+import { Cell } from 'app/cell.class';
+import { Rect } from 'app/utils/rect.class';
+
+import { CellLinkEvent } from 'app/events/cell-link.event';
+import { EventListener } from 'app/events/event-listener.class';
 
 @Component({
 	selector: 'links',
 	templateUrl: './links.component.svg'
 })
 
-export class LinksComponent {
+export class LinksComponent extends EventListener implements OnInit, AfterViewInit {
 
 @Input() id: string;
-@Input() arrows: Arrows;
+@Input() source: Cell;
+@Input() element: ElementRef;
+
+arrows: Arrows = new Arrows();
+
+
+ngOnInit() {
+
+	// we registger to events returing with the complete information so we can draw the arrows
+	this.register(this.events.service.of<CellLinkEvent>(CellLinkEvent)
+			.pipe(filter(link => link.source===this.source && link.destRect!==undefined))
+			.subscribe(link => this.addArrow(link.destRect)));
+
+}
+
+
+ngAfterViewInit() {
+
+	// now we can draw the arrows, starting from the starting element to the cells, we send a number of events
+	// to get the linked components back
+	this.source.links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
+
+
+}
+
+
+private addArrow(destRect: Rect) {
+
+}
 
 }
 

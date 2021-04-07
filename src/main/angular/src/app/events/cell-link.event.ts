@@ -1,23 +1,21 @@
-// RECT . CLASS . TS
+// CELL - LINK . EVENT . TS
 
-export class Rect {
+import { MorfeuEvent } from './morfeu-event.class';
+
+import { Cell } from '../cell.class';
+import { Rect } from '../utils/rect.class';
+
+/** this is sent only with a source */
+export class CellLinkEvent extends MorfeuEvent {
 
 
-constructor(public x: number, public y: number, public right: number, public bottom: number) {}
-
-
-get width(): number {
-	return this.right - this.x;
+constructor(public source: Cell, public destination: Cell, public destRect?: Rect) {
+	super('CellLinkEvent');
 }
 
 
-get height(): number {
-	return this.bottom - this.y;
-}
-
-
-public toString = (): string => { 
-	return '{['+this.x+','+this.y+'],['+this.right+','+this.bottom+']}';
+public toString = (): string => {
+	return 'CellLinkEvent:{'+this.source.name+'->'+this.destination.name+(this.destRect ? this.destRect : '')+'}';
 }
 
 
@@ -37,4 +35,4 @@ public toString = (): string => {
  *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *	 See the License for the specific language governing permissions and
  *	 limitations under the License.
-*/
+ */

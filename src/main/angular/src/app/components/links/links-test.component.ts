@@ -4,25 +4,31 @@ import { Component } from '@angular/core';
 import { CellDocument } from '../../cell-document.class';
 import { Model } from '../../model.class';
 
-import { Arrow } from './arrow.class';
-import { Arrows } from './arrows.class';
+import { Cell } from 'app/cell.class';
+import { CellLocator } from 'app/utils/cell-locator.class';
 
-import { _typesDocument } from '../../test/test.data';
-import { TestComponent } from '../../test/test-component.class';
+import { _model, _types, _typesDocument, _typesPrefix } from 'app/test/test.data';
+import { TestComponent } from 'app/test/test-component.class';
 
-import { ContentRequestEvent } from '../../events/content-request.event';
+import { ContentRequestEvent } from 'app/events/content-request.event';
 
 @Component({
 	selector: 'arrow-test',
 	template: `
-		<links *ngIf="arrows" [arrows]="arrows" [id]="'test'"></links>
+		<div>
+			<cell *ngIf="cell" [cell]="cell" [level]="3" [position]="0"></cell>
+		</div>
+		<div>
+			<cell *ngIf="cell" [cell]="sourceCell" [level]="3" [position]="0"></cell>
+		</div>
 		<content *ngIf="document"></content>
-	`
+		`
 })
 
 export class LinksTestComponent extends TestComponent {
 
-arrows: Arrows;
+cell: Cell;
+sourceCell: Cell;
 document: CellDocument;
 
 
@@ -38,8 +44,18 @@ protected test(case_: string): void {
 private showArrow() {
 
 	console.debug('Show arrow test');
-	this.arrows	= new Arrows();
-	this.arrows.push(new Arrow(0,0, 128, 128));
+	const CELL: Cell = Object.create(Cell.prototype); // to simulate static call
+	const MODEL: Model = Object.create(Model.prototype); // to simulate static call
+
+	const model = MODEL.fromJSON(_model);
+
+	let types = CELL.fromJSON(_types);				// should contain links
+	types.associateWith(model, types.cellModelURI);
+
+	const stuffURI = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(0)';
+	this.cell = CellLocator.findCellWithURI(types, stuffURI);
+	const typesURI = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
+	this.sourceCell = CellLocator.findCellWithURI(types, typesURI);
 
 }
 
@@ -54,7 +70,7 @@ private showLinksOnLoad() {
 
 
 protected loadedModel(model: Model): void {
-	this.events.service.publish(new ContentRequestEvent(this.document, model))
+	this.events.service.publish(new ContentRequestEvent(this.document, model));
 }
 
 
