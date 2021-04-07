@@ -1,7 +1,5 @@
 // LOCATOR . CLASS . SPEC . TS
 
-
-import { hasUncaughtExceptionCaptureCallback } from 'process';
 import { Cell } from '../cell.class';
 import { Model } from '../model.class';
 
@@ -29,7 +27,6 @@ describe('locator.class', () => {
 
 	});
 
-
 	it('should find cell with URI', () => {
 
 		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(2)';
@@ -39,6 +36,14 @@ describe('locator.class', () => {
 
 	});
 
+	it('should not fast find cell with nonexistant URI', () => {
+		
+		const uri2 = _typesPrefix+'/test(0)/row(0)/col(0)/types(11)';
+		console.log('foof')
+		const notFound = CellLocator.findCellWithURI(types, uri2);
+		expect(notFound).toBeUndefined();
+
+	});	
 
 	it('should find anything with unsupported locators', () => {
 
@@ -51,7 +56,6 @@ describe('locator.class', () => {
 		expect(values2).toEqual([]);
 
 	});
-
 
 	it('should find stuff cells and values', () => {
 

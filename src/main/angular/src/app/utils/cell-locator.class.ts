@@ -4,32 +4,42 @@ import { Cell } from '../cell.class';
 
 export class CellLocator {
 
-
-/** find a cell that has this URI or return undefined */
-static findCellWithURI(startingCell: Cell, uri: string): Cell {
-
-	let cell: Cell;
-	let pending: Cell[] = [startingCell];
-
-	while (!cell && pending.length>0) {
-		const currentCell = pending.pop();
-		if (currentCell.getURI()===uri) {
-			cell = currentCell;
-		} else if (currentCell.childrenCount()>0) {
-			currentCell.children.forEach(c => pending.push(c));
-		}
-	}
-
-	return cell;
-
-}
-
-
 private static readonly ANYWHERE = '**';
 private static readonly ANY = '*';
 //private static readonly ANY = '*';	// not supported (yet)
-private static readonly ATTR_SEPARATOR = '@';
 private static readonly LOCATOR_SEPARATOR = '/';
+private static readonly ATTR_SEPARATOR = '@';
+
+
+/** look for a cell, fast implementation, note that we remove the prefix of the starting cell
+ * @param startingCell cell where we start to look for it
+ * @param uri we are looking for
+ * @returns return the cell if it has been found or undefined if it has not
+ */
+static findCellWithURI(startingCell: Cell, uri: string): Cell {
+return CellLocator._fastFindCellWithURI(startingCell, 
+										uri.substring(startingCell.URI.length).split(CellLocator.LOCATOR_SEPARATOR),
+										0,
+										uri);
+}
+
+private static _fastFindCellWithURI(cell: Cell,  tokens: string[], index: number, uri: string) {
+	
+	let found: Cell;
+	const head = Cell.removePositionFromName(tokens[index++]);	// foo(1) --> foo, to be able to compare with name
+	if (cell.name === head) {
+		const tokensLength = tokens.length;
+		if (index===tokensLength && cell.URI === uri) {			// found cell!
+			found = cell;
+		} else if (index<tokensLength) {						// look for it in the children
+			found = cell.children?.map(c => this._fastFindCellWithURI(c, tokens, index, uri)).find(c => c!==undefined);
+		}
+	}
+	
+	return found;
+
+}	
+
 
 /** Use a locator to find a set of cells
 *	@param startingCell is the starting point where to start looking
