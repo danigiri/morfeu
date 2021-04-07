@@ -127,22 +127,21 @@ get list(): Arrow[] {
 
 
 get minX(): number {
-    return this.#minX.peek();
+    return this.#minX.isEmpty() ? 0.0 : this.#minX.peek();
 }
 
 
 get minY(): number {
-    return this.#minY.peek();
+    return this.#minY.isEmpty() ? 0.0 :this.#minY.peek();
 }
 
 
 get maxX(): number {
-    return this.#maxX.peek();
+    return this.#maxX.isEmpty() ? 0.0 : this.#maxX.peek();
 }
 
-
 get maxY(): number {
-    return this.#maxY.peek();
+    return this.#maxX.isEmpty() ? 0.0 : this.#maxY.peek();
 }
 
 

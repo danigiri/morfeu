@@ -24,6 +24,15 @@ it('should add selectively', () => {
 
 });
 
+it('should handle min and max with no values', () => {
+
+    const arrows = new Arrows();
+    expect (arrows.minX).toBe(0.0);
+    expect (arrows.minY).toBe(0.0);
+    expect(arrows.maxX).toBe(0.0);
+    expect(arrows.maxY).toBe(0.0);
+
+});
 
 it('should handle min and max', () => {
 
@@ -56,7 +65,6 @@ it('should handle min and max', () => {
     expect(arrows.maxY).toBe(2.0);
 
 });
-
 
 });
 
