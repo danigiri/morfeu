@@ -52,10 +52,12 @@ private showArrow() {
 	let types = CELL.fromJSON(_types);				// should contain links
 	types.associateWith(model, types.cellModelURI);
 
-	const stuffURI = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(0)';
-	this.cell = CellLocator.findCellWithURI(types, stuffURI);
-	const typesURI = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
-	this.sourceCell = CellLocator.findCellWithURI(types, typesURI);
+	Promise.resolve(null).then(() => {
+		const stuffURI = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(0)';
+		this.cell = CellLocator.findCellWithURI(types, stuffURI);
+		const typesURI = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
+		this.sourceCell = CellLocator.findCellWithURI(types, typesURI);
+	});
 
 }
 

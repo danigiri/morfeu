@@ -50,8 +50,8 @@ activeReadonly = false;
 dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
+mayHaveLinks = false;			// true if the cell has active links to other cells
 info = false;
-
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -154,7 +154,21 @@ ngOnInit() {
 }
 
 
-ngAfterViewInit() {}
+ngAfterViewInit() {
+
+	// check if we may have active links from this cell or from any of it's children
+	// now that we have the cell informed
+	const model = this.cell.cellModel;
+	if (!model) {
+		return;
+	}
+	// let's make sure we change it in the next cycle
+	Promise.resolve(null).then(() =>
+		this.mayHaveLinks = model.presentation===CellModel.ATTR_LOCATOR_PRESENTATION 
+						|| model.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined
+	);
+
+}
 
 
 /**  we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it */

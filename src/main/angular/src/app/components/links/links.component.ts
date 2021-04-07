@@ -10,6 +10,8 @@ import { Rect } from 'app/utils/rect.class';
 
 import { CellLinkEvent } from 'app/events/cell-link.event';
 import { EventListener } from 'app/events/event-listener.class';
+import { CellModel } from 'app/cell-model.class';
+import { CellLocator } from 'app/utils/cell-locator.class';
 
 @Component({
 	selector: 'links',
@@ -39,15 +41,31 @@ ngAfterViewInit() {
 
 	// now we can draw the arrows, starting from the starting element to the cells, we send a number of events
 	// to get the linked components back
-	this.source.links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
-
+	//this.source.links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
+	let links: Cell[] = [];
+	// first we look for potential values in the cell
+	links = this.addLinks(this.source, links);
+	this.source.attributes?.forEach(a => this.addLinks(a, links));
+	// now we fire the appropriate events for all of them
+	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
 
 }
 
+private addLinks(c: Cell, links: Cell[]): Cell[] {
+
+	if (c.cellModel?.presentation===CellModel.ATTR_LOCATOR_PRESENTATION) {
+		const root = c.getRootAncestor().asCell();
+		CellLocator.findCellsWithLocatorAndValue(root, c.cellModel.valueLocator, c.value).forEach(c => links.push(c));
+	}
+
+	return links;
+
+}
 
 private addArrow(destRect: Rect) {
 
 }
+
 
 }
 
