@@ -136,7 +136,6 @@ describe('cell.class', () => {
 
 	});
 
-
 	it('attributes should also have parent information', () => {
 
 		const uri = _typesPrefix+'/test(0)/row(0)/col(0)/types(1)';
@@ -171,20 +170,6 @@ describe('cell.class', () => {
 		
 	});	
 
-	it('locator based attribute should have a link to the right cell', () => {
-	
-		const uri = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
-		const locatorAttribute = typesContent.findCellWithURI(uri).getAttribute('locator');
-		const links = locatorAttribute.links;
-		expect(links).toBeDefined();
-		expect(links.length).toBe(1);
-		
-		const stuffURI = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(0)';
-		const stuff = typesContent.findCellWithURI(stuffURI);
-		expect(links[0]).toBe(stuff);
-
-	});
-
 	it('should deep clone cells correctly', () => {
 
 		const uri = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
@@ -193,7 +178,6 @@ describe('cell.class', () => {
 		expect(typesClone).toEqual(types);
 
 	});
-
 
 	it('should remove the position information from a name', () => {
 		

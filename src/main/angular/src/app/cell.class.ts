@@ -21,6 +21,7 @@ private static readonly VALUE_FIELD = 'value';
 private static readonly _NAME = "$_NAME";
 private static readonly _VALUE = "$_VALUE";
 private static readonly _ATTRIBUTES = "$_ATTRIBUTES";
+private static readonly POSITION_DELIMITER = "(";
 
 value?: string;					// current value of the cell
 attributes?: Cell[];			// attributes list, if any
@@ -29,7 +30,7 @@ children?: Cell[];				// children, if any
 cellModel?: CellModel;			// reference to the model of this cell
 parent?: Adopter;				// runtime reference to the parent
 position?: number;				// runtime position reference
-links?: Cell[];					// runtime reference to other cells
+
 
 constructor(public schema: number,
 			public URI: string,
@@ -206,8 +207,7 @@ equalValues(c: Cell): boolean {
 	// we are assuming the same order for the attributes and internal attributes
 	if (this.attributes && c.attributes && !this.cellsEqualValues(this.attributes, c.attributes)) {
 			return false;
-	}
-
+		}
 
 	if ((this.internalAttributes && !c.internalAttributes) || (!this.internalAttributes && c.internalAttributes)) {
 		return false;
@@ -219,6 +219,15 @@ equalValues(c: Cell): boolean {
 
 	return true;
 
+}
+
+
+static removePositionFromName(name: string) {
+
+	if (name===undefined) {
+		console.error('oo');
+	}
+	return name.substring(0, name.indexOf(Cell.POSITION_DELIMITER));
 }
 
 
@@ -250,9 +259,6 @@ private cloneRuntimeDataInto(clone: Cell, parent: Adopter): Cell {
 	}
 	if (this.cellModel) {
 		clone.cellModel = this. cellModel;
-	}
-	if (this.links) {
-		clone.links = [...this.links];	// this copies the reference arrays
 	}
 
 	// for the attributes, we go through them and we assign the runtime information to the clone's attributes
@@ -307,7 +313,6 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 		}
 
 	this.cellModel = cellModel;
-	this.generateLinks();		// at this moment if our model is locator based we can generate the cell links
 
 	}
 
@@ -613,22 +618,11 @@ static reviver(key: string, value: any): any {
 
 //// SerialisableToJSON [end] ////
 
-
 static removeRuntimeData(o: any) {
 
 	delete o['cellModel'];
 	delete o['parent'];
 	delete o['links'];
-
-}
-
-
-private generateLinks() {
-	
-	if (this.cellModel?.presentation===CellModel.ATTR_LOCATOR_PRESENTATION) {
-		const ancestor = this.getRootAncestor().asCell();
-		this.links = CellLocator.findCellsWithLocatorAndValue(ancestor, this.cellModel.valueLocator, this.value);
-	}
 
 }
 
