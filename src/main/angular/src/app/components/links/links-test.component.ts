@@ -15,14 +15,15 @@ import { ContentRequestEvent } from 'app/events/content-request.event';
 @Component({
 	selector: 'arrow-test',
 	template: `
-		<div>
+		<div style="max-width: 200px">
 			<cell *ngIf="cell" [cell]="cell" [level]="3" [position]="0"></cell>
 		</div>
-		<div>
+		<div style="max-width: 200px">space left intentionally blank</div>
+		<div style="max-width: 200px">
 			<cell *ngIf="cell" [cell]="sourceCell" [level]="3" [position]="0"></cell>
 		</div>
 		<content *ngIf="document"></content>
-		`
+		`,
 })
 
 export class LinksTestComponent extends TestComponent {

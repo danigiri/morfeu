@@ -15,29 +15,33 @@ export class Arrows {
 #maxY: Stack<number> = new Stack<number>();
 
 
-constructor() {}
-
-
 /** push this arrow if it has not been added already, updates min and max if need be
  *  @returns true if we added the arrow
  */
 push(a: Arrow): boolean {
+	
+	let addition = false;
+	if (!this.alreadyHave(a)) {
 
-    let addition = false;
-    if (!this.alreadyHave(a)) {
+		this.#arrows.push(a);
+		addition = true;
+		
+		// first of all, we check if we have no minimum or maximum
+		if (this.#minX.isEmpty()) {
+			this.addMinStack(this.#minX, Math.min(a.sx, a.ex));
+			this.addMinStack(this.#minY, Math.min(a.sy, a.ey));
+			this.addMaxStack(this.#maxX, Math.max(a.sx, a.ex));
+			this.addMaxStack(this.#maxY, Math.max(a.sy, a.ey));		
+		} else {
+			// now we check if we have to change the min and max values
+			this.addMinStack(this.#minX, a.sx) || this.addMaxStack(this.#maxX, a.sx);
+			this.addMinStack(this.#minY, a.sy) || this.addMaxStack(this.#maxY, a.sy);
+			this.addMinStack(this.#minX, a.ex) || this.addMaxStack(this.#maxX, a.ex);
+			this.addMinStack(this.#minY, a.ey) || this.addMaxStack(this.#maxY, a.ey);
+		}
+	}
 
-        this.#arrows.push(a);
-        addition = true;
-        
-        // now we check if we have to change the min and max values
-        this.addMinStack(this.#minX, a.sx) || this.addMaxStack(this.#maxX, a.sx);
-        this.addMinStack(this.#minY, a.sy) || this.addMaxStack(this.#maxY, a.sy);
-        this.addMinStack(this.#minX, a.ex) || this.addMaxStack(this.#maxX, a.ex);
-        this.addMinStack(this.#minY, a.ey) || this.addMaxStack(this.#maxY, a.ey);
-
-    }
-
-    return addition;
+	return addition;
 
 }
 
@@ -46,102 +50,102 @@ push(a: Arrow): boolean {
  *  @returns true if we removed the arrow
 */
 remove(a: Arrow): boolean {
-    
-    let removal = false;
+	
+	let removal = false;
 
-    if (this.alreadyHave(a)) {
+	if (this.alreadyHave(a)) {
 
-        this.#arrows = this.#arrows.filter(ca => !ca.equals(a));
-        removal = true;
+		this.#arrows = this.#arrows.filter(ca => !ca.equals(a));
+		removal = true;
 
-        // now we check if we have to change the min and max values
-        this.removeMinStack(this.#minX, a.sx) || this.removeMaxStack(this.#maxX, a.sx);
-        this.removeMinStack(this.#minY, a.sy) || this.removeMaxStack(this.#maxY, a.sy);
-        this.removeMinStack(this.#minX, a.ex) || this.removeMaxStack(this.#maxX, a.ex);
-        this.removeMinStack(this.#minY, a.ey) || this.removeMaxStack(this.#maxY, a.ey);
+		// now we check if we have to change the min and max values
+		this.removeMinStack(this.#minX, a.sx) || this.removeMaxStack(this.#maxX, a.sx);
+		this.removeMinStack(this.#minY, a.sy) || this.removeMaxStack(this.#maxY, a.sy);
+		this.removeMinStack(this.#minX, a.ex) || this.removeMaxStack(this.#maxX, a.ex);
+		this.removeMinStack(this.#minY, a.ey) || this.removeMaxStack(this.#maxY, a.ey);
 
-    }
+	}
 
-    return removal;
+	return removal;
 
 }
 
 
 private alreadyHave(a: Arrow):boolean {
-    return this.#arrows.find(ca => ca.equals(a))!==undefined;
+	return this.#arrows.find(ca => ca.equals(a))!==undefined;
 }
 
 
 private addMinStack(s: Stack<number>, v: number): boolean {
 
-    let min = false;
-    if (s.isEmpty() || s.peek()>=v) {
-        s.push(v);
-        min = true;
-    }
+	let min = false;
+	if (s.isEmpty() || s.peek()>=v) {
+		s.push(v);
+		min = true;
+	}
 
-    return min;
+	return min;
 
 }
 
 
 private removeMinStack(s: Stack<number>, v: number): boolean {
 
-    let min = false;
-    if (!s.isEmpty() && s.peek()===v) { // we consider that values will be identical
-        s.pop();
-        min = true;
-    }
+	let min = false;
+	if (!s.isEmpty() && s.peek()===v) { // we consider that values will be identical
+		s.pop();
+		min = true;
+	}
 
-    return min;
+	return min;
 
 }
 
 
 private addMaxStack(s: Stack<number>, v: number): boolean {
 
-    let max = false;
-    if (s.isEmpty() || s.peek()<=v) {
-        s.push(v);
-        max = true;
-    }
+	let max = false;
+	if (s.isEmpty() || s.peek()<=v) {
+		s.push(v);
+		max = true;
+	}
 
-    return max;
+	return max;
 
 }
 
 
 private removeMaxStack(s: Stack<number>, v: number): boolean {
-    return this.removeMinStack(s, v);   // the implementation is the same but will change if needed
+	return this.removeMinStack(s, v);   // the implementation is the same but will change if needed
 }
 
 
 get length(): number {
-    return this.#arrows.length;
+	return this.#arrows.length;
 }
 
 
 get list(): Arrow[] {
-    return this.#arrows;
+	return this.#arrows;
 }
 
 
 get minX(): number {
-    return this.#minX.isEmpty() ? 0.0 : this.#minX.peek();
+	return this.#minX.isEmpty() ? 0.0 : this.#minX.peek();
 }
 
 
 get minY(): number {
-    return this.#minY.isEmpty() ? 0.0 :this.#minY.peek();
+	return this.#minY.isEmpty() ? 0.0 :this.#minY.peek();
 }
 
 
 get maxX(): number {
-    return this.#maxX.isEmpty() ? 0.0 : this.#maxX.peek();
+	return this.#maxX.isEmpty() ? 0.0 : this.#maxX.peek();
 }
 
 get maxY(): number {
-    return this.#maxX.isEmpty() ? 0.0 : this.#maxY.peek();
+	return this.#maxX.isEmpty() ? 0.0 : this.#maxY.peek();
 }
 
 

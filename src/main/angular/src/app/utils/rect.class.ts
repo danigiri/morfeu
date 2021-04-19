@@ -1,6 +1,8 @@
 // RECT . CLASS . TS
 
-export class Rect {
+import { Rectangle } from './rect.interface';
+
+export class Rect implements Rectangle {
 
 
 constructor(public x: number, public y: number, public right: number, public bottom: number) {}
@@ -13,6 +15,20 @@ get width(): number {
 
 get height(): number {
 	return this.bottom - this.y;
+}
+
+
+static fromElement(element: Element): Rect {
+
+	const elemRect = element.getBoundingClientRect();
+	const scrollTop = document.documentElement.scrollTop;
+	const x = elemRect.x;
+	const y = elemRect.y + scrollTop;
+	const right = elemRect.right;
+	const bottom = elemRect.top + scrollTop;
+
+	return new Rect(x, y, right, bottom);
+
 }
 
 

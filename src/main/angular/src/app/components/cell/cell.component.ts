@@ -142,7 +142,7 @@ ngOnInit() {
 	);
 
 	this.register(this.events.service.of<CellLinkEvent>(CellLinkEvent)
-			.pipe(filter(link => link.source===this.cell && link.destRect===undefined))
+			.pipe(filter(link => link.destination===this.cell && link.destRect===undefined))
 			.subscribe(link => this.linkToThisCell(link))
 	);
 
@@ -429,15 +429,7 @@ private remove() {
 /** called when we receive a request to link to this cell, we bounce it back with the filled link event */
 private linkToThisCell(link: CellLinkEvent): void {
 
-	const elemRect = this.cellElement.nativeElement.getBoundingClientRect();
-	const scrollTop = document.documentElement.scrollTop;
-	const x = elemRect.x;
-	const y = elemRect.y + scrollTop;
-	const right = elemRect.right;
-	const bottom = elemRect.top + scrollTop;
-
-	link.destRect = new Rect(x, y, right, bottom);
-	console.log(link.destRect);
+	link.destRect = Rect.fromElement(this.cellElement.nativeElement);
 	this.events.service.publish(link);
 
 }

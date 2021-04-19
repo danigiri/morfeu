@@ -7,62 +7,94 @@ describe('arrows.class', () => {
 
 it('should add selectively', () => {
 
-    let arrows = new Arrows();
-    const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
-    expect(arrows.push(a0)).toBeTrue();
-    expect(arrows.list.length).toBe(1);
-    expect(arrows.push(a0)).toBeFalse();
-    expect(arrows.list.length).toBe(1);
+	let arrows = new Arrows();
+	const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
+	expect(arrows.push(a0)).toBeTrue();
+	expect(arrows.list.length).toBe(1);
+	expect(arrows.push(a0)).toBeFalse();
+	expect(arrows.list.length).toBe(1);
 
-    const a1 = new Arrow (0.0, 0.0, 1.0, 2.0);
-    expect(arrows.push(a1)).toBeFalse();
-    expect(arrows.list.length).toBe(1);
+	const a1 = new Arrow (0.0, 0.0, 1.0, 2.0);
+	expect(arrows.push(a1)).toBeFalse();
+	expect(arrows.list.length).toBe(1);
 
-    const a2 = new Arrow (0.0, 0.0, 0.1, 0.1);
-    expect(arrows.push(a2)).toBeTrue();
-    expect(arrows.list.length).toBe(2);
+	const a2 = new Arrow (0.0, 0.0, 0.1, 0.1);
+	expect(arrows.push(a2)).toBeTrue();
+	expect(arrows.list.length).toBe(2);
 
 });
 
 it('should handle min and max with no values', () => {
 
-    const arrows = new Arrows();
-    expect (arrows.minX).toBe(0.0);
-    expect (arrows.minY).toBe(0.0);
-    expect(arrows.maxX).toBe(0.0);
-    expect(arrows.maxY).toBe(0.0);
+	const arrows = new Arrows();
+	expect (arrows.minX).toBe(0.0);
+	expect (arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(0.0);
+	expect(arrows.maxY).toBe(0.0);
 
 });
 
 it('should handle min and max', () => {
 
-    let arrows = new Arrows();
-    const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
-    expect(arrows.push(a0)).toBeTrue();
-    expect(arrows.minX).toBe(0.0);
-    expect(arrows.minY).toBe(0.0);
-    expect(arrows.maxX).toBe(1.0);
-    expect(arrows.maxY).toBe(2.0);
+	let arrows = new Arrows();
+	const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
+	expect(arrows.push(a0)).toBeTrue();
+	expect(arrows.minX).toBe(0.0);
+	expect(arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(1.0);
+	expect(arrows.maxY).toBe(2.0);
 
-    const a1 = new Arrow (0.0, 0.0, 0.1, 0.1);
-    expect(arrows.push(a1)).toBeTrue();
-    expect(arrows.minX).toBe(0.0);
-    expect(arrows.minY).toBe(0.0);
-    expect(arrows.maxX).toBe(1.0);
-    expect(arrows.maxY).toBe(2.0);
+	const a1 = new Arrow (0.0, 0.0, 0.1, 0.1);
+	expect(arrows.push(a1)).toBeTrue();
+	expect(arrows.minX).toBe(0.0);
+	expect(arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(1.0);
+	expect(arrows.maxY).toBe(2.0);
 
-    const a2 = new Arrow (-1.0, 0.0, 1.1, 0.1);
-    expect(arrows.push(a2)).toBeTrue();
-    expect(arrows.minX).toBe(-1.0);
-    expect(arrows.minY).toBe(0.0);
-    expect(arrows.maxX).toBe(1.1);
-    expect(arrows.maxY).toBe(2.0);
+	const a2 = new Arrow (-1.0, 0.0, 1.1, 0.1);
+	expect(arrows.push(a2)).toBeTrue();
+	expect(arrows.minX).toBe(-1.0);
+	expect(arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(1.1);
+	expect(arrows.maxY).toBe(2.0);
 
-    expect(arrows.remove(a2)).toBeTrue();
-    expect(arrows.minX).toBe(0.0);
-    expect(arrows.minY).toBe(0.0);
-    expect(arrows.maxX).toBe(1.0);
-    expect(arrows.maxY).toBe(2.0);
+	expect(arrows.remove(a2)).toBeTrue();
+	expect(arrows.minX).toBe(0.0);
+	expect(arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(1.0);
+	expect(arrows.maxY).toBe(2.0);
+
+});
+
+it('should handle min and max more cases', () => {
+
+	let arrows = new Arrows();
+	const a0 = new Arrow (0.0, 0.0, 1.0, 2.0);
+	expect(arrows.push(a0)).toBeTrue();
+	expect(arrows.minX).toBe(0.0);
+	expect(arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(1.0);
+	expect(arrows.maxY).toBe(2.0);
+
+	const a1 = new Arrow (0.0, 0.0, 0.1, 3.0);
+	expect(arrows.push(a1)).toBeTrue();
+	expect(arrows.minX).toBe(0.0);
+	expect(arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(1.0);
+	expect(arrows.maxY).toBe(3.0);
+
+});
+
+it('should handle min and max pointing in the other direction', () => {
+
+	let arrows = new Arrows();
+	console.log('foo');
+	const a0 = new Arrow (1.0, 2.0, 0.0, 0.0);
+	expect(arrows.push(a0)).toBeTrue();
+	expect(arrows.minX).toBe(0.0);
+	expect(arrows.minY).toBe(0.0);
+	expect(arrows.maxX).toBe(1.0);
+	expect(arrows.maxY).toBe(2.0);
 
 });
 

@@ -1,7 +1,7 @@
 // LINKS . COMPONENT . TS
 
 import { AfterViewInit, Component, ElementRef, Input, OnInit } from '@angular/core';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 
 import { Arrows } from './arrows.class';
@@ -12,10 +12,19 @@ import { CellLinkEvent } from 'app/events/cell-link.event';
 import { EventListener } from 'app/events/event-listener.class';
 import { CellModel } from 'app/cell-model.class';
 import { CellLocator } from 'app/utils/cell-locator.class';
+import { Arrow } from './arrow.class';
 
 @Component({
 	selector: 'links',
-	templateUrl: './links.component.svg'
+	templateUrl: './links.component.svg',
+	styles: [`
+		.arrows {
+			position: absolute;
+  			left: 0px;
+  			top: 0px;
+			z-index: -1;
+		}
+	`]
 })
 
 export class LinksComponent extends EventListener implements OnInit, AfterViewInit {
@@ -24,24 +33,28 @@ export class LinksComponent extends EventListener implements OnInit, AfterViewIn
 @Input() source: Cell;
 @Input() element: ElementRef;
 
+links = new Map<Cell, Arrow>();	// destination cell, arrow
 arrows: Arrows = new Arrows();
 
 
 ngOnInit() {
 
+	console.debug('LinksComponent::ngOnInit() – pre register');
 	// we registger to events returing with the complete information so we can draw the arrows
 	this.register(this.events.service.of<CellLinkEvent>(CellLinkEvent)
 			.pipe(filter(link => link.source===this.source && link.destRect!==undefined))
-			.subscribe(link => this.addArrow(link.destRect)));
-
+			.pipe(filter(link => !this.links.has(link.destination)))
+			.subscribe(link => this.addArrow(link.destRect, link.destination))
+	);
+			
 }
-
-
+		
+		
 ngAfterViewInit() {
-
+			
 	// now we can draw the arrows, starting from the starting element to the cells, we send a number of events
 	// to get the linked components back
-	//this.source.links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
+	//console.debug('LinksComponent::ngAfterViewInit()');
 	let links: Cell[] = [];
 	// first we look for potential values in the cell
 	links = this.addLinks(this.source, links);
@@ -51,19 +64,52 @@ ngAfterViewInit() {
 
 }
 
-private addLinks(c: Cell, links: Cell[]): Cell[] {
 
+maxX(): number {
+	
+	const max = this.arrows.maxX;
+
+	return max===0 ? 50 : max;
+
+}
+
+
+maxY(): number {
+
+	const max = this.arrows.maxY;
+
+	return max===0 ? 50 : max;
+	
+}
+
+
+private addLinks(c: Cell, links: Cell[]): Cell[] {
+	
 	if (c.cellModel?.presentation===CellModel.ATTR_LOCATOR_PRESENTATION) {
 		const root = c.getRootAncestor().asCell();
 		CellLocator.findCellsWithLocatorAndValue(root, c.cellModel.valueLocator, c.value).forEach(c => links.push(c));
 	}
-
+	
 	return links;
-
+	
 }
 
-private addArrow(destRect: Rect) {
 
+private addArrow(destRect: Rect, destination: Cell) {
+	
+	//console.log(new Error().stack);
+	// from the source element and dest element we can create an arrow
+	const sourceRect = Rect.fromElement(this.element.nativeElement);
+	console.log('source', sourceRect);
+	console.log('dest', destRect);
+	const arrow = new Arrow(sourceRect.x, sourceRect.y, destRect.x, destRect.y);
+	console.log(arrow);
+	this.links.set(destination, arrow);
+	Promise.resolve(null).then(() => {
+		this.arrows.push(arrow)
+		console.log(this.arrows.minX,this.arrows.minY,' - ', this.arrows.maxX, this.arrows.maxY);
+	});	// this will modify the SVG template state
+	
 }
 
 
