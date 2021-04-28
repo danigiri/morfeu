@@ -1,7 +1,7 @@
 <div class="arrows">
 <svg:svg xmlns:svg="http://www.w3.org/2000/svg"
-	attr.viewBox="0 0 {{maxX}} {{maxY}}"
-	style="width: {{maxX}}, height: {{maxY}}"
+	attr.viewBox="viewBox()"
+	style="style()"
 	stroke="#000"
 	fill="#000"
 	strokeWidth="3"

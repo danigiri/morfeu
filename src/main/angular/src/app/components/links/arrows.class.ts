@@ -19,7 +19,7 @@ export class Arrows {
  *  @returns true if we added the arrow
  */
 push(a: Arrow): boolean {
-	
+
 	let addition = false;
 	if (!this.alreadyHave(a)) {
 

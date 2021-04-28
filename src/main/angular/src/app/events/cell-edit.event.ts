@@ -2,7 +2,6 @@
 
 import { MorfeuEvent } from './morfeu-event.class';
 
-
 import {Cell} from '../cell.class';
 
 export class CellEditEvent extends MorfeuEvent {

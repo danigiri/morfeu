@@ -1,12 +1,12 @@
 // LINKS . COMPONENT . TS
 
-import { AfterViewInit, Component, ElementRef, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { filter, tap } from 'rxjs/operators';
 
 
 import { Arrows } from './arrows.class';
 import { Cell } from 'app/cell.class';
-import { Rect } from 'app/utils/rect.class';
+import { Rectangle } from 'app/utils/rectangle.interface';
 
 import { CellLinkEvent } from 'app/events/cell-link.event';
 import { EventListener } from 'app/events/event-listener.class';
@@ -27,11 +27,13 @@ import { Arrow } from './arrow.class';
 	`]
 })
 
-export class LinksComponent extends EventListener implements OnInit, AfterViewInit {
+/** Component to hold references between cells */
+export class LinksComponent extends EventListener implements AfterViewInit, OnChanges, OnInit {
 
 @Input() id: string;
 @Input() source: Cell;
-@Input() element: ElementRef;
+@Input() x: number;
+@Input() y: number;
 
 links = new Map<Cell, Arrow>();	// destination cell, arrow
 arrows: Arrows = new Arrows();
@@ -62,6 +64,20 @@ ngAfterViewInit() {
 	// now we fire the appropriate events for all of them
 	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
 
+}
+
+ngOnChanges(changes: SimpleChanges) {
+	console.log('c:', this.x, this.y);
+}
+
+
+viewBox(): string {
+	return '0 0 '+this.maxX()+' '+this.maxY();
+}
+
+
+style(): string {
+	return 'width: '+this.maxX()+', height: '+this.maxY();
 }
 
 
@@ -95,14 +111,13 @@ private addLinks(c: Cell, links: Cell[]): Cell[] {
 }
 
 
-private addArrow(destRect: Rect, destination: Cell) {
+private addArrow(destRect: Rectangle, destination: Cell) {
 	
 	//console.log(new Error().stack);
 	// from the source element and dest element we can create an arrow
-	const sourceRect = Rect.fromElement(this.element.nativeElement);
-	console.log('source', sourceRect);
+	console.log('source:', this.x, this.y);
 	console.log('dest', destRect);
-	const arrow = new Arrow(sourceRect.x, sourceRect.y, destRect.x, destRect.y);
+	const arrow = new Arrow(this.x, this.y, destRect.x, destRect.y);
 	console.log(arrow);
 	this.links.set(destination, arrow);
 	Promise.resolve(null).then(() => {

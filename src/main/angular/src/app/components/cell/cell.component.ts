@@ -6,6 +6,8 @@ import { filter } from 'rxjs/operators';
 import { FamilyMember } from 'app/family-member.interface';
 import { Cell } from 'app/cell.class';
 import { CellModel } from 'app/cell-model.class';
+import { ElementRect } from 'app/components/links/element-rect.class';
+import { Rectangle } from 'app/utils/rectangle.interface';
 
 import { DropAreaComponent } from '../drop-area.component';
 import { SelectableWidget } from 'app/selectable-widget.class';
@@ -24,7 +26,6 @@ import { CellSelectionClearEvent } from 'app/events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from 'app/events/cell-model-activated.event';
 import { InfoModeEvent } from 'app/events/info-mode.event';
 import { EventService } from 'app/services/event.service';
-import { Rect } from 'app/utils/rect.class';
 
 @Component({
 	selector: 'cell',
@@ -52,6 +53,7 @@ canBeDeleted = true;
 canBeModified = true;
 mayHaveLinks = false;			// true if the cell has active links to other cells
 info = false;
+rect: Rectangle;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -156,18 +158,19 @@ ngOnInit() {
 
 ngAfterViewInit() {
 
-	// check if we may have active links from this cell or from any of it's children
-	// now that we have the cell informed
-	const model = this.cell.cellModel;
-	if (!model) {
-		return;
-	}
-	// let's make sure we change it in the next cycle
-	Promise.resolve(null).then(() =>
-		this.mayHaveLinks = model.presentation===CellModel.ATTR_LOCATOR_PRESENTATION 
-						|| model.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined
-	);
+	// handling the links logic, first we create the wrapper of the rectangle from the native element reference
+	this.rect = new ElementRect(this.cellElement);
 
+	// check if we may have active links from this cell or from any of it's children
+	const model = this.cell.cellModel;
+	if (model) {
+		// let's make sure we change it in the next cycle
+		Promise.resolve(null).then(() => 
+			this.mayHaveLinks = model.presentation===CellModel.ATTR_LOCATOR_PRESENTATION 
+			|| model.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined
+		);
+	}
+		
 }
 
 
@@ -429,7 +432,7 @@ private remove() {
 /** called when we receive a request to link to this cell, we bounce it back with the filled link event */
 private linkToThisCell(link: CellLinkEvent): void {
 
-	link.destRect = Rect.fromElement(this.cellElement.nativeElement);
+	link.destRect = new ElementRect(this.cellElement);
 	this.events.service.publish(link);
 
 }
