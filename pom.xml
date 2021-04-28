@@ -18,14 +18,15 @@
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
 		<skip-build-client>false</skip-build-client>
 		<async-timeout>2000</async-timeout>
-		<dagger-2-version>2.29.1</dagger-2-version>
-		<jackson-2-version>2.12.1</jackson-2-version>
-		<jetty-version>10.0.1</jetty-version>
+		<batik-version>1.14</batik-version>
+		<dagger-2-version>2.35</dagger-2-version>
+		<jackson-2-version>2.12.3</jackson-2-version>
+		<jetty-version>10.0.2</jetty-version>
 		<jtwig-version>5.87.0.RELEASE</jtwig-version>
-		<selenide-version>5.15.1</selenide-version>
-		<selenium-version>3.141.59</selenium-version>
 		<jupiter-version>5.7.0</jupiter-version>
 		<junit-platform-version>1.7.0</junit-platform-version>
+		<selenide-version>5.20.4</selenide-version>
+		<selenium-version>3.141.59</selenium-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<scm.host_>github.com</scm.host_>
@@ -364,7 +365,7 @@
 		<dependency><!-- to test dynamic preview with SVG -->
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-dom</artifactId>
-			<version>1.12</version>
+			<version>${batik-version}</version>
 			<!-- get rid of java 1.9 module clashing old xml api dupes -->
 			<exclusions>
 				<exclusion>  <!-- declare the exclusion here -->
@@ -380,7 +381,7 @@
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-svggen</artifactId>
-			<version>1.12</version>
+			<version>${batik-version}</version>
 		</dependency>
 		<dependency>	<!-- used to test the code integration -->
 			<groupId>com.h2database</groupId>
@@ -422,7 +423,7 @@
 		<dependency>
 			<groupId>org.mitre.dsmiley.httpproxy</groupId>
 			<artifactId>smiley-http-proxy-servlet</artifactId>
-			<version>1.11</version>
+			<version>1.12</version>
 		</dependency>
 
 		<!-- process execution -->
@@ -471,7 +472,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.6.0</version>
+			<version>3.9.0</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -479,7 +480,7 @@
 		<dependency>	<!-- web driver manager -->
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>4.2.2</version>
+			<version>4.4.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -537,13 +538,13 @@
 		<dependency>
 			<groupId>org.xmlunit</groupId>
 			<artifactId>xmlunit-core</artifactId>
-			<version>2.7.0</version>
+			<version>2.8.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.tngtech.archunit</groupId>
 			<artifactId>archunit-junit5</artifactId>
-			<version>0.16.0</version>
+			<version>0.18.0</version>
 			<scope>test</scope>
 		</dependency>
 
