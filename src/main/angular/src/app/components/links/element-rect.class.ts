@@ -8,33 +8,30 @@ import { Rectangle } from 'app/utils/rectangle.interface';
 export class ElementRect implements Rectangle {
 
 
-public constructor(private e: ElementRef) {}
+public constructor(public e: ElementRef) {}
 
 
 get x(): number {
-	return this.e.nativeElement.getBoundingClientRect().x;
+	return this.e.nativeElement.getBoundingClientRect().x ; //+ document.documentElement.scrollTop;
 }
 
 
 get y(): number {
 
-	const rect: DOMRect = this.e.nativeElement.getBoundingClientRect();
-
-	return rect.y + document.documentElement.scrollTop;
+	return  this.e.nativeElement.getBoundingClientRect().y + document.documentElement.scrollTop;
 
 }
 
+
 get right(): number {
-	return this.e.nativeElement.getBoundingClientRect().right;
+	return this.x+this.e.nativeElement.clientWidth;		// for some reason the bounding rect does not work
+	//return this.e.nativeElement.getBoundingClientRect().right;
 }
 
 
 get bottom(): number {
-
-	const rect: DOMRect = this.e.nativeElement.getBoundingClientRect();
-
-	return rect.top + document.documentElement.scrollTop;
-
+	return this.y+this.e.nativeElement.clientHeight;	// for some reason the bounding rect does not work
+	//return this.e.nativeElement.getBoundingClientRect().y + this.e.nativeElement.getBoundingClientRect().height;
 }
 
 
@@ -45,6 +42,11 @@ get width(): number {
 
 get height(): number {
 	return this.bottom - this.y;
+}
+
+
+public toString = (): string => {
+	return `ElementRect:{${this.x},${this.y},${this.right},${this.bottom}}`;
 }
 
 

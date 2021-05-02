@@ -1,6 +1,8 @@
 // DEBUG . COMPONENT . TS
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { fromEvent, Observable } from 'rxjs';
 
 import { EventListener } from '../../events/event-listener.class';
 import { InfoModeEvent } from '../../events/info-mode.event';
@@ -9,9 +11,10 @@ import { EventService } from '../../services/event.service';
 @Component({
 	selector: 'debug',
 	template: `
-				<p *ngIf="info" class="card-text"
+				<p *ngIf="info || show" class="card-text"
 				>
-					<small>{{subscriptionBreakdown()}}</small>
+				<small><strong>x</strong>:{{mouseX}},<strong>x</strong>:{{mouseY}}</small>
+				<small>{{subscriptionBreakdown()}}</small>
 					<small>
 						<strong>#events: {{eventCounter()}}, #subscriptions: {{subscriptionCounter()}}</strong>
 					</small>
@@ -21,7 +24,12 @@ import { EventService } from '../../services/event.service';
 
 export class DebugComponent extends EventListener implements OnInit {
 
-public info = false;
+info = false;
+mouseX: number;
+mouseY: number;
+
+@Input() show: boolean = false;
+@Input() trackMouse: boolean = false;
 
 
 constructor(eventService: EventService) {
@@ -31,8 +39,11 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
-
+	if (this.trackMouse) {
+		fromEvent(document.body, 'mousemove').subscribe({next:(e:MouseEvent) => this.mouseMove(e.pageX, e.pageY)});
+	}
 }
+
 
 public eventCounter(): number {
 	return this.events.service.eventCount();
@@ -46,6 +57,15 @@ public subscriptionCounter(): number {
 public subscriptionBreakdown():string {
 	return this.events.service.toString();
 }
+
+
+private mouseMove(x: number, y: number) {
+
+	this.mouseX = x;
+	this.mouseY = y;
+
+}
+
 
 }
 

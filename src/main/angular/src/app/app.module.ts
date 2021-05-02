@@ -55,7 +55,6 @@ import { StatusComponent } from './components/status.component';
 					CollapsibleComponent,
 					CellDocumentComponent,
 					CellModelComponent,
-					DebugComponent,
 					MainComponent,
 					ModelAreaComponent,
 					ModelComponent,

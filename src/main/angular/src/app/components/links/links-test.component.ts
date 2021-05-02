@@ -23,6 +23,7 @@ import { ContentRequestEvent } from 'app/events/content-request.event';
 			<cell *ngIf="cell" [cell]="sourceCell" [level]="3" [position]="0"></cell>
 		</div>
 		<content *ngIf="document"></content>
+		<debug [show]="true" [trackMouse]="true"></debug>
 		`,
 })
 

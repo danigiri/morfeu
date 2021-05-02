@@ -19,6 +19,7 @@ import { CellEditorComponent } from './cell-editor/cell-editor.component';
 import { CellHeaderComponent } from './cell-header.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { ContentComponent } from './content/content.component';
+import { DebugComponent } from './debug/debug.component';
 import { DropAreaComponent } from './drop-area.component';
 import { KeyCaptureComponent } from '../components/key-capture.component';
 import { LinksComponent } from './links/links.component';
@@ -55,6 +56,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					CellHeaderComponent,
 					CodeEditorComponent,
 					ContentComponent,
+					DebugComponent,
 					DropAreaComponent,
 					KeyCaptureComponent,
 					PresentationComponent,
@@ -72,6 +74,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					CellHeaderComponent,
 					CodeEditorComponent,
 					ContentComponent,
+					DebugComponent,
 					KeyCaptureComponent,
 					PresentationComponent,
 					SnippetComponent,

@@ -160,6 +160,7 @@ ngAfterViewInit() {
 
 	// handling the links logic, first we create the wrapper of the rectangle from the native element reference
 	this.rect = new ElementRect(this.cellElement);
+	//console.log('cell rect', this.cell.URI,this.rect.toString(), this.rect.e)
 
 	// check if we may have active links from this cell or from any of it's children
 	const model = this.cell.cellModel;
