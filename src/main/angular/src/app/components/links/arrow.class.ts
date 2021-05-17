@@ -6,11 +6,14 @@ export class Arrow {
 
 public static readonly PI180 = 180 / Math.PI;
 
-public transform: string;
+public pi180 = Arrow.PI180;	// so we can access it from the template
+
 public cx: number;
 public cy: number;
 public ae: number;
-public pi180 = Arrow.PI180;	// so we can access it from the template
+public transform: string;
+public path: string;
+
 
 /**
  * @param sx The x position of the starting point
@@ -27,12 +30,20 @@ constructor(public sx: number, public sy: number, public ex: number, public ey: 
 	this.ey = ey_;
 	this.ae = ae_;
 	this.transform = `translate(${ex_},${ey_}) rotate(${ae_ * Arrow.PI180})`;
-
+	this.path = `M${this.sx},${this.sy} Q${this.cx},${this.cy} ${this.ex},${this.ey}`;
 }
+
+
 
 equals(a: Arrow): boolean {
 	return this.sx===a.sx && this.sy===a.sy && this.ex===a.ex && this.ey===a.ey;
 }
+
+
+public toString = (): string => {
+	return `Arrow:{${this.sx},${this.sy},${this.ex},${this.ey}}`;
+}
+
 
 }
 

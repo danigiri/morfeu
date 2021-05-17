@@ -20,9 +20,14 @@ import { Arrow } from './arrow.class';
 	styles: [`
 		.arrows {
 			position: absolute;
-  			left: 0px;
-  			top: 0px;
+			padding: 0;
+			margin: 0;
+  			left: 0;
+  			top: 0;
+			width: 100%;
+			height: 100%;
 			z-index: -1;
+			transform: translateX(0);
 		}
 	`]
 })
@@ -66,8 +71,9 @@ ngAfterViewInit() {
 
 }
 
+
 ngOnChanges(changes: SimpleChanges) {
-	console.log('c:', this.x, this.y);
+	//console.log('c:', this.x, this.y);
 }
 
 
@@ -115,14 +121,12 @@ private addArrow(destRect: Rectangle, destination: Cell) {
 	
 	//console.log(new Error().stack);
 	// from the source element and dest element we can create an arrow
-	console.log('source:', this.x, this.y);
-	console.log('dest', destRect);
+	//console.log('source:', this.x, this.y,'dest', destRect);
 	const arrow = new Arrow(this.x, this.y, destRect.x, destRect.y);
-	console.log(arrow);
 	this.links.set(destination, arrow);
 	Promise.resolve(null).then(() => {
-		this.arrows.push(arrow)
-		console.log(this.arrows.minX,this.arrows.minY,' - ', this.arrows.maxX, this.arrows.maxY);
+		console.log('>>'+arrow);
+		this.arrows.push(arrow);
 	});	// this will modify the SVG template state
 	
 }

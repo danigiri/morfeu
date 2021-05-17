@@ -15,13 +15,32 @@ import { ContentRequestEvent } from 'app/events/content-request.event';
 @Component({
 	selector: 'arrow-test',
 	template: `
-		<div style="max-width: 200px">
-			<cell *ngIf="cell" [cell]="cell" [level]="3" [position]="0"></cell>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+				<cell *ngIf="cell" [cell]="cell" [level]="3" [position]="0"></cell>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+					<div>&nbsp;</div>
+					<div>&nbsp;</div>
+					<cell *ngIf="cell" [cell]="sourceCell" [level]="3" [position]="0"></cell>
+				</div>
+			</div>
 		</div>
-		<div style="max-width: 200px">space left intentionally blank</div>
-		<div style="max-width: 200px">
-			<cell *ngIf="cell" [cell]="sourceCell" [level]="3" [position]="0"></cell>
-		</div>
+		<!--div style="position:absolute; left:0; top:0; z-index:-2; width:100%; height:100%">
+		<svg:svg xmlns:svg="http://www.w3.org/2000/svg"
+			viewBox="0 0 200 200"
+			
+			stroke="#aaa"
+			fill="#aaa"
+			strokeWidth="3"
+			id="aaa"
+			>
+			<svg:circle id="circle" cx="10" cy="10" r="100" ></svg:circle>
+		</svg:svg>
+		</div-->
 		<content *ngIf="document"></content>
 		<debug [show]="true" [trackMouse]="true"></debug>
 		`,

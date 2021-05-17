@@ -13,7 +13,7 @@ import { EventService } from '../../services/event.service';
 	template: `
 				<p *ngIf="info || show" class="card-text"
 				>
-				<small><strong>x</strong>:{{mouseX}},<strong>x</strong>:{{mouseY}}</small>
+				<small><strong>x</strong>:{{mouseX}},<strong>y</strong>:{{mouseY}}</small>
 				<small>{{subscriptionBreakdown()}}</small>
 					<small>
 						<strong>#events: {{eventCounter()}}, #subscriptions: {{subscriptionCounter()}}</strong>

@@ -1,6 +1,6 @@
 // CELL . COMPONENT . TS
 
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { filter } from 'rxjs/operators';
 
 import { FamilyMember } from 'app/family-member.interface';
@@ -157,19 +157,24 @@ ngOnInit() {
 
 
 ngAfterViewInit() {
+//ngAfterViewChecked() {
 
 	// handling the links logic, first we create the wrapper of the rectangle from the native element reference
 	this.rect = new ElementRect(this.cellElement);
-	//console.log('cell rect', this.cell.URI,this.rect.toString(), this.rect.e)
-
-	// check if we may have active links from this cell or from any of it's children
-	const model = this.cell.cellModel;
-	if (model) {
-		// let's make sure we change it in the next cycle
-		Promise.resolve(null).then(() => 
-			this.mayHaveLinks = model.presentation===CellModel.ATTR_LOCATOR_PRESENTATION 
-			|| model.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined
-		);
+//	Promise.resolve(null).then(() => 
+//	);
+// check if we may have active links from this cell or from any of it's children
+const model = this.cell.cellModel;
+if (model) {
+	// let's make sure we change it in the next cycle
+	//Promise.resolve(null).then(() => 
+	setTimeout(() =>  {
+	console.log('cell rect', this.cell.name, this.rect.toString());
+	this.mayHaveLinks = model.presentation===CellModel.ATTR_LOCATOR_PRESENTATION 
+	|| model.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined
+	}
+	,100);
+	//);
 	}
 		
 }
