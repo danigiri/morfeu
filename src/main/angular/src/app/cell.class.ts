@@ -118,6 +118,20 @@ findCellWithURI(uri: string): Cell {
 }
 
 
+/** @returns a list of linked cells or an empty array if this cell model is not setup for linking */
+getLinks(): Cell[] {
+	
+	let links: Cell[] = [];
+	if (this.cellModel?.canHaveLinks && this.cellModel.valueLocator) {
+		const root = this.getRootAncestor().asCell();
+		const locator = this.cellModel.valueLocator;
+		CellLocator.findCellsWithLocatorAndValue(root, locator, this.value).forEach(c => links.push(c));
+	}
+
+	return links;
+
+}
+
 /** set ourselves at this position, uses information from the parent but does not mutate the parent */
 setPosition(position: number): Cell {
 

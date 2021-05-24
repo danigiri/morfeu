@@ -17,7 +17,6 @@ describe('cell-model.class', () => {
 
 	});
 
-
 	it('child should return correct children', () => {
 
 		expect(model.child('xxx')).toBeUndefined();
@@ -40,6 +39,7 @@ describe('cell-model.class', () => {
 		expect(cm.getAttributesInCategory(undefined).length).toBe(0);	// no attributes without a category
 		expect(cm.getAttributesInCategory('X').length).toBe(2);
 		expect(cm.getAttributesInCategory('Y').length).toBe(2);
+	
 	});
 
 	it('should have the right category attributes', () => {
@@ -60,7 +60,6 @@ describe('cell-model.class', () => {
 
 	});
 
-
 	it('should validate regexs', () => {
 
 		const cm = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/data3');
@@ -74,7 +73,6 @@ describe('cell-model.class', () => {
 		expect(color.validates('12aacx')).toBeFalse;
 
 	});
-
 
 	it('should validate regexs', () => {
 
@@ -125,14 +123,15 @@ describe('cell-model.class', () => {
 
 	it('can only have links when', () =>  {
 
-		const types = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/types');
-		expect(types).toBeDefined();
-		expect(types.canHaveLinks).toBeTrue();
-
 		const stuff = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff');
 		expect(stuff).toBeDefined();
 		expect(stuff.canHaveLinks).toBeFalse();
 
+		const types = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/types');
+		expect(types).toBeDefined();
+		expect(types.canHaveLinks).toBeFalse();
+
+		expect(types.getAttribute('locator').canHaveLinks).toBeTrue();
 	});
 
 });

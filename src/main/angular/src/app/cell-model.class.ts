@@ -77,8 +77,8 @@ init() {
 		this.type_.regexCompiled = new RegExp(this.type_.regex);
 	}
 
-	this.canHaveLinks = this.presentation===CellModel.ATTR_LOCATOR_PRESENTATION 
-		|| this.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined;
+	this.canHaveLinks = this.presentation===CellModel.ATTR_LOCATOR_PRESENTATION;
+	//	|| this.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined;
 
 	
 }

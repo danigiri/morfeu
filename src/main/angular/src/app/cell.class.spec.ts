@@ -189,6 +189,23 @@ describe('cell.class', () => {
 		
 	});
 
+	it('should return links for cells with linked content', () => {
+
+		const uri = _typesPrefix+'/test(0)/row(1)/col(0)/stuff(0)';
+		const stuff = typesContent.findCellWithURI(uri);
+		expect(stuff).toBeDefined();
+		expect(stuff.getLinks()).toEqual([]);
+
+		console.log('FOOOOOOOOOOO')
+		const uri2 = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
+		const types = typesContent.findCellWithURI(uri2);
+		expect(types).toBeDefined();
+		expect(types.getLinks()).toEqual([]);
+		
+		expect(types.getAttribute('locator').getLinks()).toEqual([stuff]);
+		
+	});
+
 });
 
 /*
