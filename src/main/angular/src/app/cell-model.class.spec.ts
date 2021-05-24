@@ -122,6 +122,19 @@ describe('cell-model.class', () => {
 		
 	});
 
+
+	it('can only have links when', () =>  {
+
+		const types = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/types');
+		expect(types).toBeDefined();
+		expect(types.canHaveLinks).toBeTrue();
+
+		const stuff = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff');
+		expect(stuff).toBeDefined();
+		expect(stuff.canHaveLinks).toBeFalse();
+
+	});
+
 });
 
 /*

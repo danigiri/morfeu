@@ -130,7 +130,6 @@
 			<div style="background-color: lightgrey; border-radius: 5px;"><small>{{cell.cellModel.name}}</small></div>
 			<presentation *ngIf="!cellPresentationIsIMG()" [cell]="cell" ></presentation>
 		</div>
-		<links *ngIf="mayHaveLinks" [id]="cell.URI+'links'" [source]="cell" [x]="rect.x" [y]="rect.y"></links>
 		<!-- the position of the drop area is always where droped cells will go -->
 		<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 	</ng-container>

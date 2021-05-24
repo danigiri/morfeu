@@ -12,6 +12,7 @@ import { NameValue } from './utils/name-value.interface';
 import { CellLocator } from './utils/cell-locator.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
 import { VariableParser } from './utils/variable-parser.class';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 /**	Cell class, contains a unit of content, can be moved, adopted, cloned, serialised, deseralised, etc. */
 export class Cell extends BasicFamilyMember
@@ -22,6 +23,7 @@ private static readonly _NAME = "$_NAME";
 private static readonly _VALUE = "$_VALUE";
 private static readonly _ATTRIBUTES = "$_ATTRIBUTES";
 private static readonly POSITION_DELIMITER = "(";
+
 
 value?: string;					// current value of the cell
 attributes?: Cell[];			// attributes list, if any
@@ -83,7 +85,7 @@ getAttribute(name: string): Cell {
 
 
 /** we look for an attribute that has representation of COL-FIELD and return its value (1 as default) */
-columnFieldValue(): string {
+columnFieldValue(): string {	//TODO: this probably belongs in a controller
 
 	let value = "1";
 	if (this.attributes) {
@@ -96,6 +98,7 @@ columnFieldValue(): string {
 	return value;
 
 }
+
 
 /** @returns the list of possible values this cell can take, mostly useful for list-like stuff, undefined otherwise */
 getPossibleValues(): string[] {

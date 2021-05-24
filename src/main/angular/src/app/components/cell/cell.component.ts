@@ -51,7 +51,6 @@ activeReadonly = false;
 dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
-mayHaveLinks = false;			// true if the cell has active links to other cells
 info = false;
 rect: Rectangle;
 
@@ -156,28 +155,7 @@ ngOnInit() {
 }
 
 
-ngAfterViewInit() {
-//ngAfterViewChecked() {
-
-	// handling the links logic, first we create the wrapper of the rectangle from the native element reference
-	this.rect = new ElementRect(this.cellElement);
-//	Promise.resolve(null).then(() => 
-//	);
-// check if we may have active links from this cell or from any of it's children
-const model = this.cell.cellModel;
-if (model) {
-	// let's make sure we change it in the next cycle
-	//Promise.resolve(null).then(() => 
-	setTimeout(() =>  {
-	console.log('cell rect', this.cell.name, this.rect.toString());
-	this.mayHaveLinks = model.presentation===CellModel.ATTR_LOCATOR_PRESENTATION 
-	|| model.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined
-	}
-	,100);
-	//);
-	}
-		
-}
+ngAfterViewInit() {}
 
 
 /**  we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it */
