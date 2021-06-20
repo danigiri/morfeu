@@ -35,13 +35,10 @@ import { Arrow } from './arrow.class';
 /** Component to hold references between cells */
 export class LinksComponent extends EventListener implements AfterViewInit, OnChanges, OnInit {
 
-@Input() id: string;
-@Input() source: Cell;
-@Input() x: number;
-@Input() y: number;
+private arrows: Arrows = new Arrows();	// we are assuming this will get initialised before input sets
 
-links = new Map<Cell, Arrow>();	// destination cell, arrow
-arrows: Arrows = new Arrows();
+@Input() id: string;
+@Input() arrowsList: Arrow[] = this.arrows.list;	// default input, not supposed to be overriden
 
 
 ngOnInit() {
@@ -49,32 +46,17 @@ ngOnInit() {
 	console.debug('LinksComponent::ngOnInit() – pre register');
 	// we registger to events returing with the complete information so we can draw the arrows
 	this.register(this.events.service.of<CellLinkEvent>(CellLinkEvent)
-			.pipe(filter(link => link.source===this.source && link.destRect!==undefined))
-			.pipe(filter(link => !this.links.has(link.destination)))
-			.subscribe(link => this.addArrow(link.destRect, link.destination))
+			.pipe(
+				tap(link => console.debug(link, link.destRect!==undefined)),
+				filter(link => link.destRect!==undefined))
+			//.pipe(filter(link => !this.links.has(link.destination)))
+			.subscribe(link => this.addArrow(link.sourceRect, link.destRect))
 	);
 			
 }
 		
 		
-ngAfterViewInit() {
-			
-	// now we can draw the arrows, starting from the starting element to the cells, we send a number of events
-	// to get the linked components back
-	//console.debug('LinksComponent::ngAfterViewInit()');
-	let links: Cell[] = [];
-	// first we look for potential values in the cell
-	links = this.addLinks(this.source, links);
-	this.source.attributes?.forEach(a => this.addLinks(a, links));
-	// now we fire the appropriate events for all of them
-	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
-
-}
-
-	addLinks(source: Cell, links: Cell[]): Cell[] {
-		throw new Error('Method not implemented.');
-	}
-
+ngAfterViewInit() {}
 
 
 ngOnChanges(changes: SimpleChanges) {
@@ -110,18 +92,20 @@ maxY(): number {
 }
 
 
-private addArrow(destRect: Rectangle, destination: Cell) {
+private addArrow(source: Rectangle, destination: Rectangle) {
 	
+	console.log('HERE HERE (3) arrow gets added')
 	//console.log(new Error().stack);
 	// from the source element and dest element we can create an arrow
 	//console.log('source:', this.x, this.y,'dest', destRect);
-	const arrow = new Arrow(this.x, this.y, destRect.x, destRect.y);
+	//const arrow = ;
+	Promise.resolve(null).then(() => 
+		this.arrows.push(new Arrow(source.x, source.y, destination.x, destination.y))
+	);	// this will modify the SVG template state
+	/*
 	this.links.set(destination, arrow);
-	Promise.resolve(null).then(() => {
 		console.log('>>'+arrow);
-		this.arrows.push(arrow);
-	});	// this will modify the SVG template state
-	
+	*/
 }
 
 

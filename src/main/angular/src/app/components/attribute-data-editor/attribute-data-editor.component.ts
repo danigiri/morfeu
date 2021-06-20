@@ -58,7 +58,7 @@ ngOnInit() {
 
 	const pres = this.cellModel.presentation;
 	this.isBoolean = pres === CellModel.ATTR_BOOLEAN_PRESENTATION;
-	this.isList = pres === CellModel.ATTR_LIST_PRESENTATION || pres === CellModel.ATTR_LOCATOR_PRESENTATION;
+	this.isList = pres === CellModel.ATTR_LIST_PRESENTATION || pres === CellModel.ATTR_LINK_PRESENTATION;
 	this.isText = !this.isBoolean && !this.isList;
 
 	// if we have a value at the beginning

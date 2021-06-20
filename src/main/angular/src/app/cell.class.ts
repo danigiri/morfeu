@@ -122,7 +122,7 @@ findCellWithURI(uri: string): Cell {
 getLinks(): Cell[] {
 	
 	let links: Cell[] = [];
-	if (this.cellModel?.canHaveLinks && this.cellModel.valueLocator) {
+	if (this.cellModel?.canLink && this.cellModel.valueLocator) {
 		const root = this.getRootAncestor().asCell();
 		const locator = this.cellModel.valueLocator;
 		CellLocator.findCellsWithLocatorAndValue(root, locator, this.value).forEach(c => links.push(c));

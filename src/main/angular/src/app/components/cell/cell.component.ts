@@ -159,11 +159,11 @@ ngOnInit() {
 // we run any callbacks or logic that needs the full view 
 ngAfterViewInit() {
 
-	if (this.cell.cellModel?.canHaveLinks) {
+	if (this.cell.cellModel?.canLink || this.cell.cellModel?.attributesCanLink) {
 		// In theory, once the Promise runs we should have the complete element size, but in practice we do not
 		// so we put a timeout
 		//Promise.resolve(null).then(() => );
-		setTimeout(() => this.generateLinks(), 100);
+		setTimeout(() => this.generateLinks(), CellComponent._LINKS_TIMER);
 	}
 
 }
@@ -430,27 +430,33 @@ private generateLinks() {
 
 	let links: Cell[] = [];
 	const model = this.cell.cellModel;
-	if (model?.canHaveLinks) {
+	if (model?.canLink) {
 		this.cell.getLinks().forEach(link => links.push(link));
 	}
 	model
-		?.attributes
-		?.filter(cm => cm.canHaveLinks)
-		.map(cm => this.cell.getAttribute(cm.name))
-		.filter(a => a!==null)
-		.forEach(a => links.push(a));	
+	?.attributes
+	?.filter(cm => cm.canLink)
+	.map(cm => this.cell.getAttribute(cm.name))
+	.filter(a => a!==null)
+	.map(a => a.getLinks())
+	.flat() //for some reason not in es2020, so workaround-ing
+	//.reduce((acc, val) => acc.concat(val), [])
+	.forEach(a => links.push(a));	
 	
-
+	
+	console.log('HERE HERE (1) link generation', links)
 	const rect = new ElementRect(this.cellElement);
 	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.cell, link, rect)));
-
+	
 }
 
 
 // called when we receive a request to link to this cell, we bounce it back with the filled link event
 private linkToThisCell(link: CellLinkEvent): void {
 
+	console.log('HERE HERE (2) link gets destination')
 	link.destRect = new ElementRect(this.cellElement);
+
 	this.events.service.publish(link);
 
 }
