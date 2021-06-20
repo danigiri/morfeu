@@ -148,7 +148,7 @@ This will run unit tests and general integration tests (see next command for UI 
 
 To launch UI Selenium integration tests you can do:
 
-    mvn test failsafe:integration-test -Dit.test='*IntTest' -Dapp-url='http://localhost:3000/'
+    mvn test failsafe:integration-test -Dit.test='*UITest' -Dapp-url='http://localhost:3000/'
 
 A small number of frontend tests is also available, to launch them you can do:
 
