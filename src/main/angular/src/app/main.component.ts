@@ -52,7 +52,7 @@ import { RemoteEventService } from './services/remote-event.service';
 				<problem></problem>
 			</div>
 		</div>
-		<key-capture></key-capture>
+	<key-capture></key-capture>
 		<cell-editor></cell-editor>
 	`,
 	providers: [

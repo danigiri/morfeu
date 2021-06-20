@@ -132,6 +132,7 @@ describe('cell-model.class', () => {
 		expect(types.canHaveLinks).toBeFalse();
 
 		expect(types.getAttribute('locator').canHaveLinks).toBeTrue();
+		
 	});
 
 });
