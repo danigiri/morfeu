@@ -125,13 +125,13 @@ describe('cell-model.class', () => {
 
 		const stuff = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/stuff');
 		expect(stuff).toBeDefined();
-		expect(stuff.canHaveLinks).toBeFalse();
+		expect(stuff.canLink).toBeFalse();
 
 		const types = model.findCellModel('target/test-classes/test-resources/models/test-model.xsd/test/row/col/types');
 		expect(types).toBeDefined();
-		expect(types.canHaveLinks).toBeFalse();
+		expect(types.canLink).toBeFalse();
 
-		expect(types.getAttribute('locator').canHaveLinks).toBeTrue();
+		expect(types.getAttribute('locator').canLink).toBeTrue();
 		
 	});
 

@@ -22,7 +22,7 @@ public static readonly ATTR_TEXT_PRESENTATION = 'CELL';
 public static readonly ATTR_BOOLEAN_PRESENTATION = 'BOOLEAN';
 public static readonly ATTR_LIST_PRESENTATION = 'LIST';
 // presentation constants
-public static readonly ATTR_LOCATOR_PRESENTATION = 'VALUELOCATOR';
+public static readonly ATTR_LINK_PRESENTATION = 'VALUELOCATOR';
 
 attributes?: CellModel[];
 children: CellModel[];
@@ -30,7 +30,8 @@ isReference: boolean;
 referenceURI?: string;
 parent?: FamilyMember;
 order?: number;		// only relevant if our parent has ordered children
-canHaveLinks: boolean;
+canLink: boolean;
+attributesCanLink: boolean;
 
 // //// COMPONENT STUFF										////
 // to circumvent limitations of the angular tree, we establish a relationship with the cell model component //
@@ -77,9 +78,8 @@ init() {
 		this.type_.regexCompiled = new RegExp(this.type_.regex);
 	}
 
-	this.canHaveLinks = this.presentation===CellModel.ATTR_LOCATOR_PRESENTATION;
-	//	|| this.attributes?.find(a => a.presentation==CellModel.ATTR_LOCATOR_PRESENTATION)!==undefined;
-
+	this.canLink = this.presentation===CellModel.ATTR_LINK_PRESENTATION;
+	this.attributesCanLink = this.attributes?.find(a => a.presentation==CellModel.ATTR_LINK_PRESENTATION)!==undefined;
 	
 }
 
