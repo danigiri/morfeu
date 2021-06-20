@@ -20,6 +20,7 @@ export class EventService {
 private events$: Map<string, Subject<_Event>> = new Map<string, Subject<_Event>>();
 private eventCounter = 0;
 
+
 /** @param event publish this event */
 public publish(event: MorfeuEvent) {
 
@@ -28,6 +29,16 @@ public publish(event: MorfeuEvent) {
 	this.subject(k).next({ channel: k, data: event });
 	this.eventCounter++;
 
+}
+
+
+promiseToPublish(event: MorfeuEvent) {
+	Promise.resolve(null).then(() => {
+		const k = event.eventName;
+		//console.debug("\tSending event "+k+" -> ("+event.toString()+")");
+		this.subject(k).next({ channel: k, data: event });
+		this.eventCounter++;
+	});
 }
 
 
