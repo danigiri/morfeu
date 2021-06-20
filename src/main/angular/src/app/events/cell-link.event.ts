@@ -9,13 +9,18 @@ import { Rect } from '../utils/rect.class';
 export class CellLinkEvent extends MorfeuEvent {
 
 
-constructor(public source: Cell, public destination: Cell, public destRect?: Rect) {
+constructor(public source: Cell, public destination: Cell, public sourceRect?: Rect, public destRect?: Rect) {
 	super('CellLinkEvent');
 }
 
 
 public toString = (): string => {
-	return 'CellLinkEvent:{'+this.source.name+'->'+this.destination.name+(this.destRect ? this.destRect : '')+'}';
+
+	const sourceRect = this.sourceRect ? '('+this.sourceRect+')' : ''
+	const destRect = this.destRect ? '('+this.destRect+')' : ''
+
+	return `CellLinkEvent:{${this.source.name}${sourceRect} -> ${this.destination.name}${destRect}`;
+
 }
 
 

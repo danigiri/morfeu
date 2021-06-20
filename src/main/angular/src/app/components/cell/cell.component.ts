@@ -26,6 +26,7 @@ import { CellSelectionClearEvent } from 'app/events/cell-selection-clear.event';
 import { CellModelActivatedEvent } from 'app/events/cell-model-activated.event';
 import { InfoModeEvent } from 'app/events/info-mode.event';
 import { EventService } from 'app/services/event.service';
+import { CellLocator } from 'app/utils/cell-locator.class';
 
 @Component({
 	selector: 'cell',
@@ -38,6 +39,7 @@ import { EventService } from 'app/services/event.service';
 export class CellComponent extends SelectableWidget implements OnInit, AfterViewInit {
 
 private static readonly _MAX_PRESENTATION_SIZE = 1024;	// used to detect issues with too long presentation
+private static readonly _LINKS_TIMER = 100;				// number of milliseconds to wait until displaying links
 
 @Input() parent?: FamilyMember;	// may not have a parent if we are a snippet
 @Input() cell: Cell;
@@ -154,8 +156,17 @@ ngOnInit() {
 
 }
 
+// we run any callbacks or logic that needs the full view 
+ngAfterViewInit() {
 
-ngAfterViewInit() {}
+	if (this.cell.cellModel?.canHaveLinks) {
+		// In theory, once the Promise runs we should have the complete element size, but in practice we do not
+		// so we put a timeout
+		//Promise.resolve(null).then(() => );
+		setTimeout(() => this.generateLinks(), 100);
+	}
+
+}
 
 
 /**  we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it */
@@ -413,7 +424,30 @@ private remove() {
 
 }
 
-/** called when we receive a request to link to this cell, we bounce it back with the filled link event */
+
+// we call it to generate links *from* this cell, given the value can link or any of its attributes can link
+private generateLinks() {
+
+	let links: Cell[] = [];
+	const model = this.cell.cellModel;
+	if (model?.canHaveLinks) {
+		this.cell.getLinks().forEach(link => links.push(link));
+	}
+	model
+		?.attributes
+		?.filter(cm => cm.canHaveLinks)
+		.map(cm => this.cell.getAttribute(cm.name))
+		.filter(a => a!==null)
+		.forEach(a => links.push(a));	
+	
+
+	const rect = new ElementRect(this.cellElement);
+	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.cell, link, rect)));
+
+}
+
+
+// called when we receive a request to link to this cell, we bounce it back with the filled link event
 private linkToThisCell(link: CellLinkEvent): void {
 
 	link.destRect = new ElementRect(this.cellElement);

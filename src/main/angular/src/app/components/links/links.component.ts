@@ -105,18 +105,6 @@ maxY(): number {
 }
 
 
-private addLinks(c: Cell, links: Cell[]): Cell[] {
-	
-	if (c.cellModel?.presentation===CellModel.ATTR_LOCATOR_PRESENTATION) {
-		const root = c.getRootAncestor().asCell();
-		CellLocator.findCellsWithLocatorAndValue(root, c.cellModel.valueLocator, c.value).forEach(c => links.push(c));
-	}
-	
-	return links;
-	
-}
-
-
 private addArrow(destRect: Rectangle, destination: Cell) {
 	
 	//console.log(new Error().stack);
