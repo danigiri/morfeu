@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSType;
 
@@ -23,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
-
+import cat.calidos.morfeu.model.injection.TypeModule;
 
 /**
 * @author daniel giribet

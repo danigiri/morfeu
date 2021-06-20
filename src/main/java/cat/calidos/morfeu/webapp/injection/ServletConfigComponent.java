@@ -6,17 +6,27 @@ import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 
+import dagger.BindsInstance;
 import dagger.Component;
 
 /**
 * @author daniel giribet
 *//////////////////////////////////////////////////////////////////////////////
-@Component(modules = ServletConfigModule.class, dependencies = ServletConfig.class)
+@Component(modules = ServletConfigModule.class)
 public interface ServletConfigComponent {
 
 /** @return merge of configuration properties, from servlet to java system, and env vars (from less to more priority)
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Properties getProperties();
+
+@Component.Builder
+interface Builder {
+
+	@BindsInstance Builder with(ServletConfig c);
+
+	ServletConfigComponent build();
+
+}
 
 }
 

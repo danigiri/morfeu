@@ -3,15 +3,13 @@ package cat.calidos.morfeu.view.injection;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
-import cat.calidos.morfeu.problems.MorfeuRuntimeException;
-import cat.calidos.morfeu.problems.ParsingException;
+
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.utils.injection.DaggerSQLComponent;
 import cat.calidos.morfeu.utils.injection.SQLComponent;
