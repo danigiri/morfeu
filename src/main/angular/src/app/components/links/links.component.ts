@@ -5,7 +5,7 @@ import { filter, tap } from 'rxjs/operators';
 
 
 import { Arrows } from './arrows.class';
-import { Cell } from 'app/cell.class';
+import { Cell } from 'app/cell.class'; 
 import { Rectangle } from 'app/utils/rectangle.interface';
 
 import { CellLinkEvent } from 'app/events/cell-link.event';
@@ -70,6 +70,11 @@ ngAfterViewInit() {
 	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.source, link)));
 
 }
+
+	addLinks(source: Cell, links: Cell[]): Cell[] {
+		throw new Error('Method not implemented.');
+	}
+
 
 
 ngOnChanges(changes: SimpleChanges) {

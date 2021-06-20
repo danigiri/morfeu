@@ -137,8 +137,15 @@ export abstract class AbstractComponent {
             //
             if (event.dataTransfer != null) {
                 event.dataTransfer.setData('text', '');
-                // Change drag effect
-                event.dataTransfer.effectAllowed = this.effectAllowed || this._config.dragEffect.name;
+				// Change drag effect
+				// DANI: changing to type union as before it was a generic string operation
+				//event.dataTransfer.effectAllowed = this.effectAllowed || this._config.dragEffect.name;
+				if (this.effectAllowed) {
+					event.dataTransfer.effectAllowed = this.effectAllowed as ("copy" | "link" | "move" | "none" 
+													| "copyLink" | "copyMove" | "linkMove" | "all" | "uninitialized");
+				} else {
+					event.dataTransfer.effectAllowed = this._config.dragEffect.name;
+				}
                 // Change drag image
                 if (isPresent(this.dragImage)) {
                     if (isString(this.dragImage)) {

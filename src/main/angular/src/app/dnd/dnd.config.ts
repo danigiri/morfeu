@@ -11,7 +11,8 @@ export class DataTransferEffect {
     static MOVE = new DataTransferEffect('move');
     static NONE = new DataTransferEffect('none');
 
-    constructor(public name: string) { }
+	// DANI: changed this from string as typescript does not allow setting strings to type unions anymore
+    constructor(public name: "copy" | "link" | "move" | "none") { }
 }
 
 export class DragImage {
