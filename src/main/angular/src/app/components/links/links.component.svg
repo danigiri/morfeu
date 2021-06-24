@@ -5,6 +5,9 @@
 	fill="#F00"
 	strokeWidth="2"
 	[id]="id"
+	fill="green"
+	[attr.width]="maxX()"
+	[attr.height]="maxY()"
 	>
 	<ng-container *ngFor="let a of arrowsList">
 		<svg:circle [id]="id+'circle'" attr.cx="{{a.sx}}" attr.cy="{{a.sy}}" r="4"></svg:circle>
@@ -13,4 +16,3 @@
 	</ng-container>
 </svg:svg>
 </div>
-{{viewBox()}},{{style()}}

@@ -47,7 +47,7 @@ ngOnInit() {
 	// we registger to events returing with the complete information so we can draw the arrows
 	this.register(this.events.service.of<CellLinkEvent>(CellLinkEvent)
 			.pipe(
-				tap(link => console.debug(link, link.destRect!==undefined)),
+//				tap(link => console.debug(link, link.destRect!==undefined)),
 				filter(link => link.destRect!==undefined))
 			//.pipe(filter(link => !this.links.has(link.destination)))
 			.subscribe(link => this.addArrow(link.sourceRect, link.destRect))
@@ -94,10 +94,9 @@ maxY(): number {
 
 private addArrow(source: Rectangle, destination: Rectangle) {
 	
-	console.log('HERE HERE (3) arrow gets added')
 	//console.log(new Error().stack);
 	// from the source element and dest element we can create an arrow
-	//console.log('source:', this.x, this.y,'dest', destRect);
+	console.log('arrow:', source.x, source.y,'-->', destination.x, destination.y);
 	//const arrow = ;
 	Promise.resolve(null).then(() => 
 		this.arrows.push(new Arrow(source.x, source.y, destination.x, destination.y))

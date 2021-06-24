@@ -443,8 +443,6 @@ private generateLinks() {
 	//.reduce((acc, val) => acc.concat(val), [])
 	.forEach(a => links.push(a));	
 	
-	
-	console.log('HERE HERE (1) link generation', links)
 	const rect = new ElementRect(this.cellElement);
 	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.cell, link, rect)));
 	
@@ -454,7 +452,6 @@ private generateLinks() {
 // called when we receive a request to link to this cell, we bounce it back with the filled link event
 private linkToThisCell(link: CellLinkEvent): void {
 
-	console.log('HERE HERE (2) link gets destination')
 	link.destRect = new ElementRect(this.cellElement);
 
 	this.events.service.publish(link);
