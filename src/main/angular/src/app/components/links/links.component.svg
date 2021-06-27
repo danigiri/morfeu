@@ -3,7 +3,7 @@
 	[attr.viewBox]="viewBox()"
 	stroke="#F00"
 	fill="#F00"
-	strokeWidth="2"
+	strokeWidth="1"
 	[id]="id"
 	fill="green"
 	[attr.width]="maxX()"
@@ -11,7 +11,7 @@
 	>
 	<ng-container *ngFor="let a of arrowsList">
 		<svg:circle [id]="id+'circle'" attr.cx="{{a.sx}}" attr.cy="{{a.sy}}" r="4"></svg:circle>
-		<svg:path stroke-width="2" [attr.d]="a.path" fill="none"></svg:path>
+		<svg:path stroke-width="4" [attr.d]="a.path" fill="none"></svg:path>
 		<svg:polygon [id]="id+'poly'" points="0,-6 12,0, 0,6" [attr.transform]="a.transform"></svg:polygon>
 	</ng-container>
 </svg:svg>

@@ -1,11 +1,17 @@
 // RECT . CLASS . TS
 
+import { Point } from 'app/utils/point.class';
 import { Rectangle } from './rectangle.interface';
 
 export class Rect implements Rectangle {
 
 
 constructor(public x: number, public y: number, public right: number, public bottom: number) {}
+
+
+get origin(): Point {
+	return new Point(this.x, this.y);
+}
 
 
 get width(): number {
@@ -18,9 +24,48 @@ get height(): number {
 }
 
 
+get center(): Point {
+	return Rect.centerFrom(this);
+}
+
+
+get rightUp(): Point {
+	return Rect.rightUpFrom(this);
+}
+
+
+get rightDown(): Point {
+	return Rect.rightDownFrom(this);
+}
+
+
+get leftDown(): Point {
+	return Rect.leftDownFrom(this);
+}
+
 
 public toString = (): string => { 
 	return '{['+this.x+','+this.y+'],['+this.right+','+this.bottom+']}';
+}
+
+
+static centerFrom(r: Rectangle): Point {
+	return new Point((r.width/2)+r.x, (r.height/2)+r.y);
+}
+
+
+static rightUpFrom(r: Rectangle): Point {
+	return new Point(r.right, r.y);
+}
+
+
+static rightDownFrom(r: Rectangle): Point {
+	return new Point(r.right, r.bottom);
+}
+
+
+static leftDownFrom(r: Rectangle): Point {
+	return new Point(r.x, r.bottom);
 }
 
 

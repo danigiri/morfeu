@@ -4,6 +4,16 @@ import { Rect } from './rect.class';
 
 describe('rect.class', () => {
 
+	it('should have correct points', () => {
+		
+		const rect = new Rect(1, 1, 6, 7);
+		expect(rect).toBeDefined();
+		expect(rect.origin.x).toBe(1);
+		expect(rect.origin.y).toBe(1);
+
+	});
+
+
 	it('should get correct width and height', () => {
 
 		const rect = new Rect(1, 1, 6, 7);
@@ -12,6 +22,24 @@ describe('rect.class', () => {
 		expect(rect.height).toBe(6);
 
 	});
+
+	it('should have the correct points', () => {
+
+		const rect = new Rect(1, 1, 6, 8);
+		expect(rect).toBeDefined();
+		expect(rect.origin.x).toBe(1);
+		expect(rect.origin.y).toBe(1);
+		expect(rect.center.x).toBe(3.5);
+		expect(rect.center.y).toBe(4.5);
+		expect(rect.rightUp.x).toBe(6);
+		expect(rect.rightUp.y).toBe(1);
+		expect(rect.rightDown.x).toBe(6);
+		expect(rect.rightDown.y).toBe(8);
+		expect(rect.leftDown.x).toBe(1);
+		expect(rect.leftDown.y).toBe(8);
+	});
+
+	
 
 });
 

@@ -1,13 +1,34 @@
 // RECTANGLE . INTERFACE . TS
 
+import { Point } from 'app/utils/point.class';
+
+/**
+ * 			origin(x,y)				righup(right,y)
+ * 				+–––––––––––––––––––––––¬
+ * 				|						|
+ * 				|						|
+ * 				|						|
+ *				|		center			|
+ * 				|						|
+ * 				|						|
+ * 				|						|
+ *				+–––––––––––––––––––––––+ 
+ * 			leftdown(x,bottom)		rightdown(right, bottom)
+ * 
+ */
 export interface Rectangle {
 
-x: number;
-y: number;
-right: number;
-bottom: number;
-width: number;
-height: number;
+	x: number;
+	y: number;
+	right: number;
+	bottom: number;
+	width: number;
+	height: number;
+	origin: Point;
+	center: Point;
+	rightUp: Point;
+	rightDown: Point;
+	leftDown: Point;
 
 }
 
