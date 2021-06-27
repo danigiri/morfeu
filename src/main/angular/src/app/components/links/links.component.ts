@@ -13,6 +13,7 @@ import { EventListener } from 'app/events/event-listener.class';
 import { CellModel } from 'app/cell-model.class';
 import { CellLocator } from 'app/utils/cell-locator.class';
 import { Arrow } from './arrow.class';
+import { Point, Quadrant } from 'app/utils/point.class';
 
 @Component({
 	selector: 'links',
@@ -96,10 +97,30 @@ private addArrow(source: Rectangle, destination: Rectangle) {
 	
 	//console.log(new Error().stack);
 	// from the source element and dest element we can create an arrow
-	console.log('arrow:', source.x, source.y,'-->', destination.x, destination.y);
+	console.log('arrow:', source.center.x, source.center.y,'-->', destination.center.x, destination.center.y);
+	let closest: Point;
+	switch (source.center.quadrantOf(destination.center)) {
+		case Quadrant.LU:
+			console.debug('aaaaa')
+			closest = destination.rightDown;
+			break;
+		case Quadrant.RU:
+			console.debug('bbbbb')
+			closest = destination.leftDown;
+			break;
+		case Quadrant.RD:
+			console.debug('ccccc')
+			closest = destination.origin;
+			break;
+		case Quadrant.LD:
+			console.debug('ddddd')
+			closest = destination.rightUp;
+			break;
+	
+		}
 	//const arrow = ;
 	Promise.resolve(null).then(() => 
-		this.arrows.push(new Arrow(source.x, source.y, destination.x, destination.y))
+		this.arrows.push(new Arrow(source.center.x, source.center.y, closest.x, closest.y))
 	);	// this will modify the SVG template state
 	/*
 	this.links.set(destination, arrow);

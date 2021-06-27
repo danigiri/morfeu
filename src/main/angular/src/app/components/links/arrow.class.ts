@@ -4,9 +4,9 @@ import { getArrow } from 'perfect-arrows';
 /** Arrow class that takes start and end coordinates */
 export class Arrow {
 
+private static readonly options = {bow: 0.1};
 public static readonly PI180 = 180 / Math.PI;
-
-public pi180 = Arrow.PI180;	// so we can access it from the template
+public readonly pi180 = Arrow.PI180;	// so we can access it from the template
 
 public cx: number;
 public cy: number;
@@ -23,7 +23,7 @@ public path: string;
  */
 constructor(public sx: number, public sy: number, public ex: number, public ey: number) {
 
-	const [sx_, sy_, cx_, cy_, ex_, ey_, ae_, as_, ec_] = getArrow(sx, sy, ex, ey);
+	const [sx_, sy_, cx_, cy_, ex_, ey_, ae_, as_, ec_] = getArrow(sx, sy, ex, ey, Arrow.options);
 	this.cx = cx_;
 	this.cy = cy_;
 	this.ex = ex_;
