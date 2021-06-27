@@ -8,16 +8,17 @@ constructor(public x: number, public y: number) {}
 
 quadrantOf(p: Point) {
 
+	// notice the additional use of equal for two quadrants, to avoid edge cases
 	if (p.x===this.x && p.y===this.y) {
 		return Quadrant.EQ;
 	}
-	if (p.x<this.x && p.y>this.y) {
+	if (p.x<=this.x && p.y<=this.y) {
 		return Quadrant.LU;
 	}
-	if (p.x>this.x && p.y>this.y) {
+	if (p.x>this.x && p.y<this.y) {
 		return Quadrant.RU;
 	}
-	if (p.x>this.x && p.y<this.y) {
+	if (p.x>=this.x && p.y>=this.y) {
 		return Quadrant.RD;
 	}
 

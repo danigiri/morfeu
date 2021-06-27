@@ -20,16 +20,16 @@ describe('point.class', () => {
 		const p = new Point(0, 0);
 		expect(p.quadrantOf(p)).toBe(Quadrant.EQ);
 
-		const p0 = new Point(-1, 1);
+		const p0 = new Point(-1, -1);
 		expect(p.quadrantOf(p0)).toBe(Quadrant.LU);
 
-		const p1 = new Point(1, 1);
+		const p1 = new Point(1, -1);
 		expect(p.quadrantOf(p1)).toBe(Quadrant.RU);
 
-		const p2 = new Point(1,-1);
+		const p2 = new Point(1, 1);
 		expect(p.quadrantOf(p2)).toBe(Quadrant.RD);
 
-		const p3 = new Point(-1,-1);
+		const p3 = new Point(-1, 1);
 		expect(p.quadrantOf(p3)).toBe(Quadrant.LD);
 
 	});
