@@ -3,10 +3,33 @@
 import { Point } from 'app/utils/point.class';
 import { Rectangle } from './rectangle.interface';
 
-export class Rect implements Rectangle {
 
 
-constructor(public x: number, public y: number, public right: number, public bottom: number) {}
+/**
+ * 		origin(x,y)					centerup(center.x,y)				rightup(right,y)
+ * 				+–––––––––––––––––––––––-––––––------––-–––----–––––––––––––¬
+ * 				|															|
+ * 				|															|
+ * 				|															|
+ * 				|															|
+ * 				|															|
+ *		leftcenter(x,center.y)				center							|	rightcenter(right, center.x)
+ * 				|															|
+ * 				|															|
+ * 				|															|
+ * 				|															|
+ * 				|															|
+ *				+––––––––––––––––––––––--–––––––––––––––––––––––––––––––––––+ 
+ * 		leftdown(x,bottom)			centerdown(center.x,bottom)			rightdown(right, bottom)
+ * 
+ */
+
+export abstract class Rect {
+
+abstract get x(): number;
+abstract get y(): number;
+abstract get right(): number;
+abstract get bottom(): number;
 
 
 get origin(): Point {
@@ -25,47 +48,47 @@ get height(): number {
 
 
 get center(): Point {
-	return Rect.centerFrom(this);
+	return new Point((this.width/2)+this.x, (this.height/2)+this.y);
+}
+
+
+get centerUp(): Point {
+	return new Point(this.center.x, this.y);
 }
 
 
 get rightUp(): Point {
-	return Rect.rightUpFrom(this);
+	return new Point(this.right, this.y);
+}
+
+
+get rightCenter(): Point {
+	return new Point(this.right, this.center.y);
 }
 
 
 get rightDown(): Point {
-	return Rect.rightDownFrom(this);
+	return new Point(this.right, this..bottom);
+}
+
+
+get centerDown(): Point {
+	return new Point(this.center.x, this.bottom);
 }
 
 
 get leftDown(): Point {
-	return Rect.leftDownFrom(this);
+	return new Point(this.x, this.bottom);
+}
+
+
+get leftCenter(): Point {
+	return new Point(this.x, this.center.y);
 }
 
 
 public toString = (): string => { 
 	return '{['+this.x+','+this.y+'],['+this.right+','+this.bottom+']}';
-}
-
-
-static centerFrom(r: Rectangle): Point {
-	return new Point((r.width/2)+r.x, (r.height/2)+r.y);
-}
-
-
-static rightUpFrom(r: Rectangle): Point {
-	return new Point(r.right, r.y);
-}
-
-
-static rightDownFrom(r: Rectangle): Point {
-	return new Point(r.right, r.bottom);
-}
-
-
-static leftDownFrom(r: Rectangle): Point {
-	return new Point(r.x, r.bottom);
 }
 
 

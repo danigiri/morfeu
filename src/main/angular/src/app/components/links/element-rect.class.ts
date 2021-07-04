@@ -4,13 +4,14 @@ import { ElementRef } from '@angular/core';
 
 import { Point } from 'app/utils/point.class';
 import { Rect } from 'app/utils/rect.class';
-import { Rectangle } from 'app/utils/rectangle.interface';
 
 /** This class encapsulates a native element into a rectangle class, holds no additional state  */
-export class ElementRect  implements Rectangle {
+export class ElementRect extends Rect {
 
 
-public constructor(public e: ElementRef) {}
+public constructor(public e: ElementRef) {
+	super();
+}
 
 
 get origin(): Point {
@@ -24,9 +25,7 @@ get x(): number {
 
 
 get y(): number {
-
 	return  this.e.nativeElement.getBoundingClientRect().y + document.documentElement.scrollTop;
-
 }
 
 
@@ -49,26 +48,6 @@ get width(): number {
 
 get height(): number {
 	return this.bottom - this.y;
-}
-
-
-get center(): Point {
-	return Rect.centerFrom(this);
-}
-
-
-get rightUp(): Point {
-	return Rect.rightUpFrom(this);
-}
-
-
-get rightDown(): Point {
-	return Rect.rightDownFrom(this);
-}
-
-
-get leftDown(): Point {
-	return Rect.leftDownFrom(this);
 }
 
 
