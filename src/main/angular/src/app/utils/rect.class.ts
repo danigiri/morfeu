@@ -1,6 +1,7 @@
 // RECT . CLASS . TS
 
-import { Point } from 'app/utils/point.class';
+import { Point } from './point.class';
+import { Vector2D } from './vector-2d.class';
 
 /**
  * 		origin(x,y)					centerup(center.x,y)				rightup(right,y)
@@ -83,9 +84,17 @@ get leftCenter(): Point {
 }
 
 
+/** @returns a best effort fast implementation of a vector joining this rect to the parameter rect
+*/
+public fastVectorTo(r: Rect): Vector2D {
+	return undefined;
+}
+
+
 public toString = (): string => { 
 	return '{['+this.x+','+this.y+'],['+this.right+','+this.bottom+']}';
 }
+
 
 
 }

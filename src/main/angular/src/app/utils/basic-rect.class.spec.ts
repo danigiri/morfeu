@@ -40,6 +40,11 @@ describe('rect.class', () => {
 
 	});
 
+	it('should return a correct vector between to rects', () => {}
+	
+	);
+
+
 });
 
 /*
