@@ -1,7 +1,16 @@
 // BASIC - RECT . CLASS . TS
 
+import { Rect } from 'app/utils/rect.class';
+
+export class BasicRect extends Rect {
+
+	
+public constructor(public x: number, public y: number, public right: number, public bottom: number) {
+	super();
+}
 
 
+}
 
 /*
  *	  Copyright 2021 Daniel Giribet

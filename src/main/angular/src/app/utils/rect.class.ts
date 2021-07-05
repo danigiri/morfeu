@@ -1,9 +1,6 @@
 // RECT . CLASS . TS
 
 import { Point } from 'app/utils/point.class';
-import { Rectangle } from './rectangle.interface';
-
-
 
 /**
  * 		origin(x,y)					centerup(center.x,y)				rightup(right,y)
@@ -23,7 +20,6 @@ import { Rectangle } from './rectangle.interface';
  * 		leftdown(x,bottom)			centerdown(center.x,bottom)			rightdown(right, bottom)
  * 
  */
-
 export abstract class Rect {
 
 abstract get x(): number;
@@ -68,7 +64,7 @@ get rightCenter(): Point {
 
 
 get rightDown(): Point {
-	return new Point(this.right, this..bottom);
+	return new Point(this.right, this.bottom);
 }
 
 
@@ -83,7 +79,7 @@ get leftDown(): Point {
 
 
 get leftCenter(): Point {
-	return new Point(this.x, this.center.y);
+	return new Point(this.x, this.center.y);71
 }
 
 

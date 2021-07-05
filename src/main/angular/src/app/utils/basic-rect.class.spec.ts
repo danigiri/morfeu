@@ -1,12 +1,12 @@
-// RECT . CLASS . SPEC . TS
+// BASIC-RECT . CLASS . SPEC . TS
 
-import { Rect } from './rect.class';
+import { BasicRect } from './basic-rect.class';
 
 describe('rect.class', () => {
 
 	it('should have correct points', () => {
 		
-		const rect = new Rect(1, 1, 6, 7);
+		const rect = new BasicRect(1, 1, 6, 7);
 		expect(rect).toBeDefined();
 		expect(rect.origin.x).toBe(1);
 		expect(rect.origin.y).toBe(1);
@@ -16,7 +16,7 @@ describe('rect.class', () => {
 
 	it('should get correct width and height', () => {
 
-		const rect = new Rect(1, 1, 6, 7);
+		const rect = new BasicRect(1, 1, 6, 7);
 		expect(rect).toBeDefined();
 		expect(rect.width).toBe(5);
 		expect(rect.height).toBe(6);
@@ -25,7 +25,7 @@ describe('rect.class', () => {
 
 	it('should have the correct points', () => {
 
-		const rect = new Rect(1, 1, 6, 8);
+		const rect = new BasicRect(1, 1, 6, 8);
 		expect(rect).toBeDefined();
 		expect(rect.origin.x).toBe(1);
 		expect(rect.origin.y).toBe(1);
@@ -37,9 +37,8 @@ describe('rect.class', () => {
 		expect(rect.rightDown.y).toBe(8);
 		expect(rect.leftDown.x).toBe(1);
 		expect(rect.leftDown.y).toBe(8);
-	});
 
-	
+	});
 
 });
 
