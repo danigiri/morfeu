@@ -1,0 +1,21 @@
+<li *ngIf="isFromModel || (isFromCell && hasValue_())"
+	class="attribute-data attribute-data-info list-group-item"
+	[class.attribute-data-boolean] = "isBoolean"
+	[class.list-group-item-secondary]="isFromModel"
+	[attr._index]="index"
+>
+	<span class="font-weight-bold attribute-data-name"
+		[class.attribute-data-identifier]="isIdentifier()"
+	>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:</span>
+	<ng-container  *ngIf="hasValue_()" [ngSwitch]="true">
+		<ng-container *ngSwitchCase="!isBoolean">
+			<span class="attribute-data-value">{{getValue()}}</span>
+		</ng-container>
+		<ng-container *ngSwitchCase="isBoolean">
+			<span *ngIf="getValue()==='true'"> ✅ <small>true</small></span>
+			<span *ngIf="getValue()!=='true'"> ❌ <small>false</small></span>
+			<span class="attribute-data-value d-none">{{getValue()}}</span>
+		</ng-container>
+	</ng-container>
+	<span class="text-muted attribute-data-type-name float-right">({{cellModel.type_.name}})</span>
+</li>

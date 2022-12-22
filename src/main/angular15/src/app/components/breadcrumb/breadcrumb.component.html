@@ -1,0 +1,21 @@
+<small *ngIf="visible">
+	<nav id="breadcrumb_" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li *ngIf="isFragment" class="breadcrumb-item">
+				<button id="breadcrumb-fragment-back" 
+					type="button" 
+					class="btn btn-light btn-sm" 
+					(click)="fragmentBack()">«««</button>
+			</li>
+			<li *ngFor="let e of uriElements" 
+				class="breadcrumb-item breadcrumb-element" 
+				aria-current="e"
+			>{{e}}</li>
+			<li *ngIf="name" 
+				id="breadcrumb-active-name"
+				class="breadcrumb-item breadcrumb-element"
+				aria-current="name"><strong>{{name}}</strong></li>
+			<li lass="breadcrumb-item">&nbsp;</li>	<!-- to always have the same height -->
+		</ol>
+	</nav>
+</small>

@@ -1,0 +1,68 @@
+<div class="attribute-data-editor"
+	[class.attribute-data]="isPresent()"
+	[class.attribute-not-present]="!isPresent()"
+	[class.attribute-data-boolean] = "isBoolean"
+	[class.attribute-data-list] = "isList"
+	[attr._index]="index"
+>
+	<div *ngIf="isPresent()" class="form-group">
+		<label 	class="attribute-data-name"
+				for="{{cellModel.name}}"
+				[class.attribute-data-editor-identifier]="parentCell.cellModel.identifier===cellModel"
+		>{{cellModel.name}}<ng-container *ngIf="cellModel.minOccurs==1">*</ng-container>:&nbsp;
+		<ng-container *ngIf="info">isText:{{isText}},isBoolean:{{isBoolean}},isList:{{isList}}</ng-container>
+		</label>
+		<ng-container [ngSwitch]="true">
+			<ng-container *ngSwitchCase="isText">
+				<input 	type="text"
+						id="{{cellModel.name}}"
+						class="attribute-data-value form-control form-control-sm"
+						attr.aria-label="{{cellModel.name}}"
+						attr.aria-describedby="{{cellModel.desc}}"
+						[(ngModel)]="this.value"
+						(change)="modified($event)"
+						(input)="modified($event)"
+				/>
+				<small *ngIf="!validates" class="form-text attribute-data-validation-warning"
+				>{{validationWarning}}</small>
+			</ng-container>
+			<ng-container *ngSwitchCase="isBoolean">
+				<input 	type="checkbox"
+						id="{{cellModel.name}}"
+						class="attribute-data-value form-control form-control-sm"
+						attr.aria-label="{{cellModel.name}}"
+						attr.aria-describedby="{{cellModel.desc}}"
+						[(ngModel)]="this.booleanValue"
+						(change)="modified($event)"
+						(input)="modified($event)"
+						[checked]="this.booleanValue"
+				/>
+			</ng-container>
+			<ng-container *ngSwitchCase="isList">
+				<select id="{{cellModel.name}}"
+						class="form-control form-control-sm attribute-data-value"
+						attr.aria-label="{{cellModel.name}}"
+						attr.aria-describedby="{{cellModel.desc}}"
+						[(ngModel)]="this.value"
+						(change)="modified($event)"
+				>
+					<option	*ngFor="let o of possibleValues" [selected]="o===this.value">{{o}}</option>
+				</select>
+			</ng-container>
+		</ng-container>
+		<img *ngIf="cellModel.minOccurs==0"
+				class="btn float-right attribute-data-delete"
+				src="assets/images/open-iconic/circle-x.svg"
+				(click)="delete()"
+		/>
+	</div>
+	<div *ngIf="!isPresent()" class="list-group-item">
+		<small class="attribute-data-name">{{cellModel.name}}</small>
+		<span class="badge float-right">
+			<img class="btn float-right attribute-data-add"
+				src="assets/images/open-iconic/plus.svg"
+				(click)="add()"
+			/>
+		</span>
+	</div>
+</div>
