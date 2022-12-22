@@ -88,7 +88,6 @@ it('should handle min and max more cases', () => {
 it('should handle min and max pointing in the other direction', () => {
 
 	let arrows = new Arrows();
-	console.log('foo');
 	const a0 = new Arrow (1.0, 2.0, 0.0, 0.0);
 	expect(arrows.push(a0)).toBeTrue();
 	expect(arrows.minX).toBe(0.0);

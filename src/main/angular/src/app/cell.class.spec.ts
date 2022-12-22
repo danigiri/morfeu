@@ -196,7 +196,6 @@ describe('cell.class', () => {
 		expect(stuff).toBeDefined();
 		expect(stuff.getLinks()).toEqual([]);
 
-		console.log('FOOOOOOOOOOO')
 		const uri2 = _typesPrefix+'/test(0)/row(2)/col(0)/types(0)';
 		const types = typesContent.findCellWithURI(uri2);
 		expect(types).toBeDefined();
