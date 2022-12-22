@@ -4,7 +4,7 @@
 
 import {ChangeDetectorRef} from '@angular/core';
 import {Directive, Input, Output, EventEmitter, ElementRef} from '@angular/core';
-import {FormArray} from '@angular/forms';
+import {UntypedFormArray} from '@angular/forms';
 
 import {AbstractComponent, AbstractHandleComponent} from './abstract.component';
 import {DragDropConfig} from './dnd.config';
@@ -17,12 +17,12 @@ export class SortableContainer extends AbstractComponent {
         this.dragEnabled = !!value;
     }
 
-    private _sortableData: Array<any>|FormArray = [];
+    private _sortableData: Array<any>|UntypedFormArray = [];
     private sortableHandler: SortableFormArrayHandler|SortableArrayHandler;
 
-    @Input() set sortableData(sortableData: Array<any>|FormArray) {
+    @Input() set sortableData(sortableData: Array<any>|UntypedFormArray) {
         this._sortableData = sortableData;
-        if (sortableData instanceof FormArray) {
+        if (sortableData instanceof UntypedFormArray) {
             this.sortableHandler = new SortableFormArrayHandler();
         } else {
             this.sortableHandler = new SortableArrayHandler();
@@ -31,7 +31,7 @@ export class SortableContainer extends AbstractComponent {
         this.dropEnabled = !!this._sortableData;
         // console.log("collection is changed, drop enabled: " + this.dropEnabled);
     }
-    get sortableData(): Array<any>|FormArray {
+    get sortableData(): Array<any>|UntypedFormArray {
         return this._sortableData;
     }
 
