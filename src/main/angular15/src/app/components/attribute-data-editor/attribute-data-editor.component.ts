@@ -118,7 +118,7 @@ add() {
 }
 
 
-modified(e) {
+modified(e: any) {
 
 	const attr = this.parentCell.getAttribute(this.cellModel.name);
 	const valid = this.updateValidity(attr.value);

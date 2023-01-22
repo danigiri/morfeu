@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+			"allowedCommonJsDependencies": ["ace-builds"],
             "outputPath": "dist/morfeu",
             "index": "src/index.html",
             "main": "src/main.ts",

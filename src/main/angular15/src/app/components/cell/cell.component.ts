@@ -3,30 +3,30 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { filter } from 'rxjs/operators';
 
-import { FamilyMember } from 'app/family-member.interface';
-import { Cell } from 'app/cell.class';
-import { CellModel } from 'app/cell-model.class';
-import { ElementRect } from 'app/components/links/element-rect.class';
-import { Rectangle } from 'app/utils/rectangle.interface';
+import { FamilyMember } from '../../family-member.interface';
+import { Cell } from '../../cell.class';
+import { CellModel } from '../../cell-model.class';
+import { ElementRect } from '../../components/links/element-rect.class';
+import { Rect } from '../../utils/rect.class';
 
 import { DropAreaComponent } from '../drop-area.component';
-import { SelectableWidget } from 'app/selectable-widget.class';
+import { SelectableWidget } from '../../selectable-widget.class';
 
-import { CellActivateEvent } from 'app/events/cell-activate.event';
-import { CellActivatedEvent } from 'app/events/cell-activated.event';
-import { CellDeactivatedEvent } from 'app/events/cell-deactivated.event';
-import { CellDragEvent } from 'app/events/cell-drag.event';
-import { CellDropEvent } from 'app/events/cell-drop.event';
-import { CellEditEvent } from 'app/events/cell-edit.event';
-import { CellLinkEvent } from 'app/events/cell-link.event';
-import { CellModelDeactivatedEvent } from 'app/events/cell-model-deactivated.event';
-import { CellRemoveEvent } from 'app/events/cell-remove.event';
-import { CellSelectEvent } from 'app/events/cell-select.event';
-import { CellSelectionClearEvent } from 'app/events/cell-selection-clear.event';
-import { CellModelActivatedEvent } from 'app/events/cell-model-activated.event';
-import { InfoModeEvent } from 'app/events/info-mode.event';
-import { EventService } from 'app/services/event.service';
-import { CellLocator } from 'app/utils/cell-locator.class';
+import { CellActivateEvent } from '../../events/cell-activate.event';
+import { CellActivatedEvent } from '../../events/cell-activated.event';
+import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
+import { CellDragEvent } from '../../events/cell-drag.event';
+import { CellDropEvent } from '../../events/cell-drop.event';
+import { CellEditEvent } from '../../events/cell-edit.event';
+import { CellLinkEvent } from '../../events/cell-link.event';
+import { CellModelDeactivatedEvent } from '../../events/cell-model-deactivated.event';
+import { CellRemoveEvent } from '../../events/cell-remove.event';
+import { CellSelectEvent } from '../../events/cell-select.event';
+import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
+import { CellModelActivatedEvent } from '../../events/cell-model-activated.event';
+import { InfoModeEvent } from '../../events/info-mode.event';
+import { EventService } from '../../services/event.service';
+import { CellLocator } from '../../utils/cell-locator.class';
 
 @Component({
 	selector: 'cell',
@@ -54,7 +54,7 @@ dragEnabled = false;
 canBeDeleted = true;
 canBeModified = true;
 info = false;
-rect: Rectangle;
+rect: Rect;
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!

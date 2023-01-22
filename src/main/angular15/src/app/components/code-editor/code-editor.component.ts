@@ -37,7 +37,7 @@ ngAfterContentChecked() {
 
 	if (!this.codeEditor) {
 		Promise.resolve(null).then(() => {
-			const editorOptions: Partial<ace.Ace.EditorOptions> = {
+			const editorOptions: Partial<any> = {
 					highlightActiveLine: true,
 					minLines: 10,
 					maxLines: Infinity,
@@ -45,7 +45,7 @@ ngAfterContentChecked() {
 			editorOptions.enableBasicAutocompletion = true;
 			editorOptions.enableLiveAutocompletion = true
 
-			this.codeEditor = ace.edit(this.editor.nativeElement, editorOptions)
+			this.codeEditor = ace.edit(this.editor.nativeElement, editorOptions);
 			this.codeEditor.setTheme('ace/theme/clouds');
 			this.codeEditor.getSession().setMode('ace/mode/sql');
 

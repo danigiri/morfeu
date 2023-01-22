@@ -74,8 +74,8 @@ export class DropAreaComponent extends SelectableWidget implements OnInit {
 @Input() parent: FamilyMember;
 @Input() position: number;
 
+override selected = false;			// are we selected?
 active = false;
-selected = false;			// are we selected?
 info = false;
 
 

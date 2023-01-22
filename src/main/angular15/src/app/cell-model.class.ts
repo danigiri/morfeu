@@ -304,12 +304,17 @@ getParent(): FamilyMember {
 //// SerialisableToJSON ////
 
 toJSON(): CellModelJSON {
-
-	let serialisedCellModel: CellModelJSON = Object.assign({}, this);
-
+	
+	
 	// we ensure that we do not serialised unwanted properties (like pointers to other structures) that do not 
-	// belong to the serialised object
-	delete serialisedCellModel["parent"];
+	// belong to the serialised object, so we store it temporarily, delete it, restore it. The CellModelJSON type
+	// does not have parent as it is only a runtime non-serialisable piece of data
+	const previousParent = this.parent;
+	delete this["parent"];
+	let serialisedCellModel: CellModelJSON = Object.assign({}, this);
+	if (previousParent !== undefined && previousParent !==null) {
+		this.parent = previousParent;
+	}
 
 	if (serialisedCellModel.identifier) {
 		serialisedCellModel.identifier = this.identifier.name;	// we serialise to the (attribute) name

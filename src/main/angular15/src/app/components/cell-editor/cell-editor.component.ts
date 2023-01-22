@@ -219,7 +219,7 @@ createValue() {
 }
 
 
-modifiedValue(e) {
+modifiedValue(e: any) {
 
 	const valid = this.cell.cellModel.validates(this.cell.value);
 	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.MODIFIED_VALUE, valid));

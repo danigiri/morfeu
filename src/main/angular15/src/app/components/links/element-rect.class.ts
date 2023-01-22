@@ -2,8 +2,8 @@
 
 import { ElementRef } from '@angular/core';
 
-import { Point } from 'app/utils/point.class';
-import { Rect } from 'app/utils/rect.class';
+import { Point } from '../../utils/point.class';
+import { Rect } from '../../utils/rect.class';
 
 /** This class encapsulates a native element into a rectangle class, holds no additional state  */
 export class ElementRect extends Rect {
@@ -14,7 +14,7 @@ public constructor(public e: ElementRef) {
 }
 
 
-get origin(): Point {
+override get origin(): Point {
 	return new Point(this.x, this.y);
 }
 
@@ -41,17 +41,17 @@ get bottom(): number {
 }
 
 
-get width(): number {
+override get width(): number {
 	return this.right - this.x;
 }
 
 
-get height(): number {
+override get height(): number {
 	return this.bottom - this.y;
 }
 
 
-public toString = (): string => {
+public override toString = (): string => {
 	return `ElementRect:{${this.x},${this.y},${this.right},${this.bottom}}`;
 }
 

@@ -80,7 +80,7 @@ public unregisterKeyShortcuts() {
 }
 
 
-ngOnDestroy() {
+override ngOnDestroy() {
 
 	super.ngOnDestroy();
 	this.unregisterKeyShortcuts();

@@ -26,7 +26,7 @@ import {UXEvent} from "../events/ux.event";
 				<ng-container *ngSwitchCase="4">
 					<h4 class="card-header {{headerClass}} {{toggleClass()}} btn-block collapsible-header"
 						attr.aria-controls="{{id_}}-region" 
-						attr.aria-expanded="!folded"
+						aria-expanded="!folded"
 						role="button"
 						(click)="toggle()"
 						>

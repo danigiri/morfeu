@@ -133,7 +133,7 @@ protected addStatus(newStatus: StatusEvent) {
 // To make sure the cleaning is not out of synch with the bindings we use a promise here, as we do not know
 // if the animation callback is called in a spot where this is affected, errors in the console confirm it
 // is indeed the case, so we delay changing the bindings in a promise
-animationComplete($event) {
+animationComplete($event: any) {
 
 	Promise.resolve(null).then(() => {
 	// console.log("\t StatusComponent::animationComplete(%s, %s)", $event.fromState, $event.toState);

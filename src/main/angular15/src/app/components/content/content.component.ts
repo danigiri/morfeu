@@ -61,7 +61,7 @@ model: Model;
 info = false;
 isFragment = false;
 
-protected commandKeys: string[] = ["c", "a", "d", "t", "e", "R", "i", "u"];
+protected override commandKeys: string[] = ["c", "a", "d", "t", "e", "R", "i", "u"];
 
 @ViewChildren(CellComponent) childrenCellComponents: QueryList<CellComponent>;
 
@@ -274,7 +274,7 @@ save(document_: CellDocument) {
 
 //// KeyListenerWidget ////
 
-commandPressedCallback(command: string) {
+override commandPressedCallback(command: string) {
 
 	console.log("[UI] ContentComponent::keyPressed(%s)", command);
 	if (this.dropAreaSelectingMode) {
@@ -331,7 +331,7 @@ commandPressedCallback(command: string) {
 }
 
 
-commandNotRegisteredCallback(command: string) {
+override commandNotRegisteredCallback(command: string) {
 
 	console.log("[UI] ContentComponent::not selecting anything in content");
 	this.dropAreaSelectingMode = false;
@@ -340,7 +340,7 @@ commandNotRegisteredCallback(command: string) {
 }
 
 
-numberPressedCallback(num: number) {
+override numberPressedCallback(num: number) {
 
 	if (this.cellSelectingMode) {
 		console.log("[UI] ContentComponent::numberPressed(%i) [cellSelectingMode]", num);
