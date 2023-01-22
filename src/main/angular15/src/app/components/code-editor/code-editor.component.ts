@@ -2,7 +2,8 @@
 
 import { Component, ElementRef, Input, OnInit, ViewChild, AfterContentChecked } from '@angular/core';
 
-import * as ace from 'ace-builds/src-min-noconflict/ace';
+//import * as ace from 'ace-builds/src-min-noconflict/ace';
+import * as ace from 'ace-builds';
 import 'ace-builds/src-min-noconflict/mode-sql';
 import 'ace-builds/src-min-noconflict/theme-clouds';
 import 'ace-builds/src-noconflict/ext-language_tools';

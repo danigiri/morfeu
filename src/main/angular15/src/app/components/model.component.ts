@@ -2,7 +2,7 @@
 
 import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
 
-import { TreeComponent } from '@circlon/angular-tree-component';
+//import { TreeComponent } from '@circlon/angular-tree-component';
 
 import { Configuration } from '../config/configuration.class';
 
@@ -37,12 +37,12 @@ import { RemoteEventService } from "../services/remote-event.service";
 					<!-- non-intuitively, the nodes binding expects an array and not a root node-->
 					<!-- we use direct binding as opposed to events for the moment -->
 					<div id="model-cell-models" class="">
-						<tree-root
+						<!--tree-root
 							[nodes]="model.children">
 							<ng-template #treeNodeTemplate let-node let-index="index">
 								<cell-model [node]="node" [index]="index"></cell-model>
 							</ng-template>
-						</tree-root>
+						/tree-root-->
 					</div>
 					<!--ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container-->
 				</div>
@@ -66,7 +66,7 @@ displayName: string;
 protected override commandKeys: string[] = ["m", "a", "n"];
 private cellModelSelectingMode = false;
 
-@ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
+//@ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
 
 constructor(eventService: EventService,
@@ -224,13 +224,13 @@ private subscribeChildrenToCellSelection () {
 
 	console.log("ModelComponent::subscribeChildrenToCellSelection()");
 	this.unsubscribeChildrenFromCellSelection();
-	this.cellModelComponentsRoot.treeModel.roots.forEach(r => {
-		r.expand();
-		(r.data as CellModel).component.subscribeToSelection(); // breaks class-component abstraction,
-																  // but there does not seem to be an easy 
-																  // way to do this with the tree component
-		}
-	);
+	// this.cellModelComponentsRoot.treeModel.roots.forEach(r => {
+	// 	r.expand();
+	// 	(r.data as CellModel).component.subscribeToSelection(); // breaks class-component abstraction,
+	// 															  // but there does not seem to be an easy 
+	// 															  // way to do this with the tree component
+	// 	}
+	// );
 
 }
 
@@ -238,9 +238,9 @@ private subscribeChildrenToCellSelection () {
 private unsubscribeChildrenFromCellSelection() {
 	// breaks class-component abstraction, but there does not seem to
 	// be an easy way to do this with the tree component we're using
-	this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
-		(n.data as CellModel).component.unsubscribeFromSelection()
-	); 
+	// this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
+	// 	(n.data as CellModel).component.unsubscribeFromSelection()
+	// ); 
 }
 
 

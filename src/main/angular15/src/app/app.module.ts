@@ -15,7 +15,7 @@ import { PipesModule } from './pipes/pipes.module';
 import { CatalogueListComponent } from './components/catalogue-list.component';
 import { CatalogueComponent } from './components/catalogue.component';
 import { CellDocumentComponent } from './components/cell-document.component';
-import { CellModelComponent } from './components/cell-model.component';
+import { CellModelComponent } from './components/cell-model/cell-model.component';
 import { CollapsibleComponent } from './components/collapsible.component';
 import { ComponentsModule } from './components/components.module';
 import { DebugComponent } from './components/debug/debug.component';

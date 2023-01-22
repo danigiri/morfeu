@@ -4,44 +4,25 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { TreeNode } from '@circlon/angular-tree-component';
+//import { TreeNode } from '@circlon/angular-tree-component';
 
-import { CellModel } from '../cell-model.class';
-import { FamilyMember } from '../family-member.interface';
-import { SelectableWidget } from '../selectable-widget.class';
+import { CellModel } from '../../cell-model.class';
+import { FamilyMember } from '../../family-member.interface';
+import { SelectableWidget } from '../../selectable-widget.class';
 
-import { CellActivatedEvent } from '../events/cell-activated.event';
-import { CellDeactivatedEvent } from '../events/cell-deactivated.event';
-import { CellDropEvent } from '../events/cell-drop.event';
-import { CellModelActivatedEvent } from '../events/cell-model-activated.event';
-import { CellModelDeactivatedEvent } from '../events/cell-model-deactivated.event';
-import { CellSelectEvent } from '../events/cell-select.event';
-import { CellSelectionClearEvent } from '../events/cell-selection-clear.event';
-import { NewCellFromModelEvent } from '../events/new-cell-from-model.event';
-import { EventService } from '../services/event.service';
+import { CellActivatedEvent } from '../../events/cell-activated.event';
+import { CellDeactivatedEvent } from '../../events/cell-deactivated.event';
+import { CellDropEvent } from '../../events/cell-drop.event';
+import { CellModelActivatedEvent } from '../../events/cell-model-activated.event';
+import { CellModelDeactivatedEvent } from '../../events/cell-model-deactivated.event';
+import { CellSelectEvent } from '../../events/cell-select.event';
+import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
+import { NewCellFromModelEvent } from '../../events/new-cell-from-model.event';
+import { EventService } from '../../services/event.service';
 
 @Component({
 	selector: 'cell-model',
-	template: `
-		<div id="{{node.data.id}}"
-			 class="cell-model-entry cell-model-level-{{node.level}} cell-model-position-{{index}}">
-			<img
-				src={{getThumb()}}
-				class="cell-model-thumb img-fluid"
-				[class.cell-model-active]="active"
-				[class.cell-model-selected]="this.selected"
-				(mousedown)="clickDown()"
-				(mouseup)="clickUp()"
-				(mouseenter)="clickDown()"
-				(mouseleave)="clickUp()"
-				dnd-draggable
-				[dragEnabled]="dragEnabled"
-				(onDragEnd)="dragEnd()"
-				[dragData]="node.data.generateCell()"
-			/>
-			<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
-		</div>
-		`,
+	templateUrl: './cell-model.component.html',
 
 	styles: [`
 			.cell-model-entry {}
@@ -81,7 +62,7 @@ import { EventService } from '../services/event.service';
 
 export class CellModelComponent extends SelectableWidget implements OnInit {
 
-@Input() node: TreeNode;
+//@Input() node: TreeNode;
 @Input() index: number;
 
 cellModel: CellModel;
@@ -102,7 +83,7 @@ ngOnInit() {
 	console.log("CellModelComponent::ngOnInit()");
 
 	// establish the relationship between the cellmodel and the component
-	this.cellModel = this.node.data as CellModel;
+//	this.cellModel = this.node.data as CellModel;
 	this.cellModel.component = this;
 
 	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)

@@ -40,7 +40,7 @@ constructor(eventService: EventService) {
 ngOnInit() {
 	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 	if (this.trackMouse) {
-		fromEvent(document.body, 'mousemove').subscribe({next:(e:MouseEvent) => this.mouseMove(e.pageX, e.pageY)});
+		fromEvent(document.body, 'mousemove').subscribe({next:(e:any) => this.mouseMove(e.pageX, e.pageY)});
 	}
 }
 
@@ -70,7 +70,7 @@ private mouseMove(x: number, y: number) {
 }
 
 /*
- *    Copyright 2020 Daniel Giribet
+ *    Copyright 2023 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

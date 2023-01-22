@@ -10,7 +10,7 @@ import { VariableParser } from './utils/variable-parser.class';
 
 // //// COMPONENT STUFF										////
 // //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
-import { CellModelComponent } from "./components/cell-model.component";
+import { CellModelComponent } from "./components/cell-model/cell-model.component";
 // ////														////
 
 export class CellModel extends BasicFamilyMember implements NameValue {
