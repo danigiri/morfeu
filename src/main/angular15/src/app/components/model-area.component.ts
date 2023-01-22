@@ -3,7 +3,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { NgbTabset, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNav, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 import { KeyListenerWidget } from '../key-listener-widget.class';
 import { SnippetsListComponent } from './snippets-list/snippets-list.component';
@@ -24,18 +24,20 @@ import { EventService } from '../services/event.service';
 	selector: "model-area",
 	template: `
 		<div [hidden]="!isVisible()">
-		<ngb-tabset type="pills" activeId="model-tab" (tabChange)="beforeTabChange($event)" #tabs="ngbTabset">
-			<ngb-tab title="Model" id="model-tab">
-				<ng-template ngbTabContent>
-					<model></model>
-				</ng-template>
-			</ngb-tab>
-			<ngb-tab title="Snippets" id="snippets-tab">
-				<ng-template ngbTabContent>
-					<snippets *ngIf="snippets" [snippetStubs]="snippets" [model]="model"></snippets>
-				</ng-template>
-			</ngb-tab>
-		</ngb-tabset>
+			<ul ngbNav id="model-navs" type="pills" activeId="model-tab" class="nav-tabs">
+				<li ngbNavItem id="model-tab">
+					<a ngbNavLink>Model</a>
+					<ng-template ngbNavContent>
+						<model></model>
+					</ng-template>
+				</li>
+				<li ngbNavItem id="snippets-tab">
+					<a ngbNavLink>Snippets</a>
+					<ng-template ngbNavContent>
+						<snippets *ngIf="snippets" [snippetStubs]="snippets" [model]="model"></snippets>
+					</ng-template>
+				</li>
+			</ul>
 		</div>
 	`,
 	styles: [`
@@ -47,14 +49,14 @@ import { EventService } from '../services/event.service';
 export class ModelAreaComponent extends KeyListenerWidget implements OnInit {
 
 private static readonly MODEL_TAB = 'model-tab';
-private static SNIPPETS_TAB = 'snippets-tab';
+private static readonly SNIPPETS_TAB = 'snippets-tab';
 
 model?: Model;
 snippets?: CellDocument[];
 
 protected override commandKeys: string[] = ['m', 's'];
 
-@ViewChild('tabs') tabs: NgbTabset;
+@ViewChild('ngbNav') tabs: NgbNav;
 @ViewChild(SnippetsListComponent) private snippetListComponent: SnippetsListComponent;
 
 private modelDisplayReadySubscription: Subscription;
@@ -115,7 +117,7 @@ override commandPressedCallback(command: string) {
 //// KeyListenerWidget [end] ////
 
 
-beforeTabChange($event: NgbTabChangeEvent) {
+beforeTabChange($event: NgbNavChangeEvent) {
 
 	console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
 	if ($event.activeId===ModelAreaComponent.MODEL_TAB) {

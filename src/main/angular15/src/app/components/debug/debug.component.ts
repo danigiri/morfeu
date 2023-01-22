@@ -54,6 +54,7 @@ public subscriptionCounter(): number {
 	return this.events.service.subscriptionCount()
 }
 
+
 public subscriptionBreakdown():string {
 	return this.events.service.toString();
 }
