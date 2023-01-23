@@ -4,13 +4,13 @@ import { Component } from '@angular/core';
 import { CellDocument } from '../../cell-document.class';
 import { Model } from '../../model.class';
 
-import { Cell } from 'app/cell.class';
-import { CellLocator } from 'app/utils/cell-locator.class';
+import { Cell } from '../../cell.class';
+import { CellLocator } from '../../utils/cell-locator.class';
 
-import { _model, _types, _typesDocument, _typesPrefix } from 'app/test/test.data';
-import { TestComponent } from 'app/test/test-component.class';
+import { _model, _types, _typesDocument, _typesPrefix } from '../../test/test.data';
+import { TestComponent } from '../../test/test-component.class';
 
-import { ContentRequestEvent } from 'app/events/content-request.event';
+import { ContentRequestEvent } from '../../events/content-request.event';
 
 @Component({
 	selector: 'arrow-test',
@@ -81,7 +81,7 @@ private showLinksOnLoad() {
 }
 
 
-protected loadedModel(model: Model): void {
+protected override loadedModel(model: Model): void {
 	this.events.service.publish(new ContentRequestEvent(this.document, model));
 }
 

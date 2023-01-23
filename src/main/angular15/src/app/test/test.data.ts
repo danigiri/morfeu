@@ -17,7 +17,7 @@ export const _document1Document = `
 }
 `;
 
-export const _content1 = {
+export const _content1: any = {
 	"schema": 0,
 	"URI": "target/test-classes/test-resources/documents/document1.xml",
 	"name": "",
@@ -325,7 +325,7 @@ export const _document3Document = `
 }
 `;
 
-export const _content3 = {
+export const _content3: any = {
 	"schema" : 0,
 	"URI" : "target/test-classes/test-resources/documents/document3.xml",
 	"name" : "",

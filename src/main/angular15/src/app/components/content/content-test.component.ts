@@ -75,7 +75,7 @@ private dragAndDrop1() {
 }
 
 
-protected loadedModel(model: Model): void {
+protected override loadedModel(model: Model): void {
 	this.events.service.publish(new ContentRequestEvent(this.document, model))
 }
 

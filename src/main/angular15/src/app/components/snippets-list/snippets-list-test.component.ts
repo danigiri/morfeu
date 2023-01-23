@@ -35,8 +35,8 @@ model: Model;
 
 constructor(eventService: EventService,
 			route: ActivatedRoute,
-			@Inject("ContentService") protected contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") protected modelService: RemoteObjectService<Model, ModelJSON>) {
+			@Inject("ContentService") protected override contentService: RemoteObjectService<Content, ContentJSON>,
+			@Inject("ModelService") protected override modelService: RemoteObjectService<Model, ModelJSON>) {
 
 	super(eventService, route, contentService, modelService);
 

@@ -1,12 +1,15 @@
 # Morfeu
 
-Morfeu is an application to visually manage APIs represented as [YAML](http://yaml.org), [JSON](https://www.json.org/json-en.html), [JSX](https://facebook.github.io/jsx/) or [XML](https://www.w3.org/XML/) documents. APIs are defined formally and enriched with metadata, which enables Morfeu to present a practical generic UI. Morfeu treats the original document as source of truth, is fully compatible with manual editing, git workflows and requires no dependencies in the API implementation.
+Morfeu is an application to visually manage APIs represented as [YAML](http://yaml.org), 
+[JSON](https://www.json.org/json-en.html), [JSX](https://facebook.github.io/jsx/) or [XML](https://www.w3.org/XML/) 
+documents. APIs are defined formally and enriched with metadata, which enables Morfeu to present a practical generic UI. 
+Morfeu treats the original document as source of truth, is fully compatible with manual editing, git workflows and 
+requires no dependencies in the API implementation.
 
 YAML and JSON-based APIs are commonly used in many domains to represent complex API configurations, and Morfeu makes it
-easier 
-for users to engage and experiment with those APIs. Using a microservices approach, other services can be developed
-and run a a sidecars to support different environments, systems and APIs. The sidecars in question are lightweight 
-layers that are ran alongside existing complex systems.
+easier for users to engage and experiment with those APIs. Using a microservices approach, other services can be 
+developed and run a a sidecars to support different environments, systems and APIs. The sidecars in question are 
+lightweight layers that are ran alongside existing complex systems.
 
 - [snow-package](https://github.com/danigiri/snow-package) is a demo project that lets you manage pages written in JSX, 
   for instance your typical React web application. An example site can be found in the

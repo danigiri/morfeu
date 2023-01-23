@@ -63,7 +63,7 @@ private code1() {
 }
 
 
-protected loaded(model: Model, content: Content): void {
+protected override loaded(model: Model, content: Content): void {
 
 	const cell = content.findCellWithURI(content.getURI()+this.cellPath);
 	cell.associateWith(model, cell.cellModelURI);

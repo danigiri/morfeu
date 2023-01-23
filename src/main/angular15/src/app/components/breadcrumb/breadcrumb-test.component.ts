@@ -40,7 +40,7 @@ protected test(case_: string): void {
 }
 
 
-protected loaded(model: Model, content: Content): void {
+protected override loaded(model: Model, content: Content): void {
 
 	const cellPath  = '/test(0)/row(0)/col(1)/row(0)/col(1)/data2(1)';
 

@@ -8,8 +8,8 @@ import { HttpClientModule } from '@angular/common/http';  // new angular 5 http 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { DndModule } from './dnd/dnd.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
 
 import { PipesModule } from './pipes/pipes.module';
 import { CatalogueListComponent } from './components/catalogue-list.component';
@@ -19,10 +19,13 @@ import { CellModelComponent } from './components/cell-model/cell-model.component
 import { CollapsibleComponent } from './components/collapsible.component';
 import { ComponentsModule } from './components/components.module';
 import { DebugComponent } from './components/debug/debug.component';
+import { MainComponent } from './main.component';
 import { ModelAreaComponent } from './components/model-area.component';
 import { ModelComponent } from './components/model.component';
 import { ProblemComponent } from './components/problem.component';
 import { StatusComponent } from './components/status.component';
+
+
 
 @NgModule({
   declarations: [
@@ -32,18 +35,22 @@ import { StatusComponent } from './components/status.component';
 	CollapsibleComponent,
 	CellDocumentComponent,
 	CellModelComponent,
+	MainComponent,
 	ModelAreaComponent,
 	ModelComponent,
 	ProblemComponent,
 	StatusComponent,
-
-  ],
-  imports: [
+	
+],
+imports: [
 	AppRoutingModule,
     BrowserModule,
 	BrowserAnimationsModule,
 	ComponentsModule,
-  ],
+	HttpClientModule,
+	DndModule.forRoot(),
+	NgbModule,
+],
   providers: [],
   bootstrap: [AppComponent]
 })

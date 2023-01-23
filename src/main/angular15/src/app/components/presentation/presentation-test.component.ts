@@ -75,7 +75,7 @@ private loadPOST() {
 }
 
 
-protected loadedModel(model: Model): void {
+protected override loadedModel(model: Model): void {
 	this.model = model.findCellModel(model.getURI()+'/test/row/col/data3');
 
 }
