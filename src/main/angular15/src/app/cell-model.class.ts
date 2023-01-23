@@ -59,7 +59,7 @@ constructor(public schema: number,
 			public maxOccurs?: number,
 			public defaultValue?: string,
 			public category?: string,
-			public identifier?: CellModel
+			public identifier?: CellModel | string
 			) {
 
 	super(URI, name);
@@ -317,7 +317,7 @@ toJSON(): CellModelJSON {
 	}
 
 	if (serialisedCellModel.identifier) {
-		serialisedCellModel.identifier = this.identifier.name;	// we serialise to the (attribute) name
+		serialisedCellModel.identifier = (<CellModel>this.identifier).name;	// we serialise to the (attribute) name
 	}
 
 	if (this.attributes) {
@@ -354,7 +354,7 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 		// overwrite the reference
 		if (cellModel.identifier && typeof cellModel.identifier === 'string' ) {
 			// this was modified in the angular15 migration
-			cellModel.identifier = cellModel.attributes.find(a => a.name===cellModel.identifier.name);
+			cellModel.identifier = cellModel.attributes.find(a => a.name===<string>cellModel.identifier);
 			if (cellModel.identifier==undefined) {
 				console.error("Wrong identifier reference in %s", cellModel.name);
 			}
