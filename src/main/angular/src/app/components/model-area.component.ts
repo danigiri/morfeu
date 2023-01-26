@@ -71,6 +71,7 @@ ngOnInit() {
 
 	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent).subscribe(() => this.clear()));
 
+	console.log('aaaaaaaaa');
 	this.register(this.events.service.of<CellDocumentLoadedEvent>(CellDocumentLoadedEvent)
 			.subscribe(loaded => this.events.service.publish(new ModelRequestEvent(loaded.document)))
 	);

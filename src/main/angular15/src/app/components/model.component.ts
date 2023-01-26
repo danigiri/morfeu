@@ -69,17 +69,14 @@ private cellModelSelectingMode = false;
 //@ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
 
-constructor(eventService: EventService,
-			remoteEventService: RemoteEventService,
-			@Inject("ModelService") private modelService: RemoteObjectService<Model, ModelJSON> ) {
-	super(eventService, remoteEventService);
+constructor(eventService: EventService) {
+	super(eventService);
 }
 
 
 ngOnInit() {
 
 	console.log("ModelComponent::ngOnInit()"); 
-
 	// if we are in a tab area this is redundant, as the parent will remove us from the component tree
 	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
 			.subscribe(() => this.clearModel())
@@ -87,10 +84,6 @@ ngOnInit() {
 
 	this.register(this.events.service.of<ModelDisplayEvent>(ModelDisplayEvent)
 			.subscribe(display => this.displayModel(display.model))
-	);
-
-	this.register(this.events.service.of<ModelRequestEvent>(ModelRequestEvent)
-			.subscribe(requested => this.loadModel(requested.document))
 	);
 
 	//this.subscribeToCellSelectionClear();
@@ -103,29 +96,6 @@ ngAfterViewInit() {
 	// we are ready to reload the model
 	console.log("ModelComponent::ngAfterViewInit()"); 
 	Promise.resolve(null).then(() => this.events.service.publish(new ModelDisplayReadyEvent()));
-
-}
-
-
-loadModel(document: CellDocument) {
-
-	this.events.service.publish(new StatusEvent("Fetching model"));
-	const modelURI = Configuration.BACKEND_PREF+"/dyn/models/"+document.modelURI;
-	this.register(
-			this.modelService.get(modelURI, Model).subscribe( (model:Model) => {
-				console.log("ModelComponent::loadModel() Got model from Morfeu service ("+model.name+")");
-				this.displayModel(model);	// not firing a load event yet if not needed
-				document.model = model;	 // associating the document with the recently loaded model
-				// now that we have loaded the model we can safely load the content (as both are related
-				this.events.service.publish(new ModelLoadedEvent(model));
-				this.events.remote.publish(new ContentRequestEvent(document, model));
-				this.events.ok();
-			},
-			// TODO: check for network errors (see https://angular.io/guide/http)
-			error => this.events.problem(error.message),	// error is of the type HttpErrorResponse
-			() =>	  this.events.service.publish(new StatusEvent("Fetching model", StatusEvent.DONE))
-			)
-	);
 
 }
 
