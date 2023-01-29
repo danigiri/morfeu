@@ -24,7 +24,7 @@
     "bootstrap": "^5.2.3",
     "ng-keyboard-shortcuts": "^13.0.8",
     "perfect-arrows": "^0.3.7",
-    "rxjs": "~7.5.0",
+    "rxjs": "~7.5.2",
     "ts-data.stack": "^1.0.6",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

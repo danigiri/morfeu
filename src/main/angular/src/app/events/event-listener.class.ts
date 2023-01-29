@@ -1,7 +1,7 @@
 // EVENT - LISTENER . CLASS . TS
 
 import { OnDestroy, Component } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Subscription } from 'rxjs';
 
 import { EventService } from "../services/event.service";
 import { RemoteEventService } from "../services/remote-event.service";
