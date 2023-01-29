@@ -1,6 +1,6 @@
 // POINT . CLASS . SPECT . TS
 
-import { Point, Quadrant } from 'app/utils/point.class';
+import { Point, Quadrant } from './point.class';
 import { assert } from 'node:console';
 
 
