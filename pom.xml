@@ -22,7 +22,7 @@
 		<dagger-2-version>2.51.1</dagger-2-version>
 		<jackson-2-version>2.12.3</jackson-2-version>
 		<jetty-version>10.0.3</jetty-version>
-		<jtwig-version>5.87.0.RELEASE</jtwig-version>
+		<thymeleaf-version>3.1.2.RELEASE</thymeleaf-version>
 		<jupiter-version>5.7.0</jupiter-version>
 		<junit-platform-version>1.7.0</junit-platform-version>
 		<selenide-version>5.20.4</selenide-version>
@@ -409,14 +409,9 @@
 
 		<!--  templating -->
 		<dependency>
-			<groupId>org.jtwig</groupId>
-			<artifactId>jtwig-core</artifactId>
-			<version>${jtwig-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jtwig</groupId>
-			<artifactId>jtwig-reflection</artifactId>
-			<version>${jtwig-version}</version>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf</artifactId>
+			<version>${thymeleaf-version}</version>
 		</dependency>
 
 		<!-- request proxying -->

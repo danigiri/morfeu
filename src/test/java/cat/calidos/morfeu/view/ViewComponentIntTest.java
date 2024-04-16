@@ -22,7 +22,7 @@ public class ViewComponentIntTest {
 public void testInlineTemplate() {
 
 	Map<String, Object> values = MorfeuUtils.paramMap("foo", "bar");
-	String templ = "value={{ v.foo }}";
+	String templ = "value=[(${v.foo})]";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("").build();
 
@@ -30,11 +30,22 @@ public void testInlineTemplate() {
 
 }
 
+@Test
+public void testInlineTemplateWithProblem() {
+	Map<String, Object> values = MorfeuUtils.paramMap();
+	String templ = "problem=[(${problem})]";
+
+	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("bar").build();
+
+	assertEquals("problem=bar", view.render());
+
+}
+
 
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
