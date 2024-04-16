@@ -36,14 +36,14 @@ public void testPingControl() {
 
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath("/ping")
-																.method(DaggerControlComponent.GET)
+																.method(ControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
 																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 	assertTrue("Should match /ping path", controlComponent.matches());
 	assertEquals("OK", controlComponent.process());
-	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 	
 }
 
@@ -53,18 +53,18 @@ public void testPingControlWithParam() {
 
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath("/ping/param")
-																.method(DaggerControlComponent.GET)
+																.method(ControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
 																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 	assertTrue("Should match /ping/param path", controlComponent.matches());
 	assertEquals("OK param", controlComponent.process());
-	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 
 	controlComponent = DaggerControlComponent.builder()
 												.withPath("/ping/param%20with%20spaces")
-												.method(DaggerControlComponent.GET)
+												.method(ControlComponent.GET)
 												.withParams(emptyParams)
 												.andContext(context)
 												.encoding(Config.DEFAULT_CHARSET)
@@ -80,14 +80,14 @@ public void testNoMatch() {
 
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath("/foo")
-																.method(DaggerControlComponent.GET)
+																.method(ControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
 																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 
 	assertFalse(controlComponent.matches());
-	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 
 }
 
@@ -99,14 +99,14 @@ public void testContext() {
 
 	ControlComponent controlComponent = DaggerControlComponent.builder()
 																.withPath("/counter")
-																.method(DaggerControlComponent.GET)
+																.method(ControlComponent.GET)
 																.withParams(emptyParams)
 																.andContext(context)
 																.encoding(Config.DEFAULT_CHARSET)
 																.build();
 	assertTrue("Should match /counter path", controlComponent.matches());
 	assertEquals("1", controlComponent.process());
-	assertEquals(DaggerControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 
 }
 
@@ -114,7 +114,7 @@ public void testContext() {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

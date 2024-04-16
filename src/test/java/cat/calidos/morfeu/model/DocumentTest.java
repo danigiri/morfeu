@@ -20,7 +20,6 @@ import java.net.URI;
 
 import org.junit.Test;
 
-import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.ValidationException;
 
 /**
@@ -31,7 +30,7 @@ public class DocumentTest {
 
 @Test(expected=ValidationException.class)
 public void testEmptyValidator() throws Exception {
-	
+
 	String site = "http://foo.com";
 	String path = "/whatever.json";
 	URI uri = new URI(site+path);
