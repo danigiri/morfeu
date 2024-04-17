@@ -18,11 +18,11 @@ public class OperationResultModule {
 
 
 private static final String TEMPLATE = "{" +
-										"\"result\": \"{{v.result}}\",\n" + 
-										"\"target\": \"{{v.target}}\",\n" + 
-										"\"operation\": \"{{v.operation}}\",\n" + 
-										"\"operationTime\": {{v.operationTime}}\n" + 
-										"{% if hasProblem.isPresent %}, \"problem\": \"{{hasProblem.get}}\"{%endif%}"+
+										"\"result\": \"[(${v.result})]\",\n" + 
+										"\"target\": \"[(${v.target})]\",\n" + 
+										"\"operation\": \"[(${v.operation})]\",\n" + 
+										"\"operationTime\": [(${v.operationTime})]\n" + 
+										"[# th:if=\"${hasProblem.isPresent}\"], \"problem\": \"[(${hasProblem.get})]\"[/]"+
 										"}";
 
 @Provides

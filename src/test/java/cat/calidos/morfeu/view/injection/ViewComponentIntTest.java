@@ -9,8 +9,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import cat.calidos.morfeu.utils.MorfeuUtils;
-import cat.calidos.morfeu.view.injection.DaggerViewComponent;
-import cat.calidos.morfeu.view.injection.ViewComponent;
 
 /**
  * @author daniel giribet
