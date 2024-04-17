@@ -21,6 +21,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
 import org.thymeleaf.context.IExpressionContext;
+import org.thymeleaf.dialect.AbstractDialect;
+import org.thymeleaf.dialect.IExpressionObjectDialect;
 import org.thymeleaf.expression.IExpressionObjectFactory;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -74,27 +76,30 @@ public IContext context(Map<String, Object> values) {
 
 
 @Provides
-public static TemplateEngine engine(@Nullable @Named("templatePath") String path,
-		@Nullable @Named("template") String template) {
+ITemplateResolver resolver(@Nullable @Named("templatePath") String path, @Nullable @Named("template") String template) {
 
-	if (path == null && template == null) {
-		throw new NullPointerException("Cannot produce a template without a path or template value");
-	}
-
-
-	ITemplateResolver r;
+	// TODO: we can probably chain both
 	if (path == null) {
 		StringTemplateResolver stringResolver = new StringTemplateResolver();
 		stringResolver.setTemplateMode(TemplateMode.TEXT);
-		r = stringResolver;
+		return stringResolver;
 
 	} else {
 		ClassLoaderTemplateResolver classLoaderResolver = new ClassLoaderTemplateResolver();
 		classLoaderResolver.setTemplateMode(TemplateMode.TEXT);
-		r = classLoaderResolver;
+		return classLoaderResolver;
 	}
+}
+
+
+@Provides
+public static TemplateEngine engine(ITemplateResolver resolver, AbstractDialect dialect) {
+
+
+	// TODO: turn into a singleton
 	TemplateEngine engine = new TemplateEngine();
-	engine.setTemplateResolver(r);
+	engine.setTemplateResolver(resolver);
+	engine.addDialect(dialect);
 
 	return engine;
 
@@ -102,9 +107,18 @@ public static TemplateEngine engine(@Nullable @Named("templatePath") String path
 
 
 @Provides
+AbstractDialect dialect(IExpressionObjectFactory expressionObjectFactory) {
+
+	return new ExpressionDialect(expressionObjectFactory);
+}
+
+
+@Provides
 IExpressionObjectFactory expressionObjectFactory() {
 
 	return new IExpressionObjectFactory() {
+
+	private static final String STR = "str";
 
 	@Override
 	public boolean isCacheable(String expressionObjectName) {
@@ -116,19 +130,62 @@ IExpressionObjectFactory expressionObjectFactory() {
 	@Override
 	public Set<String> getAllExpressionObjectNames() {
 
-		return Set.of("range");
+		return Set.of(STR);
 	}
 
 
 	@Override
 	public Object buildObject(IExpressionContext context, String expressionObjectName) {
 
-		// TODO Auto-generated method stub
+		if (expressionObjectName.equals(STR)) {
+			return new Str();
+		}
 		return null;
 	}
 	};
 }
 
+
+private class ExpressionDialect extends AbstractDialect implements IExpressionObjectDialect {
+
+private IExpressionObjectFactory expressionObjectFactory;
+
+public ExpressionDialect(IExpressionObjectFactory expressionObjectFactory) {
+
+	super("morfeu");
+	this.expressionObjectFactory = expressionObjectFactory;
+}
+
+
+@Override
+public IExpressionObjectFactory getExpressionObjectFactory() {
+
+	return expressionObjectFactory;
+}
+}
+
+@SuppressWarnings("unused")
+private final class Str {
+
+/** remove last char */
+public String chop(String s) {
+	return s.substring(0, s.length() - 1);
+}
+
+
+/** adds double quotes around the string if they are not there */
+public String quote(String s) {
+	s = (!s.startsWith("\"") && !s.endsWith("\"")) ? s = "\"" + s + "\"" : s;
+	return s;
+}
+
+
+/** returns true if the input has the '\n' literal */
+public boolean isMultiline(String s) {
+	return s.contains("\\n");
+}
+
+}
 
 //
 // final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
@@ -158,25 +215,8 @@ IExpressionObjectFactory expressionObjectFactory() {
 //
 // };
 //
-/// ** remove last char */
-// final static SimpleJtwigFunction chop = new SimpleJtwigFunction() {
 //
-// @Override
-// public String name() {
-// return "chop";
-// }
-//
-// @Override
-// public Object execute(FunctionRequest request) {
-//
-// request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-// String s =
-// request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
-//
-// return s.substring(0, s.length()-1);
-// }
-//
-// };
+
 //
 //
 /// ** iterator to list */
@@ -266,31 +306,6 @@ IExpressionObjectFactory expressionObjectFactory() {
 // List<Object> arguments = request.getArguments();
 //
 // return new Object();
-//
-// }
-//
-// };
-//
-//
-/// ** add double quotes around the content */
-// final static SimpleJtwigFunction quote = new SimpleJtwigFunction() {
-//
-// @Override
-// public String name() {
-//
-// return "quote";
-// }
-//
-//
-// @Override
-// public Object execute(FunctionRequest request) {
-//
-// request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-// String s = request.getEnvironment().getValueEnvironment()
-// .getStringConverter().convert(request.get(0));
-// s = (!s.startsWith("\"") && !s.endsWith("\"")) ? s = "\"" + s + "\"" : s;
-//
-// return s;
 //
 // }
 //

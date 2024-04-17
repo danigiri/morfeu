@@ -1,4 +1,4 @@
-package cat.calidos.morfeu.view;
+package cat.calidos.morfeu.view.injection;
 
 import static org.junit.jupiter.api.Assertions.*;
 

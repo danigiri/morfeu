@@ -1,6 +1,6 @@
 // SVG VIEW MODULE INT TEST . JAVA
 
-package cat.calidos.morfeu.view;
+package cat.calidos.morfeu.view.injection;
 
 import static org.junit.Assert.*;
 
