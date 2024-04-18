@@ -12,11 +12,10 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
-import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.injection.ModelTezt;
@@ -32,7 +31,7 @@ private XSSchema schema;
 private XSSchemaSet schemaSet;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	uri = "target/test-classes/test-resources/models/test-model.xsd";

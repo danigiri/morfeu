@@ -16,11 +16,11 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import cat.calidos.morfeu.model.Cell;
@@ -56,10 +56,10 @@ public void testSimpleCell() throws Exception {
 	ComplexCellModel testCellModel = cellModelFrom(modelURI, "test").asComplex();	
 	children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 	assertEquals(1, children.size());
-	
+
 	ComplexCell col = children.child("row(0)").asComplex().children().child("col(0)").asComplex();
 	assertEquals(4, col.children().size());
-	
+
 	Cell stuff = col.children().child("stuff(0)");
 	assertTrue(stuff.isSimple());
 	assertFalse(stuff.isComplex());

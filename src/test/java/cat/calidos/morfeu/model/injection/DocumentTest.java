@@ -2,7 +2,7 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,28 +11,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cat.calidos.morfeu.model.Cell;
-import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentTest {
-
-@Rule 
-public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 
 @Test
@@ -45,15 +36,15 @@ public void testParseDocument() throws Exception {
 }
 
 
-@Test(expected = ParsingException.class)
+@Test
 public void testMalformedDocument() throws Exception {
-	parseRelativeLocation("test-resources/documents/malformed-document.json");
+	assertThrows(ParsingException.class, () ->parseRelativeLocation("test-resources/documents/malformed-document.json"));
 }
 
 
-@Test(expected = ParsingException.class)
+@Test
 public void testInvalidDocument() throws Exception {
-	parseRelativeLocation("test-resources/documents/nonvalid-document.json");
+	assertThrows(ParsingException.class, () ->parseRelativeLocation("test-resources/documents/nonvalid-document.json"));
 }
 
 
@@ -161,7 +152,7 @@ private Document createDocument(String site, String path, String model, String c
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

@@ -2,14 +2,14 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
@@ -28,7 +28,7 @@ private URI modelURI;
 private Model model;
 
 
-@Before
+@BeforeEach
 public void setup () throws Exception {
 
 	// TODO: see what we can do about these ugly maven specific paths
@@ -47,8 +47,8 @@ public void testParseModel() throws Exception {
 	assertEquals("ROOT", model.getMetadata().getPresentation());	// testing values of root node
 	assertEquals("", model.getMetadata().getCellPresentation());	// testing values of root node
 	assertEquals("", model.getMetadata().getThumb());	// testing values of root node
-	assertFalse("Root node should never be simple", model.isSimple());
-	assertTrue("Root node should always be complex", model.isComplex());
+	assertFalse( model.isSimple(), "Root node should never be simple");
+	assertTrue(model.isComplex(), "Root node should always be complex");
 
 	Composite<CellModel> rootCellModels = model.children();
 	assertNotNull(rootCellModels);
@@ -86,7 +86,7 @@ public void testGlobalMetadata() {
 
 @Test
 public void testMetadataDirectives() {
-	
+
 	ComplexCellModel col = model.children()
 									.child(0)
 									.asComplex()
@@ -111,15 +111,15 @@ public void testMetadataDirectives() {
 }
 
 
-@Test(expected = ParsingException.class)
+@Test
 public void testParseNonValidModel() throws Exception  {
 
 	// TODO: see what we can do about these ugly maven specific paths
 
-	System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid schema");
-	
+	// System.err.println("Please ignore next ParsingException, it is expected as we are testing non valid schema");
+
 	URI modelURI = new URI("target/test-classes/test-resources/models/nonvalid-model.xsd");
-	parseModelFrom(modelURI);
+	assertThrows(ParsingException.class, () ->parseModelFrom(modelURI));
 
 }
 
@@ -127,7 +127,7 @@ public void testParseNonValidModel() throws Exception  {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

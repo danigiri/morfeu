@@ -3,10 +3,8 @@ package cat.calidos.morfeu.control.injection;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
-import cat.calidos.morfeu.control.injection.OperationResultComponent.Builder;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
-import dagger.BindsInstance;
 import dagger.Module;
 import dagger.Provides;
 

@@ -5,9 +5,6 @@ package cat.calidos.morfeu.model.injection;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.ExecutionException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +13,6 @@ import cat.calidos.morfeu.model.ComplexCell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.Validable;
-import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.problems.ParsingException;
-import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 
 /**
@@ -181,7 +175,7 @@ private void testDocument1Content(Composite<Cell> content) {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

@@ -2,12 +2,12 @@
 
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
@@ -35,7 +35,7 @@ public void testSnippet() throws Exception {
 															.content()
 															.get();
 	assertNotNull(content);
-	assertEquals("There should be only one stuff snippet", 1, content.size());
+	assertEquals(1, content.size(), "There should be only one stuff snippet");
 
 	Cell stuff = content.child(0);
 	assertNotNull(stuff);

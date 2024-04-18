@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import cat.calidos.morfeu.model.Metadata;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.model.Type;
-import cat.calidos.morfeu.model.injection.TypeModule;
 
 /**
 * @author daniel giribet

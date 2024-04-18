@@ -2,7 +2,7 @@
 
 package cat.calidos.morfeu.control.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
 
@@ -10,11 +10,9 @@ import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+
 
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
@@ -25,7 +23,6 @@ import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ControlComponentIntTest {
 
-@Rule public MockitoRule mockitoRule = MockitoJUnit.rule(); 
 @Mock ServletContext context;
 
 HashMap<String, String> emptyParams = new HashMap<String, String>(0);
@@ -41,7 +38,7 @@ public void testPingControl() {
 																.andContext(context)
 																.encoding(Config.DEFAULT_CHARSET)
 																.build();
-	assertTrue("Should match /ping path", controlComponent.matches());
+	assertTrue(controlComponent.matches(), "Should match /ping path");
 	assertEquals("OK", controlComponent.process());
 	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 	
@@ -58,7 +55,7 @@ public void testPingControlWithParam() {
 																.andContext(context)
 																.encoding(Config.DEFAULT_CHARSET)
 																.build();
-	assertTrue("Should match /ping/param path", controlComponent.matches());
+	assertTrue(controlComponent.matches(), "Should match /ping/param path");
 	assertEquals("OK param", controlComponent.process());
 	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 
@@ -69,7 +66,7 @@ public void testPingControlWithParam() {
 												.andContext(context)
 												.encoding(Config.DEFAULT_CHARSET)
 												.build();
-	assertTrue("Should match /ping/param path with %20 encoded spaces", controlComponent.matches());
+	assertTrue(controlComponent.matches(), "Should match /ping/param path with %20 encoded spaces");
 	assertEquals("OK param with spaces", controlComponent.process());
 
 }
@@ -104,7 +101,7 @@ public void testContext() {
 																.andContext(context)
 																.encoding(Config.DEFAULT_CHARSET)
 																.build();
-	assertTrue("Should match /counter path", controlComponent.matches());
+	assertTrue(controlComponent.matches(), "Should match /counter path");
 	assertEquals("1", controlComponent.process());
 	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 

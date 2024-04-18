@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.injection.ModelTezt;
-import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
 /**
@@ -27,7 +26,7 @@ public void contentGET() throws Exception {
 	String path = "test-resources/documents/document1.xml";
 	String model = "test-resources/models/test-model.xsd";
 	@SuppressWarnings("unchecked")
-	List<Cell> content = (List<Cell>) new ContentGETControl(prefix, path, Optional.empty(), model).process();
+	var content = (List<Cell>) new ContentGETControl(prefix, path, Optional.empty(), model).process();
 	assertNotNull(content);
 
 	Cell test = content.get(0);
@@ -63,7 +62,7 @@ public void contentGETFiltered() throws Exception {
 }
 
 /*
- *    Copyright 2020 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

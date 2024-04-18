@@ -10,12 +10,10 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
-import org.openjdk.tools.sjavac.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -61,7 +59,7 @@ public static BiFunction<List<String>, Map<String, String>, String> pingPost() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

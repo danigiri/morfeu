@@ -1,12 +1,12 @@
 package cat.calidos.morfeu.model.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import cat.calidos.morfeu.model.Attributes;
@@ -28,7 +28,7 @@ private Composite<Cell> children;
 private ComplexCellModel testCellModel;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	String contentPath = "target/test-classes/test-resources/documents/document1.xml";
@@ -86,14 +86,14 @@ public void testAttributesFrom() throws Exception {
 
 	// ensure order is also cool, to do that, we assume there are two column children, access the first and compare
 
-	assertEquals("Accessing children by index and not name fails, order is not preserved", 
-				 children.child("row(0)").asComplex().children().child("col(0)"), 
-				 children.child("row(0)").asComplex().children().child(0));
+	assertEquals(children.child("row(0)").asComplex().children().child("col(0)"), 
+				 children.child("row(0)").asComplex().children().child(0),
+				 "Accessing children by index and not name fails, order is not preserved");
 
 	// extra order check
 	List<Cell> cols = children.child("row(0)").asComplex().children().asList();
-	assertEquals("Order not preserved", children.child("row(0)").asComplex().children().child(0), cols.get(0));
-	assertEquals("Order not preserved", children.child("row(0)").asComplex().children().child(1), cols.get(1));
+	assertEquals(children.child("row(0)").asComplex().children().child(0), cols.get(0), "Order not preserved");
+	assertEquals(children.child("row(0)").asComplex().children().child(1), cols.get(1), "Order not preserved");
 
 	Attributes<Cell> attributes = complexCell.attributes();
 	assertNotNull(attributes);
@@ -121,7 +121,7 @@ public void testInternalAttributes() throws Exception {
 																	contentURI,
 																	testCellModel);
 	assertNotNull(attributes);
-	assertEquals("More internal attributes than expected", 2, attributes.size());
+	assertEquals(2, attributes.size(), "More internal attributes than expected");
 	assertEquals("http://www.w3.org/2001/XMLSchema-instance", attributes.attribute("xmlns:xsi").getValue().get());
 	assertEquals("../models/test-model.xsd", attributes.attribute("xsi:noNamespaceSchemaLocation").getValue().get());
 
@@ -130,7 +130,7 @@ public void testInternalAttributes() throws Exception {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

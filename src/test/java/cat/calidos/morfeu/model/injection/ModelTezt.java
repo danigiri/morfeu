@@ -8,9 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Rule;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -41,7 +38,6 @@ import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelTezt extends Tezt {
 
-@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 public  static final int EXPECTED_COL_CHILDREN_COUNT = 13;
 
