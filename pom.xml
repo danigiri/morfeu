@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
 	<artifactId>morfeu-webapp</artifactId>
@@ -6,8 +8,10 @@
 	<packaging>war</packaging>
 
 	<name>Morfeu web application</name>
-	<!-- find . -name "*.ts" -exec bash -c 'unexpand -t 4 "$0" > /tmp/a && mv -v /tmp/a "$0"' {} \; -->
-	<description>Morfeu is an application to manage multiple APIs represented as YAML, JSON, JSX or XML documents</description>
+	<!-- find . -name "*.ts" -exec bash -c 'unexpand -t 4 "$0" > /tmp/a && mv -v
+	/tmp/a "$0"' {} \; -->
+	<description>Morfeu is an application to manage multiple APIs represented as
+		YAML, JSON, JSX or XML documents</description>
 	<inceptionYear>2016</inceptionYear>
 
 	<properties>
@@ -24,19 +28,23 @@
 		<jetty-version>10.0.3</jetty-version>
 		<thymeleaf-version>3.1.2.RELEASE</thymeleaf-version>
 		<jupiter-version>5.7.0</jupiter-version>
-		<junit-platform-version>1.7.0</junit-platform-version>
+		<junit-platform-version>5.10.2</junit-platform-version>
 		<selenide-version>5.20.4</selenide-version>
 		<selenium-version>3.141.59</selenium-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<scm.host_>github.com</scm.host_>
 		<developer.id_>danigiri</developer.id_>
+		<java.version>20</java.version>
 	</properties>
 
-	<scm>	<!-- mvn -B release:prepare release:perform -Darguments=" -Dskip-build-client=true -DskipITs -Djetty.skip -DaltDeploymentRepository=REPO::default::file://$HOME/.m2/repository" -->
+	<scm>	<!-- mvn -B release:prepare release:perform -Darguments="
+		-Dskip-build-client=true -DskipITs -Djetty.skip
+		-DaltDeploymentRepository=REPO::default::file://$HOME/.m2/repository" -->
 		<connection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</connection>
 		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
-		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
+		<developerConnection>
+			scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -53,7 +61,8 @@
 			<resource>
 				<directory>src/test/resources</directory>
 			</resource>
-			<resource>	<!-- helper scripts, for instance to help with the release process -->
+			<resource>	<!-- helper scripts, for instance to help with the release
+				process -->
 				<directory>src/main/scripts</directory>
 				<filtering>true</filtering>
 				<targetPath>${project.build.directory}/scripts</targetPath>
@@ -62,7 +71,8 @@
 				<directory>src/main/resources/angular</directory>
 				<targetPath>${project.build.directory}/dist</targetPath>
 			</resource>
-			<resource>	<!--  application metadata, like the version, goes to the webapp root -->
+			<resource>	<!--  application metadata, like the version, goes to the
+				webapp root -->
 				<directory>src/main/resources/metadata</directory>
 				<filtering>true</filtering>
 				<targetPath>${project.build.outputDirectory}/metadata</targetPath>
@@ -72,18 +82,20 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.13.0</version>
 				<configuration>
-					<source>21</source>
-					<target>21</target>
+					<source>20</source>
+					<target>20</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>com.google.dagger</groupId>
 							<artifactId>dagger-compiler</artifactId>
 							<version>${dagger-2-version}</version>
 						</path>
-					</annotationProcessorPaths>	<!-- FIXME: NEED TO DOUBLE CHECK THIS IS IN CLASSPATH -->
-					<generatedSourcesDirectory>target/generated-sources/annotations</generatedSourcesDirectory>
+					</annotationProcessorPaths>	<!--
+					FIXME: NEED TO DOUBLE CHECK THIS IS IN CLASSPATH -->
+					<generatedSourcesDirectory>
+						target/generated-sources/annotations</generatedSourcesDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -116,8 +128,11 @@
 							<skip>${skip-build-client}</skip>
 							<arguments>
 								<argument>-c</argument>
-								<argument>chmod a+x ${project.build.directory}/scripts/angular.sh &amp;&amp; \
-											${project.build.directory}/scripts/angular.sh
+								<argument>
+									chmod a+x
+									${project.build.directory}/scripts/angular.sh
+									&amp;&amp; \
+									${project.build.directory}/scripts/angular.sh
 								</argument>
 							</arguments>
 						</configuration>
@@ -125,32 +140,41 @@
 				</executions>
 			</plugin>
 
-			<plugin>	<!--  mvn package war:war install -DarchiveClasses=true -DattachClasses=true -DskipITs -DskipTests=true -Djetty.skip -->
+			<plugin>	<!--  mvn package war:war install -DarchiveClasses=true
+				-DattachClasses=true -DskipITs -DskipTests=true -Djetty.skip -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.2.2</version>
 				<configuration>
 					<webResources>
 						<resource>
-							<directory>${project.build.directory}/dist</directory> <!-- add build distribution to root of WAR -->
+							<directory>${project.build.directory}/dist</directory> <!--
+							add build distribution to root of WAR -->
 							<excludes>
-								<exclude>README</exclude>	<!-- originally in the empty dist folder, not needed -->
+								<exclude>README</exclude>	<!-- originally in the
+								empty dist folder, not needed -->
 							</excludes>
 						</resource>
 						<resource>
-							<directory>${project.build.outputDirectory}/test-resources</directory>	<!-- test material for dev env compatibility -->
+							<directory>
+								${project.build.outputDirectory}/test-resources</directory>	<!--
+							test material for dev env compatibility -->
 							<targetPath>target/test-classes/test-resources</targetPath>
 						</resource>
 						<resource>
-							<directory>${project.build.outputDirectory}/test-resources</directory>	<!-- test material for dev env compatibility -->
+							<directory>
+								${project.build.outputDirectory}/test-resources</directory>	<!--
+							test material for dev env compatibility -->
 							<targetPath>test-resources</targetPath>
 						</resource>
 						<resource>
-							<directory>${project.build.outputDirectory}/metadata</directory>	<!-- metadata -->
+							<directory>${project.build.outputDirectory}/metadata</directory>	<!--
+							metadata -->
 							<targetPath>metadata</targetPath>
 						</resource>
 					</webResources>
-					<attachClasses>true</attachClasses>	<!-- creates a jar with the classes and attaches an artifact -->
+					<attachClasses>true</attachClasses>	<!-- creates a jar with
+					the classes and attaches an artifact -->
 				</configuration>
 			</plugin>
 
@@ -175,35 +199,43 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<dumpOnStart>false</dumpOnStart> <!-- set to true for debugging -->
+					<dumpOnStart>false</dumpOnStart> <!-- set to true for
+					debugging -->
 					<!--scanIntervalSeconds>0</scanIntervalSeconds-->
-<reload>manual</reload>
+					<reload>manual</reload>
 					<stopPort>${jetty-stop-port}</stopPort>
 					<stopKey>STOP</stopKey>
 					<useTestScope>true</useTestScope>
 					<webApp>
 						<contextPath>${jetty-context-path}</contextPath>
-						<!-- we add this extra classpath so jetty loads templates and all jar deps like jackson and stuff -->
+						<!-- we add this extra classpath so jetty loads
+						templates and all jar deps like jackson and stuff -->
 						<!--extraClasspath>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/lib</extraClasspath-->
 						<resourceBases>
-							<resourceBase>${project.build.outputDirectory}</resourceBase>	<!-- data files for angular app -->
-							<!-- fallback for testing: /morfeu/target/test-classes/test-resources/.. is ok -->
-							<resourceBase>${basedir}</resourceBase>								<!-- more data files, compatible with int tests -->
+							<resourceBase>${project.build.outputDirectory}</resourceBase>	<!--
+							data files for angular app -->
+							<!-- fallback for testing:
+							/morfeu/target/test-classes/test-resources/.. is ok -->
+							<resourceBase>${basedir}</resourceBase>								<!-- more
+							data files, compatible with int tests -->
 							<!--resourceBase>${project.build.directory}/dist</resourceBase-->
 						</resourceBases>
 						<webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
 					</webApp>
-					<testClassesDirectory>${project.build.directory}/SKIPSCANTESTCLASSES</testClassesDirectory>
+					<testClassesDirectory>
+						${project.build.directory}/SKIPSCANTESTCLASSES</testClassesDirectory>
 					<systemProperties>
 						<systemProperty>
 							<name>org.eclipse.jetty.annotations.maxWait</name>
 							<value>60000</value>
 						</systemProperty>
-						<systemProperty> <!-- mvn jetty:run -D__RESOURCES_PREFIX=file://$(PWD)/  -->
+						<systemProperty> <!-- mvn jetty:run
+							-D__RESOURCES_PREFIX=file://$(PWD)/  -->
 							<name>__RESOURCES_PREFIX</name>
 							<value>${resources-prefix}</value>
 						</systemProperty>
-						<systemProperty> <!-- mvn jetty:run -D__ASYNC_TIMEOUT=1000  -->
+						<systemProperty> <!-- mvn jetty:run
+							-D__ASYNC_TIMEOUT=1000  -->
 							<name>__ASYNC_TIMEOUT</name>
 							<value>${async-timeout}</value>
 						</systemProperty>
@@ -213,18 +245,20 @@
 					</httpConnector>
 				</configuration>
 				<executions>
-					<execution>	<!-- start jetty when target is integration testing -->
-					<id>start-jetty-integration-test</id>
-					<phase>pre-integration-test</phase>
-					<goals>
-						<goal>run</goal>
-					</goals>
-					<configuration>
-						<scanIntervalSeconds>0</scanIntervalSeconds>
-						<daemon>true</daemon>
-					</configuration>
+					<execution>	<!-- start jetty when target is integration
+						testing -->
+						<id>start-jetty-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<daemon>true</daemon>
+						</configuration>
 					</execution>
-					<execution>	<!-- stop jetty when completed integration testing-->
+					<execution>	<!-- stop jetty when completed integration
+						testing-->
 						<id>stop-jetty</id>
 						<phase>post-integration-test</phase>
 						<goals>
@@ -255,7 +289,8 @@
 				<version>3.0.0-M4</version>
 				<configuration>
 					<systemPropertyVariables>
-						<TMP_FOLDER>${project.build.directory}/integration-tests-tmp</TMP_FOLDER>
+						<TMP_FOLDER>
+							${project.build.directory}/integration-tests-tmp</TMP_FOLDER>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
@@ -278,7 +313,8 @@
 
 	</build>
 	<dependencies>
-		<!-- DEPENDENCY INJECTION dependencies (optionals not included in the final WAR archive) -->
+		<!-- DEPENDENCY INJECTION dependencies (optionals not included in the
+		final WAR archive) -->
 		<dependency>
 			<groupId>com.google.dagger</groupId>
 			<artifactId>dagger</artifactId>
@@ -302,7 +338,8 @@
 			<!-- scope>provided</scope -->
 		</dependency>
 
-		<!-- XML Schema parsing (compatible license, see here https://xsom.java.net) -->
+		<!-- XML Schema parsing (compatible license, see here
+		https://xsom.java.net) -->
 		<dependency>
 			<groupId>com.sun.xsom</groupId>
 			<artifactId>xsom</artifactId>
@@ -311,14 +348,16 @@
 
 
 		<!-- Jackson JSON lib stuff -->
-		 <!-- the core, which includes Streaming API, shared low-level abstractions (but NOT data-binding) -->
+		<!-- the core, which includes Streaming API, shared low-level
+		abstractions (but NOT data-binding) -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>${jackson-2-version}</version>
 		</dependency>
 
-		 <!-- Just the annotations; use this dependency if you want to attach annotations
+		<!-- Just the annotations; use this dependency if you want to attach
+		annotations
 		      to classes without connecting them to the code. -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -436,32 +475,8 @@
 		<!-- UNIT TESTING -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${jupiter-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${jupiter-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<version>${jupiter-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>${junit-platform-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-runner</artifactId>
-			<version>${junit-platform-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -484,7 +499,7 @@
 			<version>${selenium-version}</version>
 			<scope>test</scope>
 			<exclusions>
-                <!--exclusion>
+				<!--exclusion>
                    <groupId>org.seleniumhq.selenium</groupId>
                     <artifactId>selenium-chrome-driver</artifactId>
                 </exclusion-->
