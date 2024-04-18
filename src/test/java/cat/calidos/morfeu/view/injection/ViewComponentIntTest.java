@@ -84,6 +84,18 @@ public void testIsMultiline() {
 	assertEquals("false", view.render());
 }
 
+
+@Test
+public void testXMLEscaping() {
+	String templ = "[(${#str.xmlc('& > <')})]";
+
+	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
+			.andProblem("").build();
+
+	assertEquals("&amp; &gt; &lt;", view.render());
+}
+
+
 }
 
 /*

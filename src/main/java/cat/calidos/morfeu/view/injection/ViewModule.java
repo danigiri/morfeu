@@ -2,10 +2,7 @@
 
 package cat.calidos.morfeu.view.injection;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -14,8 +11,6 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.thymeleaf.templateresolver.StringTemplateResolver;
-
-import cat.calidos.morfeu.utils.MorfeuUtils;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -183,6 +178,15 @@ public String quote(String s) {
 /** returns true if the input has the '\n' literal */
 public boolean isMultiline(String s) {
 	return s.contains("\\n");
+}
+
+
+/** returns xml content scaping & --> &amp;, < --> &gt; < --> &lt; */
+public String xmlc(String s) {
+	s = s.replace("&", "&amp;");
+	s = s.replace(">", "&gt;");
+	s = s.replace("<", "&lt;");
+	return s;
 }
 
 }
