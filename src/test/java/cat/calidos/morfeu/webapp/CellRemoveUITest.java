@@ -39,12 +39,12 @@ public void removeAfterSelection() {
 	UICell test = content.rootCells().get(0);
 
 	UICell col = test.child("row(0)").child("col(0)");
-	assertEquals("Should have one child", 1, col.children().size());
+	assertEquals(1, col.children().size(), "Should have one child");
 	UICell data = col.child("data(0)");
 	assertNotNull(data);
 
 	data.select().remove();
-	assertEquals("Should have no children after removing", 0, col.children().size());
+	assertEquals(0, col.children().size(), "Should have no children after removing");
 
 }
 
@@ -56,12 +56,12 @@ public void removeAfterActivation() {
 	UICell test = content.rootCells().get(0);
 
 	UICell col = test.child("row(0)").child("col(0)");
-	assertEquals("Should have one child", 1, col.children().size());
+	assertEquals(1, col.children().size(), "Should have one child");
 	UICell data = col.child("data(0)");
 	assertNotNull(data);
 
 	data.select().activate().remove(); // should also work
-	assertEquals("Should have no children after removing", 0, col.children().size());
+	assertEquals(0, col.children().size(), "Should have no children after removing");
 
 }
 

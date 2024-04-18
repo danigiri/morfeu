@@ -90,14 +90,14 @@ public void addCellValue() {
 	assertFalse(stuffEditor.isRemoveValueVisible(), "Should not be able to remove value for new cell");
 
 	stuffEditor.clickCreateValue();
-	assertFalse( stuffEditor.isCreateValueVisible(), "Should not be able to create a value again");
+	assertFalse(stuffEditor.isCreateValueVisible(), "Should not be able to create a value again");
 	assertTrue(stuffEditor.isRemoveValueVisible(), "Should be able to remove value for this cell");
 
 	// we are creating a new value, so the focus is not there by default, let's try to set it
 	stuffEditor.pressTAB();
 	stuffEditor.enterText("Foo bar");
 	value = stuffEditor.value();
-	assertTrue( value.isPresent(), "After entering text we should be able to retrieve it");
+	assertTrue(value.isPresent(), "After entering text we should be able to retrieve it");
 	assertEquals("Foo bar", value.get());
 
 	// FIXME: JUST FOUND A BUG, THE SECOND TIME WE LOAD A DOCUMENT, THE CELL SELECTION SHORTCUTS
