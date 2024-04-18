@@ -2,11 +2,11 @@
 
 package cat.calidos.morfeu.api;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.InputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -20,16 +20,16 @@ public void testStuffSnippet() throws Exception {
 
 	// http://localhost:8080/morfeu/dyn/snippets/target/test-classes/test-resources/snippets/stuff.xml
 	//  &model=target/test-classes/test-resources/models/test-model.xsd%3Ffilter=/test/row/col/stuff
-	String model = pathPrefix+"models/test-model.xsd%3Ffilter=/test/row/col/stuff";
-	String uri = "snippets/"+pathPrefix+"snippets/stuff.xml?model="+model;
+	var model = pathPrefix+"models/test-model.xsd%3Ffilter=/test/row/col/stuff";
+	var uri = "snippets/"+pathPrefix+"snippets/stuff.xml?model="+model;
 	InputStream content = fetchRemoteInputStreamFrom(uri);
 	assertNotNull(content);
 
 	JsonNode stuff = parseJson(content);
-	assertEquals("Wrong document schema", 0, stuff.get("schema").asInt());
-	assertTrue("Stuff snippet should just have the content cell directly", stuff.isContainerNode());
-	assertEquals("/stuff has a wrong name", "stuff", stuff.get("name").asText());
-	assertEquals("/stuff has wrong content", "Stuff content", stuff.get("value").asText());
+	assertEquals( 0, stuff.get("schema").asInt(), "Wrong document schema");
+	assertTrue(stuff.isContainerNode(), "Stuff snippet should just have the content cell directly");
+	assertEquals("stuff", stuff.get("name").asText(), "/stuff has a wrong name");
+	assertEquals("Stuff content", stuff.get("value").asText(), "/stuff has wrong content");
 
 }
 
@@ -39,15 +39,15 @@ public void testData2Snippet() throws Exception {
 
 	// http://localhost:8080/morfeu/dyn/snippets/target/test-classes/test-resources/snippets/data2.xml
 	//  &model=target/test-classes/test-resources/models/test-model.xsd%3Ffilter=/test/row/col/data2
-	String model = pathPrefix+"models/test-model.xsd%3Ffilter=/test/row/col/data2";
-	String uri = "snippets/"+pathPrefix+"snippets/data2.xml?model="+model;
+	var model = pathPrefix+"models/test-model.xsd%3Ffilter=/test/row/col/data2";
+	var uri = "snippets/"+pathPrefix+"snippets/data2.xml?model="+model;
 	InputStream content = fetchRemoteInputStreamFrom(uri);
 	assertNotNull(content);
 
 	JsonNode data2 = parseJson(content);
-	assertEquals("Wrong document schema", 0, data2.get("schema").asInt());
-	assertTrue("Data2 snippet should just have the content cell directly", data2.isContainerNode());
-	assertEquals("/children/data2(0) has a wrong name", "data2", data2.get("name").asText());
+	assertEquals(0, data2.get("schema").asInt(), "Wrong document schema");
+	assertTrue(data2.isContainerNode(), "Data2 snippet should just have the content cell directly");
+	assertEquals("data2", data2.get("name").asText(), "/children/data2(0) has a wrong name");
 
 }
 
@@ -55,7 +55,7 @@ public void testData2Snippet() throws Exception {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
