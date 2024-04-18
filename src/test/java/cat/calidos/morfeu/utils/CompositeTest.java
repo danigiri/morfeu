@@ -1,41 +1,25 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-
 package cat.calidos.morfeu.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.problems.InternalException;
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CompositeTest {
 
 private Composite<String> composite;
 
 
-@Before
+@BeforeEach
 public void setup() {
 
-//TODO: put in a module somewhere
+	// TODO: put in a module somewhere
 	this.composite = new OrderedMap<String>();
 }
 
@@ -45,22 +29,22 @@ public void testChildren() {
 
 	assertTrue(composite.asList().isEmpty());
 	assertEquals(0, composite.size());
-	
+
 	assertTrue(composite.addChild("foo", "bar"));
 	assertFalse(composite.asList().isEmpty());
 	assertEquals(1, composite.size());
-	
+
 	assertEquals("bar", composite.asList().get(0));
-	
+
 	assertEquals("bar", composite.child(0));
 
 	assertTrue(composite.addChild("foo2", "bar2"));
 	assertEquals("bar", composite.asList().get(0));
 	assertEquals("bar2", composite.asList().get(1));
-	
+
 	assertFalse(composite.addChild("foo2", "bar3"));
 	assertEquals("bar3", composite.asList().get(1));
-	
+
 	assertEquals("bar", composite.child(0));
 	assertEquals("bar3", composite.child(1));
 
@@ -71,22 +55,36 @@ public void testChildren() {
 }
 
 
-@Test(expected=InternalException.class)
+@Test
 public void testBadGet() {
 
 	assertTrue(composite.addChild("foo", "bar"));
-	composite.child(1);
+	assertThrows(InternalException.class, () -> composite.child(1));
 
 }
 
 
-@Test(expected=InternalException.class)
+@Test
 public void testBadGetName() {
-	
+
 	assertTrue(composite.addChild("foo", "bar"));
-	composite.child("nope");
-	
+	assertThrows(InternalException.class, () -> composite.child("nope"));
+
 }
 
 
 }
+
+/*
+ * Copyright 2024 Daniel Giribet
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */

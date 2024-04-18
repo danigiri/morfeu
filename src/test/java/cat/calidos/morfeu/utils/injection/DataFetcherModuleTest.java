@@ -1,6 +1,6 @@
 package cat.calidos.morfeu.utils.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.io.InputStream;
@@ -12,18 +12,13 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.utils.injection.DataFetcherModule;
+
 
 public class DataFetcherModuleTest {
-
-@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 @Mock CloseableHttpClient httpClient;
 @Mock CloseableHttpResponse response;

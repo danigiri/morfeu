@@ -2,13 +2,13 @@
 
 package cat.calidos.morfeu.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.net.URI;
 
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,8 +16,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.injection.ModelTezt;
-import cat.calidos.morfeu.transform.JsonNodeCellModel;
-import cat.calidos.morfeu.transform.YAMLTextualToXMLProcessor;
 
 /**
 *	@author daniel giribet
@@ -71,7 +69,7 @@ public void testOutputWithEmptyContent() {
 
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

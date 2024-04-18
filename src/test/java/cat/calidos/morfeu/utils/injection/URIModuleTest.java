@@ -16,15 +16,12 @@
 
 package cat.calidos.morfeu.utils.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URISyntaxException;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.problems.FetchingException;
-import cat.calidos.morfeu.utils.injection.URIModule;
 
 /**
 * @author daniel giribet
@@ -34,7 +31,7 @@ public class URIModuleTest {
 private String uri;
 
 
-@Before
+@BeforeEach
 public void setup() {
 	uri = "http://foo.com";
 }
@@ -45,9 +42,9 @@ public void testURI() throws FetchingException {
 }
 
 
-@Test(expected = FetchingException.class)
+@Test
 public void testURIException() throws FetchingException {
-	URIModule.uri(":/foo.com");
+	assertThrows(FetchingException.class, () -> URIModule.uri(":/foo.com"));
 }
 
 }

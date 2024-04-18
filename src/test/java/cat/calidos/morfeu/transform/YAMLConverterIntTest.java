@@ -2,10 +2,10 @@
 
 package cat.calidos.morfeu.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ public class YAMLConverterIntTest extends TransformTezt {
 private Model model;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	String docPath = "test-resources/documents/document1.json";

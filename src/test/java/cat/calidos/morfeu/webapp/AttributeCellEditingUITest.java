@@ -2,15 +2,15 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.codeborne.selenide.Selenide.open;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UIAttributeData;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -28,7 +28,7 @@ private UICell test;
 private UIContent content;
 
 
-@Before
+@BeforeEach
 public void setup() {
 
 	open(appBaseURL);
@@ -57,7 +57,7 @@ public void addAttributeTest() throws Exception {
 	assertNotNull(data);
 
 	List<UIAttributeData> attributes = data.cellInfo().attributes();
-	assertEquals("We should only have a single attribute before adding another", 1, attributes.size());
+	assertEquals( 1, attributes.size(), "We should only have a single attribute before adding another");
 
 	UIAttributeData number = attributes.get(0);
 	assertEquals("42", number.value());
@@ -67,10 +67,10 @@ public void addAttributeTest() throws Exception {
 	UICellData dataEditorCellData = dataEditor.cellData();
 	List<UIAttributeData> nonPresentAttributes = dataEditorCellData.notPresentAttributes();
 	assertNotNull(nonPresentAttributes);
-	assertEquals("We should only have one attribute missing", 1, nonPresentAttributes.size());
+	assertEquals( 1, nonPresentAttributes.size(), "We should only have one attribute missing");
 
 	Optional<UIAttributeData> notPresentAttribute = dataEditorCellData.notPresentAttribute("text");
-	assertTrue("Text attribute is not present yet", notPresentAttribute.isPresent());	// a bit of a contradiction
+	assertTrue(notPresentAttribute.isPresent(), "Text attribute is not present yet");	// a bit of a contradiction
 
 	UIAttributeData textAttribute = notPresentAttribute.get();
 	assertFalse(textAttribute.hasValue());
@@ -83,10 +83,10 @@ public void addAttributeTest() throws Exception {
 	assertEquals("Default value for text (from global)", textAttribute.value());
 
 	dataEditorCellData = dataEditor.cellData();
-	assertEquals("We have now two attributes", 2, dataEditorCellData.attributes().size()); // awesome!
+	assertEquals( 2, dataEditorCellData.attributes().size(), "We have now two attributes"); // awesome!
 
 	nonPresentAttributes = dataEditorCellData.notPresentAttributes();
-	assertEquals("We do not have any remaining non-present attributes", 0, nonPresentAttributes.size());
+	assertEquals(0, nonPresentAttributes.size(), "We do not have any remaining non-present attributes");
 
 }
 
@@ -94,7 +94,7 @@ public void addAttributeTest() throws Exception {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
