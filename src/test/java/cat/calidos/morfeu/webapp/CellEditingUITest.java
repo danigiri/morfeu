@@ -3,7 +3,7 @@
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,23 +19,19 @@ import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellEditingUITest extends UITezt {
 
-private UICell test;
-private UIContent content;
+private UICell		test;
+private UIContent	content;
 
 
 @Before
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()
-							.shouldAppear()
-							.clickOn(0)
-							.clickOnDocumentNamed("Document 1")
-							.content();
+	content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1").content();
 	content.shouldBeVisible();
 	test = content.rootCells().get(0);
 
@@ -57,17 +53,17 @@ public void editCellAndSave() {
 
 	UICellData cellEditorData = dataEditor.cellData();
 	assertNotNull(cellEditorData);
-	assertTrue("Editing the cell should show an editor", cellEditorData.isFromEditor());
-	assertTrue("Editing the cell should show an editor with data coming from the cell", cellEditorData.isFromCell());
+	assertTrue(cellEditorData.isFromEditor(), "Editing the cell should show an editor");
+	assertTrue(cellEditorData.isFromCell(), "Editing the cell should show an editor with data coming from the cell");
 
 	attributes = cellEditorData.attributes();
 	assertNotNull(attributes);
-	assertEquals("We should be editing two attributes", 2, attributes.size());
+	assertEquals(2, attributes.size(), "We should be editing two attributes");
 	UIAttributeData text = checkAttribute(attributes, "text", "blahblah");
-	assertTrue("Attribute text should be editable", text.isEditable());
+	assertTrue(text.isEditable(), "Attribute text should be editable");
 
 	UIAttributeData number = checkAttribute(attributes, "number", "42");
-	assertTrue("Attribute number should be editable", number.isEditable());
+	assertTrue(number.isEditable(), "Attribute number should be editable");
 
 	// let's modify the values
 	text.eraseValueInField();
@@ -75,8 +71,8 @@ public void editCellAndSave() {
 	number.enterTextNext("66");
 	dataEditor.clickSave();
 
-	data = test.child("row(0)").child("col(0)").child("data(0)").select().activate();	// refresh
-	attributes = data.cellInfo().attributes();	// re-read attributes from the now-modified cell
+	data = test.child("row(0)").child("col(0)").child("data(0)").select().activate(); // refresh
+	attributes = data.cellInfo().attributes(); // re-read attributes from the now-modified cell
 	text = checkAttribute(attributes, "text", "foo");
 	number = checkAttribute(attributes, "number", "66");
 
@@ -114,8 +110,8 @@ public void editCellAndDismiss() {
 	// we refetch it as using the previous instance was problematic
 	data = test.child("row(0)").child("col(0)").child("data(0)");
 	data.select().activate();
-	attributes = data.cellInfo().attributes();				// re-read attributes from the now-modified cell
-	text = checkAttribute(attributes, "text", "blahblah");	// boom, magically restored
+	attributes = data.cellInfo().attributes(); // re-read attributes from the now-modified cell
+	text = checkAttribute(attributes, "text", "blahblah"); // boom, magically restored
 	number = checkAttribute(attributes, "number", "42");
 
 }
@@ -147,7 +143,7 @@ private UIAttributeData checkAttribute(List<UIAttributeData> attributes, String 
 	Optional<UIAttributeData> attributeOptional = attributes.stream().filter(a -> a.name().matches(name)).findFirst();
 	assertTrue(attributeOptional.isPresent());
 	UIAttributeData attribute = attributeOptional.get();
-	assertEquals("Wrong value of '"+name+"'", expectedValue, attribute.value());
+	assertEquals("Wrong value of '" + name + "'", expectedValue, attribute.value());
 
 	return attribute;
 
@@ -157,17 +153,15 @@ private UIAttributeData checkAttribute(List<UIAttributeData> attributes, String 
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

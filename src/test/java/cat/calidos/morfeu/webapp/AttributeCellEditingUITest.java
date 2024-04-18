@@ -2,12 +2,12 @@
 
 package cat.calidos.morfeu.webapp;
 
+import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.codeborne.selenide.Selenide.open;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

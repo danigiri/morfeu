@@ -3,11 +3,11 @@
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
@@ -43,7 +43,7 @@ public void testDragSnippetCell() {
 
 	// now we select. activate and drag it to the drop area
 	stuffSnippet.select();
-	assertTrue("Snippet is not selected after selection", stuffSnippet.isSelected());
+	assertTrue(stuffSnippet.isSelected(), "Snippet is not selected after selection");
 
 	UICell stuff = stuffSnippet.children().get(0);
 	assertNotNull(stuff);
@@ -55,7 +55,7 @@ public void testDragSnippetCell() {
 	assertTrue(stuff.isActive());
 
 	UICell targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
-	assertEquals("Initially we should have one child", 1, targetCol.children().size());
+	assertEquals(1, targetCol.children().size(), "Initially we should have one child");
 	UIDropArea targetDropArea = targetCol.dropArea(1);
 	targetDropArea.select();
 	targetDropArea.dropHere(stuff);
@@ -64,7 +64,7 @@ public void testDragSnippetCell() {
 
 	UICell stuffFromSnippet = targetCol.child("stuff(1)");
 	Optional<String> value = stuffFromSnippet.select().activate().cellInfo().value();
-	assertTrue("Snippet created 'stuff' should have a value", value.isPresent());
+	assertTrue(value.isPresent(), "Snippet created 'stuff' should have a value");
 	assertEquals("Stuff content", value.get());
 
 }
@@ -73,7 +73,7 @@ public void testDragSnippetCell() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

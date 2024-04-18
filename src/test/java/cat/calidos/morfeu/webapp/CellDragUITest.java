@@ -3,10 +3,10 @@
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -19,7 +19,7 @@ import cat.calidos.morfeu.webapp.ui.UIContent;
 public class CellDragUITest extends UITezt {
 
 
-@Before
+@BeforeEach
 public void setup() {
 	open(appBaseURL);
 }
@@ -91,11 +91,11 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 	
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
 	assertNotNull(targetCol);
-	assertEquals("Target column should only have one child (row) at the start", 1, targetCol.children().size());
+	assertEquals( 1, targetCol.children().size(), "Target column should only have one child (row) at the start");
 	
 	UICell sourceCol = targetCol.child("row(0)").child("col(0)");
 	assertNotNull(sourceCol);
-	assertEquals("Source column should have two child (data and data2) at the start", 2, sourceCol.children().size());
+	assertEquals(2, sourceCol.children().size(), "Source column should have two child (data and data2) at the start");
 	
 	UICell data = sourceCol.child("data(0)");
 	assertNotNull(data);
@@ -103,16 +103,16 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 	assertNotNull(data2);
 	
 	data.dragTo(targetCol.dropArea(0));
-	assertEquals("Target column should have two children after drag", 2, targetCol.children().size());
+	assertEquals( 2, targetCol.children().size(), "Target column should have two children after drag");
 
 	data = targetCol.child("data(0)");	// newly dropped data cell
 	assertNotNull(data);
 	
 	UICell displacedRow = targetCol.child("row(1)");
-	assertNotNull("Displaced row is now at position (1)", displacedRow);
+	assertNotNull( displacedRow, "Displaced row is now at position (1)");
 
 	sourceCol = displacedRow.child("col(0)"); // we re-read the source col as it now has a different location
-	assertEquals("Source column should have 1 child after drag", 1, sourceCol.children().size());
+	assertEquals(1, sourceCol.children().size(), "Source column should have 1 child after drag");
 	data2 = sourceCol.child("data2(0)");
 	assertNotNull(data2);
 
@@ -164,18 +164,18 @@ public void testDragCellFromLast() {
 	// Next:
 	UICell data2 = col.child("data2(1)");
 	data2.dragTo(col.dropArea(0));
-	assertEquals("Target column should still have two children after drag", 2, col.children().size());
+	assertEquals(2, col.children().size(), "Target column should still have two children after drag");
 
 	// Put it back
 	data2 = col.child("data2(0)");
 	data2.dragTo(col.dropArea(2));
-	assertEquals("Target column should still have two children after 2nd drag", 2, col.children().size());
+	assertEquals(2, col.children().size(), "Target column should still have two children after 2nd drag");
 
 	// And again:
 	col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)");
 	data2 = col.child("data2(1)");
 	data2.dragTo(col.dropArea(0));
-	assertEquals("Target column should still have two children after 3rd drag", 2, col.children().size());
+	assertEquals(2, col.children().size(), "Target column should still have two children after 3rd drag");
 
 }
 
@@ -183,7 +183,7 @@ public void testDragCellFromLast() {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

@@ -2,11 +2,10 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.Assert.*;
-
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -37,16 +36,16 @@ public void documentBasicDataTest() {
 	
 	UIDocument document = catalogue.clickOnDocumentNamed("Document 1");
 	String title = document.title();
-	assertTrue("'Document 1' is not titled correltly ("+title+")",  title.contains("Document 1"));
-	assertTrue("'Document 1' is not correctly detected as xml", title.contains("xml"));
+	assertTrue(title.contains("Document 1"), "'Document 1' is not titled correltly ("+title+")");
+	assertTrue( title.contains("xml"), "'Document 1' is not correctly detected as xml");
 	assertEquals("First document", document.desc());
 	assertTrue(document.isValid());
 
 	
 	document = catalogue.clickOnDocumentNamed("Document with non-valid content");
 	title = document.title();
-	assertTrue("'non valid doc' is not titled correctly ("+title+")",  title.contains("Problematic document"));
-	assertTrue("'non valid doc' is not correctly detected as Unknown", title.contains("Unknown"));
+	assertTrue( title.contains("Problematic document"), "'non valid doc' is not titled correctly ("+title+")");
+	assertTrue( title.contains("Unknown"), "'non valid doc' is not correctly detected as Unknown");
 	assertEquals("Unknown", document.desc());
 	assertFalse(document.isValid());
 	
@@ -55,7 +54,7 @@ public void documentBasicDataTest() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

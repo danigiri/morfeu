@@ -3,12 +3,11 @@
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -20,13 +19,15 @@ import cat.calidos.morfeu.webapp.ui.UIDropArea;
 import cat.calidos.morfeu.webapp.ui.UIModel;
 
 
-/** Testing content display without manipulation
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Testing content display without manipulation
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUITest extends UITezt {
 
 
-@Before
+@BeforeEach
 public void setup() {
 	open(appBaseURL);
 }
@@ -53,42 +54,39 @@ public void contentTestAppearingAndDisappearing() {
 @Test
 public void contentTest() {
 
-	UIContent content = UICatalogues.openCatalogues()
-										.shouldAppear()
-										.clickOn(0)
-										.clickOnDocumentNamed("Document 1")
-										.content();
+	UIContent content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1")
+			.content();
 	content.shouldBeVisible();
 
-	List<UICell> rootCells = content.rootCells();		// TEST
+	List<UICell> rootCells = content.rootCells(); // TEST
 	assertNotNull(rootCells);
 	assertEquals(1, rootCells.size());
 
-	UICell test1 = rootCells.get(0);					// TEST/*
+	UICell test1 = rootCells.get(0); // TEST/*
 	assertNotNull(test1);
 	assertTrue(test1.isWell());
 
-	UICell row2 = test1.children().get(0);				// TEST/ROW
+	UICell row2 = test1.children().get(0); // TEST/ROW
 	assertNotNull(row2);
 	assertTrue(row2.isRowWell());
 
-	List<UICell> cols3 = row2.children();				// TEST/ROW/*
+	List<UICell> cols3 = row2.children(); // TEST/ROW/*
 	assertNotNull(cols3);
 	assertEquals(2, cols3.size());
 
-	UICell col3a = cols3.get(0);						// TEST/ROW/COL0
+	UICell col3a = cols3.get(0); // TEST/ROW/COL0
 	assertNotNull(col3a);
 	assertTrue(col3a.isColumnWell());
 
 	UICell data = col3a.child("data(0)");
-	assertTrue("'data' cell representation img is wrong", data.img().endsWith("assets/images/data-cell.svg"));
+	assertTrue(data.img().endsWith("assets/images/data-cell.svg"), "'data' cell representation img is wrong");
 
-	UICell col3b = cols3.get(1);						// TEST/ROW/COL1
+	UICell col3b = cols3.get(1); // TEST/ROW/COL1
 	assertNotNull(col3b);
 	assertTrue(col3b.isColumnWell());
 
 	UICell data2 = col3b.child("row(0)").child("col(0)").child("data2(1)");
-	assertTrue("'data2' cell representation img is wrong", data2.img().contains("/dyn/preview/svg/data2.svg"));
+	assertTrue(data2.img().contains("/dyn/preview/svg/data2.svg"), "'data2' cell representation img is wrong");
 
 }
 
@@ -96,12 +94,9 @@ public void contentTest() {
 @Test
 public void relationshipFromContentToModelTest() {
 
-	String document1URI = "target/test-classes/test-resources/documents/document1.xml";
+	var document1URI = "target/test-classes/test-resources/documents/document1.xml";
 
-	UIDocument document = UICatalogues.openCatalogues()
-										.shouldAppear()
-										.clickOn(0)
-										.clickOnDocumentNamed("Document 1");
+	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
 	content.shouldBeVisible();
 	UICell test = content.rootCells().get(0);
@@ -109,17 +104,17 @@ public void relationshipFromContentToModelTest() {
 	// /test/row/col/data
 	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
 	assertTrue(data.isCell());
-	assertEquals(document1URI+"/test(0)/row(0)/col(0)/data(0)", data.id());
+	assertEquals(document1URI + "/test(0)/row(0)/col(0)/data(0)", data.id());
 
 	data.hover();
 	assertTrue(data.isActive());
 
 	UIModel model = document.model();
-	//test/row/col/data
+	// test/row/col/data
 	UICellModelEntry dataModel = model.rootCellModel("test").child("row").child("col").child("data");
 	assertTrue(dataModel.isActive());
 
-	UICellModelEntry data2Model =  model.rootCellModel("test").child("row").child("col").child("data2");
+	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2");
 	assertFalse(data2Model.isActive());
 
 	UICell data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").child("data2(0)");
@@ -129,17 +124,14 @@ public void relationshipFromContentToModelTest() {
 	assertTrue(data2.isActive());
 	assertTrue(data2Model.isActive());
 	assertFalse(dataModel.isActive());
-	
+
 }
 
 
 @Test
 public void relationshipFromModelToContentTest() {
 
-	UIDocument document = UICatalogues.openCatalogues()
-										.shouldAppear()
-										.clickOn(0)
-										.clickOnDocumentNamed("Document 1");
+	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
 
 	UIContent content = document.content();
 	content.shouldBeVisible();
@@ -158,7 +150,8 @@ public void relationshipFromModelToContentTest() {
 	List<UIDropArea> dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").dropAreas();
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 
-	// on the other one, there is only one data2, so there is room for 1 more, all drop areas active on that column
+	// on the other one, there is only one data2, so there is room for 1 more, all drop areas active
+	// on that column
 	dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").dropAreas();
 	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
 
@@ -167,11 +160,8 @@ public void relationshipFromModelToContentTest() {
 
 @Test
 public void dropAreasTest() {
-	
-	UIDocument document = UICatalogues.openCatalogues()
-										.shouldAppear()
-										.clickOn(0)
-										.clickOnDocumentNamed("Document 1");
+
+	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
 	content.shouldBeVisible();
 	UICell test = content.rootCells().get(0);
@@ -181,27 +171,29 @@ public void dropAreasTest() {
 	List<UIDropArea> dropAreas = col.dropAreas();
 	assertEquals(2, dropAreas.size());
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
-	
+
 	// we hover over the data cell and we do not activate both drop areas, as it's an only child
 	UICell data = col.child("data(0)");
 	assertTrue(data.isCell());
 	data.hover();
 	assertTrue(data.isActive());
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
-	
+
 	// we hover over another data, we should activate both drop areas from the original first column
 	test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data(0)").hover();
 	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
-	
-	
-	// here we have 2 data2 children, we can reorder them around so all drop areas are active in this col
+
+
+	// here we have 2 data2 children, we can reorder them around so all drop areas are active in
+	// this col
 	// this is irrespective of child count and expected
 	UICell colWith2data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	dropAreas = colWith2data2.dropAreas();
 	colWith2data2.child("data2(0)").hover();
 	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
-	
-	// however, if we hover on another data2 somewhere else, we hit over the count limit of 2 data2 so we have no
+
+	// however, if we hover on another data2 somewhere else, we hit over the count limit of 2 data2
+	// so we have no
 	// active cols
 	test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data2(1)").hover();
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
@@ -212,17 +204,15 @@ public void dropAreasTest() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

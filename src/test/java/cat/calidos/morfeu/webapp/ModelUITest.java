@@ -3,12 +3,12 @@
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.injection.ModelTezt;
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
@@ -23,7 +23,7 @@ import cat.calidos.morfeu.webapp.ui.UIModel;
 public class ModelUITest extends UITezt {
 
 
-@Before
+@BeforeEach
 public void setup() {
 	open(appBaseURL);
 }
@@ -102,9 +102,9 @@ public void testCellModels() {
 	assertTrue(testModelEntry.thumb().endsWith("assets/images/test-thumb.svg"));
 
 	//TODO: add cell model children testing
-	assertTrue("Model is not expanded by default",  testModelEntry.isExpanded());
+	assertTrue(testModelEntry.isExpanded(), "Model is not expanded by default");
 	testModelEntry.clickOnArrow();
-	assertTrue("Model should collapse when clicked", testModelEntry.isCollapsed());
+	assertTrue(testModelEntry.isCollapsed(), "Model should collapse when clicked");
 	testModelEntry.clickOnArrow();	// let's expand again so we can find the children =)
 
 	List<UICellModelEntry> testModelChildren = testModelEntry.children();
@@ -124,7 +124,7 @@ public void testCellModels() {
 	List<UICellModelEntry> colChildren = colModel.children();				// TEST/ROW/COL/*
 	int colChildrenSize = colChildren.size();
 	int expectedCount = ModelTezt.EXPECTED_COL_CHILDREN_COUNT;
-	assertEquals("col model should have 10 children, not "+colChildrenSize, expectedCount, colChildrenSize);
+	assertEquals( expectedCount, colChildrenSize, "col model should have 10 children, not "+colChildrenSize);
 
 	assertEquals("stuff", colChildren.get(0).name());
 	assertEquals("data", colChildren.get(1).name());

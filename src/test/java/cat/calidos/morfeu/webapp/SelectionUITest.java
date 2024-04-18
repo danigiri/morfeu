@@ -1,27 +1,11 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-
 package cat.calidos.morfeu.webapp;
 
 import static com.codeborne.selenide.Selenide.open;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
@@ -36,7 +20,7 @@ public class SelectionUITest extends UITezt {
 private UIContent content;
 
 
-@Before
+@BeforeEach
 public void setup() {
 	
 	open(appBaseURL);
@@ -52,22 +36,22 @@ public void setup() {
 
 @Test
 public void testClearSelection() {
-	
+
 	content.pressKey(UIContent.SELECTION_MODE);
-	assertFalse("After selection mode, root cell should not be selected", content.rootCells().get(0).isSelected());
-	
+	assertFalse(content.rootCells().get(0).isSelected(), "After selection mode, root cell should not be selected");
+
 	content.pressKey("0");
-	assertTrue("After selecting root cell it should be selected", content.rootCells().get(0).isSelected());
-	assertFalse("First row should not be selected yet", content.rootCells().get(0).child(0).isSelected());
+	assertTrue(content.rootCells().get(0).isSelected(), "After selecting root cell it should be selected");
+	assertFalse(content.rootCells().get(0).child(0).isSelected(), "First row should not be selected yet");
 
 	content.pressKey("0");
 	assertFalse(content.rootCells().get(0).isSelected());
 	assertTrue(content.rootCells().get(0).child(0).isSelected());
-	
+
 	content.pressKey(UIContent.SELECTION_MODE);
 	assertFalse(content.rootCells().get(0).isSelected());
 	assertFalse(content.rootCells().get(0).child(0).isSelected());
-	
+
 }
 
 
@@ -106,9 +90,9 @@ public void testSelectionClearsActivation() {
 	content.pressKey("0");
 	content.pressKey("a");
 	UICell data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)");
-	assertFalse("After activating data cell, it should not be selected anymore", data.isSelected());
-	assertTrue("After activating data cell, it should be activated now", data.isActive());
-	
+	assertFalse(data.isSelected(), "After activating data cell, it should not be selected anymore");
+	assertTrue(data.isActive(), "After activating data cell, it should be activated now");
+
 	content.pressKey(UIContent.SELECTION_MODE);
 	content.pressKey("0");
 	content.pressKey("0");
@@ -147,7 +131,7 @@ public void testSelectionChangesActivation() {
 	assertTrue(data.isActive());
 	assertTrue(data2.isSelected());
 	assertFalse(data2.isActive());
-	
+
 	content.pressKey("a");
 	assertFalse(data.isSelected());
 	assertFalse(data.isActive());
@@ -157,3 +141,20 @@ public void testSelectionChangesActivation() {
 }
 
 }
+
+/*
+ *    Copyright 2024 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+

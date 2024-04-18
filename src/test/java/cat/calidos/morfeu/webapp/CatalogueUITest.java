@@ -2,9 +2,8 @@
 
 package cat.calidos.morfeu.webapp;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import com.codeborne.selenide.ElementsCollection;
@@ -18,13 +17,13 @@ import cat.calidos.morfeu.webapp.ui.UIProblem;
 import static com.codeborne.selenide.Selenide.*;
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CatalogueUITest extends UITezt {
 
-private static final int CATALOGUE_NOT_FOUND_INDEX = 4;
-private static final int EXPECTED_CATALOGUES_COUNT = 5;
-private static final int EXPECTED_DOCUMENTS_SIZE = 8;
+private static final int	CATALOGUE_NOT_FOUND_INDEX	= 4;
+private static final int	EXPECTED_CATALOGUES_COUNT	= 5;
+private static final int	EXPECTED_DOCUMENTS_SIZE		= 8;
 
 
 @Test
@@ -72,7 +71,8 @@ public void catalogueDetailTest() throws Exception {
 @Test
 public void catalogueDetailErrorTest() {
 
-	// notice here we are not using the helper method to open a catalogue given that they don't expect errors
+	// notice here we are not using the helper method to open a catalogue given that they don't
+	// expect errors
 	open(appBaseURL);
 	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
 	UICatalogue.shouldNotBeVisible();
@@ -94,17 +94,15 @@ public void catalogueDetailErrorTest() {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
