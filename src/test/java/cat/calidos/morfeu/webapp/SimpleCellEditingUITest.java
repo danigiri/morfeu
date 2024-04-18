@@ -7,8 +7,8 @@ import static com.codeborne.selenide.Selenide.open;
 
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
@@ -25,7 +25,7 @@ private UICell		test;
 private UIContent	content;
 
 
-@Before
+@BeforeEach
 public void setup() {
 
 	open(appBaseURL);

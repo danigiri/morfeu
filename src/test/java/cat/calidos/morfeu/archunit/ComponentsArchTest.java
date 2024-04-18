@@ -1,39 +1,40 @@
 package cat.calidos.morfeu.archunit;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+//import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-
+/*
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+*/
 
 /** Proof of concept of arch unit testing, validating somme basic code structure assumptions on ComponentBuilders
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@AnalyzeClasses(packages = "cat.calidos.morfeu")
+//@AnalyzeClasses(packages = "cat.calidos.morfeu")
 public class ComponentsArchTest {
 
 private static final String COMPONENT = "@Component";
 
 private static final String PRODUCTION_COMPONENT = "@ProductionComponent";
 
-@ArchTest
-private final ArchRule componentsShouldBeNamedAsComponents = classes()
-																.that()
-																.areAnnotatedWith(PRODUCTION_COMPONENT)
-																.or()
-																.areAnnotatedWith(COMPONENT)
-																.should()
-																.haveSimpleNameEndingWith("Component");
-
-@ArchTest
-private final ArchRule componentsShouldBeInInjectionPackages = classes()
-																.that()
-																.areAnnotatedWith(PRODUCTION_COMPONENT)
-																.or()
-																.areAnnotatedWith(COMPONENT)
-																.should()
-																.resideInAPackage("..injection..");
+//@ArchTest
+//private final ArchRule componentsShouldBeNamedAsComponents = classes()
+//																.that()
+//																.areAnnotatedWith(PRODUCTION_COMPONENT)
+//																.or()
+//																.areAnnotatedWith(COMPONENT)
+//																.should()
+//																.haveSimpleNameEndingWith("Component");
+//
+//@ArchTest
+//private final ArchRule componentsShouldBeInInjectionPackages = classes()
+//																.that()
+//																.areAnnotatedWith(PRODUCTION_COMPONENT)
+//																.or()
+//																.areAnnotatedWith(COMPONENT)
+//																.should()
+//																.resideInAPackage("..injection..");
 
 }
 

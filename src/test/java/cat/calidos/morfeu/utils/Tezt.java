@@ -2,8 +2,7 @@
 
 package cat.calidos.morfeu.utils;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -107,7 +106,7 @@ protected void compareWithXMLFile(String content, String path) {
 							.ignoreWhitespace()
 							.build();
 
-	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
+	assertFalse(diff.hasDifferences(), "Transformed JSON to XML should be the same as original"+diff.toString());
 
 }
 
@@ -123,7 +122,7 @@ protected void compareWithXML(String content, String expected) {
 							.ignoreWhitespace()
 							.build();
 
-	assertFalse("Transformed JSON to XML should be the same as original"+diff.toString(), diff.hasDifferences());
+	assertFalse(diff.hasDifferences(), "Transformed JSON to XML should be the same as original"+diff.toString());
 
 }
 
@@ -131,7 +130,7 @@ protected void compareWithXML(String content, String expected) {
 }
 
 /*
- *    Copyright 2017 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

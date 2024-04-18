@@ -1,19 +1,3 @@
-/*
- *    Copyright 2018 Daniel Giribet
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-
 package cat.calidos.morfeu.api;
 
 import java.io.IOException;
@@ -25,8 +9,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Tezt;
@@ -43,7 +27,7 @@ protected String webappPrefix;
 protected String pathPrefix = "target/test-classes/test-resources/";
 
 
-@Before
+@BeforeEach
 public void setup() {
 
 	client = HttpClients.createDefault();
@@ -52,7 +36,7 @@ public void setup() {
 }
 
 
-@After
+@AfterEach
 public void teardown() throws IOException {
 
 	if (client!=null) {
@@ -90,3 +74,19 @@ public InputStream postToRemote(String location, String content) throws Exceptio
 
 
 }
+
+/*
+ *    Copyright 2024 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

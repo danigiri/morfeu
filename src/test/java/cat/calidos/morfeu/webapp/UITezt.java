@@ -2,8 +2,6 @@
 
 package cat.calidos.morfeu.webapp;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
@@ -32,12 +30,10 @@ protected static final String DEFAULT_CHROME_LOCATION = "/Applications/chromedri
 protected static final String FIREFOX_LOCATION_PROPERTY = "webdriver.gecko.driver";
 protected static final String DEFAULT_FIREFOX_LOCATION = "/usr/local/bin/geckodriver";
 
-
 protected static String appBaseURL;
 protected static WebDriver driver;
 
-
-@BeforeClass @BeforeAll
+@BeforeAll
 public static void setUpClass() throws Exception {
 
 	appBaseURL = defineSystemVariable(URL_PROPERTY, DEFAULT_URL);
@@ -89,7 +85,7 @@ public void waitOneSec() {
 }
 
 
-@AfterClass @AfterAll
+@AfterAll
 public static void tearDownClass() {
 
 	//Close the browser

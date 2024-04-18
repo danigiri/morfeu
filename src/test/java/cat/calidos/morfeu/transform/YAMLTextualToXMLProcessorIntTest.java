@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 
 import java.net.URI;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -27,7 +27,7 @@ JsonNode node;
 private CellModel stuff; 
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");

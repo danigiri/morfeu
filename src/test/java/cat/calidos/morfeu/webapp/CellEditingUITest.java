@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UIAttributeData;
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
@@ -27,7 +27,7 @@ private UICell		test;
 private UIContent	content;
 
 
-@Before
+@BeforeEach
 public void setup() {
 
 	open(appBaseURL);
