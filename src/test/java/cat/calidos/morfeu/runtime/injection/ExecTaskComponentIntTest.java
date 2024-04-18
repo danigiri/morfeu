@@ -2,9 +2,9 @@
 
 package cat.calidos.morfeu.runtime.injection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.runtime.api.FinishedTask;
 import cat.calidos.morfeu.runtime.api.ReadyTask;
@@ -12,7 +12,6 @@ import cat.calidos.morfeu.runtime.api.RunningTask;
 import cat.calidos.morfeu.runtime.api.StartingTask;
 import cat.calidos.morfeu.runtime.api.StoppingTask;
 import cat.calidos.morfeu.runtime.api.Task;
-import cat.calidos.morfeu.runtime.injection.DaggerExecTaskComponent;
 
 /**
 *	@author daniel giribet
@@ -36,9 +35,9 @@ public void testOneTimeExecSimpleTask() throws Exception {
 												.build()
 												.readyTask();
 	
-	assertTrue("Wrong task definition", task.toString().contains("/bin/bash, -c, echo 'hello world' && sleep 1"));
-	assertFalse("Task not started should not be 'done'", task.isDone());
-	assertEquals("Task not started should be ready", Task.READY, task.getStatus());
+	assertTrue(task.toString().contains("/bin/bash, -c, echo 'hello world' && sleep 1"), "Wrong task definition");
+	assertFalse( task.isDone(), "Task not started should not be 'done'");
+	assertEquals(Task.READY, task.getStatus(), "Task not started should be ready" );
 	System.out.println("TEST: about to call start");
 	StartingTask starting = task.start();
 //	assertEquals("ready tasks should have transitioned to started", Task.STARTED, task.getStatus());
@@ -49,7 +48,7 @@ public void testOneTimeExecSimpleTask() throws Exception {
 	running.spinUntil(Task.FINISHED);
 
 	FinishedTask finishedTask = running.finishedTask();
-	assertTrue("Task finished should be 'done'", finishedTask.isDone());
+	assertTrue(finishedTask.isDone(), "Task finished should be 'done'");
 	assertTrue(finishedTask.isOK());
 	assertEquals(0, finishedTask.result());
 
@@ -81,8 +80,8 @@ public void testOneTimeExecComplexTask() throws Exception {
 	RunningTask running = start.runningTask();
 	running.spinUntil(Task.FINISHED);
 	assertEquals("100\n50\n0\n", running.show());
-	assertTrue("Start callback was not called at all", startedCallbackCalled);
-	assertTrue("Finished callback was not called at all", finishedCallbackCalled);
+	assertTrue(startedCallbackCalled, "Start callback was not called at all");
+	assertTrue(finishedCallbackCalled, "Finished callback was not called at all");
 
 	FinishedTask finished = running.finishedTask();
 	assertTrue(finished.isOK());
@@ -106,8 +105,8 @@ public void testOneTimeExecProblematicTask() throws Exception {
 
 	StartingTask start = task.start();
 	start.spinUntil(Task.STARTED);
-	assertTrue("Started task should be completed", start.isDone());
-	assertTrue("Started task should be OK as failure is in the running state", start.isOK());
+	assertTrue(start.isDone(), "Started task should be completed");
+	assertTrue(start.isOK(), "Started task should be OK as failure is in the running state");
 	assertEquals("started\n", start.show());
 	
 	RunningTask runningTask = start.runningTask();
@@ -115,14 +114,14 @@ public void testOneTimeExecProblematicTask() throws Exception {
 	try {
 		runningTask.spinUntil(Task.FINISHED); 
 	} catch (InterruptedException e) {
-		assertFalse("Spinning throwing exception should not be OK", runningTask.isOK());
+		assertFalse(runningTask.isOK(), "Spinning throwing exception should not be OK");
 	} // task may finish before throwing the exception
-	assertTrue("Running failed task should also be done", runningTask.isDone());
-	
+	assertTrue(runningTask.isDone(), "Running failed task should also be done");
+
 	FinishedTask finishedTask = runningTask.finishedTask();
 	finishedTask.waitFor();
-	assertFalse("finished failed task should not be OK", finishedTask.isOK());
-	assertEquals("result of command not found should be 127", 127, finishedTask.result());
+	assertFalse(finishedTask.isOK(), "finished failed task should not be OK");
+	assertEquals(127, finishedTask.result(), "result of command not found should be 127");
 	
 }
 
@@ -166,7 +165,7 @@ public void testStopOneTimeStartingTask() throws Exception {
 	assertFalse(starting.isDone());
 
 	int status = starting.getStatus();
-	assertEquals("Starting task should be STARTING ("+starting.translate(status)+")", Task.STARTING, status);
+	assertEquals(Task.STARTING, status, "Starting task should be STARTING ("+starting.translate(status)+")");
 
 	StoppingTask stopping = starting.stop();
 	assertNotNull(stopping);
@@ -174,7 +173,7 @@ public void testStopOneTimeStartingTask() throws Exception {
 	assertFalse(stopping.isDone());
 
 	status = stopping.getStatus();
-	assertEquals("Starting task should be STOPPING ("+starting.translate(status)+")", Task.STOPPING, status);
+	assertEquals(Task.STOPPING, status, "Starting task should be STOPPING ("+starting.translate(status)+")");
 
 	stopping.spinUntil(Task.FINISHED);
 	// FIXME: this is brittle for some reason
@@ -211,7 +210,7 @@ public void testStopOneTimeRunningTask() throws Exception {
 	assertTrue(running.isDone());
 
 	int status = running.getStatus();
-	assertEquals("Stopped task should not be ("+running.translate(status)+")", Task.STOPPED, status);
+	assertEquals( Task.STOPPED, status, "Stopped task should not be ("+running.translate(status)+")");
 	assertNotNull(stopping);
 
 	stopping.spinUntil(Task.FINISHED);
@@ -221,8 +220,8 @@ public void testStopOneTimeRunningTask() throws Exception {
 
 	FinishedTask finished = stopping.finishedTask();
 	finished.waitFor();
-	assertFalse("finished failed task should not be OK", finished.isOK());
-	assertEquals("result of stopped task should be 143", 143, finished.result());
+	assertFalse( finished.isOK(), "finished failed task should not be OK");
+	assertEquals(143, finished.result(), "result of stopped task should be 143");
 
 }
 
@@ -238,8 +237,8 @@ public void testOneTimeExecSTDINTask() throws Exception {
 												.problemMatcher(s -> true)	// if anything shows on STDERR
 												.build()
 												.readyTask();
-	assertFalse("Task not started should not be 'done'", task.isDone());
-	assertEquals("Task not started should be ready", Task.READY, task.getStatus());
+	assertFalse( task.isDone(), "Task not started should not be 'done'");
+	assertEquals(Task.READY, task.getStatus(), "Task not started should be ready");
 	StartingTask starting = task.start("hello world");
 	starting.spinUntil(Task.STARTED);
 	assertEquals("hello world\n", starting.show());
@@ -248,7 +247,7 @@ public void testOneTimeExecSTDINTask() throws Exception {
 	running.spinUntil(Task.FINISHED);
 	
 	FinishedTask finishedTask = running.finishedTask();
-	assertTrue("Task finished should be 'done'", finishedTask.isDone());
+	assertTrue(finishedTask.isDone(), "Task finished should be 'done'");
 	assertTrue(finishedTask.isOK());
 	assertEquals(0, finishedTask.result());
 
@@ -257,7 +256,7 @@ public void testOneTimeExecSTDINTask() throws Exception {
 }
 
 /*
- *    Copyright 2020 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

@@ -1,10 +1,10 @@
 package cat.calidos.morfeu.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -114,7 +114,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 												.withValue(values)
 												.build()
 												.render();
-	System.err.println(transformed);
+	//System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -253,7 +253,7 @@ private void checkData(JsonNode data, int expectedNumber, String expectedText) {
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

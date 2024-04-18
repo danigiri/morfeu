@@ -2,7 +2,7 @@
 
 package cat.calidos.morfeu.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -76,7 +76,7 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

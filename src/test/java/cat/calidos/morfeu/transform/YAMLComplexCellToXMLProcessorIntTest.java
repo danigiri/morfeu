@@ -1,13 +1,13 @@
 package cat.calidos.morfeu.transform;
 
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,9 +16,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.model.injection.ModelTezt;
-import cat.calidos.morfeu.transform.JsonNodeCellModel;
-import cat.calidos.morfeu.transform.PrefixProcessor;
-import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
 import cat.calidos.morfeu.transform.injection.DaggerYAMLCellToXMLProcessorComponent;
 
 /**
@@ -29,7 +26,7 @@ public class YAMLComplexCellToXMLProcessorIntTest extends ModelTezt {
 private ComplexCellModel test;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");

@@ -2,7 +2,7 @@
 
 package cat.calidos.morfeu.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.Map;
@@ -11,8 +11,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
@@ -28,7 +29,7 @@ public class TransformNoValueIntTest extends TransformTezt {
 private String content;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	File inputFile = new File("target/test-classes/test-resources/transform/document4-as-view.json");
@@ -78,11 +79,11 @@ public void testTransformJSONToYAML() throws Exception {
 
 	JsonNode stuff = col.get("stuff");
 	assertTrue(stuff.isArray());
-	assertEquals("stuff : [] in transformed yaml should have no elements", 0, stuff.size());
+	assertEquals(0, stuff.size(), "stuff : [] in transformed yaml should have no elements");
 
 	JsonNode data4 = col.get("data4");
 	assertTrue(data4.isObject());
-	assertEquals("data4: {} in transformed yaml should be empty", 0, data4.size());
+	assertEquals( 0, data4.size(), "data4: {} in transformed yaml should be empty");
 
 }
 
@@ -104,7 +105,7 @@ public void testTransformYAMLToXML() throws Exception {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

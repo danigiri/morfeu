@@ -2,22 +2,22 @@
 
 package cat.calidos.morfeu.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.EmptyStackException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TestStackContext {
+public class StackContextTest {
 
 private StackContext<String> context;
 
 
-@Before
+@BeforeEach
 public void setup() {
 	context = new StackContext<String>();
 }
@@ -32,15 +32,15 @@ public void testEmptyContext() {
 }
 
 
-@Test(expected=EmptyStackException.class)
+@Test
 public void testPeekFail() {
-	context.peek();
+	assertThrows(EmptyStackException.class, () -> context.peek());
 }
 
 
-@Test(expected=EmptyStackException.class)
+@Test
 public void testPopFail() {
-	context.pop();
+	assertThrows(EmptyStackException.class, () -> context.pop());
 }
 
 
@@ -82,13 +82,13 @@ public void testToString() {
 	context.push(new IdentityProcessor("barx"));
 	context.push(new IdentityProcessor("tooLong-01234567890123456789012345678901234567890123456789"));
 	context.push(new IdentityProcessor("bar"));
-	String expected = 	"\n"+
-						"⊏------------------------------------------------⊐\n"+
-						"|bar                                             |\n"+
-						"|tooLong-0123456789012345678901234567890123456789|\n"+
-						"|barx                                            |\n"+
-						"|foo                                             |\n"+
-						"⊏------------------------------------------------⊐\n";
+	var expected = 	"\n"+
+					"⊏------------------------------------------------⊐\n"+
+					"|bar                                             |\n"+
+					"|tooLong-0123456789012345678901234567890123456789|\n"+
+					"|barx                                            |\n"+
+					"|foo                                             |\n"+
+					"⊏------------------------------------------------⊐\n";
 	assertEquals(expected, context.toString());
 
 }
@@ -128,12 +128,8 @@ public String toString() {
 
 }
 
-
-
-
-
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

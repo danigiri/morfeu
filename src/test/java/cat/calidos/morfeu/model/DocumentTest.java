@@ -1,8 +1,10 @@
 package cat.calidos.morfeu.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.net.URI;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.problems.ValidationException;
 
@@ -12,7 +14,7 @@ import cat.calidos.morfeu.problems.ValidationException;
 public class DocumentTest {
 
 
-@Test(expected = ValidationException.class)
+@Test
 public void testEmptyValidator() throws Exception {
 	String site = "http://foo.com";
 	String path = "/whatever.json";
@@ -24,7 +26,7 @@ public void testEmptyValidator() throws Exception {
 	doc.setContentURI(contentURI);
 	// notice we do not set a validator for this document
 
-	doc.validate();
+	assertThrows(ValidationException.class, () -> doc.validate());
 }
 
 

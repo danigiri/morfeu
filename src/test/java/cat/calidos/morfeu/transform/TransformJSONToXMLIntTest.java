@@ -2,13 +2,13 @@
 
 package cat.calidos.morfeu.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -26,7 +26,7 @@ public class TransformJSONToXMLIntTest extends TransformTezt {
 private String content;
 
 
-@Before
+@BeforeEach
 public void setup() throws Exception {
 
 	File inputFile = new File("target/classes/test-resources/transform/document1-as-view.json");
@@ -70,7 +70,7 @@ public void testConverter() throws Exception {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
