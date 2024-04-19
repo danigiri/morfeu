@@ -47,14 +47,12 @@ public static List<String> parseFilters(String requestedFilters) {
 
 
 public static JsonNode parseParametersFrom(String f) throws ConfigurationException {
-
 	String paramString = hasParameters(f) ? f.substring(beginningOfParameters(f)) : "{}";
 	try {
 		return DaggerJSONParserComponent.builder().from(paramString).build().json().get();
 	} catch (InterruptedException | ExecutionException | ParsingException e) {
 		throw new ConfigurationException("Execution of parsing parameters of '"+f+"' did not go well", e);
 	}
-
 }
 
 
@@ -189,7 +187,7 @@ private static boolean hasParameters(String filter) {
 }
 
 private static int endOfParameters(String filter) {
-	return filter.indexOf("}");
+	return filter.lastIndexOf("}");
 }
 
 
