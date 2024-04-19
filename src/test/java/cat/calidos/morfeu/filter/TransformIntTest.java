@@ -15,18 +15,20 @@ import org.junit.jupiter.api.Test;
 import cat.calidos.morfeu.filter.injection.DaggerFilterComponent;
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformIntTest {
 
 
-@Test @DisplayName("Stream chain test")
+@Test
+@DisplayName("Stream chain test")
 public void streamChainTest() throws Exception {
 
-	// I pre-create a set of variables that hold the different states 
+	// I pre-create a set of variables that hold the different states
 	// and keep playing with them: <string, string>, <int,string>, <string, int>, <int,int>
 	// to create a virtual chain list of composite operations
-	// string->string->string ---> composite, when I need to convert, I push the composite onto the list
+	// string->string->string ---> composite, when I need to convert, I push the composite onto the
+	// list
 	// push string-> integer and then either get an integer->string
 	// or just integer->integer...
 
@@ -34,13 +36,13 @@ public void streamChainTest() throws Exception {
 	UnaryOperator<String> identity3 = (s) -> s;
 	UnaryOperator<String> replace3 = (s) -> s.replace("1", "2");
 
-		// while string do compose..
+	// while string do compose..
 	Function<String, String> stringComposite = identity3.compose(replace3);
 	// if ned to change, apply and then switch modes
-	Function<String, Integer> toInt3 = (s) -> Integer.valueOf(s);	
+	Function<String, Integer> toInt3 = (s) -> Integer.valueOf(s);
 	Function<String, Integer> compose = toInt3.compose(stringComposite);
 
-	UnaryOperator<Integer> increment = (i) -> i.intValue()+1;	
+	UnaryOperator<Integer> increment = (i) -> i.intValue() + 1;
 	Function<String, Integer> chain = increment.compose(compose);
 
 	Function<Integer, String> back = (i) -> i.toString();
@@ -54,7 +56,8 @@ public void streamChainTest() throws Exception {
 }
 
 
-@Test @DisplayName("Identity test")
+@Test
+@DisplayName("Identity test")
 public void identityTest() throws Exception {
 
 	Filter<String, String> f = DaggerFilterComponent.builder().filters("identity").build().stringToString().get();
@@ -68,7 +71,8 @@ public void identityTest() throws Exception {
 }
 
 
-@Test @DisplayName("Chained filter test")
+@Test
+@DisplayName("Chained filter test")
 public void objectToStringTest() throws Exception {
 
 	String transforms = "to-string;identity;lowercase";
@@ -77,39 +81,35 @@ public void objectToStringTest() throws Exception {
 
 	StringBuffer fooObject = new StringBuffer("FOO");
 	String result = f.apply(fooObject);
-	assertAll("to string and to lower case",
-		() -> assertNotNull(result),
-		() -> assertEquals("foo", result, "Correct filter chain was not applied")
-	);
+	assertAll("to string and to lower case", 
+			() -> assertNotNull(result),
+			() -> assertEquals("foo", result, "Correct filter chain was not applied"));
 
 }
 
 
-@Test @DisplayName("JSON to YAML test")
+@Test
+@DisplayName("JSON to YAML test")
 public void jsonToYAMLTest() throws Exception {
 
 	String transforms = "yaml-to-json";
 	Filter<String, String> f = DaggerFilterComponent.builder().filters(transforms).build().stringToString().get();
 	assertNotNull(f);
 
-	String yaml = "a:\n" + 
-					"- a0\n" + 
-					"- a1";
+	String yaml = "a:\n" + "- a0\n" + "- a1";
 	String result = f.apply(yaml);
-	String expected = "{\n" + 
-						"  \"a\" : [ \"a0\", \"a1\" ]\n" + 
-						"}\n";
-	assertAll("check yaml to json outcome",
+	String expected = "{\n" + "  \"a\" : [ \"a0\", \"a1\" ]\n" + "}\n";
+	assertAll("check yaml to json outcome", 
 			() -> assertNotNull(result),
-			() -> assertEquals(expected, expected, "Correct filter chain was not applied")
-	);
+			() -> assertEquals(expected, expected, "Correct filter chain was not applied"));
 }
 
 
-@Test @DisplayName("Apply template filter test")
+@Test
+@DisplayName("Apply template filter test")
 public void applyTemplateTest() throws Exception {
 
-	String transforms = "apply-template{\"template\":\"templates/transform/map-identity.twig\"}";
+	String transforms = "apply-template{\"template\":\"templates/transform/map-identity.thy\"}";
 	Filter<Object, String> f = DaggerFilterComponent.builder().filters(transforms).build().objectToString().get();
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
@@ -117,56 +117,63 @@ public void applyTemplateTest() throws Exception {
 	values.put("b", "bar");
 	String result = f.apply(values);
 	String expected = "a=foo,b=bar,";
-	assertAll("check yaml to json outcome",
+	assertAll("check yaml to json outcome", 
 			() -> assertNotNull(result),
-			() -> assertEquals(expected, result, "Correct template was not applied")
-	);
+			() -> assertEquals(expected, result, "Correct template was not applied"));
 
 	transforms = "apply-template{}";
 	Filter<Object, String> f2 = DaggerFilterComponent.builder().filters(transforms).build().objectToString().get();
 	String result2 = f2.apply(values);
 	String expected2 = "APPLY TEMPLATE HAS NO TEMPLATE PARAMETER";
-	assertAll("check yaml to json outcome",
+	assertAll("check yaml to json outcome", 
 			() -> assertNotNull(result2),
-			() -> assertEquals(expected2, result2, "Should not have applied a template")
-	);
-
+			() -> assertEquals(expected2, result2, "Should not have applied a template"));
 }
 
 
-@Test @DisplayName("Search and replace test")
+@Test
+@DisplayName("Search and replace test")
 public void replaceTest() throws Exception {
-
-	String filter = "replace{\"replacements\":{\"from\":\"FROM\", \"to\":\"TO\"}}";
+	var filter = "replace{\"replacements\":{\"from\":\"FROM\", \"to\":\"TO\"}}";
 	Filter<String, String> f = DaggerFilterComponent.builder().filters(filter).build().stringToString().get();
 	assertEquals("TO here TO there", f.apply("FROM here FROM there"));
 
 	// arrays of replacements also work
-	String filter2 = "replace{\"replacements\":[{\"from\":\"FROM\", \"to\":\"TO\"}]}";
+	var filter2 = "replace{\"replacements\":[{\"from\":\"FROM\", \"to\":\"TO\"}]}";
 	Filter<String, String> f2 = DaggerFilterComponent.builder().filters(filter2).build().stringToString().get();
 	assertEquals("TO here TO there", f2.apply("FROM here FROM there"));
 
 	// backreferences
-	String filter3 = "replace{\"replacements\":[{\"from\":\"F(\\\\d)\", \"to\":\"T$1\"}]}";
+	var filter3 = "replace{\"replacements\":[{\"from\":\"F(\\\\d)\", \"to\":\"T$1\"}]}";
 	Filter<String, String> f3 = DaggerFilterComponent.builder().filters(filter3).build().stringToString().get();
 	assertEquals("T1 here T2 there", f3.apply("F1 here F2 there"));
+}
 
+
+@Test
+@DisplayName("Complex search and replace test")
+public void complexReplaceTest() throws Exception {
+	var filter = """
+				replace{\"replacements\":[
+					{\"from\":\"=\\\\s*\\\\{\",\"to\":\"=\\\"{\"},
+					{\"from\":\"}\",\"to\":\"}\\\"\"}
+				]}""";
+	Filter<String, String> f2 = DaggerFilterComponent.builder().filters(filter).build().stringToString().get();
+	assertEquals("foo=\"{1}\"", f2.apply("foo={1}"));
 }
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
