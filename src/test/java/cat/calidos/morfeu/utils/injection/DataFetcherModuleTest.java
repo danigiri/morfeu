@@ -20,10 +20,10 @@ import cat.calidos.morfeu.problems.FetchingException;
 
 public class DataFetcherModuleTest {
 
-@Mock CloseableHttpClient httpClient;
-@Mock CloseableHttpResponse response;
-@Mock HttpEntity entity;
-@Mock InputStream stream;
+CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
+CloseableHttpResponse response =mock(CloseableHttpResponse.class);
+HttpEntity entity = mock(HttpEntity.class);
+InputStream stream = mock(InputStream.class);
 
 private String uri = "http://www.foo.com";
 
