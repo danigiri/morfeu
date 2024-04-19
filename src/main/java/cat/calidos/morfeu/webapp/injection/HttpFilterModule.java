@@ -8,9 +8,6 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import javax.inject.Named;
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +16,9 @@ import dagger.multibindings.IntKey;
 import dagger.multibindings.IntoMap;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
-
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 
 /**

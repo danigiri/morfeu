@@ -4,10 +4,9 @@ package cat.calidos.morfeu.webapp.injection;
 
 import java.util.Properties;
 
-import javax.servlet.ServletConfig;
-
 import dagger.BindsInstance;
 import dagger.Component;
+import jakarta.servlet.ServletConfig;
 
 /**
 * @author daniel giribet

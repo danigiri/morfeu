@@ -6,10 +6,10 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import jakarta.servlet.ServletContext;
 
 import cat.calidos.morfeu.control.injection.PingControlModule;
 

@@ -14,20 +14,18 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
+import jakarta.servlet.ServletContext;
+
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.MorfeuServlet;
 import cat.calidos.morfeu.control.SVGPreviewGETControl;
-import cat.calidos.morfeu.problems.MorfeuRuntimeException;
-import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.utils.injection.DaggerSQLComponent;
-import cat.calidos.morfeu.utils.injection.SQLModule;
 import cat.calidos.morfeu.view.injection.DaggerSQLViewComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;

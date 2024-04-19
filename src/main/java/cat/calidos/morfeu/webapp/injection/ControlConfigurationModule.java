@@ -4,11 +4,10 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 
 import dagger.Module;
 import dagger.Provides;
-
+import jakarta.servlet.ServletContext;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 
 /** Generate a configuration from the servlet context

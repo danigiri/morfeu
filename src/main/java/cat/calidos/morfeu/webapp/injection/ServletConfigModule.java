@@ -6,11 +6,10 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.stream.StreamSupport;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-
 import dagger.Module;
 import dagger.Provides;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 
 /**
 * @author daniel giribet

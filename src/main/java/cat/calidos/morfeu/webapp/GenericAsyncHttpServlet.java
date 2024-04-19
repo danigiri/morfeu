@@ -6,11 +6,6 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +13,11 @@ import org.slf4j.LoggerFactory;
 import cat.calidos.morfeu.control.MorfeuServletListener;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
 *	@author daniel giribet

@@ -4,9 +4,6 @@ package cat.calidos.morfeu.control;
 
 import java.util.Map;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +11,8 @@ import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
-import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
 
 
 /** Generic morfeu filter, will load the configuration and invoke the controller with the request 

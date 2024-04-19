@@ -8,22 +8,19 @@ import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 
-import javax.servlet.ServletContext;
-
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-
 
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
+import jakarta.servlet.ServletContext;
 
 /**
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ControlComponentIntTest {
 
-@Mock ServletContext context;
+ServletContext context = mock(ServletContext.class);
 
 HashMap<String, String> emptyParams = new HashMap<String, String>(0);
 

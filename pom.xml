@@ -25,12 +25,12 @@
 		<batik-version>1.14</batik-version>
 		<dagger-2-version>2.51.1</dagger-2-version>
 		<jackson-2-version>2.12.3</jackson-2-version>
-		<jetty-version>10.0.3</jetty-version>
+		<jetty-version>12.0.8</jetty-version>
 		<thymeleaf-version>3.1.2.RELEASE</thymeleaf-version>
 		<jupiter-version>5.7.0</jupiter-version>
 		<junit-platform-version>5.10.2</junit-platform-version>
-		<selenide-version>5.20.4</selenide-version>
-		<selenium-version>3.141.59</selenium-version>
+		<selenide-version>7.2.3</selenide-version>
+		<selenium-version>4.19.1</selenium-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<scm.host_>github.com</scm.host_>
@@ -188,21 +188,23 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
+				<groupId>org.eclipse.jetty.ee10</groupId>
+				<artifactId>jetty-ee10-maven-plugin</artifactId>
 				<version>${jetty-version}</version>
 				<dependencies>	<!--  to add GZIP compression -->
-					<dependency>
+					<!--<dependency>
 						<groupId>org.eclipse.jetty</groupId>
 						<artifactId>jetty-servlets</artifactId>
 						<version>${jetty-version}</version>
-					</dependency>
+					</dependency>-->
+
 				</dependencies>
 				<configuration>
-					<dumpOnStart>false</dumpOnStart> <!-- set to true for
+					<!-- looks deprecated in  jetty 12 -->
+					<!--dumpOnStart>false</dumpOnStart--> <!-- set to true for
 					debugging -->
 					<!--scanIntervalSeconds>0</scanIntervalSeconds-->
-					<reload>manual</reload>
+					<!--reload>manual</reload-->
 					<stopPort>${jetty-stop-port}</stopPort>
 					<stopKey>STOP</stopKey>
 					<useTestScope>true</useTestScope>
@@ -282,7 +284,8 @@
 						<exclude>**/*ComponentTest*</exclude>
 					</excludes>
 					<!-- getting weird errors on one of the tests -->
-					<argLine>--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+					<argLine>--add-opens java.base/java.util=ALL-UNNAMED
+						--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -391,6 +394,12 @@
 			<version>${jetty-version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- HELPERS -->
 		<dependency>
@@ -459,7 +468,7 @@
 		<dependency>
 			<groupId>org.mitre.dsmiley.httpproxy</groupId>
 			<artifactId>smiley-http-proxy-servlet</artifactId>
-			<version>1.12</version>
+			<version>2.0</version>
 		</dependency>
 
 		<!-- process execution -->
@@ -492,7 +501,7 @@
 		<dependency>	<!-- web driver manager -->
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>4.4.1</version>
+			<version>5.8.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -530,7 +539,7 @@
 
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-server</artifactId>
+			<artifactId>selenium-java</artifactId>
 			<version>${selenium-version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -553,8 +562,8 @@
 			<version>2.8.2</version>
 		</dependency>
 
-<!-- this is causing incompatibilities with junit5 test launcher -->
-<!--
+		<!-- this is causing incompatibilities with junit5 test launcher -->
+		<!--
 	<dependency>
 			<groupId>com.tngtech.archunit</groupId>
 			<artifactId>archunit-junit5</artifactId>
