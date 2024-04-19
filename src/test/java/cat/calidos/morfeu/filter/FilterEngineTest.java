@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.filter.injection.FilterEngine;
+import cat.calidos.morfeu.problems.ConfigurationException;
 
 /**
 *	@author daniel giribet
@@ -61,7 +62,7 @@ public void parseFiltersParameters() throws Exception {
 @Test @DisplayName("Parse parameters edge cases test")
 public void parseFilterssParametersEdgeCases() throws Exception {
 
-	String filters = "a{ \"p0\":\"fo\\;o\", \"p1\": 0};b{}";
+	var filters = "a{ \"p0\":\"fo\\;o\", \"p1\": 0};b{}";
 	List<String> f = FilterEngine.parseFilters(filters);
 	assertAll("parse params filter",
 			() -> assertNotNull(f),
@@ -82,13 +83,17 @@ public void parseFilterssParametersEdgeCases() throws Exception {
 			() -> assertTrue(params1.isEmpty(), "Should get an empty param")
 	);
 
+	var filters2 = "a{\"p0\":\"0\"";
+	List<String> f2 = FilterEngine.parseFilters(filters2);
+	assertThrows(ConfigurationException.class, () ->FilterEngine.parseParametersFrom(f2.get(0)));
+
 }
 
 
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

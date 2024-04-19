@@ -64,7 +64,8 @@ public static String nameFromFilter(String filter) throws ConfigurationException
 	if (hasParameters(filterName)) {
 
 		int paramsIndex = beginningOfParameters(filterName);
-		if (paramsIndex==-1) {
+		int endOfParamsIndex = endOfParameters(filterName);
+		if (paramsIndex==-1 || endOfParamsIndex==-1) {
 			throw new ConfigurationException("Operation '"+filterName+"' not parsing correctly");
 		}
 		filterName = filterName.substring(0, paramsIndex);
@@ -184,7 +185,11 @@ private Pair<Filter<X, X>, Filter<X, Y>> stateMachine(List<String> transforms,
 
 
 private static boolean hasParameters(String filter) {
-	return filter.endsWith("}");
+	return filter.contains("{") || filter.endsWith("}");
+}
+
+private static int endOfParameters(String filter) {
+	return filter.indexOf("}");
 }
 
 
