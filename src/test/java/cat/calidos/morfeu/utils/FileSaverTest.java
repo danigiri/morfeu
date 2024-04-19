@@ -30,7 +30,7 @@ public void testSave() throws Exception {
 	var file2 = new File(path);
 	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);
 
-	assertEquals("Content written to the output file was not as expected", contentWritten, contentRead);
+	assertEquals(contentWritten, contentRead, "Content written to the output file was not as expected");
 
 }
 
@@ -52,7 +52,7 @@ public void testBackup() throws Exception {
 	assertTrue(file2.exists(), "File saver did not create a backup file");
 
 	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);
-	assertEquals("Backup file did not have original content", contentWritten, contentRead);
+	assertEquals(contentWritten, contentRead, "Backup file did not have original content");
 
 }
 
