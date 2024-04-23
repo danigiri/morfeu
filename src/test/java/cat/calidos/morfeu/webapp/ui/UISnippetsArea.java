@@ -46,7 +46,7 @@ public static void shouldNotBeVisible() {
 
 public List<String> categories() {
 	return element.$$("div[role=tab]")
-					.stream()
+			.asFixedIterable().stream()
 					.filter(e -> e.attr("class")!=null)
 					.filter(e -> e.attr("id").endsWith("-header"))
 					.map(e -> e.text())

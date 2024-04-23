@@ -82,7 +82,7 @@ public UIDocument clickOnDocument(int i) {
 public UIDocument clickOnDocumentNamed(String name) {
 	
 	ElementsCollection documentEntries = getDocuments();
-	Optional<SelenideElement> foundDocument = documentEntries.stream()
+	Optional<SelenideElement> foundDocument = documentEntries.asFixedIterable().stream()
 																.filter(d -> d.getText().trim().equals(name))
 																.findFirst();
 	foundDocument.orElseThrow(() -> new IndexOutOfBoundsException("Could not find document named '"+name+"'")).click();

@@ -49,7 +49,7 @@ public List<UIArrow>arrows() {
 	AtomicInteger i = new AtomicInteger(-1);
 	By circle = By.id(id+CIRCLE);
 
-	return element.$$(circle).stream().map(e -> new UIArrow(this, i.incrementAndGet())).collect(Collectors.toList());
+	return element.$$(circle).asFixedIterable().stream().map(e -> new UIArrow(this, i.incrementAndGet())).collect(Collectors.toList());
 
 }
 

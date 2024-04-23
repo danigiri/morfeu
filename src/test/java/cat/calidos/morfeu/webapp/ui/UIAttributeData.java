@@ -96,7 +96,7 @@ public List<String> possibleValues() {
 		throw new RuntimeException("Tried to get a list of possible valus from a non-list ("+name()+")");
 	}
 
-	return element.$$(By.xpath(".//option")).stream().map(e -> e.innerText()).collect(Collectors.toList());
+	return element.$$(By.xpath(".//option")).asFixedIterable().stream().map(e -> e.innerText()).collect(Collectors.toList());
 
 }
 

@@ -47,7 +47,7 @@ public String URI() {
 }
 
 public List<String> extraInfo() {
-	return element.$$(".cell-data-extra-info").stream().map(e -> e.text()).collect(Collectors.toList());
+	return element.$$(".cell-data-extra-info").asFixedIterable().stream().map(e -> e.text()).collect(Collectors.toList());
 }
 
 
@@ -106,7 +106,7 @@ public Optional<String> value() {
 
 
 private List<UIAttributeData> attributesOfClass(String class_) {
-	return element.$$(class_).stream().map( e -> new UIAttributeData(e, this)).collect(Collectors.toList());
+	return element.$$(class_).asFixedIterable().stream().map( e -> new UIAttributeData(e, this)).collect(Collectors.toList());
 }
 
 

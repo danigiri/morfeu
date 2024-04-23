@@ -18,6 +18,8 @@ import jakarta.servlet.ServletException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuProxyServlet extends ProxyServlet {
 
+private static final long serialVersionUID = 9192081928916080216L;
+
 protected final static Logger log = LoggerFactory.getLogger(MorfeuProxyServlet.class);
 
 private static final String __PROXY_PREFIX = "__PROXY_PREFIX";

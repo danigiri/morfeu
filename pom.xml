@@ -188,16 +188,10 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.eclipse.jetty.ee10</groupId>
-				<artifactId>jetty-ee10-maven-plugin</artifactId>
+				<groupId>org.eclipse.jetty.ee9</groupId>
+				<artifactId>jetty-ee9-maven-plugin</artifactId>
 				<version>${jetty-version}</version>
 				<dependencies>	<!--  to add GZIP compression -->
-					<!--<dependency>
-						<groupId>org.eclipse.jetty</groupId>
-						<artifactId>jetty-servlets</artifactId>
-						<version>${jetty-version}</version>
-					</dependency>-->
-
 				</dependencies>
 				<configuration>
 					<!-- looks deprecated in  jetty 12 -->
@@ -397,7 +391,7 @@
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.0.0</version>
+			<version>5.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -410,7 +404,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpasyncclient</artifactId>
-			<version>4.1.4.redhat-00001</version>
+			<version>4.1.5</version>
 		</dependency>
 		<dependency><!-- to test dynamic preview with SVG -->
 			<groupId>org.apache.xmlgraphics</groupId>
@@ -454,7 +448,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>2.0.0-alpha1</version>
+			<version>2.0.13</version>
 		</dependency>
 
 		<!--  templating -->

@@ -58,7 +58,7 @@ public UICatalogues shouldBeVisible() {
 
 
 public List<UICatalogueEntry> allCatalogueEntries() {
-	return $$(CATALOGUE_LIST_ENTRY).stream().map(e -> new UICatalogueEntry(e)).collect(Collectors.toList());
+	return $$(CATALOGUE_LIST_ENTRY).asFixedIterable().stream().map(e -> new UICatalogueEntry(e)).collect(Collectors.toList());
 }
 
 

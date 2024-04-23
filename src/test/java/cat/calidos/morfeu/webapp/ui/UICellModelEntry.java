@@ -43,7 +43,7 @@ private int level;
 public UICellModelEntry(SelenideElement e, UIModel model, Optional<UICellModelEntry> parent, int level) {
 
 	super(e);
-	
+
 	this.model = model;
 	this.parent = parent;
 	this.level = level;
@@ -150,7 +150,7 @@ public String thumb() {
 
 public List<UICellModelEntry> children() {	
 	return element.$$(".tree-node-level-"+(level+1))
-					.stream()
+			.asFixedIterable().stream()
 					.map(e -> new UICellModelEntry(e, model, Optional.of(this), level+1)).collect(Collectors.toList());
 }
 

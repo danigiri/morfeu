@@ -26,7 +26,7 @@ public UIBreadcrumb(SelenideElement element) {
 
 /**	@return all elements of the breadcrumb (includind doc name and active cell name) */
 public List<String> elements() {
-	return element.$$(".breadcrumb-element").stream().map(e -> e.text()).collect(Collectors.toList());
+	return element.$$(".breadcrumb-element").asFixedIterable().stream().map(e -> e.text()).collect(Collectors.toList());
 }
 
 

@@ -10,13 +10,11 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-
-
 import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.injection.ServletConfigModule;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 
 
 public class ConfigModuleTest {
@@ -25,8 +23,8 @@ public class ConfigModuleTest {
 @Test
 public void testProvideConfigWithServletConfig() {
 
-	ServletConfig servletConfig = mock(ServletConfig.class);
-	ServletContext servletContext = mock(ServletContext.class);
+	var servletConfig = mock(ServletConfig.class);
+	var servletContext = mock(ServletContext.class);
 
 	Enumeration<String> names = Collections.enumeration(Arrays.asList("a", "b", "c"));
 	when(servletConfig.getInitParameterNames()).thenReturn(names);

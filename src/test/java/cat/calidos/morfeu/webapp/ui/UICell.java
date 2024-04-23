@@ -71,7 +71,7 @@ public String img() {
 
 public List<UIDropArea> dropAreas() {
 	
-	List<UIDropArea> dropAreas = element.$$(".drop-area").stream()
+	List<UIDropArea> dropAreas = element.$$(".drop-area").asFixedIterable().stream()
 									.map(e -> new UIDropArea(e, content, this))
 									.collect(Collectors.toList());
 	int i = 0;
@@ -90,7 +90,7 @@ public UIDropArea dropArea(int i) {
 
 
 public List<UICell> children() {
-	return element.$$(".cell-level-"+(level+1)).stream()
+	return element.$$(".cell-level-"+(level+1)).asFixedIterable().stream()
 			.map(e -> new UICell(e, content, Optional.of(this), level+1))
 			.collect(Collectors.toList());
 }

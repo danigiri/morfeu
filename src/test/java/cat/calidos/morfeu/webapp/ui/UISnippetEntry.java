@@ -57,7 +57,7 @@ public boolean isSelected() {
 // we (ab)use the flexible constructor so the content is the snippets list, which is in fact
 // a content area
 public List<UICell> children() {
-	return element.$$(".cell-level-0").stream()
+	return element.$$(".cell-level-0").asFixedIterable().stream()
 			.map(e -> new UICell(e, new UIContent(snippets.element), Optional.empty(), 0))
 			.collect(Collectors.toList());
 }
