@@ -58,27 +58,10 @@ protected void initTarget() throws ServletException {
 
 }
 
-
-/*
-@Override
-protected void copyResponseHeaders(HttpResponse proxyResponse, HttpServletRequest servletRequest,
-		HttpServletResponse servletResponse) {
-
-	super.copyResponseHeaders(proxyResponse, servletRequest, servletResponse);
-
-	// to help with preview if needed
-	servletResponse.addHeader("X-Content-Type-Options", "nosniff");
-
 }
 
-*/
-
-
-}
-
-
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
