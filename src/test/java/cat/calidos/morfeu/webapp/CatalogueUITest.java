@@ -55,7 +55,7 @@ public void catalogueDetailTest() throws Exception {
 
 	// test listing of documents
 	ElementsCollection documentEntries = catalogue.getDocuments();
-	documentEntries.shouldHaveSize(EXPECTED_DOCUMENTS_SIZE);
+	assertEquals(documentEntries.size(), EXPECTED_DOCUMENTS_SIZE);
 	assertEquals("Wrong catalogue content", "Document 1", documentEntries.get(0).getText());
 	assertEquals("Wrong catalogue content", "Document 2", documentEntries.get(1).getText());
 	assertEquals("Wrong catalogue content", "Document 3", documentEntries.get(2).getText());

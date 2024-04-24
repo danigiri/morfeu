@@ -70,7 +70,7 @@ public UISnippetsArea clickOnCategory(String name) {
 
 
 public List<UISnippetEntry> snippets() {
-	return $$(".snippet").stream().map(e -> new UISnippetEntry(e, this)).collect(Collectors.toList());
+	return $$(".snippet").asFixedIterable().stream().map(e -> new UISnippetEntry(e, this)).collect(Collectors.toList());
 }
 
 
