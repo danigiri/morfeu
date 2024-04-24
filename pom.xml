@@ -22,7 +22,7 @@
 		<resources-prefix>file://${project.basedir}/</resources-prefix>
 		<skip-build-client>false</skip-build-client>
 		<async-timeout>2000</async-timeout>
-		<batik-version>1.14</batik-version>
+		<batik-version>1.17</batik-version>
 		<dagger-2-version>2.51.1</dagger-2-version>
 		<jackson-2-version>2.12.3</jackson-2-version>
 		<jetty-version>12.0.8</jetty-version>
@@ -101,7 +101,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>3.4.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -114,7 +114,7 @@
 			<plugin>        <!-- run test scripts -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<id>build-angular</id>
@@ -144,7 +144,7 @@
 				-DattachClasses=true -DskipITs -DskipTests=true -Djetty.skip -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.4.0</version>
 				<configuration>
 					<webResources>
 						<resource>
@@ -181,7 +181,7 @@
 			<plugin>	<!-- we specift the name of the releases -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>3.0.0-M1</version>
+				<version>3.0.1</version>
 				<configuration>
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
@@ -270,7 +270,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M4</version>
+				<version>3.2.5</version>
 				<configuration>
 					<excludes>	<!-- no UI/integration tests in unit testing -->
 						<exclude>**/*IntTest*</exclude>
@@ -285,7 +285,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M4</version>
+				<version>3.2.5</version>
 				<configuration>
 					<systemPropertyVariables>
 						<TMP_FOLDER>
@@ -399,7 +399,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.8.0</version>
+			<version>2.16.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -430,7 +430,7 @@
 		<dependency>	<!-- used to test the code integration -->
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.200</version>
+			<version>2.2.224</version>
 		</dependency>
 
 		<!-- logging -->
@@ -474,7 +474,7 @@
 		<dependency>
 			<groupId>org.zeroturnaround</groupId>
 			<artifactId>zt-process-killer</artifactId>
-			<version>1.10</version>
+			<version>1.11</version>
 		</dependency>
 
 		<!-- UNIT TESTING -->
@@ -553,7 +553,7 @@
 		<dependency>
 			<groupId>org.xmlunit</groupId>
 			<artifactId>xmlunit-core</artifactId>
-			<version>2.8.2</version>
+			<version>2.9.1</version>
 		</dependency>
 
 		<!-- this is causing incompatibilities with junit5 test launcher -->
