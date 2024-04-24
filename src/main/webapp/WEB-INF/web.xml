@@ -47,9 +47,10 @@
 	<listener>
 		<listener-class>cat.calidos.morfeu.control.MorfeuServletListener</listener-class>
 	</listener>
-	<listener>	<!-- create an H2 database for the code demo -->
+	<!-- create an H2 database for the code demo, currently using pre-jakarta which means we can't use it -->
+	<!-->listener>
 		<listener-class>org.h2.server.web.DbStarter</listener-class>
-	</listener>
+	</listener-->
 
 	<!--filter>
 		<filter-name>MorfeuRequestFilter</filter-name>
