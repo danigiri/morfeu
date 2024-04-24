@@ -135,15 +135,7 @@ private InputStream stdinStream(String stdin) {
 
 	// this is setup as a private method as we want to set it outside the exec task injection creation
 	// which means we can decouple the task creation (config) from it's input (runtime)
-	try {
-		return IOUtils.toInputStream(stdin, Config.DEFAULT_CHARSET);
-	} catch (IOException e) {}
-
-	try {
-		return IOUtils.toInputStream("", Config.DEFAULT_CHARSET);
-	} catch (IOException e) {}
-
-	return null;	// giving up
+	return IOUtils.toInputStream(stdin, Config.DEFAULT_CHARSET);
 }
 
 
