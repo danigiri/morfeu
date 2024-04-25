@@ -38,7 +38,7 @@ private String modelPath;	// relative path of the model, not used to validate
 
 public SnippetGETControl(String prefix, String path, @Nullable String modelPath) {
 
-	super("GET snippet:"+path, "templates/content.twig", "templates/content-problem.twig");
+	super("GET snippet:"+path, "templates/content.thy", "templates/content-problem.thy");
 
 	this.prefix = prefix;
 	this.path = path;
