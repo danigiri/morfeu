@@ -76,7 +76,7 @@ constructor(eventService: EventService) {
 
 ngOnInit() {
 
-	console.log("ModelComponent::ngOnInit()"); 
+	console.log("ModelComponent::ngOnInit()");
 	// if we are in a tab area this is redundant, as the parent will remove us from the component tree
 	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
 			.subscribe(() => this.clearModel())

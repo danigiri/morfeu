@@ -34,10 +34,9 @@ private String path;
 private String modelPath;
 private String filters;
 
-
 public ContentGETControl(String prefix, String path, Optional<String> filters, @Nullable String modelPath) {
 
-	super("GET content:"+path, "templates/content.twig", "templates/content-problem.twig");
+	super("GET content:"+path, "templates/content.thy", "templates/content-problem.thy");
 
 	this.prefix = prefix;
 	this.path = path;
