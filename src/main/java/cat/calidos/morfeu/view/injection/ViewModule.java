@@ -189,6 +189,12 @@ public String xmlc(String s) {
 	return s;
 }
 
+/** returns safe json attribute scaping '\' --&gt; '\\' */
+public String jsona(String s) {
+	s = s.replace("\\", "\\\\");
+	return s;
+}
+
 }
 
 //

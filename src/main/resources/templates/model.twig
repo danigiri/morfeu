@@ -1,7 +1,0 @@
-{
-	{% include "cell-model.twig" with {'cm': v} only %}
-	,"valid": {% if defined(problem) %}false{% else %}true{% endif %}
-	{% if defined(problem) %}
-		,"problem": "{{ problem }}"
-	{% endif %}
-}
