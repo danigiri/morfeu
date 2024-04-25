@@ -1,6 +1,6 @@
 // CONTENT - TEST . COMPONENT . TS
 
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CellDocument } from '../../cell-document.class';
 import { Model } from '../../model.class';

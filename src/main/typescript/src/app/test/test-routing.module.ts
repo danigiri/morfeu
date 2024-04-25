@@ -16,6 +16,7 @@ import { CellEditorTestComponent } from '../components/cell-editor/cell-editor-t
 import { CodeEditorTestComponent } from '../components/code-editor/code-editor-test.component';
 import { ContentTestComponent } from '../components/content/content-test.component';
 import { LinksTestComponent } from '../components/links/links-test.component';
+import { PlaygroundTestComponent } from '../components/playground/playground-test.component';
 import { PresentationTestComponent } from '../components/presentation/presentation-test.component';
 import { SnippetsListTestComponent } from '../components/snippets-list/snippets-list-test.component';
 
@@ -29,7 +30,8 @@ const routes: Routes = [
 						{path: 'code-editor/:case_', component: CodeEditorTestComponent},
 						{path: 'presentation-test/:case_', component: PresentationTestComponent},
 						{path: 'content/:case_', component: ContentTestComponent},
-						{path: 'snippets-list/:case_', component: SnippetsListTestComponent}
+						{path: 'snippets-list/:case_', component: SnippetsListTestComponent},
+						{path: 'playground/:case_', component: PlaygroundTestComponent}
 ];
 
 @NgModule({
@@ -49,6 +51,7 @@ const routes: Routes = [
 					CellEditorTestComponent,
 					CodeEditorTestComponent,
 					ContentTestComponent,
+					PlaygroundTestComponent,
 					PresentationTestComponent,
 					SnippetsListTestComponent
 	]
