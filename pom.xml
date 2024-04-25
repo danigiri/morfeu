@@ -194,6 +194,9 @@
 				<dependencies>	<!--  to add GZIP compression -->
 				</dependencies>
 				<configuration>
+					<!-- looks like we have some code trying to access private methods for  java.util.OptionalInt() -->
+					<!-- only if if we run in forked mode this is picked up -->
+					<jvmArgs>--add-opens=java.base/java.util=ALL-UNNAMED</jvmArgs>
 					<!-- looks deprecated in  jetty 12 -->
 					<!--dumpOnStart>false</dumpOnStart--> <!-- set to true for
 					debugging -->
@@ -225,7 +228,7 @@
 							<name>org.eclipse.jetty.annotations.maxWait</name>
 							<value>60000</value>
 						</systemProperty>
-						<systemProperty> <!-- mvn jetty:run
+						<systemProperty> <!-- MAVEN_OPTS=DASHDASHadd-opens=java.base/java.util=ALL-UNNAMED mvn jetty:run
 							-D__RESOURCES_PREFIX=file://$(PWD)/  -->
 							<name>__RESOURCES_PREFIX</name>
 							<value>${resources-prefix}</value>
@@ -375,11 +378,12 @@
 			<artifactId>jackson-dataformat-yaml</artifactId>
 			<version>${jackson-2-version}</version>
 		</dependency>
-		<dependency>
+		<!-- not sure this is needed -->
+		<!--dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jdk8</artifactId>
 			<version>${jackson-2-version}</version>
-		</dependency>
+		</dependency-->
 
 		<!-- JETTY RUNTIME -->
 		<dependency>
