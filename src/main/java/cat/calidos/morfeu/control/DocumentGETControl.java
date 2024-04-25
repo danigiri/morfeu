@@ -40,7 +40,7 @@ private String path;
 
 public DocumentGETControl(String prefix, String path) {
 
-	super("document", "templates/document.twig", "templates/document-problem.twig");
+	super("document", "templates/document.thy", "templates/document-problem.thy");
 
 	this.prefix = prefix;
 	this.path = path;
