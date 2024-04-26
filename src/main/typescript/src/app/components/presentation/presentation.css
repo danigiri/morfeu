@@ -1,7 +1,6 @@
-.cell {
-}
+.cell {}
 .well-img {
-	border: 1px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
+	border: 3px solid transparent;	/* So when changed to highlighted, active, it doesn't move */
 	border-radius: 5px;
 }
 .cell-img {
@@ -9,10 +8,8 @@
 	border-radius: 5px;
 }
 .cell-img-size {
-	/*
-	width: 10%;
+	width: 100%;
 	min-width: 50px;
-	*/
 	/* max-height: 10em; */
 }
 .cell-html {
