@@ -3,13 +3,18 @@
 	user-select: none;
 }
 .well {
+
+	background-color: grey;
 /*
 				padding: 0;
 				align-content: stretch;
  */
 	}
 .row-well {
+	/*
 	background-color: rgba(255, 0, 0, .05);
+	*/
+	border: 1px solid red;
 }
 .col-well {
 	/*
@@ -18,6 +23,7 @@
 	max-width: 100%;
 	width: 100%;
 	*/
+	border: 1px solid blue;
 }
 .show-grid	{
 	background-color: rgba(200, 200, 200, .05);
@@ -44,6 +50,9 @@
 .drag-active {
 	opacity: .9;
 }
+
+
+
 /*
 .cell-col-1 {
 	max-width: 8.3%;

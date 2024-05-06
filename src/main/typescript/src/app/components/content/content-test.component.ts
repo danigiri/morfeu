@@ -34,6 +34,7 @@ protected test(case_: string) {
 		case 'dnd-1' : this.dragAndDrop1(); break;
 		case 'dnd-3' : this.dragAndDrop3(); break;
 		case 'dnd-5' : this.dragAndDrop5(); break;
+		case 'document' : this.document1(); break;
 	}
 
 }
@@ -74,6 +75,15 @@ private dragAndDrop1() {
 
 }
 
+ 
+ private document1() {
+
+	console.debug('Document1 test')
+	this.document = this.createDocument(_document1Document);
+	this.loadModel(this.document.modelURI);
+	//this.loadModel(this.document.modelURI);
+
+}
 
 protected override loadedModel(model: Model): void {
 	this.events.service.publish(new ContentRequestEvent(this.document, model))
