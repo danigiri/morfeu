@@ -10,9 +10,13 @@ import { _readonlyDocument, _document1Document, _document3Document, _document5Do
 import { TestComponent } from '../../test/test-component.class';
 
 
+
+
+
 @Component({
 	selector: 'playground-test',
 	template: `
+
 	<div class="card">
 		<div class="card-body">
 			<h1 class="card-title">Morfeu application</h1>
@@ -51,11 +55,12 @@ import { TestComponent } from '../../test/test-component.class';
 									</div>
 								    <div class="row myrow">
 									    <div class="col-6 mycol">
-								    	<div> <!-- cell -->
-									    	<img src="/assets/images/stuff-cell.svg" />
-										</div>
-										<div> <!-- cell -->
-											<img src="/dyn/preview/svg/data2.svg?__header=data2&number=42&text=blahblah"/>
+								    		<div> <!-- cell -->
+									    		<img src="/assets/images/stuff-cell.svg" />
+											</div>
+											<div> <!-- cell -->
+												<img src="/dyn/preview/svg/data2.svg?__header=data2&number=42&text=blahblah"/>
+											</div>
 										</div>
 										<div class="col-6 mycol">
 									    	<div> <!-- cell -->
