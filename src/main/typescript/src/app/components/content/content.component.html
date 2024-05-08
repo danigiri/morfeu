@@ -1,6 +1,6 @@
 <breadcrumb></breadcrumb>
 <!-- if we change the cell so the root cell is presented like a well we are good to go to remove dirty if here-->
-<div id="content" class="card" *ngIf="content">
+<div class="card" *ngIf="content">
 	<div id="content" class="card-body" [class.content-info]="info">
 		<small *ngIf="info"><strong>{{content.name}}</strong>:[<em>childrenCount={{content.childrenCount()}}</em>]</small>
 		<ng-container *ngIf="!isFragment">
@@ -29,7 +29,7 @@
 	</div>
 	<!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
 	<ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->
-	</div>
+</div>
 <!-- THIS DISPLAYS AS IT SHOULD -->
 <!--div class="container-fluid" style="border: 2px solid rgba(86, 62, 128, .2)">
 		<div class="row" style="border: 2px solid rgba(86, 62, 128, .2)">

@@ -83,22 +83,6 @@ getAttribute(name: string): Cell {
 }
 
 
-/** we look for an attribute that has representation of COL-FIELD and return its value (1 as default) */
-columnFieldValue(): string {	//TODO: this probably belongs in a controller
-
-	let value = "1";
-	if (this.attributes) {
-		let attribute: Cell = this.attributes.find(a => a.cellModel.presentation=="COL-FIELD");
-		if (attribute) {
-			value = attribute.value;
-		}
-	}
-
-	return value;
-
-}
-
-
 /** @returns the list of possible values this cell can take, mostly useful for list-like stuff, undefined otherwise */
 getPossibleValues(): string[] {
 

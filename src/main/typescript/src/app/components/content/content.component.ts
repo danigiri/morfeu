@@ -43,9 +43,12 @@ import { RemoteEventService } from '../../services/remote-event.service';
 	templateUrl: './content.component.html',
 	styles: [`
 		#content {}
+
 		.content-info {
+			/*
 			border: 2px dashed #444444;
 			border-radius: 5px;
+			*/
 			opacity: 0.8;
 		}
 	`]

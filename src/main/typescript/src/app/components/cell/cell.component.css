@@ -21,20 +21,28 @@
 }
 .show-grid	{
 	background-color: rgba(200, 200, 200, .05);
+	/*
 	border: 3px solid #c8c8c8;
+	*/
 }
 .cell-active {
+	/*
 	border: 3px solid #00f000;
 	border-radius: 5px;
+	*/
 }
 .cell-active-readonly {
+	/*
 	border: 3px solid red;
 	border-radius: 5px;
+	*/
 	/*background-color: red;*/
 }
 .cell-selected {
+	/*
 	border: 3px dashed blue;
 	border-radius: 5px;
+	*/
 }
 .cell-readonly {}
 

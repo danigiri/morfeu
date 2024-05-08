@@ -459,10 +459,26 @@ private linkToThisCell(link: CellLinkEvent): void {
 }
 
 
+/** we look for an attribute that has representation of COL-FIELD and return its value (12 as default) */
+columnFieldValue(): string {
+
+	let value = "12";
+	if (this.cell.attributes) {
+		let attribute: Cell = this.cell.attributes.find(a => a.cellModel.presentation=="COL-FIELD");
+		if (attribute) {
+			value = attribute.value;
+		}
+	}
+
+	return value;
+
+}
+
+
 }
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the 'License');
  *	 you may not use this file except in compliance with the License.

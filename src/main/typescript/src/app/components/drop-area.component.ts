@@ -40,28 +40,36 @@ import { UXEvent } from '../events/ux.event';
 		`,
 	styles:[`
 				.drop-area {
+/*
 					padding-top: 2px;
 					padding-bottom: 2px;
+				*/
 				}
 				.drop-area-active {
+					/*
 					padding-top: 0px;
 					padding-bottom: 0px;
 					border: 2px dotted #080;
 					border-radius: 5px;
+					*/
 					opacity: 0.8;
 				}
 				.drop-area-inactive {
 					opacity: 0.01;
 				}
 				.drop-area-selected {
+					/*
 					padding-top: 0px;
 					padding-bottom: 0px;
 					border: 2px dashed #00f;
 					border-radius: 5px;
+					*/
 				}
 				.drop-area-info {
+					/*
 					padding-top: 2px;
 					padding-bottom: 2px;
+					*/
 					background-color: #eaeaea;
 					opacity: 0.8;
 				}

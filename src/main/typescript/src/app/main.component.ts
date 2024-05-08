@@ -34,14 +34,14 @@ import { RemoteEventService } from './services/remote-event.service';
 				<debug></debug>
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-3">
+						<div class="col-2">
 							<catalogue-list></catalogue-list>
 							<document></document>
 						</div>
-						<div class="col">
+						<div class="col-8">
 							<content></content>
 						</div>
-						<div class="col-3">
+						<div class="col-2">
 							<model-area></model-area>
 							<cell-data></cell-data>
 					</div>
