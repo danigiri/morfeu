@@ -1,6 +1,7 @@
 // CELL . COMPONENT . TS
 
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+//import {ViewEncapsulation} from '@angular/core';
 import { filter } from 'rxjs/operators';
 
 import { FamilyMember } from '../../family-member.interface';
@@ -33,7 +34,7 @@ import { CellLocator } from '../../utils/cell-locator.class';
 	//changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './cell.component.html',
 	styleUrls: ['./cell.component.css', '../presentation/presentation.css']
-	// encapsulation: ViewEncapsulation.Emulated,
+	//,encapsulation: ViewEncapsulation.None 
 })
 
 export class CellComponent extends SelectableWidget implements OnInit, AfterViewInit {

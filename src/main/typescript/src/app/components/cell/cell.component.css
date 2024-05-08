@@ -20,11 +20,22 @@
 	/*
 	padding-right: 0;
 	padding-left: 0;
-	max-width: 100%;
 	width: 100%;
+	max-width: 95%;
+	padding: 0 !important;
 	*/
+	margin: 0 !important;
 	border: 1px solid blue;
 }
+
+.cell {
+		margin: 0 !important;
+		padding: 0 !important;
+		width: 90% !important;
+		max-width: 90% !important;
+		background-color: red !important;
+}
+
 .show-grid	{
 	background-color: rgba(200, 200, 200, .05);
 	border: 3px solid #c8c8c8;
