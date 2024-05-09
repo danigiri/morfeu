@@ -1,6 +1,7 @@
 // CELL . COMPONENT . TS
 
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { HostBinding } from '@angular/core';
 //import {ViewEncapsulation} from '@angular/core';
 import { filter } from 'rxjs/operators';
 
@@ -56,6 +57,9 @@ canBeDeleted = true;
 canBeModified = true;
 info = false;
 rect: Rect;
+isColumnCell = false;
+columnFieldValue: number = null;
+
 
 @ViewChildren(CellComponent) children: QueryList<CellComponent>;
 @ViewChild(DropAreaComponent) dropArea: DropAreaComponent;	// we only have one of those!!!
@@ -167,23 +171,49 @@ ngAfterViewInit() {
 		setTimeout(() => this.generateLinks(), CellComponent._LINKS_TIMER);
 	}
 
+	// caching information aboug column cells, as we have to inject the bindings directly due to bootstrap expecting
+	// a specific DOM structure which does not like the '<cell>' elements added to the dom
+	this.isColumnCell = this.cell.cellModel && this.cell.cellModel.presentation === 'COL-WELL';
+	this.columnFieldValue = this.getColumnFieldValue();
+
 }
 
 
-/** we look for an attribute that has representation of COL-FIELD and return its value (12 as default) */
-columnFieldValue(): string {	//TODO: this probably belongs in a controller
+@HostBinding('id') get id() { return this.cell.URI; }
 
-	let value = "12";
+/** we look for an attribute that has representation of COL-FIELD and return its value (12 as default) */
+getColumnFieldValue(): number {
+
+	if (!this.isColumnCell) {
+		return null;
+	}
+	let value = 12;
 	if (this.cell.attributes) {
-		let attribute: Cell = this.cell.attributes.find(a => a.cellModel.presentation=="COL-FIELD");
+		let attribute: Cell = this.cell.attributes.find(a => a.cellModel.presentation==="COL-FIELD");
 		if (attribute) {
-			value = attribute.value;
+			value = attribute.value ? parseInt(attribute.value) : null;
 		}
 	}
 
 	return value;
 
 }
+
+// those are helper methods to set the column classes directly to the '<cell>' element in the DOM
+@HostBinding('class.col-1') get col1() {return this.columnFieldValue===1;}
+@HostBinding('class.col-2') get col2() {return this.columnFieldValue===2;}
+@HostBinding('class.col-3') get col3() {return this.columnFieldValue===3;}
+@HostBinding('class.col-4') get col4() {return this.columnFieldValue===4;}
+@HostBinding('class.col-5') get col5() {return this.columnFieldValue===5;}
+@HostBinding('class.col-6') get col6() {return this.columnFieldValue===6;}
+@HostBinding('class.col-7') get col7() {return this.columnFieldValue===7;}
+@HostBinding('class.col-8') get col8() {return this.columnFieldValue===8;}
+@HostBinding('class.col-9') get col9() {return this.columnFieldValue===9;}
+@HostBinding('class.col-10') get col10() {return this.columnFieldValue===10;}
+@HostBinding('class.col-11') get col11() {return this.columnFieldValue===11;}
+@HostBinding('class.col-12') get col12() {return this.columnFieldValue===12;}
+@HostBinding('class.col-well') get colWell() {return this.isColumnCell;}
+
 
 
 /**  we focus on this cell, we want to notify all listeners interested in this type of cell and highlight it */
@@ -474,6 +504,7 @@ private linkToThisCell(link: CellLinkEvent): void {
 	this.events.service.publish(link);
 
 }
+
 
 
 }

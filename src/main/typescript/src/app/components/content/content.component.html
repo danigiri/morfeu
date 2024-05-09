@@ -1,7 +1,7 @@
 <breadcrumb></breadcrumb>
 <!-- if we change the cell so the root cell is presented like a well we are good to go to remove dirty if here-->
 <ng-container *ngIf="content" [class.content-info]="info">
-	<div class="container-fluid text-center">
+	<div class="container-fluid text-center well">
 		<div class="row myrow">
 		    <cell 
 				[cell]="content.children[0].children[0].children[0]"
@@ -56,6 +56,7 @@
 					[isFragment]="true"
 			></cell>
 		</ng-container>
+	</div>
 		<!-- TODO: static checks using the model and not what's already present (cells) -->
 	<!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
 	<ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->

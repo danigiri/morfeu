@@ -28,20 +28,20 @@ import { RemoteEventService } from './services/remote-event.service';
 @Component({
 	selector: "app-main",
 	template: `
-	<content></content>
 	<div class="card">
 			<div class="card-body">
 				<h1 class="card-title">Morfeu application</h1>
 				<debug></debug>
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-3">
+						<div class="col-2">
 							<catalogue-list></catalogue-list>
 							<document></document>
 						</div>
-						<div class="col-6">
+						<div class="col-8">
+							<content></content>
 						</div>
-						<div class="col-3">
+						<div class="col-2">
 							<model-area></model-area>
 							<cell-data></cell-data>
 					</div>

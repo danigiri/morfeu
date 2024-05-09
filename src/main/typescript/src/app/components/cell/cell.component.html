@@ -15,8 +15,8 @@
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
 		/-->
-		<div id="{{cell.URI}}"
-			class="container-fluid text-center"
+		<div
+			class="container-fluid text-center well"
 		>
 			<!-- drop area to be able to add new rows to this well -->
 			<!--div class="row">
@@ -50,9 +50,7 @@
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
 		/-->
-		<div id="{{cell.URI}}"
-			class="row-well row"
-		 >
+		<div class="row-well row">
 			<!-- add a drop area here if we ever want to dynamically add new columns -->
 			<cell *ngFor="let c of cell.children; let i=index"
 						[cell]="c"
@@ -61,20 +59,17 @@
 						[position]="i"
 						[snippet]="snippet"
 			></cell>
-		</div>
+		<!-- /div-->
 		<!-- drop area to be able to add new row after this one -->
 		<!--div class="row">
 			<div class="col">
 				<drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
-			</div>
-		</div-->
+			</div-->
+		</div>
 	</ng-container>
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
 		<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
-		<div id="{{cell.URI}}"
-			class="col-{{this.columnFieldValue()}} col-well"
-			><!--COL-{{this.cell.columnFieldValue()}}-->
 			<!-- drop area here to add anything at the beginning of the column -->
 			<!--drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area-->
 			<cell *ngFor="let c of cell.children; let i=index"
@@ -84,7 +79,6 @@
 					[position]="i"
 					[snippet]="snippet"
 			></cell>
-		</div>
 	</ng-container>
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation.startsWith('CELL') && !isFragment">

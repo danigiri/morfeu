@@ -3,9 +3,9 @@
 	user-select: none;
 }
 .well {
-
-	background-color: grey;
+	border: 1px solid grey;
 /*
+	background-color: grey;
 				padding: 0;
 				align-content: stretch;
  */
