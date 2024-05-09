@@ -1,39 +1,6 @@
 <breadcrumb></breadcrumb>
 <!-- if we change the cell so the root cell is presented like a well we are good to go to remove dirty if here-->
 <ng-container *ngIf="content" [class.content-info]="info">
-	<div class="container-fluid text-center well">
-		<div class="row myrow">
-		    <cell 
-				[cell]="content.children[0].children[0].children[0]"
-				[parent]="content.children[0].children[0]"
-				[position]="0"
-			></cell>
-		    <!--
-		<div class="col-4 mycol">
-		   	<div>
-			    <img src="http://localhost:3000/assets/images/data-cell.svg" />
-		    </div>
-		</div>
-		    -->
-			<div class="col-8">
-				<div class="row myrow">
-					<div class="col-6">
-					    <div class="">
-						    <img src="http://localhost:3000/assets/images/data-cell.svg" />
-					    </div>
-					<img src="/dyn/preview/svg/data2.svg?__header=data2&number=42&text=blahblah"/>
-					</div>
-					<div class="col-6 mycol">
-				    	<div class="mycell">
-							<img src="/dyn/preview/svg/data2.svg?__header=data2&number=42&text=blahblah"/>
-						</div>
-						<div class="mycell">
-							<img src="/dyn/preview/svg/data2.svg?__header=data2&number=42&text=blahblah"/>
-						</div>
-					</div>
-				</div>
-			</div> <!-- row -->
-		</div> 
 		<small *ngIf="info"><strong>{{content.name}}</strong>:[<em>childrenCount={{content.childrenCount()}}</em>]</small>
 		<ng-container *ngIf="!isFragment">
 				<!--div class="row">
@@ -56,7 +23,6 @@
 					[isFragment]="true"
 			></cell>
 		</ng-container>
-	</div>
 		<!-- TODO: static checks using the model and not what's already present (cells) -->
 	<!--ng-container *ngIf="this.cellSelectingMode">cellSelectingMode</ng-container>
 	<ng-container *ngIf="this.dropAreaSelectingMode">dropAreaSelectingMode</ng-container-->

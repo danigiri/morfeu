@@ -132,6 +132,8 @@ import { TestComponent } from '../../test/test-component.class';
 				</div>
 			</div> <!-- row -->
 		</div>
+		<h5>content</h5>
+		<content></content>
 	`,
 	styles: [
 	     	'.myrow { border: 1px solid red;}',
