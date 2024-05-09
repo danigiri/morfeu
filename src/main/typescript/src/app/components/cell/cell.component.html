@@ -1,11 +1,12 @@
 <ng-container [ngSwitch]="true">
 <!-- check for ROOT here -->
 	<ng-container *ngSwitchCase="cell.cellModel && (cell.cellModel.presentation === 'WELL' || isFragment)">
-		<!-- img *ngIf="!isFragment" src="{{getCellPresentation()}}"
+		<img *ngIf="!isFragment" src="{{getCellPresentation()}}"
 			class=""
 			[class.drag-active]="active"
 			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
+			[class.cell-inactive]="!active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn(cell)"
@@ -14,16 +15,16 @@
 			[dragEnabled]="dragEnabled"
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
-		/-->
+		/>
 		<div
 			class="container-fluid text-center well"
 		>
 			<!-- drop area to be able to add new rows to this well -->
-			<!--div class="row">
+			<div class="row">
 				<div class="col-12">
 					<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
 				</div>
-			</div-->
+			</div>
 			<cell *ngFor="let c of cell.children; let i=index" 
 					[cell]="c"
 					[parent]="cell"
@@ -32,15 +33,16 @@
 					[snippet]="snippet"
 			></cell>
 		</div>
-		<!-- TODO: we probable want a drop area here to be able to add new wells -->
+		<!-- TODO: we probably want a drop area here to be able to add new wells -->
 	</ng-container>
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'ROW-WELL'">
-		<!--img src="{{getCellPresentation()}}"
+		<img src="{{getCellPresentation()}}"
 			class="well-img img-fluid"
 			[class.drag-active]="active"
 			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
+			[class.cell-inactive]="!active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn(cell)"
@@ -49,7 +51,7 @@
 			[dragEnabled]="dragEnabled"
 			(onDragEnd)="dragEnd(cell)"
 			[dragData]="cellDragData()"
-		/-->
+		/>
 		<div class="row-well row">
 			<!-- add a drop area here if we ever want to dynamically add new columns -->
 			<cell *ngFor="let c of cell.children; let i=index"
@@ -59,19 +61,19 @@
 						[position]="i"
 						[snippet]="snippet"
 			></cell>
-		<!-- /div-->
+		</div>
 		<!-- drop area to be able to add new row after this one -->
-		<!--div class="row">
-			<div class="col">
+		<div class="row">
+			<div class="col-12">
 				<drop-area *ngIf="parent" [parent]="cell" [position]="position+1"></drop-area>
-			</div-->
+			</div>
 		</div>
 	</ng-container>
 
 	<ng-container *ngSwitchCase="cell.cellModel && cell.cellModel.presentation === 'COL-WELL'">
 		<!-- col-{{this.cell.columnFieldValue()}} cell-level-{{level}}" -->
 			<!-- drop area here to add anything at the beginning of the column -->
-			<!--drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area-->
+			<drop-area *ngIf="parent" [parent]="cell" [position]="0"></drop-area>
 			<cell *ngFor="let c of cell.children; let i=index"
 					[cell]="c"
 					[parent]="cell"
@@ -114,7 +116,7 @@
 			<presentation *ngIf="!cellPresentationIsIMG()" [cell]="cell" ></presentation>
 		</div>
 		<!-- the position of the drop area is always where droped cells will go -->
-		<!-- drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area-->
+		<drop-area *ngIf="parent" [parent]="parent" [position]="position+1"></drop-area>
 	</ng-container>
 
 </ng-container>
