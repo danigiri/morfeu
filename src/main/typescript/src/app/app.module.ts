@@ -15,13 +15,12 @@ import { PipesModule } from './pipes/pipes.module';
 import { CatalogueListComponent } from './components/catalogue-list.component';
 import { CatalogueComponent } from './components/catalogue.component';
 import { CellDocumentComponent } from './components/cell-document.component';
-import { CellModelComponent } from './components/cell-model/cell-model.component';
 import { CollapsibleComponent } from './components/collapsible.component';
 import { ComponentsModule } from './components/components.module';
 import { DebugComponent } from './components/debug/debug.component';
 import { MainComponent } from './main.component';
-import { ModelAreaComponent } from './components/model-area.component';
-import { ModelComponent } from './components/model.component';
+import { ModelAreaComponent } from './components/model-area/model-area.component';
+import { ModelComponent } from './components/model/model.component';
 import { ProblemComponent } from './components/problem.component';
 import { StatusComponent } from './components/status.component';
 
@@ -34,7 +33,6 @@ import { StatusComponent } from './components/status.component';
 	CatalogueComponent,
 	CollapsibleComponent,
 	CellDocumentComponent,
-	CellModelComponent,
 	MainComponent,
 	ModelAreaComponent,
 	ModelComponent,

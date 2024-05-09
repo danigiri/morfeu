@@ -64,8 +64,8 @@ export class CellModelComponent extends SelectableWidget implements OnInit {
 
 //@Input() node: TreeNode;
 @Input() index: number;
+@Input() cellModel: CellModel;
 
-cellModel: CellModel;
 active = false;
 dragEnabled = false;
 

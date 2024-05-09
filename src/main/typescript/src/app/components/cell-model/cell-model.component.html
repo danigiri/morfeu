@@ -1,5 +1,7 @@
-<!--div id="{{node.data.id}}"
-		class="cell-model-entry cell-model-level-{{node.level}} cell-model-position-{{index}}">
+<!--
+-->
+	<div id="{{cellModel.id}}"
+		class="cell-model-entry cell-model-position-{{index}}">
 	<img
 		src={{getThumb()}}
 		class="cell-model-thumb img-fluid"
@@ -12,7 +14,7 @@
 		dnd-draggable
 		[dragEnabled]="dragEnabled"
 		(onDragEnd)="dragEnd()"
-		[dragData]="node.data.generateCell()"
+		[dragData]="cellModel.generateCell()"
 	/>
-	<span class="cell-model-name"><small>{{ node.data.name }}</small></span>
-</div-->
+	<span class="cell-model-name"><small>{{ cellModel.name }}</small></span>
+</div>

@@ -4,27 +4,27 @@ import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@a
 
 //import { TreeComponent } from '@circlon/angular-tree-component';
 
-import { Configuration } from '../config/configuration.class';
+import { Configuration } from '../../config/configuration.class';
 
-import { CellModel } from "../cell-model.class";
-import { Model, ModelJSON } from "../model.class";
-import { RemoteObjectService } from "../services/remote-object.service";
-import { CellDocument } from "../cell-document.class";
-import { KeyListenerWidget } from "../key-listener-widget.class";
+import { CellModel } from "../../cell-model.class";
+import { Model, ModelJSON } from "../../model.class";
+import { RemoteObjectService } from "../../services/remote-object.service";
+import { CellDocument } from "../../cell-document.class";
+import { KeyListenerWidget } from "../../key-listener-widget.class";
 
-import { CellDocumentClearEvent } from "../events/cell-document-clear.event";
-import { CellSelectEvent } from "../events/cell-select.event";
-import { CellSelectionClearEvent } from "../events/cell-selection-clear.event";
-import { CellModelActivatedEvent } from "../events/cell-model-activated.event";
-import { ContentRequestEvent } from "../events/content-request.event";
-import { ModelLoadedEvent } from "../events/model-loaded.event";
-import { ModelDisplayEvent } from "../events/model-display.event";
-import { ModelDisplayReadyEvent } from "../events/model-display-ready.event";
-import { ModelRequestEvent } from "../events/model-request.event";
-import { NewCellFromModelEvent } from "../events/new-cell-from-model.event";
-import { StatusEvent } from "../events/status.event";
-import { EventService } from "../services/event.service";
-import { RemoteEventService } from "../services/remote-event.service";
+import { CellDocumentClearEvent } from "../../events/cell-document-clear.event";
+import { CellSelectEvent } from "../../events/cell-select.event";
+import { CellSelectionClearEvent } from "../../events/cell-selection-clear.event";
+import { CellModelActivatedEvent } from "../../events/cell-model-activated.event";
+import { ContentRequestEvent } from "../../events/content-request.event";
+import { ModelLoadedEvent } from "../../events/model-loaded.event";
+import { ModelDisplayEvent } from "../../events/model-display.event";
+import { ModelDisplayReadyEvent } from "../../events/model-display-ready.event";
+import { ModelRequestEvent } from "../../events/model-request.event";
+import { NewCellFromModelEvent } from "../../events/new-cell-from-model.event";
+import { StatusEvent } from "../../events/status.event";
+import { EventService } from "../../services/event.service";
+import { RemoteEventService } from "../../services/remote-event.service";
 
 @Component({
 	selector: "model",
@@ -223,7 +223,7 @@ private unsubscribeChildrenFromCellSelection() {
 }
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

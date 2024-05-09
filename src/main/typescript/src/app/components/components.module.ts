@@ -17,6 +17,7 @@ import { CellComponent } from './cell/cell.component';
 import { CellDataComponent } from './cell-data/cell-data.component';
 import { CellEditorComponent } from './cell-editor/cell-editor.component';
 import { CellHeaderComponent } from './cell-header.component';
+import { CellModelComponent } from './cell-model/cell-model.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { ContentComponent } from './content/content.component';
 import { DebugComponent } from './debug/debug.component';
@@ -26,6 +27,7 @@ import { LinksComponent } from './links/links.component';
 import { PresentationComponent } from './presentation/presentation.component';
 import { SnippetComponent } from './snippet.component';
 import { SnippetsListComponent } from './snippets-list/snippets-list.component';
+import { TreeNodeComponent } from './tree-node/tree-node.component';
 
 import { RemoteDataService } from '../services/remote-data.service';
 import { RemoteObjectService } from '../services/remote-object.service';
@@ -54,6 +56,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					CellDataComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
+					CellModelComponent,
 					CodeEditorComponent,
 					ContentComponent,
 					DebugComponent,
@@ -61,7 +64,8 @@ import { RemoteEventService } from '../services/remote-event.service';
 					KeyCaptureComponent,
 					PresentationComponent,
 					SnippetComponent,
-					SnippetsListComponent
+					SnippetsListComponent,
+					TreeNodeComponent,
 	],
 	exports: [
 					LinksComponent,
@@ -72,13 +76,15 @@ import { RemoteEventService } from '../services/remote-event.service';
 					CellDataComponent,
 					CellEditorComponent,
 					CellHeaderComponent,
+					CellModelComponent,
 					CodeEditorComponent,
 					ContentComponent,
 					DebugComponent,
 					KeyCaptureComponent,
 					PresentationComponent,
 					SnippetComponent,
-					SnippetsListComponent
+					SnippetsListComponent,
+					TreeNodeComponent,
 	],
 	providers: [
 				{provide: "RemoteJSONDataService",
@@ -113,7 +119,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 export class ComponentsModule {}
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

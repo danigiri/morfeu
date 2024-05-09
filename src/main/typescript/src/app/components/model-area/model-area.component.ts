@@ -5,30 +5,30 @@ import { Subscription } from 'rxjs';
 
 import { NgbNav, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
-import { KeyListenerWidget } from '../key-listener-widget.class';
-import { SnippetsListComponent } from './snippets-list/snippets-list.component';
+import { KeyListenerWidget } from '../../key-listener-widget.class';
+import { SnippetsListComponent } from '../snippets-list/snippets-list.component';
 
-import { CellDocument } from '../cell-document.class';
-import { Model, ModelJSON } from '../model.class';
+import { CellDocument } from '../../cell-document.class';
+import { Model, ModelJSON } from '../../model.class';
 
-import { CatalogueLoadedEvent } from '../events/catalogue-loaded.event';
-import { CellDocumentClearEvent } from '../events/cell-document-clear.event';
-import { CellDocumentLoadedEvent } from '../events/cell-document-loaded.event';
-import { ModelDisplayEvent } from '../events/model-display.event';
-import { ModelDisplayReadyEvent } from '../events/model-display-ready.event';
-import { ModelRequestEvent } from '../events/model-request.event';
-import { ModelLoadedEvent } from '../events/model-loaded.event';
-import { EventService } from '../services/event.service';
-import { Configuration } from '../config/configuration.class';
-import { ContentRequestEvent } from '../events/content-request.event';
-import { StatusEvent } from '../events/status.event';
-import { RemoteObjectService } from '../services/remote-object.service';
-import { RemoteEventService } from '../services/remote-event.service';
+import { CatalogueLoadedEvent } from '../../events/catalogue-loaded.event';
+import { CellDocumentClearEvent } from '../../events/cell-document-clear.event';
+import { CellDocumentLoadedEvent } from '../../events/cell-document-loaded.event';
+import { ModelDisplayEvent } from '../../events/model-display.event';
+import { ModelDisplayReadyEvent } from '../../events/model-display-ready.event';
+import { ModelRequestEvent } from '../../events/model-request.event';
+import { ModelLoadedEvent } from '../../events/model-loaded.event';
+import { EventService } from '../../services/event.service';
+import { Configuration } from '../../config/configuration.class';
+import { ContentRequestEvent } from '../../events/content-request.event';
+import { StatusEvent } from '../../events/status.event';
+import { RemoteObjectService } from '../../services/remote-object.service';
+import { RemoteEventService } from '../../services/remote-event.service';
 
 @Component({
 	selector: "model-area",
-	template: `xxx
-		<div [hidden]="!isVisible()">yyy
+	template: `
+		<div [hidden]="!isVisible()">
 			<ul ngbNav id="model-navs" type="pills" activeId="model-tab" class="nav-tabs">
 				<li ngbNavItem id="model-tab">
 					<a ngbNavLink>Model</a>

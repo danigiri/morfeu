@@ -8,7 +8,7 @@ import { Content, ContentJSON } from '../content.class';
 import { Model, ModelJSON } from '../model.class';
 
 import { ContentComponent } from '../components/content/content.component';
-import { ModelComponent } from '../components/model.component';
+import { ModelComponent } from '../components/model/model.component';
 
 import { RemoteObjectService } from '../services/remote-object.service';
 
