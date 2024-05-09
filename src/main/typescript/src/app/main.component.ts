@@ -28,20 +28,20 @@ import { RemoteEventService } from './services/remote-event.service';
 @Component({
 	selector: "app-main",
 	template: `
-		<div class="card">
+	<div class="card">
 			<div class="card-body">
 				<h1 class="card-title">Morfeu application</h1>
 				<debug></debug>
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-3">
+						<div class="col-2">
 							<catalogue-list></catalogue-list>
 							<document></document>
 						</div>
-						<div class="col">
+						<div class="col-8">
 							<content></content>
 						</div>
-						<div class="col-3">
+						<div class="col-2">
 							<model-area></model-area>
 							<cell-data></cell-data>
 					</div>
@@ -183,7 +183,7 @@ ngAfterViewInit() {
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

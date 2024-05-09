@@ -48,7 +48,14 @@ import { RemoteEventService } from '../../services/remote-event.service';
 			border-radius: 5px;
 			opacity: 0.8;
 		}
-	`]
+		.myrow {
+			border: 1px solid red;
+		}
+		.mycol {
+			border: 1px solid blue;
+		}
+
+		`]
 })
 
 
