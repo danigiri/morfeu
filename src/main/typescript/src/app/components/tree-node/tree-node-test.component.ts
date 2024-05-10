@@ -5,23 +5,26 @@ import { Component } from "@angular/core";
 import { Model } from "src/app/model.class";
 
 import { TestComponent } from "src/app/test/test-component.class";
-import { TreeNodeComponent } from "./tree-node.component";
+import { TreeNode } from "./tree-node.component";
 import { _document1Document } from "src/app/test/test.data";
+
+type node = TreeNode & any;
 
 @Component({
 	selector: 'tree-node-test',
 	template: `
-	<ul *ngIf="model" class="list-group">
-		<tree-node *ngFor=" let m of model.children; index as i" [node]="m">
-			<cell-model [cellModel]="m" [index]="i"></cell-model>
+	<ng-container *ngIf="model">
+		<tree-node [node]="model">
+  			<div *treeNode="let node" >{{ node.name }}, {{node.children.length}}</div>
 		</tree-node>
-	</ul>
+	</ng-container>
 	`
 })
 
+
 export class TreeNodeTestComponent extends TestComponent {
 
-	model?: Model;
+model?: Model;
 
 protected override test(case_: string): void {
 	console.debug('Show arrows on load test');
@@ -34,6 +37,10 @@ protected override loadedModel(model: Model): void {
 	console.log('model loaded');
 }
 
+/*
+				<img src="/assets/images/open-iconic/caret-right.svg" />
+				<cell-model [cellModel]="node" [index]="0"></cell-model>
+*/
 
 }
 

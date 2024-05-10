@@ -1,78 +1,30 @@
-// TREE-NODE . COMPONENT . TS
+import { Component, OnInit, Input, TemplateRef, ContentChild, Output, EventEmitter } from '@angular/core';
+import { TreeNodeDirective } from './tree-node.directive';
 
-
-import {AfterViewInit, Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from "@angular/core";
-
+export interface TreeNode {
+	children : TreeNode[]
+}
 
 @Component({
-	selector: "tree-node",
-	template: `
-	aaaaa
-		<li class="list-group-item">
-			<ng-content></ng-content>
-		</li>
-	`,
-
-	styles:[`
-				#model-info {}
-				#model-name {}
-				#model-desc {}
-				#model-cell-model-list {}
-	`]
+  selector: 'tree-node',
+  template: `
+	<li class="list-group-item">
+		<ng-container *ngTemplateOutlet="nodeTemplate || template; context: { $implicit: node }"></ng-container>
+			<ul *ngIf="node.children && node.children.length>0" class="list-group">
+				<ng-container *ngFor="let n of node.children; index as i">
+					<tree-node [node]="n" [index]="i" [level]="level+1" [template]="nodeTemplate || template"></tree-node>
+				</ng-container>
+		</ul>
+	</li>
+  `
 })
+export class TreeNodeComponent {
 
-export class TreeNodeComponent  implements OnInit, OnDestroy, OnChanges {
+@Input() node: TreeNode & any;
+@Input() template: TemplateRef<any>
+@Input() index: number = 0;
+@Input() level: number = 0;
 
-@Input() node: any;
-@Input() expanded: boolean = false;
-@Input() expandedAll: boolean = false;
-showChildren: boolean = false;
-
-constructor() {
-
-}
-
-ngOnInit() {
+ @ContentChild( TreeNodeDirective, { read: TemplateRef } ) nodeTemplate:any;
 
 }
-
-ngOnChanges(changes: SimpleChanges) {
-	// this is called whenever Angular detects changes to the input properties.
-	// this.showChildren = 'node' in changes && changes.node && 'children' in changes.node && Array.isArray(changes.node.children);
-}
-
-ngOnDestroy() {
-
-}
-
-}
-
-/*
-	<ng-container *ngIf="showChildren">
-			<ul>
-						<!--tree-root
-							[nodes]="model.children">
-							<ng-template #treeNodeTemplate let-node let-index="index">
-								<cell-model [node]="node" [index]="index"></cell-model>
-							</ng-template>
-						/tree-root-->
-						
-			</ul>
-	</ng-container>
-	*/
-
-/*
- *	  Copyright 2024 Daniel Giribet
- *
- *	 Licensed under the Apache License, Version 2.0 (the "License");
- *	 you may not use this file except in compliance with the License.
- *	 You may obtain a copy of the License at
- *
- *		 http://www.apache.org/licenses/LICENSE-2.0
- *
- *	 Unless required by applicable law or agreed to in writing, software
- *	 distributed under the License is distributed on an "AS IS" BASIS,
- *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	 See the License for the specific language governing permissions and
- *	 limitations under the License.
- */

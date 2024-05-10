@@ -28,6 +28,7 @@ import { PresentationComponent } from './presentation/presentation.component';
 import { SnippetComponent } from './snippet.component';
 import { SnippetsListComponent } from './snippets-list/snippets-list.component';
 import { TreeNodeComponent } from './tree-node/tree-node.component';
+import { TreeNodeDirective } from './tree-node/tree-node.directive';
 
 import { RemoteDataService } from '../services/remote-data.service';
 import { RemoteObjectService } from '../services/remote-object.service';
@@ -66,6 +67,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					SnippetComponent,
 					SnippetsListComponent,
 					TreeNodeComponent,
+					TreeNodeDirective,
 	],
 	exports: [
 					LinksComponent,
@@ -85,6 +87,7 @@ import { RemoteEventService } from '../services/remote-event.service';
 					SnippetComponent,
 					SnippetsListComponent,
 					TreeNodeComponent,
+					TreeNodeDirective,
 	],
 	providers: [
 				{provide: "RemoteJSONDataService",

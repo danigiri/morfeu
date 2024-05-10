@@ -3,9 +3,10 @@
 import { CellType } from './cell-type.class';
 import { CellModel, CellModelJSON } from './cell-model.class';
 import { SerialisableToJSON } from './serialisable-to-json.interface';
+import { TreeNode } from './components/tree-node/tree-node.component';
 
 /** Root cell model, also called Model */
-export class Model extends CellModel implements SerialisableToJSON<Model, ModelJSON> {
+export class Model extends CellModel implements SerialisableToJSON<Model, ModelJSON>{
 
 
 constructor(public override schema: number, 

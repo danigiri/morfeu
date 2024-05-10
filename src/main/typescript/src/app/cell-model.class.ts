@@ -9,11 +9,11 @@ import { NameValue } from './utils/name-value.interface';
 import { VariableParser } from './utils/variable-parser.class';
 
 // //// COMPONENT STUFF										////
-// //// PRESENT HERE DUE TO LIMITATIONS IN TREE COMPONENT	////
 import { CellModelComponent } from "./components/cell-model/cell-model.component";
+import { TreeNode } from './components/tree-node/tree-node.component';
 // ////														////
 
-export class CellModel extends BasicFamilyMember implements NameValue {
+export class CellModel extends BasicFamilyMember implements NameValue, TreeNode {
 
 static readonly DEFAULT_EMPTY_VALUE = '';
 // cell presentation constants
