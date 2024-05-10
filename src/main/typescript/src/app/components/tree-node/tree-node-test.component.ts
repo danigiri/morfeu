@@ -15,7 +15,7 @@ type node = TreeNode & any;
 	template: `
 	<ng-container *ngIf="model">
 		<tree-node [node]="model">
-  			<div *treeNode="let node" >{{ node.name }}, {{node.children.length}}</div>
+			<cell-model *treeNode="let node; let i" [cellModel]="node" [index]="i"></cell-model>
 		</tree-node>
 	</ng-container>
 	`

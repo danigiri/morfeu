@@ -37,12 +37,9 @@ import { RemoteEventService } from "../../services/remote-event.service";
 					<!-- non-intuitively, the nodes binding expects an array and not a root node-->
 					<!-- we use direct binding as opposed to events for the moment -->
 					<div id="model-cell-models" class="">
-						<!--tree-root
-							[nodes]="model.children">
-							<ng-template #treeNodeTemplate let-node let-index="index">
-								<cell-model [node]="node" [index]="index"></cell-model>
-							</ng-template>
-						/tree-root-->
+						<tree-node [node]="model">
+							<cell-model *treeNode="let node; let i" [cellModel]="node" [index]="i"></cell-model>
+						</tree-node>
 					</div>
 					<!--ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container-->
 				</div>

@@ -29,7 +29,7 @@ import { RemoteEventService } from '../../services/remote-event.service';
 	selector: "model-area",
 	template: `
 		<div [hidden]="!isVisible()">
-			<ul ngbNav id="model-navs" type="pills" activeId="model-tab" class="nav-tabs">
+			<ul ngbNav #modnav="ngbNav" id="model-navs" type="pills"  class="nav-tabs">
 				<li ngbNavItem id="model-tab">
 					<a ngbNavLink>Model</a>
 					<ng-template ngbNavContent>
@@ -43,6 +43,7 @@ import { RemoteEventService } from '../../services/remote-event.service';
 					</ng-template>
 				</li>
 			</ul>
+			<div [ngbNavOutlet]="modnav"></div>
 		</div>
 	`,
 	styles: [`
@@ -192,7 +193,7 @@ private clear() {
 }
 
 /*
- *	  Copyright 2023 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

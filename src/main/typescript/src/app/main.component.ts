@@ -38,10 +38,10 @@ import { RemoteEventService } from './services/remote-event.service';
 							<catalogue-list></catalogue-list>
 							<document></document>
 						</div>
-						<div class="col-8">
+						<div class="col-7">
 							<content></content>
 						</div>
-						<div class="col-2">
+						<div class="col-3">
 							<model-area></model-area>
 							<cell-data></cell-data>
 					</div>
