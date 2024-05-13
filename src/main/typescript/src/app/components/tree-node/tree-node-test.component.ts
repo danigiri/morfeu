@@ -13,11 +13,11 @@ type node = TreeNode & any;
 @Component({
 	selector: 'tree-node-test',
 	template: `
-	<ng-container *ngIf="model">
-		<tree-node [node]="model">
+	<ul *ngIf="model" class="list-group">
+		<tree-node *ngFor="let c of model.children" [node]="c" [expanded]="true">
 			<cell-model *treeNode="let node; let i" [cellModel]="node" [index]="i"></cell-model>
 		</tree-node>
-	</ng-container>
+	</ul>
 	`
 })
 
