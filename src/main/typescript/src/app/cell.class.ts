@@ -323,23 +323,17 @@ private associateWith_(rootCellmodels: CellModel[], cellModels: CellModel[]): Ce
 
 /** return presentation with the variable substitutions in the presentation URL for dynamic preview */
 getCellPresentation(): string {
-
 	let finalPres = this.cellModel.getRawCellPresentation();
 	if (finalPres.includes("$")) {
 		finalPres = this.replaceCellPresentationVariables(finalPres);
 	}
-
 	return finalPres;
-
 }
 
 /** return presentation with all variables included for dynamic preview */
 getCellPresentationAllContent(): string {
-
 	const template = '_name='+Cell._NAME+'&_value='+Cell._VALUE+'&'+Cell._ATTRIBUTES;
-
 	return this.replaceCellPresentationVariables(template);
-
 }
 
 

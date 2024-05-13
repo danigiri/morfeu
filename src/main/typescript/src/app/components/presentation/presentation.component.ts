@@ -17,7 +17,7 @@ import { EventService } from '../../services/event.service';
 	selector: 'presentation',
 	template: `
 		<iframe *ngIf="this.getPresentationType()==='IFRAME'"
-				class="cell cell-html"
+				class=""
 				[src]="getCellPresentation() | safe: 'resourceUrl' "
 		></iframe>
 		<!--div class="embed-responsive embed-responsive-16by9">
@@ -26,7 +26,7 @@ import { EventService } from '../../services/event.service';
 				[src]="getCellPresentation() | safe: 'resourceUrl' "
 			></iframe>
 		</div-->
-		<div class="cell cell-html" *ngIf="this.getPresentationType()==='HTML'">
+		<div class="" *ngIf="this.getPresentationType()==='HTML'">
 			<div [innerHTML]="html$ | async | safe: 'html'"></div>
 		</div>
 	`,
@@ -64,9 +64,8 @@ ngAfterViewInit() {
 
 		// we update from events if we are showing inner html and we have cell content to present  
 		if (this.cell) {
-
-		// FIXME: is there a potential race condition where this
-		// method calls pile up on each other on the get text?
+			// FIXME: is there a potential race condition where this
+			// method calls pile up on each other on the get text?
 			this.register(this.events.service.of<CellChangeEvent>(CellChangeEvent)
 					.pipe(filter(change => change.what===CellChange.COMPLETED),
 							filter(change => change.cell.getURI()===this.cell?.getURI()))
@@ -79,11 +78,8 @@ ngAfterViewInit() {
 
 
 getPresentationType(): string {
-
 	const cellModel = this.cell === undefined ? this.cellModel : this.cell.cellModel;
-
 	return cellModel.getCellPresentationType();
-
 }
 
 
@@ -128,7 +124,7 @@ private updateHTMLPresentation() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

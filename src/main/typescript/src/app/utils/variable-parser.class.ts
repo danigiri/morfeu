@@ -5,7 +5,7 @@ import { NameValue } from './name-value.interface';
 export class VariableParser {
 
 
-/** perform variable expansion ifthe variable is there */
+/** perform variable expansion if the variable is there, will also URL encode the variable content */
 static expand(str: string, variable: string, data: string|NameValue[]): string {
 
 	let out = str;
@@ -47,7 +47,7 @@ static expandVariables(str: string, data: NameValue[]): string {
 			const name = out.substring(varStart+2, varEnd);
 			const dataEntry = data.find( a => a.name===name);
 			const value = dataEntry!==undefined && dataEntry.value ? dataEntry.value : '';	// watch value not defined!
-			out = VariableParser.expand(out, '${'+name+'}', encodeURIComponent(value));
+			out = VariableParser.expand(out, '${'+name+'}', value);
 			varStart = out.indexOf('${', varStart);
 		}
 
@@ -61,7 +61,7 @@ static expandVariables(str: string, data: NameValue[]): string {
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

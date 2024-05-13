@@ -123,9 +123,9 @@ public static String contentTypeHTML(@Named("Path") String path) {
 
 private static String renderPresentation(String path, String color) {
 
-	String template = "<div class=\"card\">\n" + 
-					"	<div class=\"card-body html-preview\" style=\"background-color: #{{v.color}}\">\n" + 
-					"		<h4 class=\"card-title html-preview-title\">{{v.path}}</h4>\n" + 
+	var template = "<div class=\"card\">\n" +
+					"	<div class=\"card-body html-preview\" style=\"background-color: #[(${v.color})]\">\n" + 
+					"		<h4 class=\"card-title html-preview-title\">[(${v.path})]</h4>\n" + 
 					"	</div>\n" + 
 					"</div>";
 
@@ -157,7 +157,7 @@ private void initDatabase(Connection conn, ServletContext context) {
 		String tables = "SHOW TABLES";
 		List<List<String>> pt = DaggerSQLComponent.builder().sql(tables).andConnection(conn).build().query().get();
 		if (!contains(pt, "PERSONS")) {
-			String create = "CREATE TABLE Persons (\n" + 
+			var create = "CREATE TABLE Persons (\n" + 
 							"	PersonID int,\n" + 
 							"	LastName varchar(255),\n" + 
 							"	FirstName varchar(255),\n" + 
@@ -190,7 +190,7 @@ private boolean contains(List<List<String>> result, String toFind) {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
