@@ -2,8 +2,6 @@
 
 import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
 
-//import { TreeComponent } from '@circlon/angular-tree-component';
-
 import { Configuration } from '../../config/configuration.class';
 
 import { CellModel } from "../../cell-model.class";
@@ -34,10 +32,8 @@ import { RemoteEventService } from "../../services/remote-event.service";
 				<h5 id="model-name" class="card-header">Model at: ...{{displayName}}</h5>
 				<div class="card-body">
 					  <div id="model-desc" class="card-title">{{model.desc}}</div>
-					<!-- non-intuitively, the nodes binding expects an array and not a root node-->
-					<!-- we use direct binding as opposed to events for the moment -->
-					<div id="model-cell-models" class="">
-						<tree-node [node]="model">
+						<div id="model-cell-models" class="">
+						<tree-node *ngFor="let c of model.children" [node]="c" [expanded]="false">
 							<cell-model *treeNode="let node; let i" [cellModel]="node" [index]="i"></cell-model>
 						</tree-node>
 					</div>
@@ -62,8 +58,6 @@ displayName: string;
 
 protected override commandKeys: string[] = ["m", "a", "n"];
 private cellModelSelectingMode = false;
-
-//@ViewChild(TreeComponent) private cellModelComponentsRoot: TreeComponent;
 
 
 constructor(eventService: EventService) {
