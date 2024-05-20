@@ -87,7 +87,13 @@
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
 		<div>
 			<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()" #cellElement
-				class=""
+				class="cell-level-{{level}}"
+				[class.drag-active]="active"
+				[class.drag-inactive]="!active"
+				[class.cell-active]="active"
+				[class.cell-inactive]="!active"
+				[class.cell-active-readonly]="activeReadonly"
+				[class.cell-selected]="selected"
 				src="{{getCellPresentation()}}"
 				(mouseenter)="focusOn(cell)"
 				(mouseleave)="focusOff(cell)"
@@ -99,8 +105,11 @@
 			/>
 		</div>
 		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" #cellElement
-			class="cell cell-img-size cell-level-{{level}}"
+			class="cell-level-{{level}}"
+			[class.drag-active]="active"
+			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
+			[class.cell-inactive]="!active"
 			[class.cell-active-readonly]="activeReadonly"
 			[class.cell-selected]="selected"
 			(mouseenter)="focusOn(cell)"
