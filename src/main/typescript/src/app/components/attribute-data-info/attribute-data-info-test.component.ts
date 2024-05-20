@@ -12,6 +12,7 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 
 import { TestComponent } from '../../test/test-component.class';
 
+import { Configuration } from 'src/app/config/configuration.class';
 import { EventService } from '../../services/event.service';
 
 
@@ -38,10 +39,11 @@ attributeCellModel: CellModel;
 
 
 constructor(eventService: EventService,
+			config: Configuration,
 			route: ActivatedRoute,
 			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
-	super(eventService, route, contentService, modelService);
+	super(eventService, config, route, contentService, modelService);
 }
 
 

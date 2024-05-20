@@ -50,7 +50,7 @@ import { RemoteEventService } from '../../services/remote-event.service';
 				#model-tab {}
 				#snippets-tab {}
 	 `]
-})
+}) 
 
 export class ModelAreaComponent extends KeyListenerWidget implements OnInit {
 

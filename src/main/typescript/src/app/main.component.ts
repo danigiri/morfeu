@@ -94,7 +94,7 @@ constructor(eventService: EventService, private route: ActivatedRoute, private c
 }
 
 
-// this hoock is called "after Angular initializes the component's views and child views." so everyone has
+// this hook is called "after Angular initializes the component's views and child views." so everyone has
 // been able to to register their listeners to appropriate events
 ngAfterViewInit() {
 
@@ -164,17 +164,7 @@ ngAfterViewInit() {
 
 	// we need to subscribe to the query params to override possible configuration
 	this.register(this.route.queryParams.subscribe(
-			params => {
-				if (params.config && params.config!==undefined) {
-					console.log("Configuration to be bootstrapped from config url '%s'", params.config);
-					this.config.loadConfigFrom(params.config);
-				} else {
-					let merged = this.config.overwriteWithParams(params);
-					console.log("Configuration bootstrapped from defaults, firing config loaded event ^^");
-					this.events.service.publish(new ConfigurationLoadedEvent(merged));
-					console.debug('Configuration loaded event fired');
-				}
-			}
+			params => Configuration.bootstrapFromRouteParams(this.events.service, this.config, params)
 	));
 
 }

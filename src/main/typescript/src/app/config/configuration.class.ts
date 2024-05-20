@@ -71,6 +71,21 @@ overwriteWithConfig(config: Configuration) {
 
 }
 
+
+/** given the paramters from the route, do we load from the url or just overwrite certain parts of the configuration? */
+static bootstrapFromRouteParams(eventService: EventService, config: Configuration, params: Params) {
+	if (params.config && params.config!==undefined) {
+		console.log("Configuration to be bootstrapped from config url '%s'", params.config);
+		config.loadConfigFrom(params.config);
+	} else {
+		let merged = config.overwriteWithParams(params);
+		console.log("Configuration bootstrapped from defaults, firing config loaded event ^^");
+		eventService.publish(new ConfigurationLoadedEvent(merged));
+		console.debug('Configuration loaded event fired');
+	}
+}
+
+
 ////SerialisableToJSON ////
 
 toJSON(): ConfigJSON {
@@ -121,7 +136,7 @@ reloadOnSave?: boolean;
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

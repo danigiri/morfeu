@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 
 import { ComponentsModule } from '../components/components.module';
 import { TestRoutingModule } from './test-routing.module';
+import { ConfigJSON, Configuration } from '../config/configuration.class';
+import { HttpClient } from '@angular/common/http';
+import { RemoteObjectService } from '../services/remote-object.service';
 
 @NgModule({
 	declarations: [],
@@ -12,6 +15,13 @@ import { TestRoutingModule } from './test-routing.module';
 		ComponentsModule,
 		CommonModule,
 		TestRoutingModule
+	],
+	providers: [
+			Configuration,
+			{provide: "ConfigurationService",
+			useFactory: (http: HttpClient) => (new RemoteObjectService<Configuration, ConfigJSON>(http)),
+			deps: [HttpClient]
+			}
 	]
 })
 

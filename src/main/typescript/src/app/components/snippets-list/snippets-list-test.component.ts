@@ -13,6 +13,7 @@ import { SnippetsListComponent } from './snippets-list.component';
 import { _model, _snippets } from '../../test/test.data';
 import { TestComponent } from '../../test/test-component.class';
 
+import { Configuration } from 'src/app/config/configuration.class';
 import { SnippetDisplayedEvent } from '../../events/snippet-displayed.event';
 import { RemoteObjectService } from '../../services/remote-object.service';
 import { EventService } from '../../services/event.service';
@@ -34,11 +35,12 @@ model: Model;
 
 
 constructor(eventService: EventService,
+			config: Configuration,
 			route: ActivatedRoute,
 			@Inject("ContentService") protected override contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("ModelService") protected override modelService: RemoteObjectService<Model, ModelJSON>) {
 
-	super(eventService, route, contentService, modelService);
+	super(eventService, config, route, contentService, modelService);
 
 	// we create in the constructor so the view will have values to inject
 	this.snippets = [];

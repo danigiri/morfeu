@@ -24,6 +24,8 @@ import { DebugComponent } from './debug/debug.component';
 import { DropAreaComponent } from './drop-area.component';
 import { KeyCaptureComponent } from '../components/key-capture.component';
 import { LinksComponent } from './links/links.component';
+import { ModelComponent } from './model/model.component';
+import { ModelAreaComponent } from './model-area/model-area.component';
 import { PresentationComponent } from './presentation/presentation.component';
 import { SnippetComponent } from './snippet.component';
 import { SnippetsListComponent } from './snippets-list/snippets-list.component';
@@ -63,6 +65,8 @@ import { RemoteEventService } from '../services/remote-event.service';
 					DebugComponent,
 					DropAreaComponent,
 					KeyCaptureComponent,
+					ModelComponent,
+					ModelAreaComponent,
 					PresentationComponent,
 					SnippetComponent,
 					SnippetsListComponent,
@@ -83,6 +87,8 @@ import { RemoteEventService } from '../services/remote-event.service';
 					ContentComponent,
 					DebugComponent,
 					KeyCaptureComponent,
+					ModelComponent,
+					ModelAreaComponent,
 					PresentationComponent,
 					SnippetComponent,
 					SnippetsListComponent,

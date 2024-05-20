@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {ReactiveFormsModule} from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
@@ -17,10 +16,7 @@ import { CatalogueComponent } from './components/catalogue.component';
 import { CellDocumentComponent } from './components/cell-document.component';
 import { CollapsibleComponent } from './components/collapsible.component';
 import { ComponentsModule } from './components/components.module';
-import { DebugComponent } from './components/debug/debug.component';
 import { MainComponent } from './main.component';
-import { ModelAreaComponent } from './components/model-area/model-area.component';
-import { ModelComponent } from './components/model/model.component';
 import { ProblemComponent } from './components/problem.component';
 import { StatusComponent } from './components/status.component';
 
@@ -34,8 +30,6 @@ import { StatusComponent } from './components/status.component';
 	CollapsibleComponent,
 	CellDocumentComponent,
 	MainComponent,
-	ModelAreaComponent,
-	ModelComponent,
 	ProblemComponent,
 	StatusComponent,
 	
@@ -59,7 +53,7 @@ imports: [
 export class AppModule { }
 
 /*
- *	  Copyright 2023 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

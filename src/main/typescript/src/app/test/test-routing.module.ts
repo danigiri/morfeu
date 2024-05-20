@@ -16,23 +16,25 @@ import { CellEditorTestComponent } from '../components/cell-editor/cell-editor-t
 import { CodeEditorTestComponent } from '../components/code-editor/code-editor-test.component';
 import { ContentTestComponent } from '../components/content/content-test.component';
 import { LinksTestComponent } from '../components/links/links-test.component';
+import { ModelAreaTestComponent } from '../components/model-area/model-area-test.component';
 import { PlaygroundTestComponent } from '../components/playground/playground-test.component';
 import { PresentationTestComponent } from '../components/presentation/presentation-test.component';
 import { SnippetsListTestComponent } from '../components/snippets-list/snippets-list-test.component';
 import { TreeNodeTestComponent } from '../components/tree-node/tree-node-test.component';
 
 const routes: Routes = [
-						{path: 'links/:case_', component: LinksTestComponent},
 						{path: 'attribute-data-editor-test/:case_', component: AttributeDataEditorTestComponent},
 						{path: 'attribute-data-info-test/:case_', component: AttributeDataInfoTestComponent},
 						{path: 'breadcrumb-test/:case_', component: BreadcrumbTestComponent},
 						{path: 'cell-data/:case_', component: CellDataTestComponent},
 						{path: 'cell-editor/:case_', component: CellEditorTestComponent},
 						{path: 'code-editor/:case_', component: CodeEditorTestComponent},
-						{path: 'presentation-test/:case_', component: PresentationTestComponent},
 						{path: 'content/:case_', component: ContentTestComponent},
-						{path: 'snippets-list/:case_', component: SnippetsListTestComponent},
+						{path: 'links/:case_', component: LinksTestComponent},
+						{path: 'model-area/:case_', component: ModelAreaTestComponent},
 						{path: 'playground/:case_', component: PlaygroundTestComponent},
+						{path: 'presentation-test/:case_', component: PresentationTestComponent},
+						{path: 'snippets-list/:case_', component: SnippetsListTestComponent},
 						{path: 'tree-node/:case_', component: TreeNodeTestComponent}
 ];
 
@@ -45,7 +47,6 @@ const routes: Routes = [
 	],
 	exports: [RouterModule],
 	declarations: [
-					LinksTestComponent,
 					AttributeDataEditorTestComponent,
 					AttributeDataInfoTestComponent,
 					BreadcrumbTestComponent,
@@ -53,6 +54,8 @@ const routes: Routes = [
 					CellEditorTestComponent,
 					CodeEditorTestComponent,
 					ContentTestComponent,
+					LinksTestComponent,
+					ModelAreaTestComponent,
 					PlaygroundTestComponent,
 					PresentationTestComponent,
 					SnippetsListTestComponent,

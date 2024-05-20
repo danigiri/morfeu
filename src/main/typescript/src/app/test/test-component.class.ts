@@ -1,7 +1,7 @@
 // TEST - COMPONENT . CLASS . TS
 
 import { Inject, AfterViewInit, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import { CellDocument } from '../cell-document.class';
 import { Content, ContentJSON } from '../content.class';
@@ -12,17 +12,21 @@ import { ModelComponent } from '../components/model/model.component';
 
 import { RemoteObjectService } from '../services/remote-object.service';
 
+import { Configuration } from '../config/configuration.class';
 import { EventListener } from '../events/event-listener.class';
 import { EventService } from '../services/event.service';
+import { CataloguesLoadedEvent } from '../events/catalogues-loaded.event';
+import { ConfigurationLoadedEvent } from '../events/configuration-loaded.event';
 
 @Component({template:''})
 export abstract class TestComponent extends EventListener implements AfterViewInit {
 
-
+private params: Params;
 protected case: string;
 
 
 constructor(eventService: EventService,
+			private config: Configuration,
 			private route: ActivatedRoute,
 			@Inject("ContentService") protected contentService: RemoteObjectService<Content, ContentJSON>,
 			@Inject("ModelService") protected modelService: RemoteObjectService<Model, ModelJSON>) {
@@ -31,9 +35,15 @@ constructor(eventService: EventService,
 
 
 ngAfterViewInit() {
+ 	this.register(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
+	.subscribe(loaded => {
+		this.case = this.params.get('case_');
+		this.test(this.case);
+	}));
+	console.log('before subscribe')
 	this.route.paramMap.subscribe(params => {
-												this.case = params.get('case_');
-												this.test(this.case);
+			this.params = params;
+			Configuration.bootstrapFromRouteParams(this.events.service, this.config, params);
 	});
 }
 

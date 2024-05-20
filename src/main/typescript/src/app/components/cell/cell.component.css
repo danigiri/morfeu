@@ -62,9 +62,7 @@
 
 .cell-readonly {}
 
-.drag-inactive {
-	opacity: .6;
-}
+.drag-inactive {}
 .drag-active {
 	opacity: .9;
 }
