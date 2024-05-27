@@ -135,10 +135,38 @@ describe('cell-model.class', () => {
 		
 	});
 
+	it('normalised model references should point to original cell model', () => {
+
+		const pref = 'target/test-classes/test-resources/models/test-model.xsd';
+		let data2 = model.findCellModel(pref+'/test/row/col/data2');
+		// data2 is a reference to data
+		expect(data2).toBeDefined();
+		expect(data2.isReference).toBeTrue();
+		expect(data2.referenceURI).toBe(pref+'/test/row/col/data');
+
+		let rowRef = model.findCellModel(pref+'/test/row/col/holderWell/row');
+		expect(rowRef).toBeDefined();
+		expect(rowRef.isReference).toBeTrue();
+		expect(rowRef.referenceURI).toBe(pref+'/test/row');
+		// as we have not normalised the references, the row reference children are empty
+		expect(rowRef.children).toEqual([]);
+
+		model.normaliseReferences();
+
+		data2 = model.findCellModel(pref+'/test/row/col/data2');
+		const data = model.findCellModel(pref+'/test/row/col/data');
+		expect(data2.children).toBe(data.children);		
+		
+		rowRef = model.findCellModel(pref+'/test/row/col/holderWell/row');
+		const row = model.findCellModel(pref+'/test/row');
+		expect(rowRef.children).toBe(row.children);		
+		
+	});
+
 });
 
 /*
- *	Copyright 2020 Daniel Giribet
+ *	Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
