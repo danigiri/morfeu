@@ -8,7 +8,9 @@ import { _model, _readonly } from './test/test.data';
 
 describe('cell-model.class', () => {
 
+	const pref = 'target/test-classes/test-resources/models/test-model.xsd';
 	let model: Model;
+
 
 	beforeEach(() => {
 
@@ -136,8 +138,6 @@ describe('cell-model.class', () => {
 	});
 
 	it('normalised model references should point to original cell model', () => {
-
-		const pref = 'target/test-classes/test-resources/models/test-model.xsd';
 		let data2 = model.findCellModel(pref+'/test/row/col/data2');
 		// data2 is a reference to data
 		expect(data2).toBeDefined();
@@ -163,7 +163,17 @@ describe('cell-model.class', () => {
 		
 	});
 
+	it('when serialising, we should not follow references', () => {
+		const rowRef = model.findCellModel(pref+'/test/row/col/holderWell/row');
+		expect(rowRef).toBeDefined();
+		expect(rowRef.isReference).toBeTrue();
+		model.normaliseReferences();
+		// this should not explode
+		const json = rowRef.toJSON();
+		expect(json).toBeDefined();
+	});
 });
+
 
 /*
  *	Copyright 2024 Daniel Giribet

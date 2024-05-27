@@ -308,7 +308,8 @@ toJSON(): CellModelJSON {
 	
 	// we ensure that we do not serialised unwanted properties (like pointers to other structures) that do not 
 	// belong to the serialised object, so we store it temporarily, delete it, restore it. The CellModelJSON type
-	// does not have parent as it is only a runtime non-serialisable piece of data
+	// does not have parent as it is only a runtime non-serialisable piece of data. We also do not serialise the
+	// children of references
 	const previousParent = this.parent;
 	delete this["parent"];
 	let serialisedCellModel: CellModelJSON = Object.assign({}, this);
@@ -324,7 +325,11 @@ toJSON(): CellModelJSON {
 		serialisedCellModel.attributes = this.attributes.map(a => a.toJSON());
 	}
 	if (this.children) {
-		serialisedCellModel.children = this.children.map(c => c.toJSON());
+		if (!this.isReference) {
+			serialisedCellModel.children = this.children.map(c => c.toJSON());
+		} else {
+			serialisedCellModel.children = [];
+		}
 	}
 
 	return serialisedCellModel;
