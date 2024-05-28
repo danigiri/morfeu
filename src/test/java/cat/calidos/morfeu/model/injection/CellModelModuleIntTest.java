@@ -167,6 +167,14 @@ public void testColAndRowReference() throws Exception {
 	assertEquals(1, rowRef.asComplex().children().size());
 	assertNotNull(rowRef.asComplex().children().child("col"));
 
+	// we also test that holder well has a row that is also a reference
+	CellModel holderWell = col.asComplex().children().child("holderWell");
+	assertNotNull(holderWell);
+	rowRef = holderWell.asComplex().children().child("row");
+	assertNotNull(rowRef);
+	assertTrue(rowRef.isReference());
+	assertEquals(row, rowRef.getReference().get(), "Row reference in col does not reference original");
+
 }
 
 
