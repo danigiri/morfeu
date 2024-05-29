@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+/* this is to prevent content shift when scroll bar appears */
+
+/* this does not work 
+html {
+	margin-left: calc(100vw - 100%);
+  }
+*/ 
+/* ugly, but it works */
+html {
+	overflow-y: scroll;
+  }
+
