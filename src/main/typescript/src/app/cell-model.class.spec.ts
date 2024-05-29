@@ -164,14 +164,27 @@ describe('cell-model.class', () => {
 	});
 
 	it('when serialising, we should not follow references', () => {
-		const rowRef = model.findCellModel(pref+'/test/row/col/holderWell/row');
+		let rowRef = model.findCellModel(pref+'/test/row/col/holderWell/row');
 		expect(rowRef).toBeDefined();
 		expect(rowRef.isReference).toBeTrue();
+		
 		model.normaliseReferences();
+		rowRef = model.findCellModel(pref+'/test/row/col/holderWell/row');
 		// this should not explode
 		const json = rowRef.toJSON();
 		expect(json).toBeDefined();
 	});
+
+
+	// it('we should find cell model by name in JSON', () => {
+	// 	const json = model.toJSON();
+	// 	const stuff = CellModel.findCellModelJSONByName(json, 'stuff');
+	// 	expect(stuff).toBeDefined();
+	// 	expect(stuff.length).toBe(1);
+	// 	expect(stuff[0].name).toBe('stuff');
+	// });
+
+
 });
 
 

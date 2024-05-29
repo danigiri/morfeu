@@ -168,7 +168,7 @@ public void testColAndRowReference() throws Exception {
 	assertNotNull(rowRef.asComplex().children().child("col"));
 
 	// we also test that holder well has a row that is also a reference
-	CellModel holderWell = col.asComplex().children().child("holderWell");
+	CellModel holderWell = col.asComplex().children().child("holderWell"); // TEST -> ROW -> COL -> holderWell -> row
 	assertNotNull(holderWell);
 	rowRef = holderWell.asComplex().children().child("row");
 	assertNotNull(rowRef);
@@ -181,7 +181,7 @@ public void testColAndRowReference() throws Exception {
 @Test
 public void testAttributesOf() {
 
-	String name = "test";
+	var name = "test";
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 	// Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
 	Type type = provideElementType(elem);
@@ -257,7 +257,7 @@ public void testPossibleValues() throws Exception {
 @Test
 public void testAttributesDefaultValues() {
 
-	String name = "test";
+	var name = "test";
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
 	// Map<String, XSElementDecl> elementDecls = schemaSet.getSchema(MODEL_NAMESPACE).getElementDecls();
 	Type type = provideElementType(elem);
@@ -366,7 +366,7 @@ private void checkAttribute(CellModel textAttribute, String name, String typeNam
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

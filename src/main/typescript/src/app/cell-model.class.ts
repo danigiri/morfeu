@@ -303,9 +303,7 @@ getParent(): FamilyMember {
 
 //// SerialisableToJSON ////
 
-toJSON(): CellModelJSON {
-	
-	
+toJSON(): CellModelJSON {	
 	// we ensure that we do not serialised unwanted properties (like pointers to other structures) that do not 
 	// belong to the serialised object, so we store it temporarily, delete it, restore it. The CellModelJSON type
 	// does not have parent as it is only a runtime non-serialisable piece of data. We also do not serialise the
@@ -313,6 +311,9 @@ toJSON(): CellModelJSON {
 	const previousParent = this.parent;
 	delete this["parent"];
 	let serialisedCellModel: CellModelJSON = Object.assign({}, this);
+	// these are set below, let's unset them to be more explicit on their values
+	delete serialisedCellModel['children'];
+	delete serialisedCellModel['attributes'];
 	if (previousParent !== undefined && previousParent !==null) {
 		this.parent = previousParent;
 	}
@@ -331,9 +332,7 @@ toJSON(): CellModelJSON {
 			serialisedCellModel.children = [];
 		}
 	}
-
 	return serialisedCellModel;
-
 }
 
 
@@ -344,7 +343,6 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 		return JSON.parse(json, CellModel.reviver);
 
 	} else {
-
 		let cellModel: CellModel = Object.create(CellModel.prototype);
 		cellModel = Object.assign(cellModel, json); // add parsed attributes like schema, URI, name...
 		cellModel.init();							// make sure we have all attributes ok
@@ -390,6 +388,21 @@ static reviver(key: string, value: any): any {
 
 //// SerialisableToJSON [end] ////
 
+/*
+// utility to debug json serialisation issues
+static findCellModelJSONByName(json: CellModelJSON, name: string): CellModelJSON[] {
+	let pending: CellModelJSON[] = [json];
+	let found: CellModelJSON[] = [];
+	while (pending.length>0) {
+		const current = pending.shift();
+		if (current.name === name) {
+			found.push(current);
+		}
+		current.children.forEach(c => pending.push(c));
+	}
+	return found;
+}
+*/
 
 private generateAttributeFrom(attribute: CellModel): Cell {
 
@@ -479,7 +492,7 @@ referenceURI?: string;
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

@@ -79,7 +79,7 @@ normaliseReferences() {
 //// SerialisableToJSON ////
 // check out this excellent post http://choly.ca/post/typescript-json/ to find out how to deserialize objects
 	override toJSON(): ModelJSON {
-	return Object.assign({}, this, {cellModels: this.children.map(cm => cm.toJSON())});
+	return Object.assign({}, this, {children: this.children.map(cm => cm.toJSON())});
 }
 
 
