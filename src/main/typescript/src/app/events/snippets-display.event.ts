@@ -1,14 +1,15 @@
-// SNIPPET - DISPLAYED . EVENT . TS
+// SNIPPETS - DISPLAY . EVENT . TS
 
+import { Catalogue } from '../catalogue.class';
 import { CellDocument } from '../cell-document.class';
 
 import { MorfeuEvent } from './morfeu-event.class';
 
-export class SnippetDisplayedEvent extends MorfeuEvent {
+export class SnippetsDisplayEvent extends MorfeuEvent {
 
 
-constructor(public snippet: CellDocument, public position: number) {
-	super('SnippetDisplayedEvent');
+constructor(public snippets: CellDocument[], public catalogue: Catalogue) {
+	super('SnippetsDisplayEvent');
 }
 
 

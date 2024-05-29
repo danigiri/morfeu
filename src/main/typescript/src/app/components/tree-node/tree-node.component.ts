@@ -34,7 +34,7 @@ export interface TreeNode {
 	</li>
   `
 })
-export class TreeNodeComponent implements OnChanges {
+export class TreeNodeComponent {
 	
 @Input() node: TreeNode & any;
 @Input() template: TemplateRef<any>
@@ -44,29 +44,17 @@ export class TreeNodeComponent implements OnChanges {
 
 @ContentChild(TreeNodeDirective, { read: TemplateRef }) nodeTemplate: any;
 
-
-ngOnChanges(changes: SimpleChanges): void {
-	if ('expanded' in changes) {
-		console.log('expanded ' + this.expanded);
-	}
-}
-
-
 expandedButton() {
 	return this.expanded ? '-' : '+';
 }
 
 
 toggle() {
-	console.log("foo")
 	Promise.resolve(null).then(() => this.expanded = !this.expanded);
-	//this.expanded = !this.expanded;
-	//this.ref.markForCheck();
 }
 
 
 }
-
 
 /*
  *	  Copyright 2024 Daniel Giribet

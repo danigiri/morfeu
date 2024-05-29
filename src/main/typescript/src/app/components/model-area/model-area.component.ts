@@ -24,6 +24,8 @@ import { ContentRequestEvent } from '../../events/content-request.event';
 import { StatusEvent } from '../../events/status.event';
 import { RemoteObjectService } from '../../services/remote-object.service';
 import { RemoteEventService } from '../../services/remote-event.service';
+import { Catalogue } from 'src/app/catalogue.class';
+import { SnippetsDisplayEvent } from 'src/app/events/snippets-display.event';
 
 @Component({
 	selector: "model-area",
@@ -31,15 +33,16 @@ import { RemoteEventService } from '../../services/remote-event.service';
 		<div [hidden]="!isVisible()">
 			<ul ngbNav #modnav="ngbNav" id="model-navs" type="pills"  class="nav-tabs">
 				<li ngbNavItem id="model-tab">
-					<a ngbNavLink>Model</a>
+					<a ngbNavLink (click)="select('model-tab')">Model</a>
 					<ng-template ngbNavContent>
 						<model></model>
 					</ng-template>
 				</li>
 				<li ngbNavItem id="snippets-tab">
-					<a ngbNavLink>Snippets</a>
+					<a ngbNavLink (click)="select('snippets-tab')">Snippets</a>
 					<ng-template ngbNavContent>
-						<snippets *ngIf="snippets" [snippetStubs]="snippets" [model]="model"></snippets>
+						snippets
+						<snippets [model]="model"></snippets>
 					</ng-template>
 				</li>
 			</ul>
@@ -54,11 +57,11 @@ import { RemoteEventService } from '../../services/remote-event.service';
 
 export class ModelAreaComponent extends KeyListenerWidget implements OnInit {
 
-private static readonly MODEL_TAB = 'model-tab';
-private static readonly SNIPPETS_TAB = 'snippets-tab';
+public static readonly MODEL_TAB = 'model-tab';
+public static readonly SNIPPETS_TAB = 'snippets-tab';
 
 model?: Model;
-snippets?: CellDocument[];
+catalogue?: Catalogue;
 
 protected override commandKeys: string[] = ['m', 's'];
 
@@ -88,9 +91,8 @@ ngOnInit() {
 	this.register(this.events.service.of<ModelRequestEvent>(ModelRequestEvent)
 			.subscribe(requested => this.loadModel(requested.document))
 	);
-
 	this.register(this.events.service.of<CatalogueLoadedEvent>(CatalogueLoadedEvent)
-			.subscribe(loaded => this.snippets = loaded.catalogue.snippets)
+			.subscribe(loaded => this.catalogue = loaded.catalogue)
 	);
 
 	this.registerKeyPressedEvents();
@@ -150,16 +152,15 @@ override commandPressedCallback(command: string) {
 //// KeyListenerWidget [end] ////
 
 
-beforeTabChange($event: NgbNavChangeEvent) {
-
-	console.log("[UI] ModelAreaComponent:: beforeTabChange(%s)", $event.activeId);
-	if ($event.activeId===ModelAreaComponent.MODEL_TAB) {
-	} else if ($event.activeId===ModelAreaComponent.SNIPPETS_TAB) {
-		this.modelDisplayReadySubscription = this.register(this.events.service.of<ModelDisplayReadyEvent>(ModelDisplayReadyEvent)
-													.subscribe(() => this.redisplayModel())
-											);
+select(selected: string) {
+	if (selected===ModelAreaComponent.SNIPPETS_TAB) {
+		this.events.service.publish(new SnippetsDisplayEvent(this.catalogue.snippets, this.catalogue));
+	} else if (selected===ModelAreaComponent.MODEL_TAB) {
+			// redisplay will unsuscribe
+			this.modelDisplayReadySubscription = this.register(this.events.service.of<ModelDisplayReadyEvent>(ModelDisplayReadyEvent)
+				.subscribe(() => this.redisplayModel())
+		);
 	}
-
 }
 
 
@@ -179,6 +180,7 @@ private redisplayModel() {
 
 	console.log("[UI] ModelAreaComponent:: redisplayModel(%s), sending display event", this.model.name);
 	this.unsubscribe(this.modelDisplayReadySubscription);
+	this.modelDisplayReadySubscription = null;
 	this.events.service.publish(new ModelDisplayEvent(this.model));
 	console.log("[UI] ModelAreaComponent:: redisplayModel(%s), display event sent", this.model.name);
 

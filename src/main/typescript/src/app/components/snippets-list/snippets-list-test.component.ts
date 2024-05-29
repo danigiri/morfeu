@@ -15,13 +15,16 @@ import { TestComponent } from '../../test/test-component.class';
 
 import { Configuration } from 'src/app/config/configuration.class';
 import { SnippetDisplayedEvent } from '../../events/snippet-displayed.event';
+import { SnippetsDisplayEvent } from 'src/app/events/snippets-display.event';
 import { RemoteObjectService } from '../../services/remote-object.service';
+import { RemoteDataService } from 'src/app/services/remote-data.service';
 import { EventService } from '../../services/event.service';
+import { Catalogue } from 'src/app/catalogue.class';
 
 @Component({
 	selector: 'snippets-list-test',
-	template: `
-		<snippets [snippetStubs]="snippets" [model]="model"></snippets>
+	template: `aaa
+		<snippets [model]="model"></snippets>
 		<key-capture></key-capture>
 	`
 })
@@ -38,12 +41,15 @@ constructor(eventService: EventService,
 			config: Configuration,
 			route: ActivatedRoute,
 			@Inject("ContentService") protected override contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") protected override modelService: RemoteObjectService<Model, ModelJSON>) {
+			@Inject("ModelService") protected override modelService: RemoteObjectService<Model, ModelJSON>,
+			@Inject("RemoteJSONDataService") catalogueService: RemoteDataService,
+		) {
 
-	super(eventService, config, route, contentService, modelService);
+	super(eventService, config, route, contentService, modelService, catalogueService);
 
-	// we create in the constructor so the view will have values to inject
+	// we create in the constructor so the view will have values to inject and create the component
 	this.snippets = [];
+	// TODO: load from model instead of static as we are not testing the model
 	this.model = this.createModel(_model);
 
 }
@@ -67,12 +73,29 @@ protected test(case_: string): void {
 
 
 private display() {
-	Promise.resolve(null).then(() => {
-										this.snippets = this.createSnippets(_snippets);	// a bit forced but works
-										this.snippetsComponent.snippetStubs = this.snippets;
-										this.snippetsComponent.fetchSnippets();
-	});
+	console.debug('Testing catalogue 1 snippets...');
+	this.loadCatalogue('/test-resources/catalogues/catalogue1.json');
 }
 
+protected override loadedCatalogue(catalogue: Catalogue): void {	
+	this.snippets = catalogue.snippets;
+	this.events.service.publish(new SnippetsDisplayEvent(catalogue.snippets, catalogue));
+}
 
 }
+
+/*
+ *	  Copyright 2024 Daniel Giribet
+ *
+ *	 Licensed under the Apache License, Version 2.0 (the "License");
+ *	 you may not use this file except in compliance with the License.
+ *	 You may obtain a copy of the License at
+ *
+ *		 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	 Unless required by applicable law or agreed to in writing, software
+ *	 distributed under the License is distributed on an "AS IS" BASIS,
+ *	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	 See the License for the specific language governing permissions and
+ *	 limitations under the License.
+ */

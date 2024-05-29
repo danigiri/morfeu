@@ -10,13 +10,15 @@ import { Model, ModelJSON } from '../model.class';
 import { ContentComponent } from '../components/content/content.component';
 import { ModelComponent } from '../components/model/model.component';
 
+import { RemoteDataService } from '../services/remote-data.service';
 import { RemoteObjectService } from '../services/remote-object.service';
 
 import { Configuration } from '../config/configuration.class';
 import { EventListener } from '../events/event-listener.class';
 import { EventService } from '../services/event.service';
-import { CataloguesLoadedEvent } from '../events/catalogues-loaded.event';
 import { ConfigurationLoadedEvent } from '../events/configuration-loaded.event';
+import { CatalogueComponent } from '../components/catalogue.component';
+import { Catalogue } from '../catalogue.class';
 
 @Component({template:''})
 export abstract class TestComponent extends EventListener implements AfterViewInit {
@@ -26,21 +28,25 @@ protected case: string;
 
 
 constructor(eventService: EventService,
-			private config: Configuration,
+			protected config: Configuration,
 			private route: ActivatedRoute,
 			@Inject("ContentService") protected contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") protected modelService: RemoteObjectService<Model, ModelJSON>) {
+			@Inject("ModelService") protected modelService: RemoteObjectService<Model, ModelJSON>,
+			@Inject("RemoteJSONDataService") protected catalogueService: RemoteDataService) {
 	super(eventService);
 }
 
 
 ngAfterViewInit() {
+
+	// first we register for the configuration loaded, once that is done, we store that configuration and can find out 
+	// which test case we want to load
  	this.register(this.events.service.of<ConfigurationLoadedEvent>(ConfigurationLoadedEvent)
 	.subscribe(loaded => {
+		this.config = loaded.configuration;
 		this.case = this.params.get('case_');
 		this.test(this.case);
 	}));
-	console.log('before subscribe')
 	this.route.paramMap.subscribe(params => {
 			this.params = params;
 			Configuration.bootstrapFromRouteParams(this.events.service, this.config, params);
@@ -53,8 +59,8 @@ protected abstract test(case_: string): void;
 
 protected load(contentURI: string, model: string) {
 
-	const contentAndModelURI = ContentComponent.contentURIFrom(contentURI, model);
-	const modelURI = ModelComponent.modelURIFrom(model);
+	const contentAndModelURI = ContentComponent.contentURIFrom(this.config, contentURI, model);
+	const modelURI = ModelComponent.modelURIFrom(this.config, model);
 
 	this.modelService.get(modelURI, Model).subscribe((m: Model) => {
 		this.contentService.get(contentAndModelURI, Content).subscribe( (c: Content) => this.loaded(m, c));
@@ -65,9 +71,15 @@ protected load(contentURI: string, model: string) {
 
 protected loadModel(url: string): void {
 
-	const modelURI = ModelComponent.modelURIFrom(url);
+	const modelURI = ModelComponent.modelURIFrom(this.config, url);
 	this.modelService.get(modelURI, Model).subscribe((m: Model) => this.loadedModel(m));
 
+}
+
+
+protected loadCatalogue(url: string): void {
+      const catalogueURI = CatalogueComponent.catalogueURIFrom(this.config, url);
+	  this.catalogueService.get<Catalogue>(catalogueURI).subscribe((c: Catalogue) => this.loadedCatalogue(c));
 }
 
 
@@ -117,6 +129,8 @@ protected loaded(model: Model, content: Content): void {}
 
 protected loadedModel(model: Model): void {}
 
+
+protected loadedCatalogue(catalogue: Catalogue) {}
 
 }
 

@@ -176,7 +176,7 @@ activateCellModelSelectingMode() {
 }
 
 
-static modelURIFrom(model: string): string {
+static modelURIFrom(config: Configuration, model: string): string {
 	return Configuration.BACKEND_PREF+'/dyn/models/'+model;
 }
 

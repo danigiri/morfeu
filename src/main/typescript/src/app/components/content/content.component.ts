@@ -150,7 +150,7 @@ fetchContentFor(document_: CellDocument, model: Model) {
 
 	this.events.service.publish(new StatusEvent("Fetching content"));
 	const uri = document_.contentURI;
-	let contentURI = ContentComponent.contentURIFrom(uri, model.URI);
+	let contentURI = ContentComponent.contentURIFrom(this.configuration, uri, model.URI);
 	contentURI = this.configuration?.loadFilters ? contentURI+'&filters='+this.configuration.loadFilters : contentURI;
 
 	console.debug("ContentComponent::fetchContent() About to fetch content from '%s'", contentURI);
@@ -173,7 +173,7 @@ fetchContentFor(document_: CellDocument, model: Model) {
 			)
 	);
 
-}
+}	
 
 
 displayContent(content: Content) {
@@ -363,7 +363,7 @@ override numberPressedCallback(num: number) {
 //// KeyListenerWidget [end] ////
 
 
-static contentURIFrom(contentURI: string, model: string): string {
+static contentURIFrom(config: Configuration, contentURI: string, model: string): string {
 	return Configuration.BACKEND_PREF+'/dyn/content/'+contentURI+'?model='+model;
 }
 

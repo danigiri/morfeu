@@ -23,6 +23,8 @@ import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event
 import { SnippetDocumentRequestEvent } from '../../events/snippet-document-request.event';
 import { StatusEvent } from '../../events/status.event';
 import { EventService } from '../../services/event.service';
+import { SnippetsDisplayEvent } from 'src/app/events/snippets-display.event';
+import { CellModel } from 'src/app/cell-model.class';
 
 @Component({
 	selector: "snippets",
@@ -55,7 +57,8 @@ import { EventService } from '../../services/event.service';
 export class SnippetsListComponent extends KeyListenerWidget implements AfterViewInit {
 
 @Input() model: Model;
-@Input() snippetStubs: CellDocument[];	 // stubs that come from the catalogue
+
+snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
 @ViewChild(NgbAccordion) accordion: NgbAccordion;
 snippetComponents: SnippetComponent[];				// this list is maintained manually and updated by the children
@@ -73,7 +76,6 @@ private snippetSelectingMode = false;			// or snippets?
 protected snippetSubs: Subscription;
 
 
-
 constructor(eventService: EventService,
 			@Inject("RemoteJSONDataService") private snippetDocumentService: RemoteDataService,
 			@Inject("SnippetContentService") private snippetContentService: RemoteObjectService<Content, ContentJSON>) {
@@ -86,21 +88,23 @@ ngAfterViewInit() {
 	console.log("SnippetsListComponent::ngAfterViewInit()");
 	this.snippetComponents = [];
 
-	Promise.resolve(null).then(() => this.fetchSnippets());
+	this.register(this.events.service.of<SnippetsDisplayEvent>(SnippetsDisplayEvent)
+	.subscribe(display => this.fetchSnippets(display.snippets))
+);
+	//Promise.resolve(null).then(() => this.fetchSnippets());
 
 }
 
 
 // fetch all snippet documents
-public fetchSnippets() {
-
-	if (this.snippetStubs.length>0) {
-
+public fetchSnippets(stubs: CellDocument[]) {
+	if (stubs.length>0) {
+		this.snippetStubs = stubs;
 		// we copy and normalise the model as we will link it with the snippets
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
-		this.normalisedModel = MODEL.fromJSON(this.model.toJSON());
+		const json = this.model.toJSON();
+		this.normalisedModel = MODEL.fromJSON(json);
 		this.normalisedModel.normaliseReferences();
-
 		// we initialise the snippet structures
 		this.snippetCategoryNames = [];
 		this.snippetsByCategory = new Map<string, CellDocument[]>();
@@ -111,7 +115,9 @@ public fetchSnippets() {
 		});
 
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
-		this.snippetSubs = this.register(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
+		// FIXME: WHY DO WE ASSIGN THE REGISTRATION TO THE STUBS? AND WHY WE REQUEST ONE ONLY?
+		//this.snippetSubs = 
+		this.register(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
 										.subscribe(
 											req => this.loadSnippetDocument(this.snippetStubs[req.index], req.index)
 										)
@@ -314,7 +320,7 @@ private unsubscribeChildrenFromCellSelection() {
 }
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

@@ -8,6 +8,7 @@ import { CellModel } from '../../cell-model.class';
 import { Content, ContentJSON } from '../../content.class';
 import { Model, ModelJSON } from '../../model.class';
 
+import { RemoteDataService } from 'src/app/services/remote-data.service';
 import { RemoteObjectService } from '../../services/remote-object.service';
 
 import { TestComponent } from '../../test/test-component.class';
@@ -40,8 +41,9 @@ constructor(eventService: EventService,
 			config: Configuration,
 			route: ActivatedRoute,
 			@Inject("ContentService") contentService: RemoteObjectService<Content, ContentJSON>,
-			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>) {
-	super(eventService, config, route, contentService, modelService);
+			@Inject("ModelService") modelService: RemoteObjectService<Model, ModelJSON>,
+			@Inject("RemoteJSONDataService") catalogueService: RemoteDataService) {
+	super(eventService, config, route, contentService, modelService, catalogueService);
 }
 
 

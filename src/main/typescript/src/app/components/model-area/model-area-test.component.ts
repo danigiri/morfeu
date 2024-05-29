@@ -9,6 +9,8 @@ import { _document1Document } from 'src/app/test/test.data';
 import { TestComponent } from 'src/app/test/test-component.class';
 
 import { ModelRequestEvent } from 'src/app/events/model-request.event';
+import { Catalogue } from 'src/app/catalogue.class';
+import { CatalogueLoadedEvent } from 'src/app/events/catalogue-loaded.event';
 
 @Component({
 	selector: 'model-area-test',
@@ -28,7 +30,15 @@ private model() {
 	console.debug('Load model test')
 	this.document = this.createDocument(_document1Document);
 	this.events.service.publish(new ModelRequestEvent(this.document));
+	this.loadCatalogue('/test-resources/catalogues/catalogue1.json');
+}
 
+
+protected override loadedModel(model: Model): void {}
+
+
+protected override loadedCatalogue(catalogue: Catalogue): void {
+	this.events.service.publish(new CatalogueLoadedEvent(catalogue));
 }
 
 
