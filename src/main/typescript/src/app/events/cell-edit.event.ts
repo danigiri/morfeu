@@ -12,14 +12,14 @@ constructor(public cell?: Cell) {
 
 
 public override toString = (): string => {
-	return "CellEditEvent:{cell:"+this.cell.URI+"}";
+	return "CellEditEvent:{cell:"+(this.cell? this.cell.URI : '(not yet defined)')+"}";
 }
 
 
 }
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
