@@ -28,7 +28,6 @@ import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event
 import { CellModelActivatedEvent } from '../../events/cell-model-activated.event';
 import { InfoModeEvent } from '../../events/info-mode.event';
 import { EventService } from '../../services/event.service';
-import { CellLocator } from '../../utils/cell-locator.class';
 
 @Component({
 	selector: 'cell',
