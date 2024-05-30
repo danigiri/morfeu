@@ -5,6 +5,7 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogue;
@@ -19,37 +20,56 @@ import cat.calidos.morfeu.webapp.ui.UIProblem;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentUITest extends UITezt {
 
-
+@DisplayName("Loading valid document")
 @Test
-public void documentBasicDataTest() {
-	
+public void documentValidDataTest() {
+
 	open(appBaseURL);
 
-	// click on catalogue list entry and it appears
-	UICatalogues catalogues = UICatalogues.openCatalogues()
-											.shouldAppear();
 	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
-	
-	UICatalogue catalogue = catalogues.clickOn(0);
-	catalogue.shouldAppear();
-	
+
+	// click on catalogue list entry and it appears
+	UICatalogue catalogue = UICatalogues.openCatalogues()
+											.shouldAppear()
+											.clickOn(0)
+											.shouldAppear();
+
 	UIDocument document = catalogue.clickOnDocumentNamed("Document 1");
+	document.shouldBeVisible();
 	String title = document.title();
 	assertTrue(title.contains("Document 1"), "'Document 1' is not titled correltly ("+title+")");
 	assertTrue( title.contains("xml"), "'Document 1' is not correctly detected as xml");
 	assertEquals("First document", document.desc());
 	assertTrue(document.isValid());
+}
 
-	
-	document = catalogue.clickOnDocumentNamed("Document with non-valid content");
-	title = document.title();
+
+@DisplayName("Loading non valid document")
+@Test
+public void documentNonValidDataTest() {
+
+	open(appBaseURL);
+
+	UICatalogue.shouldNotBeVisible();
+	UIProblem.shouldNotBeVisible();
+
+	// click on catalogue list entry and it appears
+	UICatalogue catalogue = UICatalogues.openCatalogues()
+											.shouldAppear()
+											.clickOn(0)
+											.shouldAppear();
+
+	UIDocument document = catalogue.clickOnDocumentNamed("Document with non-valid content");
+	document.shouldBeVisible();
+	String title = document.title();
 	assertTrue( title.contains("Problematic document"), "'non valid doc' is not titled correctly ("+title+")");
 	assertTrue( title.contains("Unknown"), "'non valid doc' is not correctly detected as Unknown");
 	assertEquals("Unknown", document.desc());
 	assertFalse(document.isValid());
-	
+
 }
+
 
 }
 
