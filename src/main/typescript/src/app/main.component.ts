@@ -38,7 +38,7 @@ import { RemoteEventService } from './services/remote-event.service';
 							<catalogue-list></catalogue-list>
 							<document></document>
 						</div>
-						<div class="col-7">
+						<div class="col-7" id="content">
 							<content></content>
 						</div>
 						<div class="col-3">
