@@ -17,6 +17,7 @@ import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UICellData;
 import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
+import cat.calidos.morfeu.webapp.ui.UIDocument;
 
 /** Tests adding new attributes on a cell editor, does not bother with saving or discarding as this is tested elsewhere
 *	@author daniel giribet
@@ -31,11 +32,12 @@ private UIContent content;
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()
+	UIDocument document = UICatalogues.openCatalogues()
 							.shouldAppear()
 							.clickOn(0)
-							.clickOnDocumentNamed("Document 2")
-							.content();
+							.clickOnDocumentNamed("Document 2");
+	document.shouldBeVisible();
+	content = document.content();
 	content.shouldBeVisible();
 	test = content.rootCells().get(0);
 
