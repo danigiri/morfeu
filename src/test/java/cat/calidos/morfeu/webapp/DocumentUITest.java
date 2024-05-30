@@ -5,6 +5,7 @@ package cat.calidos.morfeu.webapp;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,20 +21,28 @@ import cat.calidos.morfeu.webapp.ui.UIProblem;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentUITest extends UITezt {
 
+
+private UICatalogue catalogue;
+
+
+@BeforeEach
+public void setup() {
+	open(appBaseURL);
+	
+	UICatalogue.shouldNotBeVisible();
+	UIProblem.shouldNotBeVisible();
+	
+	// click on catalogue list entry and it appears
+	catalogue = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.shouldAppear();
+
+}
+
 @DisplayName("Loading valid document")
 @Test
 public void documentValidDataTest() {
-
-	open(appBaseURL);
-
-	UICatalogue.shouldNotBeVisible();
-	UIProblem.shouldNotBeVisible();
-
-	// click on catalogue list entry and it appears
-	UICatalogue catalogue = UICatalogues.openCatalogues()
-											.shouldAppear()
-											.clickOn(0)
-											.shouldAppear();
 
 	UIDocument document = catalogue.clickOnDocumentNamed("Document 1");
 	document.shouldBeVisible();
@@ -48,17 +57,6 @@ public void documentValidDataTest() {
 @DisplayName("Loading non valid document")
 @Test
 public void documentNonValidDataTest() {
-
-	open(appBaseURL);
-
-	UICatalogue.shouldNotBeVisible();
-	UIProblem.shouldNotBeVisible();
-
-	// click on catalogue list entry and it appears
-	UICatalogue catalogue = UICatalogues.openCatalogues()
-											.shouldAppear()
-											.clickOn(0)
-											.shouldAppear();
 
 	UIDocument document = catalogue.clickOnDocumentNamed("Document with non-valid content");
 	document.shouldBeVisible();
