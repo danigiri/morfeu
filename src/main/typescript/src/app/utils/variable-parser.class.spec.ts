@@ -1,5 +1,6 @@
 // VARIABLE - PARSER . CLASS . SPEC . TS
 
+import { NameValue } from "./name-value.interface";
 import { VariableParser } from "./variable-parser.class";
 
 describe('variable-parser.class', () => {
@@ -12,6 +13,28 @@ describe('variable-parser.class', () => {
 	it('should replace variables if found', () => {
 		expect(VariableParser.expand('var', 'var', 'value')).toBe('value');
 		expect(VariableParser.expand('var var', 'var', 'value')).toBe('value value');
+		expect(VariableParser.expand('var', 'var', null)).toBe('');
+
+	});
+
+	it('should replace variables with encoding', () => {
+		expect(VariableParser.expand('var', 'var', 'value here')).toBe('value%20here');
+
+	});
+
+	it('should replace name values if found', () => {
+		const empty: NameValue[] = [];
+		expect(VariableParser.expand('var', 'var', empty)).toBe('');
+		const nameValue: NameValue[] = [{name: "name", value: "value"}];
+		expect(VariableParser.expand('var', 'var', nameValue)).toBe('name=value');
+		const nameValues: NameValue[] = [{name: "name", value: "value"}, {name: "name2", value: "value2"}];
+		expect(VariableParser.expand('var', 'var', nameValues)).toBe('name=value&name2=value2');
+	});
+
+
+	it('should replace variables if found', () => {
+		expect(VariableParser.expand('var', 'var', 'value')).toBe('value');
+		expect(VariableParser.expand('var var', 'var', 'value')).toBe('value value');
 	});
 
 	
@@ -20,11 +43,18 @@ describe('variable-parser.class', () => {
 		expect(VariableParser.expand('var', 'var', 'variable')).toBe('var');
 	});
 
+	it('should expand variables', () => {
+		expect(VariableParser.expandVariables('not here',  [])).toBe('not here');
+		expect(VariableParser.expandVariables('${name}',  [])).toBe('');
+		const nameValue: NameValue[] = [{name: "name", value: "value"}];
+		expect(VariableParser.expandVariables('${name}',  nameValue)).toBe('value');
+	});
+
 
 });
 
 /*
- *	Copyright 2020 Daniel Giribet
+ *	Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

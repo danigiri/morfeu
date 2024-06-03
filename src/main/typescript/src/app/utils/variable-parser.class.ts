@@ -31,7 +31,7 @@ static expand(str: string, variable: string, data: string|NameValue[]): string {
 }
 
 
-/** expand arbitrarily named variables in a string, variables must be as ${varname} in input */
+/** expand arbitrarily named variables in a string, variables must be as ${varname} in input, also URI encodes */
 static expandVariables(str: string, data: NameValue[]): string {
 
 	if (data===null || data===undefined) {
