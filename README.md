@@ -18,7 +18,7 @@ lightweight layers that are ran alongside existing complex systems.
   ecosystem using Helm
 
 Morfeu is flexible and can work with any YAML, JSON or XML API once a schema is for that API is created and added to the 
-system.It can even work with JSX markup code given it is an structured language that can be parsed.
+system. It can even work with JSX markup code given it is an structured language that can be parsed.
 
 It is licensed under the Apache 2 open-source license and is under heavy development.
 
@@ -39,6 +39,7 @@ git clone https://github.com/danigiri/morfeu.git
 # install maven, npm and angular and then...
 cd morfeu
 # Start the backend (notice that we are setting an java env var to point to our location)
+export MAVEN_OPTS=--add-opens=java.base/java.util=ALL-UNNAMED
 mvn clean compile jetty:run -D__RESOURCES_PREFIX=file://$(PWD)/ &
 # launch the frontend
 cd src/main/typescript && npm install && npm start
