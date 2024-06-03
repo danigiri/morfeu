@@ -8,9 +8,14 @@ export class VariableParser {
 /** perform variable expansion if the variable is there, will also URL encode the variable content */
 static expand(str: string, variable: string, data: string|NameValue[]): string {
 
+	if (typeof data === 'string' && data.includes(variable)) {
+		// noop to avoid infinite loops
+		return str;
+	}
+
 	let out = str;
 	// console.debug("str:%s, variable:%s, data:",str, variable, data);
-	if (out.includes(variable)) {
+	while (out.includes(variable)) {
 		if (data===null || data===undefined) {	// this behaviour could be reverted to leave string unmodified
 			out = out.replace(variable, '');
 		} else if (typeof data === 'string') {	// we do a single variable replacement
@@ -26,7 +31,7 @@ static expand(str: string, variable: string, data: string|NameValue[]): string {
 }
 
 
-/** expand arbitrarily named variables in a string */
+/** expand arbitrarily named variables in a string, variables must be as ${varname} in input */
 static expandVariables(str: string, data: NameValue[]): string {
 
 	if (data===null || data===undefined) {
