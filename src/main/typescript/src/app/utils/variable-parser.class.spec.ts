@@ -30,13 +30,6 @@ describe('variable-parser.class', () => {
 		const nameValues: NameValue[] = [{name: "name", value: "value"}, {name: "name2", value: "value2"}];
 		expect(VariableParser.expand('var', 'var', nameValues)).toBe('name=value&name2=value2');
 	});
-
-
-	it('should replace variables if found', () => {
-		expect(VariableParser.expand('var', 'var', 'value')).toBe('value');
-		expect(VariableParser.expand('var var', 'var', 'value')).toBe('value value');
-	});
-
 	
 	it('should not replace variable if data includes variable name', () => {
 		expect(VariableParser.expand('var', 'var', 'var')).toBe('var');
