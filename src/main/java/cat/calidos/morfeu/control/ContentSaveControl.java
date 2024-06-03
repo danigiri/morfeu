@@ -45,7 +45,7 @@ private HashMap<String, String> resultMetadata;
 
 public ContentSaveControl(String prefix, String path, String content, Optional<String> filters, String modelPath) {
 
-	super("POST content:"+path, "templates/operation-ok.twig", "templates/operation-problem.twig");
+	super("POST content:"+path, "templates/operation-ok.thy", "templates/operation-problem.thy");
 
 	this.prefix = prefix;
 	this.path = path;
@@ -122,7 +122,7 @@ protected Object problemInformation() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
