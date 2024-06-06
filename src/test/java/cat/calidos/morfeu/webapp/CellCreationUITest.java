@@ -24,27 +24,36 @@ public class CellCreationUITest extends UITezt  {
 
 private UIModel model;
 private UIContent content;
+private UICellModelEntry data2Model;
 
 
 @BeforeEach
-public void setup() {	
+public void setup() {
 
 	open(appBaseURL);
-	UIDocument doc = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
+	UIDocument doc = UICatalogues.openCatalogues()
+									.shouldAppearLong()
+									.shouldBeVisible()
+									.clickOn(0)
+									.clickOnDocumentNamed("Document 1");
 	model = doc.model();
 	content = doc.content();
 
+	model.shouldAppear();
+	content.shouldBeVisible();
+
+	UICellModelEntry testModel = model.rootCellModels().get(0);	// TEST
+	data2Model = testModel
+					.child("row")
+					.child("col")
+					.child("data2");	// TEST->ROW->COL->DATA2
 }
 
 
 @Test
 public void newAfterMouseActivationOfCellModel() {
 
-	model.shouldAppear();
-	content.shouldBeVisible();
 
-	UICellModelEntry testModel = model.rootCellModels().get(0);							// TEST
-	UICellModelEntry data2Model = testModel.child("row").child("col").child("data2");	// TEST->ROW->COL->DATA2
 	assertNotNull(data2Model);
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
@@ -72,12 +81,10 @@ public void newAfterMouseActivationOfCellModel() {
 @Test
 public void newAfterKeyboardActivationOfCellModel() {
 
-	model.shouldAppear();
-	content.shouldBeVisible();
-
-	UICellModelEntry testModel = model.rootCellModels().get(0);							// TEST
-	UICellModelEntry data2Model = testModel.child("row").child("col").child("data2");	// TEST->ROW->COL->DATA2
 	assertNotNull(data2Model);
+	UICellModelEntry testModel = model.rootCellModels().get(0);	// TEST
+	assertNotNull(testModel);
+
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals(1, targetCol.children().size(), "Before creating a new cell, we should only have one child");
@@ -86,8 +93,15 @@ public void newAfterKeyboardActivationOfCellModel() {
 	UIDropArea targetDropArea = targetCol.dropArea(0);
 	assertFalse(targetDropArea.isActive(), "Target area should not be active before rollover");
 
-	data2Model = testModel.child("row").child("col").child("data2");
-	data2Model.select().activate();
+	data2Model = testModel
+					.child("row")
+					.child("col")
+					.child("data2");
+	assertNotNull(data2Model);
+	model.pressKey(UIModel.MODEL_MODE_KEY);
+	data2Model
+		.select()
+		.activate();
 	assertTrue(data2Model.isActive(), "data2 cell model is not highlighted after activation");
 	assertTrue(targetDropArea.isActive(), "Target area should be active on after activating cell model");
 	targetDropArea.select();

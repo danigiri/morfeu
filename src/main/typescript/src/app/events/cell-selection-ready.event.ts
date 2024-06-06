@@ -1,23 +1,24 @@
-// CELL - MODEL - ACITVATED . EVENT . TS
+// CELL - SELECTION - READY . EVENT . TS
 
 import { MorfeuEvent } from './morfeu-event.class';
 
-import { CellModel } from "../cell-model.class";
+import { FamilyMember } from '../family-member.interface';
 
 
-export class CellModelActivatedEvent extends MorfeuEvent {
+export class CellSelectionReadyEvent extends MorfeuEvent {
 
-constructor(public cellModel?: CellModel) {
-	super('CellModelActivatedEvent');
+constructor(public target: FamilyMember, public ready: boolean = true) {
+	super('CellSelectionReadyEvent');
 }
 
 
 public override toString = (): string => {
-	return "CellModelActivatedEvent:{cellModel:'"+(this.cellModel ? this.cellModel.URI : "<selection>")+"}'}";
+	return "CellSelectionReadyEvent:{{'"+this.target.getURI()+"',"+this.ready+"})";
 }
 
 
 }
+
 
 /*
  *	  Copyright 2024 Daniel Giribet

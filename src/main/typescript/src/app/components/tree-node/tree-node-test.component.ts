@@ -15,7 +15,7 @@ type node = TreeNode & any;
 	template: `
 	<ul *ngIf="model" class="list-group">
 		<tree-node *ngFor="let c of model.children" [node]="c" [expanded]="true">
-			<cell-model *treeNode="let node; let i" [cellModel]="node" [index]="i"></cell-model>
+			<cell-model *treeNode="let node" [cellModel]="node" [position]="node.index"></cell-model>
 		</tree-node>
 	</ul>
 	`

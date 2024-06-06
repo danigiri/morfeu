@@ -20,6 +20,8 @@ import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.visible;
 
+import java.time.Duration;
+
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -41,7 +43,7 @@ public UIWidget(SelenideElement element) {
 
 	this.element = element;
 	this.driver = element.getWrappedDriver();
-	
+
 }
 
 
@@ -67,6 +69,12 @@ public T shouldAppear() {
 
 	return (T)this;
 
+}
+
+@SuppressWarnings("unchecked")
+public T shouldAppearLong() {
+	element.should(appear, Duration.ofSeconds(10));
+	return (T)this;
 }
 
 

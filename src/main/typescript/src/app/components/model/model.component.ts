@@ -1,28 +1,23 @@
 // MODEL . COMPONENT . TS
 
-import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChildren} from "@angular/core";
 
 import { Configuration } from '../../config/configuration.class';
 
-import { CellModel } from "../../cell-model.class";
 import { Model, ModelJSON } from "../../model.class";
-import { RemoteObjectService } from "../../services/remote-object.service";
-import { CellDocument } from "../../cell-document.class";
 import { KeyListenerWidget } from "../../key-listener-widget.class";
 
 import { CellDocumentClearEvent } from "../../events/cell-document-clear.event";
 import { CellSelectEvent } from "../../events/cell-select.event";
 import { CellSelectionClearEvent } from "../../events/cell-selection-clear.event";
 import { CellModelActivatedEvent } from "../../events/cell-model-activated.event";
-import { ContentRequestEvent } from "../../events/content-request.event";
-import { ModelLoadedEvent } from "../../events/model-loaded.event";
 import { ModelDisplayEvent } from "../../events/model-display.event";
 import { ModelDisplayReadyEvent } from "../../events/model-display-ready.event";
-import { ModelRequestEvent } from "../../events/model-request.event";
 import { NewCellFromModelEvent } from "../../events/new-cell-from-model.event";
-import { StatusEvent } from "../../events/status.event";
 import { EventService } from "../../services/event.service";
-import { RemoteEventService } from "../../services/remote-event.service";
+import { TreeNodeComponent } from "../tree-node/tree-node.component";
+import { FamilyMember } from "src/app/family-member.interface";
+import { CellSelectionReadyEvent } from "src/app/events/cell-selection-ready.event";
 
 @Component({
 	selector: "model",
@@ -33,8 +28,8 @@ import { RemoteEventService } from "../../services/remote-event.service";
 				<div class="card-body">
 					  <div id="model-desc" class="card-title">{{model.desc}}</div>
 						<div id="model-cell-models" class="">
-						<tree-node *ngFor="let c of model.children" [node]="c" [expanded]="false">
-							<cell-model *treeNode="let node; let i" [cellModel]="node" [index]="i"></cell-model>
+						<tree-node *ngFor="let c of model.children" [node]="c" [expanded]="true">
+							<cell-model *treeNode="let node" [cellModel]="node" [position]="node.index"></cell-model>
 						</tree-node>
 					</div>
 					<!--ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container-->
@@ -55,6 +50,8 @@ export class ModelComponent extends KeyListenerWidget implements OnInit, AfterVi
 
 model: Model;
 displayName: string;
+
+@ViewChildren(TreeNodeComponent) roots: TreeNodeComponent[];
 
 protected override commandKeys: string[] = ["m", "a", "n"];
 private cellModelSelectingMode = false;
@@ -185,27 +182,22 @@ private subscribeChildrenToCellSelection () {
 
 	console.log("ModelComponent::subscribeChildrenToCellSelection()");
 	this.unsubscribeChildrenFromCellSelection();
-	// this.cellModelComponentsRoot.treeModel.roots.forEach(r => {
-	// 	r.expand();
-	// 	(r.data as CellModel).component.subscribeToSelection(); // breaks class-component abstraction,
-	// 															  // but there does not seem to be an easy 
-	// 															  // way to do this with the tree component
-	// 	}
-	// );
+	this.roots.forEach(r => {
+		Promise.resolve(null).then(() => {
+			r.expandAll();
+			this.events.service.publish(new CellSelectionReadyEvent((r.node as FamilyMember)));
+		});
+	});
 
 }
 
 
 private unsubscribeChildrenFromCellSelection() {
-	// breaks class-component abstraction, but there does not seem to
-	// be an easy way to do this with the tree component we're using
-	// this.cellModelComponentsRoot.treeModel.getVisibleRoots().forEach(n => 
-	// 	(n.data as CellModel).component.unsubscribeFromSelection()
-	// ); 
+	this.model.children.forEach(c => this.events.service.publish(new CellSelectionReadyEvent(c, false)));
 }
 
 
-	override ngOnDestroy() {
+override ngOnDestroy() {
 	console.log("ModelComponent::ngOnDestroy()");
 	super.ngOnDestroy();
 }

@@ -19,6 +19,7 @@ import { CellSelectEvent } from '../../events/cell-select.event';
 import { CellSelectionClearEvent } from '../../events/cell-selection-clear.event';
 import { NewCellFromModelEvent } from '../../events/new-cell-from-model.event';
 import { EventService } from '../../services/event.service';
+import { CellSelectionReadyEvent } from 'src/app/events/cell-selection-ready.event';
 
 @Component({
 	selector: 'cell-model',
@@ -63,7 +64,7 @@ import { EventService } from '../../services/event.service';
 export class CellModelComponent extends SelectableWidget implements OnInit {
 
 //@Input() node: TreeNode;
-@Input() index: number;
+@Input() position: number;
 @Input() cellModel: CellModel;
 
 active = false;
@@ -84,8 +85,9 @@ ngOnInit() {
 
 	// establish the relationship between the cellmodel and the component
 //	this.cellModel = this.node.data as CellModel;
-	this.cellModel.component = this;
+//	this.cellModel.component = this;
 
+	// this is activation due to a cell that is compatible with this model being activated
 	this.register(this.events.service.of<CellDeactivatedEvent>(CellDeactivatedEvent)
 		.pipe(filter(deactivated => this.isCompatibleWith(deactivated.cell)))
 		.subscribe(() => this.becomeInactive(true))
@@ -98,6 +100,32 @@ ngOnInit() {
 				// console.log("-> cell-model component gets cell activated event for '"+activated.cell.name+"'");
 	);
 
+	// an outsider component (like a keyboard shortcut) wants to activate this selected cell model
+	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
+	.pipe(filter(activated => this.selected && activated.cellModel == null))
+	.subscribe(() => {
+			console.log('-> selected cell model comp gets model activation event and proceeds to focus :)');
+			this.becomeActive(false);
+		})
+	);
+	// a different cell model was activated and we are active at this moment
+	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
+			.pipe(filter(activated => this.active && activated.cellModel && activated.cellModel !== this.cellModel))
+			.subscribe(() => {
+				console.log('-> cell model comp gets cell model activated event from someone else, as active, clear');
+				this.becomeInactive(false);
+			})
+	);
+
+	this.register(this.events.service.of<CellSelectionReadyEvent>(CellSelectionReadyEvent)
+		.pipe(filter(e => !e.ready && this.isCompatibleWith(e.target)))
+		.subscribe(() => this.unsubscribeFromSelection())
+	);
+
+	this.register(this.events.service.of<CellSelectionReadyEvent>(CellSelectionReadyEvent)
+			.pipe(filter(e => e.ready && this.isCompatibleWith(e.target)))
+			.subscribe(() => this.subscribeToSelection())
+	);
 }
 
 
@@ -128,14 +156,14 @@ becomeInactive(fromCell: boolean) {
 
 select(position: number) {
 
-	if (position===this.index) {
+	if (position===this.position) {
 
 		// if we were activated we deactivate ourselves and become selectable again
 		if (this.active) {
 			this.becomeInactive(false);
 		}
 
-		console.log("[UI] CellModelComponent::select("+this.cellModel.name+"("+this.index+"))");
+		console.log("[UI] CellModelComponent::select("+this.cellModel.name+"("+this.position+"))");
 		this.selected = true;
 		this.unsubscribeFromSelection();
 		// cleverly, we now subscribe to cellmodel activation events that may be triggered by shortcuts
@@ -147,7 +175,7 @@ select(position: number) {
 		this.events.service.publish(new CellSelectionClearEvent()); // warning: resets model state variables
 		this.subscribeToSelectionClear();
 
-		this.cellModel.children.forEach(c => c.component.subscribeToSelection());
+		this.cellModel.children.forEach(c => this.events.service.publish(new CellSelectionReadyEvent(c)));
 
 		// TODO: implement out of bounds handling for cell-models
 //	  } else if (this.cellModel.parent && position>=this.cell.parent.childrenCount()) {
@@ -161,6 +189,7 @@ select(position: number) {
 
 subscribeToSelection() {
 
+	//console.debug('Subscribed to selection: '+this.cellModel.name+'('+this.position+')');
 	this.selectionSubscription = this.register(this.events.service.of<CellSelectEvent>(CellSelectEvent)
 										.subscribe(cs => this.select(cs.position))
 	);
@@ -258,7 +287,7 @@ private unsubscribeToNewCellFromModel() {
 }
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

@@ -52,11 +52,8 @@ public UICellModelEntry(SelenideElement e, UIModel model, Optional<UICellModelEn
 
 
 public UIWidget<UICellModelEntry> click() {
-	
 	element.click();
-	
 	return this;
-	
 }
 
 
@@ -83,8 +80,8 @@ public UICellModelEntry hover() {
 
 
 public UICellModelEntry select() {
-	
-	LinkedList<UICellModelEntry> path = new LinkedList<UICellModelEntry>();
+
+	var path = new LinkedList<UICellModelEntry>();
 	UICellModelEntry parentVisitor = this;
 	while (parentVisitor!=null) {
 		path.push(parentVisitor);
@@ -94,7 +91,7 @@ public UICellModelEntry select() {
 	path.stream().forEachOrdered(cm -> model.pressKey(cm.position()+""));
 
 	return this;
-	
+
 }
 
 
@@ -122,7 +119,6 @@ public int position() {
 		}
 		i++;
 	}
-		
 	return position;
 
 }
@@ -148,7 +144,7 @@ public String thumb() {
 }
 
 
-public List<UICellModelEntry> children() {	
+public List<UICellModelEntry> children() {
 	return element.$$(".tree-node-level-"+(level+1))
 			.asFixedIterable().stream()
 					.map(e -> new UICellModelEntry(e, model, Optional.of(this), level+1)).collect(Collectors.toList());
@@ -156,7 +152,7 @@ public List<UICellModelEntry> children() {
 
 
 public UICellModelEntry child(String name) {
-	return children().stream().filter((UICellModelEntry cme ) -> cme.name().equals(name)).findAny().get();
+	return children().stream().filter((UICellModelEntry cme) -> cme.name().equals(name)).findAny().get();
 }
 
 
@@ -203,3 +199,19 @@ public String toString() {
 
 
 }
+
+/*
+ *    Copyright 2024 Daniel Giribet
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */

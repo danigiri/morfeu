@@ -1,10 +1,10 @@
-<div id="{{cellModel.id}}"
-		class="cell-model-entry cell-model-position-{{index}}">
+<div id="{{cellModel.getURI()}}"
+	class="cell-model-entry cell-model-position-{{position}}">
 	<img
 		src={{getThumb()}}
 		class="cell-model-thumb img-fluid"
 		[class.cell-model-active]="active"
-		[class.cell-model-selected]="this.selected"
+		[class.cell-model-selected]="this.selected && !this.active"
 		style="display: unset !important;"
 		(mousedown)="clickDown()"
 		(mouseup)="clickUp()"

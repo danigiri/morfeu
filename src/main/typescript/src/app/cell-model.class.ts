@@ -9,7 +9,6 @@ import { NameValue } from './utils/name-value.interface';
 import { VariableParser } from './utils/variable-parser.class';
 
 // //// COMPONENT STUFF										////
-import { CellModelComponent } from "./components/cell-model/cell-model.component";
 import { TreeNode } from './components/tree-node/tree-node.component';
 // ////														////
 
@@ -26,19 +25,13 @@ public static readonly ATTR_LINK_PRESENTATION = 'VALUELOCATOR';
 
 attributes?: CellModel[];
 children: CellModel[];
+index: number;
 isReference: boolean;
 referenceURI?: string;
 parent?: FamilyMember;
-order?: number;		// only relevant if our parent has ordered children
 canLink: boolean;
 attributesCanLink: boolean;
 
-// //// COMPONENT STUFF										////
-// to circumvent limitations of the angular tree, we establish a relationship with the cell model component //
-component: CellModelComponent;
-id: string;
-isExpanded: boolean;
-// ////														////
 
 constructor(public schema: number,
 			public override URI: string,
@@ -72,21 +65,13 @@ constructor(public schema: number,
 // also compile the regexp for validity
 init() {
 
-	this.id = this.URI;	 // this is guaranteed to be unique 
-	this.isExpanded = true;
 	if (this.type_?.regex) {
 		this.type_.regexCompiled = new RegExp(this.type_.regex);
 	}
 
 	this.canLink = this.presentation===CellModel.ATTR_LINK_PRESENTATION;
 	this.attributesCanLink = this.attributes?.find(a => a.presentation==CellModel.ATTR_LINK_PRESENTATION)!==undefined;
-	
-}
-
-
-
-setComponent(c: CellModelComponent) {
-	this.component = c;
+	this.index = 0; // unless set by the parent
 }
 
 
@@ -272,7 +257,7 @@ getAdoptionURI(): string {	// we try to work out using a reference (works for mo
 
 
 getAdoptionOrder(): number {
-	return this.order;
+	return this.index;
 }
 
 
@@ -369,8 +354,7 @@ static fromJSON(json: CellModelJSON|string): CellModel {
 				cm.parent = cellModel;
 				return cm;
 			})});
-			//let i = 0;
-			cellModel.children.forEach((c: CellModel, index: number) => c.order = index);
+			cellModel.children.forEach((c: CellModel, i: number) => c.index = i);
 		} else {
 			cellModel = Object.assign(cellModel, {children: []});  // empty as the Tree class requires it
 		}
