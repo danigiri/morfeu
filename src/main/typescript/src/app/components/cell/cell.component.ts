@@ -505,7 +505,6 @@ private linkToThisCell(link: CellLinkEvent): void {
 }
 
 
-
 }
 
 /*

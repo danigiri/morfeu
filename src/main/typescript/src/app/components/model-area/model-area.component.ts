@@ -32,16 +32,15 @@ import { SnippetsDisplayEvent } from 'src/app/events/snippets-display.event';
 	template: `
 		<div [hidden]="!isVisible()">
 			<ul ngbNav #modnav="ngbNav" id="model-navs" type="pills"  class="nav-tabs">
-				<li ngbNavItem id="model-tab">
+				<li [ngbNavItem]="'model-tab'" id="model-tab">
 					<a ngbNavLink (click)="select('model-tab')">Model</a>
 					<ng-template ngbNavContent>
 						<model></model>
 					</ng-template>
 				</li>
-				<li ngbNavItem id="snippets-tab">
+				<li [ngbNavItem]="'snippets-tab'" id="snippets-tab">
 					<a ngbNavLink (click)="select('snippets-tab')">Snippets</a>
 					<ng-template ngbNavContent>
-						snippets
 						<snippets [model]="model"></snippets>
 					</ng-template>
 				</li>
@@ -65,7 +64,7 @@ catalogue?: Catalogue;
 
 protected override commandKeys: string[] = ['m', 's'];
 
-@ViewChild('ngbNav') tabs: NgbNav;
+@ViewChild('modnav') tabs: NgbNav;
 @ViewChild(SnippetsListComponent) private snippetListComponent: SnippetsListComponent;
 
 private modelDisplayReadySubscription: Subscription;
@@ -133,6 +132,7 @@ override commandPressedCallback(command: string) {
 	// we select the appropriate tab, at the moment we need the user to re-issue the key again
 	switch (command) {
 	case "m":
+		console.log("[UI] ModelAreaComponent:: commandPressedCallback(%s)", command);
 		if (this.tabs.activeId===ModelAreaComponent.SNIPPETS_TAB) {
 			this.tabs.select(ModelAreaComponent.MODEL_TAB);
 		}
