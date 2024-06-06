@@ -154,6 +154,9 @@ To launch UI Selenium integration tests you can do:
 
     mvn test failsafe:integration-test -Dit.test='*UITest' -Dapp-url='http://localhost:3000/'
 
+To use Firefox you can do something like (Ubuntu snap installation):
+    mvn test failsafe:integration-test -Dit.test='*UITest' -Dapp-url='http://localhost:3000/' -Ddriver=firefox -Dwebdriver.gecko.driver=/snap/bin/geckodriver
+
 A small number of frontend tests is also available, to launch them you can do:
 
     cd src/main/angular && ng test
