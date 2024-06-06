@@ -101,7 +101,7 @@ ngAfterViewInit() {
 	console.info("\t\t\t\t\t ****** APPLICATION STARTS ******");
 	console.debug("AppComponent::ngAfterViewInit()");
 
-	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE
+	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE, SET TO FALSE IF TESTING
 	const foo = !environment.production && true;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions

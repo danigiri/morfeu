@@ -30,7 +30,9 @@ public void setup() {
 
 	open(appBaseURL);
 	content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 3").content();
+	content.shouldAppear();
 	content.shouldBeVisible();
+	// need the cells to load here
 	test = content.rootCells().get(0);
 
 }

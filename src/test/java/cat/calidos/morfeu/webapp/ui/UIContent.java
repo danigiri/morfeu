@@ -36,6 +36,7 @@ public static void shouldNotBeVisible() {
 
 
 public List<UICell> rootCells() {
+	$(".cell-level-0").should(appear); // wait for at least one cell to appear otherwise the loop may not find anything
 	return $$(".cell-level-0").asFixedIterable().stream().map(e -> new UICell(e, this, Optional.empty(), 0))
 			.collect(Collectors.toList());
 }
