@@ -73,12 +73,12 @@ public void checkCellData() {
 	assertEquals(2, attributes.size(), "Wrong number of attributes of 'data',");
 
 	UIAttributeData textAttribute = cellData.attribute("text");
-	assertEquals("Wrong name of attribut 'data@text'", "text", textAttribute.name());
+	assertEquals("text", textAttribute.name(), "Wrong name of attribute 'data@text'");
 	assertTrue(textAttribute.isOptional(), "Attribute data@text should not be mandatory");
 	assertEquals("blahblah", textAttribute.value());
 
 	UIAttributeData numberAttribute = cellData.attribute("number");
-	assertEquals("Wrong name of attribut 'data@text'", "number", numberAttribute.name());
+	assertEquals("number", numberAttribute.name(), "Wrong name of attribute 'data@text'");
 	assertTrue(numberAttribute.isMandatory(), "Attribute data@number should be mandatory");
 	assertEquals("42", numberAttribute.value());
 
@@ -104,7 +104,7 @@ public void checkCellDataMissingAttributes() {
 	assertEquals(1, attributes.size(), "Wrong number of attributes of 'data',");
 
 	UIAttributeData numberAttribute = cellData.attribute("number");
-	assertEquals("Wrong name of attribut 'data@text'", "number", numberAttribute.name());
+	assertEquals("number", numberAttribute.name(), "Wrong name of attribute 'data@text'");
 	assertTrue(numberAttribute.isMandatory(), "Attribute data@number should be mandatory");
 	assertEquals("42", numberAttribute.value());
 
