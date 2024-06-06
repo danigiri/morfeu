@@ -143,7 +143,7 @@ private UIAttributeData checkAttribute(List<UIAttributeData> attributes, String 
 	Optional<UIAttributeData> attributeOptional = attributes.stream().filter(a -> a.name().matches(name)).findFirst();
 	assertTrue(attributeOptional.isPresent());
 	UIAttributeData attribute = attributeOptional.get();
-	assertEquals("Wrong value of '" + name + "'", expectedValue, attribute.value());
+	assertEquals(expectedValue, attribute.value(), "Wrong value of '" + name + "'");
 
 	return attribute;
 
