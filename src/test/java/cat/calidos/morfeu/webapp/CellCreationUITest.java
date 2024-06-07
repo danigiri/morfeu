@@ -58,22 +58,25 @@ public void newAfterMouseActivationOfCellModel() {
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals( 1, targetCol.children().size(), "Before creating a new cell, we should only have one child");
-	assertNotNull( targetCol.child("data(0)"), "Before creating new cell, target child 0 is data");
+	assertNotNull(targetCol.child("data(0)"), "Before creating new cell, target child 0 is data");
 
-	UIDropArea targetDropArea = targetCol.dropArea(0);
+	UIDropArea targetDropArea = targetCol.dropArea(1);
 	assertFalse( targetDropArea.isActive(), "Target area should not be active before rollover");
 
 	data2Model.hover();
-	assertTrue( data2Model.isActive(), "data2 cell model is not highlighted after rollover");
-	assertTrue( targetDropArea.isActive(), "Target area should be active on rollover");
+	assertTrue(data2Model.isActive(), "data2 cell model is not highlighted after rollover");
+	assertTrue(targetDropArea.isActive(), "Valid target drop area should be active on rollover");
+	UIDropArea disabledDropArea = targetCol.dropArea(0); // extra testing for ordering
+	assertFalse(disabledDropArea.isActive(), "Due to order restrictions, drop area zero should still be inactive");
+
 	targetDropArea.select();
 	assertTrue(targetDropArea.isSelected(), "Target drop area shoud be selected after select");
 
 	// create a new data2 element through the keyboard shortcut
 	model.pressKey(UIModel.NEW_CELL_KEY);
 	assertEquals( 2, targetCol.children().size(), "After creating a new cell, we should have 2 children");
-	assertNotNull(targetCol.child("data2(0)"), "Aftert creating new cell, target child 0 is data2");
-	assertNotNull(targetCol.child("data(1)"), "Before creating new cell, target child 1 is data");
+	assertNotNull(targetCol.child("data(0)"), "Before creating new cell, target child 0 is still data");
+	assertNotNull(targetCol.child("data2(1)"), "Aftert creating new cell, target child 1 is data2");
 
 }
 
@@ -88,9 +91,9 @@ public void newAfterKeyboardActivationOfCellModel() {
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals(1, targetCol.children().size(), "Before creating a new cell, we should only have one child");
-	assertNotNull( targetCol.child("data(0)"), "Before creating new cell, target child 0 is data");
+	assertNotNull(targetCol.child("data(0)"), "Before creating new cell, target child 0 is data");
 
-	UIDropArea targetDropArea = targetCol.dropArea(0);
+	UIDropArea targetDropArea = targetCol.dropArea(1);
 	assertFalse(targetDropArea.isActive(), "Target area should not be active before rollover");
 
 	data2Model = testModel
@@ -110,8 +113,8 @@ public void newAfterKeyboardActivationOfCellModel() {
 	// create a new data2 element through the keyboard shortcut
 	model.pressKey(UIModel.NEW_CELL_KEY);
 	assertEquals( 2, targetCol.children().size(), "After creating a new cell, we should have 2 children");
-	assertNotNull(targetCol.child("data2(0)"), "After creating new cell, target child 0 is data2");
-	assertNotNull(targetCol.child("data(1)"), "Before creating new cell, target child 1 is data");
+	assertNotNull(targetCol.child("data(0)"), "Before creating new cell, target child 0 is still data");
+	assertNotNull(targetCol.child("data2(1)"), "Aftert creating new cell, target child 1 is data2");
 
 }
 
