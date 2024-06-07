@@ -22,15 +22,16 @@ private UIContent content;
 
 @BeforeEach
 public void setup() {
-	
+
 	open(appBaseURL);
 	content = UICatalogues.openCatalogues()	
-							.shouldAppear()
+							.shouldAppearLong()
+							.shouldBeVisible()
 							.clickOn(0)
 							.clickOnDocumentNamed("Document 1")
 							.content();
 	content.shouldAppear();
-	
+
 }
 
 
@@ -38,19 +39,23 @@ public void setup() {
 public void testClearSelection() {
 
 	content.pressKey(UIContent.SELECTION_MODE);
-	assertFalse(content.rootCells().get(0).isSelected(), "After selection mode, root cell should not be selected");
+	UICell rootCell = content.rootCells().get(0);
+	assertFalse(rootCell.isSelected(), "After selection mode, root cell should not be selected");
 
 	content.pressKey("0");
-	assertTrue(content.rootCells().get(0).isSelected(), "After selecting root cell it should be selected");
-	assertFalse(content.rootCells().get(0).child(0).isSelected(), "First row should not be selected yet");
+	rootCell = content.rootCells().get(0);
+	assertTrue(rootCell.isSelected(), "After selecting root cell it should be selected");
+	assertFalse(rootCell.child(0).isSelected(), "First row should not be selected yet");
 
 	content.pressKey("0");
-	assertFalse(content.rootCells().get(0).isSelected());
-	assertTrue(content.rootCells().get(0).child(0).isSelected());
+	rootCell = content.rootCells().get(0);
+	assertFalse(rootCell.isSelected());
+	assertTrue(rootCell.child(0).isSelected());
 
 	content.pressKey(UIContent.SELECTION_MODE);
-	assertFalse(content.rootCells().get(0).isSelected());
-	assertFalse(content.rootCells().get(0).child(0).isSelected());
+	 rootCell = content.rootCells().get(0);
+	assertFalse(rootCell.isSelected());
+	assertFalse(rootCell.child(0).isSelected());
 
 }
 
@@ -80,7 +85,7 @@ public void testSelectionActivate() {
 
 @Test
 public void testSelectionClearsActivation() {
-	
+
 	// we select and activate, then we select the same cell again, which means that it gets deactivated
 	// (no double state is allowed)
 	content.pressKey(UIContent.SELECTION_MODE);
@@ -100,13 +105,13 @@ public void testSelectionClearsActivation() {
 	content.pressKey("0");
 	assertTrue(data.isSelected());
 	assertFalse(data.isActive());
-	
+
 }
 
 
 @Test
 public void testSelectionChangesActivation() {
-	
+
 	content.pressKey("c");
 	content.pressKey("0");
 	content.pressKey("0");
@@ -116,7 +121,7 @@ public void testSelectionChangesActivation() {
 	UICell data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)");
 	assertFalse(data.isSelected());
 	assertTrue(data.isActive());
-	
+
 	// select and activate another cell, and check activation is moved to the second cell
 	content.pressKey("c");
 	content.pressKey("0");
@@ -137,8 +142,9 @@ public void testSelectionChangesActivation() {
 	assertFalse(data.isActive());
 	assertFalse(data2.isSelected());
 	assertTrue(data2.isActive());
-	
+
 }
+
 
 }
 

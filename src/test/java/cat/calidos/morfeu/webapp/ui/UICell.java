@@ -70,7 +70,7 @@ public String img() {
 
 
 public List<UIDropArea> dropAreas() {
-	
+
 	List<UIDropArea> dropAreas = element.$$(".drop-area").asFixedIterable().stream()
 									.map(e -> new UIDropArea(e, content, this))
 									.collect(Collectors.toList());
