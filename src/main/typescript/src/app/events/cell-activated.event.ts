@@ -11,7 +11,7 @@ constructor(public cell: Cell) {
 
 
 public override toString = (): string => {
-	return "CellActivatedEvent:{cell:'"+this.cell.URI+"'}";
+	return "CellActivatedEvent:{cell:'"+(this.cell.getURI() ? this.cell.getURI() : 'null')+"',"+this.cell.getAdoptionURI()+"'}";
 }
 
 

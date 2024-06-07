@@ -30,6 +30,9 @@ matches(e:FamilyMember): boolean;
 /** can we adopt this new family member? (usually means can have children with given name and adoption uri) */
 canAdopt(newMember:FamilyMember, position?: number): boolean;
 
+/** return a map of criteria and the results, helpful for debugging, but can be used to implement canAdopt */
+canAdoptMap(newMember:FamilyMember, position?: number): Map<string, boolean>;
+
 //canRemoveAsChild(cell:Cell):boolean;
 
 /** @returns the number of children */

@@ -473,16 +473,28 @@ getAdoptionOrder(): number {
 			));
 */
 canAdopt(newMember: FamilyMember, position: number): boolean {
-	return Adoption.hasCellModel(this) &&
-			Adoption.canBeModified(this) &&
-			Adoption.isModelCompatible(this, newMember) && // we check the model 
-			Adoption.weHaveRoomForOneMore(this, newMember) &&
-			(position===undefined || 
-				(Adoption.isNotAdjacentPosition(this, newMember, position) &&
-				Adoption.itsTheRightOrder(this, newMember, position))
-			);
+	// if a single condition is false, we cannot adopt
+	for (const [_, result] of this.canAdoptMap(newMember, position).entries()) {
+		if (!result) {
+			return false;
+		}
+	};
+	return true;
 }
 
+
+canAdoptMap(newMember:FamilyMember, position?: number): Map<string, boolean> {
+	let c = new Map<string, boolean>();
+	c.set('hasCellModel', Adoption.hasCellModel(this));
+	c.set('canBeModified', Adoption.canBeModified(this));
+	c.set('isModelCompatible', Adoption.isModelCompatible(this, newMember));
+	c.set('weHaveRoomForOneMore', Adoption.weHaveRoomForOneMore(this, newMember));
+	c.set('position', (position===undefined ||
+		(Adoption.isNotAdjacentPosition(this, newMember, position) &&
+		Adoption.itsTheRightOrder(this, newMember, position))
+	));
+	return c;
+}
 
 childrenCount(): number {
 	return this.children ? this.children.length : 0;

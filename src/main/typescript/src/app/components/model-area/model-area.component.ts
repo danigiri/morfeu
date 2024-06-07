@@ -3,7 +3,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { NgbNav, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 
 import { KeyListenerWidget } from '../../key-listener-widget.class';
 import { SnippetsListComponent } from '../snippets-list/snippets-list.component';
@@ -33,7 +33,7 @@ import { SnippetsDisplayEvent } from 'src/app/events/snippets-display.event';
 		<div [hidden]="!isVisible()">
 			<ul ngbNav #modnav="ngbNav" id="model-navs" type="pills"  class="nav-tabs">
 				<li [ngbNavItem]="'model-tab'" id="model-tab">
-					<a ngbNavLink (click)="select('model-tab')">Model</a>
+					<a ngbNavLink (click)="select('model-tab')"> Model</a>
 					<ng-template ngbNavContent>
 						<model></model>
 					</ng-template>

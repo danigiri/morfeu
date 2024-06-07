@@ -33,6 +33,8 @@ matches(e: FamilyMember): boolean {
 
 abstract canAdopt(newMember:FamilyMember, position?: number): boolean;
 
+abstract canAdoptMap(newMember:FamilyMember, position?: number): Map<string, boolean>;
+
 
 abstract childrenCount(): number;
 
@@ -66,7 +68,7 @@ getRootAncestor(): FamilyMember {
 
 
 equals(m: FamilyMember) {
-	return this.getURI()==m.getURI();
+	return this.getURI()==m?.getURI();
 }
 
 

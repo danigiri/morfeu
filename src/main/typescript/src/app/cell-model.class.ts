@@ -262,7 +262,17 @@ getAdoptionOrder(): number {
 
 
 canAdopt(element: FamilyMember): boolean {
-	return this.children.some(c => c.matches(element));
+	return this.canAdoptMap(element).size>0;
+}
+
+
+canAdoptMap(element:FamilyMember): Map<string, boolean> {
+	let c = new Map<string, boolean>();
+	const i = this.children.findIndex(e => e.matches(element))
+	if (i!==-1) {
+		c.set(i.toString(), true);
+	}
+	return c;
 }
 
 
@@ -276,7 +286,7 @@ getParent(): FamilyMember {
 }
 
 
-	override isCellModel(): boolean {
+override isCellModel(): boolean {
 	return true;
 }
 

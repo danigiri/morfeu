@@ -102,7 +102,7 @@ public fetchSnippets(stubs: CellDocument[]) {
 		this.snippetStubs = stubs;
 		// we copy and normalise the model as we will link it with the snippets
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
-		const json = this.model.toJSON();
+		const json = this.model.toJSON(); // TOOD: this is costly and we could cache it
 		this.normalisedModel = MODEL.fromJSON(json);
 		this.normalisedModel.normaliseReferences();
 		// we initialise the snippet structures
@@ -175,7 +175,7 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 private requestSnippetContent(snippet: CellDocument, index: number) {
 
 	const snippetURI = Configuration.BACKEND_PREF+'/dyn/snippets/'+snippet.contentURI+"?model="+snippet.modelURI;
-	//console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
+	// console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
 	this.register(
 			this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 				this.storeSnippetContent(snippet, snippetContent);

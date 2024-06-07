@@ -1,6 +1,6 @@
 // DROP - AREA . COMPONENT . TS
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import { filter } from 'rxjs/operators';
 
 import { FamilyMember } from '../family-member.interface';
@@ -18,6 +18,7 @@ import { DropAreaSelectEvent } from '../events/drop-area-select.event';
 import { InfoModeEvent } from '../events/info-mode.event';
 import { EventService } from '../services/event.service';
 import { UXEvent } from '../events/ux.event';
+import { Adoption } from '../adoption.class';
 
 @Component({
 	selector: 'drop-area',
@@ -35,6 +36,7 @@ import { UXEvent } from '../events/ux.event';
 			<small>{{position}}</small>
 				<small *ngIf="info">
 					<strong *ngIf="active">[active]</strong><em *ngIf="!active">[inactive]</em>, selected={{selected}}]
+					<p *ngIf="adoptionMap">{{adoptionMap}}</p>
 				</small>
 			</div>
 		`,
@@ -80,6 +82,7 @@ export class DropAreaComponent extends SelectableWidget implements OnInit {
 override selected = false;			// are we selected?
 active = false;
 info = false;
+adoptionMap: string = null;
 
 
 constructor(eventService: EventService, private cdr: ChangeDetectorRef) {
@@ -101,11 +104,12 @@ ngOnInit() {
 	);
  
 	this.register(this.events.service.of<CellActivatedEvent>(CellActivatedEvent)
-			.pipe(filter(activated => this.parent && this.parent.canAdopt(activated.cell, this.position)))
+			.pipe(filter(activated => this.parent && this.canAdoptCell(activated.cell)))
 			.subscribe(() => this.becomeActive())
 					// console.log("-> drop-area component '"+this.parent.getAdoptionName()+"' gets cell activated event for '"+activated.cell.name+"'");
 	);
 
+	// for deactivation we only do a match for cell model, which is faster and simpler
 	this.register(this.events.service.of<CellModelDeactivatedEvent>(CellModelDeactivatedEvent)
 			.subscribe(d => {
 				if (this.matchesCellmodel(d.cellModel)) {
@@ -115,9 +119,9 @@ ngOnInit() {
 			})
 	);
 
-	// TODO: the matches cell model does not take the position into account
+	// the event for cell model activation generates an new cell which we can use for adoption conmpatibility
 	this.register(this.events.service.of<CellModelActivatedEvent>(CellModelActivatedEvent)
-			.pipe(filter(activated => activated.cellModel && this.matchesCellmodel(activated.cellModel)))
+			.pipe(filter(activated => activated.cellModel && this.canAdoptCell(activated.newCell)))
 			.subscribe(() => this.becomeActive())
 	);
 
@@ -183,13 +187,21 @@ becomeActive() {
 
 
 matchesCell(cell: Cell): boolean {
+	this.adoptionMap = this.info ? Adoption.adoptionMapToString(this.parent?.canAdoptMap(cell)) : null;
 	return this.parent && this.parent.canAdopt(cell);
 }
 
 
 matchesCellmodel(cellModel: CellModel): boolean {
 	//console.debug("matching with %s, this.parent="+(this.parent&& true)+",canAdopt="+this.parent && this.parent.canAdopt(cellModel), cellModel.getAdoptionName());
-	return this.parent && this.parent.canAdopt(cellModel);
+	return this.canAdoptCell(cellModel.generateCell());
+}
+
+
+//  cell can be a moved cell or a new cell from a model
+canAdoptCell(cell: Cell): boolean {
+	this.adoptionMap = this.info ? Adoption.adoptionMapToString(this.parent?.canAdoptMap(cell, this.position)) : null;
+	return this.parent.canAdopt(cell, this.position);
 }
 
 
@@ -218,7 +230,7 @@ performDropHere(cell:Cell, newParent: FamilyMember, newPosition: number) {
 }
 
 /*
- *	  Copyright 2019 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

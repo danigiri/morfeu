@@ -2,13 +2,17 @@
 
 import { MorfeuEvent } from './morfeu-event.class';
 
+import { Cell } from '../cell.class';
 import { CellModel } from "../cell-model.class";
 
 
 export class CellModelActivatedEvent extends MorfeuEvent {
 
+newCell: Cell;
+
 constructor(public cellModel?: CellModel) {
 	super('CellModelActivatedEvent');
+	this.newCell = cellModel?.generateCell(); // used for precise adoption logic, all receivers can test against it
 }
 
 
