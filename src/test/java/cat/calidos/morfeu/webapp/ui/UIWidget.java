@@ -64,23 +64,13 @@ public boolean isDisplayed() {
 
 @SuppressWarnings("unchecked")
 public T shouldAppear() {
-
-	element.should(appear);
-
-	return (T)this;
-
-}
-
-@SuppressWarnings("unchecked")
-public T shouldAppearLong() {
 	element.should(appear, Duration.ofSeconds(10));
 	return (T)this;
 }
 
 
 public void shouldDisappear() {
-	element.should(disappear);
-
+	element.should(disappear, Duration.ofSeconds(10));
 }
 
 

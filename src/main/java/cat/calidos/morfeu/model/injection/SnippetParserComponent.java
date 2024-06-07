@@ -22,7 +22,7 @@ import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 /** Component to get cell data from a snippet (can be optionally filtered), needs the cellmodel (within th emodel
-*	the model hierarchy). Very similar to the regular content parser component 
+*	the model hierarchy). Very similar to the regular content parser component
 * @author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 
@@ -50,7 +50,7 @@ interface Builder {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in  compliance with the License.

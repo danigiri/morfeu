@@ -25,7 +25,7 @@ public void setup() {
 
 	open(appBaseURL);
 	content = UICatalogues.openCatalogues()	
-							.shouldAppearLong()
+							.shouldAppear()
 							.shouldBeVisible()
 							.clickOn(0)
 							.clickOnDocumentNamed("Document 1")
