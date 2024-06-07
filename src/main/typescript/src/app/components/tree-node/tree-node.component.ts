@@ -18,11 +18,12 @@ export interface TreeNode {
 			<div class="row">
 				<div class="col-1">
 					<button 
+						id="tree-node-toggle-{{level}}-{{index}}"
 						*ngIf="node.children && node.children.length > 0" 
 						type="button" 
-						class="btn"
+						class="btn toggle-children"
 						(click)="toggle()"
-						>{{expandedButton()}}</button>
+						>{{toggleButton()}}</button>
 				</div>
 				<div class="col">
 					<ng-container *ngTemplateOutlet="nodeTemplate || template; context: { $implicit: node }"></ng-container>
@@ -49,7 +50,7 @@ export class TreeNodeComponent {
 @ContentChild(TreeNodeDirective, { read: TemplateRef }) nodeTemplate: any;
 @ViewChildren(TreeNodeComponent) children: TreeNodeComponent[];
 
-expandedButton() {
+toggleButton() {
 	return this.expanded ? '-' : '+';
 }
 

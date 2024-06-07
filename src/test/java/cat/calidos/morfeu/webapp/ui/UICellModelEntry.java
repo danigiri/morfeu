@@ -16,13 +16,16 @@
 
 package cat.calidos.morfeu.webapp.ui;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
 /**
@@ -38,15 +41,17 @@ private static final String THUMB = "src";
 private UIModel model;
 private Optional<UICellModelEntry> parent;
 private int level;
+private int position;
 
 
-public UICellModelEntry(SelenideElement e, UIModel model, Optional<UICellModelEntry> parent, int level) {
+public UICellModelEntry(SelenideElement e, UIModel model, Optional<UICellModelEntry> parent, int level, int position) {
 
 	super(e);
 
 	this.model = model;
 	this.parent = parent;
 	this.level = level;
+	this.position = position;
 
 }
 
@@ -58,11 +63,9 @@ public UIWidget<UICellModelEntry> click() {
 
 
 public UIWidget<UICellModelEntry> clickOnArrow() {
-
-	element.$(".toggle-children").click();
-
+	// even though we locate the button, selenium complains it's not clickable
+	model.element.$(By.id("tree-node-toggle-"+level+"-"+position)).click();
 	return this;
-	
 }
 
 
@@ -108,6 +111,7 @@ public UICellModelEntry activate() {
 
 public int position() {
 
+	// TODO: we could just use the position informed here
 	String class_ = class_();
 	String[] classes = element.$(".cell-model-entry").attr(CLASS).split(" ");	// get the appropriate div
 	int i = 0;
@@ -145,9 +149,12 @@ public String thumb() {
 
 
 public List<UICellModelEntry> children() {
-	return element.$$(".tree-node-level-"+(level+1))
-			.asFixedIterable().stream()
-					.map(e -> new UICellModelEntry(e, model, Optional.of(this), level+1)).collect(Collectors.toList());
+	var list = new ArrayList<UICellModelEntry>();
+	ElementsCollection children = element.$$(".tree-node-level-"+(level+1));
+	for (int i=0; i<children.size(); i++) {
+		list.add(new UICellModelEntry(children.get(i), model, Optional.of(this), level+1, i));
+	}
+	return list;
 }
 
 

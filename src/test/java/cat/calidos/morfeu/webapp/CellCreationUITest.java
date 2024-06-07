@@ -32,7 +32,7 @@ public void setup() {
 
 	open(appBaseURL);
 	UIDocument doc = UICatalogues.openCatalogues()
-									.shouldAppearLong()
+									.shouldAppear()
 									.shouldBeVisible()
 									.clickOn(0)
 									.clickOnDocumentNamed("Document 1");

@@ -17,9 +17,14 @@ package cat.calidos.morfeu.webapp.ui;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Spliterator;
 import java.util.stream.Collectors;
+
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 
 /**
  * @author daniel giribet
@@ -51,8 +56,12 @@ public String desc() {
 
 
 public List<UICellModelEntry> rootCellModels() {
-	return $$(".tree-node-level-0").asFixedIterable().stream()
-			.map(e -> new UICellModelEntry(e, this, Optional.empty(), 0)).collect(Collectors.toList());
+	var list = new ArrayList<UICellModelEntry>();
+	ElementsCollection roots = $$(".tree-node-level-0");
+	for (int i=0; i<roots.size(); i++) {		
+		list.add(new UICellModelEntry(roots.get(i), this, Optional.empty(), 0, i));
+	}
+	return list;
 }
 
 
