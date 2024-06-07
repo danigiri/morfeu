@@ -57,13 +57,13 @@ public void testDragSnippetCell() {
 
 	UICell targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals(1, targetCol.children().size(), "Initially we should have one child");
-	UIDropArea targetDropArea = targetCol.dropArea(1);
+	UIDropArea targetDropArea = targetCol.dropArea(0); // we are ordered, so we can only drop 'stuff' on drop area 0
 	targetDropArea.select();
 	targetDropArea.dropHere(stuff);
 
 	targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
 
-	UICell stuffFromSnippet = targetCol.child("stuff(1)");
+	UICell stuffFromSnippet = targetCol.child("stuff(0)");
 	Optional<String> value = stuffFromSnippet.select().activate().cellInfo().value();
 	assertTrue(value.isPresent(), "Snippet created 'stuff' should have a value");
 	assertEquals("Stuff content", value.get());
