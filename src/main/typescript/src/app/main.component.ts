@@ -98,11 +98,11 @@ constructor(eventService: EventService, private route: ActivatedRoute, private c
 // been able to to register their listeners to appropriate events
 ngAfterViewInit() {
 
-	console.info("\t\t\t\t\t ****** APPLICATION STARTS ******");
+	console.info("\t\t\t\t\t************ APPLICATION STARTS ************");
 	console.debug("AppComponent::ngAfterViewInit()");
 
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE, SET TO FALSE IF TESTING
-	const foo = !environment.production && true;
+	const foo = !environment.production && false;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.register(this.events.service.of<CataloguesLoadedEvent>(CataloguesLoadedEvent)

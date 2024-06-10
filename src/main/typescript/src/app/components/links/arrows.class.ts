@@ -25,7 +25,7 @@ push(a: Arrow): boolean {
 
 		this.#arrows.push(a);
 		addition = true;
-		
+
 		// first of all, we check if we have no minimum or maximum
 		if (this.#minX.isEmpty()) {
 			this.addMinStack(this.#minX, Math.min(a.sx, a.ex));
