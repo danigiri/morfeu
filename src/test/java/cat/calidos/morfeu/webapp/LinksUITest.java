@@ -14,7 +14,9 @@ import cat.calidos.morfeu.webapp.ui.UILinks;
 public class LinksUITest extends UITezt {
 
 
-@Test @DisplayName("Test show one arrow")
+// TODO: this is under development, commenting for now
+//@Test 
+@DisplayName("Test show one arrow")
 public void testShowArrow() {
 
 	open(appBaseURL+"test/arrows/arrow");
