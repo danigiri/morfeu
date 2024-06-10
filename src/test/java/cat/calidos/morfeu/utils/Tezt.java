@@ -24,6 +24,8 @@ import org.xmlunit.diff.Diff;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Tezt {
 
+protected static int systemPropertyPrints = 0;
+
 protected static final String URL_PROPERTY = "app-url";
 protected static String DEFAULT_URL = "http://localhost:3000/";
 public static final String DEFAULT_TMP_FOLDER_NAME = "integration-tests-tmp";
@@ -71,7 +73,12 @@ protected static String defineSystemVariable(String systemProperty, String defau
 		value = defaultValue;
 		System.setProperty(systemProperty, defaultValue);
 	} else {
-		System.err.println("Using "+systemProperty+"="+value+" [ENV]");
+		if (systemPropertyPrints<10) {
+			System.err.println("Using "+systemProperty+"="+value+" [ENV]");
+		} else if (systemPropertyPrints==10){
+			System.err.println("See previous messages for system property overrides");
+		}
+		systemPropertyPrints++;
 	}
 
 	return value;
