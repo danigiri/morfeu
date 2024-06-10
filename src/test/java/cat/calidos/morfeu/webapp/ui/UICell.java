@@ -147,6 +147,10 @@ public UICell activate() {
 	if (this.isSelected()) {
 		content.pressKey(UIModel.ACTIVATE_KEY);
 	}
+	try {
+		Thread.sleep(500);
+	} catch (InterruptedException e) {
+	}
 
 	return this;
 

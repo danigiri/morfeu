@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
+import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
 /** Manipulate cell position
@@ -30,10 +31,11 @@ public void testDragCell() {
 
 	UIContent content = UICatalogues.openCatalogues()
 										.shouldAppear()
+										.shouldBeVisible()
 										.clickOn(0)
 										.clickOnDocumentNamed("Document 1")
 										.content();
-	content.shouldBeVisible();
+	content.shouldAppear().shouldBeVisible();
 
 	UICell test = content.rootCells().get(0);
 
@@ -43,16 +45,16 @@ public void testDragCell() {
 	UICell data = sourceCol.child("data(0)");
 	assertTrue(data.isCell());
 
-	// col(1) here has two data2 children, we'll drop the data into the middle
+	// col(1) here has two data2 children, we'll drop the data into the drop slot zero (to preserve order)
 	UICell targetCol = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	assertEquals(2, targetCol.children().size());
 
-	data.dragTo(targetCol.dropArea(1));				// drop in the middle
+	data.dragTo(targetCol.dropArea(0));				// drop in the middle
 	assertEquals(3, targetCol.children().size());
 
-	// we check that we effectively put it in the middle
-	assertNotNull(targetCol.child("data2(0)"));
-	assertNotNull(targetCol.child("data(1)"));
+	// we check that we effectively put it first
+	assertNotNull(targetCol.child("data(0)"));
+	assertNotNull(targetCol.child("data2(1)"));
 	assertNotNull(targetCol.child("data2(2)"));
 
 	// we also check that the source col has no children anymore
@@ -66,17 +68,18 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 
 	UIContent content = UICatalogues.openCatalogues()
 										.shouldAppear()
+										.shouldBeVisible()
 										.clickOn(0)
 										.clickOnDocumentNamed("Document 2")
 										.content();
-	content.shouldBeVisible();
-	
+	content.shouldAppear().shouldBeVisible();
+
 	// we drag the first cell to the parent row, to trigger quite a different set of URI changes
 	// /test(0)/row(0)
 	//			/col(0)	[targetCol]
 	//										<-- (here) -----------------------------------------------\
-	//				/row(0)	(this will become row(1) as 'data' will come first)						|	
-	//					/col(0)	[sourceCol]															|
+	//				/row(0)	(this will become row(1) as 'data' will come first)							|
+	//					/col(0)	[sourceCol]																|
 	//						/data(0) * this goes ------------------------------------------------------/
 	//						/data2(1)	(this one will end up with a different uri too, as parent and order changed)
 	//
@@ -87,16 +90,16 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 	//						/row(1)	[displacedRow]	
 	//							/col(0)	[sourceCol]
 	//								/data2(0)	
-	
-	
+
+
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
 	assertNotNull(targetCol);
 	assertEquals( 1, targetCol.children().size(), "Target column should only have one child (row) at the start");
-	
+
 	UICell sourceCol = targetCol.child("row(0)").child("col(0)");
 	assertNotNull(sourceCol);
 	assertEquals(2, sourceCol.children().size(), "Source column should have two child (data and data2) at the start");
-	
+
 	UICell data = sourceCol.child("data(0)");
 	assertNotNull(data);
 	UICell data2 = sourceCol.child("data2(1)");
@@ -122,60 +125,85 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 @Test
 public void testDragCellFromLast() {
 
-	// BUG: if we drag from the last position two times , the element gets duplicated instead of dragged
+	// BUG: if we drag from the last position two times, the element gets duplicated instead of dragged
 	// Start:
-	// data
-	// data2
+	// data2(a)
+	// data2(b)
 	//
 	// Next:
-	// <-------\
-	// data    |
-	// data2 --/
+	// <----------\
+	// data2(a)    |
+	// data2(b) --/
 	//
 	// Put it back:
-	// data2 --\
-	// data    |
-	// <-------/
+	// data2(b) --\
+	// data2(a)    |
+	// <----------/
 	//
 	// And again:
-	// <-------\
-	// data    |
-	// data2 --/
+	// <----------\
+	// data2(a)    |
+	// data2(b) --/
 	//
-	// This ends up with:
-	// data2
-	// data
-	// data2
+	// This should end up with:
+	// data2(b)
+	// data2(a)
 	// We need to be careful here, as we're moving elements at the end of the children list, so the destination position
 	// changes while we're moving the cell, as the children list has one less element while the drag happens
 	// In effect, the position is position-1 (the children count while the dragged cell is in 'the air' and an orphan)
-	
+
 	UIContent content = UICatalogues.openCatalogues()
 										.shouldAppear()
+										.shouldBeVisible()
 										.clickOn(0)
 										.clickOnDocumentNamed("Document 1")
 										.content();
-	content.shouldBeVisible();
+	content.shouldAppear().shouldBeVisible();
 
 	// source col has two children: data and data2
-	UICell col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)");
+	UICell col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	assertEquals(2, col.children().size());
-	
+
+	// first we edit the two indentical data2 instances to distinguish then
+	UICell data2a = col.child("data2(0)");
+	assertNotNull(data2a);
+	data2a.shouldBeVisible();
+	UICellEditor editor = data2a.select().activate().edit().shouldAppear();
+	editor.cellData().attribute("text").tabIntoEnterText("A");
+	editor.clickSave();
+
+	UICell data2b = col.child("data2(1)");
+	editor = data2b.select().activate().edit().shouldAppear();
+	editor.cellData().attribute("text").tabIntoEnterText("B");
+	editor.clickSave();
+
 	// Next:
+	col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	UICell data2 = col.child("data2(1)");
 	data2.dragTo(col.dropArea(0));
 	assertEquals(2, col.children().size(), "Target column should still have two children after drag");
 
 	// Put it back
+	col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	data2 = col.child("data2(0)");
 	data2.dragTo(col.dropArea(2));
 	assertEquals(2, col.children().size(), "Target column should still have two children after 2nd drag");
 
 	// And again:
-	col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)");
+	col = content.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	data2 = col.child("data2(1)");
 	data2.dragTo(col.dropArea(0));
 	assertEquals(2, col.children().size(), "Target column should still have two children after 3rd drag");
+
+	// let's check we are good
+	data2b = col.child("data2(0)");
+	editor = data2b.select().activate().edit().shouldAppear();
+	assertEquals("blahblahB", editor.cellData().attribute("text").value());
+	editor.clickDiscard();
+	data2a = col.child("data2(1)");
+	editor = data2a.select().activate().edit().shouldAppear();
+	assertEquals("blahblahA", editor.cellData().attribute("text").value());
+	editor.clickDiscard();
 
 }
 

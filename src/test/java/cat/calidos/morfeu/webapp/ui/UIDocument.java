@@ -19,6 +19,8 @@ package cat.calidos.morfeu.webapp.ui;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
+import java.time.Duration;
+
 
 /**
 * @author daniel giribet
@@ -32,7 +34,7 @@ public UIDocument() {}
 //}
 
 public void shouldBeVisible() {
-	$("#document-info").shouldBe(visible);
+	$("#document-info").shouldBe(visible, Duration.ofSeconds(10));
 }
 
 

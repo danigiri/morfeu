@@ -97,7 +97,7 @@
 		<!-- TODO: check the model and the content as well (counts, etc.) -->
 		<div>
 			<img id="{{cell.URI}}" *ngIf="cellPresentationIsIMG()" #cellElement
-				class="cell-level-{{level}}"
+				class="cell-level-{{level}} cell-img"
 				[class.drag-active]="active"
 				[class.drag-inactive]="!active"
 				[class.cell-active]="active"
@@ -115,7 +115,7 @@
 			/>
 		</div>
 		<div id="{{cell.URI}}" *ngIf="!cellPresentationIsIMG()" #cellElement
-			class="cell-level-{{level}}"
+			class="cell-level-{{level}} cell-img"
 			[class.drag-active]="active"
 			[class.drag-inactive]="!active"
 			[class.cell-active]="active"
