@@ -71,10 +71,10 @@
 		  },
           "configurations": {
             "production": {
-              "browserTarget": "morfeu:build:production"
+              "buildTarget": "morfeu:build:production"
             },
             "development": {
-              "browserTarget": "morfeu:build:development"
+              "buildTarget": "morfeu:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "morfeu:build"
+            "buildTarget": "morfeu:build"
           }
         },
         "test": {
