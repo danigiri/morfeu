@@ -38,7 +38,7 @@ public void contentTestAppearingAndDisappearing() {
 
 	UIContent.shouldNotBeVisible();
 
-	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear();
+	UICatalogues catalogues = UICatalogues.openCatalogues().shouldAppear().shouldBeVisible();
 	UIContent.shouldNotBeVisible();
 
 	UICatalogue catalogue = catalogues.clickOn(0);
@@ -56,7 +56,7 @@ public void contentTest() {
 
 	UIContent content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1")
 			.content();
-	content.shouldBeVisible();
+	content.shouldAppear().shouldBeVisible();
 
 	List<UICell> rootCells = content.rootCells(); // TEST
 	assertNotNull(rootCells);
@@ -98,7 +98,7 @@ public void relationshipFromContentToModelTest() {
 
 	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
-	content.shouldBeVisible();
+	content.shouldAppear().shouldBeVisible();
 	UICell test = content.rootCells().get(0);
 
 	// /test/row/col/data
@@ -134,7 +134,7 @@ public void relationshipFromModelToContentTest() {
 	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
 
 	UIContent content = document.content();
-	content.shouldBeVisible();
+	content.shouldAppear().shouldBeVisible();
 	UICell test = content.rootCells().get(0);
 	UIModel model = document.model();
 
@@ -151,9 +151,9 @@ public void relationshipFromModelToContentTest() {
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 
 	// on the other one, there is only one data2, so there is room for 1 more, all drop areas active
-	// on that column
+	// on that column except the first one, as it's not allowed due to order restrictions, so that's two drop areas
 	dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").dropAreas();
-	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
+	assertEquals(2, dropAreas.stream().filter(UIDropArea::isActive).count());
 
 }
 
@@ -163,7 +163,7 @@ public void dropAreasTest() {
 
 	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
-	content.shouldBeVisible();
+	content.shouldAppear().shouldBeVisible();
 	UICell test = content.rootCells().get(0);
 
 	// we check that we have two drop areas, first inactive
@@ -184,14 +184,17 @@ public void dropAreasTest() {
 	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
 
 
-	// here we have 2 data2 children, we can reorder them around so all drop areas are active in
-	// this col
-	// this is irrespective of child count and expected
+	// here we have 2 data2 children, we can reorder them around in two ways:
+	// a) take first element and put it at the end
+	// b) take second element and put it in the beginning
 	UICell colWith2data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)");
 	dropAreas = colWith2data2.dropAreas();
 	colWith2data2.child("data2(0)").hover();
-	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
+	assertEquals(1, dropAreas.stream().filter(UIDropArea::isActive).count());
+	colWith2data2.child("data2(1)").hover();
+	assertEquals(1, dropAreas.stream().filter(UIDropArea::isActive).count());
 
+	
 	// however, if we hover on another data2 somewhere else, we hit over the count limit of 2 data2
 	// so we have no
 	// active cols
