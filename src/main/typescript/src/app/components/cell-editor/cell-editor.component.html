@@ -1,9 +1,9 @@
 <ng-template let-c="close" let-d="dismiss" #editor>
 	<div id="cell-editor" class="card mt-2 modal-body">
-		<cell-header [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
+		<cell-header *ngIf="cell" [uri]="cell.URI" [cellModel]="cell.cellModel"></cell-header>
 		<div class="card-body">
 			<!-- class="form-inline" -->
-			<form  #form_="ngForm"> {{formCallback(form_)}}
+			<form *ngIf="cell" #form_="ngForm"> {{formCallback(form_)}}
 				<textarea *ngIf="cell.value!=undefined && showText()"
 					class="cell-editor-value form-control"
 					rows="textAreaRows()"
