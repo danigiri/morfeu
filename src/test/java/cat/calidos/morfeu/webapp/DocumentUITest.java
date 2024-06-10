@@ -28,10 +28,10 @@ private UICatalogue catalogue;
 @BeforeEach
 public void setup() {
 	open(appBaseURL);
-	
+
 	UICatalogue.shouldNotBeVisible();
 	UIProblem.shouldNotBeVisible();
-	
+
 	// click on catalogue list entry and it appears
 	catalogue = UICatalogues.openCatalogues()
 			.shouldAppear()

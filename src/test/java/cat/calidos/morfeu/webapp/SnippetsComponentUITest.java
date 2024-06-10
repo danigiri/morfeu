@@ -18,14 +18,18 @@ import cat.calidos.morfeu.webapp.ui.UISnippetsArea;
 public class SnippetsComponentUITest extends UITezt {
 
 
-
 @Test @DisplayName("Check snippet categories")
 public void testSnippetCategories() {
 
 	open(appBaseURL+"test/snippets-list/display");
 
 	UISnippetsArea snippetsArea = new UISnippetsArea();
-	snippetsArea.shouldAppear();
+	snippetsArea.shouldAppear().shouldBeVisible();
+	// we need some time to load the snippets, not ideal but this should give us time
+	try {
+		Thread.sleep(1000);
+	} catch (InterruptedException e) {
+	}
 
 	List<String> categories = snippetsArea.categories();
 	assertAll("checking categories",
