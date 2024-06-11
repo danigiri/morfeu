@@ -20,11 +20,12 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 import { RemoteDataService } from 'src/app/services/remote-data.service';
 import { EventService } from '../../services/event.service';
 import { Catalogue } from 'src/app/catalogue.class';
+import { ModelDisplayEvent } from 'src/app/events/model-display.event';
 
 @Component({
 	selector: 'snippets-list-test',
-	template: `aaa
-		<snippets [model]="model"></snippets>
+	template: `
+		<snippets></snippets>
 		<key-capture></key-capture>
 	`
 })
@@ -56,6 +57,7 @@ constructor(eventService: EventService,
 
 
 ngOnInit() {
+	
 	// when we are finished loading we are ready for keypresses
 	this.register(this.events.service.of<SnippetDisplayedEvent>(SnippetDisplayedEvent)
 			.pipe(filter(displayed => displayed.position===this.snippetsComponent.currentSnippets().length-1))

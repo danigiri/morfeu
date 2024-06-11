@@ -13,6 +13,12 @@ constructor(public snippets: CellDocument[], public catalogue: Catalogue) {
 }
 
 
+
+public override toString = (): string => {
+	return 'SnippetsDisplayEvent:{'+this.catalogue.name+', snippets:'+this.snippets.length+'}';
+}
+
+
 }
 
 /*

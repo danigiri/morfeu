@@ -11,6 +11,9 @@ constructor(public snippet: CellDocument, public position: number) {
 	super('SnippetDisplayedEvent');
 }
 
+public override toString = (): string => {
+	return 'SnippetDisplayedEvent:{'+this.snippet.name+'}';
+}
 
 }
 

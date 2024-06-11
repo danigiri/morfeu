@@ -25,13 +25,15 @@ import { StatusEvent } from '../../events/status.event';
 import { EventService } from '../../services/event.service';
 import { SnippetsDisplayEvent } from 'src/app/events/snippets-display.event';
 import { CellModel } from 'src/app/cell-model.class';
+import { ModelDisplayEvent } from 'src/app/events/model-display.event';
+import { CellDocumentClearEvent } from 'src/app/events/cell-document-clear.event';
 
 @Component({
 	selector: "snippets",
 	template: `
 		<div id="snippets" class="list-group">
 			<ngb-accordion 
-				*ngIf="snippetCategoryNames.length>0" 
+				*ngIf="snippetCategoryNames.length>0 && display"  
 				[closeOthers]="true"
 			>
 				<ngb-panel *ngFor="let c of snippetCategoryNames;let i=index" [id]="c" [title]="c">
@@ -54,9 +56,11 @@ import { CellModel } from 'src/app/cell-model.class';
 	`]
 })
 
-export class SnippetsListComponent extends KeyListenerWidget implements AfterViewInit {
+export class SnippetsListComponent extends KeyListenerWidget implements OnInit {
 
-@Input() model: Model;
+@Input() display = false;
+
+model: Model;
 
 snippetStubs: CellDocument[];	 // stubs that come from the catalogue
 
@@ -72,8 +76,9 @@ currentCategory: string;
 protected override commandKeys: string[] = ["a"];		// activation keybinding
 private snippetCategorySelectingMode = false;	// are we selecting categories
 private snippetSelectingMode = false;			// or snippets?
+private completedLoading = false;
 
-protected snippetSubs: Subscription;
+protected snippetSubscription: Subscription;
 
 
 constructor(eventService: EventService,
@@ -83,14 +88,24 @@ constructor(eventService: EventService,
 }
 
 
-ngAfterViewInit() {
+ngOnInit() {
 
-	console.log("SnippetsListComponent::ngAfterViewInit()");
+	console.log("SnippetsListComponent::ngOnInit()");
 	this.snippetComponents = [];
 
+	// when we clear the curernt document, we do not show the snippets anymore
+	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
+			.subscribe(() => this.clear())
+	);
+
+	// once the model has loaded, we set it, as we need to link it 
+	this.register(this.events.service.of<ModelDisplayEvent>(ModelDisplayEvent)
+			.subscribe(display => this.model = display.model)
+	);
+
 	this.register(this.events.service.of<SnippetsDisplayEvent>(SnippetsDisplayEvent)
-	.subscribe(display => this.fetchSnippets(display.snippets))
-);
+		.subscribe(display => this.fetchSnippets(display.snippets))
+	);
 	//Promise.resolve(null).then(() => this.fetchSnippets());
 
 }
@@ -98,7 +113,7 @@ ngAfterViewInit() {
 
 // fetch all snippet documents
 public fetchSnippets(stubs: CellDocument[]) {
-	if (stubs.length>0) {
+	if (!this.completedLoading && stubs.length>0) {
 		this.snippetStubs = stubs;
 		// we copy and normalise the model as we will link it with the snippets
 		let MODEL:Model = Object.create(Model.prototype); // to simulate a static call
@@ -115,15 +130,16 @@ public fetchSnippets(stubs: CellDocument[]) {
 		});
 
 		this.events.service.publish(new StatusEvent("Fetching snippets"));
-		// FIXME: WHY DO WE ASSIGN THE REGISTRATION TO THE STUBS? AND WHY WE REQUEST ONE ONLY?
-		//this.snippetSubs = 
-		this.register(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
+		this.snippetSubscription = 
+			this.register(this.events.service.of<SnippetDocumentRequestEvent>(SnippetDocumentRequestEvent)
 										.subscribe(
 											req => this.loadSnippetDocument(this.snippetStubs[req.index], req.index)
 										)
 		);
 		this.events.service.publish(new SnippetDocumentRequestEvent(0));
-	} else {
+	} else if (this.completedLoading) {
+		console.debug('Already loaded snippets, skipping reload');
+	 } else  {
 		console.warn('Empty snippets list from catalogue');
 	}
 
@@ -145,7 +161,6 @@ public beforeToggle($event: unknown) {
 		this.snippetCategorySelectingMode = true;	// but we want to be able to toggle the categories now
 
 	}
-
 }
 
 
@@ -175,7 +190,7 @@ private loadSnippetDocument(snippetStub: CellDocument, index: number) {
 private requestSnippetContent(snippet: CellDocument, index: number) {
 
 	const snippetURI = Configuration.BACKEND_PREF+'/dyn/snippets/'+snippet.contentURI+"?model="+snippet.modelURI;
-	// console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content '%s'", snippetURI);
+	// console.debug("SnippetsListComponent::loadSnippetContent() Loading snippet content [%d]'%s'",index, snippetURI);
 	this.register(
 			this.snippetContentService.get(snippetURI, Content).subscribe( (snippetContent: Content) => {
 				this.storeSnippetContent(snippet, snippetContent);
@@ -185,9 +200,11 @@ private requestSnippetContent(snippet: CellDocument, index: number) {
 				if (index<this.snippetStubs.length-1) {
 					this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
 				} else {
+					console.debug('SnippetsListComponent: completed loading all snippets');
 					this.events.service.publish(new StatusEvent("Fetching snippets", StatusEvent.DONE));
-					this.unsubscribe(this.snippetSubs);
-					this.events.ok();	// this means we don't see errors for that long unfortunately
+					this.completedLoading = true; // finished, do not load snippets again
+					this.events.ok();	// this means we don't see intermediate errors for that long unfortunately
+					this.unsubscribe(this.snippetSubscription);
 				}
 			})
 	);
@@ -314,6 +331,16 @@ private unsubscribeChildrenFromCellSelection() {
 	console.log('SnippetsListComponent::unsubscribeChildrenToCellSelection() {%i}', this.snippetComponents.length);
 	this.snippetComponents.forEach(sc => sc.unsubscribeFromSelection());
 
+}
+
+
+private clear(): void {
+	console.debug('SnippetsListComponent::clear')
+	this.model = null;
+	this.snippetStubs = []
+	this.snippetCategoryNames = [];
+	this.snippetsByCategory = null;
+	this.completedLoading = false;
 }
 
 

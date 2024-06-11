@@ -1,6 +1,6 @@
 {
   "name": "morfeu",
-  "version": "0.6.2",
+  "version": "0.8.13",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 3000",
@@ -21,7 +21,8 @@
     "@ng-bootstrap/ng-bootstrap": "^15.1.2",
     "@popperjs/core": "^2.11.6",
     "ace-builds": "^1.14.0",
-    "bootstrap": "^5.2.3",
+    "bootstrap": "^5.3.3",
+    "ng-bootstrap": "^1.6.3",
     "ng-keyboard-shortcuts": "^13.0.8",
     "perfect-arrows": "^0.3.7",
     "rxjs": "~7.5.2",
@@ -41,7 +42,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "ng-bootstrap": "^1.6.3",
     "typescript": "^5.3.3"
   }
 }

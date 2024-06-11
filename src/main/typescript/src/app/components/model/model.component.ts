@@ -1,6 +1,6 @@
 // MODEL . COMPONENT . TS
 
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChildren} from "@angular/core";
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChildren} from "@angular/core";
 
 import { Configuration } from '../../config/configuration.class';
 
@@ -22,8 +22,7 @@ import { CellSelectionReadyEvent } from "src/app/events/cell-selection-ready.eve
 @Component({
 	selector: "model",
 	template: `
-	<ng-container *ngIf="model">
-			<div id="model-info" class="card">
+			<div id="model-info" class="card" *ngIf="model && display">
 				<h5 id="model-name" class="card-header">Model at: ...{{displayName}}</h5>
 				<div class="card-body">
 					  <div id="model-desc" class="card-title">{{model.desc}}</div>
@@ -35,7 +34,6 @@ import { CellSelectionReadyEvent } from "src/app/events/cell-selection-ready.eve
 					<!--ng-container *ngIf="this.cellModelSelectingMode">cellModelSelectingMode</ng-container-->
 				</div>
 			</div>
-	</ng-container>
 	`,
 
 	styles:[`
@@ -47,6 +45,8 @@ import { CellSelectionReadyEvent } from "src/app/events/cell-selection-ready.eve
 })
 
 export class ModelComponent extends KeyListenerWidget implements OnInit, AfterViewInit, OnDestroy {
+
+@Input() display = false;
 
 model: Model;
 displayName: string;
@@ -65,7 +65,6 @@ constructor(eventService: EventService) {
 ngOnInit() {
 
 	console.log("ModelComponent::ngOnInit()");
-	// if we are in a tab area this is redundant, as the parent will remove us from the component tree
 	this.register(this.events.service.of<CellDocumentClearEvent>(CellDocumentClearEvent)
 			.subscribe(() => this.clearModel())
 	);

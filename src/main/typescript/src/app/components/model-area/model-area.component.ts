@@ -31,21 +31,32 @@ import { SnippetsDisplayEvent } from 'src/app/events/snippets-display.event';
 	selector: "model-area",
 	template: `
 		<div [hidden]="!isVisible()">
-			<ul ngbNav #modnav="ngbNav" id="model-navs" type="pills"  class="nav-tabs">
-				<li [ngbNavItem]="'model-tab'" id="model-tab">
-					<a ngbNavLink (click)="select('model-tab')"> Model</a>
-					<ng-template ngbNavContent>
-						<model></model>
-					</ng-template>
-				</li>
-				<li [ngbNavItem]="'snippets-tab'" id="snippets-tab">
-					<a ngbNavLink (click)="select('snippets-tab')">Snippets</a>
-					<ng-template ngbNavContent>
-						<snippets [model]="model"></snippets>
-					</ng-template>
-				</li>
-			</ul>
-			<div [ngbNavOutlet]="modnav"></div>
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container-fluid">
+					<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav">
+						<li class="nav-item">
+						<button id="model-tab"
+							[class.active]="isModelActive"
+							class="nav-link"
+							(click)="select('model-tab')"
+							aria-current="page">Model</button>
+						</li>
+						<li class="nav-item">
+						<button id="snippets-tab" 
+							[class.active]="isSnippetsActive"
+							(click)="select('snippets-tab')"
+							class="nav-link">Snippets</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			</nav>
+			<div>
+				<snippets [display]="isSnippetsActive"></snippets>
+				<model [display]="isModelActive"></model>	
+			</div>
 		</div>
 	`,
 	styles: [`
@@ -61,6 +72,10 @@ public static readonly SNIPPETS_TAB = 'snippets-tab';
 
 model?: Model;
 catalogue?: Catalogue;
+
+isModelActive = true;
+isSnippetsActive = false;
+activeTabId = ModelAreaComponent.MODEL_TAB;
 
 protected override commandKeys: string[] = ['m', 's'];
 
@@ -128,19 +143,18 @@ loadModel(document: CellDocument) {
 
 override commandPressedCallback(command: string) {
 
-
 	// we select the appropriate tab, at the moment we need the user to re-issue the key again
 	switch (command) {
 	case "m":
 		console.log("[UI] ModelAreaComponent:: commandPressedCallback(%s)", command);
-		if (this.tabs.activeId===ModelAreaComponent.SNIPPETS_TAB) {
-			this.tabs.select(ModelAreaComponent.MODEL_TAB);
+		if (this.activeTabId===ModelAreaComponent.SNIPPETS_TAB) {
+			this.select(ModelAreaComponent.MODEL_TAB);
 		}
 		break;
 	case "s":
 		console.log("[UI] ModelAreaComponent:: commandPressedCallback(%s)", command);
-		if (this.tabs.activeId===ModelAreaComponent.MODEL_TAB) {
-			this.tabs.select(ModelAreaComponent.SNIPPETS_TAB);
+		if (this.activeTabId===ModelAreaComponent.MODEL_TAB) {
+			this.select(ModelAreaComponent.SNIPPETS_TAB);
 		} else {
 			this.snippetListComponent.activateSnippetSelectingMode();
 		}
@@ -153,14 +167,22 @@ override commandPressedCallback(command: string) {
 
 
 select(selected: string) {
+	this.activeTabId = selected;
+	Promise.resolve(null).then(() => {
 	if (selected===ModelAreaComponent.SNIPPETS_TAB) {
-		this.events.service.publish(new SnippetsDisplayEvent(this.catalogue.snippets, this.catalogue));
-	} else if (selected===ModelAreaComponent.MODEL_TAB) {
+			this.isModelActive = false;
+			this.isSnippetsActive = true;
+			console.log('AAAAAA, sending snippets display event AAAAAA')
+			this.events.service.publish(new SnippetsDisplayEvent(this.catalogue.snippets, this.catalogue));
+		} else if (selected===ModelAreaComponent.MODEL_TAB) {
+			this.isSnippetsActive = false;
+			this.isModelActive = true;
 			// redisplay will unsuscribe
 			this.modelDisplayReadySubscription = this.register(this.events.service.of<ModelDisplayReadyEvent>(ModelDisplayReadyEvent)
 				.subscribe(() => this.redisplayModel())
-		);
-	}
+			);
+		}
+	});
 }
 
 
