@@ -1,6 +1,7 @@
 // BASIC-RECT . CLASS . SPEC . TS
 
 import { BasicRect } from './basic-rect.class';
+import { Point } from './point.class';
 
 describe('rect.class', () => {
 
@@ -40,8 +41,47 @@ describe('rect.class', () => {
 
 	});
 
-	it('should return a correct vector between to rects', () => {}
-	
+	it('should return the closes point between two rects', () => {
+		const r0 = new BasicRect(0, 0, 1, 1);
+		
+		expect(r0.closestPoint(r0)).toEqual(r0.center);
+		
+		// RU
+		const ru = new BasicRect(1, -2, 2, -1);
+		expect(r0.closestPoint(ru)).toEqual(r0.rightUp);
+		
+		// RC (near up)
+		const rc1 = new BasicRect(1.9, -0.1, 2.9, 0.9);
+		expect(r0.closestPoint(rc1)).toEqual(r0.rightCenter);
+
+		// RC (near down)
+		const rc2 = new BasicRect(1.1, 0.6, 1.1+0.5, 0.6+0.5);
+		expect(r0.closestPoint(rc2)).toEqual(r0.rightCenter);
+
+		// RD
+		const rd = new BasicRect(2, 2, 3, 3);
+		expect(r0.closestPoint(rd)).toEqual(r0.rightDown);
+
+		// CD (near right)
+		const cd1 = new BasicRect(0.6, 1.1, 0.6+0.5, 1.1+0.5);
+		expect(r0.closestPoint(cd1)).toEqual(r0.centerDown);
+
+
+
+		// LU
+		const lu = new BasicRect(-2, -2, -1, -1);
+		expect(r0.closestPoint(lu)).toEqual(r0.origin);
+
+		// LE
+		const r1le = new BasicRect(-0.9, -0.9, -0.1, 0.9);
+		expect(r0.closestPoint(r1le)).toEqual(r0.leftCenter);
+
+		
+		}
+	);
+
+
+	it('should return a correct vector between two rects', () => {}
 	);
 
 

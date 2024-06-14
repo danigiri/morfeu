@@ -1,6 +1,6 @@
 // RECT . CLASS . TS
 
-import { Point } from './point.class';
+import { Point, Quadrant } from './point.class';
 import { Vector2D } from './vector-2d.class';
 
 /**
@@ -80,7 +80,47 @@ get leftDown(): Point {
 
 
 get leftCenter(): Point {
-	return new Point(this.x, this.center.y);71
+	return new Point(this.x, this.center.y);
+}
+
+/**  
+ * return which is the closest point of the current rect in respect to the input rect 
+ * a) if rects are the same, return center
+ * c) if param rect is outside, return closes point in quadrant of this center with param center
+ *	 	+–––––––+   +–––––––+
+ * 		| this  |	|r		|
+ * 		|   ––––––––>		|
+ * 		|       |	|		|
+ *		+–––––––+	+–––––––+
+ *		
+ * */
+public closestPoint(r: Rect): Point {
+	// note we use the reverse
+	switch(this.center.quadrantOf(r.center)) {
+		case Quadrant.EQ:
+			return this.center;
+		case Quadrant.RU || Quadrant.RC:
+				if (this.rightUp.y<=r.center.y) { //r center is right up but close to the this center
+					return this.rightCenter;
+				}
+				return this.rightUp;
+		case Quadrant.RD:
+				if (this.rightDown.y>=r.center.y) {
+					return this.rightCenter;
+				} else if (this.rightDown.x>=r.center.x) {
+					return this.centerDown;
+				}
+				return this.rightDown;
+		case Quadrant.LU || Quadrant.LC:
+			if (this.origin.y<=r.center.y) { //r center is left up but close to the this center
+				return this.leftCenter;
+			}
+			return this.origin;
+		case Quadrant.LD:
+			return this.leftDown;
+	}
+
+	return undefined;
 }
 
 
@@ -90,6 +130,9 @@ public fastVectorTo(r: Rect): Vector2D {
 	return undefined;
 }
 
+public equals(r: Rect): boolean {
+	return (r!=null && this.x===r.x && this.y===r.y && this.right===r.right && this.bottom===r.bottom);
+}
 
 public toString = (): string => { 
 	return '{['+this.x+','+this.y+'],['+this.right+','+this.bottom+']}';

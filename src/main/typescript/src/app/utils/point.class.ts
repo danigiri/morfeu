@@ -12,14 +12,26 @@ quadrantOf(p: Point) {
 	if (p.x===this.x && p.y===this.y) {
 		return Quadrant.EQ;
 	}
-	if (p.x<=this.x && p.y<=this.y) {
+	if (p.x<this.x && p.y<this.y) {
 		return Quadrant.LU;
+	}
+	if (p.x===this.x && p.y<this.y) {
+		return Quadrant.CU;
 	}
 	if (p.x>this.x && p.y<this.y) {
 		return Quadrant.RU;
 	}
-	if (p.x>=this.x && p.y>=this.y) {
+	if (p.x>=this.x && p.y===this.y) {
+		return Quadrant.RC;
+	}
+	if (p.x>this.x && p.y>this.y) {
 		return Quadrant.RD;
+	}
+	if (p.x===this.x && p.y>this.y) {
+		return Quadrant.CD;
+	}
+	if (p.x<this.x && p.y===this.y) {
+		return Quadrant.LC;
 	}
 
 	return Quadrant.LD;
@@ -30,17 +42,21 @@ quadrantOf(p: Point) {
 
 /**
 	This is an enumerator to represent quadrants in respect to a point
-	LU	|	RU
-	----+-----
-	LD	|	RD
+	LU	CU	RU
+	LC--+---RC
+	LD	CD	RD
 	EQ: means the points are in the same place, basically equal (not necessarily the same object)
 */
 export enum Quadrant {
 	EQ,
 	LU,
+	CU,
 	RU,
+	RC,
 	RD,
-	LD
+	CD,
+	LD,
+	LC
 }
 
 /*

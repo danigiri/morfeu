@@ -22,16 +22,30 @@ describe('point.class', () => {
 
 		const p0 = new Point(-1, -1);
 		expect(p.quadrantOf(p0)).toBe(Quadrant.LU);
-
+		
+		const p0u = new Point(0, -1);
+		expect(p.quadrantOf(p0u)).toBe(Quadrant.CU);
+		
 		const p1 = new Point(1, -1);
 		expect(p.quadrantOf(p1)).toBe(Quadrant.RU);
-
+		
+		const p1r = new Point(1, 0);
+		expect(p.quadrantOf(p1r)).toBe(Quadrant.RC);
+		
 		const p2 = new Point(1, 1);
 		expect(p.quadrantOf(p2)).toBe(Quadrant.RD);
-
+		
+		const p2d = new Point(0, 1);
+		expect(p.quadrantOf(p2d)).toBe(Quadrant.CD);
+		
 		const p3 = new Point(-1, 1);
 		expect(p.quadrantOf(p3)).toBe(Quadrant.LD);
-
+		
+		const p3l = new Point(-1, 0);
+		expect(p.quadrantOf(p3l)).toBe(Quadrant.LC);
+		
+		/*
+		*/
 	});
 
 });
