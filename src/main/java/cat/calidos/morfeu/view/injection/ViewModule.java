@@ -189,10 +189,29 @@ public String xmlc(String s) {
 	return s;
 }
 
+
 /** returns safe json attribute scaping '\' --&gt; '\\' */
 public String jsona(String s) {
 	s = s.replace("\\", "\\\\");
 	return s;
+}
+
+
+/** returns xml attribute scaping & --> &amp;, " --> &quot; */
+public String xmla(String s) {
+	 s = s.replace("&", "&amp;");
+	
+	 if (s.startsWith("\"") && s.endsWith("\"")) { // these are delimiters
+	 s = s.substring(1, s.length()-1);
+	 s = s.replace("\\\"", "&quot;"); // yaml escaped
+	 s = s.replace("\"", "&quot;"); // not yaml escaped
+	 s = "\""+s+"\"";
+	
+	 } else {
+	 s = s.replace("\\\"", "&quot;"); // yaml escaped
+	 s = s.replace("\"", "&quot;"); // not yaml escaped
+	 }
+	 return s;
 }
 
 }

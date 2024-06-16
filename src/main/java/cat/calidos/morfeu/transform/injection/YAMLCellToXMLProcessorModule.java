@@ -33,7 +33,7 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 															JsonNode node,
 															CellModel cellModel) {
 
-	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
+	var processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 
 	if (cellModel.isSimple()) {		//// SIMPLE CELL MODEL	////
 
@@ -77,7 +77,7 @@ PrefixProcessor<JsonNodeCellModel, String> processorSlash(String pref, JsonNode 
 		throw new NullPointerException("Cannot create a slash processor without the node");
 	}
 
-	JsonNodeCellModel nodeCellModel = new JsonNodeCellModel(node, cellModel);
+	var nodeCellModel = new JsonNodeCellModel(node, cellModel);
 	return new YAMLComplexCellToXMLProcessorSlash(pref, nodeCellModel);
 
 }
@@ -111,7 +111,7 @@ private YAMLKeyValueToXMLProcessor generateKeyValueProcessor(String pref,
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

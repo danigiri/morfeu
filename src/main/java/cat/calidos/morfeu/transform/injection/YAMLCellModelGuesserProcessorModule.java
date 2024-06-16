@@ -25,10 +25,10 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 															@Nullable @Named("name") String name,
 															JsonNode node,
 															ComplexCellModel parentCellModel) {
-	
-	List<PrefixProcessor<JsonNodeCellModel, String>> p = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
+
+	var p = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 	p.add(new YAMLCellModelGuesserProcessor(pref, case_, name, new JsonNodeCellModel(node, parentCellModel)));
-	
+
 	return p;
 }
 

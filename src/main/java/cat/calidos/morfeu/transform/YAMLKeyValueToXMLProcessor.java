@@ -40,9 +40,9 @@ public JsonNodeCellModel input() {
 
 @Override
 public String output() {
-	
-	HashMap<String, Object> values = new HashMap<String, Object>(5);
-	
+
+	var values = new HashMap<String, Object>(5);
+
 	CellModel cellModel = nodeCellModel.cellModel();
 	Metadata metadata = cellModel.getMetadata();
 
@@ -61,11 +61,11 @@ public String output() {
 	values.put("valueKey", valueKey);
 	values.put("value", nodeCellModel.node().asText());
 
-	String template =	"<{{v.name}}"+
-						"{% for a in v.caseAttr %} {{a}}{% endfor %} "+
-						"{{v.identifier}}={{quote(xmla(v.identifierValue))}} " +
-						"{{v.valueKey}}={{quote(xmla(v.value))}} " +
-						"/>\n";
+	var template =	"<[(${v.name})]"+
+					"[# th:each=\"a : ${v.caseAttr}\"] [(${a})][/] "+
+					"[(${v.identifier})]=[(${#str.quote(#str.xmla(v.identifierValue))})] " +
+					"[(${v.valueKey})]=[(${#str.quote(#str.xmla(v.value))})] " +
+					"/>\n";
 
 	String out = super.output()+DaggerViewComponent.builder()
 													.withValue(values)
@@ -83,7 +83,7 @@ public String output() {
 
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

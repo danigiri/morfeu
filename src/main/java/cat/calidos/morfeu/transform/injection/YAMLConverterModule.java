@@ -33,7 +33,7 @@ Converter<JsonNodeCellModel, String> converter(@Named("PopulatedContext") StackC
 
 @Provides @Named("PopulatedContext")
 StackContext<JsonNodeCellModel> populatedContext(StackContext<JsonNodeCellModel> context,
-													JsonNode yaml, 
+													JsonNode yaml,
 													CellModel model) {
 
 	// we iteratively add all elements, skipping the root node as our algorithm is happy with that
@@ -54,7 +54,7 @@ StackContext<JsonNodeCellModel> populatedContext(StackContext<JsonNodeCellModel>
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

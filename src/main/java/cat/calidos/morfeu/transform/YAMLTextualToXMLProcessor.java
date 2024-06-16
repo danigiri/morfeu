@@ -7,7 +7,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 /**	This creates a simple xml text node witjout any attributes &lt;foo&gt;bar&lt;/foo&gt;
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class YAMLTextualToXMLProcessor  extends PrefixProcessor<JsonNodeCellModel, String> {
+public class YAMLTextualToXMLProcessor extends PrefixProcessor<JsonNodeCellModel, String> {
 
 private JsonNodeCellModel nodeCellModel;
 
@@ -29,14 +29,14 @@ public JsonNodeCellModel input() {
 @Override
 public String output() {
 
-	HashMap<String, Object> values = new HashMap<String, Object>(2);
+	var values = new HashMap<String, Object>(2);
 	values.put("cm", nodeCellModel.cellModel());
-	values.put("yaml", nodeCellModel.node());
-	String template = "";
+	values.put("yaml", nodeCellModel.node().asText());
+	var template = "";
 	if (nodeCellModel.node().asText().isEmpty()) {
-		template = "<{{v.cm.name}}/>\n";	// null or empty?
+		template = "<[(${v.cm.name})]/>\n";	// null or empty?
 	} else {
-		template = "<{{v.cm.name}}>{{v.yaml.asText | xmlc}}</{{v.cm.name}}>\n";
+		template = "<[(${v.cm.name})]>[(${#str.xmlc(v.yaml)})]</[(${v.cm.name})]>\n";
 	}
 	String out = super.output()+DaggerViewComponent.builder()
 													.withValue(values)
@@ -59,7 +59,7 @@ public String toString() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

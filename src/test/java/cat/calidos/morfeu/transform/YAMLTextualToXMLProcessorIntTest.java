@@ -9,7 +9,6 @@ import java.net.URI;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -22,7 +21,6 @@ import cat.calidos.morfeu.model.injection.ModelTezt;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class YAMLTextualToXMLProcessorIntTest extends ModelTezt {
 
-@Mock
 JsonNode node;
 private CellModel stuff; 
 
@@ -34,19 +32,27 @@ public void setup() throws Exception {
 	ComplexCellModel test = cellModelFrom(modelURI, "test").asComplex();
 	stuff = test.children().child("row").asComplex().children().child("col").asComplex().children().child("stuff");
 
+	node = mock(JsonNode.class);
 }
 
 @Test
 public void testOutputWithContent() throws Exception {
 
 
-	String content = "stuff content";
+	var content = "stuff content";
 	when(node.size()).thenReturn(content.length());
 	when(node.asText()).thenReturn(content);
 
-	JsonNodeCellModel nodeCellModel = new JsonNodeCellModel(node, stuff);
-	YAMLTextualToXMLProcessor processor = new YAMLTextualToXMLProcessor("\t", nodeCellModel);
+	var nodeCellModel = new JsonNodeCellModel(node, stuff);
+	var processor = new YAMLTextualToXMLProcessor("\t", nodeCellModel);
 	assertEquals("\t<stuff>"+content+"</stuff>\n", processor.output());
+
+	content = "stuff content &";
+	when(node.size()).thenReturn(content.length());
+	when(node.asText()).thenReturn(content);
+	nodeCellModel = new JsonNodeCellModel(node, stuff);
+	processor = new YAMLTextualToXMLProcessor("\t", nodeCellModel);
+	assertEquals("\t<stuff>"+content.replace("&", "&amp;")+"</stuff>\n", processor.output());
 
 }
 
@@ -54,12 +60,12 @@ public void testOutputWithContent() throws Exception {
 @Test
 public void testOutputWithEmptyContent() {
 
-	String content = "";
+	var content = "";
 	when(node.size()).thenReturn(content.length());
 	when(node.asText()).thenReturn(content);
 
-	JsonNodeCellModel jsonNodeCellModel = new JsonNodeCellModel(node, stuff);
-	YAMLTextualToXMLProcessor processor = new YAMLTextualToXMLProcessor("\t", jsonNodeCellModel);
+	var jsonNodeCellModel = new JsonNodeCellModel(node, stuff);
+	var processor = new YAMLTextualToXMLProcessor("\t", jsonNodeCellModel);
 	assertEquals("\t<stuff/>\n", processor.output());
 
 }

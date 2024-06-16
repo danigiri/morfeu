@@ -44,7 +44,7 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 
 	Context<JsonNodeCellModel, String> context = oldContext;
 
-	List<PrefixProcessor<JsonNodeCellModel, String>> processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
+	var processors = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
 
 	JsonNode node = nodeCellmodel.node();
 	ComplexCellModel parent = nodeCellmodel.cellModel().asComplex();
@@ -56,7 +56,7 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 
 	} 
 	// we have to do some creative matching next
-	
+
 	if (child==null && name.isPresent()) { 	// whecking if we come from an object parent that had a field name to match
 		child = parent.children()
 						.stream()
@@ -138,7 +138,7 @@ private String matchName(CellModel model, String case_) {
 
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

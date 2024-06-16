@@ -130,16 +130,16 @@ public String output() {
 	}
 	values.put("attr", attr);
 
-	String template =	"<{{v.cm.name}}"+
-						"{% for a in v.caseAttr %} {{a}}{% endfor %}"+
-						"{% if  v.hasIdentifier %} {{v.identifier}}={{quote(xmla(v.identifierValue))}}{% endif %}"+
-						"{% for a in v.attr %} {{a}}={{quote(xmla(v.yaml.get(a)))}}{% endfor %}" +
-						"{% if v.hasChildren %}" +
-						">\n"+
-						"{% else %}"+
-						"/>\n"+
-						"{% endif %}";
-	
+	var template =	"<[(${v.cm.name})]"+
+					"[# th:each=\"a : ${v.caseAttr}\"] [(${a})][/]"+
+					"[# th:if=\"${ v.hasIdentifier}\"] [(${v.identifier})]=[(${#str.quote(#str.xmla(v.identifierValue))})][/]"+
+					"[# th:each=\"a : ${v.attr}\"] [(${a})]=[(${#str.quote(#str.xmla(v.yaml.get(a)))})][/]" +
+					"[# th:if=\"${v.hasChildren}\"]" +
+					">\n"+
+					"[/][# th:if=\"${!v.hasChildren}\"]"+
+					"/>\n"+
+					"[/]";
+
 	String out = super.output()+DaggerViewComponent.builder()
 													.withValue(values)
 													.withTemplate(template)
@@ -155,7 +155,7 @@ public String output() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
