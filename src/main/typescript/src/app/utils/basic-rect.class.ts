@@ -10,6 +10,11 @@ public constructor(public x: number, public y: number, public right: number, pub
 }
 
 
+public static  fromWidthHeight(x: number, y: number, w: number, h: number): Rect {
+	return new BasicRect(x,y,x+w, y+h);
+}
+
+
 }
 
 /*

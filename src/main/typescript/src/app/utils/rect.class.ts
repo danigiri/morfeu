@@ -100,8 +100,10 @@ public closestPoint(r: Rect): Point {
 		case Quadrant.EQ:
 			return this.center;
 		case Quadrant.RU || Quadrant.RC:
-				if (this.rightUp.y<=r.center.y) { //r center is right up but close to the this center
+				if (this.rightUp.y<=r.center.y) {
 					return this.rightCenter;
+				} else if (this.rightUp.x>=r.center.x) {
+					return this.centerUp;
 				}
 				return this.rightUp;
 		case Quadrant.RD:
@@ -112,11 +114,18 @@ public closestPoint(r: Rect): Point {
 				}
 				return this.rightDown;
 		case Quadrant.LU || Quadrant.LC:
-			if (this.origin.y<=r.center.y) { //r center is left up but close to the this center
+			if (this.origin.y<=r.center.y) { // not convinced origin is best here
 				return this.leftCenter;
-			}
+			} else if (this.origin.x<r.center.x) {
+				return this.centerUp;
+			}	
 			return this.origin;
 		case Quadrant.LD:
+			if (this.origin.x<=r.center.x) { // not convinced origin is best here
+				return this.centerDown;
+			} else if (this.centerDown.y>=r.center.y) {
+				return this.centerDown;
+			}
 			return this.leftDown;
 	}
 
@@ -137,7 +146,6 @@ public equals(r: Rect): boolean {
 public toString = (): string => { 
 	return '{['+this.x+','+this.y+'],['+this.right+','+this.bottom+']}';
 }
-
 
 
 }

@@ -46,6 +46,18 @@ describe('rect.class', () => {
 		
 		expect(r0.closestPoint(r0)).toEqual(r0.center);
 		
+		// LU
+		const lu = new BasicRect(-2, -2, -1, -1);
+		expect(r0.closestPoint(lu)).toEqual(r0.origin);
+		
+		// CU (near left)
+		const cu1 = new BasicRect(-0.1, -1.1, -0.1+0.5, -1.1+0.5);
+		expect(r0.closestPoint(cu1)).toEqual(r0.centerUp);
+
+		// CU (near right)
+		const cu2 =  BasicRect.fromWidthHeight(0.6, -1.1, 0.5, 0.5);
+		expect(r0.closestPoint(cu2)).toEqual(r0.centerUp);
+
 		// RU
 		const ru = new BasicRect(1, -2, 2, -1);
 		expect(r0.closestPoint(ru)).toEqual(r0.rightUp);
@@ -66,15 +78,22 @@ describe('rect.class', () => {
 		const cd1 = new BasicRect(0.6, 1.1, 0.6+0.5, 1.1+0.5);
 		expect(r0.closestPoint(cd1)).toEqual(r0.centerDown);
 
+		// CD (near left)
+		const cd2 =  BasicRect.fromWidthHeight(-0.1, 1.1, 0.5, 0.5);
+		expect(r0.closestPoint(cd2)).toEqual(r0.centerDown);
+
+		// LD
+		const ld =  BasicRect.fromWidthHeight(-2, 2, 1, 1);
+		expect(r0.closestPoint(ld)).toEqual(r0.leftDown);
 
 
-		// LU
-		const lu = new BasicRect(-2, -2, -1, -1);
-		expect(r0.closestPoint(lu)).toEqual(r0.origin);
+		// LC (near up)
+		const lc1 = new BasicRect(-0.9, -0.9, -0.1, 0.9);
+		expect(r0.closestPoint(lc1)).toEqual(r0.leftCenter);
 
-		// LE
-		const r1le = new BasicRect(-0.9, -0.9, -0.1, 0.9);
-		expect(r0.closestPoint(r1le)).toEqual(r0.leftCenter);
+		// LC (near down)
+		const lc2 =  BasicRect.fromWidthHeight(-1, 0.1, 0.5, 0.5);
+		expect(r0.closestPoint(lc2)).toEqual(r0.leftCenter);
 
 		
 		}
