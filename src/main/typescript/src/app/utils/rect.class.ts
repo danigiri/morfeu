@@ -94,7 +94,7 @@ get leftCenter(): Point {
  *		+–––––––+	+–––––––+
  *		
  * */
-public closestPoint(r: Rect): Point {
+public closestPointTo(r: Rect): Point {
 	// note we use the reverse
 	switch(this.center.quadrantOf(r.center)) {
 		case Quadrant.EQ:
@@ -134,9 +134,12 @@ public closestPoint(r: Rect): Point {
 
 
 /** @returns a best effort fast implementation of a vector joining this rect to the parameter rect
+ * 	Direction is from this rect to the parameter
 */
 public fastVectorTo(r: Rect): Vector2D {
-	return undefined;
+	const source = this.closestPointTo(r);
+	const dest = r.closestPointTo(this);
+	return new Vector2D(source,dest);
 }
 
 public equals(r: Rect): boolean {
