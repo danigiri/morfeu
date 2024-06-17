@@ -109,7 +109,7 @@ public String output() {
 					+ "[# th:each=\"a : ${v.node.get('internalAttributes')}\"]" // - prefix
 					+ " [(${a.get('name').textValue})]=\"[(${a.get('value').textValue})]\" [/]" // - postfix
 					+ "[# th:each=\"a : ${v.node.get('attributes')}\"] [(${a.get('name').textValue})]=\"[(${a.get('value').textValue})]\" [/] >"
-					+ (hasValue ? "[(${str.xmlc(v.value)})]" : "\n");
+					+ (hasValue ? "[(${#str.xmlc(v.value)})]" : "\n");
 		}
 
 		ViewComponent view = DaggerViewComponent.builder().withValue(v).withTemplate(template).andProblem("").build();

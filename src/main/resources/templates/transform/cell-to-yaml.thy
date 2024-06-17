@@ -1,11 +1,10 @@
-{%- import 'macros.twig' as m -%}
 {%- set meta = cell.cellModel.metadata -%}
 {%- set i = indent -%}
 {%- set d =  meta.getDirectivesFor(case) -%}
-{% if d.contains("ATTRIBUTES-ONLY") or hidename==true -%}
-{% else -%}											{#- the include will handle the empty values -#}
-	{{-i}}{{ cell.name }}:{% set i = concat(i,'  ') %}{%include "empty-cell-to-yaml.twig" with {'c': cell} only %}
-{% endif -%}
+[# th:if="${!(meta.getDirectivesFor(case).contains('ATTRIBUTES-ONLY') || hidename==true)}"]/*[-
+	-- the include will handle the empty values 
+	-]*/[(${indent})][(${cell.name})]:{% set i = concat(i,'  ') %}{%include "empty-cell-to-yaml.twig" with {'c': cell} only %}
+[/]
 {%- if cell.isComplex -%}
 	{#- ____________ complex content case ____________ -#}
 	{#- 1) the attributes -#}

@@ -1,5 +1,0 @@
----
-{% set children = v.cells.asList()[0].asComplex().children().asList() -%}{# skip virtual root -#}
-{%- for cell in children -%}
-{%- include "cell-to-yaml.twig" with {'cell': cell, 'case':'obj-to-yaml', 'indent': ''} only -%}
-{%- endfor %}
