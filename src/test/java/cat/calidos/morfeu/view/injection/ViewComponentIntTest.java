@@ -20,7 +20,7 @@ public class ViewComponentIntTest {
 public void testInlineTemplate() {
 
 	Map<String, Object> values = MorfeuUtils.paramMap("foo", "bar");
-	String templ = "value=[(${v.foo})]";
+	String templ = "value=${v.foo}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("").build();
 
@@ -33,7 +33,7 @@ public void testInlineTemplate() {
 public void testInlineTemplateWithProblem() {
 
 	Map<String, Object> values = MorfeuUtils.paramMap();
-	String templ = "problem=[(${problem})]";
+	String templ = "problem=${problem}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("bar").build();
 
@@ -45,7 +45,7 @@ public void testInlineTemplateWithProblem() {
 @Test
 public void testChop() {
 
-	String templ = "[(${#str.chop('abc')})]";
+	String templ = "${f.chop('abc')}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
@@ -57,14 +57,14 @@ public void testChop() {
 
 @Test
 public void testQuote() {
-	String templ = "[(${#str.quote('abc')})]";
+	String templ = "${f.quote('abc')}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
 
 	assertEquals("\"abc\"", view.render());
 
-	String templ2 = "[(${#str.quote('\"abc\"')})]";
+	String templ2 = "${f.quote('\"abc\"')}";
 
 	ViewComponent view2 = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ2)
 			.andProblem("").build();
@@ -76,7 +76,7 @@ public void testQuote() {
 
 @Test
 public void testIsMultiline() {
-	String templ = "[(${#str.isMultiline('abc')})]";
+	String templ = "${f.isMultiline('abc')?c}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
@@ -87,7 +87,7 @@ public void testIsMultiline() {
 
 @Test
 public void testXMLEscaping() {
-	String templ = "[(${#str.xmlc('& > <')})]";
+	String templ = "${f.xmlc('& > <')}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
