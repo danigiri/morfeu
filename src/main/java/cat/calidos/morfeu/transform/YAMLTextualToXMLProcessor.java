@@ -34,9 +34,9 @@ public String output() {
 	values.put("yaml", nodeCellModel.node().asText());
 	var template = "";
 	if (nodeCellModel.node().asText().isEmpty()) {
-		template = "<[(${v.cm.name})]/>\n";	// null or empty?
+		template = "<${v.cm.name}/>\n";	// null or empty?
 	} else {
-		template = "<[(${v.cm.name})]>[(${#str.xmlc(v.yaml)})]</[(${v.cm.name})]>\n";
+		template = "<${v.cm.name}>${f.xmlc(v.yaml)}</${v.cm.name}>\n";
 	}
 	String out = super.output()+DaggerViewComponent.builder()
 													.withValue(values)
