@@ -130,15 +130,15 @@ public String output() {
 	}
 	values.put("attr", attr);
 
-	var template =	"<[(${v.cm.name})]"+
-					"[# th:each=\"a : ${v.caseAttr}\"] [(${a})][/]"+
-					"[# th:if=\"${ v.hasIdentifier}\"] [(${v.identifier})]=[(${#str.quote(#str.xmla(v.identifierValue))})][/]"+
-					"[# th:each=\"a : ${v.attr}\"] [(${a})]=[(${#str.quote(#str.xmla(v.yaml.get(a)))})][/]" +
-					"[# th:if=\"${v.hasChildren}\"]" +
+	var template =	"<${v.cm.name}"+
+					"<#list v.caseAttr as a> ${a}</#list>"+
+					"<#if v.hasIdentifier> ${v.identifier}=${f.quote(f.xmla(v.identifierValue))}</#if>"+
+					"<#list v.attr as a> ${a}=${f.quote(f.xmla(v.yaml.get(a)))}</#list>" +
+					"<#if v.hasChildren>" +
 					">\n"+
-					"[/][# th:if=\"${!v.hasChildren}\"]"+
+					"<#else><#t>"+
 					"/>\n"+
-					"[/]";
+					"</#if>";
 
 	String out = super.output()+DaggerViewComponent.builder()
 													.withValue(values)
