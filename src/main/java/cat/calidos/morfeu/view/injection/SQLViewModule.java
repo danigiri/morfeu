@@ -20,7 +20,7 @@ import cat.calidos.morfeu.utils.injection.SQLComponent;
 @Module
 public class SQLViewModule {
 
-private static final String TEMPLATE = "templates/view/sql.twig";
+private static final String TEMPLATE = "view/sql.ftl";
 
 
 @Provides
@@ -54,7 +54,7 @@ public static SQLComponent sql(Connection connection, @Named("query") String que
 }
 
 /*
- *    Copyright 2020 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
