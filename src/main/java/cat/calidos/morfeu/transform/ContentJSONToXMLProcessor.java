@@ -100,16 +100,17 @@ public String output() {
 		Map<String, Object> v = MorfeuUtils.paramMap(NAME_FIELD, name, "value", value, "pref", prefix, "node", node);
 		String template = null;
 		if (!hasChildren && !hasValue) {
-			template = "[(${v.pref})]<[(${v.name })] " // - postfix
-					+ "[# th:each=\"a : ${v.node.get('internalAttributes')}\"]" // - prefix
-					+ " [(${a.get('name').textValue})]=\"[(${a.get('value').textValue})]\" [/]" // - postfix
-					+ "[# th:each=\"a : ${v.node.get('attributes')}\"] [(${a.get('name').textValue})]=\"[(${a.get('value').textValue})]\" [/] />\n";
+			template = "${v.pref}<${v.name}" // - postfix
+					+ " <#list v.node.get('internalAttributes').iterator() as a>" // - prefix
+					+ "${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>" // - postfix
+					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list> />\n";
 		} else {
-			template = "[(${v.pref})]<[(${v.name })] " // - postfix
-					+ "[# th:each=\"a : ${v.node.get('internalAttributes')}\"]" // - prefix
-					+ " [(${a.get('name').textValue})]=\"[(${a.get('value').textValue})]\" [/]" // - postfix
-					+ "[# th:each=\"a : ${v.node.get('attributes')}\"] [(${a.get('name').textValue})]=\"[(${a.get('value').textValue})]\" [/] >"
-					+ (hasValue ? "[(${#str.xmlc(v.value)})]" : "\n");
+			template = "${v.pref}<${v.name}" // - postfix
+					+ " <#list v.node.get('internalAttributes').iterator() as a>" // - prefix
+					+ "${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>" // - postfix
+					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list> >"
+					+ (hasValue ? "${#str.xmlc(v.value)}" : "\n");
+					// FIXME: in theory we should close the tag here?
 		}
 
 		ViewComponent view = DaggerViewComponent.builder().withValue(v).withTemplate(template).andProblem("").build();

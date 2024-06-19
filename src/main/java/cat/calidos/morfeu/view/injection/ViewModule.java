@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import com.google.common.hash.Hashing;
 
@@ -18,6 +17,7 @@ import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.TemplateUtils;
+
 import dagger.Module;
 import dagger.Provides;
 import freemarker.cache.ClassTemplateLoader;
