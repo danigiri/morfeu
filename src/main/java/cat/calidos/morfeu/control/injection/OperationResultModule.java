@@ -15,13 +15,14 @@ import dagger.Provides;
 public class OperationResultModule {
 
 
-private static final String TEMPLATE = "{" +
-										"\"result\": \"[(${v.result})]\",\n" + 
-										"\"target\": \"[(${v.target})]\",\n" + 
-										"\"operation\": \"[(${v.operation})]\",\n" + 
-										"\"operationTime\": [(${v.operationTime})]\n" + 
-										"[# th:if=\"${hasProblem.isPresent}\"], \"problem\": \"[(${hasProblem.get})]\"[/]"+
-										"}";
+private static final String TEMPLATE = """
+	{
+	"result": "${v.result}",
+	"target": "${v.target}",
+	"operation": "${v.operation}",
+	"operationTime": ${v.operationTime}
+	<#if hasProblem.isPresent()>, "problem": "${hasProblem.get()}"</#if>
+	}""";
 
 @Provides
 public static String result(@Named("Result") String result,
