@@ -102,7 +102,7 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 @Override
 public String output() {
 
-	HashMap<String, Object> values = new HashMap<String, Object>(7);
+	var values = new HashMap<String, Object>(7);
 	
 	ComplexCellModel cellModel = nodeCellModel.cellModel().asComplex();
 	Metadata metadata = cellModel.getMetadata();
@@ -130,15 +130,16 @@ public String output() {
 	}
 	values.put("attr", attr);
 
-	var template =	"<${v.cm.name}"+
-					"<#list v.caseAttr as a> ${a}</#list>"+
-					"<#if v.hasIdentifier> ${v.identifier}=${f.quote(f.xmla(v.identifierValue))}</#if>"+
-					"<#list v.attr as a> ${a}=${f.quote(f.xmla(v.yaml.get(a)))}</#list>" +
-					"<#if v.hasChildren>" +
-					">\n"+
-					"<#else><#t>"+
-					"/>\n"+
-					"</#if>";
+	var template =	"""
+		<${v.cm.name}<#t>
+		<#list v.caseAttr as a> ${a}</#list><#t>
+		<#if v.hasIdentifier> ${v.identifier}=${f.quote(f.xmla(v.identifierValue))}</#if><#t>
+		<#list v.attr as a> ${a}=${f.quote(f.xmla(v.yaml.get(a)))}</#list><#t>
+		<#if v.hasChildren><#t>
+		>
+		<#else><#t>
+		/>
+		</#if><#t>""";
 
 	String out = super.output()+DaggerViewComponent.builder()
 													.withValue(values)

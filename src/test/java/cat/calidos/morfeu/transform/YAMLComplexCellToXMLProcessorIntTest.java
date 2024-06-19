@@ -29,7 +29,7 @@ private ComplexCellModel test;
 @BeforeEach
 public void setup() throws Exception {
 
-	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
+	var modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	test = cellModelFrom(modelURI, "test").asComplex();
 
 }
@@ -41,8 +41,8 @@ public void testIdentifier() throws Exception {
 	CellModel data3 = test.children()
 							.child("row").asComplex().children().child("col").asComplex().children().child("data3");
 
-	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-	String yaml = 	"text: identifier\n"+
+	var mapper = new ObjectMapper(new YAMLFactory());
+	var yaml = 	"text: identifier\n"+
 					"color: 00ff00\n";
 	JsonNode yamlNode = mapper.readTree(yaml);
 	JsonNodeCellModel nodeCellModel = new JsonNodeCellModel(yamlNode, data3);
@@ -53,20 +53,22 @@ public void testIdentifier() throws Exception {
 }
 
 
-//@Test
+// FIXME: need to investigate why this test is disabled
+// @Test
 public void testData2() throws Exception {
 
 	ComplexCellModel col = test.children().child("row").asComplex().children().child("col").asComplex();
 	ComplexCellModel data2 = test.children().child("row").asComplex().children().child("col").asComplex().children().child("data2").asComplex();
 
 	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-	String yaml = 	"data2:\n" + 
-					"  - \n" + 
-					"    number: 42\n" + 
-					"    text: blahblah\n" + 
-					"  - \n" + 
-					"    number: 42\n" + 
-					"    text: blahblah";
+	var yaml = 	"""
+		data2:
+		  -\s
+		    number: 42
+		    text: blahblah
+		  -\s
+		    number: 42
+		    text: blahblah""";
 	JsonNode yamlNode = mapper.readTree(yaml);
 	List<PrefixProcessor<JsonNodeCellModel, String>> processors = DaggerYAMLCellToXMLProcessorComponent.builder()
 																							.withPrefix("")
@@ -85,7 +87,7 @@ public void testData2() throws Exception {
 
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
