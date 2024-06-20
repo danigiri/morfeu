@@ -61,10 +61,10 @@ public String output() {
 	values.put("valueKey", valueKey);
 	values.put("value", nodeCellModel.node().asText());
 
-	var template =	"<[(${v.name})]"+
-					"[# th:each=\"a : ${v.caseAttr}\"] [(${a})][/] "+
-					"[(${v.identifier})]=[(${#str.quote(#str.xmla(v.identifierValue))})] " +
-					"[(${v.valueKey})]=[(${#str.quote(#str.xmla(v.value))})] " +
+	var template =	"<${v.name}"+
+					"<#list v.caseAttr as a>${a}<#sep> </#list> "+
+					"${v.identifier}=${f.quote(f.xmla(v.identifierValue))} " +
+					"${v.valueKey}=${f.quote(f.xmla(v.value))} " +
 					"/>\n";
 
 	String out = super.output()+DaggerViewComponent.builder()

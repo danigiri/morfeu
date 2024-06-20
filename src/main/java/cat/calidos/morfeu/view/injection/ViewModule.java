@@ -57,7 +57,7 @@ public String render(Template template, Map<String, Object> values) {
 public static String effectiveTemplate(@Nullable @Named("templatePath") String path,
 		@Nullable @Named("template") String template) {
 	return path != null ? path
-			: (template.substring(Math.min(template.length(), 10))) // so it's minimally readable
+			: (template.substring(0, Math.min(template.length(), 10))) // so it's minimally readable
 					+ Hashing.murmur3_32_fixed().hashString(template, Config.DEFAULT_NIO_CHARSET).toString();
 }
 
@@ -66,7 +66,7 @@ public static String effectiveTemplate(@Nullable @Named("templatePath") String p
 public static Configuration configuration(StringTemplateLoader stringLoader) {
 	Configuration cfg = new Configuration(Configuration.VERSION_2_3_33);
 	cfg.setDefaultEncoding("UTF-8");
-	// cfg.setDirectoryForTemplateLoading(null);
+	// use the logger below to debug
 	var ctl = new ClassTemplateLoader(ViewModule.class, "/templates");
 	var mtl = new MultiTemplateLoader(new TemplateLoader[] { stringLoader, ctl });
 
@@ -122,6 +122,30 @@ public static Map<String, Object> values(@Named("value") Object v, @Nullable @Na
 
 
 }
+
+
+/*
+package cat.calidos.morfeu.view.injection;
+
+import java.io.IOException;
+
+import freemarker.cache.ClassTemplateLoader;
+
+class LoggingClassTemplateLoader extends ClassTemplateLoader {
+
+    public LoggingClassTemplateLoader(Class<ViewModule> resourceLoaderClass, String basePackagePath) {
+		super(resourceLoaderClass, basePackagePath);
+	}
+
+	@Override
+    public Object findTemplateSource(String name) throws IOException {
+        // Log the attempted path before processing
+        System.out.println("AAAA Trying to load template: " + this.getBasePackagePath());
+        return super.findTemplateSource(name);
+    }
+}
+
+ */
 
 //
 // final static SimpleJtwigFunction range = new SimpleJtwigFunction() {
