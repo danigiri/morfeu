@@ -55,6 +55,14 @@ public String xmla(String s) {
 	return s;
 }
 
+
+/** returns yaml attribute scaping \" --> ", */
+public String yamla(String s) {
+	s = s.replace("\\\"", "\"");
+	return s;
+}
+
+
 }
 
 /*

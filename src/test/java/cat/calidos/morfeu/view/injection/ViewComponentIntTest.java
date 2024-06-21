@@ -45,7 +45,7 @@ public void testInlineTemplateWithProblem() {
 @Test
 public void testChop() {
 
-	String templ = "${f.chop('abc')}";
+	var templ = "${f.chop('abc')}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
@@ -57,7 +57,7 @@ public void testChop() {
 
 @Test
 public void testQuote() {
-	String templ = "${f.quote('abc')}";
+	var templ = "${f.quote('abc')}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
@@ -76,7 +76,7 @@ public void testQuote() {
 
 @Test
 public void testIsMultiline() {
-	String templ = "${f.isMultiline('abc')?c}";
+	var templ = "${f.isMultiline('abc')?c}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
@@ -87,12 +87,24 @@ public void testIsMultiline() {
 
 @Test
 public void testXMLEscaping() {
-	String templ = "${f.xmlc('& > <')}";
+	var templ = "${f.xmlc('& > <')}";
 
 	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
 			.andProblem("").build();
 
 	assertEquals("&amp; &gt; &lt;", view.render());
+}
+
+
+@Test
+public void testYAMLEscaping() {
+	var templ = "${f.yamla('\\\"')}";
+
+	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
+			.andProblem("").build();
+
+	assertEquals("\"", view.render());
+
 }
 
 
