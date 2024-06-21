@@ -1,15 +1,17 @@
-{#- if we are empty -#}
-{%- if c.isSimple -%}
-	{%- if c.getValue.isPresent -%}
-	{%- else -%} 
-		{%- if c.cellModel.maxOccurs.isPresent -%}
-			{%- if c.cellModel.maxOccurs.asInt==1 %}  {}{%- else %}  []{% endif -%}
-		{%- else %}  []{% endif -%}
-	{%- endif -%}
-{%- elseif c.isComplex -%}
-	{%- if (not (c.asComplex.attributes.hasAttributes)) and (not (c.asComplex.children.hasChildren)) -%} 
-		{%- if c.cellModel.maxOccurs.isPresent -%}
-			{%- if c.cellModel.maxOccurs.asInt==1 %}  {}{%- else %}  []{% endif -%}
-		{%- else %}  []{% endif -%}
-	{%- endif -%}
-{%- endif %}
+<#-- if we are empty --><#t>
+<#macro emptycell2yaml c><#t>
+<#if c.isSimple()><#t>
+	<#if c.getValue.isPresent()><#t>
+	<#else><#t> 
+		<#if c.cellModel.maxOccurs.isPresent()><#t>
+<#if c.cellModel.maxOccurs.asInt==1>  {}<#else>  []</#if><#rt>
+<#else>  []</#if><#rt>
+	</#if><#t>
+<#elseif c.isComplex()><#t>
+	<#if (!c.asComplex.attributes.hasAttributes()) && (!c.asComplex.children.hasChildren())>
+		<#if c.cellModel.maxOccurs.isPresent()><#t>
+<#if c.cellModel.maxOccurs.asInt()==1>  {}<#else>  []</#if><#rt>
+<#else>  []</#if><#rt>
+	</#if><#t>
+</#if><#t>
+</#macro>

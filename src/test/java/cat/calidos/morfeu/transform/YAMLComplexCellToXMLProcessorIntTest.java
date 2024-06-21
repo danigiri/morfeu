@@ -60,7 +60,7 @@ public void testData2() throws Exception {
 	ComplexCellModel col = test.children().child("row").asComplex().children().child("col").asComplex();
 	ComplexCellModel data2 = test.children().child("row").asComplex().children().child("col").asComplex().children().child("data2").asComplex();
 
-	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+	var mapper = new ObjectMapper(new YAMLFactory());
 	var yaml = 	"""
 		data2:
 		  -\s

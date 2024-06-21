@@ -63,6 +63,19 @@ public String yamla(String s) {
 }
 
 
+/** returns yaml content scaping \" --> " */
+public String yamlc(String s) {
+	 s = s.replace("\\\"", "\"");
+	 return s;
+}
+
+// convert multiline string into a yaml multiline value
+public String multiline(String indent, String s) {
+	 var indentedLinefeed = "\n"+indent;
+	 return s.replace("\\n", indentedLinefeed);
+}
+
+
 }
 
 /*

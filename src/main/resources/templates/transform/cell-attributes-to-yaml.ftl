@@ -1,25 +1,27 @@
-{#- This template takes all the attributes of a complex cell and prints them out as yaml. -%}
-{#- Taking care of: -#}
-{#- a) if we are key value, we print out a fixed output -#}
-{#- b) otherwise, we print the fields (if we have an identifier we put it first and use the compact mapping form) -#}
-{%- if cell.cellModel.metadata.identifier.isPresent -%}
-	{%- set indentid = slice(indent, 2, length(indent)) -%}
-	{%- set id = cell.cellModel.metadata.identifier.get -%}
-	{%- set a = cell.asComplex.attributes.attribute(id) -%}
-{%- endif -%}
-{# Find out if we have key value -#}
-{%- if cell.cellModel.metadata.getDirectivesFor(case).contains('KEY-VALUE') -%}
-	{{-indentid}}{{a.value.get}}:{% for x in cell.asComplex.attributes.asList %}{% if x.name!=id and x.value.isPresent %} {{x.value.get|yamla}}{% endif %}{% endfor %}
-{% else -%}
-	{#- hack to put the identifier first -#}
-	{%- if cell.cellModel.metadata.identifier.isPresent -%}
-		{{-indentid}}- {{a.name}}: {% if a.value.isPresent %}{{a.value.get|yamla}}{% endif %}
-{% else -%}
-		{%- set id = '' -%}
-	{%- endif -%}
-	{%- for x in cell.asComplex.attributes.asList -%}
-	{%- if x.name!=id -%}
-		{{-indent}}{{x.name}}: {% if x.value.isPresent %}{{x.value.get|yamla}}{% endif %}{# no multiline attributes allowed #}
-{% endif -%}
-{% endfor -%}
-{%- endif -%}
+<#-- This template takes all the attributes of a complex cell and prints them out as yaml. --><#t>
+<#macro cellattributes2yaml cell attribute case indent><#t>
+<#-- Taking care of: --><#t>
+<#-- a) if we are key value, we print out a fixed output --><#t>
+<#-- b) otherwise, we print the fields (if we have an identifier we put it first and use the compact mapping form) --><#t>
+<#if cell.cellModel.metadata.identifier.isPresent()><#t>
+	<#assign indentid = indent.substring( 2, indent.length()-1)><#t>
+	<#assign id = cell.cellModel.metadata.identifier.get()><#t>
+	<#assign a = cell.asComplex.attributes.attribute(id)><#t>
+</#if><#t>
+<#-- Find out if we have key value --><#t>
+<#if cell.cellModel.metadata.getDirectivesFor(case).contains('KEY-VALUE') ><#t>
+	${-indentid}${a.value.get}:<#list cell.asComplex.attributes.asList as x><#if (!x.name().equals(id)) && x.value.isPresent()> ${f.yamla(x.value.get())}</#if></#list>
+<#else><#t>
+	<#-- hack to put the identifier first --><#t>
+	<#if cell.cellModel.metadata.identifier.isPresent()><#t>
+${indentid}- ${a.name()}: <#if a.value().isPresent()>${f.yamla(a.value().get())}</#if>
+		<#else><#t>
+		<#assign id = ''><#t>
+	</#if><#t>
+	<#list cell.asComplex.attributes.asList() as x><#t>
+	<#if !x.name.equals(id)><#t>
+${-indent}${x.name()}: <#if x.value().isPresent()>${f.yamla(x.value().get())}</#if><#-- no multiline attributes allowed --><#rt>
+</#if><#t>
+</#list><#t>
+</#if><#t>
+</#macro>

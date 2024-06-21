@@ -105,6 +105,12 @@ public void testYAMLEscaping() {
 
 	assertEquals("\"", view.render());
 
+	templ = "${f.yamlc('\\\"')}";
+
+	view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
+			.andProblem("").build();
+
+	assertEquals("\"", view.render());
 }
 
 
