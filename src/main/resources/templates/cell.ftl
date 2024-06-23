@@ -1,22 +1,22 @@
-<#macro cell cell>
+<#macro cell c>
 {	"schema": 0
-	,"URI": "${cell.URI}"
-	,"name": "${cell.Name}"
-	,"desc": "${f.trim(cell.Desc)}"
-	<#if cell.value.isPresent()> ,"value": "${f.trim(cell.value.get())}"</#if>
-	,"cellModelURI": "${cell.CellModel.URI}"
-	,"isSimple": ${cell.isSimple}
-	<#if cell.isComplex()>
+	,"URI": "${c.URI}"
+	,"name": "${c.name}"
+	,"desc": "${c.desc}"
+	<#if c.value.isPresent()> ,"value": "${c.value.get()}"</#if>
+	,"cellModelURI": "${c.cellModel.URI}"
+	,"isSimple": ${c.isSimple()?c}
+	<#if c.isComplex()>
 		,"attributes": [
-			<#list cell.asComplex.attributes.asList() as a>
-			<@cell cell=a><#sep>,</#list>
+			<#list (c.asComplex().attributes().asList()) as a>
+			<@cell a/><#sep>,</#list>
 						]
 		,"internalAttributes": [
-			<#list cell.asComplex.internalAttributes.asList() as a>
-					<@cell cell=a><#sep>,</#list><#t>
+			<#list (c.asComplex().internalAttributes().asList()) as a>
+					<@cell a/><#sep>,</#list><#t>
 								]
-		,"children": [<#list cell.asComplex.children.asList() as c>
-					<@cell cell=c><#sep>,</#list><#t>
+		,"children": [<#list (c.asComplex().children().asList()) as child>
+					<@cell child/><#sep>,</#list><#t>
 					 ]
 	</#if>
 }
