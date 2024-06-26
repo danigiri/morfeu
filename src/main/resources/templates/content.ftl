@@ -1,2 +1,2 @@
 <#import "cell.ftl" as content>
-<@content.cell c=v[0]/>
+<@content.cell v[0]/>

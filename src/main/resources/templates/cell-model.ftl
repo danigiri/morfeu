@@ -10,7 +10,7 @@
 	<#if cm.metadata.identifier.isPresent()><#t>
 		,"identifier": "${cm.metadata.identifier.get()}"
 	</#if><#t>
-	<#if !(cm.metadata.cellPresentation??)><#t>
+	<#if cm.metadata.cellPresentation??><#t>
 		,"cellPresentation": "${cm.metadata.cellPresentation}"
 	</#if><#t>
 	,"cellPresentationType": "${cm.metadata.cellPresentationType}"
@@ -25,7 +25,7 @@
 		</#if><#t>
 		<#if (cm.type.hasPossibleValues())!false>
 		<#list cm.type.possibleValues><#t>
-		,"possibleValues":[<#items as pv>${pv}<#sep>,</#items>]
+		,"possibleValues":[<#items as pv>"${pv}"<#sep>,</#items>]
 		</#list>
 		</#if>
 	}
