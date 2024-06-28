@@ -189,6 +189,11 @@ public Set<String> getDirectivesFor(String case_) {
 }
 
 
+public boolean directivesForCaseContain(String case_, String match) {
+	return getDirectivesFor(case_).contains(match);
+}
+
+
 public Map<String, Set<String>> getDirectives() {
 	return directives;
 }
