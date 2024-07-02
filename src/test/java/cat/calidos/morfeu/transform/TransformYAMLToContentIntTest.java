@@ -67,7 +67,7 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	assertNotNull(transformed);
-	//System.err.println(transformed);
+	// System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
 }

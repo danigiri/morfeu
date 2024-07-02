@@ -31,13 +31,13 @@ public void testTransformJSONToYAML() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath("templates/transform/content-to-yaml.ftl")
 												.withValue(values)
 												.build()
 												.render();
-	System.err.println(transformed);
+	// System.err.println(transformed);
 
-	YAMLMapper mapper = new YAMLMapper();
+	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 	assertTrue(yaml.isObject());

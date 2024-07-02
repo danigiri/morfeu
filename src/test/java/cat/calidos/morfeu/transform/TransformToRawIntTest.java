@@ -24,7 +24,7 @@ public void streamChainTest() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 	String output = DaggerViewComponent.builder()
-											.withTemplatePath("templates/transform/content-to-raw.twig")
+											.withTemplatePath("transform/content-to-raw.ftl")
 											.withValue(values)
 											.build() 
 											.render();

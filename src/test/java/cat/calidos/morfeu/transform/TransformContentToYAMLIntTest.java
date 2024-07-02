@@ -18,7 +18,7 @@ import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformContentToYAMLIntTest extends ModelTezt {
 
-private static final String TEMPLATE = "templates/transform/content-to-yaml.twig";
+private static final String TEMPLATE = "transform/content-to-yaml.ftl";
 
 
 @Test

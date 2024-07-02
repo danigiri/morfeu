@@ -32,7 +32,7 @@ private String content;
 @BeforeEach
 public void setup() throws Exception {
 
-	File inputFile = new File("target/test-classes/test-resources/transform/document4-as-view.json");
+	var inputFile = new File("target/test-classes/test-resources/transform/document4-as-view.json");
 	content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
 
 }
@@ -59,13 +59,13 @@ public void testTransformJSONToYAML() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("templates/transform/content-to-yaml.twig")
+												.withTemplatePath("transform/content-to-yaml.ftl")
 												.withValue(values)
 												.build()
 												.render();
 	//System.err.println(transformed);
 
-	YAMLMapper mapper = new YAMLMapper();
+	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 	assertTrue(yaml.isObject());
@@ -91,9 +91,9 @@ public void testTransformJSONToYAML() throws Exception {
 @Test
 public void testTransformYAMLToXML() throws Exception {
 
-	String yamlPath = "target/test-classes/test-resources/transform/document4.yaml";
-	String documentPath = "test-resources/documents/document4.json";
-	String xmlPath = "src/test/resources/test-resources/documents/document4.xml";
+	var yamlPath = "target/test-classes/test-resources/transform/document4.yaml";
+	var documentPath = "test-resources/documents/document4.json";
+	var xmlPath = "src/test/resources/test-resources/documents/document4.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	//System.err.println(transformed);

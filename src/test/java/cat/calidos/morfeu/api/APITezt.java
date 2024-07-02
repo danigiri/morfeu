@@ -31,6 +31,8 @@ protected String pathPrefix = "target/test-classes/test-resources/";
 public void setup() {
 
 	client = HttpClients.createDefault();
+	// the default setup has a double // slash which leads to a 404
+	
 	webappPrefix = getConfigurationVariable(URL_PROPERTY, DEFAULT_WEBAPP_BASE_URL)+"/dyn/";
 
 }
