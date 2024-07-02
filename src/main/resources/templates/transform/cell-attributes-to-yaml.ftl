@@ -4,7 +4,7 @@
 <#-- a) if we are key value, we print out a fixed output --><#t>
 <#-- b) otherwise, we print the fields (if we have an identifier we put it first and use the compact mapping form) --><#t>
 <#if cell.cellModel.metadata.identifier.isPresent()><#t>
-	<#assign indentid = indent.substring( 2, indent.length()-1)><#t>
+	<#assign indentid = (f.trimtwo(indent))><#t>
 	<#assign id = cell.cellModel.metadata.identifier.get()><#t>
 	<#assign a = cell.asComplex().attributes().attribute(id)><#t>
 </#if><#t>
@@ -14,14 +14,13 @@ ${indentid}${a.value.get}:<#list cell.asComplex.attributes.asList as x><#if (!x.
 <#else><#t>
 	<#-- hack to put the identifier first --><#t>
 	<#if cell.cellModel.metadata.identifier.isPresent()><#t>
-${indentid}- ${a.name()}: <#if a.value().isPresent()>${f.yamla(a.value().get())}</#if>
+${indentid}- ${a.name}: <#if a.value.isPresent()>${f.yamla(a.value.get())}</#if>
 		<#else><#t>
 		<#assign id = ''><#t>
 	</#if><#t>
-	<#list (cell.asComplex().attributes().asList()) as x><#t>
-	<#if x.name!=id><#t>
-${indent}${x.name}: <#if x.value.isPresent()>${f.yamla(x.value.get())}</#if><#-- no multiline attributes allowed --><#rt>
+	<#list (cell.asComplex().attributes().asList()) as x><#-- FIXME: this creates a blank line when there is only the identifier --><#t>
+		<#if x.name!=id><#t>${indent}${x.name}: <#if x.value.isPresent()>${f.yamla(x.value.get())}</#if><#-- no multiline attributes allowed -->
+		</#if>
+	</#list><#t>
 </#if><#t>
-</#list><#t>
-</#if><#t>
-</#macro>
+</#macro><#t>

@@ -76,6 +76,17 @@ public String multiline(String indent, String s) {
 }
 
 
+// this is used to reduce indentation in yaml
+public String trimtwo(String s) {
+	return s.substring(2);
+}
+
+
+public String debug(Object...objects) {
+	return "";
+}
+
+
 }
 
 /*
