@@ -1,7 +1,7 @@
 <#macro cellsimple2yaml cell indent><#t>
-<#if  cell.value.isPresent()><#t>
-	<#if  cell.cellModel().metadata().presentation()=='CELL-TEXT' && f.isMultiline(cell.value().get())><#t>
-		<#assign textindent = "$(indent}  "><#t>
+<#if cell.value.isPresent()><#t>
+	<#if (cell.cellModel.metadata.presentation=='CELL-TEXT' && f.isMultiline(cell.value.get()))><#t>
+		<#local textindent = f.addtwospaces(indent)><#t>
 ${indent}- |
 ${textindent}${f.yamlc(f.multiline(textindent, cell.value.get()))}
 	<#else><#t>
