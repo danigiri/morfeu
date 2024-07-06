@@ -43,6 +43,7 @@ public void testData2Snippet() throws Exception {
 	var uri = "snippets/"+pathPrefix+"snippets/data2.xml?model="+model;
 	InputStream content = fetchRemoteInputStreamFrom(uri);
 	assertNotNull(content);
+	// content = printInputStream(content);
 
 	JsonNode data2 = parseJson(content);
 	assertEquals(0, data2.get("schema").asInt(), "Wrong document schema");

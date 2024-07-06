@@ -1,9 +1,9 @@
 <#macro cellattributes2raw cell case indent>
 <#if cell.cellModel.metadata.identifier.isPresent()><#t>
-	<#assign id = cell.cellModel().metadata().identifier.get()><#t>
-	<#assign a = cell.asComplex().attributes.attribute(id)><#t>
+	<#local id = cell.cellModel().metadata().identifier.get()><#t>
+	<#local a = cell.asComplex().attributes.attribute(id)><#t>
 <#else><#t>
-	<#assign id = ''><#t>
+	<#local id = ''><#t>
 </#if>
 <#-- Find out if we have key value --><#t>
 <#-- FIXME: for some reason, we are passing a cell that has null metadata --><#t>

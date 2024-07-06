@@ -109,14 +109,14 @@ public void jsonToYAMLTest() throws Exception {
 @DisplayName("Apply template filter test")
 public void applyTemplateTest() throws Exception {
 
-	String transforms = "apply-template{\"template\":\"templates/transform/map-identity.thy\"}";
+	String transforms = "apply-template{\"template\":\"transform/map-identity.ftl\"}";
 	Filter<Object, String> f = DaggerFilterComponent.builder().filters(transforms).build().objectToString().get();
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
 	values.put("a", "foo");
 	values.put("b", "bar");
 	String result = f.apply(values);
-	String expected = "a=foo,b=bar,";
+	String expected = "a=foo,b=bar";
 	assertAll("check yaml to json outcome", 
 			() -> assertNotNull(result),
 			() -> assertEquals(expected, result, "Correct template was not applied"));

@@ -36,7 +36,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 												.render();
 	//System.err.println(transformed);
 
-	YAMLMapper mapper = new YAMLMapper();
+	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 	assertTrue(yaml.isObject());
@@ -85,9 +85,9 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 												.withValue(values)
 												.build()
 												.render();
-	//System.err.println(transformed);
+	// System.err.println(transformed);
 
-	YAMLMapper mapper = new YAMLMapper();
+	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 
@@ -116,7 +116,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 												.render();
 	//System.err.println(transformed);
 
-	YAMLMapper mapper = new YAMLMapper();
+	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 
@@ -150,7 +150,7 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 												.render();
 	//System.err.println(transformed);
 
-	YAMLMapper mapper = new YAMLMapper();
+	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 
@@ -179,7 +179,7 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 												.render();
 	//System.err.println(transformed);
 
-	YAMLMapper mapper = new YAMLMapper();
+	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 

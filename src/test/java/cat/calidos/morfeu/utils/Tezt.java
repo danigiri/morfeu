@@ -4,6 +4,7 @@ package cat.calidos.morfeu.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
@@ -27,7 +29,7 @@ public class Tezt {
 protected static int systemPropertyPrints = 0;
 
 protected static final String URL_PROPERTY = "app-url";
-protected static String DEFAULT_URL = "http://localhost:3000/";
+protected static String DEFAULT_URL = "http://localhost:3000";
 public static final String DEFAULT_TMP_FOLDER_NAME = "integration-tests-tmp";
 
 
@@ -131,6 +133,19 @@ protected void compareWithXML(String content, String expected) {
 
 	assertFalse(diff.hasDifferences(), "Transformed JSON to XML should be the same as original"+diff.toString());
 
+}
+
+
+protected InputStream printInputStream(InputStream s) {
+	String c;
+	try {
+		c = IOUtils.toString(s, "UTF-8");
+		System.err.println(c);
+	} catch (IOException e) {
+		e.printStackTrace();
+		return null;
+	}
+	return new ByteArrayInputStream(c.getBytes());
 }
 
 

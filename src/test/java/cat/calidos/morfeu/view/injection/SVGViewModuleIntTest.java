@@ -42,7 +42,7 @@ public void testRenderSVGTruncate() throws Exception {
 
 	Node text = nodeList.item(0).getFirstChild(); // text is the top XML node and the first child
 													// has the content
-	assertEquals("Should have the short text as SVG content", "Short text", text.getNodeValue());
+	assertEquals("Short text", text.getNodeValue(), "Should have the short text as SVG content");
 
 }
 

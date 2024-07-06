@@ -1,7 +1,7 @@
 {
 	"schema": 0
 	,cells: []
-	{% if defined(problem) %}
-		,"problem": "{{ problem }}"
-	{% endif %}	
+	<#if problem!=null><#t>
+		,"problem": "${ problem }"
+	</#if><#t>
 }

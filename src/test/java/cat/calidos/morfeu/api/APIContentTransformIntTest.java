@@ -22,12 +22,14 @@ public void testDocument1YAMLTransform() throws Exception {
 	String model = pathPrefix + "models/test-model.xsd";
 	InputStream content = fetchRemoteInputStreamFrom(
 			"content/" + pathPrefix + "transform/document1.yaml?model=" + model);
+	// content = printInputStream(content);
+	
 	assertNotNull(content);
 
 	JsonNode root = parseJson(content); // <root node>
 	assertNotNull(root);
 	assertEquals( 0, root.get("schema").asInt(), "Wrong document schema");
-	assertEquals("Root node has a wrong name", "", root.get("name").asText());
+	assertEquals("", root.get("name").asText(), "Root node has a wrong name");
 	assertTrue( root.get("children").isArray(), "/children is not an array and it should be");
 
 	JsonNode test = root.get("children").get(0); // /test(0)
@@ -45,7 +47,7 @@ public void testDocument1YAMLTransform() throws Exception {
 
 	JsonNode row = test.get("children").get(0); // /test(0)/row(0)
 	assertNotNull(row);
-	assertEquals("/children/test(0)/row(0) has a wrong name", "row", row.get("name").asText());
+	assertEquals("row", row.get("name").asText(), "/children/test(0)/row(0) has a wrong name");
 
 }
 

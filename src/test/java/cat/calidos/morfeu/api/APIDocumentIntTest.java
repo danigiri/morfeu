@@ -27,11 +27,11 @@ public void testDocument() throws Exception {
 	assertEquals("First document", doc.get("desc").asText());
 	assertEquals("xml", doc.get("kind").asText());
 
-	String modelURI = pathPrefix + "models/test-model.xsd?not=used";
+	var modelURI = pathPrefix + "models/test-model.xsd?not=used";
 	assertEquals(modelURI, doc.get("modelURI").asText());
 	assertTrue(doc.get("fetchableModelURI").asText().endsWith(modelURI), "Fetchable model uri does not end correctly");
 
-	String contentURI = pathPrefix + "documents/document1.xml";
+	var contentURI = pathPrefix + "documents/document1.xml";
 	assertEquals(contentURI, doc.get("contentURI").asText());
 	assertTrue(doc.get("fetchableContentURI").asText().endsWith(contentURI), "Fetchable content uri not correct");
 
@@ -61,6 +61,7 @@ public void testNonValidModelDocument() throws Exception {
 	InputStream content = fetchRemoteInputStreamFrom(
 			"documents/" + pathPrefix + "documents/document-with-nonvalid-model.json");
 	assertNotNull(content);
+	// content = printInputStream(content);
 
 	JsonNode doc = parseJson(content);
 	assertEquals("Problematic document", doc.get("name").asText());

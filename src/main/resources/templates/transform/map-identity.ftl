@@ -1,0 +1,1 @@
+<#list v as key, value>${key}=${value}<#sep>,</#list>

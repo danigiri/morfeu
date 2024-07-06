@@ -76,14 +76,45 @@ public String multiline(String indent, String s) {
 }
 
 
-// this is used to reduce indentation in yaml
+// this is used to reduce indentation in yaml by two spaces (just by removing two chars at the beginning
 public String trimtwo(String s) {
 	return s.substring(2);
 }
 
 
+// this is used to increase indentation in yaml, by appending two spaces at the end
+public String addtwospaces(String s) {
+	return s.concat("  ");
+}
+
+
 public String debug(Object...objects) {
 	return "";
+}
+
+
+public String p(Object...objects) {
+	var s = new StringBuffer();
+	var i = 0;
+	int length = objects.length-1;
+	while (i<length) {
+		s.append(objects[i++]+":'"+objects[i++]+"'");
+		if (i<length) {
+			s.append(",");
+		}
+	}
+	return s.toString();
+}
+
+
+public String y(Object...objects) {
+	return "# "+p(objects);
+}
+
+
+public String d(String s) {
+	System.err.println(s);
+	return s;
 }
 
 

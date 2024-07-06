@@ -1,1 +1,0 @@
-[# th:each="kv : ${v}"][(${kv.key})]=[(${kv.value})],[/]

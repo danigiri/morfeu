@@ -24,7 +24,7 @@ public class APIContentIntTest extends APITezt {
 public void testContent() throws Exception {
 
 	// http://localhost:8080/dyn/content/target/test-classes/test-resources/documents/document1.xml?model=
-	String model = pathPrefix + "models/test-model.xsd";
+	var model = pathPrefix + "models/test-model.xsd";
 	InputStream content = fetchRemoteInputStreamFrom(
 			"content/" + pathPrefix + "documents/document1.xml?model=" + model);
 	assertNotNull(content);

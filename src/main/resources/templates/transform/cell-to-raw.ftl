@@ -1,7 +1,7 @@
 <#import "cell-attributes-to-raw.ftl" as ca><#t>
 <#macro cell2raw cell case indent><#t>
-<#assign meta = cell.cellModel.metadata><#t>
-<#assign i = indent><#t>
+<#local meta = cell.cellModel.metadata><#t>
+<#local i = indent><#t>
 <#if cell.isComplex()><#t>
 	<#-- ____________ complex content case ____________ --><#t>
 	<#-- 1) the attributes (check key value and also identifiers first) --><#t>
