@@ -268,7 +268,6 @@ class LoggingClassTemplateLoader extends ClassTemplateLoader {
 // return new Object();
 //
 // }
-//
 // };
 //
 //
