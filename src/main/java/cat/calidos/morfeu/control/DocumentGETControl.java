@@ -40,7 +40,7 @@ private String path;
 
 public DocumentGETControl(String prefix, String path) {
 
-	super("document", "templates/document.thy", "templates/document-problem.thy");
+	super("document", "document.ftl", "document-problem.ftl");
 
 	this.prefix = prefix;
 	this.path = path;

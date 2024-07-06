@@ -25,7 +25,7 @@ private String prefix;	// orefix, to build the full fetchable path
 
 public ModelGETControl(String prefix, String path) {
 
-	super("model:"+path, "templates/model.thy", "templates/model-problem.thy");
+	super("model:"+path, "model.ftl", "model-problem.ftl");
 
 	this.prefix = prefix;
 	this.path = path;

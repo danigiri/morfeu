@@ -45,7 +45,7 @@ private HashMap<String, String> resultMetadata;
 
 public ContentSaveControl(String prefix, String path, String content, Optional<String> filters, String modelPath) {
 
-	super("POST content:"+path, "templates/operation-ok.thy", "templates/operation-problem.thy");
+	super("POST content:"+path, "operation-ok.ftl", "operation-problem.ftl");
 
 	this.prefix = prefix;
 	this.path = path;

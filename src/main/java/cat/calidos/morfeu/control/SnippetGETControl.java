@@ -38,7 +38,7 @@ private String modelPath;	// relative path of the model, not used to validate
 
 public SnippetGETControl(String prefix, String path, @Nullable String modelPath) {
 
-	super("GET snippet:"+path, "templates/content.thy", "templates/content-problem.thy");
+	super("GET snippet:"+path, "content.ftl", "content-problem.ftl");
 
 	this.prefix = prefix;
 	this.path = path;

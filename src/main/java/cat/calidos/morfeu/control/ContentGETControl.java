@@ -36,7 +36,7 @@ private String filters;
 
 public ContentGETControl(String prefix, String path, Optional<String> filters, @Nullable String modelPath) {
 
-	super("GET content:"+path, "content.ftl", "templates/content-problem.ftl");
+	super("GET content:"+path, "content.ftl", "content-problem.ftl");
 
 	this.prefix = prefix;
 	this.path = path;
