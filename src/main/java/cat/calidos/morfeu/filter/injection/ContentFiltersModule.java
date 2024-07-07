@@ -57,7 +57,7 @@ public static Filter<Object, String> mapToString(Map<String, JsonNode> params) {
 @StringKey("content-to-yaml")
 public static Filter<Object, String> contentToYAML() {
 	return (values) -> DaggerViewComponent.builder()
-											.withTemplatePath("templates/transform/content-to-yaml.twig")
+											.withTemplatePath("transform/content-to-yaml.ftl")
 											.withValue(values)
 											.build()
 											.render();
@@ -67,7 +67,7 @@ public static Filter<Object, String> contentToYAML() {
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
