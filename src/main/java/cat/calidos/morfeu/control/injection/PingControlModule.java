@@ -39,12 +39,10 @@ public static BiFunction<List<String>, Map<String, String>, String> ping() {
 @StringKey("/counter/?(reset)?")
 public static BiFunction<List<String>, Map<String, String>, String> counter(@Nullable ServletContext context) {
 	return (pathElems, params) -> {
-
 		Integer counter = context !=null ? (Integer)context.getAttribute("counter") : 0;
 		context.setAttribute("counter", ++counter);
 
 		return counter.toString();
-
 	};
 }
 

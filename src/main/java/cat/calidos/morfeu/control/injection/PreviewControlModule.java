@@ -123,11 +123,12 @@ public static String contentTypeHTML(@Named("Path") String path) {
 
 private static String renderPresentation(String path, String color) {
 
-	var template = "<div class=\"card\">\n" +
-					"	<div class=\"card-body html-preview\" style=\"background-color: #[(${v.color})]\">\n" + 
-					"		<h4 class=\"card-title html-preview-title\">[(${v.path})]</h4>\n" + 
-					"	</div>\n" + 
-					"</div>";
+	var template = """
+		<div class="card">
+			<div class="card-body html-preview" style="background-color: #${v.color}">
+				<h4 class="card-title html-preview-title">${v.path}</h4>
+			</div>
+		</div>""";
 
 	color = color!=null && colorRegexp.matcher(color).matches() ? color : "ff0000";
 	Map<String, String> values = MorfeuUtils.paramStringMap("path", path, "color", color);
