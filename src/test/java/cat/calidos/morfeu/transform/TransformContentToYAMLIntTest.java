@@ -91,8 +91,14 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	JsonNode yaml = mapper.readTree(transformed);
 	assertNotNull(yaml);
 
-	JsonNode stuffs = yaml.get("rows").get(0).get("cols").get(0).get("stuff");
-	assertNotNull(stuffs);
+	JsonNode rows = yaml.get("rows");
+	assertNotNull(rows, "We should have rows");
+	assertEquals(1, rows.size(), "Should only have a single row");
+	JsonNode cols = rows.get(0).get("cols");
+	assertNotNull(cols, "We should have cols");
+	assertEquals(1, cols.size(), "Should only have a single col");
+	JsonNode stuffs = cols.get(0).get("stuff");
+	assertNotNull(stuffs, "Should have stuff instances inside the col");
 	assertTrue(stuffs.isArray());
 	assertEquals(3, stuffs.size());
 	assertEquals("Stuff content", stuffs.get(0).asText());

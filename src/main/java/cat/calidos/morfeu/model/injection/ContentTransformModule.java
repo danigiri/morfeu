@@ -74,7 +74,7 @@ public static String effectiveContent(@Named("DestinationContentURI") URI uri,
 @Produces @Named("YAMLContent")
 public static String yamlContent(@Named("ValuesForTemplate") Map<String, Object> values) {
 	return DaggerViewComponent.builder()
-								.withTemplatePath("templates/transform/content-to-yaml.twig")
+								.withTemplatePath("transform/content-to-yaml.ftl")
 								.withValue(values)
 								.build()
 								.render();

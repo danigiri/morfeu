@@ -33,6 +33,8 @@ import { Point, Quadrant } from '../../utils/point.class';
 /** Component to hold references between cells */
 export class LinksComponent extends EventListener implements AfterViewInit, OnChanges, OnInit {
 
+private readonly EXTRA_MAX_FOR_BEND = 50;
+
 private arrows: Arrows = new Arrows();	// we are assuming this will get initialised before input sets
 
 @Input() id: string;
@@ -72,21 +74,16 @@ style(): string {
 }
 
 
+// given the arrows have a slight bend, we need a bit more room
 maxX(): number {
-	
-	const max = this.arrows.maxX;
-
-	return max===0 ? 50 : max;
-
+	const max = this.arrows.maxX+this.EXTRA_MAX_FOR_BEND;
+	return max===0 ? this.EXTRA_MAX_FOR_BEND : max;
 }
 
 
 maxY(): number {
-
-	const max = this.arrows.maxY;
-
-	return max===0 ? 50 : max;
-	
+	const max = this.arrows.maxY+this.EXTRA_MAX_FOR_BEND;
+	return max===0 ? this.EXTRA_MAX_FOR_BEND : max;
 }
 
 
@@ -95,29 +92,9 @@ private addArrow(source: Rect, destination: Rect) {
 	//console.log(new Error().stack);
 	// from the source element and dest element we can create an arrow
 	console.log('arrow:', source.center.x, source.center.y,'-->', destination.center.x, destination.center.y);
-	let closest: Point;
-	switch (source.center.quadrantOf(destination.center)) {
-		case Quadrant.LU:
-			console.debug('aaaaa')
-			closest = destination.rightDown;
-			break;
-		case Quadrant.RU:
-			console.debug('bbbbb')
-			closest = destination.leftDown;
-			break;
-		case Quadrant.RD:
-			console.debug('ccccc')
-			closest = destination.origin;
-			break;
-		case Quadrant.LD:
-			console.debug('ddddd')
-			closest = destination.rightUp;
-			break;
-	
-		}
 	//const arrow = ;
 	Promise.resolve(null).then(() => 
-		this.arrows.push(new Arrow(source.center.x, source.center.y, closest.x, closest.y))
+		this.arrows.push(Arrow.from(source.fastVectorTo(destination)))
 	);	// this will modify the SVG template state
 	/*
 	this.links.set(destination, arrow);
@@ -129,7 +106,7 @@ private addArrow(source: Rect, destination: Rect) {
 }
 
 /*
- *	  Copyright 2021 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

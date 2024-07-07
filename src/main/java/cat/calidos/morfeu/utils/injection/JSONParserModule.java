@@ -46,9 +46,9 @@ public static JsonNode json(String content, ObjectMapper mapper) throws ParsingE
 		return mapper.readTree(content);
 
 	} catch (Exception e) {
-		String snippet = content.substring(0,Math.min(10, content.length()));
+		String snippet = content.substring(0,Math.min(20, content.length()));
 		log.error("Cound not process input '{}', as valid JSON", snippet);
-		throw new ParsingException("Cound not process input '"+snippet+"', as valid JSON", e);
+		throw new ParsingException("Cound not process input '"+snippet+"', as valid JSON ("+e.getMessage()+")", e);
 	}
 
 }
@@ -61,3 +61,17 @@ public static @Named("pretty") String pretty(JsonNode json) {
 
 
 }
+
+/*
+ * Copyright 2024 Daniel Giribet
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */

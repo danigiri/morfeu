@@ -64,6 +64,10 @@ public Optional<String> getRegex() {
 }
 
 
+public boolean hasPossibleValues() {
+	return getPossibleValues()!=null && !getPossibleValues().isEmpty();
+}
+
 /**	@return all allowed values of elements of this type, empty set means all values allowed */
 public Set<String> getPossibleValues() {
 	return possibleValues;

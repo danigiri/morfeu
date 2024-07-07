@@ -170,7 +170,7 @@ ngAfterViewInit() {
 		setTimeout(() => this.generateLinks(), CellComponent._LINKS_TIMER);
 	}
 
-	// caching information aboug column cells, as we have to inject the bindings directly due to bootstrap expecting
+	// caching information about column cells, as we have to inject the bindings directly due to bootstrap expecting
 	// a specific DOM structure which does not like the '<cell>' elements added to the dom
 	this.isColumnCell = this.cell.cellModel && this.cell.cellModel.presentation === 'COL-WELL';
 	this.columnFieldValue = this.getColumnFieldValue();
@@ -466,6 +466,8 @@ private remove() {
 		parent.remove(this.cell);
 	}
 
+	// need to remove links here!
+
 	//this.cdr.markForCheck();
 
 }
@@ -480,20 +482,29 @@ private generateLinks() {
 		this.cell.getLinks().forEach(link => links.push(link));
 	}
 	model
-	?.attributes
-	?.filter(cm => cm.canLink)
-	.map(cm => this.cell.getAttribute(cm.name))
-	.filter(a => a!==null)
-	.map(a => a.getLinks())
-	.flat() //for some reason not in es2020, so workaround-ing
-	//.reduce((acc, val) => acc.concat(val), [])
-	.forEach(a => links.push(a));	
+		?.attributes
+		?.filter(cm => cm.canLink)
+		.map(cm => this.cell.getAttribute(cm.name))
+		.filter(a => a!==null)
+		.map(a => a.getLinks())
+		.flat() //for some reason not in es2020, so workaround-ing
+		//.reduce((acc, val) => acc.concat(val), [])
+		.forEach(a => links.push(a));	
 	
 	const rect = new ElementRect(this.cellElement);
 	links.forEach(link => this.events.service.publish(new CellLinkEvent(this.cell, link, rect)));
 	
 }
 
+// cell has been deleted, links need to be removed
+private removeLinks() {
+
+}
+
+// cell has been edited, links may need to be refreshed
+private refreshLinks() {
+
+}
 
 // called when we receive a request to link to this cell, we bounce it back with the filled link event
 private linkToThisCell(link: CellLinkEvent): void {

@@ -58,7 +58,7 @@ public static Document produceDocument(@Named("NormalisedDocument") Document doc
 		doc.setContent(contentParser.content().get());
 
 	} catch (Exception e) {
-		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"'",e);
+		throw new ExecutionException("Problem with model of document '"+doc.getName()+"' with model: '"+doc.getModelURI()+"', ("+e.getMessage()+")",e);
 	}
 
 	return doc;

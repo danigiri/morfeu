@@ -1,5 +1,6 @@
 /// ARROW . CLASS . TS
 import { getArrow } from 'perfect-arrows';
+import { Vector2D } from 'src/app/utils/vector-2d.class';
 
 /** Arrow class that takes start and end coordinates */
 export class Arrow {
@@ -37,6 +38,11 @@ constructor(public sx: number, public sy: number, public ex: number, public ey: 
 
 equals(a: Arrow): boolean {
 	return this.sx===a.sx && this.sy===a.sy && this.ex===a.ex && this.ey===a.ey;
+}
+
+
+static from(v: Vector2D): Arrow {
+	return new Arrow(v.v0.x, v.v0.y, v.v1.x, v.v1.y);
 }
 
 

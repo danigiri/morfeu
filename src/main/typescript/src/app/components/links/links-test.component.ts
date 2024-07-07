@@ -19,13 +19,12 @@ import { ContentRequestEvent } from '../../events/content-request.event';
 			<links [id]="'foo'"></links>
 			<div class="row">
 				<div class="col">
-				<cell *ngIf="cell" [cell]="cell" [level]="3" [position]="0"></cell>
+					<cell *ngIf="cell" [cell]="cell" [level]="3" [position]="0"></cell>
 				</div>
 				<div class="col">
 				</div>
 				<div class="col">
-					<div>&nbsp;</div>
-					<div>&nbsp;</div>
+					<div *ngFor="let e of [].constructor(1)">&nbsp;</div>
 					<cell *ngIf="cell" [cell]="sourceCell" [level]="3" [position]="0"></cell>
 				</div>
 			</div>
@@ -89,7 +88,7 @@ protected override loadedModel(model: Model): void {
 }
 
 /*
- *	  Copyright 2021 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.
