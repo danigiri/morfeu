@@ -49,11 +49,13 @@ public void teardown() throws Exception {
 		statement.execute("SHUTDOWN");
 		statement.close();
 	}
-	dbThread.interrupt();
 	if (connection != null) {
 		connection.close();
 	}
 
+	if (dbThread != null) {
+		dbThread.interrupt();
+	}
 	if (!databasePath.isEmpty()) {
 		FileUtils.deleteQuietly(new File (databasePath));
 	}
