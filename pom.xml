@@ -193,11 +193,13 @@
 				<dependencies>	<!--  to add GZIP compression -->
 				</dependencies>
 				<configuration>
-					<!-- looks like we have some code trying to access private methods for  java.util.OptionalInt() -->
+					<!-- looks like we have some code trying to access private
+					methods for  java.util.OptionalInt() -->
 					<!-- only if if we run in forked mode this is picked up -->
 					<jvmArgs>--add-opens=java.base/java.util=ALL-UNNAMED</jvmArgs>
 					<!-- looks deprecated in  jetty 12 -->
-					<!--dumpOnStart>false</dumpOnStart--> <!-- set to true for
+					<!--dumpOnStart>false</dumpOnStart--> <!--
+					set to true for
 					debugging -->
 					<!--scanIntervalSeconds>0</scanIntervalSeconds-->
 					<!--reload>manual</reload-->
@@ -227,7 +229,9 @@
 							<name>org.eclipse.jetty.annotations.maxWait</name>
 							<value>60000</value>
 						</systemProperty>
-						<systemProperty> <!-- MAVEN_OPTS=DASHDASHadd-opens=java.base/java.util=ALL-UNNAMED mvn jetty:run
+						<systemProperty> <!--
+							MAVEN_OPTS=DASHDASHadd-opens=java.base/java.util=ALL-UNNAMED
+							mvn jetty:run
 							-D__RESOURCES_PREFIX=file://$(PWD)/  -->
 							<name>__RESOURCES_PREFIX</name>
 							<value>${resources-prefix}</value>
@@ -430,11 +434,6 @@
 			<artifactId>batik-svggen</artifactId>
 			<version>${batik-version}</version>
 		</dependency>
-		<dependency>	<!-- used to test the code integration -->
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.2.224</version>
-		</dependency>
 
 		<!-- logging -->
 		<dependency>
@@ -456,9 +455,9 @@
 
 		<!--  templating -->
 		<dependency>
-		    <groupId>org.freemarker</groupId>
-		    <artifactId>freemarker</artifactId>
-		    <version>${freemarker-version}</version>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>${freemarker-version}</version>
 		</dependency>
 		<!-- request proxying -->
 		<dependency>
@@ -558,6 +557,14 @@
 			<version>2.9.1</version>
 		</dependency>
 
+		<dependency> <!-- used to test the code integration -->
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.7.3</version>
+			<scope>test</scope>
+		</dependency>
+
+
 		<!-- this is causing incompatibilities with junit5 test launcher -->
 		<!--
 	<dependency>
@@ -596,7 +603,7 @@
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-			<comments>Copyright (C) 2020 Daniel Giribet</comments>
+			<comments>Copyright (C) 2024 Daniel Giribet</comments>
 		</license>
 	</licenses>
 
