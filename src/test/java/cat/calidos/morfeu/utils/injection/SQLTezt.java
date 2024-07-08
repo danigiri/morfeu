@@ -86,7 +86,7 @@ public void run() {
 	HsqlProperties props = new HsqlProperties();
 	props.setProperty("server.database.0", "file:" + path + "/"+ name + ";");
 	props.setProperty("server.dbname.0", name);
-	server = new org.hsqldb.Server();
+	server = new Server();
 //	server.setTrace(true);
 //	server.setSilent(false);
 	try {

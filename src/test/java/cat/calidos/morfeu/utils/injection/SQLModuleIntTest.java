@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 /**
 *	@author daniel giribet
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class SQLModuleTest extends SQLTezt {
+public class SQLModuleIntTest extends SQLTezt {
 
 
 @Test @DisplayName("Test connection")
