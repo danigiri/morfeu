@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 
 import javax.xml.transform.Source;
 
@@ -148,6 +149,14 @@ protected InputStream printInputStream(InputStream s) {
 	return new ByteArrayInputStream(c.getBytes());
 }
 
+
+protected void sleep(Duration duration) {
+	try {
+		Thread.sleep(duration);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
+}
 
 }
 

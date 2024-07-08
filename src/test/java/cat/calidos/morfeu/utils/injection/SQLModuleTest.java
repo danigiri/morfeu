@@ -18,23 +18,32 @@ public void okResultTest() throws Exception {
 
 	dropPersonsTable();
 
-	String create = "CREATE TABLE Persons (\n" + 
-					"    PersonID int,\n" + 
-					"    LastName varchar(255),\n" + 
-					"    FirstName varchar(255),\n" + 
-					"    Address varchar(255),\n" + 
-					"    City varchar(255) \n" + 
-					") ";
+	var create = """
+		CREATE TABLE Persons (
+		    PersonID int,
+		    LastName varchar(255),
+		    FirstName varchar(255),
+		    Address varchar(255),
+		    City varchar(255)\s
+		)""";
 	int update = SQLModule.update(statement, create);
 	assertEquals(0, update);
-	List<List<String>> output = SQLModule.query(statement, "SHOW TABLES");
+	
+	var insert = "INSERT INTO Persons VALUES(1,'a','b','c','d')";
+	update = SQLModule.update(statement, insert);
+	assertEquals(1, update);
+	
+	List<List<String>> output = SQLModule.query(statement, "SELECT * FROM Persons");
 	assertAll("show tables asserts",
 		() -> assertEquals(2, output.size()),
-		() -> assertEquals(2, output.get(0).size()),
-		() -> assertTrue(output.get(0).contains("TABLE_NAME")),
-		() -> assertTrue(output.get(0).contains("TABLE_SCHEMA")),
-		() -> assertTrue(output.get(1).contains("PERSONS")),
-		() -> assertTrue(output.get(1).contains("PUBLIC"))
+		() -> assertEquals(5, output.get(0).size()),
+		() -> assertEquals(5, output.get(1).size()),
+		() -> assertTrue(output.get(0).contains("PERSONID")),
+		() -> assertTrue(output.get(0).contains("LASTNAME")),
+		() -> assertTrue(output.get(0).contains("FIRSTNAME")),
+		() -> assertTrue(output.get(0).contains("ADDRESS")),
+		() -> assertTrue(output.get(1).contains("a")),
+		() -> assertTrue(output.get(1).contains("b"))
 	);
 
 }
