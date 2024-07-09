@@ -1,9 +1,9 @@
-FROM openjdk:13-alpine AS build
+FROM eclipse-temurin:20 AS build
 
 LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 
 # variables build stage
-ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz
 ARG MAVEN_HOME=/usr/share/maven
 
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
@@ -42,7 +42,7 @@ FROM openjdk:13-alpine AS main
 
 # arguments and variables run stage
 ENV JETTY_HOME /var/lib/jetty
-ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/10.0.0.beta1/jetty-distribution-10.0.0.beta1.tar.gz
+ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/12.0.11/jetty-home-12.0.11.tar.gz
 ARG JETTY_BASE=/jetty-base
 
 RUN apk add --no-cache curl
