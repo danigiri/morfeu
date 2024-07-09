@@ -128,8 +128,8 @@
 							<arguments>
 								<argument>-c</argument>
 								<argument>
-									chmod a+x
-									${project.build.directory}/scripts/angular.sh
+									chmod a+x \
+									${project.build.directory}/scripts/angular.sh \
 									&amp;&amp; \
 									${project.build.directory}/scripts/angular.sh
 								</argument>
