@@ -58,11 +58,11 @@ RUN curl ${JETTY_URL} | tar zxf - -C ${JETTY_HOME} --strip-components 1
 RUN apt-get install fontconfig
 
 # create jetty-base folder and add the jetty configuration and folder structure
-COPY --from=build ./target/classes/jetty /jetty-base
-RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/resources
-COPY --from=build ./target/classes/jetty-logging.properties /jetty-base/resources
-# uncomment to create logs folder if we want to persist them (also enable the module)
-# RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/logs
+COPY --from=build ./target/classes/jetty ${JETTY_BASE}
+RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/resources ${JETTY_BASE}/lib/ext
+COPY --from=build ./target/classes/jetty-logging.properties /${JETTY_BASE}/resources
+# uncomment to create logs folder if we want to persist them (also enable the module, renaming it from .disabled)
+# RUN mkdir -p ${JETTY_BASE}/logs
 
 # add war
 COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
@@ -72,5 +72,5 @@ RUN mkdir -p ${JETTY_HOME}/target/test-classes/test-resources
 COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test-classes/test-resources
 
 # start (configuration seems not to be loading
-WORKDIR ${JETTY_HOME}
-ENTRYPOINT ["java", "-jar", "./start.jar", "jetty.base=/jetty-base"]
+WORKDIR ${JETTY_BASE}
+ENTRYPOINT ["java", "-jar", "${JETTY_HOME}/start.jar"]

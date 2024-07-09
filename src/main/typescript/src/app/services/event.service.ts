@@ -25,7 +25,7 @@ private eventCounter = 0;
 public publish(event: MorfeuEvent) {
 
 	const k = event.eventName;
-	//console.debug("\tSending event "+k+" -> ("+event.toString()+")");
+	console.debug("\tSending event "+k+" -> ("+event.toString()+")");
 	this.subject(k).next({ channel: k, data: event });
 	this.eventCounter++;
 
@@ -35,7 +35,7 @@ public publish(event: MorfeuEvent) {
 promiseToPublish(event: MorfeuEvent) {
 	Promise.resolve(null).then(() => {
 		const k = event.eventName;
-		//console.debug("\tSending event "+k+" -> ("+event.toString()+")");
+		console.debug("\tSending event "+k+" -> ("+event.toString()+")");
 		this.subject(k).next({ channel: k, data: event });
 		this.eventCounter++;
 	});

@@ -102,7 +102,7 @@ ngAfterViewInit() {
 	console.debug("AppComponent::ngAfterViewInit()");
 
 	// THIS IS TO SPEED UP DEVELOPMENT, WE TRANSITION INTO THE DESIRED STATE, SET TO FALSE IF TESTING
-	const foo = !environment.production && false;
+	const foo = !environment.production && true;
 	if (isDevMode() && foo) {
 		// we only want to do these once, hence the unsubscriptions
 		this.cataloguesLoadedEventSubscription = this.register(this.events.service.of<CataloguesLoadedEvent>(CataloguesLoadedEvent)
