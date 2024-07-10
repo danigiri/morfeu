@@ -73,4 +73,5 @@ COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test
 
 # start (configuration seems not to be loading
 WORKDIR ${JETTY_BASE}
-ENTRYPOINT ["java", "-jar", "${JETTY_HOME}/start.jar"]
+ENTRYPOINT java -jar "${JETTY_HOME}/start.jar" jetty.deploy.scanInterval=1
+
