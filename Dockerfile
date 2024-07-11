@@ -9,9 +9,8 @@ ARG MAVEN_HOME=/usr/share/maven
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
 # and sed for the proxy configuration
 # RUN apk add --no-cache curl bash ncurses git sed
-# RUN apk add --no-cache --update nodejs npm
-RUN apt-get update
-RUN apt-get install nodejs npm -y
+# this installs node and npm (using the 'n' package manager)
+RUN curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | bash -s lts
 RUN npm install -g @angular/cli
 
 # install maven
@@ -28,7 +27,8 @@ RUN /usr/bin/mvn dependency:go-offline
 RUN mkdir /cache
 COPY src/main/typescript/*.json /cache/
 COPY src/main/typescript/*.js /cache/
-RUN cd /cache/ && npm install
+# force is reuired until all node packages are stable dependency-wise
+RUN cd /cache/ && npm install --force
 
 # add code
 COPY src src
@@ -62,7 +62,7 @@ COPY --from=build ./target/classes/jetty ${JETTY_BASE}
 RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/resources ${JETTY_BASE}/lib/ext
 COPY --from=build ./target/classes/jetty-logging.properties /${JETTY_BASE}/resources
 # uncomment to create logs folder if we want to persist them (also enable the module, renaming it from .disabled)
-# RUN mkdir -p ${JETTY_BASE}/logs
+RUN mkdir -p ${JETTY_BASE}/logs
 
 # add war
 COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
