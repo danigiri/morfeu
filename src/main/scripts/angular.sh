@@ -14,10 +14,10 @@ if [ -d ${project.basedir}/src/main/typescript ]; then
 	# bundle analysis https://www.npmjs.com/package/webpack-bundle-analyzer
 	ng build --configuration production --optimization=true --aot=true --delete-output-path=false --output-path=${project.build.directory}/dist
 	if [ $? -eq 0 ]; then
+		printf "${GREEN}%s${NORMAL}\n" 'Angular build finished'
+	else
 		printf "${RED}%s${NORMAL}\n" 'NG BUILD DID NOT WORK'
 		exit -1		
-	else
-		printf "${GREEN}%s${NORMAL}\n" 'Angular build finished'
 	fi
 else
 	printf "${RED}%s${NORMAL}\n" 'FOLDER ${project.basedir}/src/main/typescript DOES NOT EXIST'
