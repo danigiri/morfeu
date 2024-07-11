@@ -9,9 +9,16 @@ NORMAL=$(tput sgr0)
 if [ -d ${project.basedir}/src/main/typescript ]; then
 	cd ${project.basedir}/src/main/typescript
 	printf "${GREEN}%s${normal}\n" 'Starting Angular build...'
-	npm install --no-optional
-	ng build --prod --optimization=true --aot=true --deleteOutputPath=false --outputPath=${project.build.directory}/dist
-	printf "${GREEN}%s${NORMAL}\n" 'Angular build finished'
+	# FIXME: using force for as some dependencies do not match
+	npm install --no-optional --force
+	# bundle analysis https://www.npmjs.com/package/webpack-bundle-analyzer
+	ng build --configuration production --optimization=true --aot=true --delete-output-path=false --output-path=${project.build.directory}/dist
+	if [ $? -eq 0 ]; then
+		printf "${RED}%s${NORMAL}\n" 'NG BUILD DID NOT WORK'
+		exit -1		
+	else
+		printf "${GREEN}%s${NORMAL}\n" 'Angular build finished'
+	fi
 else
 	printf "${RED}%s${NORMAL}\n" 'FOLDER ${project.basedir}/src/main/typescript DOES NOT EXIST'
 	exit -1

@@ -8,7 +8,7 @@
 # jetty.requestlog.formatString=%{client}a - %u %{dd/MMM/yyyy:HH:mm:ss ZZZ|GMT}t "%r" %s %O "%{Referer}i" "%{User-Agent}i"
 
 ## Logging directory (relative to $jetty.base)
-# jetty.requestlog.dir=logs
+jetty.requestlog.dir=logs
 
 ## File path
 # jetty.requestlog.filePath=${jetty.requestlog.dir}/yyyy_mm_dd.request.log
