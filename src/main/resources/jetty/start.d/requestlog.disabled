@@ -14,10 +14,10 @@ jetty.requestlog.dir=logs
 # jetty.requestlog.filePath=${jetty.requestlog.dir}/yyyy_mm_dd.request.log
 
 ## Date format for rollovered files (uses SimpleDateFormat syntax)
-# jetty.requestlog.filenameDateFormat=yyyy_MM_dd
+jetty.requestlog.filenameDateFormat=yyyy_MM_dd
 
 ## How many days to retain old log files
-# jetty.requestlog.retainDays=90
+jetty.requestlog.retainDays=60
 
 ## Whether to append to existing file
 # jetty.requestlog.append=false
