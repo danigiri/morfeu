@@ -355,7 +355,7 @@ private replaceCellPresentationVariables(input: string): string {
 
 canBeModified(): boolean {
 
-	return !this.cellModel?.readonly ?? true;	// TODO: move to capabilities
+	return !this.cellModel?.readonly;	// TODO: move to capabilities
 
 }
 
@@ -536,7 +536,7 @@ delete() {
 
 canBeDeleted(): boolean {
 
-	let canBeDeleted = !this.cellModel?.readonly ?? true;
+	let canBeDeleted = this.canBeModified();
 
 	// if it can be deleted we check if any of the children is readonly, as then we will not be able to delete it
 	if (canBeDeleted && this.childrenCount()>0) {

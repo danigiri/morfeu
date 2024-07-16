@@ -17,9 +17,9 @@ import { EventService } from '../../services/event.service';
 	selector: 'breadcrumb',
 	templateUrl: './breadcrumb.component.html',
 	styles: [`
-		#breadcrumb_ {},
-		#breadcrumb-document: {}
-		.breadcrumb-element: {}
+		#breadcrumb {}
+		#breadcrumb-document {}
+		.breadcrumb-element {}
 		#breadcrumb-active-name {}
 		#breadcrumb-fragment-back {}
 	`]

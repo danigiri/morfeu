@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {ReactiveFormsModule} from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,33 +22,25 @@ import { StatusComponent } from './components/status.component';
 
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-	CatalogueListComponent,
-	CatalogueComponent,
-	CollapsibleComponent,
-	CellDocumentComponent,
-	MainComponent,
-	ProblemComponent,
-	StatusComponent,
-	
-],
-imports: [
-	AppRoutingModule,
-    BrowserModule,
-	BrowserAnimationsModule,
-	CommonModule,
-	ComponentsModule,
-	HttpClientModule,
-	DndModule.forRoot(),
-	NgbModule,
-	PipesModule,
-	ReactiveFormsModule
-],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        CatalogueListComponent,
+        CatalogueComponent,
+        CollapsibleComponent,
+        CellDocumentComponent,
+        MainComponent,
+        ProblemComponent,
+        StatusComponent,
+    ],
+    bootstrap: [AppComponent], imports: [AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        ComponentsModule,
+        DndModule.forRoot(),
+        NgbModule,
+        PipesModule,
+        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 
 export class AppModule { }
 
