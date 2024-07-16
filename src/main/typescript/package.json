@@ -26,7 +26,6 @@
     "ngx-bootstrap": "^18.0.2",
     "perfect-arrows": "^0.3.7",
     "rxjs": "~7.5.2",
-    "ts-data.stack": "^1.0.6",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.7"
   },

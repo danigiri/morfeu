@@ -1,9 +1,8 @@
 
 // ARROWS . CLASS . TS
 
-import Stack from 'ts-data.stack';
-
 import { Arrow } from './arrow.class';
+import { Stack } from '../../utils/stack.class';
 
 /** collection of arrows, calculates the minimum visualisation area */
 export class Arrows {

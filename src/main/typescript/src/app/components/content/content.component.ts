@@ -2,12 +2,11 @@
 
 import { Component, Inject, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 
-import Stack from 'ts-data.stack';
-
 import { CellDocument } from '../../cell-document.class';
 import { Cell } from '../../cell.class';
 import { Content, ContentJSON } from '../../content.class';
 import { Model } from '../../model.class';
+import { Stack } from '../../utils/stack.class';
 
 import { Configuration } from '../../config/configuration.class';
 
