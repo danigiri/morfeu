@@ -219,7 +219,7 @@ import { TestComponent } from '../../test/test-component.class';
 	styles: [`
 	     	.myrow { border: 1px solid red;}
 	    	.mycol { border: 1px solid blue;}
-	    	'.mycell { border: 1px solid green;}',
+	    	.mycell { border: 1px solid green;}
 	    	.mydroparea {
 	    		background-color: grey;
 	    	}
