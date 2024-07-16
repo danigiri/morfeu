@@ -1,9 +1,9 @@
 {
 	"result": "${v.result}"
-	,"target": "${v.uri}"
+	,"target": "${v.target}"
 	,"operation": "${v.operation}"
 	,"operationTime": ${v.operationTime}
-	<#if problem!=null>
+	<#if problem!false>
 			,"problem": "${problem}"
 	</#if><#t>
 }

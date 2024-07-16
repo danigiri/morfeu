@@ -1,7 +1,7 @@
 {
 	"result": "${v.result}"
-	,"target": (${v.uri}"
+	,"target": (${v.target}"
 	,"operation": "${v.operation}"
 	,"operationTime": ${v.operationTime}
-	,"problem": "${problem }"
+	,"problem": "${problem}"
 }

@@ -118,7 +118,7 @@ public String output() {
 					+ "<#if v.node.has('attributes')><#t>"
 					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list> >"
 					+ "</#if><#t>"
-					+ (hasValue ? "${#str.xmlc(v.value)}" : "\n");
+					+ (hasValue ? "${f.xmlc(v.value)}" : "\n");
 					// note ContentJSONToXMLProcessorSlash that is on the stack generates the slash
 		}
 
