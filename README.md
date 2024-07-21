@@ -161,6 +161,15 @@ A small number of frontend tests is also available, to launch them you can do:
 
     cd src/main/angular && ng test
 
+
+### Releasing
+
+Using the maven release plugin and using the local repository to leave the artifact, this will create a release in GitHub.
+
+     mvn -B release:prepare release:perform -Darguments=" -Dskip-build-client=true -DskipITs -Djetty.skip -DaltDeploymentRepository=REPO::default::file://$HOME/.m2/repository"
+
+Note this runs a limited number of tests, so the above integration tests should be ran before doing a release
+
 ## Contributing
 
 PRs or issues are welcome. Morfeu is under heavy development.

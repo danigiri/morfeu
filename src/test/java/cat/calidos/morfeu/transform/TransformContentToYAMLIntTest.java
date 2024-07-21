@@ -161,7 +161,7 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 	assertNotNull(yaml);
 
 	JsonNode stuffs = yaml.get("rows").get(0).get("cols").get(0).get("stuff");
-	assertNotNull(stuffs);
+	assertNotNull(stuffs, "Should have stuff instances under col");
 	assertTrue(stuffs.isArray());
 	assertEquals(3, stuffs.size());
 	assertEquals("contains a double \" quote", stuffs.get(0).asText());
