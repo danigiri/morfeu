@@ -140,7 +140,7 @@ Morfeu proposes a generic browser-based UI to handle multiple APIs at the same t
 
 ### Dependencies
 
-Morfeu requires [Java 11](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 10](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests. A [dockerfile](./Dockerfile) is available for convenience.
+Morfeu requires [Java 20](https://java.com/en/download/), [Maven](http://maven.apache.org), [Angular 10](https://angular.io) and [npm](https://www.npmjs.com). [Selenium](https://www.seleniumhq.org) is used for browser integration tests. A [dockerfile](./Dockerfile) is available for convenience.
 
 ### Tests
 
