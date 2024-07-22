@@ -6,6 +6,7 @@ metadata:
     {{- include "morfeu.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
       {{- include "morfeu.selectorLabels" . | nindent 6 }}
