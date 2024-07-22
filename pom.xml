@@ -146,12 +146,8 @@
 				<configuration>
 					<webResources>
 						<resource>
-							<directory>${project.build.directory}/dist</directory> <!--
-							add build distribution to root of WAR -->
-							<excludes>
-								<exclude>README</exclude>	<!-- originally in the
-								empty dist folder, not needed -->
-							</excludes>
+							<directory>${project.build.directory}/dist/browser</directory> <!--
+							add build distribution to root of WAR, note that ng build now adds a browser -->
 						</resource>
 						<resource>
 							<directory>
