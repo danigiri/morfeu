@@ -67,9 +67,9 @@
 				<filtering>true</filtering>
 				<targetPath>${project.build.directory}/scripts</targetPath>
 			</resource>
-			<resource>	<!-- angular release dist folder extra materials  -->
+			<resource>	<!-- angular release dist folder extra materials (note ng build appends /browser now)  -->
 				<directory>src/main/resources/angular</directory>
-				<targetPath>${project.build.directory}/dist</targetPath>
+				<targetPath>${project.build.directory}/dist/browser</targetPath>
 			</resource>
 			<resource>	<!--  application metadata, like the version, goes to the
 				webapp root -->
@@ -147,7 +147,10 @@
 					<webResources>
 						<resource>
 							<directory>${project.build.directory}/dist/browser</directory> <!--
-							add build distribution to root of WAR, note that ng build now adds a browser -->
+							add build distribution to root of WAR, note that ng build now adds a /browser folder -->
+							<excludes>
+								<exclude>README</exclude> <!-- placeholder file in that folder, not needed -->
+							</excludes>
 						</resource>
 						<resource>
 							<directory>
