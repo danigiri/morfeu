@@ -15,7 +15,7 @@ if [ -d ${project.basedir}/src/main/typescript ]; then
 	# bundle analysis https://www.npmjs.com/package/webpack-bundle-analyzer
 	ng build --configuration production --optimization=true --aot=true --delete-output-path=false --output-path=${project.build.directory}/dist
 	if [ $? -eq 0 ]; then
-		# looks like in the argo build environment, we are outputting to the 'browser' folder?
+		# looks like in the argo build environment, we are outputting to the 'browser' folder? adding mitigation
 		if [ -d ${project.build.directory}/dist ]; then
 			printf "${GREEN}%s${NORMAL}\n" 'target dist folder exists as expected'
 		else

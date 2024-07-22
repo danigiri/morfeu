@@ -153,6 +153,15 @@
 								empty dist folder, not needed -->
 							</excludes>
 						</resource>
+						<!-- workaround: when building in argo, we have the output in the target browser folder -->
+						<resource>
+							<directory>${project.build.directory}/browser</directory> <!--
+							add build distribution to root of WAR -->
+							<excludes>
+								<exclude>README</exclude>	<!-- originally in the
+								empty dist folder, not needed -->
+							</excludes>
+						</resource>
 						<resource>
 							<directory>
 								${project.build.outputDirectory}/test-resources</directory>	<!--
