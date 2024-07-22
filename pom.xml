@@ -55,6 +55,7 @@
 				<excludes>	<!-- avoid duplicates -->
 					<exclude>angular/</exclude>
 					<exclude>metadata/</exclude>
+					<exclude>helm</exclude> <!-- not needed in the package -->
 				</excludes>
 			</resource>
 			<resource>
