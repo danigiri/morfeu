@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "morfeu.fullname" . }}-test-connection"
+  labels:
+    {{- include "morfeu.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "morfeu.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
