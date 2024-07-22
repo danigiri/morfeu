@@ -1,10 +1,16 @@
 #!/bin/sh
 
 #exit 0
-
-GREEN=$(tput setaf 2)
-RED=$(tput setaf 1)
-NORMAL=$(tput sgr0)
+if [ -v $TERM ]; then
+	GREEN=$(tput setaf 2)
+	RED=$(tput setaf 1)
+	NORMAL=$(tput sgr0)
+else 
+	export TERM=vt100
+	GREEN=$(tput bold)
+	RED=$(tput bold)
+	NORMAL=$(tput sgr0)
+fi
 
 if [ -d ${project.basedir}/src/main/typescript ]; then
 	cd ${project.basedir}/src/main/typescript

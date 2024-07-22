@@ -42,7 +42,6 @@ RUN echo 'build finished'
 
 
 FROM eclipse-temurin:20 AS main
-# dFROM openjdk:13-alpine AS main
 
 # arguments and variables run stage
 ENV JETTY_HOME /var/lib/jetty
@@ -71,7 +70,7 @@ COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
 RUN mkdir -p ${JETTY_HOME}/target/test-classes/test-resources
 COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test-classes/test-resources
 
-# start (configuration seems not to be loading
+# start jetty from its base folder (uncomment the scan interval when testing)
 WORKDIR ${JETTY_BASE}
 ENTRYPOINT java -jar "${JETTY_HOME}/start.jar" jetty.deploy.scanInterval=1
 
