@@ -10,47 +10,6 @@
 				</New>
 			</Arg>
 	</Call>
-	<!-- for some reason, in k8s argo builds, the war has the assets in a 'browser' folder -->
-	<Call name="addRule">
-			<Arg>
-				<New class="org.eclipse.jetty.rewrite.handler.RewriteRegexRule">
-					<Set name="regex">/index.html</Set>
-					<Set name="replacement">/browser/index.html</Set>
-				</New>
-			</Arg>
-	</Call>
-	<Call name="addRule">
-			<Arg>
-				<New class="org.eclipse.jetty.rewrite.handler.RewriteRegexRule">
-					<Set name="regex">/assets/(.*)</Set>
-					<Set name="replacement">/browser/assets/$1</Set>
-				</New>
-			</Arg>
-	</Call>
-	<Call name="addRule">
-			<Arg>
-				<New class="org.eclipse.jetty.rewrite.handler.RewriteRegexRule">
-					<Set name="regex">/favicon.ico</Set>
-					<Set name="replacement">/browser/favicon.ico</Set>
-				</New>
-			</Arg>
-	</Call>
-	<Call name="addRule">
-			<Arg>
-				<New class="org.eclipse.jetty.rewrite.handler.RewriteRegexRule">
-					<Set name="regex">/styles(.*)css</Set>
-					<Set name="replacement">/browser/styles$1css</Set>
-				</New>
-			</Arg>
-	</Call>
-	<Call name="addRule">
-			<Arg>
-				<New class="org.eclipse.jetty.rewrite.handler.RewriteRegexRule">
-					<Set name="regex">/(.*)js</Set>
-					<Set name="replacement">/browser/$1js</Set>
-				</New>
-			</Arg>
-	</Call>
   <!-- Protects favicon handling by not processing other rules.
   <Call name="addRule">
     <Arg>
