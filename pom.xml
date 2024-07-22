@@ -177,6 +177,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>3.0.1</version>
 				<configuration>
+					<goals>package deploy</goals><!-- goals for release:perform -->
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
