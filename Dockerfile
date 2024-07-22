@@ -72,5 +72,5 @@ COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test
 
 # start jetty from its base folder (uncomment the scan interval when testing)
 WORKDIR ${JETTY_BASE}
-ENTRYPOINT java -jar "${JETTY_HOME}/start.jar" jetty.deploy.scanInterval=1
+ENTRYPOINT sh -c "$(java -jar ${JETTY_HOME}/start.jar jetty.deploy.scanInterval=1 --dry-run)"
 
