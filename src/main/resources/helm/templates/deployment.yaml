@@ -6,7 +6,7 @@ metadata:
     {{- include "morfeu.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  revisionHistoryLimit: 5
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "morfeu.selectorLabels" . | nindent 6 }}
@@ -33,7 +33,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: {{ .Values.image.args }}
-          resources:
+          {{- if .Values.env.__RESOURCES_PREFIX -}}
+          env:
+          - name: __RESOURCES_PREFIX
+            value: {{ .Values.env.__RESOURCES_PREFIX -}} 
+         {{- end -}}
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

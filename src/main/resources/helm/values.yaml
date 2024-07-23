@@ -2,15 +2,19 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# some basic deployment information
 replicaCount: 1
+revisionHistoryLimit: 5 # instead of the default
 
 image:
   repository: localhost:32000/morfeu
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
-  args: [" -D__RESOURCES_PREFIX=file:///var/lib/jetty/"]
+  args: [] 
 
+  env:
+    # __RESOURCES_PREFIX: file://<foo>/ # or http://<foo>/ to set files and sources
 
 imagePullSecrets: []
 nameOverride: ""

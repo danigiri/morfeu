@@ -20,6 +20,8 @@ import jakarta.servlet.ServletException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuServlet extends GenericHttpServlet {
 
+private static final long serialVersionUID = 7499640302122151409L;
+
 protected final static Logger log = LoggerFactory.getLogger(MorfeuServlet.class);
 
 public final static String RESOURCES_PREFIX = "__RESOURCES_PREFIX";
@@ -30,7 +32,7 @@ protected String resourcesPrefix;
 @Override
 public void init(ServletConfig config) throws ServletException {
 
-	super.init(config);
+	super.init(config); // this will add system and env vars to the configuration
 
 	// the hierarchy is as follows:
 	// 1) Read servlet configuration

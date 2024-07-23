@@ -74,7 +74,9 @@ COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
 RUN mkdir -p ${TEST_RESOURCES_PREFIX}/target/test-classes/test-resources
 COPY --from=build ./target/test-classes/test-resources ${TEST_RESOURCES_PREFIX}/target/test-classes/test-resources
 
-# start jetty from its base folder (uncomment the scan interval when testing)
+# start jetty from its base folder (uncomment the scan interval when testing), this way of starting it means
+# we do not do a fork of the java process to run jetty, and also means ENV vars (like __RESOURCES_PREFIX) will be
+# received
 WORKDIR ${JETTY_BASE}
 ENTRYPOINT sh -c "$(java -jar ${JETTY_HOME}/start.jar jetty.deploy.scanInterval=1 --dry-run)"
 
