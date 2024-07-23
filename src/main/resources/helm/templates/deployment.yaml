@@ -33,12 +33,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: {{ .Values.image.args }}
-          {{- if .Values.env.__RESOURCES_PREFIX -}}
+          {{- if .Values.image.env.__RESOURCES_PREFIX }}
           env:
           - name: __RESOURCES_PREFIX
-            value: {{ .Values.env.__RESOURCES_PREFIX -}} 
+            value: "{{ .Values.image.env.__RESOURCES_PREFIX}}"
          {{- end -}}
-            {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
