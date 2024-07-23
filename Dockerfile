@@ -48,6 +48,10 @@ ENV JETTY_HOME /var/lib/jetty
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/12.0.11/jetty-home-12.0.11.tar.gz
 ARG JETTY_BASE=/jetty-base
 
+# we will add the test resources prefix but in produciton you can put real data as http:// or file://
+ARG TEST_RESOURCES_PREFIX=${JETTY_BASE}
+ENV __RESOURCES_PREFIX=file://$TEST_RESOURCES_PREFIX/
+
 # RUN apk add --no-cache curl
 RUN mkdir -p ${JETTY_HOME}
 RUN curl ${JETTY_URL} | tar zxf - -C ${JETTY_HOME} --strip-components 1
@@ -67,8 +71,8 @@ COPY --from=build ./target/classes/jetty-logging.properties /${JETTY_BASE}/resou
 COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
 
 # add test data (may or may not be accessible)
-RUN mkdir -p ${JETTY_HOME}/target/test-classes/test-resources
-COPY --from=build ./target/test-classes/test-resources ${JETTY_HOME}/target/test-classes/test-resources
+RUN mkdir -p ${TEST_RESOURCES_PREFIX}/target/test-classes/test-resources
+COPY --from=build ./target/test-classes/test-resources ${TEST_RESOURCES_PREFIX}/target/test-classes/test-resources
 
 # start jetty from its base folder (uncomment the scan interval when testing)
 WORKDIR ${JETTY_BASE}
