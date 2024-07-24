@@ -577,11 +577,11 @@
 
 
 	<repositories>
-		<!--repository>
+		<repository>
 			<id>Maven-Central</id>
 			<name>Maven central</name>
 			<url>https://repo1.maven.org/maven2/</url>
-		</repository-->
+		</repository>
 		<repository>
 			<id>Apache-releases</id>
 			<name>Apache releases</name>
@@ -592,10 +592,10 @@
 			<name>RedHat GA repository</name>
 			<url>https://maven.repository.redhat.com/ga/</url>
 		</repository>
-		<repository>
+		<!--repository>
 			<id>jcenter</id>
 			<url>https://jcenter.bintray.com/</url>
-		</repository>
+		</repository-->
 	</repositories>
 
 	<licenses>
