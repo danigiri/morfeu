@@ -335,19 +335,13 @@
 			<version>${dagger-2-version}</version>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<version>1.0.0.redhat-6</version>
-			<!-- scope>provided</scope -->
-		</dependency>
 
 		<!-- XML Schema parsing (compatible license, see here
 		https://xsom.java.net) -->
 		<dependency>
 			<groupId>com.sun.xsom</groupId>
 			<artifactId>xsom</artifactId>
-			<version>20140925.0.0.redhat-1</version>
+			<version>20140925</version>
 		</dependency>
 
 
@@ -463,12 +457,6 @@
 			<groupId>org.mitre.dsmiley.httpproxy</groupId>
 			<artifactId>smiley-http-proxy-servlet</artifactId>
 			<version>2.0</version>
-			<exclusions>
-				<exclusion> <!-- let's not use the redhat version which is missing sometimes -->
-					<groupId>org.apache.httpcomponents</groupId>
-					<artifactId>httpcore</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -589,24 +577,15 @@
 
 	<repositories>
 		<repository>
-			<id>Maven-Central</id>
-			<name>Maven central</name>
-			<url>https://repo1.maven.org/maven2/</url>
-		</repository>
-		<repository>
 			<id>Apache-releases</id>
 			<name>Apache releases</name>
 			<url>https://repository.apache.org/content/repositories/releases</url>
 		</repository>
 		<repository>
-			<id>RedHat-GA</id>
-			<name>RedHat GA repository</name>
-			<url>https://maven.repository.redhat.com/ga/</url>
+			<id>Maven-Central</id>
+			<name>Maven central</name>
+			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
-		<!--repository>
-			<id>jcenter</id>
-			<url>https://jcenter.bintray.com/</url>
-		</repository-->
 	</repositories>
 
 	<licenses>
