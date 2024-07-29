@@ -576,16 +576,6 @@
 
 
 	<repositories>
-		<repository>
-			<id>Apache-releases</id>
-			<name>Apache releases</name>
-			<url>https://repository.apache.org/content/repositories/releases</url>
-		</repository>
-		<repository>
-			<id>Maven-Central</id>
-			<name>Maven central</name>
-			<url>https://repo1.maven.org/maven2/</url>
-		</repository>
 	</repositories>
 
 	<licenses>
