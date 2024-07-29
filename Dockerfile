@@ -26,7 +26,7 @@ RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 COPY pom.xml pom.xml
 COPY src/main/resources/maven/settings.xml /tmp/settings.xml
 RUN if [ "${MAVEN_CENTRAL_MIRROR_}" != 'none' ]; then \
-  sed -i "s^MAVEN_CENTRAL_MIRROR^${MAVEN_CENTRAL_MIRROR_}^"" /tmp/settings.xml && \
+  sed -i "s^MAVEN_CENTRAL_MIRROR^${MAVEN_CENTRAL_MIRROR_}^" /tmp/settings.xml && \
   mkdir -v ${HOME}/.m2 &&  cp -v /tmp/settings.xml ${HOME}/.m2; \
   fi
 RUN /usr/bin/mvn dependency:go-offline
