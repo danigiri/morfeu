@@ -7,7 +7,7 @@
 		<mirror>
 			<id>central-mirror</id>
 			<name>Central-mirror</name>
-			<url>MAVEN_MIRROR</url>
+			<url>MAVEN_CENTRAL_MIRROR</url>
 			<mirrorOf>central</mirrorOf>
 		</mirror>
 	</mirrors>
