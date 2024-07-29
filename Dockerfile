@@ -25,11 +25,7 @@ RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 # and this layer will not be built unless the pom is changed
 COPY pom.xml pom.xml
 COPY src/main/resources/maven/settings.xml /tmp/settings.xml
-RUN if [ "${MAVEN_CENTRAL_MIRROR_URL_}" != 'none' ]; then \
-  sed -i 's^MAVEN_MIRROR^${MAVEN_CENTRAL_MIRROR_URL_}^' /tmp/settings.xml && \
-  mkdir -v ${HOME}/.m2 && \
-  cp -v /tmp/settings.xml ${HOME}/.m2 \
-  fi
+RUN if [ "${MAVEN_CENTRAL_MIRROR_URL_}" != 'none' ]; then sed -i 's^MAVEN_MIRROR^${MAVEN_CENTRAL_MIRROR_URL_}^' /tmp/settings.xml && mkdir -v ${HOME}/.m2 &&  cp -v /tmp/settings.xml ${HOME}/.m2 fi
 RUN /usr/bin/mvn dependency:go-offline
 
 # cache some node stuff to speed up builds
