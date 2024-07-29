@@ -6,8 +6,8 @@ LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz
 ARG MAVEN_HOME=/usr/share/maven
 # set a maven repo URL and a matching repo name ('central' recommended)
-ARG MAVEN_CENTRAL_MIRROR_URL=none
-ENV MAVEN_CENTRAL_MIRROR_URL_=${MAVEN_CENTRAL_MIRROR_URL}
+ARG MAVEN_CENTRAL_MIRROR=none
+ENV MAVEN_CENTRAL_MIRROR_=${MAVEN_CENTRAL_MIRROR}
 
 # install dependencies (bash to launch angular build, ncurses for pretty output with tput, git for npm deps)
 # and sed for the proxy configuration
@@ -26,7 +26,7 @@ RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 COPY pom.xml pom.xml
 COPY src/main/resources/maven/settings.xml /tmp/settings.xml
 RUN if [ "${MAVEN_CENTRAL_MIRROR_}" != 'none' ]; then \
-  sed -i 's^MAVEN_CENTRAL_MIRROR^${MAVEN_CENTRAL_MIRROR_}^' /tmp/settings.xml && \
+  sed -i "s^MAVEN_CENTRAL_MIRROR^${MAVEN_CENTRAL_MIRROR_}^"" /tmp/settings.xml && \
   mkdir -v ${HOME}/.m2 &&  cp -v /tmp/settings.xml ${HOME}/.m2; \
   fi
 RUN /usr/bin/mvn dependency:go-offline
