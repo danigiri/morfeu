@@ -30,11 +30,7 @@ RUN if [ "${MAVEN_CENTRAL_MIRROR_}" != 'none' ]; then \
   mkdir -v ${HOME}/.m2 &&  cp -v /tmp/settings.xml ${HOME}/.m2; \
 fi
 
-RUN if [ "${MAVEN_CENTRAL_MIRROR_}" != 'none' ]; then \
-  /usr/bin/mvn dependency:go-offline \
-  else \
-  /usr/bin/mvn -Daether.connector.basic.downstreamThreads=2 \
-fi
+RUN if [ "${MAVEN_CENTRAL_MIRROR_}" == 'none' ]; then /usr/bin/mvn dependency:go-offline else /usr/bin/mvn -Daether.connector.basic.downstreamThreads=2; fi
 
 # cache some node stuff to speed up builds
 RUN mkdir /cache
