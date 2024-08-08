@@ -31,7 +31,7 @@ RUN if [ "${MAVEN_CENTRAL_MIRROR_}" != 'none' ]; then \
 fi
 
 RUN if [ "${MAVEN_CENTRAL_MIRROR_}" != 'none' ]; then \
-  /usr/bin/mvn -Daether.connector.basic.downstreamThreads=2 
+  /usr/bin/mvn -Daether.connector.basic.downstreamThreads=2 \
   else \
   /usr/bin/mvn dependency:go-offline; \
  fi
