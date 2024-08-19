@@ -37,7 +37,7 @@ spec:
           env:
           - name: __RESOURCES_PREFIX
             value: "{{ .Values.image.env.__RESOURCES_PREFIX}}"
-         {{- end -}}
+         {{- end}}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
       {{- with .Values.nodeSelector }}
