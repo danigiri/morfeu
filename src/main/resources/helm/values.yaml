@@ -14,7 +14,7 @@ image:
   args: [] 
   env:
     __RESOURCES_PREFIX: # file://<foo>/ # or http://<foo>/ to set files and sources
-
+  
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -45,6 +45,14 @@ service:
   type: ClusterIP
   port: 8980
 
+livenessProbe:
+  httpGet:
+  path: /dyn/ping/alive
+  port: 8980
+  initialDelaySeconds: 10
+  periodSeconds: 900
+
+  
 ingress:
   enabled: true
   annotations: {}
