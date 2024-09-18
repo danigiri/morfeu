@@ -88,6 +88,12 @@ public String addtwospaces(String s) {
 }
 
 
+// freemarker does not like to call substring directly, so adding it here
+public String substr(String s, int start, int end) {
+	return s.substring(start, end);
+}
+
+
 public String debug(Object...objects) {
 	return "";
 }

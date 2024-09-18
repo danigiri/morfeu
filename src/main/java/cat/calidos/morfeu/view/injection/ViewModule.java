@@ -101,7 +101,12 @@ public static Template template(Configuration configuration, @Named("effectiveTe
 
 
 @Provides
-public static Map<String, Object> values(@Named("value") Object v, @Nullable @Named("problem") String problem) {
+public static TemplateUtils templateUtils() {
+	return new TemplateUtils();
+}
+
+@Provides
+public static Map<String, Object> values(@Named("value") Object v, @Nullable @Named("problem") String problem, TemplateUtils templateUtils) {
 
 	var value = new HashMap<String, Object>(1);
 	if (problem != null && problem != "") {
@@ -113,7 +118,7 @@ public static Map<String, Object> values(@Named("value") Object v, @Nullable @Na
 	}
 	value.put("hasProblem", Optional.ofNullable(problem));
 	value.put("v", v);
-	value.put("f", new TemplateUtils());
+	value.put("f", templateUtils);
 
 	return value;
 
