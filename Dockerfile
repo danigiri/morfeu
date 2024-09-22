@@ -65,6 +65,8 @@ ARG JETTY_BASE=/jetty-base
 # we will add the test resources prefix but in production you can put real data as http:// or file://
 ARG TEST_RESOURCES_PREFIX=${JETTY_BASE}
 ENV __RESOURCES_PREFIX=file://$TEST_RESOURCES_PREFIX/
+ARG RESOURCES_PREFIX=
+ENV __RESOURCES_PREFIX=${RESOURCES_PREFIX}
 ARG PROXY_PREFIX=
 ENV __PROXY_PREFIX=${PROXY_PREFIX}
 # TODO: add proxy configuration here env var here
