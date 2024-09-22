@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
 import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.utils.injection.DaggerConfigPropertyComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
+
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 
@@ -34,18 +36,18 @@ public void init(ServletConfig config) throws ServletException {
 
 	super.init(config); // this will add system and env vars to the configuration
 
-	// the hierarchy is as follows:
-	// 1) Read servlet configuration
-	// 2) Add and override with java system properties
-	// 3) Finally add an override with environment variables 
 	log.trace("Servlet config:"+configuration);
-	resourcesPrefix = configuration.getProperty(RESOURCES_PREFIX);
-	// FIXME: this is being ignored so we hardcode
-	if (resourcesPrefix==null) {
-		log.info("Not getting anything on RESOURCES_PREFIX, setting default '"+DEFAULT_RESOURCES_PREFIX+"'");
-		configuration.put(RESOURCES_PREFIX, DEFAULT_RESOURCES_PREFIX);
-		resourcesPrefix = configuration.getProperty(RESOURCES_PREFIX);
-	}
+	// env vars etc should be in the configuration from the super class, but this
+	// will not hurt
+	// TODO: we could move this to a view so we have more flexibility, like var substitution
+	resourcesPrefix = DaggerConfigPropertyComponent.builder()
+													.forName(RESOURCES_PREFIX)
+													.withProps(configuration)
+													.allowEmpty(false)
+													.andDefault(DEFAULT_RESOURCES_PREFIX)
+													.build()
+													.value()
+													.get();
 	log.info("Final RESOURCES_PREFIX='{}'", resourcesPrefix);
 	if (!resourcesPrefix.endsWith("/")) {
 		log.warn("*** Used resources prefix does not end with '/', may have issues fetching content ***");

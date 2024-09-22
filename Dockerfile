@@ -5,7 +5,8 @@ LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 # variables build stage
 ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz
 ARG MAVEN_HOME=/usr/share/maven
-# set a maven repo URL and a matching repo name ('central' recommended)
+# set a maven repo URL and a matching repo name ('central' recommended), like
+# --build-arg MAVEN_CENTRAL_MIRROR=http://REPOHOSTNAME/maven-central  --add-host=REPOHOSTNAME:IP
 ARG MAVEN_CENTRAL_MIRROR=none
 ENV MAVEN_CENTRAL_MIRROR_=${MAVEN_CENTRAL_MIRROR}
 
@@ -61,9 +62,12 @@ ENV JETTY_HOME /var/lib/jetty
 ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/12.0.11/jetty-home-12.0.11.tar.gz
 ARG JETTY_BASE=/jetty-base
 
-# we will add the test resources prefix but in produciton you can put real data as http:// or file://
+# we will add the test resources prefix but in production you can put real data as http:// or file://
 ARG TEST_RESOURCES_PREFIX=${JETTY_BASE}
 ENV __RESOURCES_PREFIX=file://$TEST_RESOURCES_PREFIX/
+ARG PROXY_PREFIX=
+ENV __PROXY_PREFIX=${PROXY_PREFIX}
+# TODO: add proxy configuration here env var here
 
 # RUN apk add --no-cache curl
 RUN mkdir -p ${JETTY_HOME}
@@ -87,9 +91,10 @@ COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
 RUN mkdir -p ${TEST_RESOURCES_PREFIX}/target/test-classes/test-resources
 COPY --from=build ./target/test-classes/test-resources ${TEST_RESOURCES_PREFIX}/target/test-classes/test-resources
 
-# start jetty from its base folder (uncomment the scan interval when testing), this way of starting it means
+# start jetty from its base folder, this way of starting it means
 # we do not do a fork of the java process to run jetty, and also means ENV vars (like __RESOURCES_PREFIX) will be
 # received
+# (add jetty.deploy.scanInterval=1 as a param when testing)
 WORKDIR ${JETTY_BASE}
-ENTRYPOINT sh -c "$(java -jar ${JETTY_HOME}/start.jar jetty.deploy.scanInterval=1 --dry-run)"
+ENTRYPOINT sh -c "$(java -jar ${JETTY_HOME}/start.jar --dry-run)"
 

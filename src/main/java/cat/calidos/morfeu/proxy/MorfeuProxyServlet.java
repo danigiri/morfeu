@@ -1,15 +1,16 @@
 package cat.calidos.morfeu.proxy;
 
 import java.net.URI;
+import java.util.Properties;
 
-
-
-import org.apache.http.HttpResponse;
 import org.apache.http.client.utils.URIUtils;
 import org.mitre.dsmiley.httpproxy.ProxyServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.utils.injection.DaggerConfigPropertyComponent;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
+import cat.calidos.morfeu.webapp.injection.DaggerServletConfigComponent;
 import jakarta.servlet.ServletException;
 
 
@@ -18,11 +19,13 @@ import jakarta.servlet.ServletException;
 *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuProxyServlet extends ProxyServlet {
 
+private static final String TEMPLATE_SNIPPET = "${";
+
+
 private static final long serialVersionUID = 9192081928916080216L;
 
-protected final static Logger log = LoggerFactory.getLogger(MorfeuProxyServlet.class);
 
-private static final String __PROXY_PREFIX = "__PROXY_PREFIX";
+protected final static Logger log = LoggerFactory.getLogger(MorfeuProxyServlet.class);
 
 
 @Override
@@ -35,19 +38,29 @@ protected void initTarget() throws ServletException {
 	}
 
 	targetUri = getConfigParam(P_TARGET_URI);
+	targetUri = DaggerConfigPropertyComponent.builder()
+									.forName(P_TARGET_URI)
+									.allowEmpty(false)
+									.andDefault(targetUri)
+									.build()
+									.value()
+									.get();
 	if (targetUri == null) {
 		throw new ServletException(P_TARGET_URI + " is required.");
 	}
 
-	int varStart = targetUri.indexOf("${");
-	int varEnd = targetUri.indexOf("}");
-	if (varStart>=0 && varEnd>0 && varStart<varEnd) {
-		String var = targetUri.substring(varStart, varEnd);
-		String varValue = getServletContext().getInitParameter(__PROXY_PREFIX);
-		log.info("** __PROXY_PREFIX='{}' (from init parameter)", varValue);
-		varValue = System.getProperty(__PROXY_PREFIX, varValue);
-		log.info("** __PROXY_PREFIX='{}' (after system property)", varValue);
-		targetUri = targetUri.substring(0, varStart)+varValue+targetUri.substring(varEnd+1);
+	if (targetUri.contains(TEMPLATE_SNIPPET)) {
+		// template snippet in the param, so we populate the view with the servlet config, system vars and env which
+		// can be used in the param to provide advanced features (like variable substitution)
+		Properties configuration = DaggerServletConfigComponent.builder()
+									.with(this.getServletConfig())
+									.build()
+									.getProperties();
+		targetUri = DaggerViewComponent.builder()
+				.withValue(configuration)
+				.withTemplate(targetUri)
+				.build()
+				.render();
 		log.info("** Using {} for proxy target uri", targetUri);
 	}
 
@@ -59,6 +72,7 @@ protected void initTarget() throws ServletException {
 	targetHost = URIUtils.extractHost(targetUriObj);
 
 }
+
 
 }
 
