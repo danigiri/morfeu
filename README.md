@@ -45,7 +45,7 @@ cd morfeu
 export MAVEN_OPTS=--add-opens=java.base/java.util=ALL-UNNAMED
 mvn clean compile jetty:run -D__RESOURCES_PREFIX=file://$(PWD)/ &
 # launch the frontend
-cd src/main/typescript && npm install && npm start
+cd src/main/typescript && npm install --force && npm start
 # This will open a browser with the application on http://localhost:3000
 ```
 

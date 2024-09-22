@@ -13,7 +13,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import cat.calidos.morfeu.problems.FetchingException;
 
@@ -21,7 +20,7 @@ import cat.calidos.morfeu.problems.FetchingException;
 public class DataFetcherModuleTest {
 
 CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
-CloseableHttpResponse response =mock(CloseableHttpResponse.class);
+CloseableHttpResponse response = mock(CloseableHttpResponse.class);
 HttpEntity entity = mock(HttpEntity.class);
 InputStream stream = mock(InputStream.class);
 

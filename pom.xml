@@ -41,8 +41,7 @@
 		-DaltDeploymentRepository=REPO::default::file://$HOME/.m2/repository" -->
 		<connection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</connection>
 		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
-		<developerConnection>
-			scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
+		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -486,7 +485,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>5.11.0</version>
+			<version>5.13.0</version>
 			<scope>test</scope>
 		</dependency>
 
