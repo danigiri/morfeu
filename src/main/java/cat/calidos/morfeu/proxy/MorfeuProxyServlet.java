@@ -58,7 +58,7 @@ protected void initTarget() throws ServletException {
 									.with(this.getServletConfig())
 									.build()
 									.getProperties();
-		log.trace("(From configuration) __PROXY_PREFIX="+configuration.getProperty(__PROXY_PREFIX, "not set!"));
+		log.trace("(From configuration) __PROXY_PREFIX='{}'",configuration.getProperty(__PROXY_PREFIX, "not set!"));
 		targetUri = DaggerViewComponent.builder()
 				.withValue(configuration)
 				.withTemplate(targetUri)
