@@ -83,8 +83,8 @@ RUN apt-get install fontconfig
 COPY --from=build ./target/classes/jetty ${JETTY_BASE}
 RUN mkdir -p ${JETTY_BASE}/webapps ${JETTY_BASE}/resources ${JETTY_BASE}/lib/ext
 COPY --from=build ./target/classes/jetty-logging.properties /${JETTY_BASE}/resources
-# uncomment to create logs folder if we want to persist them (also enable the module, renaming it from .disabled)
-# RUN mkdir -p ${JETTY_BASE}/logs
+# enable the module configuration file to have logs left here, renaming it from .disabled
+RUN mkdir -p ${JETTY_BASE}/logs
 
 # add war
 COPY --from=build ./target/morfeu-webapp-*.war ${JETTY_BASE}/webapps/root.war
