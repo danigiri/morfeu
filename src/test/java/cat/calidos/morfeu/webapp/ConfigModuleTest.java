@@ -5,9 +5,11 @@ package cat.calidos.morfeu.webapp;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,12 @@ public void testProvideConfigWithServletConfig() {
 	when(servletConfig.getInitParameter("b")).thenReturn("B");
 	when(servletConfig.getInitParameter("c")).thenReturn("C");
 
-	Properties p = (ServletConfigModule.getProperties(servletConfig));
+	var parameterNames = new ArrayList<String>(3);
+	parameterNames.add("a");
+	parameterNames.add("b");
+	parameterNames.add("c");
+	
+	Properties p = (ServletConfigModule.getProperties(servletConfig, Optional.empty(), parameterNames, ServletConfigModule.attributeNames(null) ));
 	assertEquals("A", p.getProperty("a"));
 	assertEquals("B", p.getProperty("b"));
 	assertEquals("C", p.getProperty("c"));
