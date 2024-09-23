@@ -2,11 +2,8 @@
 
 package cat.calidos.morfeu.webapp.injection;
 
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
