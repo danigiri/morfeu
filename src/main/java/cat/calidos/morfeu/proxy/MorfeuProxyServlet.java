@@ -24,6 +24,7 @@ private static final String TEMPLATE_SNIPPET = "${";
 
 private static final long serialVersionUID = 9192081928916080216L;
 
+public final static String __PROXY_PREFIX = "__PROXY_PREFIX";
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuProxyServlet.class);
 
@@ -45,6 +46,7 @@ protected void initTarget() throws ServletException {
 									.build()
 									.value()
 									.get();
+	log.info("** Configured {} for proxy target uri", targetUri);
 	if (targetUri == null) {
 		throw new ServletException(P_TARGET_URI + " is required.");
 	}
@@ -56,12 +58,13 @@ protected void initTarget() throws ServletException {
 									.with(this.getServletConfig())
 									.build()
 									.getProperties();
+		log.trace("(From configuration) __PROXY_PREFIX="+configuration.getProperty(__PROXY_PREFIX, "not set!"));
 		targetUri = DaggerViewComponent.builder()
 				.withValue(configuration)
 				.withTemplate(targetUri)
 				.build()
 				.render();
-		log.info("** Using {} for proxy target uri", targetUri);
+		log.info("** Using template-based {} for proxy target uri", targetUri);
 	}
 
 	try {
