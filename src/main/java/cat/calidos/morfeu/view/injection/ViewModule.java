@@ -38,11 +38,13 @@ import freemarker.template.TemplateNotFoundException;
 public class ViewModule {
 
 
+private static final int INLINE_TEMPLATE_NAME_LENGTH = 20;
+
 @Provides
-public String render(Template template, Map<String, Object> values) {
+public String render(Template template, @Named("finalValues") Map<String, Object> finalValues) {
 	try {
 		var writer = new StringWriter();
-		template.process(values, writer);
+		template.process(finalValues, writer);
 		return writer.toString();
 	} catch (TemplateException e) {
 		throw new RuntimeException(new ConfigurationException("Template '" + template + "' has issues", e));
@@ -57,7 +59,7 @@ public String render(Template template, Map<String, Object> values) {
 public static String effectiveTemplate(@Nullable @Named("templatePath") String path,
 		@Nullable @Named("template") String template) {
 	return path != null ? path
-			: (template.substring(0, Math.min(template.length(), 10))) // so it's minimally readable
+			: (template.substring(0, Math.min(template.length(), INLINE_TEMPLATE_NAME_LENGTH))) // so it's minimally readable
 					+ Hashing.murmur3_32_fixed().hashString(template, Config.DEFAULT_NIO_CHARSET).toString();
 }
 
@@ -105,25 +107,34 @@ public static TemplateUtils templateUtils() {
 	return new TemplateUtils();
 }
 
-@Provides
-public static Map<String, Object> values(@Named("value") Object v, @Nullable @Named("problem") String problem, TemplateUtils templateUtils) {
+@Provides @Named("finalValues")
+public static Map<String, Object> finalValues(@Nullable @Named("value") Object value,
+											@Nullable Map<Object, Object> values,
+											@Nullable @Named("problem") String problem, 
+											TemplateUtils templateUtils) {
 
-	var value = new HashMap<String, Object>(1);
+	var finalValues = new HashMap<String, Object>(4);
 	if (problem != null && problem != "") {
 
 		problem = problem.replaceAll("\t|\n", " "); // error messages may contain illegal JSON text
 		problem = problem.replaceAll("\"", "'"); //
-		value.put("problem", problem);
+		finalValues.put("problem", problem);
 
 	}
-	value.put("hasProblem", Optional.ofNullable(problem));
-	value.put("v", v);
-	value.put("f", templateUtils);
+	finalValues.put("hasProblem", Optional.ofNullable(problem));
+	if (value!=null) {
+		finalValues.put("v", value);
+	}
+	finalValues.put("f", templateUtils);
+	if (values!=null) {
+		for (Map.Entry<Object, Object> entry : values.entrySet()) {
+			finalValues.put(entry.getKey().toString(), entry.getValue());
+		}
+	}
 
-	return value;
+	return finalValues;
 
 }
-
 
 
 }
@@ -381,3 +392,4 @@ class LoggingClassTemplateLoader extends ClassTemplateLoader {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
