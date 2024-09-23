@@ -31,8 +31,7 @@ cd morfeu
 docker build -t morfeu .
 docker run --rm -p 8980:8980 morfeu
 # if using a maven central repository mirror (reposilite example)
-docker build -t morfeu  --build-arg MAVEN_CENTRAL_MIRROR=http://reposilite.local.test/maven-central  --add-host=reposilite.local.test:192.168.1.30 .  && docker run --rm -p 8980:8980 morfeu
-
+docker build -t morfeu  --build-arg MAVEN_CENTRAL_MIRROR=http://reposilite.local.test/maven-central  --add-host=reposilite.local.test:192.168.1.31 .  && docker run --rm -p 8980:8980 morfeu
 ```
 
 ### Manually

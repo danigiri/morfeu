@@ -18,6 +18,7 @@ if [ -d ${project.basedir}/src/main/typescript ]; then
 	# FIXME: using force for as some dependencies do not match
 	# npm install --no-optional --force
 	npm install --force
+	npm install -g @angular/cli
 	# bundle analysis https://www.npmjs.com/package/webpack-bundle-analyzer
 	# be aware that ng build appends a /browser to the output path, we will solve this in the war building
 	# it is also **relative**, so we go from src/main/typescript down and then go to target, which is hardcoded
