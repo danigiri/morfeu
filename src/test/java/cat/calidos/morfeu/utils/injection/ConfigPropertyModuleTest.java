@@ -53,6 +53,20 @@ public void testValue() {
 }
 
 
+@Test @DisplayName("Allow empty test")
+public void testAllowEmpty() {
+	System.setProperty("foo", "");
+	String value = DaggerConfigPropertyComponent.builder()
+		.forName("foo")
+		.allowEmpty(false)
+		.andDefault("bar")
+		.build()
+		.value()
+		.get();
+	assertEquals("bar", value);
+}
+
+
 }
 
 /*
