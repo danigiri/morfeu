@@ -1,4 +1,4 @@
-FROM eclipse-temurin:20 AS build
+FROM eclipse-temurin:21 AS build
 
 LABEL maintainer="Daniel Giribet - dani [at] calidos [dot] cat"
 
@@ -55,7 +55,7 @@ RUN /usr/bin/mvn test package
 RUN echo 'build finished'
 
 
-FROM eclipse-temurin:20 AS main
+FROM eclipse-temurin:21 AS main
 
 # arguments and variables run stage
 ENV JETTY_HOME /var/lib/jetty
