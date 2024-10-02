@@ -33,7 +33,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<scm.host_>github.com</scm.host_>
 		<developer.id_>danigiri</developer.id_>
-		<maven.compiler.release>20</maven.compiler.release>
+		<maven.compiler.release>21</maven.compiler.release>
 	</properties>
 
 	<scm>	<!-- mvn -B release:prepare release:perform -Darguments="
