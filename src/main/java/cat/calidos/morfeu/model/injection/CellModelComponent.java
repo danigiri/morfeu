@@ -24,7 +24,7 @@ public interface CellModelComponent {
 /**	@return instance of the cell model, given the XSD definition data*/
 CellModel cellModel();
 
-
+//@formatter:off
 @Component.Builder
 interface Builder {
 
@@ -37,6 +37,7 @@ interface Builder {
 	CellModelComponent build();
 
 }
+//@formatter:on
 
 }
 

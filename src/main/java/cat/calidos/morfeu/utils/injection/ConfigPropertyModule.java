@@ -13,8 +13,8 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ConfigPropertyModule {
 
@@ -22,36 +22,35 @@ protected final static Logger log = LoggerFactory.getLogger(ConfigPropertyModule
 
 private static final char VARIABLE_DELIMITER = '=';
 
-
 @Provides
-public static Optional<String> value(@Named("PropertyName") String name,  
-			@Named("Configuration") Properties p,
-			@Nullable @Named("SystemValue") String systemValue,
-			@Nullable @Named("EnvValue") String envValue,
-			@Nullable @Named("ArgsValue") String argsValue,
-			@Nullable Boolean allowEmpty,
-			@Nullable @Named("DefaultValue") String defaultValue) {
+public static Optional<String> value(	@Named("PropertyName") String name,
+										@Named("Configuration") Properties p,
+										@Nullable @Named("SystemValue") String systemValue,
+										@Nullable @Named("EnvValue") String envValue,
+										@Nullable @Named("ArgsValue") String argsValue,
+										@Nullable Boolean allowEmpty,
+										@Nullable @Named("DefaultValue") String defaultValue) {
 
 	var message = new StringBuffer();
-	message.append("Property "+name+"' in [");
+	message.append("Property " + name + "' in [");
 
 	String value = p.getProperty(name);
-	message.append(value!=null ? "properties," : "");
+	message.append(value != null ? "properties," : "");
 
 	value = systemValue != null ? systemValue : value;
-	message.append(systemValue!=null ? "system," : "");
+	message.append(systemValue != null ? "system," : "");
 
 	value = envValue != null ? envValue : value;
-	message.append(envValue!=null ? "env," : "");
+	message.append(envValue != null ? "env," : "");
 
 	value = argsValue != null ? argsValue : value;
-	message.append(argsValue!=null ? "args," : "");
+	message.append(argsValue != null ? "args," : "");
 
 	allowEmpty = allowEmpty == null ? true : allowEmpty;
 	value = value == null || (value.isEmpty() && !allowEmpty) ? defaultValue : value;
-	message.append(value==null ? "default" : "");
+	message.append(value == null ? "default" : "");
 
-	message.append("], final='"+value+"'");
+	message.append("], final='" + value + "'");
 	log.trace(message.toString());
 
 	return Optional.ofNullable(value);
@@ -71,22 +70,23 @@ public static String envValue(@Named("PropertyName") String name) {
 
 
 @Provides @Nullable @Named("ArgsValue")
-public static String argsValue(@Named("PropertyName") String name, @Nullable String args[]) {
-	if (args==null) {
+public static String argsValue(	@Named("PropertyName") String name,
+								@Nullable String args[]) {
+	if (args == null) {
 		return null;
 	}
 	String value = null;
 	var i = 0;
 	int nameLength = name.length();
-	while (i<args.length && value==null) {
+	while (i < args.length && value == null) {
 		String current = args[i];
-		if (current.equals("--"+name)) {
-			if (i+1<args.length) {
-				value = args[i+1];
+		if (current.equals("--" + name)) {
+			if (i + 1 < args.length) {
+				value = args[i + 1];
 			}
 		} else {
-			if (current.length() > nameLength && current.substring(0, nameLength).equals(name)
-					&& current.charAt(nameLength) == VARIABLE_DELIMITER) {
+			if (current.length() > nameLength && current.substring(0, nameLength)
+					.equals(name) && current.charAt(nameLength) == VARIABLE_DELIMITER) {
 				value = current.substring(nameLength + 1);
 			}
 		}
@@ -95,9 +95,7 @@ public static String argsValue(@Named("PropertyName") String name, @Nullable Str
 	return value;
 }
 
-
 }
-
 
 /*
  * Copyright 2024 Daniel Giribet
@@ -112,4 +110,3 @@ public static String argsValue(@Named("PropertyName") String name, @Nullable Str
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

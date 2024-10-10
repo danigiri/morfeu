@@ -12,15 +12,18 @@ import dagger.Component;
 import jakarta.servlet.ServletConfig;
 
 /**
-* @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *//////////////////////////////////////////////////////////////////////////////
 @Component(modules = ServletConfigModule.class)
 public interface ServletConfigComponent {
 
-/** @return merge of configuration properties, from servlet to java system, and env vars (from less to more priority)
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * @return merge of configuration properties, from servlet to java system, and env vars (from less
+ *         to more priority)
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Properties getProperties();
 
+//@formatter:off
 @Component.Builder
 interface Builder {
 
@@ -29,11 +32,12 @@ interface Builder {
 	ServletConfigComponent build();
 
 }
+//@formatter:on
 
 }
 
 /*
- * Copyright 2016 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at

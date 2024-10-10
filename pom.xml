@@ -29,6 +29,7 @@
 		<junit-platform-version>5.10.2</junit-platform-version>
 		<selenide-version>7.2.3</selenide-version>
 		<selenium-version>4.19.1</selenium-version>
+		<spotless.version>2.44.0.BETA2</spotless.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<scm.host_>github.com</scm.host_>
@@ -94,6 +95,7 @@
 						target/generated-sources/annotations</generatedSourcesDirectory>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>

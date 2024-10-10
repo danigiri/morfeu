@@ -6,14 +6,17 @@ import javax.inject.Named;
 import dagger.BindsInstance;
 import dagger.Component;
 
-/** Returns string representation of the results of an operation
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=OperationResultModule.class)
+/**
+ * Returns string representation of the results of an operation
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Component(modules = OperationResultModule.class)
 public interface OperationResultComponent {
 
 String result();
 
+//@formatter:off
 @Component.Builder
 interface Builder {
 
@@ -26,12 +29,13 @@ interface Builder {
 	OperationResultComponent build();
 
 }
+//@formatter.on
 
 }
 
 
 /*
- *    Copyright 2020 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -45,4 +49,3 @@ interface Builder {
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-

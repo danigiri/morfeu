@@ -10,20 +10,18 @@ import dagger.BindsInstance;
 import dagger.Component;
 
 /**
- * Read a configuration propert value in the following reverse priority order 
- * 1) from properties(optional) 
- * 2) from sysenv 
- * 3) from env vars 
- * 4) from args array (optional, with name=value or --name value)
- * Each step overrides the previous ones
+ * Read a configuration propert value in the following reverse priority order 1) from
+ * properties(optional) 2) from sysenv 3) from env vars 4) from args array (optional, with
+ * name=value or --name value) Each step overrides the previous ones
  * 
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = {ConfigurationModule.class, ConfigPropertyModule.class})
+@Component(modules = { ConfigurationModule.class, ConfigPropertyModule.class })
 public interface ConfigPropertyComponent {
 
 Optional<String> value();
 
+//@formatter:off
 @Component.Builder
 interface Builder {
 	@BindsInstance Builder forName(@Named("PropertyName") String name);
@@ -34,9 +32,9 @@ interface Builder {
 
 	ConfigPropertyComponent build();
 }
+//@formatter.on
 
 }
-
 
 /*
  * Copyright 2024 Daniel Giribet
@@ -51,4 +49,3 @@ interface Builder {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

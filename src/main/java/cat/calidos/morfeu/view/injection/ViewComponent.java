@@ -11,14 +11,14 @@ import dagger.BindsInstance;
 import dagger.Component;
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = ViewModule.class)
 public interface ViewComponent {
 
 String render();
 
-
+//@formatter:off
 @Component.Builder
 interface Builder {
 
@@ -31,6 +31,7 @@ interface Builder {
 	ViewComponent build();
 
 }
+//@formatter:on
 
 }
 

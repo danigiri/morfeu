@@ -19,15 +19,14 @@ import cat.calidos.morfeu.runtime.ExecStartingTask;
 import cat.calidos.morfeu.runtime.api.ReadyTask;
 
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules=ExecTaskModule.class)
-@Singleton
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Component(modules = ExecTaskModule.class) @Singleton
 public interface ExecTaskComponent {
 
 ReadyTask readyTask();
 
-
+//@formatter:off
 @Component.Builder
 interface Builder {
 
@@ -43,11 +42,12 @@ interface Builder {
 	ExecTaskComponent build();
 
 }
+//@formatter.on
 
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

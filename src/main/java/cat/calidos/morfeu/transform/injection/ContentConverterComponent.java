@@ -15,6 +15,7 @@ public interface ContentConverterComponent {
 
 String xml();
 
+//@formatter:off
 @Component.Builder
 interface Builder {
 
@@ -23,6 +24,7 @@ interface Builder {
 	ContentConverterComponent build();
 
 }
+//@formatter.on
 
 }
 
