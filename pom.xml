@@ -101,11 +101,13 @@
 				<artifactId>spotless-maven-plugin</artifactId>
 				<version>${spotless.version}</version>
 				<configuration>
-					<eclipse>
-					 <file>${project.basedir}/src/main/resources/jdt-codeformat.xml</file> 
-					 </eclipse>
-					<!-- to be tested <formatAnnotations /> -->
-					<removeUnusedImports />
+					<java>
+						<eclipse>
+							<file>${project.basedir}/src/main/resources/jdt-codeformat.xml</file>
+						</eclipse>
+						<!-- to be tested <formatAnnotations /> -->
+						<removeUnusedImports />
+					</java>
 				</configuration>
 			</plugin>
 
