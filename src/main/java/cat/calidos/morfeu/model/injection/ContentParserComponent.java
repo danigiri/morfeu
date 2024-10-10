@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
+
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.model.Validable;
@@ -21,17 +22,25 @@ import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
-/** With the URIs, fetchable URIs (usually absolute) and an optional set of filter swe get the content and validator
-* 	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 
-								ModelModule.class, CellModelsFilterModule.class, ValidatorModule.class,
-								XMLDocumentBuilderModule.class, ListeningExecutorServiceModule.class})
+
+/**
+ * With the URIs, fetchable URIs (usually absolute) and an optional set of filter swe get the
+ * content and validator
+ * 
+ * @author daniel giribet
+ *//////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionComponent(modules = { ContentParserModule.class, URIToParsedModule.class,
+		MapperModule.class, ModelModule.class, CellModelsFilterModule.class, ValidatorModule.class,
+		XMLDocumentBuilderModule.class, ListeningExecutorServiceModule.class })
 public interface ContentParserComponent {
 
-ListenableFuture<Validable> validator() throws FetchingException, ConfigurationException, ParsingException;
-ListenableFuture<Composite<Cell>> content() throws FetchingException, ParsingException, TransformException;
+ListenableFuture<Validable> validator()
+		throws FetchingException, ConfigurationException, ParsingException;
 
+ListenableFuture<Composite<Cell>> content()
+		throws FetchingException, ParsingException, TransformException;
+
+//@formatter:off
 @ProductionComponent.Builder
 interface Builder {
 
@@ -44,11 +53,12 @@ interface Builder {
 	ContentParserComponent build();
 
 }
+//@formatter.on
 
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -62,4 +72,3 @@ interface Builder {
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-

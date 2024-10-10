@@ -14,14 +14,18 @@ import dagger.producers.ProductionComponent;
 import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.utils.Saver;
 
-/** Component to save as-is without any parsing
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules = {SaverModule.class, ListeningExecutorServiceModule.class})
+
+/**
+ * Component to save as-is without any parsing
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionComponent(modules = { SaverModule.class, ListeningExecutorServiceModule.class })
 public interface SaverComponent {
 
 ListenableFuture<Saver> saver() throws SavingException;
 
+//@formatter:off
 @ProductionComponent.Builder
 interface Builder {
 
@@ -31,11 +35,12 @@ interface Builder {
 	SaverComponent build();
 
 }
+//@formatter.on
 
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -49,4 +54,3 @@ interface Builder {
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-

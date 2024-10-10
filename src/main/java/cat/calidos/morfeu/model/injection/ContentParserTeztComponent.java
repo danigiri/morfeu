@@ -14,12 +14,15 @@ import dagger.producers.ProductionComponent;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
-/** Content parser component used in testing
-* 	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules={ContentParserModule.class, URIToParsedModule.class, MapperModule.class, 
-								ModelModule.class, CellModelsFilterModule.class, ValidatorModule.class,
-								XMLDocumentBuilderModule.class, ListeningExecutorServiceModule.class})
+
+/**
+ * Content parser component used in testing
+ * 
+ * @author daniel giribet
+ *//////////////////////////////////////////////////////////////////////////////////////////////////
+@ProductionComponent(modules = { ContentParserModule.class, URIToParsedModule.class,
+		MapperModule.class, ModelModule.class, CellModelsFilterModule.class, ValidatorModule.class,
+		XMLDocumentBuilderModule.class, ListeningExecutorServiceModule.class })
 public interface ContentParserTeztComponent {
 
 ListenableFuture<org.w3c.dom.Document> parsedXMLDocument();
@@ -28,7 +31,9 @@ ListenableFuture<org.w3c.dom.Document> parsedXMLDocument();
 // a) adding a dom public method to the content parser component, exposing internals
 // b) heavily use internals of the content parser to build the dom in the cell module test
 // c) have an interface extend contentparsercomponent (not supported by dagger 2)
-// d) duplicate the builder interface here - chosen option as it duplicates interface, not implementation *) 
+// d) duplicate the builder interface here - chosen option as it duplicates interface, not
+// implementation *)
+//@formatter:off
 @ProductionComponent.Builder
 interface Builder {
 
@@ -41,10 +46,11 @@ interface Builder {
 	ContentParserTeztComponent build();
 
 }
+//@formatter.on
 
 }
 /*
- *    Copyright 2018 Daniel Giribet
+ *    Copyright 2024 Daniel Giribet
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -58,4 +64,3 @@ interface Builder {
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
