@@ -1,17 +1,15 @@
 /*
- *    Copyright 2018 Daniel Giribet
+ * Copyright 2018 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package cat.calidos.morfeu.model;
@@ -19,26 +17,33 @@ package cat.calidos.morfeu.model;
 import java.net.URI;
 import java.util.Optional;
 
+
 /**
-* @author daniel giribet
-*//////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class Cell extends RemoteResource {
 
-protected CellModel cellModel;
-protected Optional<String> value;
-protected boolean isSimple = true;
+protected CellModel			cellModel;
+protected Optional<String>	value;
+protected boolean			isSimple	= true;
 
 public Cell(URI u) {
 	super(u);
 }
 
 
-public Cell(URI u, String name, String desc) {
+public Cell(URI u,
+			String name,
+			String desc) {
 	super(u, name, desc);
 }
 
 
-public Cell(URI u, String name, String desc, Optional<String> value, CellModel cm) {
+public Cell(URI u,
+			String name,
+			String desc,
+			Optional<String> value,
+			CellModel cm) {
 
 	super(u, name, desc);
 
@@ -64,7 +69,7 @@ public boolean isComplex() {
 
 
 public ComplexCell asComplex() {
-	throw new ClassCastException("Tried to access simple cell as complex ("+getName()+")");
+	throw new ClassCastException("Tried to access simple cell as complex (" + getName() + ")");
 }
 
 
@@ -73,13 +78,14 @@ public Optional<String> getValue() {
 }
 
 
-/* (non-Javadoc)
-* @see java.lang.Object#toString()
-*//////////////////////////////////////////////////////////////////////////////
+/*
+ * (non-Javadoc)
+ * 
+ * @see java.lang.Object#toString()
+ *//////////////////////////////////////////////////////////////////////////////
 @Override
 public String toString() {
-	return name+":{value:'"+value.orElse("<novalue>")+"', uri:"+uri+"}";
+	return name + ":{value:'" + value.orElse("<novalue>") + "', uri:" + uri + "}";
 }
-
 
 }

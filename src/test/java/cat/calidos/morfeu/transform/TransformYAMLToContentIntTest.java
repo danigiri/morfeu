@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TransformYAMLToContentIntTest extends TransformTezt {
 
+/**
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class TransformYAMLToContentIntTest extends TransformTezt {
 
 @Test @DisplayName("Transform doc 1 test")
 public void testTransformUsingTemplateDocument1() throws Exception {
@@ -22,7 +22,7 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	assertNotNull(transformed);
-	//System.err.println(transformed);
+	// System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
 }
@@ -37,7 +37,7 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	assertNotNull(transformed);
-//	System.err.println(transformed);
+	// System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
 }
@@ -52,7 +52,7 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
 	assertNotNull(transformed);
-	//System.err.println(transformed);
+	// System.err.println(transformed);
 	compareWithXMLFile(transformed, xmlPath);
 
 }
@@ -72,21 +72,18 @@ public void testTransformUsingTemplateEscapeDocument() throws Exception {
 
 }
 
-
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

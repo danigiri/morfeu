@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.utils.MorfeuUtils;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ViewComponentIntTest {
-
 
 @Test
 public void testInlineTemplate() {
@@ -22,7 +22,11 @@ public void testInlineTemplate() {
 	Map<String, Object> values = MorfeuUtils.paramMap("foo", "bar");
 	String templ = "value=${v.foo}";
 
-	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("").build();
+	ViewComponent view = DaggerViewComponent.builder()
+			.withValue(values)
+			.withTemplate(templ)
+			.andProblem("")
+			.build();
 
 	assertEquals("value=bar", view.render());
 
@@ -35,7 +39,11 @@ public void testInlineTemplateWithProblem() {
 	Map<String, Object> values = MorfeuUtils.paramMap();
 	String templ = "problem=${problem}";
 
-	ViewComponent view = DaggerViewComponent.builder().withValue(values).withTemplate(templ).andProblem("bar").build();
+	ViewComponent view = DaggerViewComponent.builder()
+			.withValue(values)
+			.withTemplate(templ)
+			.andProblem("bar")
+			.build();
 
 	assertEquals("problem=bar", view.render());
 
@@ -47,8 +55,11 @@ public void testChop() {
 
 	var templ = "${f.chop('abc')}";
 
-	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
-			.andProblem("").build();
+	ViewComponent view = DaggerViewComponent.builder()
+			.withValue(MorfeuUtils.paramMap())
+			.withTemplate(templ)
+			.andProblem("")
+			.build();
 
 	assertEquals("ab", view.render());
 
@@ -59,15 +70,21 @@ public void testChop() {
 public void testQuote() {
 	var templ = "${f.quote('abc')}";
 
-	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
-			.andProblem("").build();
+	ViewComponent view = DaggerViewComponent.builder()
+			.withValue(MorfeuUtils.paramMap())
+			.withTemplate(templ)
+			.andProblem("")
+			.build();
 
 	assertEquals("\"abc\"", view.render());
 
 	String templ2 = "${f.quote('\"abc\"')}";
 
-	ViewComponent view2 = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ2)
-			.andProblem("").build();
+	ViewComponent view2 = DaggerViewComponent.builder()
+			.withValue(MorfeuUtils.paramMap())
+			.withTemplate(templ2)
+			.andProblem("")
+			.build();
 
 	assertEquals("\"abc\"", view2.render());
 
@@ -78,8 +95,11 @@ public void testQuote() {
 public void testIsMultiline() {
 	var templ = "${f.isMultiline('abc')?c}";
 
-	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
-			.andProblem("").build();
+	ViewComponent view = DaggerViewComponent.builder()
+			.withValue(MorfeuUtils.paramMap())
+			.withTemplate(templ)
+			.andProblem("")
+			.build();
 
 	assertEquals("false", view.render());
 }
@@ -89,8 +109,11 @@ public void testIsMultiline() {
 public void testXMLEscaping() {
 	var templ = "${f.xmlc('& > <')}";
 
-	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
-			.andProblem("").build();
+	ViewComponent view = DaggerViewComponent.builder()
+			.withValue(MorfeuUtils.paramMap())
+			.withTemplate(templ)
+			.andProblem("")
+			.build();
 
 	assertEquals("&amp; &gt; &lt;", view.render());
 }
@@ -100,19 +123,24 @@ public void testXMLEscaping() {
 public void testYAMLEscaping() {
 	var templ = "${f.yamla('\\\"')}";
 
-	ViewComponent view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
-			.andProblem("").build();
+	ViewComponent view = DaggerViewComponent.builder()
+			.withValue(MorfeuUtils.paramMap())
+			.withTemplate(templ)
+			.andProblem("")
+			.build();
 
 	assertEquals("\"", view.render());
 
 	templ = "${f.yamlc('\\\"')}";
 
-	view = DaggerViewComponent.builder().withValue(MorfeuUtils.paramMap()).withTemplate(templ)
-			.andProblem("").build();
+	view = DaggerViewComponent.builder()
+			.withValue(MorfeuUtils.paramMap())
+			.withTemplate(templ)
+			.andProblem("")
+			.build();
 
 	assertEquals("\"", view.render());
 }
-
 
 }
 
@@ -129,4 +157,3 @@ public void testYAMLEscaping() {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

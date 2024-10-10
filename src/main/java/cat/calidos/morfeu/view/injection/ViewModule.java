@@ -31,36 +31,43 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ViewModule {
 
-
 private static final int INLINE_TEMPLATE_NAME_LENGTH = 20;
 
 @Provides
-public String render(Template template, @Named("finalValues") Map<String, Object> finalValues) {
+public String render(	Template template,
+						@Named("finalValues") Map<String, Object> finalValues) {
 	try {
 		var writer = new StringWriter();
 		template.process(finalValues, writer);
 		return writer.toString();
 	} catch (TemplateException e) {
-		throw new RuntimeException(new ConfigurationException("Template '" + template + "' has issues", e));
+		throw new RuntimeException(
+				new ConfigurationException("Template '" + template + "' has issues", e));
 	} catch (IOException e) {
-		throw new RuntimeException(new FetchingException("Template '" + template + "' hit IO issues", e));
+		throw new RuntimeException(
+				new FetchingException("Template '" + template + "' hit IO issues", e));
 	}
 }
 
 
-@Provides
-@Named("effectiveTemplate")
-public static String effectiveTemplate(@Nullable @Named("templatePath") String path,
-		@Nullable @Named("template") String template) {
+@Provides @Named("effectiveTemplate")
+public static String effectiveTemplate(	@Nullable @Named("templatePath") String path,
+										@Nullable @Named("template") String template) {
 	return path != null ? path
-			: (template.substring(0, Math.min(template.length(), INLINE_TEMPLATE_NAME_LENGTH))) // so it's minimally readable
-					+ Hashing.murmur3_32_fixed().hashString(template, Config.DEFAULT_NIO_CHARSET).toString();
+			: (template.substring(0, Math.min(template.length(), INLINE_TEMPLATE_NAME_LENGTH))) // so
+																								// it's
+																								// minimally
+																								// readable
+					+ Hashing.murmur3_32_fixed()
+							.hashString(template, Config.DEFAULT_NIO_CHARSET)
+							.toString();
 }
 
 
@@ -79,7 +86,7 @@ public static Configuration configuration(StringTemplateLoader stringLoader) {
 
 @Provides
 public static StringTemplateLoader stringLoader(@Named("effectiveTemplate") String effectiveTemplate,
-		@Nullable @Named("template") String template) {
+												@Nullable @Named("template") String template) {
 	var loader = new StringTemplateLoader();
 	if (template != null) {
 		loader.putTemplate(effectiveTemplate, template);
@@ -89,15 +96,19 @@ public static StringTemplateLoader stringLoader(@Named("effectiveTemplate") Stri
 
 
 @Provides
-public static Template template(Configuration configuration, @Named("effectiveTemplate") String template) {
+public static Template template(Configuration configuration,
+								@Named("effectiveTemplate") String template) {
 	try {
 		return configuration.getTemplate(template);
 	} catch (TemplateNotFoundException e) {
-		throw new IllegalArgumentException(new ConfigurationException("Template '" + template + "' not found", e));
+		throw new IllegalArgumentException(
+				new ConfigurationException("Template '" + template + "' not found", e));
 	} catch (MalformedTemplateNameException | ParseException e) {
-		throw new RuntimeException(new ConfigurationException("Template '" + template + "' has issues", e));
+		throw new RuntimeException(
+				new ConfigurationException("Template '" + template + "' has issues", e));
 	} catch (IOException e) {
-		throw new RuntimeException(new FetchingException("Template '" + template + "' hit IO issues", e));
+		throw new RuntimeException(
+				new FetchingException("Template '" + template + "' hit IO issues", e));
 	}
 }
 
@@ -107,11 +118,12 @@ public static TemplateUtils templateUtils() {
 	return new TemplateUtils();
 }
 
+
 @Provides @Named("finalValues")
-public static Map<String, Object> finalValues(@Nullable @Named("value") Object value,
-											@Nullable Map<Object, Object> values,
-											@Nullable @Named("problem") String problem, 
-											TemplateUtils templateUtils) {
+public static Map<String, Object> finalValues(	@Nullable @Named("value") Object value,
+												@Nullable Map<Object, Object> values,
+												@Nullable @Named("problem") String problem,
+												TemplateUtils templateUtils) {
 
 	var finalValues = new HashMap<String, Object>(4);
 	if (problem != null && problem != "") {
@@ -122,11 +134,11 @@ public static Map<String, Object> finalValues(@Nullable @Named("value") Object v
 
 	}
 	finalValues.put("hasProblem", Optional.ofNullable(problem));
-	if (value!=null) {
+	if (value != null) {
 		finalValues.put("v", value);
 	}
 	finalValues.put("f", templateUtils);
-	if (values!=null) {
+	if (values != null) {
 		for (Map.Entry<Object, Object> entry : values.entrySet()) {
 			finalValues.put(entry.getKey().toString(), entry.getValue());
 		}
@@ -136,31 +148,24 @@ public static Map<String, Object> finalValues(@Nullable @Named("value") Object v
 
 }
 
-
 }
-
 
 /*
-package cat.calidos.morfeu.view.injection;
-
-import java.io.IOException;
-
-import freemarker.cache.ClassTemplateLoader;
-
-class LoggingClassTemplateLoader extends ClassTemplateLoader {
-
-    public LoggingClassTemplateLoader(Class<ViewModule> resourceLoaderClass, String basePackagePath) {
-		super(resourceLoaderClass, basePackagePath);
-	}
-
-	@Override
-    public Object findTemplateSource(String name) throws IOException {
-        // Log the attempted path before processing
-        System.out.println("AAAA Trying to load template: " + this.getBasePackagePath());
-        return super.findTemplateSource(name);
-    }
-}
-
+ * package cat.calidos.morfeu.view.injection;
+ * 
+ * import java.io.IOException;
+ * 
+ * import freemarker.cache.ClassTemplateLoader;
+ * 
+ * class LoggingClassTemplateLoader extends ClassTemplateLoader {
+ * 
+ * public LoggingClassTemplateLoader(Class<ViewModule> resourceLoaderClass, String basePackagePath)
+ * { super(resourceLoaderClass, basePackagePath); }
+ * 
+ * @Override public Object findTemplateSource(String name) throws IOException { // Log the attempted
+ * path before processing System.out.println("AAAA Trying to load template: " +
+ * this.getBasePackagePath()); return super.findTemplateSource(name); } }
+ * 
  */
 
 //
@@ -378,7 +383,6 @@ class LoggingClassTemplateLoader extends ClassTemplateLoader {
 // };
 //
 
-
 /*
  * Copyright 2024 Daniel Giribet
  *
@@ -392,4 +396,3 @@ class LoggingClassTemplateLoader extends ClassTemplateLoader {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

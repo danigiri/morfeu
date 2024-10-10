@@ -9,41 +9,41 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class OperationResultModuleTest {
 
-
-@Test
-@DisplayName("OK result test")
+@Test @DisplayName("OK result test")
 public void okResultTest() throws Exception {
 	String result = OperationResultModule.result("aaa", "bbb", "ccc", 111, null);
 	assertNotNull(result);
 
 	JsonNode json = DaggerJSONParserComponent.builder().from(result).build().json().get();
-	assertAll("checking output", () -> assertNotNull(json), () -> assertEquals("aaa", json.get("result").asText()),
+	assertAll("checking output", () -> assertNotNull(json),
+			() -> assertEquals("aaa", json.get("result").asText()),
 			() -> assertEquals("bbb", json.get("target").asText()),
 			() -> assertEquals("ccc", json.get("operation").asText()),
-			() -> assertEquals(111, json.get("operationTime").asLong()), () -> assertFalse(json.has("problem")));
+			() -> assertEquals(111, json.get("operationTime").asLong()),
+			() -> assertFalse(json.has("problem")));
 }
 
 
-@Test
-@DisplayName("KO result test")
+@Test @DisplayName("KO result test")
 public void koResultTest() throws Exception {
 	String result = OperationResultModule.result("aax", "bbx", "ccx", 111, "issue");
 	assertNotNull(result);
 
 	JsonNode json = DaggerJSONParserComponent.builder().from(result).build().json().get();
-	assertAll("checking output", () -> assertNotNull(json), () -> assertEquals("aax", json.get("result").asText()),
+	assertAll("checking output", () -> assertNotNull(json),
+			() -> assertEquals("aax", json.get("result").asText()),
 			() -> assertEquals("bbx", json.get("target").asText()),
 			() -> assertEquals("ccx", json.get("operation").asText()),
 			() -> assertEquals(111, json.get("operationTime").asLong()),
 			() -> assertEquals("issue", json.get("problem").asText()));
 
 }
-
 
 }
 
@@ -60,4 +60,3 @@ public void koResultTest() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

@@ -13,34 +13,32 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.injection.ModelTezt;
 import cat.calidos.morfeu.problems.ValidationException;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentGETControlTest extends ModelTezt {
 
-
-@Test
-@DisplayName("Content GET test")
+@Test @DisplayName("Content GET test")
 public void contentGET() throws Exception {
 
 	String prefix = testAwareFullPathFrom(".");
 	String path = "test-resources/documents/document1.xml";
 	String model = "test-resources/models/test-model.xsd";
 	@SuppressWarnings("unchecked")
-	var content = (List<Cell>) new ContentGETControl(prefix, path, Optional.empty(), model).process();
+	var content = (List<Cell>) new ContentGETControl(prefix, path, Optional.empty(), model)
+			.process();
 	assertNotNull(content);
 
 	Cell test = content.get(0);
-	assertAll("test basic content", 
-			() -> assertNotNull(test),
+	assertAll("test basic content", () -> assertNotNull(test),
 			() -> assertEquals("test-resources/documents/document1.xml", test.getURI().toString()),
 			() -> assertTrue(test.isComplex()));
 
 }
 
 
-@Test
-@DisplayName("Content GET filtered test")
+@Test @DisplayName("Content GET filtered test")
 public void contentGETFiltered() throws Exception {
 
 	String prefix = testAwareFullPathFrom(".");
@@ -50,14 +48,15 @@ public void contentGETFiltered() throws Exception {
 			+ "{\"from\":\"}\",\"to\":\"}\\\"\"}" + "]}";
 	Optional<String> filters = Optional.of(f); // if the filters are not applied we get a different
 												// exception
-	assertThrows(ValidationException.class, () -> new ContentGETControl(prefix, path, filters, model).process());
+	assertThrows(ValidationException.class,
+			() -> new ContentGETControl(prefix, path, filters, model).process());
 
 	Optional<String> empty = Optional.empty();
 	System.out.println("Ignore the next exception, thrown during testing");
-	assertThrows(ExecutionException.class, () -> new ContentGETControl(prefix, path, empty, model).process());
+	assertThrows(ExecutionException.class,
+			() -> new ContentGETControl(prefix, path, empty, model).process());
 
 }
-
 
 }
 
@@ -74,4 +73,3 @@ public void contentGETFiltered() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

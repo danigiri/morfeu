@@ -8,24 +8,29 @@ import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.injection.ModelTezt;
 import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformTezt extends ModelTezt {
 
-
-protected String transformYAMLToXML(String yamlPath, String documentPath) throws Exception {
+protected String transformYAMLToXML(String yamlPath,
+									String documentPath)
+		throws Exception {
 
 	Document doc = produceDocumentFromPath(documentPath);
 	JsonNode yaml = readYAMLFrom(yamlPath);
-	String transformed = DaggerYAMLConverterComponent.builder().from(yaml).given(doc.getModel()).build().xml();
+	String transformed = DaggerYAMLConverterComponent.builder()
+			.from(yaml)
+			.given(doc.getModel())
+			.build()
+			.xml();
 
 	return transformed;
 
 }
 
 }
-
 
 /*
  * Copyright 2024 Daniel Giribet

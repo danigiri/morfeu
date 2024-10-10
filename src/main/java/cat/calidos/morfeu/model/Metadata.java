@@ -13,43 +13,59 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/** Describes the metadata that enriches the model of a cell
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Describes the metadata that enriches the model of a cell
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Metadata implements Locatable {
 
 protected final static Logger log = LoggerFactory.getLogger(Metadata.class);
 
 private static final HashSet<String> EMPTY_SET = new HashSet<String>(0);
 
-private static final String DEFAULT_DESC = "";
-private static final String DEFAULT_THUMB = "DEFAULT";
-public static String DEFAULT_PRESENTATION = "CELL";
-private static final String DEFAULT_CELL_PRESENTATION = "DEFAULT";
-private static final String DEFAULT_CELL_PRESENTATION_TYPE = "IMG";
-private static final String DEFAULT_CELL_PRESENTATION_METHOD = "GET";
-public static final String DEFAULT_VALUE_PREFIX = "@";
-public static final String ATTRIBUTES_ONLY = "ATTRIBUTES-ONLY";	// directive to signal this cm serialises only attribs
-public static final String LISTS_NO_PLURAL = "LISTS-NO-PLURAL";	// directive that a list is not pluralised (default)
-public static final String KEY_VALUE = "KEY-VALUE";				// directive that specifyies that it's a key-value
+private static final String	DEFAULT_DESC						= "";
+private static final String	DEFAULT_THUMB						= "DEFAULT";
+public static String		DEFAULT_PRESENTATION				= "CELL";
+private static final String	DEFAULT_CELL_PRESENTATION			= "DEFAULT";
+private static final String	DEFAULT_CELL_PRESENTATION_TYPE		= "IMG";
+private static final String	DEFAULT_CELL_PRESENTATION_METHOD	= "GET";
+public static final String	DEFAULT_VALUE_PREFIX				= "@";
+public static final String	ATTRIBUTES_ONLY						= "ATTRIBUTES-ONLY";	// directive
+																						// to signal
+																						// this cm
+																						// serialises
+																						// only
+																						// attribs
+public static final String	LISTS_NO_PLURAL						= "LISTS-NO-PLURAL";	// directive
+																						// that a
+																						// list is
+																						// not
+																						// pluralised
+																						// (default)
+public static final String	KEY_VALUE							= "KEY-VALUE";			// directive
+																						// that
+																						// specifyies
+																						// that it's
+																						// a
+																						// key-value
 
-private URI uri;	// pre-calculated default
-private String desc;
-private String presentation;
-private String cellPresentation;
-private String cellPresentationType;
-private String cellPresentationMethod;
-private String thumb;
-private Optional<String> identifier;
-private Optional<Boolean> readonly;			// important to distinguish between no readonly definition and false
-private Optional<String> valueLocator;
-private Map<String, String> defaultValues;
-private Map<String, Set<String>> directives;
-private Map<String, Set<String>> attributes;
-private Optional<String> category;
-private Map<String, Set<String>> categories;
-
-
+private URI							uri;					// pre-calculated default
+private String						desc;
+private String						presentation;
+private String						cellPresentation;
+private String						cellPresentationType;
+private String						cellPresentationMethod;
+private String						thumb;
+private Optional<String>			identifier;
+private Optional<Boolean>			readonly;				// important to distinguish between no
+															// readonly definition and false
+private Optional<String>			valueLocator;
+private Map<String, String>			defaultValues;
+private Map<String, Set<String>>	directives;
+private Map<String, Set<String>>	attributes;
+private Optional<String>			category;
+private Map<String, Set<String>>	categories;
 
 public Metadata(URI uri,
 				String desc,
@@ -65,24 +81,12 @@ public Metadata(URI uri,
 				Map<String, Set<String>> directives,
 				Map<String, Set<String>> attributes,
 				String category,
-				Map<String, Set<String>> categories
-				) {
-	this(uri,
-			Optional.ofNullable(desc),
-			Optional.ofNullable(presentation),
-			Optional.ofNullable(cellPresentation),
-			Optional.ofNullable(cellPresentationType),
-			Optional.ofNullable(cellPresentationMethod),
-			Optional.ofNullable(thumb),
-			Optional.ofNullable(identifier),
-			readonly,
-			Optional.ofNullable(valueLocator),
-			defaultValues,
-			directives,
-			attributes,
-			Optional.ofNullable(category),
-			categories
-			);
+				Map<String, Set<String>> categories) {
+	this(uri, Optional.ofNullable(desc), Optional.ofNullable(presentation),
+			Optional.ofNullable(cellPresentation), Optional.ofNullable(cellPresentationType),
+			Optional.ofNullable(cellPresentationMethod), Optional.ofNullable(thumb),
+			Optional.ofNullable(identifier), readonly, Optional.ofNullable(valueLocator),
+			defaultValues, directives, attributes, Optional.ofNullable(category), categories);
 }
 
 
@@ -189,7 +193,8 @@ public Set<String> getDirectivesFor(String case_) {
 }
 
 
-public boolean directivesForCaseContain(String case_, String match) {
+public boolean directivesForCaseContain(String case_,
+										String match) {
 	return getDirectivesFor(case_).contains(match);
 }
 
@@ -227,82 +232,76 @@ public Map<String, Set<String>> getCategories() {
 @Override
 public String toString() {
 
-	return "Metadata:"+
-			"{uri:"+uri+
-			", desc:'"+desc+
-			"', thumb:'"+thumb+
-			"', presentation:'"+presentation+
-			"' defaults("+defaultValues.size()+")}";
+	return "Metadata:" + "{uri:" + uri + ", desc:'" + desc + "', thumb:'" + thumb
+			+ "', presentation:'" + presentation + "' defaults(" + defaultValues.size() + ")}";
 }
 
 
-/** Merge the more priority metadata instance and the less priority one, priority values have precedence, defaults will
-* 	overriden by the less priority.
-*	@param u new uri
-*	@param morePriority higher priority metadata instance
-*	@param lessPriority less priority metadata
-*	@return new instance with the merge
-*/
-public static Metadata merge(URI u, Metadata morePriority, Metadata lessPriority) {
+/**
+ * Merge the more priority metadata instance and the less priority one, priority values have
+ * precedence, defaults will overriden by the less priority.
+ * 
+ * @param u new uri
+ * @param morePriority higher priority metadata instance
+ * @param lessPriority less priority metadata
+ * @return new instance with the merge
+ */
+public static Metadata merge(	URI u,
+								Metadata morePriority,
+								Metadata lessPriority) {
 
 	String desc = morePriority.getDesc();
 	desc = desc.equals(DEFAULT_DESC) ? lessPriority.getDesc() : desc;
 	String presentation = morePriority.getPresentation();
-	presentation = presentation.equals(DEFAULT_PRESENTATION) ? lessPriority.getPresentation() : presentation;
+	presentation = presentation.equals(DEFAULT_PRESENTATION) ? lessPriority.getPresentation()
+			: presentation;
 	String cellPresentation = morePriority.getCellPresentation();
-	cellPresentation = cellPresentation.equals(DEFAULT_CELL_PRESENTATION) 
-						? lessPriority.getCellPresentation() : cellPresentation;
+	cellPresentation = cellPresentation.equals(DEFAULT_CELL_PRESENTATION)
+			? lessPriority.getCellPresentation() : cellPresentation;
 	String cellPresentationType = morePriority.getCellPresentationType();
-	cellPresentationType = cellPresentationType.equals(DEFAULT_CELL_PRESENTATION_TYPE) 
-							? lessPriority.getCellPresentationType() : cellPresentationType;
+	cellPresentationType = cellPresentationType.equals(DEFAULT_CELL_PRESENTATION_TYPE)
+			? lessPriority.getCellPresentationType() : cellPresentationType;
 	String cellPresentationMethod = morePriority.getCellPresentationMethod();
-	cellPresentationMethod = cellPresentationMethod.equals(DEFAULT_CELL_PRESENTATION_METHOD) 
-								? lessPriority.getCellPresentationMethod() : cellPresentationMethod;
+	cellPresentationMethod = cellPresentationMethod.equals(DEFAULT_CELL_PRESENTATION_METHOD)
+			? lessPriority.getCellPresentationMethod() : cellPresentationMethod;
 	String thumb = morePriority.getThumb();
 	thumb = thumb.equals(DEFAULT_THUMB) ? lessPriority.getThumb() : thumb;
 
-	String identifier = morePriority.getIdentifier().isPresent() 
-						? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
+	String identifier = morePriority.getIdentifier().isPresent()
+			? morePriority.getIdentifier().get() : lessPriority.getIdentifier().orElse(null);
 
-	// if we have metadata defined in a type (like readonlyCell) with readonly==true and we merge with the 
-	// metadata of an element (like xs:element="readonly") that has null annotatiton, we need to distinguish
+	// if we have metadata defined in a type (like readonlyCell) with readonly==true and we merge
+	// with the
+	// metadata of an element (like xs:element="readonly") that has null annotatiton, we need to
+	// distinguish
 	// between no defined readonly property and false
-	Optional<Boolean> readonly = morePriority.isReadonly().isPresent() ?
-									morePriority.isReadonly() : lessPriority.isReadonly();
+	Optional<Boolean> readonly = morePriority.isReadonly().isPresent() ? morePriority.isReadonly()
+			: lessPriority.isReadonly();
 
 	String valueLocator = morePriority.getValueLocator().isPresent()
-									? morePriority.getValueLocator().get() : lessPriority.getValueLocator().orElse(null);
-	Map<String,String> newDefaultValues = new HashMap<String, String>();
+			? morePriority.getValueLocator().get() : lessPriority.getValueLocator().orElse(null);
+	Map<String, String> newDefaultValues = new HashMap<String, String>();
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
-	newDefaultValues.putAll(morePriority.getDefaultValues());	// this will overwrite
+	newDefaultValues.putAll(morePriority.getDefaultValues()); // this will overwrite
 
-	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(), lessPriority.getDirectives());
-	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(), lessPriority.getAttributes());
+	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(),
+			lessPriority.getDirectives());
+	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(),
+			lessPriority.getAttributes());
 
 	String category = morePriority.getCategory().orElse(lessPriority.getCategory().orElse(null));
-	Map<String, Set<String>> categories = mergeMapSet(morePriority.getCategories(), lessPriority.getCategories());
+	Map<String, Set<String>> categories = mergeMapSet(morePriority.getCategories(),
+			lessPriority.getCategories());
 
-	return new Metadata(u,
-						desc,
-						presentation,
-						cellPresentation,
-						cellPresentationType,
-						cellPresentationMethod,
-						thumb,
-						identifier,
-						readonly,
-						valueLocator,
-						newDefaultValues,
-						directives,
-						attributes,
-						category,
-						categories
-						);
+	return new Metadata(u, desc, presentation, cellPresentation, cellPresentationType,
+			cellPresentationMethod, thumb, identifier, readonly, valueLocator, newDefaultValues,
+			directives, attributes, category, categories);
 
 }
 
 
-private static Map<String, Set<String>> mergeMapSet(Map<String, Set<String>> more, Map<String, Set<String>> less) {
+private static Map<String, Set<String>> mergeMapSet(Map<String, Set<String>> more,
+													Map<String, Set<String>> less) {
 
 	Map<String, Set<String>> merged = new HashMap<String, Set<String>>();
 	merged.putAll(less);
@@ -318,21 +317,18 @@ private static Map<String, Set<String>> mergeMapSet(Map<String, Set<String>> mor
 
 }
 
-
 }
 
 /*
- *    Copyright 2018 Daniel Giribet
+ * Copyright 2018 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

@@ -13,11 +13,11 @@ import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Composite;
 
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class SnippetIntTest extends ModelTezt {
 
+/**
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class SnippetIntTest extends ModelTezt {
 
 @Test
 public void testSnippet() throws Exception {
@@ -27,13 +27,13 @@ public void testSnippet() throws Exception {
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff";
 	String testAwareModelPath = testAwareFullPathFrom("test-resources/models/test-model.xsd");
 	Composite<Cell> content = DaggerSnippetParserComponent.builder()
-															.content(new URI(contentPath))
-															.fetchedContentFrom(new URI(fullContentPath))
-															.modelFiltered(new URI(modelPath))
-															.withModelFetchedFrom(new URI(testAwareModelPath))
-															.build()
-															.content()
-															.get();
+			.content(new URI(contentPath))
+			.fetchedContentFrom(new URI(fullContentPath))
+			.modelFiltered(new URI(modelPath))
+			.withModelFetchedFrom(new URI(testAwareModelPath))
+			.build()
+			.content()
+			.get();
 	assertNotNull(content);
 	assertEquals(1, content.size(), "There should be only one stuff snippet");
 
@@ -48,6 +48,5 @@ public void testSnippet() throws Exception {
 	assertEquals("stuff", stuffModel.getName());
 
 }
-
 
 }

@@ -12,6 +12,7 @@ import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import cat.calidos.morfeu.view.injection.ViewComponent;
 
+
 /**
  * Base class that processes Content json nodes and outputs them to XML
  * 
@@ -19,25 +20,26 @@ import cat.calidos.morfeu.view.injection.ViewComponent;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentJSONToXMLProcessor implements Processor<JsonNode, String> {
 
-private static final String	NAME_FIELD		= "name";
+private static final String NAME_FIELD = "name";
 
-private static final String	CHILDREN_FIELD	= "children";
+private static final String CHILDREN_FIELD = "children";
 
-private String				prefix;
-private JsonNode			node;
-private boolean				hasChildren;
-private boolean				needToRender;
+private String		prefix;
+private JsonNode	node;
+private boolean		hasChildren;
+private boolean		needToRender;
 
-private boolean				hasValue;
-private String				value;
+private boolean	hasValue;
+private String	value;
 
-
-public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
+public ContentJSONToXMLProcessor(	String prefix,
+									JsonNode node) {
 
 	this.prefix = prefix;
 	this.node = node;
 	if (node.has(CHILDREN_FIELD)) {
-		this.hasChildren = node.get(CHILDREN_FIELD).isArray() && node.get(CHILDREN_FIELD).size() > 0;
+		this.hasChildren = node.get(CHILDREN_FIELD).isArray()
+				&& node.get(CHILDREN_FIELD).size() > 0;
 	} else {
 		this.hasChildren = false;
 	}
@@ -62,7 +64,10 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 		// if we have a value we do not add a prefix to the slash so we don't implicitly add the
 		// prefix to the value
 		var appliedPrefix = hasValue ? "" : prefix;
-		newContext.push(DaggerContentJSONToXMLComponent.builder().fromNode(node).withPrefix(appliedPrefix).build()
+		newContext.push(DaggerContentJSONToXMLComponent.builder()
+				.fromNode(node)
+				.withPrefix(appliedPrefix)
+				.build()
 				.processorSlash());
 
 	}
@@ -76,7 +81,10 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 		children.forEach(c -> childrenList.addFirst(DaggerContentJSONToXMLComponent.builder() // add
 																								// at
 																								// beginning
-				.fromNode(c).withPrefix(newPrefix).build().processor()));
+				.fromNode(c)
+				.withPrefix(newPrefix)
+				.build()
+				.processor()));
 		childrenList.forEach(newContext::push); // now this is in the correct order
 	}
 
@@ -97,32 +105,35 @@ public String output() {
 	var render = "";
 	if (needToRender) {
 		var name = node.get(NAME_FIELD).asText();
-		Map<String, Object> v = MorfeuUtils.paramMap(NAME_FIELD, name, "value", value, "pref", prefix, "node", node);
+		Map<String, Object> v = MorfeuUtils.paramMap(NAME_FIELD, name, "value", value, "pref",
+				prefix, "node", node);
 		String template = null;
 		if (!hasChildren && !hasValue) {
 			template = "\n${v.pref}<${v.name}" // - postfix
 					+ "<#if v.node.has('internalAttributes')><#t>"
 					+ " <#list v.node.get('internalAttributes').iterator() as a>" // - prefix
-					+ "${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>" // - postfix
-					+ "</#if><#t>"
-					+ "<#if v.node.has('attributes')><#t>"
+					+ "${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>" // -
+																										// postfix
+					+ "</#if><#t>" + "<#if v.node.has('attributes')><#t>"
 					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>"
-					+ "</#if><#t>"
-					+ "/>\n";
+					+ "</#if><#t>" + "/>\n";
 		} else {
 			template = "${v.pref}<${v.name}" // - postfix
 					+ "<#if v.node.has('internalAttributes')><#t>"
 					+ " <#list v.node.get('internalAttributes').iterator() as a>" // - prefix
-					+ "${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>" // - postfix
-					+ "</#if><#t>"
-					+ "<#if v.node.has('attributes')><#t>"
+					+ "${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>" // -
+																										// postfix
+					+ "</#if><#t>" + "<#if v.node.has('attributes')><#t>"
 					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list> >"
-					+ "</#if><#t>"
-					+ (hasValue ? "${f.xmlc(v.value)}" : "\n");
-					// note ContentJSONToXMLProcessorSlash that is on the stack generates the slash
+					+ "</#if><#t>" + (hasValue ? "${f.xmlc(v.value)}" : "\n");
+			// note ContentJSONToXMLProcessorSlash that is on the stack generates the slash
 		}
 
-		ViewComponent view = DaggerViewComponent.builder().withValue(v).withTemplate(template).andProblem("").build();
+		ViewComponent view = DaggerViewComponent.builder()
+				.withValue(v)
+				.withTemplate(template)
+				.andProblem("")
+				.build();
 		render = view.render();
 	}
 
@@ -135,7 +146,6 @@ public String output() {
 public String toString() {
 	return output();
 }
-
 
 }
 
@@ -152,4 +162,3 @@ public String toString() {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

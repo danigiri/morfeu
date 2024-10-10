@@ -19,13 +19,12 @@ import cat.calidos.morfeu.problems.FetchingException;
 
 public class DataFetcherModuleTest {
 
-CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
-CloseableHttpResponse response = mock(CloseableHttpResponse.class);
-HttpEntity entity = mock(HttpEntity.class);
-InputStream stream = mock(InputStream.class);
+CloseableHttpClient		httpClient	= mock(CloseableHttpClient.class);
+CloseableHttpResponse	response	= mock(CloseableHttpResponse.class);
+HttpEntity				entity		= mock(HttpEntity.class);
+InputStream				stream		= mock(InputStream.class);
 
 private String uri = "http://www.foo.com";
-
 
 @Test
 public void testProduceRequest() throws Exception {
@@ -37,21 +36,22 @@ public void testProduceRequest() throws Exception {
 }
 
 
-//@Test FIXME: this test hangs
+// @Test FIXME: this test hangs
 public void testGetchHttpData() throws Exception {
 
-	//FIXME: this is ridiculously exposing implementation details, is there no other way? move to helper and reuse
+	// FIXME: this is ridiculously exposing implementation details, is there no other way? move to
+	// helper and reuse
 	HttpGet request = produceRequest();
-	//FIXME: create a fully fledged response and then the rest should be OK
+	// FIXME: create a fully fledged response and then the rest should be OK
 	when(httpClient.execute(request)).thenReturn(response);
 	when(response.getEntity()).thenReturn(entity);
 	when(entity.getContent()).thenReturn(stream);
 
 	DataFetcherModule httpRequester = new DataFetcherModule();
-	InputStream streamResponse =  httpRequester.fetchHttpData(httpClient, request);
+	InputStream streamResponse = httpRequester.fetchHttpData(httpClient, request);
 
 	assertEquals(stream, streamResponse);
-	verify(httpClient, times(1)).close();	
+	verify(httpClient, times(1)).close();
 
 }
 
@@ -82,6 +82,5 @@ private HttpGet produceRequest() throws URISyntaxException {
 	return module.produceRequest(new URI(uri));
 
 }
-
 
 }

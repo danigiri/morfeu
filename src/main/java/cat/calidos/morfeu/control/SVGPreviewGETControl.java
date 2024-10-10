@@ -19,20 +19,25 @@ import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.view.injection.DaggerSVGViewComponent;
 
 
-/** Controller to generate cell preview, generates SVG dynamically for the moment
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Controller to generate cell preview, generates SVG dynamically for the moment
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SVGPreviewGETControl extends Control {
 
 protected final static Logger log = LoggerFactory.getLogger(SVGPreviewGETControl.class);
 
-private String prefix;				// not used, only for logging
-private String path;				// not used, only for logging
-private Optional<String> header;	// header of the SVG preview image
-private boolean truncate;			// trucante the text within the SVG
-private Map<String, String> params;	// params to concateneate onto the SVG for info
+private String				prefix;		// not used, only for logging
+private String				path;		// not used, only for logging
+private Optional<String>	header;		// header of the SVG preview image
+private boolean				truncate;	// trucante the text within the SVG
+private Map<String, String>	params;		// params to concateneate onto the SVG for info
 
-public SVGPreviewGETControl(String prefix, String path, Optional<String> header, Map<String, String> params) {
+public SVGPreviewGETControl(String prefix,
+							String path,
+							Optional<String> header,
+							Map<String, String> params) {
 
 	super("preview", "", "");
 
@@ -45,19 +50,27 @@ public SVGPreviewGETControl(String prefix, String path, Optional<String> header,
 
 
 @Override
-protected Object process() throws InterruptedException, ExecutionException, ValidationException, ParsingException,
+protected Object process()
+		throws InterruptedException, ExecutionException, ValidationException, ParsingException,
 		FetchingException, ConfigurationException, SavingException, TransformException {
 
 	String text = params.values().stream().collect(Collectors.joining(","));
 
-	return DaggerSVGViewComponent.builder().from(text).withHeader(header).truncate(truncate).build().render();
+	return DaggerSVGViewComponent.builder()
+			.from(text)
+			.withHeader(header)
+			.truncate(truncate)
+			.build()
+			.render();
 
 }
 
 
 @Override
-protected String render(String template, Object value, String problem) {
-	return value.toString();	// no need to use templates, we return the string
+protected String render(String template,
+						Object value,
+						String problem) {
+	return value.toString(); // no need to use templates, we return the string
 }
 
 
@@ -76,23 +89,21 @@ protected void afterProblem(String problem) {
 
 @Override
 protected Object problemInformation() {
-	return params;	// we attach the parameters map which will be useful for error reporting
+	return params; // we attach the parameters map which will be useful for error reporting
 }
 
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

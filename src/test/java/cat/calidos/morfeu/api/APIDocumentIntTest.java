@@ -10,16 +10,17 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APIDocumentIntTest extends APITezt {
 
-
 @Test
 public void testDocument() throws Exception {
 
-	InputStream content = fetchRemoteInputStreamFrom("documents/" + pathPrefix + "documents/document1.json");
+	InputStream content = fetchRemoteInputStreamFrom(
+			"documents/" + pathPrefix + "documents/document1.json");
 	assertNotNull(content);
 
 	JsonNode doc = parseJson(content);
@@ -29,11 +30,13 @@ public void testDocument() throws Exception {
 
 	var modelURI = pathPrefix + "models/test-model.xsd?not=used";
 	assertEquals(modelURI, doc.get("modelURI").asText());
-	assertTrue(doc.get("fetchableModelURI").asText().endsWith(modelURI), "Fetchable model uri does not end correctly");
+	assertTrue(doc.get("fetchableModelURI").asText().endsWith(modelURI),
+			"Fetchable model uri does not end correctly");
 
 	var contentURI = pathPrefix + "documents/document1.xml";
 	assertEquals(contentURI, doc.get("contentURI").asText());
-	assertTrue(doc.get("fetchableContentURI").asText().endsWith(contentURI), "Fetchable content uri not correct");
+	assertTrue(doc.get("fetchableContentURI").asText().endsWith(contentURI),
+			"Fetchable content uri not correct");
 
 	assertTrue(doc.get("valid").asBoolean());
 
@@ -89,7 +92,8 @@ public void testNotFoundModelDocument() throws Exception {
 @Test
 public void testMalformedDocument() throws Exception {
 
-	InputStream content = fetchRemoteInputStreamFrom("documents/" + pathPrefix + "documents/malformed-document.json");
+	InputStream content = fetchRemoteInputStreamFrom(
+			"documents/" + pathPrefix + "documents/malformed-document.json");
 	assertNotNull(content);
 
 	JsonNode doc = parseJson(content);
@@ -98,7 +102,6 @@ public void testMalformedDocument() throws Exception {
 	assertTrue(doc.get("problem").asText().contains("Problem with the json format"));
 
 }
-
 
 }
 

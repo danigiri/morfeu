@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+
 /**
  * Testing that we are able to receive client-side events in the backend
  * 
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APIClientEventIntTest extends APITezt {
-
 
 @Test
 public void testClientEvent() throws Exception {
@@ -26,11 +26,11 @@ public void testClientEvent() throws Exception {
 
 	JsonNode eventResponse = parseJson(content);
 	assertNotNull(eventResponse);
-	assertEquals("foo", eventResponse.get("result").asText(), "Result should include the event name");
+	assertEquals("foo", eventResponse.get("result").asText(),
+			"Result should include the event name");
 	assertEquals("aa=b,", eventResponse.get("desc").asText(), "Desc should include the parameters");
 
 }
-
 
 }
 

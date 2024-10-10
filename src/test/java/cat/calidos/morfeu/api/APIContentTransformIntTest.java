@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APIContentTransformIntTest extends APITezt {
-
 
 @Test
 public void testDocument1YAMLTransform() throws Exception {
@@ -23,22 +23,24 @@ public void testDocument1YAMLTransform() throws Exception {
 	InputStream content = fetchRemoteInputStreamFrom(
 			"content/" + pathPrefix + "transform/document1.yaml?model=" + model);
 	// content = printInputStream(content);
-	
+
 	assertNotNull(content);
 
 	JsonNode root = parseJson(content); // <root node>
 	assertNotNull(root);
-	assertEquals( 0, root.get("schema").asInt(), "Wrong document schema");
+	assertEquals(0, root.get("schema").asInt(), "Wrong document schema");
 	assertEquals("", root.get("name").asText(), "Root node has a wrong name");
-	assertTrue( root.get("children").isArray(), "/children is not an array and it should be");
+	assertTrue(root.get("children").isArray(), "/children is not an array and it should be");
 
 	JsonNode test = root.get("children").get(0); // /test(0)
 	assertEquals("test", test.get("name").asText(), "/children/test(0) has a wrong name");
 
 	JsonNode testInternalAttributes = test.get("internalAttributes");
 	assertNotNull(testInternalAttributes);
-	assertTrue(testInternalAttributes.isArray(), "/children/test(0)@internalAttributes should be an array");
-	assertEquals(2, testInternalAttributes.size(), "/children/test(0)@internalAttributes should have two elems");
+	assertTrue(testInternalAttributes.isArray(),
+			"/children/test(0)@internalAttributes should be an array");
+	assertEquals(2, testInternalAttributes.size(),
+			"/children/test(0)@internalAttributes should have two elems");
 
 	JsonNode testAttributes = test.get("attributes");
 	assertNotNull(testAttributes);
@@ -50,7 +52,6 @@ public void testDocument1YAMLTransform() throws Exception {
 	assertEquals("row", row.get("name").asText(), "/children/test(0)/row(0) has a wrong name");
 
 }
-
 
 }
 

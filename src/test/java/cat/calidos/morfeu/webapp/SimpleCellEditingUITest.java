@@ -16,6 +16,7 @@ import cat.calidos.morfeu.webapp.ui.UICellData;
 import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,12 +25,15 @@ public class SimpleCellEditingUITest extends UITezt {
 private UICell		test;
 private UIContent	content;
 
-
 @BeforeEach
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 3").content();
+	content = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 3")
+			.content();
 	content.shouldAppear();
 	content.shouldBeVisible();
 	// need the cells to load here
@@ -56,7 +60,8 @@ public void editSimpleCellAndSave() {
 	UICellData cellEditorData = stuffEditor.cellData();
 	assertNotNull(cellEditorData);
 	assertTrue(cellEditorData.isFromEditor(), "Editing the cell should show an editor");
-	assertTrue(cellEditorData.isFromCell(), "Editing the cell should show an editor with data coming from the cell");
+	assertTrue(cellEditorData.isFromCell(),
+			"Editing the cell should show an editor with data coming from the cell");
 
 	stuffEditor.enterText("New stuff content");
 	stuffEditor.clickSave();
@@ -80,7 +85,6 @@ public void editSimpleCellAndDismiss() {
 	UICellEditor stuffEditor = stuff.edit().shouldAppear();
 	assertNotNull(stuffEditor);
 
-
 	stuffEditor.enterText("New stuff content");
 	stuffEditor.clickDiscard();
 
@@ -90,7 +94,6 @@ public void editSimpleCellAndDismiss() {
 	assertEquals("Stuff content", value.get());
 
 }
-
 
 }
 

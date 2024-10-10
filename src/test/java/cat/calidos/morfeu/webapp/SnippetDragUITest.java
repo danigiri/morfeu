@@ -16,22 +16,22 @@ import cat.calidos.morfeu.webapp.ui.UIDropArea;
 import cat.calidos.morfeu.webapp.ui.UISnippetEntry;
 import cat.calidos.morfeu.webapp.ui.UISnippetsArea;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SnippetDragUITest extends UITezt {
 
-
 @Test
-public void testDragSnippetCell() { 
+public void testDragSnippetCell() {
 
 	open(appBaseURL);
 
 	UIDocument document = UICatalogues.openCatalogues()
-										.shouldAppear()
-										.shouldBeVisible()
-										.clickOn(0)
-										.clickOnDocumentNamed("Document 1");
+			.shouldAppear()
+			.shouldBeVisible()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1");
 
 	// let's look for the snipept we want
 	UISnippetsArea snippets = document.snippets();
@@ -49,7 +49,7 @@ public void testDragSnippetCell() {
 	UICell stuff = stuffSnippet.children().get(0);
 	assertNotNull(stuff);
 
-	stuffSnippet.pressKey("0");	// this is a hack to select the first cell on the snippet
+	stuffSnippet.pressKey("0"); // this is a hack to select the first cell on the snippet
 	assertTrue(stuff.isSelected());
 
 	stuff.activate();
@@ -57,7 +57,8 @@ public void testDragSnippetCell() {
 
 	UICell targetCol = document.content().rootCells().get(0).child("row(0)").child("col(0)");
 	assertEquals(1, targetCol.children().size(), "Initially we should have one child");
-	UIDropArea targetDropArea = targetCol.dropArea(0); // we are ordered, so we can only drop 'stuff' on drop area 0
+	UIDropArea targetDropArea = targetCol.dropArea(0); // we are ordered, so we can only drop
+														// 'stuff' on drop area 0
 	targetDropArea.select();
 	targetDropArea.dropHere(stuff);
 
@@ -70,22 +71,18 @@ public void testDragSnippetCell() {
 
 }
 
-
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

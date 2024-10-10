@@ -12,13 +12,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.Document;
 
+
 /**
  * Testing the API to get content and doing some basic tests on it
  * 
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APIContentIntTest extends APITezt {
-
 
 @Test
 public void testContent() throws Exception {
@@ -34,10 +34,18 @@ public void testContent() throws Exception {
 	assertEquals(0, root.get("schema").asInt(), "Wrong document schema");
 	assertEquals(Document.ROOT_NAME, root.get("name").asText());
 	assertTrue(root.get("children").isArray(), "/children is not an array and it should be");
-	assertEquals("test", root.get("children").get(0).get("name").asText(), "/children/test(0) has a wrong name");
+	assertEquals("test", root.get("children").get(0).get("name").asText(),
+			"/children/test(0) has a wrong name");
 
 	// target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)
-	JsonNode data0 = root.get("children").get(0).get("children").get(0).get("children").get(0).get("children").get(0);
+	JsonNode data0 = root.get("children")
+			.get(0)
+			.get("children")
+			.get(0)
+			.get("children")
+			.get(0)
+			.get("children")
+			.get(0);
 	assertNotNull(data0);
 	assertTrue(data0.has("attributes"));
 
@@ -46,7 +54,6 @@ public void testContent() throws Exception {
 	assertEquals(42, number.get("value").asInt());
 
 }
-
 
 }
 

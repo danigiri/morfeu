@@ -22,20 +22,20 @@ import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Tezt {
 
 protected static int systemPropertyPrints = 0;
 
-protected static final String URL_PROPERTY = "app-url";
-protected static String DEFAULT_URL = "http://localhost:3000";
-public static final String DEFAULT_TMP_FOLDER_NAME = "integration-tests-tmp";
-
+protected static final String	URL_PROPERTY			= "app-url";
+protected static String			DEFAULT_URL				= "http://localhost:3000";
+public static final String		DEFAULT_TMP_FOLDER_NAME	= "integration-tests-tmp";
 
 public String tempDirectoryPath() {
-	return defineSystemVariable("TMP_FOLDER", "./target/"+DEFAULT_TMP_FOLDER_NAME);
+	return defineSystemVariable("TMP_FOLDER", "./target/" + DEFAULT_TMP_FOLDER_NAME);
 }
 
 
@@ -69,16 +69,17 @@ protected JsonNode parseJson(InputStream content) throws IOException, JsonProces
 }
 
 
-protected static String defineSystemVariable(String systemProperty, String defaultValue) {
+protected static String defineSystemVariable(	String systemProperty,
+												String defaultValue) {
 
 	String value = System.getProperty(systemProperty);
-	if (value==null) {
+	if (value == null) {
 		value = defaultValue;
 		System.setProperty(systemProperty, defaultValue);
 	} else {
-		if (systemPropertyPrints<10) {
-			System.err.println("Using "+systemProperty+"="+value+" [ENV]");
-		} else if (systemPropertyPrints==10){
+		if (systemPropertyPrints < 10) {
+			System.err.println("Using " + systemProperty + "=" + value + " [ENV]");
+		} else if (systemPropertyPrints == 10) {
 			System.err.println("See previous messages for system property overrides");
 		}
 		systemPropertyPrints++;
@@ -89,50 +90,57 @@ protected static String defineSystemVariable(String systemProperty, String defau
 }
 
 
-/** First look at java system properties, then into env vars (env overrides java system props), if no value is found
-*	then use the default value 
-* 	@return final value
-*////////////////////////////////////////////////////////////////////////////////
-protected String getConfigurationVariable(String name, String defaultValue) {
+/**
+ * First look at java system properties, then into env vars (env overrides java system props), if no
+ * value is found then use the default value
+ * 
+ * @return final value
+ *////////////////////////////////////////////////////////////////////////////////
+protected String getConfigurationVariable(	String name,
+											String defaultValue) {
 
 	String value = System.getProperty(name);
-	value = (value==null || System.getenv(name)!=null) ? System.getenv(name) : value;
-	value = value==null ? defaultValue : value; 
+	value = (value == null || System.getenv(name) != null) ? System.getenv(name) : value;
+	value = value == null ? defaultValue : value;
 
 	return value;
 
 }
 
 
-protected void compareWithXMLFile(String content, String path) {
+protected void compareWithXMLFile(	String content,
+									String path) {
 
 	Source transformedSource = Input.fromString(content).build();
 	File originalFile = new File(path);
 	Source originalSource = Input.fromFile(originalFile).build();
 
 	Diff diff = DiffBuilder.compare(originalSource)
-							.withTest(transformedSource)
-							.ignoreComments()
-							.ignoreWhitespace()
-							.build();
+			.withTest(transformedSource)
+			.ignoreComments()
+			.ignoreWhitespace()
+			.build();
 
-	assertFalse(diff.hasDifferences(), "Transformed JSON to XML should be the same as original"+diff.toString());
+	assertFalse(diff.hasDifferences(),
+			"Transformed JSON to XML should be the same as original" + diff.toString());
 
 }
 
 
-protected void compareWithXML(String content, String expected) {
+protected void compareWithXML(	String content,
+								String expected) {
 
 	Source transformedSource = Input.fromString(content).build();
 	Source originalSource = Input.fromString(expected).build();
 
 	Diff diff = DiffBuilder.compare(originalSource)
-							.withTest(transformedSource)
-							.ignoreComments()
-							.ignoreWhitespace()
-							.build();
+			.withTest(transformedSource)
+			.ignoreComments()
+			.ignoreWhitespace()
+			.build();
 
-	assertFalse(diff.hasDifferences(), "Transformed JSON to XML should be the same as original"+diff.toString());
+	assertFalse(diff.hasDifferences(),
+			"Transformed JSON to XML should be the same as original" + diff.toString());
 
 }
 
@@ -161,17 +169,15 @@ protected void sleep(Duration duration) {
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

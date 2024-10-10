@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import cat.calidos.morfeu.utils.POSTSaver;
 import cat.calidos.morfeu.utils.injection.HttpClientModule;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class POSTSaverIntTest extends APITezt {
-
 
 @Test
 public void testPostToPing() throws Exception {
@@ -35,7 +35,6 @@ public void testPostToPing() throws Exception {
 
 }
 
-
 }
 
 /*
@@ -51,4 +50,3 @@ public void testPostToPing() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

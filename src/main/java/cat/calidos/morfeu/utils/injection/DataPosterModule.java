@@ -4,7 +4,6 @@ package cat.calidos.morfeu.utils.injection;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,35 +23,38 @@ import cat.calidos.morfeu.problems.PostingException;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
+
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class DataPosterModule {
 
 protected final static Logger log = LoggerFactory.getLogger(DataPosterModule.class);
 
-
 @Produces
-InputStream postHttpData(CloseableHttpClient client, HttpPost request) throws PostingException {
-	
-	log.trace("Posting http data [{} bytes] to {}", request.getEntity().getContentLength(), request.getURI());
+InputStream postHttpData(	CloseableHttpClient client,
+							HttpPost request)
+		throws PostingException {
+
+	log.trace("Posting http data [{} bytes] to {}", request.getEntity().getContentLength(),
+			request.getURI());
 
 	try {
 		// we want to close right now so we fetch all the content and close the input stream
-			InputStream content = client.execute(request).getEntity().getContent();
+		InputStream content = client.execute(request).getEntity().getContent();
 
-			return IOUtils.toBufferedInputStream(content);
+		return IOUtils.toBufferedInputStream(content);
 
-		} catch (Exception e) {
-			throw new PostingException("Problem posting http data", e);
-		} finally {
-			if (client!=null) {
-				try {
-					client.close();
-				} catch (IOException e) {
-					throw new PostingException("Problem closing client when posting http data", e);
-				}
+	} catch (Exception e) {
+		throw new PostingException("Problem posting http data", e);
+	} finally {
+		if (client != null) {
+			try {
+				client.close();
+			} catch (IOException e) {
+				throw new PostingException("Problem closing client when posting http data", e);
+			}
 		}
 	}
 
@@ -60,7 +62,8 @@ InputStream postHttpData(CloseableHttpClient client, HttpPost request) throws Po
 
 
 @Produces
-HttpPost request(URI uri, HttpEntity entity) {
+HttpPost request(	URI uri,
+					HttpEntity entity) {
 
 	HttpPost request = new HttpPost(uri);
 	request.setEntity(entity);
@@ -71,37 +74,33 @@ HttpPost request(URI uri, HttpEntity entity) {
 
 
 @Produces
-HttpEntity entity(List <NameValuePair> nameValueParis) {
+HttpEntity entity(List<NameValuePair> nameValueParis) {
 	return EntityBuilder.create().setParameters(nameValueParis).build();
 }
 
 
 @Produces
-List <NameValuePair> nameValueParis(Map<String, String> data) {
+List<NameValuePair> nameValueParis(Map<String, String> data) {
 
-	List <NameValuePair> nvps = new ArrayList <NameValuePair>(data.size());
+	List<NameValuePair> nvps = new ArrayList<NameValuePair>(data.size());
 	data.entrySet().forEach(e -> nvps.add(new BasicNameValuePair(e.getKey(), e.getValue())));
 
 	return nvps;
 
 }
 
-
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

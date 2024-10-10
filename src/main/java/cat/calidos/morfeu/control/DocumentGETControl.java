@@ -1,17 +1,15 @@
 /*
- *    Copyright 2018 Daniel Giribet
+ * Copyright 2018 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package cat.calidos.morfeu.control;
@@ -27,18 +25,21 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 
-/** Document GET controller, outputs JSON
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentGETControl extends JSONGETControl  {
+
+/**
+ * Document GET controller, outputs JSON
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class DocumentGETControl extends JSONGETControl {
 
 protected final static Logger log = LoggerFactory.getLogger(DocumentGETControl.class);
 
-private String prefix;
-private String path;
+private String	prefix;
+private String	path;
 
-
-public DocumentGETControl(String prefix, String path) {
+public DocumentGETControl(	String prefix,
+							String path) {
 
 	super("document", "document.ftl", "document-problem.ftl");
 
@@ -49,14 +50,14 @@ public DocumentGETControl(String prefix, String path) {
 
 
 @Override
-protected Object process() 
-		throws InterruptedException, ExecutionException, ValidationException, ParsingException, FetchingException {
+protected Object process() throws InterruptedException, ExecutionException, ValidationException,
+		ParsingException, FetchingException {
 	return DaggerDocumentComponent.builder()
-									.from(DaggerURIComponent.builder().from(prefix+path).build().uri().get())
-									.withPrefix(prefix)
-									.build()
-									.document()
-									.get();
+			.from(DaggerURIComponent.builder().from(prefix + path).build().uri().get())
+			.withPrefix(prefix)
+			.build()
+			.document()
+			.get();
 }
 
 
@@ -74,8 +75,7 @@ protected void afterProblem(String problem) {
 
 @Override
 protected Object problemInformation() {
-	return path;	// we show the problematic path on the template
+	return path; // we show the problematic path on the template
 }
-
 
 }

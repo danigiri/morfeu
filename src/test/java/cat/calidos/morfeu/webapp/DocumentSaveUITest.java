@@ -20,6 +20,7 @@ import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 import cat.calidos.morfeu.webapp.ui.UIDocument;
 
+
 /**
  * Testing of document saving
  * 
@@ -29,7 +30,6 @@ public class DocumentSaveUITest extends UITezt {
 
 private File	contentFile;
 private File	backupFile;
-
 
 @AfterAll
 public static void teardownClass() throws InterruptedException {
@@ -69,12 +69,21 @@ public void teardown() throws Exception {
 public void documentSaveTest() throws Exception {
 
 	open(appBaseURL);
-	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
+	UIDocument document = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
 	content.shouldBeVisible();
 
 	// now we make a modification and then save
-	UICell data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)").select().activate();
+	UICell data = content.rootCells()
+			.get(0)
+			.child("row(0)")
+			.child("col(0)")
+			.child("data(0)")
+			.select()
+			.activate();
 	assertNotNull(data);
 
 	UICellData cellData = data.cellInfo();
@@ -92,20 +101,28 @@ public void documentSaveTest() throws Exception {
 	Thread.sleep(5000); // wait for reboot of jetty env as files have changed
 
 	// reload the same document and check the change
-	document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
+	document = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1");
 	content = document.content();
 	content.shouldBeVisible();
-	data = content.rootCells().get(0).child("row(0)").child("col(0)").child("data(0)").select().activate();
+	data = content.rootCells()
+			.get(0)
+			.child("row(0)")
+			.child("col(0)")
+			.child("data(0)")
+			.select()
+			.activate();
 	assertNotNull(data);
 
 	cellData = data.cellInfo();
-	assertEquals("66", cellData.attribute("number").value(), "Saving the document does not modify its content");
+	assertEquals("66", cellData.attribute("number").value(),
+			"Saving the document does not modify its content");
 
 }
 
-
 }
-
 
 /*
  * Copyright 2024 Daniel Giribet
@@ -120,4 +137,3 @@ public void documentSaveTest() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

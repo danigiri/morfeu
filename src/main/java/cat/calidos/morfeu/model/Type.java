@@ -8,19 +8,20 @@ import java.util.Set;
 
 import com.sun.xml.xsom.XSType;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Type extends RemoteResource {
 
-private Optional<XSType> xsType;
-private Optional<String> regex;
-private Set<String> possibleValues;
-private boolean isGlobal;
-private Optional<Metadata> metadata;
+private Optional<XSType>	xsType;
+private Optional<String>	regex;
+private Set<String>			possibleValues;
+private boolean				isGlobal;
+private Optional<Metadata>	metadata;
 
-
-public Type(URI u, String name) {
+public Type(URI u,
+			String name) {
 
 	super(u, name, "TYPE DESC");
 
@@ -31,13 +32,14 @@ public Type(URI u, String name) {
 }
 
 
-public Type(URI u, String name,
+public Type(URI u,
+			String name,
 			XSType xsType,
 			String regex,
 			Set<String> possibleValues,
 			boolean global,
 			Metadata metadata) {
-	//TODO: extract description for types from annotation
+	// TODO: extract description for types from annotation
 	super(u, name, "TYPE DESC");
 
 	this.xsType = Optional.of(xsType);
@@ -65,10 +67,11 @@ public Optional<String> getRegex() {
 
 
 public boolean hasPossibleValues() {
-	return getPossibleValues()!=null && !getPossibleValues().isEmpty();
+	return getPossibleValues() != null && !getPossibleValues().isEmpty();
 }
 
-/**	@return all allowed values of elements of this type, empty set means all values allowed */
+
+/** @return all allowed values of elements of this type, empty set means all values allowed */
 public Set<String> getPossibleValues() {
 	return possibleValues;
 }
@@ -82,16 +85,16 @@ public Metadata getMetadata() {
 public boolean isContentValid(Object content) {
 
 	if (isSimple()) {
-		//TODO: we're assuming we have a base type that can tell us how to validate
+		// TODO: we're assuming we have a base type that can tell us how to validate
 		XSType baseType = xsType.get().getBaseType();
 		switch (baseType.getName()) {
-		case "string":
-			return content instanceof String;
-		case "integer":
-			return validateIntegers(content);
-		default:
+			case "string":
+				return content instanceof String;
+			case "integer":
+				return validateIntegers(content);
+			default:
 
-			return false;
+				return false;
 		}
 	} else {
 
@@ -104,7 +107,7 @@ public boolean isContentValid(Object content) {
 
 @Override
 public String toString() {
-	return "["+name+", "+(isSimple() ? "simple]" : "complex]");
+	return "[" + name + ", " + (isSimple() ? "simple]" : "complex]");
 }
 
 
@@ -113,36 +116,33 @@ protected boolean validateIntegers(Object content) {
 	boolean isValid = true;
 	Integer value = null;
 	if (content instanceof Integer) {
-		value  = (Integer) content;
+		value = (Integer) content;
 	} else if (content instanceof String) {
-		try { 
+		try {
 			value = Integer.parseInt((String) content);
 		} catch (NumberFormatException e) {
 			isValid = false;
 		}
 	} else {
 		isValid = false;
-	} 
+	}
 
 	return isValid;
 
 }
 
-
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

@@ -7,15 +7,17 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuUtilsTest {
 
 @Test
 public void paramMapTest() {
 
-	Map<String, Object> map = MorfeuUtils.paramMap("foo", Collections.EMPTY_LIST, "bar", "more stuff");
+	Map<String, Object> map = MorfeuUtils.paramMap("foo", Collections.EMPTY_LIST, "bar",
+			"more stuff");
 	assertNotNull(map);
 	assertEquals(2, map.size());
 	assertTrue(map.containsKey("foo"));
@@ -28,11 +30,11 @@ public void paramMapTest() {
 
 @Test
 public void emptyParamMapTest() {
-	
+
 	Map<String, Object> map = MorfeuUtils.paramMap();
 	assertNotNull(map);
 	assertEquals(0, map.size());
-	
+
 }
 
 
@@ -51,20 +53,16 @@ public void paramStringMapTest() {
 
 }
 
-
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

@@ -13,16 +13,16 @@ import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
-/**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DragAndDropUIComponentTest extends UITezt {
 
+/**
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class DragAndDropUIComponentTest extends UITezt {
 
 @Test @DisplayName("Drag and drop stuff test")
 public void testDragAndDropStuff() {
 
-	open(appBaseURL+"test/content/dnd-1");
+	open(appBaseURL + "test/content/dnd-1");
 	UIContent content = new UIContent();
 	content.shouldBeVisible();
 
@@ -33,12 +33,11 @@ public void testDragAndDropStuff() {
 	assertNotNull(stuff0);
 
 	stuff0.hover();
-	assertAll("active areas",
-		() -> assertFalse(col.dropArea(0).isActive()),	// adjacent, noop
-		() -> assertFalse(col.dropArea(1).isActive()),	// adjacent, noop
-		() -> assertTrue(col.dropArea(2).isActive()),	// is ok
-		() -> assertTrue(col.dropArea(3).isActive()),	// is ok
-		() -> assertFalse(col.dropArea(4).isActive())	// disallowed, breaks order
+	assertAll("active areas", () -> assertFalse(col.dropArea(0).isActive()), // adjacent, noop
+			() -> assertFalse(col.dropArea(1).isActive()), // adjacent, noop
+			() -> assertTrue(col.dropArea(2).isActive()), // is ok
+			() -> assertTrue(col.dropArea(3).isActive()), // is ok
+			() -> assertFalse(col.dropArea(4).isActive()) // disallowed, breaks order
 	);
 
 	stuff0.dragTo(col.dropArea(2));
@@ -47,38 +46,31 @@ public void testDragAndDropStuff() {
 	UICellEditor stuffEditor = col2.child("stuff(0)").hover().edit();
 	Optional<String> stuffValue = stuffEditor.value();
 	stuffEditor.clickDiscard();
-	assertAll("after drop",
-		() -> assertTrue(stuffValue.isPresent()),
-		() -> assertEquals("Stuff content 2", stuffValue.get())
-	);
+	assertAll("after drop", () -> assertTrue(stuffValue.isPresent()),
+			() -> assertEquals("Stuff content 2", stuffValue.get()));
 
-	col2.child("stuff(0)").hover();	// bug in the activation event sequence
+	col2.child("stuff(0)").hover(); // bug in the activation event sequence
 	UICell movedStuff = col2.child("stuff(1)").hover();
 	UICellEditor movedStuffEditor = movedStuff.editByDoubleClicking();
 	Optional<String> movedStuffValue = movedStuffEditor.value();
 	movedStuffEditor.clickDiscard();
-	assertAll("after drop",
-		() -> assertTrue(movedStuffValue.isPresent()),
-		() -> assertEquals("Stuff content", movedStuffValue.get())
-	);
+	assertAll("after drop", () -> assertTrue(movedStuffValue.isPresent()),
+			() -> assertEquals("Stuff content", movedStuffValue.get()));
 
 }
-
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

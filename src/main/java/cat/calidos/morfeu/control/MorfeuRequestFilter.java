@@ -16,13 +16,15 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/** Placeholder for request filter if we need it
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Placeholder for request filter if we need it
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuRequestFilter implements Filter {
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuRequestFilter.class);
-
 
 @Override
 public void init(FilterConfig filterConfig) throws ServletException {
@@ -33,12 +35,14 @@ public void init(FilterConfig filterConfig) throws ServletException {
 
 
 @Override
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+public void doFilter(	ServletRequest request,
+						ServletResponse response,
+						FilterChain chain)
 		throws IOException, ServletException {
 
 	log.trace("---- REQUEST {} ----", request);
 
-	HttpServletRequest httpRequest = (HttpServletRequest)request;
+	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
 	try {
 		HttpFilterComponent filterComponent = filterComponent(chain, httpRequest, httpResponse);
@@ -51,35 +55,32 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
 
 @Override
-public void destroy() {}
+public void destroy() {
+}
 
 
-protected HttpFilterComponent filterComponent(FilterChain chain, HttpServletRequest httpRequest,
-		HttpServletResponse httpResponse) {
+protected HttpFilterComponent filterComponent(	FilterChain chain,
+												HttpServletRequest httpRequest,
+												HttpServletResponse httpResponse) {
 	return DaggerHttpFilterComponent.builder()
-										.request(httpRequest)
-										.response(httpResponse)
-										.chain(chain)
-										.build();
+			.request(httpRequest)
+			.response(httpResponse)
+			.chain(chain)
+			.build();
 }
 
-
 }
-
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

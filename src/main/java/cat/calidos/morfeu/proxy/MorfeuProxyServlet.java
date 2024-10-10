@@ -16,19 +16,17 @@ import jakarta.servlet.ServletException;
 
 
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuProxyServlet extends ProxyServlet {
 
 private static final String TEMPLATE_SNIPPET = "${";
-
 
 private static final long serialVersionUID = 9192081928916080216L;
 
 public final static String __PROXY_PREFIX = "__PROXY_PREFIX";
 
 protected final static Logger log = LoggerFactory.getLogger(MorfeuProxyServlet.class);
-
 
 @Override
 protected void initTarget() throws ServletException {
@@ -52,27 +50,31 @@ protected void initTarget() throws ServletException {
 }
 
 
-public static String getFinalTargetURI(String targetUri, ServletConfig config) throws ServletException {
+public static String getFinalTargetURI(	String targetUri,
+										ServletConfig config)
+		throws ServletException {
 	targetUri = DaggerConfigPropertyComponent.builder()
-									.forName(P_TARGET_URI)
-									.allowEmpty(false)
-									.andDefault(targetUri)
-									.build()
-									.value()
-									.get();
+			.forName(P_TARGET_URI)
+			.allowEmpty(false)
+			.andDefault(targetUri)
+			.build()
+			.value()
+			.get();
 	log.info("** Configured {} for proxy target uri", targetUri);
 	if (targetUri == null) {
 		throw new ServletException(P_TARGET_URI + " is required.");
 	}
 
 	if (targetUri.contains(TEMPLATE_SNIPPET)) {
-		// template snippet in the param, so we populate the view with the servlet config, system vars and env which
+		// template snippet in the param, so we populate the view with the servlet config, system
+		// vars and env which
 		// can be used in the param to provide advanced features (like variable substitution)
 		Properties configuration = DaggerServletConfigComponent.builder()
-																.with(config)
-																.build()
-																.getProperties();
-		log.trace("(From configuration) __PROXY_PREFIX='{}'",configuration.getProperty(__PROXY_PREFIX, "not set!"));
+				.with(config)
+				.build()
+				.getProperties();
+		log.trace("(From configuration) __PROXY_PREFIX='{}'",
+				configuration.getProperty(__PROXY_PREFIX, "not set!"));
 		targetUri = DaggerViewComponent.builder()
 				.withValues(configuration)
 				.withTemplate(targetUri)
@@ -82,7 +84,6 @@ public static String getFinalTargetURI(String targetUri, ServletConfig config) t
 	}
 	return targetUri;
 }
-
 
 }
 
@@ -99,4 +100,3 @@ public static String getFinalTargetURI(String targetUri, ServletConfig config) t
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

@@ -15,9 +15,9 @@ import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
 import cat.calidos.morfeu.transform.PrefixProcessor;
 
+
 @Module
 public class YAMLCellModelGuesserProcessorModule {
-
 
 @Provides
 List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
@@ -27,12 +27,10 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 															ComplexCellModel parentCellModel) {
 
 	var p = new LinkedList<PrefixProcessor<JsonNodeCellModel, String>>();
-	p.add(new YAMLCellModelGuesserProcessor(pref, case_, name, new JsonNodeCellModel(node, parentCellModel)));
+	p.add(new YAMLCellModelGuesserProcessor(pref, case_, name,
+			new JsonNodeCellModel(node, parentCellModel)));
 
 	return p;
 }
 
-
 }
-
-

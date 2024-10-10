@@ -10,26 +10,29 @@ import org.openqa.selenium.NoSuchElementException;
 import com.codeborne.selenide.SelenideElement;
 
 
-/** 
-* http://localhost:8080/morfeu/models/target/test-classes/test-resources/models/test-model.xsd
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * http://localhost:8080/morfeu/models/target/test-classes/test-resources/models/test-model.xsd
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICell extends UIWidget<UICell> {
 
-private static final String ACTIVE = "cell-active";
-private static final String COL_WELL = "col-well";
-private static final String WELL = "well";
-private static final String ROW_WELL = "row-well";
-private static final String SELECTED = "cell-selected";
-private static final String READONLY = "readonly";
-private static final String ACTIVE_READONLY = "cell-active-readonly";
+private static final String	ACTIVE			= "cell-active";
+private static final String	COL_WELL		= "col-well";
+private static final String	WELL			= "well";
+private static final String	ROW_WELL		= "row-well";
+private static final String	SELECTED		= "cell-selected";
+private static final String	READONLY		= "readonly";
+private static final String	ACTIVE_READONLY	= "cell-active-readonly";
 
-private UIContent content;
-private Optional<UICell> parent;
-private int level;
+private UIContent			content;
+private Optional<UICell>	parent;
+private int					level;
 
-
-public UICell(SelenideElement element, UIContent content, Optional<UICell> parent, int level) {
+public UICell(	SelenideElement element,
+				UIContent content,
+				Optional<UICell> parent,
+				int level) {
 
 	super(element);
 
@@ -37,10 +40,10 @@ public UICell(SelenideElement element, UIContent content, Optional<UICell> paren
 	this.parent = parent;
 	this.level = level;
 
-} 
+}
 
 
-/** id is where we store the cell URI*/
+/** id is where we store the cell URI */
 public String id() {
 	return element.attr("id");
 }
@@ -58,8 +61,9 @@ public Optional<UICell> parent() {
 
 public int position() {
 
-	String URI = id();	// we reuse the fact that at the end of the uri we have the position like 'foo(0)'
-	return Integer.parseInt(URI.substring(URI.lastIndexOf("(")+1, URI.length()-1));
+	String URI = id(); // we reuse the fact that at the end of the uri we have the position like
+						// 'foo(0)'
+	return Integer.parseInt(URI.substring(URI.lastIndexOf("(") + 1, URI.length() - 1));
 
 }
 
@@ -71,11 +75,13 @@ public String img() {
 
 public List<UIDropArea> dropAreas() {
 
-	List<UIDropArea> dropAreas = element.$$(".drop-area").asFixedIterable().stream()
-									.map(e -> new UIDropArea(e, content, this))
-									.collect(Collectors.toList());
+	List<UIDropArea> dropAreas = element.$$(".drop-area")
+			.asFixedIterable()
+			.stream()
+			.map(e -> new UIDropArea(e, content, this))
+			.collect(Collectors.toList());
 	int i = 0;
-	for (UIDropArea da: dropAreas) {
+	for (UIDropArea da : dropAreas) {
 		da.setPosition(i++);
 	}
 
@@ -90,22 +96,23 @@ public UIDropArea dropArea(int i) {
 
 
 public List<UICell> children() {
-	return element.$$(".cell-level-"+(level+1)).asFixedIterable().stream()
-			.map(e -> new UICell(e, content, Optional.of(this), level+1))
+	return element.$$(".cell-level-" + (level + 1))
+			.asFixedIterable()
+			.stream()
+			.map(e -> new UICell(e, content, Optional.of(this), level + 1))
 			.collect(Collectors.toList());
 }
 
 
 // clever-ish: uris are doc/foo(0)/bar(0), to look for 'bar(0)' we check for "/bar(0)$"
 public UICell child(String name) {
-	return children().stream().filter(c -> c.id().endsWith("/"+name)).findAny().get();
+	return children().stream().filter(c -> c.id().endsWith("/" + name)).findAny().get();
 }
 
 
 public UICell child(int pos) {
 	return children().get(pos);
 }
-
 
 
 public UICell dragTo(UIDropArea target) {
@@ -124,21 +131,23 @@ public UICell click() {
 
 public UICell select() {
 
-	// first we build a list of the tree nodes we use to reach this destination and we will be selecting them in turn
+	// first we build a list of the tree nodes we use to reach this destination and we will be
+	// selecting them in turn
 	content.pressKey(UIContent.SELECTION_MODE);
 	LinkedList<UICell> path = new LinkedList<UICell>();
 	UICell parentVisitor = this;
-	while (parentVisitor!=null) {
-		path.push(parentVisitor);	// notice we are inserting, so it has the right order (and not reverse)
+	while (parentVisitor != null) {
+		path.push(parentVisitor); // notice we are inserting, so it has the right order (and not
+									// reverse)
 		parentVisitor = parentVisitor.parent().orElse(null);
 	}
 
 	// activate selection mode and then select each in turn
 	content.pressKey(UIContent.SELECTION_MODE);
-	path.stream().forEachOrdered(c -> content.pressKey(c.position()+""));
+	path.stream().forEachOrdered(c -> content.pressKey(c.position() + ""));
 
 	return this;
-	
+
 }
 
 
@@ -209,7 +218,7 @@ public UICellData cellInfo() {
 
 	}
 
-	return new UICellData();	// at the moment there is only one info
+	return new UICellData(); // at the moment there is only one info
 
 }
 
@@ -220,26 +229,27 @@ public boolean isCell() {
 
 
 public boolean isWell() {
-	
-	element.$(".well");	// wait for dom updates
+
+	element.$(".well"); // wait for dom updates
 	String class_ = class_();
-	
+
 	return class_.contains(WELL) && !class_.contains(ROW_WELL);
-	
+
 }
 
 
 public boolean isRowWell() {
-	
-	element.$(".row-well");	// wait for dom updates
+
+	element.$(".row-well"); // wait for dom updates
 
 	return class_().contains(ROW_WELL);
-	
+
 }
+
 
 public boolean isColumnWell() {
 
-	element.$(".col-well");	// wait for dom updates
+	element.$(".col-well"); // wait for dom updates
 
 	return class_().contains(COL_WELL);
 
@@ -247,13 +257,14 @@ public boolean isColumnWell() {
 
 
 public boolean isActive() {
-	//element.waitUntil(cssClass(ACTIVE), 100);
-	//return element.shouldHave(cssClass(ACTIVE)).exists();
+	// element.waitUntil(cssClass(ACTIVE), 100);
+	// return element.shouldHave(cssClass(ACTIVE)).exists();
 
 	// this keeps failing randomly
 	try {
 		Thread.sleep(50);
-	} catch (InterruptedException e) {}
+	} catch (InterruptedException e) {
+	}
 
 	return class_().contains(ACTIVE);
 
@@ -275,7 +286,8 @@ public boolean isActiveReadonly() {
 	// this keeps failing randomly
 	try {
 		Thread.sleep(50);
-	} catch (InterruptedException e) {}
+	} catch (InterruptedException e) {
+	}
 
 	return class_().contains(ACTIVE_READONLY);
 }

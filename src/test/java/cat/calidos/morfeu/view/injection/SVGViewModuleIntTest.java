@@ -25,15 +25,19 @@ import org.xml.sax.InputSource;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SVGViewModuleIntTest {
 
-
 // FIXME: skip when there is no network or either avoid fetching remote resources
 @Test
 public void testRenderSVGTruncate() throws Exception {
 
 	Optional<String> header = Optional.empty();
-	String svg = DaggerSVGViewComponent.builder().from("Short text").withHeader(header).truncate(true).build().render();
+	String svg = DaggerSVGViewComponent.builder()
+			.from("Short text")
+			.withHeader(header)
+			.truncate(true)
+			.build()
+			.render();
 	assertNotNull(svg);
-	assertTrue( svg.length() > 0, "Should not get an empty SVG");
+	assertTrue(svg.length() > 0, "Should not get an empty SVG");
 	// System.err.println(svg);
 
 	NodeList nodeList = readFromSVG(svg, "//text");
@@ -51,7 +55,12 @@ public void testRenderSVGTruncate() throws Exception {
 public void testRenderSVGHeader() throws Exception {
 
 	Optional<String> header = Optional.of("Header");
-	String svg = DaggerSVGViewComponent.builder().from("Short text").withHeader(header).truncate(true).build().render();
+	String svg = DaggerSVGViewComponent.builder()
+			.from("Short text")
+			.withHeader(header)
+			.truncate(true)
+			.build()
+			.render();
 	assertNotNull(svg);
 
 	NodeList nodeList = readFromSVG(svg, "//text");
@@ -63,7 +72,9 @@ public void testRenderSVGHeader() throws Exception {
 }
 
 
-private NodeList readFromSVG(String svg, String xpath) throws Exception {
+private NodeList readFromSVG(	String svg,
+								String xpath)
+		throws Exception {
 
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 	builderFactory.setValidating(false); // no need to validate, just parse
@@ -71,12 +82,12 @@ private NodeList readFromSVG(String svg, String xpath) throws Exception {
 	InputSource svgSource = new InputSource(new StringReader(svg));
 	Document xmlDocument = builder.parse(svgSource);
 	XPath xPath = XPathFactory.newInstance().newXPath();
-	NodeList nodeList = (NodeList) xPath.compile(xpath).evaluate(xmlDocument, XPathConstants.NODESET);
+	NodeList nodeList = (NodeList) xPath.compile(xpath)
+			.evaluate(xmlDocument, XPathConstants.NODESET);
 
 	return nodeList;
 
 }
-
 
 }
 

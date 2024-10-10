@@ -21,6 +21,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +30,6 @@ public class HttpFilterModuleTest {
 private FilterChain			chain;
 private HttpServletRequest	request;
 private HttpServletResponse	response;
-
 
 @BeforeEach
 public void setup() {
@@ -41,30 +41,34 @@ public void setup() {
 }
 
 
-@Test
-@DisplayName("Handling exceptions test")
+@Test @DisplayName("Handling exceptions test")
 public void testHandledExceptions() throws Exception {
 
 	doThrow(new ServletException()).when(chain).doFilter(null, null);
 
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> true;
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (	req,
+																		resp) -> true;
 	var filters = new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
 	filters.add(f0);
 
-	assertThrows(MorfeuRuntimeException.class, () -> HttpFilterModule.process(filters, filters, null, null, chain));
+	assertThrows(MorfeuRuntimeException.class,
+			() -> HttpFilterModule.process(filters, filters, null, null, chain));
 
 }
 
 
-@Test
-@DisplayName("Right order of filters test")
+@Test @DisplayName("Right order of filters test")
 public void testFilterOrder() {
 
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> true;
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> true;
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> true;
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (	req,
+																		resp) -> true;
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (	req,
+																		resp) -> true;
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (	req,
+																		resp) -> true;
 
-	var filters = new HashMap<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>(3);
+	var filters = new HashMap<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>(
+			3);
 	filters.put(HttpFilterModule.IDENTITY_INDEX, HttpFilterModule.identity());
 	filters.put(0, f0);
 	filters.put(1, f1);
@@ -81,19 +85,20 @@ public void testFilterOrder() {
 }
 
 
-@Test
-@DisplayName("Test processing")
+@Test @DisplayName("Test processing")
 public void testProcess() throws Exception {
 
 	when(request.getHeader(anyString())).then(returnsFirstArg());
 
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (	req,
+																		resp) -> {
 		resp.setHeader("foo0", req.getHeader("foo0"));
 
 		return true;
 
 	};
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (	req,
+																		resp) -> {
 		resp.setHeader("foo1", req.getHeader("foo1"));
 
 		return true;
@@ -103,7 +108,8 @@ public void testProcess() throws Exception {
 	preFilters.add(f0);
 	preFilters.add(f1);
 
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (	req,
+																		resp) -> {
 		resp.setHeader("foo2", req.getHeader("foo2"));
 
 		return true;
@@ -128,19 +134,20 @@ public void testProcess() throws Exception {
 }
 
 
-@Test
-@DisplayName("Test stopping filter chain")
+@Test @DisplayName("Test stopping filter chain")
 public void testStopping() throws Exception {
 
 	when(request.getHeader(anyString())).then(returnsFirstArg());
 
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (	req,
+																		resp) -> {
 		req.getHeader("foo0");
 
 		return true;
 
 	};
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (	req,
+																		resp) -> {
 		req.getHeader("foo1");
 
 		return false; // this will stop
@@ -150,7 +157,8 @@ public void testStopping() throws Exception {
 	preFilters.add(f0);
 	preFilters.add(f1);
 
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f2 = (	req,
+																		resp) -> {
 		req.getHeader("foo2");
 
 		return true;
@@ -163,27 +171,29 @@ public void testStopping() throws Exception {
 
 	assertAll("Checking filter stopped",
 			() -> assertFalse(continue_, "filter chain continued when it should have stopped"),
-			() -> assertEquals(2, Mockito.mockingDetails(request).getInvocations().size(), "ran 3 filters and not 2"));
+			() -> assertEquals(2, Mockito.mockingDetails(request).getInvocations().size(),
+					"ran 3 filters and not 2"));
 	verify(request).getHeader("foo0");
 	verify(request).getHeader("foo1");
 
 }
 
 
-@Test
-@DisplayName("Test pre and post filter")
+@Test @DisplayName("Test pre and post filter")
 public void testPrePost() throws Exception {
 
 	StringBuffer testBuffer = new StringBuffer("");
 
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f0 = (	req,
+																		resp) -> {
 
 		testBuffer.append("0");
 
 		return true;
 
 	};
-	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (req, resp) -> {
+	BiFunction<HttpServletRequest, HttpServletResponse, Boolean> f1 = (	req,
+																		resp) -> {
 
 		testBuffer.append("1");
 
@@ -197,11 +207,11 @@ public void testPrePost() throws Exception {
 
 	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
 
-	assertAll("Checking filter stopped", () -> assertTrue(continue_, "filter chain stopped when it should continue"),
+	assertAll("Checking filter stopped",
+			() -> assertTrue(continue_, "filter chain stopped when it should continue"),
 			() -> assertEquals("01", testBuffer.toString(), "Should have ran the two filters"));
 
 }
-
 
 }
 
@@ -218,4 +228,3 @@ public void testPrePost() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

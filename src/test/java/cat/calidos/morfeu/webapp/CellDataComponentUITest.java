@@ -10,50 +10,42 @@ import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.webapp.ui.UICellData;
 
-/**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class CellDataComponentUITest extends UITezt {
 
+/**
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class CellDataComponentUITest extends UITezt {
 
 @Test @DisplayName("Test col data")
 public void testColData() {
 
-	open(appBaseURL+"test/cell-data/col");
+	open(appBaseURL + "test/cell-data/col");
 	UICellData cellData = new UICellData();
 	cellData.shouldBeVisible();
 
-	assertAll("check basics",
-		() -> assertTrue(cellData.isFromCell()),
-		() -> assertEquals("col [0..∞]", cellData.header()),
-		() -> assertEquals("Column, can accept content", cellData.desc())
-	);
+	assertAll("check basics", () -> assertTrue(cellData.isFromCell()),
+			() -> assertEquals("col [0..∞]", cellData.header()),
+			() -> assertEquals("Column, can accept content", cellData.desc()));
 
 	List<String> extraInfo = cellData.extraInfo();
-	assertAll("check extra info",
-			() -> assertNotNull(extraInfo),
+	assertAll("check extra info", () -> assertNotNull(extraInfo),
 			() -> assertEquals(1, extraInfo.size()),
-			() -> assertTrue(extraInfo.contains("[Children need to be in order]"))
-		);
-
+			() -> assertTrue(extraInfo.contains("[Children need to be in order]")));
 
 }
-
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

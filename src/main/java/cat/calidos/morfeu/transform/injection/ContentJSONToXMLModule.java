@@ -11,40 +11,38 @@ import cat.calidos.morfeu.transform.ContentJSONToXMLProcessor;
 import cat.calidos.morfeu.transform.ContentJSONToXMLProcessorSlash;
 import cat.calidos.morfeu.transform.Processor;
 
+
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ContentJSONToXMLModule {
 
-
 @Provides @Named("Begin")
-Processor<JsonNode, String> processor(String pref, JsonNode node) {
+Processor<JsonNode, String> processor(	String pref,
+										JsonNode node) {
 	return new ContentJSONToXMLProcessor(pref, node);
 }
 
 
 @Provides @Named("End")
-Processor<JsonNode, String> processorSlash(String pref, JsonNode node) {
+Processor<JsonNode, String> processorSlash(	String pref,
+											JsonNode node) {
 	return new ContentJSONToXMLProcessorSlash(pref, node);
 }
-
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

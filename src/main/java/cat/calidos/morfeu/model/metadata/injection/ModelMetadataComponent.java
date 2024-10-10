@@ -12,6 +12,7 @@ import com.sun.xml.xsom.XSAnnotation;
 
 import cat.calidos.morfeu.model.Metadata;
 
+
 /**
  * This component is used to fetch the metadata for a cell model, needs the annotation as well as
  * the location in the cell model hierarchy.

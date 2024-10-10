@@ -17,16 +17,15 @@ import cat.calidos.morfeu.model.Composite;
 
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellModuleIntTest extends ModelTezt {
 
-private Document document;
-private URI modelURI;
-private URI contentURI;
-private Composite<Cell> children;
-private ComplexCellModel testCellModel;
-
+private Document			document;
+private URI					modelURI;
+private URI					contentURI;
+private Composite<Cell>		children;
+private ComplexCellModel	testCellModel;
 
 @BeforeEach
 public void setup() throws Exception {
@@ -37,15 +36,15 @@ public void setup() throws Exception {
 	modelURI = new URI(modelPath);
 
 	document = DaggerContentParserTeztComponent.builder()
-												.content(contentURI)
-												.fetchedContentFrom(contentURI)
-												.model(modelURI)
-												.withModelFetchedFrom(modelURI)
-												.build()
-												.parsedXMLDocument()
-												.get();
+			.content(contentURI)
+			.fetchedContentFrom(contentURI)
+			.model(modelURI)
+			.withModelFetchedFrom(modelURI)
+			.build()
+			.parsedXMLDocument()
+			.get();
 	// we're expecting a fetchable relative path here
-	testCellModel = cellModelFrom(modelURI, "test").asComplex();	
+	testCellModel = cellModelFrom(modelURI, "test").asComplex();
 	children = CellModule.childrenFrom(document.getDocumentElement(), contentURI, testCellModel);
 
 }
@@ -58,7 +57,7 @@ public void testChildrenFrom() throws Exception {
 	assertEquals(1, children.size());
 	Cell row = children.child(0);
 	assertEquals("row", row.getName());
-	assertEquals(contentURI+"/row(0)", row.getURI().toString());
+	assertEquals(contentURI + "/row(0)", row.getURI().toString());
 	assertEquals("row", row.getCellModel().getName());
 	assertEquals("rowCell", row.getCellModel().getType().getName());
 	assertTrue(row.isComplex());
@@ -79,21 +78,30 @@ public void testChildrenFrom() throws Exception {
 @Test
 public void testAttributesFrom() throws Exception {
 
-	Cell cell = children.child("row(0)").asComplex().children().child("col(0)").asComplex().children().child("data(0)");
+	Cell cell = children.child("row(0)")
+			.asComplex()
+			.children()
+			.child("col(0)")
+			.asComplex()
+			.children()
+			.child("data(0)");
 	assertNotNull(cell);
 	assertTrue(cell.isComplex());
 	ComplexCell complexCell = cell.asComplex();
 
-	// ensure order is also cool, to do that, we assume there are two column children, access the first and compare
+	// ensure order is also cool, to do that, we assume there are two column children, access the
+	// first and compare
 
-	assertEquals(children.child("row(0)").asComplex().children().child("col(0)"), 
-				 children.child("row(0)").asComplex().children().child(0),
-				 "Accessing children by index and not name fails, order is not preserved");
+	assertEquals(children.child("row(0)").asComplex().children().child("col(0)"),
+			children.child("row(0)").asComplex().children().child(0),
+			"Accessing children by index and not name fails, order is not preserved");
 
 	// extra order check
 	List<Cell> cols = children.child("row(0)").asComplex().children().asList();
-	assertEquals(children.child("row(0)").asComplex().children().child(0), cols.get(0), "Order not preserved");
-	assertEquals(children.child("row(0)").asComplex().children().child(1), cols.get(1), "Order not preserved");
+	assertEquals(children.child("row(0)").asComplex().children().child(0), cols.get(0),
+			"Order not preserved");
+	assertEquals(children.child("row(0)").asComplex().children().child(1), cols.get(1),
+			"Order not preserved");
 
 	Attributes<Cell> attributes = complexCell.attributes();
 	assertNotNull(attributes);
@@ -117,30 +125,29 @@ public void testAttributesFrom() throws Exception {
 @Test
 public void testInternalAttributes() throws Exception {
 
-	Attributes<Cell> attributes = CellModule.internalAttributesFrom(document.getDocumentElement(), 
-																	contentURI,
-																	testCellModel);
+	Attributes<Cell> attributes = CellModule.internalAttributesFrom(document.getDocumentElement(),
+			contentURI, testCellModel);
 	assertNotNull(attributes);
 	assertEquals(2, attributes.size(), "More internal attributes than expected");
-	assertEquals("http://www.w3.org/2001/XMLSchema-instance", attributes.attribute("xmlns:xsi").getValue().get());
-	assertEquals("../models/test-model.xsd", attributes.attribute("xsi:noNamespaceSchemaLocation").getValue().get());
+	assertEquals("http://www.w3.org/2001/XMLSchema-instance",
+			attributes.attribute("xmlns:xsi").getValue().get());
+	assertEquals("../models/test-model.xsd",
+			attributes.attribute("xsi:noNamespaceSchemaLocation").getValue().get());
 
 }
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

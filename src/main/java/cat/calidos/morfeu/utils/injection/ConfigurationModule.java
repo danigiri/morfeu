@@ -8,18 +8,19 @@ import javax.inject.Named;
 import dagger.Module;
 import dagger.Provides;
 
-/** Generate an empty configuration or a configuration from the input properties
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Generate an empty configuration or a configuration from the input properties
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ConfigurationModule {
 
-
 @Provides @Named("Configuration")
 public static Properties configuration(@Nullable @Named("InputProperties") Properties p) {
-	return p==null ? new Properties() : p;
+	return p == null ? new Properties() : p;
 }
-
 
 }
 
@@ -36,4 +37,3 @@ public static Properties configuration(@Nullable @Named("InputProperties") Prope
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

@@ -22,21 +22,28 @@ import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 
-/** Controller that GETs, validates and transforms content into a cell list, from original XML or YAML, given a schema
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Controller that GETs, validates and transforms content into a cell list, from original XML or
+ * YAML, given a schema
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentGETControl extends JSONGETControl {
 
 private final static Logger log = LoggerFactory.getLogger(ContentGETControl.class);
 
-private String prefix;
-private String path;
-private String modelPath;
-private String filters;
+private String	prefix;
+private String	path;
+private String	modelPath;
+private String	filters;
 
-public ContentGETControl(String prefix, String path, Optional<String> filters, @Nullable String modelPath) {
+public ContentGETControl(	String prefix,
+							String path,
+							Optional<String> filters,
+							@Nullable String modelPath) {
 
-	super("GET content:"+path, "content.ftl", "content-problem.ftl");
+	super("GET content:" + path, "content.ftl", "content-problem.ftl");
 
 	this.prefix = prefix;
 	this.path = path;
@@ -46,22 +53,26 @@ public ContentGETControl(String prefix, String path, Optional<String> filters, @
 
 
 @Override
-protected Object process() throws InterruptedException, ExecutionException, ValidationException, 
-									ParsingException, FetchingException, ConfigurationException, TransformException {
+protected Object process() throws InterruptedException, ExecutionException, ValidationException,
+		ParsingException, FetchingException, ConfigurationException, TransformException {
 
 	// we use the prefix to build fetchable content and models whenever needed
 	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
-	URI fetchableURI = DaggerURIComponent.builder().from(prefix+path).build().uri().get();
+	URI fetchableURI = DaggerURIComponent.builder().from(prefix + path).build().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).build().uri().get();
-	URI fetchableModelPath = DaggerURIComponent.builder().from(prefix+modelPath).build().uri().get();
+	URI fetchableModelPath = DaggerURIComponent.builder()
+			.from(prefix + modelPath)
+			.build()
+			.uri()
+			.get();
 
 	ContentParserComponent contentComponent = DaggerContentParserComponent.builder()
-																			.content(uri)
-																			.fetchedContentFrom(fetchableURI)
-																			.filters(filters)
-																			.model(modelURI)
-																			.withModelFetchedFrom(fetchableModelPath)
-																			.build();
+			.content(uri)
+			.fetchedContentFrom(fetchableURI)
+			.filters(filters)
+			.model(modelURI)
+			.withModelFetchedFrom(fetchableModelPath)
+			.build();
 	// we first validate the content against the schema and then we get the cell list
 	contentComponent.validator().get().validate();
 	Composite<Cell> content = contentComponent.content().get();
@@ -85,24 +96,21 @@ protected void afterProblem(String problem) {
 
 @Override
 protected Object problemInformation() {
-	return null;	// not adding any other extra error context yet
+	return null; // not adding any other extra error context yet
 }
-
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

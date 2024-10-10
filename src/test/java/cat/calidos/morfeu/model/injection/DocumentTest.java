@@ -20,17 +20,17 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DocumentTest {
 
+/**
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class DocumentTest {
 
 @Test
 public void testParseDocument() throws Exception {
-	
+
 	Document document = parseRelativeLocation("test-resources/documents/document1.json");
-	
+
 	testDocument1(document);
 
 }
@@ -38,27 +38,29 @@ public void testParseDocument() throws Exception {
 
 @Test
 public void testMalformedDocument() throws Exception {
-	assertThrows(ParsingException.class, () ->parseRelativeLocation("test-resources/documents/malformed-document.json"));
+	assertThrows(ParsingException.class,
+			() -> parseRelativeLocation("test-resources/documents/malformed-document.json"));
 }
 
 
 @Test
 public void testInvalidDocument() throws Exception {
-	assertThrows(ParsingException.class, () ->parseRelativeLocation("test-resources/documents/nonvalid-document.json"));
+	assertThrows(ParsingException.class,
+			() -> parseRelativeLocation("test-resources/documents/nonvalid-document.json"));
 }
 
 
 @Test
 public void testDocumentPrefix() throws Exception {
-	
+
 	URI u = new URI("http://foo.com/well/whatever.json");
 	Document doc = new Document(u, "doc", "desc");
 	String pref = "http://bar.com";
 
 	URI expected = new URI(pref);
 	assertEquals(expected, DocumentModule.documentPrefix(doc, pref));
-	
-	doc = new Document(u, "doc", "desc");	// empty prefix defined so we guess
+
+	doc = new Document(u, "doc", "desc"); // empty prefix defined so we guess
 	expected = new URI("http://foo.com/well/");
 	assertEquals(expected, DocumentModule.documentPrefix(doc, ""));
 
@@ -67,7 +69,7 @@ public void testDocumentPrefix() throws Exception {
 
 @Test
 public void testModelURI() throws Exception {
-	
+
 	String site = "http://foo.com/well/";
 	URI prefixURI = new URI(site);
 	String path = "whatever.json";
@@ -75,23 +77,23 @@ public void testModelURI() throws Exception {
 	String content = "content.xml";
 	Document doc = createDocument(site, path, model, content);
 	URI modelURI = doc.getModelURI();
-	
+
 	// url should be "http://foo.com/well/model.xsd" as we want to ensure we reach the server
-	URI expected = new URI(site+model);
+	URI expected = new URI(site + model);
 	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, modelURI));
-	
+
 	site = "http://foo.com:8080/well/";
 	prefixURI = new URI(site);
 	doc = createDocument(site, path, model, content);
-	
-	expected = new URI(site+model);
+
+	expected = new URI(site + model);
 	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, modelURI));
-	
+
 	// for file paths we don't make them absolute as per current contract, so unmodified model URI
 	site = "file://tmp/";
 	doc = createDocument(site, path, model, content);
 	prefixURI = new URI(site);
-	
+
 	expected = new URI(model);
 	assertEquals(expected, DocumentModule.fetchableModelURI(prefixURI, modelURI));
 
@@ -122,7 +124,8 @@ public static void testDocument1(Document document) throws URISyntaxException {
 }
 
 
-private Document parseRelativeLocation(String location) throws ParsingException, FetchingException, URISyntaxException, MalformedURLException, IOException {
+private Document parseRelativeLocation(String location) throws ParsingException, FetchingException,
+		URISyntaxException, MalformedURLException, IOException {
 
 	String absoluteLocation = this.getClass().getClassLoader().getResource(location).toString();
 	URI uri = new URI(absoluteLocation);
@@ -135,9 +138,13 @@ private Document parseRelativeLocation(String location) throws ParsingException,
 }
 
 
-private Document createDocument(String site, String path, String model, String content) throws URISyntaxException {
+private Document createDocument(String site,
+								String path,
+								String model,
+								String content)
+		throws URISyntaxException {
 
-	URI uri = new URI(site+path);
+	URI uri = new URI(site + path);
 	URI modelURI = new URI(model);
 	URI contentURI = new URI(content);
 	Document doc = new Document(uri, "doc", "desc");
@@ -148,21 +155,18 @@ private Document createDocument(String site, String path, String model, String c
 
 }
 
-
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

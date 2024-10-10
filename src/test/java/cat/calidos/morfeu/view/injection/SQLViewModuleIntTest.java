@@ -9,36 +9,39 @@ import cat.calidos.morfeu.utils.injection.SQLComponent;
 import cat.calidos.morfeu.utils.injection.SQLModule;
 import cat.calidos.morfeu.utils.injection.SQLTezt;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SQLViewModuleIntTest extends SQLTezt {
 
-
-@Test
-@DisplayName("Test render table")
+@Test @DisplayName("Test render table")
 public void testRender() throws Exception {
 
 	dropPersonsTable();
 	var create = "CREATE TABLE Persons (\n" + "    PersonID int,\n" + "    LastName varchar(255),\n"
-			+ "    FirstName varchar(255),\n" + "    Address varchar(255),\n" + "    City varchar(255) \n" + ") ";
+			+ "    FirstName varchar(255),\n" + "    Address varchar(255),\n"
+			+ "    City varchar(255) \n" + ") ";
 	int update = SQLModule.update(statement, create);
 	assertEquals(0, update);
-	update = SQLModule.update(statement, "INSERT INTO Persons VALUES (1, 'Doe', 'John', 'foo', 'fairyland')");
+	update = SQLModule.update(statement,
+			"INSERT INTO Persons VALUES (1, 'Doe', 'John', 'foo', 'fairyland')");
 	assertEquals(1, update);
-	update = SQLModule.update(statement, "INSERT INTO Persons VALUES (1, 'Doe', 'Daisy', 'bar', 'fairyland')");
+	update = SQLModule.update(statement,
+			"INSERT INTO Persons VALUES (1, 'Doe', 'Daisy', 'bar', 'fairyland')");
 	assertEquals(1, update);
 
 	var query = "SELECT * FROM Persons";
 	SQLComponent sql = SQLViewModule.sql(connection, query);
 	String table = SQLViewModule.render(sql, false);
 	// System.err.println(table);
-	assertAll("select * asserts", () -> assertNotNull(table), () -> assertTrue(table.contains("PERSONID")),
-			() -> assertTrue(table.contains("LASTNAME")), () -> assertTrue(table.contains("FIRSTNAME")),
+	assertAll("select * asserts", () -> assertNotNull(table),
+			() -> assertTrue(table.contains("PERSONID")),
+			() -> assertTrue(table.contains("LASTNAME")),
+			() -> assertTrue(table.contains("FIRSTNAME")),
 			() -> assertTrue(table.contains("ADDRESS")), () -> assertTrue(table.contains("CITY")));
 
 }
-
 
 }
 
@@ -55,4 +58,3 @@ public void testRender() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

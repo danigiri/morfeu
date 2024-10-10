@@ -3,9 +3,9 @@ package cat.calidos.morfeu.transform.injection;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.Model;
 import dagger.BindsInstance;
 import dagger.Component;
+
 
 /**
  * @author daniel giribet

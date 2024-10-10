@@ -17,6 +17,7 @@ import cat.calidos.morfeu.webapp.ui.UIDocument;
 import cat.calidos.morfeu.webapp.ui.UIDropArea;
 import cat.calidos.morfeu.webapp.ui.UIModel;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +31,10 @@ private UIModel		model;
 public void setup() {
 
 	open(appBaseURL);
-	UIDocument doc = UICatalogues.openCatalogues().shouldAppear().shouldBeVisible().clickOn(0)
+	UIDocument doc = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.shouldBeVisible()
+			.clickOn(0)
 			.clickOnDocumentNamed("Document 3");
 	doc.shouldBeVisible();
 	content = doc.content().shouldAppear();
@@ -53,7 +57,8 @@ public void removeCellValue() {
 	Optional<String> value = stuffEditor.value();
 	assertTrue(value.isPresent());
 	assertEquals("Stuff content", value.get());
-	assertFalse(stuffEditor.isCreateValueVisible(), "Should not be able to create a value for this cell");
+	assertFalse(stuffEditor.isCreateValueVisible(),
+			"Should not be able to create a value for this cell");
 	assertTrue(stuffEditor.isRemoveValueVisible(), "Should be able to remove value for this cell");
 
 	stuffEditor.clickRemoveValue();
@@ -69,7 +74,11 @@ public void addCellValue() {
 	// target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)
 
 	// TEST->ROW->COL->STUFF
-	UICellModelEntry stuffModel = model.rootCellModels().get(0).child("row").child("col").child("stuff");
+	UICellModelEntry stuffModel = model.rootCellModels()
+			.get(0)
+			.child("row")
+			.child("col")
+			.child("stuff");
 	stuffModel.hover();
 
 	UICell col = test.child("row(0)").child("col(0)");
@@ -87,7 +96,8 @@ public void addCellValue() {
 	Optional<String> value = stuffEditor.value();
 	assertFalse(value.isPresent());
 	assertTrue(stuffEditor.isCreateValueVisible(), "Should be able to create a value for new cell");
-	assertFalse(stuffEditor.isRemoveValueVisible(), "Should not be able to remove value for new cell");
+	assertFalse(stuffEditor.isRemoveValueVisible(),
+			"Should not be able to remove value for new cell");
 
 	stuffEditor.clickCreateValue();
 	assertFalse(stuffEditor.isCreateValueVisible(), "Should not be able to create a value again");
@@ -120,4 +130,3 @@ public void addCellValue() {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

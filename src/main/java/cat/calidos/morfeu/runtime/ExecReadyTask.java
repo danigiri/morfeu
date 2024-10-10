@@ -1,23 +1,20 @@
 /*
- *    Copyright 2018 Daniel Giribet
+ * Copyright 2018 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package cat.calidos.morfeu.runtime;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
 
 import org.zeroturnaround.exec.ProcessExecutor;
@@ -29,34 +26,33 @@ import cat.calidos.morfeu.runtime.api.StartingTask;
 
 
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ExecReadyTask extends ExecTask implements ReadyTask {
 
-private ProcessExecutor executor;
-private StartedProcess startedProcess;
-private ExecStartingTask startingTask;
-private ExecRunningTask runningTask;
-private ExecStoppingTask stoppingTask;
-private ExecFinishedTask finishedTask;
+private ProcessExecutor		executor;
+private StartedProcess		startedProcess;
+private ExecStartingTask	startingTask;
+private ExecRunningTask		runningTask;
+private ExecStoppingTask	stoppingTask;
+private ExecFinishedTask	finishedTask;
 
-
-public ExecReadyTask(int type,
+public ExecReadyTask(	int type,
 						ProcessExecutor executor,
 						ExecStartingTask startingTask,
 						ExecRunningTask runningTask,
 						ExecStoppingTask stoppingTask,
 						ExecFinishedTask finishedTask) {
 
-		super(type, READY, executor);	// no matchers for ready tasks 
+	super(type, READY, executor); // no matchers for ready tasks
 
-		this.executor = executor;
-		this.startingTask = startingTask;
-		this.runningTask = runningTask;
-		this.stoppingTask = stoppingTask;
-		this.finishedTask = finishedTask;
+	this.executor = executor;
+	this.startingTask = startingTask;
+	this.runningTask = runningTask;
+	this.stoppingTask = stoppingTask;
+	this.finishedTask = finishedTask;
 
-		startingTask.setRunningTask(runningTask);	// enforce the same instance
+	startingTask.setRunningTask(runningTask); // enforce the same instance
 
 }
 
@@ -64,7 +60,8 @@ public ExecReadyTask(int type,
 @Override
 public StartingTask start(Optional<String> stdin) throws MorfeuRuntimeException {
 
-	// race condition here, stdout and stderr are to all intents and purposes being examined simultaneously, this
+	// race condition here, stdout and stderr are to all intents and purposes being examined
+	// simultaneously, this
 	// means that in the case of an error, we can have the following cases:
 	// a)
 	// starting:
@@ -88,8 +85,10 @@ public StartingTask start(Optional<String> stdin) throws MorfeuRuntimeException 
 	// markAsFailed(running)
 	// and a few other cases...
 	// GUARD 1:
-	// We synchronize the setRemaning method, plus it cannot go up on value, so we ensure that we always set
-	// startedTask to NEXT eventually. (Either the problem sets it to NEXT or it's marked complete by runningtask)
+	// We synchronize the setRemaning method, plus it cannot go up on value, so we ensure that we
+	// always set
+	// startedTask to NEXT eventually. (Either the problem sets it to NEXT or it's marked complete
+	// by runningtask)
 	// GUARD 2:
 	// Moreover, status is untouched/undefined when erroring, so if we have:
 	// a)
@@ -103,13 +102,15 @@ public StartingTask start(Optional<String> stdin) throws MorfeuRuntimeException 
 	// status=STARTED
 	// we still maintain the invariant.
 	// GUARD 3:
-	// only setKO implemented, isOK is private, so isOK is never set to true, we cannot override with OK
+	// only setKO implemented, isOK is private, so isOK is never set to true, we cannot override
+	// with OK
 	// GUARD 4:
-	// TODO: FIXME: isOK() checks previous tasks so if any is not OK, we're not OK, as the most conservative
+	// TODO: FIXME: isOK() checks previous tasks so if any is not OK, we're not OK, as the most
+	// conservative
 	//
-	// In summary: 	a) remaining is sync and always goes down, cannot be overriden and go up
-	//				b) ok variable cannot be set to true, cannot be overriden and go true
-	//				c) if any of the tasks fails, we are marked as failed
+	// In summary: a) remaining is sync and always goes down, cannot be overriden and go up
+	// b) ok variable cannot be set to true, cannot be overriden and go true
+	// c) if any of the tasks fails, we are marked as failed
 
 	status = STARTING;
 	if (stdin.isPresent()) {
@@ -119,14 +120,15 @@ public StartingTask start(Optional<String> stdin) throws MorfeuRuntimeException 
 
 	try {
 		startedProcess = executor.start();
-		//FIXME: race condition here, we may be finished already if the process starts and finishes fast
+		// FIXME: race condition here, we may be finished already if the process starts and finishes
+		// fast
 		process = startedProcess.getProcess();
 		startingTask.setProcess(process);
 		runningTask.setProcess(process);
 		stoppingTask.setProcess(process);
 		finishedTask.setProcess(process);
 	} catch (IOException e) {
-		throw new MorfeuRuntimeException("Had a problem launching "+executor.getCommand(), e);
+		throw new MorfeuRuntimeException("Had a problem launching " + executor.getCommand(), e);
 	}
 
 	startedProcess.getProcess().onExit().thenAccept(a -> runningTask.markAsFinished());
@@ -137,7 +139,8 @@ public StartingTask start(Optional<String> stdin) throws MorfeuRuntimeException 
 
 
 @Override
-public void setRemaining(int percent) {}
+public void setRemaining(int percent) {
+}
 
 
 @Override
@@ -148,7 +151,7 @@ public int getRemaining() {
 
 @Override
 public String show() {
-	return "READY TASK ["+executor.getCommand()+"]";
+	return "READY TASK [" + executor.getCommand() + "]";
 }
 
 
@@ -156,6 +159,5 @@ public String show() {
 public String toString() {
 	return show();
 }
-
 
 }

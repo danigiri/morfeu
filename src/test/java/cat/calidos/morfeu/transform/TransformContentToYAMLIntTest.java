@@ -13,13 +13,13 @@ import cat.calidos.morfeu.model.Document;
 import cat.calidos.morfeu.model.injection.ModelTezt;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformContentToYAMLIntTest extends ModelTezt {
 
 private static final String TEMPLATE = "transform/content-to-yaml.ftl";
-
 
 @Test
 public void testTransformUsingTemplateDocument1() throws Exception {
@@ -30,11 +30,11 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	Map<String, Object> values = valueMapFrom(doc);
 
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath(TEMPLATE)
-												.withValue(values)
-												.build()
-												.render();
-	//System.err.println(transformed);
+			.withTemplatePath(TEMPLATE)
+			.withValue(values)
+			.build()
+			.render();
+	// System.err.println(transformed);
 
 	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -42,17 +42,17 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	assertTrue(yaml.isObject());
 	assertTrue(yaml.has("rows"));
 
-	JsonNode rows = yaml.get("rows");			//rows
+	JsonNode rows = yaml.get("rows"); // rows
 	assertNotNull(rows);
 	assertTrue(rows.isArray());
 	assertEquals(1, rows.size());
 
-	JsonNode cols = rows.get(0).get("cols");	//rows/cols
+	JsonNode cols = rows.get(0).get("cols"); // rows/cols
 	assertNotNull(cols);
 	assertTrue(cols.isArray());
 	assertEquals(2, cols.size());
 
-	JsonNode col0 = cols.get(0);				//rows/cols/col0
+	JsonNode col0 = cols.get(0); // rows/cols/col0
 	assertTrue(col0.isObject());
 	assertTrue(col0.has("size"));
 	assertEquals(4, col0.get("size").asInt());
@@ -64,10 +64,11 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 	assertEquals(1, datas.size());
 	assertTrue(datas.has(0));
 
-	JsonNode data0 = datas.get(0);			//rows/cols/col0/data0
+	JsonNode data0 = datas.get(0); // rows/cols/col0/data0
 	checkData(data0, 42, "blahblah");
 
-	// now we check the order of the attributes that should be the one we want (like the one in the xml)
+	// now we check the order of the attributes that should be the one we want (like the one in the
+	// xml)
 	// this is not supported in the dom so we will skip this test
 }
 
@@ -81,10 +82,10 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 	Map<String, Object> values = valueMapFrom(doc);
 
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath(TEMPLATE)
-												.withValue(values)
-												.build()
-												.render();
+			.withTemplatePath(TEMPLATE)
+			.withValue(values)
+			.build()
+			.render();
 	// System.err.println(transformed);
 
 	var mapper = new YAMLMapper();
@@ -116,11 +117,11 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath(TEMPLATE)
-												.withValue(values)
-												.build()
-												.render();
-	//System.err.println(transformed);
+			.withTemplatePath(TEMPLATE)
+			.withValue(values)
+			.build()
+			.render();
+	// System.err.println(transformed);
 
 	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -131,11 +132,11 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	assertTrue(keyvalues.isObject());
 	assertEquals(2, keyvalues.size());
 
-	JsonNode foo = keyvalues.get("foo");			//rows/cols/col0/keyvalues/foo
+	JsonNode foo = keyvalues.get("foo"); // rows/cols/col0/keyvalues/foo
 	assertNotNull(foo);
 	assertEquals("bar", foo.asText());
 
-	JsonNode bar = keyvalues.get("bar");			//rows/cols/col0/keyvalues/bar
+	JsonNode bar = keyvalues.get("bar"); // rows/cols/col0/keyvalues/bar
 	assertNotNull(bar);
 	assertEquals("foo", bar.asText());
 
@@ -150,11 +151,11 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath(TEMPLATE)
-												.withValue(values)
-												.build()
-												.render();
-	//System.err.println(transformed);
+			.withTemplatePath(TEMPLATE)
+			.withValue(values)
+			.build()
+			.render();
+	// System.err.println(transformed);
 
 	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -179,11 +180,11 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath(TEMPLATE)
-												.withValue(values)
-												.build()
-												.render();
-	//System.err.println(transformed);
+			.withTemplatePath(TEMPLATE)
+			.withValue(values)
+			.build()
+			.render();
+	// System.err.println(transformed);
 
 	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -195,13 +196,13 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 	assertEquals(3, datas.size());
 	assertTrue(datas.has(0));
 
-	JsonNode data4 = datas.get(0);			//rows/cols/col0/data4
+	JsonNode data4 = datas.get(0); // rows/cols/col0/data4
 	checkData(data4, 4, "contains a double \" quote");
 
-	JsonNode data5 = datas.get(1);			//rows/cols/col0/data5
+	JsonNode data5 = datas.get(1); // rows/cols/col0/data5
 	checkData(data5, 5, "contains a single ' quote");
 
-	JsonNode data6 = datas.get(2);			//rows/cols/col0/data6
+	JsonNode data6 = datas.get(2); // rows/cols/col0/data6
 	checkData(data6, 6, "contains an & amp");
 
 }
@@ -214,13 +215,13 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	
+
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath(TEMPLATE)
-												.withValue(values)
-												.build()
-												.render();
-	//System.err.println(transformed);
+			.withTemplatePath(TEMPLATE)
+			.withValue(values)
+			.build()
+			.render();
+	// System.err.println(transformed);
 
 	YAMLMapper mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -231,22 +232,24 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 	assertTrue(keyvalues7.isObject());
 	assertEquals(3, keyvalues7.size());
 
-	JsonNode double_ = keyvalues7.get("double");			//rows/cols/col0/keyvalues7/double
+	JsonNode double_ = keyvalues7.get("double"); // rows/cols/col0/keyvalues7/double
 	assertNotNull(double_);
 	assertEquals("contains a double \" quote", double_.asText());
 
-	JsonNode single = keyvalues7.get("single");			//rows/cols/col0/keyvalues7/single
+	JsonNode single = keyvalues7.get("single"); // rows/cols/col0/keyvalues7/single
 	assertNotNull(single);
 	assertEquals("contains a single ' quote", single.asText());
 
-	JsonNode amp = keyvalues7.get("amp");			//rows/cols/col0/keyvalues7/double
+	JsonNode amp = keyvalues7.get("amp"); // rows/cols/col0/keyvalues7/double
 	assertNotNull(amp);
 	assertEquals("contains an & amp", amp.asText());
 
 }
 
 
-private void checkData(JsonNode data, int expectedNumber, String expectedText) {
+private void checkData(	JsonNode data,
+						int expectedNumber,
+						String expectedText) {
 
 	assertNotNull(data);
 	assertTrue(data.isObject());
@@ -255,21 +258,18 @@ private void checkData(JsonNode data, int expectedNumber, String expectedText) {
 
 }
 
-
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

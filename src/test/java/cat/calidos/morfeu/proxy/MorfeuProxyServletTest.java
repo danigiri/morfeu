@@ -7,20 +7,19 @@ import org.junit.jupiter.api.Test;
 
 import jakarta.servlet.ServletException;
 
-public class MorfeuProxyServletTest {
 
+public class MorfeuProxyServletTest {
 
 @Test @DisplayName("Test get target uri config")
 public void testGetFinalTargetURI() throws ServletException {
 
-	//assertEquals("foo", MorfeuProxyServlet.getFinalTargetURI("foo", null));
+	// assertEquals("foo", MorfeuProxyServlet.getFinalTargetURI("foo", null));
 
 	System.setProperty(MorfeuProxyServlet.__PROXY_PREFIX, "foo");
-	var targetUri = "${"+MorfeuProxyServlet.__PROXY_PREFIX+"}";
+	var targetUri = "${" + MorfeuProxyServlet.__PROXY_PREFIX + "}";
 	assertEquals("foo", MorfeuProxyServlet.getFinalTargetURI(targetUri, null));
 
 }
-
 
 }
 
@@ -37,4 +36,3 @@ public void testGetFinalTargetURI() throws ServletException {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

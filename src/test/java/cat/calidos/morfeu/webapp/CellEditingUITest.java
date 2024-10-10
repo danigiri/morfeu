@@ -18,6 +18,7 @@ import cat.calidos.morfeu.webapp.ui.UICellData;
 import cat.calidos.morfeu.webapp.ui.UICellEditor;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,12 +27,15 @@ public class CellEditingUITest extends UITezt {
 private UICell		test;
 private UIContent	content;
 
-
 @BeforeEach
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1").content();
+	content = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1")
+			.content();
 	content.shouldBeVisible();
 	test = content.rootCells().get(0);
 
@@ -54,7 +58,8 @@ public void editCellAndSave() {
 	UICellData cellEditorData = dataEditor.cellData();
 	assertNotNull(cellEditorData);
 	assertTrue(cellEditorData.isFromEditor(), "Editing the cell should show an editor");
-	assertTrue(cellEditorData.isFromCell(), "Editing the cell should show an editor with data coming from the cell");
+	assertTrue(cellEditorData.isFromCell(),
+			"Editing the cell should show an editor with data coming from the cell");
 
 	attributes = cellEditorData.attributes();
 	assertNotNull(attributes);
@@ -138,9 +143,13 @@ public void editCellByDoubleClick() {
 }
 
 
-private UIAttributeData checkAttribute(List<UIAttributeData> attributes, String name, String expectedValue) {
+private UIAttributeData checkAttribute(	List<UIAttributeData> attributes,
+										String name,
+										String expectedValue) {
 
-	Optional<UIAttributeData> attributeOptional = attributes.stream().filter(a -> a.name().matches(name)).findFirst();
+	Optional<UIAttributeData> attributeOptional = attributes.stream()
+			.filter(a -> a.name().matches(name))
+			.findFirst();
 	assertTrue(attributeOptional.isPresent());
 	UIAttributeData attribute = attributeOptional.get();
 	assertEquals(expectedValue, attribute.value(), "Wrong value of '" + name + "'");
@@ -148,7 +157,6 @@ private UIAttributeData checkAttribute(List<UIAttributeData> attributes, String 
 	return attribute;
 
 }
-
 
 }
 

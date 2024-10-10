@@ -9,16 +9,16 @@ import java.util.Optional;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSSchemaSet;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Model extends ComplexCellModel {
 
-protected XSSchemaSet schema;
-public static final String MODEL_NAMESPACE = "";
+protected XSSchemaSet		schema;
+public static final String	MODEL_NAMESPACE	= "";
 
-
-public Model(URI u,
+public Model(	URI u,
 				String name,
 				String desc,
 				Type type,
@@ -33,7 +33,8 @@ public Model(URI u,
 				Composite<CellModel> children) {
 
 	// TODO: fetch description from annotation
-	super(u, name, desc, type, min, max, defaultValue, category, areChildrenOrdered, meta,  attributes, children);
+	super(u, name, desc, type, min, max, defaultValue, category, areChildrenOrdered, meta,
+			attributes, children);
 
 	this.schema = s;
 
@@ -42,7 +43,7 @@ public Model(URI u,
 
 public int getComplextTypeCount() {
 
-	//	XSSchema modelSchema = schema.getSchema("http://dani.calidos.com/morfeu/model");
+	// XSSchema modelSchema = schema.getSchema("http://dani.calidos.com/morfeu/model");
 	Iterator<XSComplexType> typeIterator = schema.iterateComplexTypes();
 	int c = 0;
 	while (typeIterator.hasNext()) {
@@ -53,6 +54,5 @@ public int getComplextTypeCount() {
 	return c;
 
 }
-
 
 }

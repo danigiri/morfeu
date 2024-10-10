@@ -7,21 +7,20 @@ import java.util.Properties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
 public class ConfigPropertyModuleTest {
-
-
 
 @Test @DisplayName("Test arg value extraction")
 public void testArgsValue() {
 	assertEquals(null, ConfigPropertyModule.argsValue("foo", null));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[]{}));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[]{"bar"}));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[]{"foo"}));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[]{"--foo"}));
-	assertEquals("bar", ConfigPropertyModule.argsValue("foo", new String[]{"--foo", "bar"}));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[]{"foobar"}));
-	assertEquals("bar", ConfigPropertyModule.argsValue("foo", new String[]{"foo=bar"}));
-	assertEquals("", ConfigPropertyModule.argsValue("foo", new String[]{"foo="}));
+	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] {}));
+	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "bar" }));
+	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "foo" }));
+	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "--foo" }));
+	assertEquals("bar", ConfigPropertyModule.argsValue("foo", new String[] { "--foo", "bar" }));
+	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "foobar" }));
+	assertEquals("bar", ConfigPropertyModule.argsValue("foo", new String[] { "foo=bar" }));
+	assertEquals("", ConfigPropertyModule.argsValue("foo", new String[] { "foo=" }));
 }
 
 
@@ -34,16 +33,23 @@ public void testValue() {
 	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, null, "bar", null, null).get());
 
 	// default value testing
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, "bar", null, null, null, "bar2").get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, "bar", null, null, "bar2").get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, null, "bar", null, "bar2").get());
+	assertEquals("bar",
+			ConfigPropertyModule.value("foo", p, "bar", null, null, null, "bar2").get());
+	assertEquals("bar",
+			ConfigPropertyModule.value("foo", p, null, "bar", null, null, "bar2").get());
+	assertEquals("bar",
+			ConfigPropertyModule.value("foo", p, null, null, "bar", null, "bar2").get());
 	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, null, null, null, "bar").get());
 
 	// override
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, "bar2", null, "bar", null, null).get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, "bar2", "bar3", "bar", null, null).get());
+	assertEquals("bar",
+			ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
+	assertEquals("bar",
+			ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
+	assertEquals("bar",
+			ConfigPropertyModule.value("foo", p, "bar2", null, "bar", null, null).get());
+	assertEquals("bar",
+			ConfigPropertyModule.value("foo", p, "bar2", "bar3", "bar", null, null).get());
 
 	// null value handling
 	assertEquals("", ConfigPropertyModule.value("", p, "", null, null, null, "bar2").get());
@@ -57,15 +63,14 @@ public void testValue() {
 public void testAllowEmpty() {
 	System.setProperty("foo", "");
 	String value = DaggerConfigPropertyComponent.builder()
-		.forName("foo")
-		.allowEmpty(false)
-		.andDefault("bar")
-		.build()
-		.value()
-		.get();
+			.forName("foo")
+			.allowEmpty(false)
+			.andDefault("bar")
+			.build()
+			.value()
+			.get();
 	assertEquals("bar", value);
 }
-
 
 }
 

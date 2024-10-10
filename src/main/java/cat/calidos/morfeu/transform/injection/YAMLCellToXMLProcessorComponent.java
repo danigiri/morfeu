@@ -2,21 +2,17 @@ package cat.calidos.morfeu.transform.injection;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 import cat.calidos.morfeu.model.CellModel;
-import cat.calidos.morfeu.model.ComplexCellModel;
 import cat.calidos.morfeu.transform.JsonNodeCellModel;
 import cat.calidos.morfeu.transform.PrefixProcessor;
-import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessor;
-import cat.calidos.morfeu.transform.YAMLComplexCellToXMLProcessorSlash;
 import cat.calidos.morfeu.transform.injection.ContentJSONToXMLComponent.Builder;
 import dagger.BindsInstance;
-import dagger.BindsOptionalOf;
 import dagger.Component;
+
 
 /**
  * @author daniel giribet

@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 import cat.calidos.morfeu.model.Composite;
 import cat.calidos.morfeu.problems.InternalException;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CompositeTest {
 
 private Composite<String> composite;
-
 
 @BeforeEach
 public void setup() {
@@ -71,7 +71,6 @@ public void testBadGetName() {
 	assertThrows(InternalException.class, () -> composite.child("nope"));
 
 }
-
 
 }
 

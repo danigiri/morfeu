@@ -20,13 +20,13 @@ import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class TransformNoValueIntTest extends TransformTezt {
 
 private String content;
-
 
 @BeforeEach
 public void setup() throws Exception {
@@ -44,7 +44,7 @@ public void testTransformJSONToXML() throws Exception {
 	assertNotNull(json);
 
 	String transformed = DaggerContentConverterComponent.builder().from(json).build().xml();
-	//System.err.println(transformed);
+	// System.err.println(transformed);
 	compareWithXMLFile(transformed, "target/test-classes/test-resources/documents/document4.xml");
 
 }
@@ -58,11 +58,11 @@ public void testTransformJSONToYAML() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 	String transformed = DaggerViewComponent.builder()
-												.withTemplatePath("transform/content-to-yaml.ftl")
-												.withValue(values)
-												.build()
-												.render();
-	//System.err.println(transformed);
+			.withTemplatePath("transform/content-to-yaml.ftl")
+			.withValue(values)
+			.build()
+			.render();
+	// System.err.println(transformed);
 
 	var mapper = new YAMLMapper();
 	JsonNode yaml = mapper.readTree(transformed);
@@ -70,7 +70,7 @@ public void testTransformJSONToYAML() throws Exception {
 	assertTrue(yaml.isObject());
 	assertTrue(yaml.has("rows"));
 
-	JsonNode col = yaml.get("rows").get(0).get("cols").get(0);	//rows/cols/col
+	JsonNode col = yaml.get("rows").get(0).get("cols").get(0); // rows/cols/col
 	assertNotNull(col);
 	assertTrue(col.isObject());
 	assertTrue(col.has("stuff"));
@@ -82,7 +82,7 @@ public void testTransformJSONToYAML() throws Exception {
 
 	JsonNode data4 = col.get("data4");
 	assertTrue(data4.isObject());
-	assertEquals( 0, data4.size(), "data4: {} in transformed yaml should be empty");
+	assertEquals(0, data4.size(), "data4: {} in transformed yaml should be empty");
 
 }
 
@@ -95,26 +95,23 @@ public void testTransformYAMLToXML() throws Exception {
 	var xmlPath = "src/test/resources/test-resources/documents/document4.xml";
 
 	String transformed = transformYAMLToXML(yamlPath, documentPath);
-	//System.err.println(transformed);
-	compareWithXMLFile(transformed,  xmlPath);
+	// System.err.println(transformed);
+	compareWithXMLFile(transformed, xmlPath);
 
 }
-
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

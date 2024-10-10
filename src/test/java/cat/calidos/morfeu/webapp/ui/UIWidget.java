@@ -1,17 +1,15 @@
 /*
- *    Copyright 2018 Daniel Giribet
+ * Copyright 2018 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package cat.calidos.morfeu.webapp.ui;
@@ -28,9 +26,10 @@ import org.openqa.selenium.interactions.Actions;
 
 import com.codeborne.selenide.SelenideElement;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UIWidget<T extends UIWidget<T>> {
 
 protected static final String CLASS = "class";
@@ -52,7 +51,7 @@ public T shouldBeVisible() {
 
 	element.shouldBe(visible);
 
-	return (T)this;
+	return (T) this;
 
 }
 
@@ -65,7 +64,7 @@ public boolean isDisplayed() {
 @SuppressWarnings("unchecked")
 public T shouldAppear() {
 	element.should(appear, Duration.ofSeconds(10));
-	return (T)this;
+	return (T) this;
 }
 
 
@@ -77,38 +76,40 @@ public void shouldDisappear() {
 @SuppressWarnings("unchecked")
 public T hover() {
 
-	//element.scrollTo().hover();
+	// element.scrollTo().hover();
 	element.hover();
 
-	return (T)this;
-	
+	return (T) this;
+
 }
 
 
 @SuppressWarnings("unchecked")
 public T pressKey(String k) {
-	
-	// we are sending the keys this way as it seems to work as it should, selenide or selenium has a lot of trouble here
+
+	// we are sending the keys this way as it seems to work as it should, selenide or selenium has a
+	// lot of trouble here
 
 	Actions actions = new Actions(driver);
-	//actions.moveToElement(element.getWrappedElement());
-	//actions.click();
+	// actions.moveToElement(element.getWrappedElement());
+	// actions.click();
 
 	// on geckodriver, tab is sent specifically and does not switch fields
-	if (k.equals("\t") ) {
+	if (k.equals("\t")) {
 		actions.sendKeys(Keys.TAB);
 	} else {
-		actions.sendKeys(Keys.chord((CharSequence)k));
+		actions.sendKeys(Keys.chord((CharSequence) k));
 	}
 	actions.build().perform();
 
 	// this keeps failing randomly
 	try {
 		Thread.sleep(50);
-	} catch (InterruptedException e) {}
+	} catch (InterruptedException e) {
+	}
 
-	return (T)this;
-	
+	return (T) this;
+
 }
 
 
@@ -139,8 +140,8 @@ public T pressTAB() {
 
 
 /**
-* @return
-*////////////////////////////////////////////////////////////////////////////////
+ * @return
+ *////////////////////////////////////////////////////////////////////////////////
 protected String class_() {
 
 	return element.attr(CLASS);

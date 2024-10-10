@@ -15,22 +15,20 @@ import cat.calidos.morfeu.filter.Filter;
 import cat.calidos.morfeu.transform.injection.DaggerContentConverterComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
+
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
 public class ContentFiltersModule {
 
-
-@Produces @IntoMap @Named("objectToString")
-@StringKey("content-to-xml")
+@Produces @IntoMap @Named("objectToString") @StringKey("content-to-xml")
 public static Filter<Object, String> contentToXML() {
-	return (json) -> DaggerContentConverterComponent.builder().from((JsonNode)json).build().xml();
+	return (json) -> DaggerContentConverterComponent.builder().from((JsonNode) json).build().xml();
 }
 
 
-@Produces @IntoMap @Named("objectToString")
-@StringKey("map-to-string")
+@Produces @IntoMap @Named("objectToString") @StringKey("map-to-string")
 @SuppressWarnings("unchecked")
 public static Filter<Object, String> mapToString(Map<String, JsonNode> params) {
 
@@ -42,43 +40,37 @@ public static Filter<Object, String> mapToString(Map<String, JsonNode> params) {
 		return (map) -> "map filter did not get key parameter";
 	}
 
-
 	String key = filterParams.get("key").asText();
 	return (map) -> {
 
-		return (String)((Map<String, Object>)map).get(key);	// TODO: add more error control
+		return (String) ((Map<String, Object>) map).get(key); // TODO: add more error control
 
 	};
 
 }
 
 
-@Produces @IntoMap @Named("objectToString")
-@StringKey("content-to-yaml")
+@Produces @IntoMap @Named("objectToString") @StringKey("content-to-yaml")
 public static Filter<Object, String> contentToYAML() {
 	return (values) -> DaggerViewComponent.builder()
-											.withTemplatePath("transform/content-to-yaml.ftl")
-											.withValue(values)
-											.build()
-											.render();
+			.withTemplatePath("transform/content-to-yaml.ftl")
+			.withValue(values)
+			.build()
+			.render();
 }
-
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

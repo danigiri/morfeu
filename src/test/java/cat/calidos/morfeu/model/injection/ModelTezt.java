@@ -33,17 +33,16 @@ import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.Tezt;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ModelTezt extends Tezt {
 
+public static final int EXPECTED_COL_CHILDREN_COUNT = 13;
 
-public  static final int EXPECTED_COL_CHILDREN_COUNT = 13;
-
-
-protected Document produceDocumentFromPath(String path)
-throws InterruptedException, ExecutionException, ParsingException, FetchingException, ValidationException {
+protected Document produceDocumentFromPath(String path) throws InterruptedException,
+		ExecutionException, ParsingException, FetchingException, ValidationException {
 
 	String docPath = testAwareFullPathFrom(path);
 	URI uri = DaggerURIComponent.builder().from(docPath).build().uri().get();
@@ -53,56 +52,68 @@ throws InterruptedException, ExecutionException, ParsingException, FetchingExcep
 }
 
 
-protected Model parseModelFrom(URI u) throws ConfigurationException, InterruptedException, ExecutionException, 
-											ParsingException, FetchingException {
+protected Model parseModelFrom(URI u) throws ConfigurationException, InterruptedException,
+		ExecutionException, ParsingException, FetchingException {
 
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
 	Metadata metadata = ModelModule.metadata(u, annotation);
 	String desc = ModelModule.description(metadata);
-	Type type = DaggerTypeComponent.builder().withDefaultName(ModelModule.ROOT_NAME).andURI(u).build().emptyType();
+	Type type = DaggerTypeComponent.builder()
+			.withDefaultName(ModelModule.ROOT_NAME)
+			.andURI(u)
+			.build()
+			.emptyType();
 	Attributes<CellModel> attributes = ModelModule.attributes();
-	Map<URI, Metadata> globalModelMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, u);
-	Composite<CellModel> rootCellModels = ModelModule.rootCellModels(schemaSet, u, globalModelMetadata);
+	Map<URI, Metadata> globalModelMetadata = GlobalModelMetadataModule
+			.provideGlobalModelMetadata(annotation, u);
+	Composite<CellModel> rootCellModels = ModelModule.rootCellModels(schemaSet, u,
+			globalModelMetadata);
 
 	return ModelModule.model(u, desc, type, metadata, attributes, schemaSet, rootCellModels);
 
 }
 
 
-protected CellModel cellModelFrom(URI u, String name) throws Exception {
+protected CellModel cellModelFrom(	URI u,
+									String name)
+		throws Exception {
 
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
-	Map<String,CellModel> globals = new HashMap<String, CellModel>();
+	Map<String, CellModel> globals = new HashMap<String, CellModel>();
 	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
-	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule.provideGlobalModelMetadata(annotation, u);
+	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule
+			.provideGlobalModelMetadata(annotation, u);
 
-	//FIXME: this particle creation is probably wrong but it seems to work, at least for complex types
+	// FIXME: this particle creation is probably wrong but it seems to work, at least for complex
+	// types
 	return DaggerCellModelComponent.builder()
-									.fromElem(elem)
-									.fromParticle(elem.getType().asComplexType().getContentType().asParticle())
-									.withParentURI(u)
-									.withGlobalMetadata(globalMetadata)
-									.andExistingGlobals(globals)
-									.build()
-									.cellModel();
+			.fromElem(elem)
+			.fromParticle(elem.getType().asComplexType().getContentType().asParticle())
+			.withParentURI(u)
+			.withGlobalMetadata(globalMetadata)
+			.andExistingGlobals(globals)
+			.build()
+			.cellModel();
 
 }
 
 
-protected ComplexCellModel complexCellModelFrom(URI u, String name) throws Exception {
+protected ComplexCellModel complexCellModelFrom(URI u,
+												String name)
+		throws Exception {
 
 	CellModel cellModel = cellModelFrom(u, name);
 
-	return ComplexCellModel.from(cellModel);	// from simple to complex
+	return ComplexCellModel.from(cellModel); // from simple to complex
 
 }
 
 
-protected XSSchemaSet parseSchemaFrom(URI uri)
-		throws InterruptedException, ExecutionException, ConfigurationException, ParsingException, FetchingException {
- 
+protected XSSchemaSet parseSchemaFrom(URI uri) throws InterruptedException, ExecutionException,
+		ConfigurationException, ParsingException, FetchingException {
+
 	XSOMParser parser = DaggerModelParserComponent.builder().build().produceXSOMParser().get();
 
 	return ModelModule.parseModel(uri, parser);
@@ -112,11 +123,12 @@ protected XSSchemaSet parseSchemaFrom(URI uri)
 
 protected Type provideElementType(XSElementDecl elem) {
 
-	return DaggerTypeComponent.builder()	//awfully convenient to inject the dependencies, ok on integration tests
-								.withDefaultName("default-type-name")
-								.withXSType(elem.getType())
-								.build()
-								.type();
+	return DaggerTypeComponent.builder() // awfully convenient to inject the dependencies, ok on
+											// integration tests
+			.withDefaultName("default-type-name")
+			.withXSType(elem.getType())
+			.build()
+			.type();
 
 }
 
@@ -136,7 +148,8 @@ protected JsonNode readYAMLFrom(String path) throws Exception {
 protected Map<String, Object> valueMapFrom(Document doc) {
 
 	Map<String, Object> values = new HashMap<String, Object>(2);
-	values.put("cells", doc.children());	// skip document, do not skip root node and it's more compatible
+	values.put("cells", doc.children()); // skip document, do not skip root node and it's more
+											// compatible
 	values.put("model", doc.getModel());
 
 	return values;
@@ -145,25 +158,21 @@ protected Map<String, Object> valueMapFrom(Document doc) {
 
 
 protected String temporaryOutputFilePathIn(String pref) {
-	return pref+"/filesaver-test-"+System.currentTimeMillis()+".txt";
+	return pref + "/filesaver-test-" + System.currentTimeMillis() + ".txt";
 }
-
 
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

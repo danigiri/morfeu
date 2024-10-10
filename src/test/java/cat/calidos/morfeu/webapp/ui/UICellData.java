@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 import com.codeborne.selenide.SelenideElement;
 
-/**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class UICellData extends UIWidget<UICellData>{
 
+/**
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class UICellData extends UIWidget<UICellData> {
 
 public UICellData() {
 	super($(".cell-data"));
@@ -46,12 +46,19 @@ public String URI() {
 	return element.$(".cell-header-uri").text();
 }
 
+
 public List<String> extraInfo() {
-	return element.$$(".cell-data-extra-info").asFixedIterable().stream().map(e -> e.text()).collect(Collectors.toList());
+	return element.$$(".cell-data-extra-info")
+			.asFixedIterable()
+			.stream()
+			.map(e -> e.text())
+			.collect(Collectors.toList());
 }
 
 
-/** @return Does the data come from a cell? (always true if it's an editor), false if from a model */
+/**
+ * @return Does the data come from a cell? (always true if it's an editor), false if from a model
+ */
 public boolean isFromCell() {
 	return class_().contains("cell-data-source-cell") || isFromEditor();
 }
@@ -99,31 +106,31 @@ public Optional<UIAttributeData> notPresentAttribute(String name) {
 }
 
 
-
 public Optional<String> value() {
 	return Optional.ofNullable(element.$(".cell-data-value").getValue());
 }
 
 
 private List<UIAttributeData> attributesOfClass(String class_) {
-	return element.$$(class_).asFixedIterable().stream().map( e -> new UIAttributeData(e, this)).collect(Collectors.toList());
+	return element.$$(class_)
+			.asFixedIterable()
+			.stream()
+			.map(e -> new UIAttributeData(e, this))
+			.collect(Collectors.toList());
 }
-
 
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

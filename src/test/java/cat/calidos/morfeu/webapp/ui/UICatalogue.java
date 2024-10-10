@@ -1,17 +1,15 @@
 /*
- *    Copyright 2018 Daniel Giribet
+ * Copyright 2018 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package cat.calidos.morfeu.webapp.ui;
@@ -27,15 +25,18 @@ import com.codeborne.selenide.SelenideElement;
 
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UICatalogue {
 
-private UICatalogue() {}
+private UICatalogue() {
+}
+
 
 public static UICatalogue openCatalogue() {
 	return new UICatalogue();
 }
+
 
 public static void shouldNotBeVisible() {
 
@@ -51,13 +52,13 @@ public UICatalogue shouldAppear() {
 	$("#document-list").should(appear);
 
 	return this;
-	
+
 }
 
 
 public String getName() {
 	return $("#catalogue-name").getText();
-} 
+}
 
 
 public String getDesc() {
@@ -66,29 +67,33 @@ public String getDesc() {
 
 
 public UIDocument clickOnDocument(int i) {
-	
+
 	ElementsCollection documentEntries = getDocuments();
 	int count = documentEntries.size();
-	if (i>=count) { 
-		throw new IndexOutOfBoundsException("Could not click on doc entry "+i+" as there are only "+count);
+	if (i >= count) {
+		throw new IndexOutOfBoundsException(
+				"Could not click on doc entry " + i + " as there are only " + count);
 	}
 	documentEntries.get(i).click();
-	
+
 	return currentlySelectedDocument();
-	
+
 }
 
 
 public UIDocument clickOnDocumentNamed(String name) {
-	
+
 	ElementsCollection documentEntries = getDocuments();
-	Optional<SelenideElement> foundDocument = documentEntries.asFixedIterable().stream()
-																.filter(d -> d.getText().trim().equals(name))
-																.findFirst();
-	foundDocument.orElseThrow(() -> new IndexOutOfBoundsException("Could not find document named '"+name+"'")).click();
-	
+	Optional<SelenideElement> foundDocument = documentEntries.asFixedIterable()
+			.stream()
+			.filter(d -> d.getText().trim().equals(name))
+			.findFirst();
+	foundDocument.orElseThrow(
+			() -> new IndexOutOfBoundsException("Could not find document named '" + name + "'"))
+			.click();
+
 	return currentlySelectedDocument();
-	
+
 }
 
 
@@ -96,9 +101,9 @@ private UIDocument currentlySelectedDocument() {
 
 	UIDocument document = new UIDocument();
 	document.shouldBeVisible();
-	
+
 	return document;
-	
+
 }
 
 

@@ -18,6 +18,7 @@ import cat.calidos.morfeu.webapp.ui.UICellModelEntry;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 import cat.calidos.morfeu.webapp.ui.UIModel;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,12 +26,14 @@ public class CellDataUITest extends UITezt {
 
 private UICell test;
 
-
 @BeforeEach
 public void setup() {
 
 	open(appBaseURL);
-	UIContent content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1")
+	UIContent content = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1")
 			.content();
 	content.shouldBeVisible();
 	test = content.rootCells().get(0);
@@ -41,7 +44,6 @@ public void setup() {
 @Test
 public void checkCellData() {
 
-
 	// target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)
 	UICell data = test.child("row(0)").child("col(0)").child("data(0)");
 	assertNotNull(data);
@@ -51,17 +53,22 @@ public void checkCellData() {
 	data.hover();
 	UICellData cellData = data.cellInfo();
 	assertNotNull(cellData);
-	assertFalse(cellData.isFromModel(), "cell data from hovering on a cell should not come from the model");
-	assertTrue(cellData.isFromCell(), "cell data from hovering on a cell should come from the cell");
+	assertFalse(cellData.isFromModel(),
+			"cell data from hovering on a cell should not come from the model");
+	assertTrue(cellData.isFromCell(),
+			"cell data from hovering on a cell should come from the cell");
 	assertFalse(cellData.isFromEditor(), "cell data from hovering should not be an editor");
 
 	String header = cellData.header();
-	assertTrue(header.contains("data"), "Bad information cell, we did not get 'data' in the cell info header");
-	assertTrue(header.contains("[0..∞]"), "Bad information cell, should have 0 to ∞ as the cardinality of 'data'");
+	assertTrue(header.contains("data"),
+			"Bad information cell, we did not get 'data' in the cell info header");
+	assertTrue(header.contains("[0..∞]"),
+			"Bad information cell, should have 0 to ∞ as the cardinality of 'data'");
 
 	String desc = cellData.desc();
 	String expectedDesc = "Globally provided description of 'data'";
-	assertTrue(desc.contains(expectedDesc), "Bad information cell, does not have the correct description");
+	assertTrue(desc.contains(expectedDesc),
+			"Bad information cell, does not have the correct description");
 
 	String uri = cellData.URI();
 	String expectedURI = "target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(0)/data(0)";
@@ -90,7 +97,11 @@ public void checkCellDataMissingAttributes() {
 
 	// this cell only has 'number' attribute and no 'text'
 	// target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data(0)
-	UICell data = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data(0)");
+	UICell data = test.child("row(0)")
+			.child("col(1)")
+			.child("row(0)")
+			.child("col(0)")
+			.child("data(0)");
 	assertNotNull(data);
 
 	UICellData.shouldNotBeVisible();
@@ -114,7 +125,11 @@ public void checkCellDataMissingAttributes() {
 @Test
 public void checkCellModelData() {
 
-	UIModel model = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1").model()
+	UIModel model = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1")
+			.model()
 			.shouldAppear();
 
 	List<UICellModelEntry> rootCellModels = model.rootCellModels();
@@ -123,16 +138,21 @@ public void checkCellModelData() {
 	UICellData.shouldNotBeVisible();
 	testModelEntry.hover();
 	UICellData testData = testModelEntry.cellInfo().shouldAppear();
-	assertTrue(testData.isFromModel(), "cell data from hovering on the model should come from the model");
-	assertFalse(testData.isFromCell(), "cell data from hovering on the model should come from the model");
+	assertTrue(testData.isFromModel(),
+			"cell data from hovering on the model should come from the model");
+	assertFalse(testData.isFromCell(),
+			"cell data from hovering on the model should come from the model");
 
 	String header = testData.header();
-	assertTrue(header.contains("test"), "Bad information from model, we did not get 'test' in the cell info header");
-	assertTrue(header.contains("[1..1]"), "Bad information from model, should have 1..1 as the cardinality of 'test'");
+	assertTrue(header.contains("test"),
+			"Bad information from model, we did not get 'test' in the cell info header");
+	assertTrue(header.contains("[1..1]"),
+			"Bad information from model, should have 1..1 as the cardinality of 'test'");
 
 	String desc = testData.desc();
 	String expectedDesc = "Root cell-model desc";
-	assertTrue(desc.contains(expectedDesc), "Bad information from model, does not have the correct description");
+	assertTrue(desc.contains(expectedDesc),
+			"Bad information from model, does not have the correct description");
 
 	List<UIAttributeData> attributes = testData.attributes();
 	assertNotNull(attributes);
@@ -143,7 +163,6 @@ public void checkCellModelData() {
 	assertFalse(textAttribute.isMandatory(), "Attribute test@text should not be mandatory");
 
 }
-
 
 }
 

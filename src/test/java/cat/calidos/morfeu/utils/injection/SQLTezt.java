@@ -23,7 +23,6 @@ protected Connection	connection;
 protected Statement		statement;
 private String			databasePath;
 
-
 @BeforeEach
 public void setupDatabase() throws Exception {
 
@@ -36,7 +35,8 @@ public void setupDatabase() throws Exception {
 	dbThread.start();
 	sleep(Duration.ofMillis(200)); // so db starts
 	Class.forName("org.hsqldb.jdbcDriver");
-	connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/"+databaseName, "SA", "");
+	connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/" + databaseName, "SA",
+			"");
 	statement = SQLModule.statement(connection);
 
 }
@@ -45,7 +45,7 @@ public void setupDatabase() throws Exception {
 @AfterEach
 public void teardown() throws Exception {
 
-	if (statement!=null) {
+	if (statement != null) {
 		statement.execute("SHUTDOWN");
 		statement.close();
 	}
@@ -57,7 +57,7 @@ public void teardown() throws Exception {
 		dbThread.interrupt();
 	}
 	if (!databasePath.isEmpty()) {
-		FileUtils.deleteQuietly(new File (databasePath));
+		FileUtils.deleteQuietly(new File(databasePath));
 	}
 
 }
@@ -67,14 +67,14 @@ protected void dropPersonsTable() throws ParsingException {
 	SQLModule.update(statement, "DROP TABLE IF EXISTS Persons;");
 }
 
-
 class DBThread extends Thread {
 
-private String path;
-private Server server;
-private String name;
+private String	path;
+private Server	server;
+private String	name;
 
-DBThread(String path, String name) {
+DBThread(	String path,
+			String name) {
 	this.path = path;
 	this.name = name;
 }
@@ -84,11 +84,11 @@ DBThread(String path, String name) {
 public void run() {
 
 	HsqlProperties props = new HsqlProperties();
-	props.setProperty("server.database.0", "file:" + path + "/"+ name + ";");
+	props.setProperty("server.database.0", "file:" + path + "/" + name + ";");
 	props.setProperty("server.dbname.0", name);
 	server = new Server();
-//	server.setTrace(true);
-//	server.setSilent(false);
+	// server.setTrace(true);
+	// server.setSilent(false);
 	try {
 		server.setProperties(props);
 
@@ -106,7 +106,6 @@ public void interrupt() {
 	super.interrupt();
 	server.stop();
 }
-
 
 }
 

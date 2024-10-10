@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import dagger.Module;
 import dagger.Provides;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,8 +86,8 @@ public static String argsValue(	@Named("PropertyName") String name,
 				value = args[i + 1];
 			}
 		} else {
-			if (current.length() > nameLength && current.substring(0, nameLength)
-					.equals(name) && current.charAt(nameLength) == VARIABLE_DELIMITER) {
+			if (current.length() > nameLength && current.substring(0, nameLength).equals(name)
+					&& current.charAt(nameLength) == VARIABLE_DELIMITER) {
 				value = current.substring(nameLength + 1);
 			}
 		}

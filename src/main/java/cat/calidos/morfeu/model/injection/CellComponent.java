@@ -12,6 +12,7 @@ import dagger.Component;
 import cat.calidos.morfeu.model.Cell;
 import cat.calidos.morfeu.model.CellModel;
 
+
 /**
  * Cell: content element, always related to a cell model
  * 

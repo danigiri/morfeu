@@ -22,23 +22,25 @@ import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 import cat.calidos.morfeu.utils.injection.MapperModule;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 
+
 /**
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(includes=MapperModule.class)
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProducerModule(includes = MapperModule.class)
 public class AdvancedFiltersModule {
 
 protected final static Logger log = LoggerFactory.getLogger(AdvancedFiltersModule.class);
 
-
-@Produces @IntoMap @Named("stringToString")
-@StringKey("yaml-to-json")
-public static Filter<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMapper yamlMapper) {
+@Produces @IntoMap @Named("stringToString") @StringKey("yaml-to-json")
+public static Filter<String, String> yamlToJSON(ObjectMapper jsonMapper,
+												YAMLMapper yamlMapper) {
 	return yaml -> {
 		try {
 
-			// we are using the dirty trick of converting to YAML and then converting to JSON, works ^^
-			return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(yamlMapper.readTree(yaml));
+			// we are using the dirty trick of converting to YAML and then converting to JSON, works
+			// ^^
+			return jsonMapper.writerWithDefaultPrettyPrinter()
+					.writeValueAsString(yamlMapper.readTree(yaml));
 
 		} catch (IOException e) {
 			throw new TransformException("Problem when transforming yaml", e);
@@ -47,9 +49,8 @@ public static Filter<String, String> yamlToJSON(ObjectMapper jsonMapper, YAMLMap
 }
 
 
-//TODO: move to domain-specific transform module
-@Produces @IntoMap @Named("objectToString")
-@StringKey("apply-template")
+// TODO: move to domain-specific transform module
+@Produces @IntoMap @Named("objectToString") @StringKey("apply-template")
 public static Filter<Object, String> applyTemplate(Map<String, JsonNode> params) {
 
 	if (!params.containsKey("apply-template")) {
@@ -61,40 +62,40 @@ public static Filter<Object, String> applyTemplate(Map<String, JsonNode> params)
 	}
 	JsonNode templateNode = filterParameters.get("template");
 	if (!templateNode.isTextual()) {
-		log.error("Incorrect parameters in apply-template, 'template' param value should be a string");
+		log.error(
+				"Incorrect parameters in apply-template, 'template' param value should be a string");
 		return (values) -> "APPLY TEMPLATE PARAM 'template' IS NOT A STRING";
 	}
 	String template = templateNode.asText();
 
 	return (values) -> {
-		return DaggerViewComponent.builder().withTemplatePath(template).withValue(values).build().render();
+		return DaggerViewComponent.builder()
+				.withTemplatePath(template)
+				.withValue(values)
+				.build()
+				.render();
 	};
 
 }
 
 
-@Produces  @IntoMap @Named("stringToObject")
-@StringKey("string-to-json")
+@Produces @IntoMap @Named("stringToObject") @StringKey("string-to-json")
 public static Filter<String, Object> stringToJSON() {
 	return (content) -> DaggerJSONParserComponent.builder().from(content).build().json().get();
 }
 
-
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

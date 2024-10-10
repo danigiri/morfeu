@@ -1,6 +1,5 @@
 package cat.calidos.morfeu.utils;
 
-
 public class TemplateUtils {
 
 /** remove last char */
@@ -65,18 +64,21 @@ public String yamla(String s) {
 
 /** returns yaml content scaping \" --> " */
 public String yamlc(String s) {
-	 s = s.replace("\\\"", "\"");
-	 return s;
+	s = s.replace("\\\"", "\"");
+	return s;
 }
+
 
 // convert multiline string into a yaml multiline value
-public String multiline(String indent, String s) {
-	 var indentedLinefeed = "\n"+indent;
-	 return s.replace("\\n", indentedLinefeed);
+public String multiline(String indent,
+						String s) {
+	var indentedLinefeed = "\n" + indent;
+	return s.replace("\\n", indentedLinefeed);
 }
 
 
-// this is used to reduce indentation in yaml by two spaces (just by removing two chars at the beginning
+// this is used to reduce indentation in yaml by two spaces (just by removing two chars at the
+// beginning
 public String trimtwo(String s) {
 	return s.substring(2);
 }
@@ -89,23 +91,25 @@ public String addtwospaces(String s) {
 
 
 // freemarker does not like to call substring directly, so adding it here
-public String substr(String s, int start, int end) {
+public String substr(	String s,
+						int start,
+						int end) {
 	return s.substring(start, end);
 }
 
 
-public String debug(Object...objects) {
+public String debug(Object... objects) {
 	return "";
 }
 
 
-public String p(Object...objects) {
+public String p(Object... objects) {
 	var s = new StringBuffer();
 	var i = 0;
-	int length = objects.length-1;
-	while (i<length) {
-		s.append(objects[i++]+":'"+objects[i++]+"'");
-		if (i<length) {
+	int length = objects.length - 1;
+	while (i < length) {
+		s.append(objects[i++] + ":'" + objects[i++] + "'");
+		if (i < length) {
 			s.append(",");
 		}
 	}
@@ -113,8 +117,8 @@ public String p(Object...objects) {
 }
 
 
-public String y(Object...objects) {
-	return "# "+p(objects);
+public String y(Object... objects) {
+	return "# " + p(objects);
 }
 
 
@@ -122,7 +126,6 @@ public String d(String s) {
 	System.err.println(s);
 	return s;
 }
-
 
 }
 

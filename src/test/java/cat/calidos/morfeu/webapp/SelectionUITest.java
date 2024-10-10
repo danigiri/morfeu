@@ -13,23 +13,22 @@ import cat.calidos.morfeu.webapp.ui.UIContent;
 
 
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class SelectionUITest extends UITezt {
 
 private UIContent content;
-
 
 @BeforeEach
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()	
-							.shouldAppear()
-							.shouldBeVisible()
-							.clickOn(0)
-							.clickOnDocumentNamed("Document 1")
-							.content();
+	content = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.shouldBeVisible()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1")
+			.content();
 	content.shouldAppear();
 
 }
@@ -53,7 +52,7 @@ public void testClearSelection() {
 	assertTrue(rootCell.child(0).isSelected());
 
 	content.pressKey(UIContent.SELECTION_MODE);
-	 rootCell = content.rootCells().get(0);
+	rootCell = content.rootCells().get(0);
 	assertFalse(rootCell.isSelected());
 	assertFalse(rootCell.child(0).isSelected());
 
@@ -86,7 +85,8 @@ public void testSelectionActivate() {
 @Test
 public void testSelectionClearsActivation() {
 
-	// we select and activate, then we select the same cell again, which means that it gets deactivated
+	// we select and activate, then we select the same cell again, which means that it gets
+	// deactivated
 	// (no double state is allowed)
 	content.pressKey(UIContent.SELECTION_MODE);
 	content.pressKey("0");
@@ -130,8 +130,13 @@ public void testSelectionChangesActivation() {
 	content.pressKey("0");
 	content.pressKey("0");
 	content.pressKey("1");
-	UICell data2 = content
-				.rootCells().get(0).child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data2(1)");
+	UICell data2 = content.rootCells()
+			.get(0)
+			.child("row(0)")
+			.child("col(1)")
+			.child("row(0)")
+			.child("col(0)")
+			.child("data2(1)");
 	assertFalse(data.isSelected());
 	assertTrue(data.isActive());
 	assertTrue(data2.isSelected());
@@ -145,22 +150,18 @@ public void testSelectionChangesActivation() {
 
 }
 
-
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-

@@ -8,6 +8,7 @@ import cat.calidos.morfeu.transform.Processor;
 import dagger.BindsInstance;
 import dagger.Component;
 
+
 @Component(modules = { ContentJSONToXMLModule.class })
 public interface ContentJSONToXMLComponent {
 

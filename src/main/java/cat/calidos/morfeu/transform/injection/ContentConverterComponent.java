@@ -7,10 +7,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import dagger.BindsInstance;
 import dagger.Component;
 
-/** Content conversion transformation component that uses converters for easier debugging
-*	@author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules={ContentConverterModule.class, JsonNodeStackContextModule.class})
+
+/**
+ * Content conversion transformation component that uses converters for easier debugging
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@Component(modules = { ContentConverterModule.class, JsonNodeStackContextModule.class })
 public interface ContentConverterComponent {
 
 String xml();
@@ -43,4 +46,3 @@ interface Builder {
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-

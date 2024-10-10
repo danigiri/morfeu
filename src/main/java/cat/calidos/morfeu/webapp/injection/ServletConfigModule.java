@@ -16,29 +16,29 @@ import dagger.Provides;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class ServletConfigModule {
 
-
 @Provides
-public static Properties getProperties(@Nullable ServletConfig config,
+public static Properties getProperties(	@Nullable ServletConfig config,
 										Optional<ServletContext> servletContext,
-										List<String> parameterNames, 
+										List<String> parameterNames,
 										Iterable<String> attributeNames) {
 
 	Properties p = new Properties();
-	if (config !=null) {
+	if (config != null) {
 		parameterNames.forEach(name -> p.setProperty(name, config.getInitParameter(name)));
 	}
 
 	if (servletContext.isPresent()) {
 		ServletContext context = servletContext.get();
 		StreamSupport.stream(attributeNames.spliterator(), false)
-						.filter(a -> context.getAttribute(a) instanceof String)
-						.forEach(a -> p.setProperty(a, (String)context.getAttribute(a)));
+				.filter(a -> context.getAttribute(a) instanceof String)
+				.forEach(a -> p.setProperty(a, (String) context.getAttribute(a)));
 	}
 
 	p.putAll(System.getProperties());
@@ -51,15 +51,13 @@ public static Properties getProperties(@Nullable ServletConfig config,
 
 @Provides
 public static List<String> parameterNames(@Nullable ServletConfig c) {
-	return c==null ?
-			List.of()
-	: Collections.list(c.getInitParameterNames());
+	return c == null ? List.of() : Collections.list(c.getInitParameterNames());
 }
 
 
 @Provides
 public static Iterable<String> attributeNames(@Nullable ServletConfig c) {
-	if (c==null) {
+	if (c == null) {
 		return () -> new ArrayList<String>().iterator();
 	}
 	ServletContext context = c.getServletContext();

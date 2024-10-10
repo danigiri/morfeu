@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import cat.calidos.morfeu.problems.ValidationException;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DocumentTest {
-
 
 @Test
 public void testEmptyValidator() throws Exception {
@@ -29,7 +29,6 @@ public void testEmptyValidator() throws Exception {
 	assertThrows(ValidationException.class, () -> doc.validate());
 }
 
-
 }
 
 /*
@@ -45,4 +44,3 @@ public void testEmptyValidator() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

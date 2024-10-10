@@ -22,34 +22,39 @@ import cat.calidos.morfeu.utils.LocalSaver;
 import cat.calidos.morfeu.utils.POSTSaver;
 import cat.calidos.morfeu.utils.Saver;
 
-/** (We include the http client so the http post saver can be created)
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@ProducerModule(includes=HttpClientModule.class)
+
+/**
+ * (We include the http client so the http post saver can be created)
+ * 
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@ProducerModule(includes = HttpClientModule.class)
 public class SaverModule {
 
 protected final static Logger log = LoggerFactory.getLogger(SaverModule.class);
 
-
 @Produces
-public static Saver saver(@Named("DestinationContentURI") URI u,
+public static Saver saver(	@Named("DestinationContentURI") URI u,
 							Producer<LocalSaver> fileSaverProducer,
-							Producer<POSTSaver> postSaverProducer) throws SavingException {
+							Producer<POSTSaver> postSaverProducer)
+		throws SavingException {
 
 	String scheme = u.getScheme();
 	log.debug("Trying to save to uri {} with scheme {}", u, scheme);
 
 	try {
-		return scheme.startsWith("file") ? fileSaverProducer.get().get() : postSaverProducer.get().get();
+		return scheme.startsWith("file") ? fileSaverProducer.get().get()
+				: postSaverProducer.get().get();
 	} catch (Exception e) {
-		throw new SavingException("Could not provide an appropriate saver for '"+u+"'", e);
+		throw new SavingException("Could not provide an appropriate saver for '" + u + "'", e);
 	}
 
 }
 
 
 @Produces
-public static LocalSaver fileSaver(@Named("DestinationPath") String path, @Named("EffectiveContent") String content) {
+public static LocalSaver fileSaver(	@Named("DestinationPath") String path,
+									@Named("EffectiveContent") String content) {
 	return new LocalSaver(path, content);
 }
 
@@ -69,7 +74,7 @@ public static String destinationPathFrom(@Named("DestinationContentURI") URI u) 
 
 
 @Produces
-public static POSTSaver postSaver(@Named("DestinationContentURI") URI u,
+public static POSTSaver postSaver(	@Named("DestinationContentURI") URI u,
 									Map<String, String> contentMap,
 									CloseableHttpClient client) {
 	return new POSTSaver(client, u, contentMap);
@@ -77,7 +82,7 @@ public static POSTSaver postSaver(@Named("DestinationContentURI") URI u,
 
 
 @Produces
-public static Map<String, String> contentMap(@Named("DestinationContentURI") URI u,
+public static Map<String, String> contentMap(	@Named("DestinationContentURI") URI u,
 												@Named("EffectiveContent") String content) {
 	// by convention, we send two variables, though that can be easily changed
 
@@ -89,21 +94,18 @@ public static Map<String, String> contentMap(@Named("DestinationContentURI") URI
 
 }
 
-
 }
 
 /*
- *    Copyright 2019 Daniel Giribet
+ * Copyright 2019 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */

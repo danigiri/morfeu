@@ -16,8 +16,8 @@ import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 
-public class DocumentIntTest extends ModelTezt {
 
+public class DocumentIntTest extends ModelTezt {
 
 @Test
 public void testProduceCompleteDocument() throws Exception {
@@ -79,7 +79,8 @@ public void testNonValidModelDocument() throws Exception {
 
 	try {
 
-		System.err.println("Please ignore next ParsingException, it is expected as the model is not valid");
+		System.err.println(
+				"Please ignore next ParsingException, it is expected as the model is not valid");
 		produceDocumentFromPath("test-resources/documents/document-with-nonvalid-model.json");
 
 	} catch (ExecutionException e) {
@@ -91,7 +92,6 @@ public void testNonValidModelDocument() throws Exception {
 	}
 
 }
-
 
 }
 

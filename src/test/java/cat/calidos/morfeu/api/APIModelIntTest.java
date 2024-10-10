@@ -8,8 +8,8 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
+
 
 /**
  * We test the model API and some basic aspects of the JSON structure
@@ -18,23 +18,23 @@ import com.fasterxml.jackson.databind.JsonNode;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class APIModelIntTest extends APITezt {
 
-
 @Test
 public void testModel() throws Exception {
 	// http://localhost:8080/morfeu/dyn/models/target/test-classes/test-resources/models/test-model.xsd
-	InputStream content = fetchRemoteInputStreamFrom("models/target/test-classes/test-resources/models/test-model.xsd");
+	InputStream content = fetchRemoteInputStreamFrom(
+			"models/target/test-classes/test-resources/models/test-model.xsd");
 	assertNotNull(content);
 
 	JsonNode model = parseJson(content);
 	assertNotNull(model);
 
-	assertEquals( 0, model.get("schema").asInt(), "Wrong model schema");
+	assertEquals(0, model.get("schema").asInt(), "Wrong model schema");
 	assertTrue(model.get("children").isArray(), "/children is not an array and it should be");
 	assertEquals("", model.get("name").asText(), "Wrong model name");
 	assertEquals("Description of test model", model.get("desc").asText(), "Wrong model desc");
-	assertEquals("test", model.get("children").get(0).get("name").asText(), "/children/test(0) has a wrong name");
+	assertEquals("test", model.get("children").get(0).get("name").asText(),
+			"/children/test(0) has a wrong name");
 }
-
 
 }
 
@@ -51,4 +51,3 @@ public void testModel() throws Exception {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

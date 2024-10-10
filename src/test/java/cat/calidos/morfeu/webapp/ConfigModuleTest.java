@@ -21,7 +21,6 @@ import jakarta.servlet.ServletContext;
 
 public class ConfigModuleTest {
 
-
 @Test
 public void testProvideConfigWithServletConfig() {
 
@@ -30,7 +29,8 @@ public void testProvideConfigWithServletConfig() {
 
 	Enumeration<String> names = Collections.enumeration(Arrays.asList("a", "b", "c"));
 	when(servletConfig.getInitParameterNames()).thenReturn(names);
-	when(servletContext.getAttributeNames()).thenReturn(Collections.enumeration(Collections.emptyList()));
+	when(servletContext.getAttributeNames())
+			.thenReturn(Collections.enumeration(Collections.emptyList()));
 	when(servletConfig.getServletContext()).thenReturn(servletContext);
 	when(servletConfig.getInitParameter("a")).thenReturn("A");
 	when(servletConfig.getInitParameter("b")).thenReturn("B");
@@ -40,8 +40,9 @@ public void testProvideConfigWithServletConfig() {
 	parameterNames.add("a");
 	parameterNames.add("b");
 	parameterNames.add("c");
-	
-	Properties p = (ServletConfigModule.getProperties(servletConfig, Optional.empty(), parameterNames, ServletConfigModule.attributeNames(null) ));
+
+	Properties p = (ServletConfigModule.getProperties(servletConfig, Optional.empty(),
+			parameterNames, ServletConfigModule.attributeNames(null)));
 	assertEquals("A", p.getProperty("a"));
 	assertEquals("B", p.getProperty("b"));
 	assertEquals("C", p.getProperty("c"));

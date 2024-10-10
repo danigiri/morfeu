@@ -26,7 +26,6 @@ import cat.calidos.morfeu.webapp.ui.UIModel;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentUITest extends UITezt {
 
-
 @BeforeEach
 public void setup() {
 	open(appBaseURL);
@@ -54,7 +53,10 @@ public void contentTestAppearingAndDisappearing() {
 @Test
 public void contentTest() {
 
-	UIContent content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1")
+	UIContent content = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1")
 			.content();
 	content.shouldAppear().shouldBeVisible();
 
@@ -79,14 +81,16 @@ public void contentTest() {
 	assertTrue(col3a.isColumnWell());
 
 	UICell data = col3a.child("data(0)");
-	assertTrue(data.img().endsWith("assets/images/data-cell.svg"), "'data' cell representation img is wrong");
+	assertTrue(data.img().endsWith("assets/images/data-cell.svg"),
+			"'data' cell representation img is wrong");
 
 	UICell col3b = cols3.get(1); // TEST/ROW/COL1
 	assertNotNull(col3b);
 	assertTrue(col3b.isColumnWell());
 
 	UICell data2 = col3b.child("row(0)").child("col(0)").child("data2(1)");
-	assertTrue(data2.img().contains("/dyn/preview/svg/data2.svg"), "'data2' cell representation img is wrong");
+	assertTrue(data2.img().contains("/dyn/preview/svg/data2.svg"),
+			"'data2' cell representation img is wrong");
 
 }
 
@@ -96,7 +100,10 @@ public void relationshipFromContentToModelTest() {
 
 	var document1URI = "target/test-classes/test-resources/documents/document1.xml";
 
-	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
+	UIDocument document = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
 	content.shouldAppear().shouldBeVisible();
 	UICell test = content.rootCells().get(0);
@@ -111,13 +118,23 @@ public void relationshipFromContentToModelTest() {
 
 	UIModel model = document.model();
 	// test/row/col/data
-	UICellModelEntry dataModel = model.rootCellModel("test").child("row").child("col").child("data");
+	UICellModelEntry dataModel = model.rootCellModel("test")
+			.child("row")
+			.child("col")
+			.child("data");
 	assertTrue(dataModel.isActive());
 
-	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2");
+	UICellModelEntry data2Model = model.rootCellModel("test")
+			.child("row")
+			.child("col")
+			.child("data2");
 	assertFalse(data2Model.isActive());
 
-	UICell data2 = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").child("data2(0)");
+	UICell data2 = test.child("row(0)")
+			.child("col(1)")
+			.child("row(0)")
+			.child("col(1)")
+			.child("data2(0)");
 	assertFalse(data2.isActive());
 
 	data2.hover();
@@ -131,7 +148,10 @@ public void relationshipFromContentToModelTest() {
 @Test
 public void relationshipFromModelToContentTest() {
 
-	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
+	UIDocument document = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1");
 
 	UIContent content = document.content();
 	content.shouldAppear().shouldBeVisible();
@@ -144,14 +164,22 @@ public void relationshipFromModelToContentTest() {
 	assertTrue(test.dropArea(0).isActive());
 
 	// we highlight data2, on this column there are two of them so no drop areas are active
-	UICellModelEntry data2Model = model.rootCellModel("test").child("row").child("col").child("data2");
+	UICellModelEntry data2Model = model.rootCellModel("test")
+			.child("row")
+			.child("col")
+			.child("data2");
 	data2Model.hover();
 	assertTrue(data2Model.isActive());
-	List<UIDropArea> dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(1)").dropAreas();
+	List<UIDropArea> dropAreas = test.child("row(0)")
+			.child("col(1)")
+			.child("row(0)")
+			.child("col(1)")
+			.dropAreas();
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 
 	// on the other one, there is only one data2, so there is room for 1 more, all drop areas active
-	// on that column except the first one, as it's not allowed due to order restrictions, so that's two drop areas
+	// on that column except the first one, as it's not allowed due to order restrictions, so that's
+	// two drop areas
 	dropAreas = test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").dropAreas();
 	assertEquals(2, dropAreas.stream().filter(UIDropArea::isActive).count());
 
@@ -161,7 +189,10 @@ public void relationshipFromModelToContentTest() {
 @Test
 public void dropAreasTest() {
 
-	UIDocument document = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1");
+	UIDocument document = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1");
 	UIContent content = document.content();
 	content.shouldAppear().shouldBeVisible();
 	UICell test = content.rootCells().get(0);
@@ -183,7 +214,6 @@ public void dropAreasTest() {
 	test.child("row(0)").child("col(1)").child("row(0)").child("col(0)").child("data(0)").hover();
 	assertEquals(dropAreas.size(), dropAreas.stream().filter(UIDropArea::isActive).count());
 
-
 	// here we have 2 data2 children, we can reorder them around in two ways:
 	// a) take first element and put it at the end
 	// b) take second element and put it in the beginning
@@ -194,7 +224,6 @@ public void dropAreasTest() {
 	colWith2data2.child("data2(1)").hover();
 	assertEquals(1, dropAreas.stream().filter(UIDropArea::isActive).count());
 
-	
 	// however, if we hover on another data2 somewhere else, we hit over the count limit of 2 data2
 	// so we have no
 	// active cols
@@ -202,7 +231,6 @@ public void dropAreasTest() {
 	assertEquals(0, dropAreas.stream().filter(UIDropArea::isActive).count());
 
 }
-
 
 }
 

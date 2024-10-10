@@ -26,6 +26,7 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 import cat.calidos.morfeu.utils.injection.MapperModule;
 
+
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +43,8 @@ public void testProduceSchemaParser() throws Exception {
 	SAXParserFactory factory = ModelParserModule.produceSAXParserFactory();
 	ErrorHandler errorHandler = ModelParserModule.errorHandler();
 	AnnotationParserFactory annotationParserFactory = ModelParserModule.annotationParserFactory();
-	XSOMParser parser = ModelParserModule.produceSchemaParser(factory, errorHandler, annotationParserFactory);
+	XSOMParser parser = ModelParserModule.produceSchemaParser(factory, errorHandler,
+			annotationParserFactory);
 	assertNotNull(parser);
 	assertNotNull(parser.getErrorHandler());
 }
@@ -52,6 +54,5 @@ public void testProduceSchemaParser() throws Exception {
 public void testProduceJSONObjectMapper() throws Exception {
 	assertNotNull(MapperModule.jsonMapper());
 }
-
 
 }

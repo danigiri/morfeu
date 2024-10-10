@@ -15,10 +15,8 @@
 package cat.calidos.morfeu.model.metadata.injection;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
-import javax.inject.Named;
 
 import org.w3c.dom.Node;
 
@@ -26,6 +24,7 @@ import com.sun.xml.xsom.XSAnnotation;
 
 import dagger.BindsInstance;
 import dagger.Component;
+
 
 /**
  * @author daniel giribet

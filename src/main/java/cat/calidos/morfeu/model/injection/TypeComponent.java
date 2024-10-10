@@ -14,6 +14,7 @@ import dagger.Component;
 
 import cat.calidos.morfeu.model.Type;
 
+
 /**
  * Create a Type instance from a XSType instance from the model xml schema
  * 

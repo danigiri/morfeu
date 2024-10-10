@@ -11,6 +11,7 @@ import cat.calidos.morfeu.webapp.ui.UICatalogues;
 import cat.calidos.morfeu.webapp.ui.UICell;
 import cat.calidos.morfeu.webapp.ui.UIContent;
 
+
 /**
  * Testing cell removal
  * 
@@ -18,15 +19,17 @@ import cat.calidos.morfeu.webapp.ui.UIContent;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CellRemoveUITest extends UITezt {
 
-
 private UIContent content;
-
 
 @BeforeEach
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues().shouldAppear().clickOn(0).clickOnDocumentNamed("Document 1").content();
+	content = UICatalogues.openCatalogues()
+			.shouldAppear()
+			.clickOn(0)
+			.clickOnDocumentNamed("Document 1")
+			.content();
 
 }
 
@@ -65,7 +68,6 @@ public void removeAfterActivation() {
 
 }
 
-
 }
 
 /*
@@ -81,4 +83,3 @@ public void removeAfterActivation() {
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-

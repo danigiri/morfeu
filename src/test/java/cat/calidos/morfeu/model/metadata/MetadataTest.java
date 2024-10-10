@@ -17,13 +17,14 @@ import org.junit.jupiter.api.BeforeEach;
 
 import cat.calidos.morfeu.model.Metadata;
 
+
 /**
-* @author daniel giribet
-*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * @author daniel giribet
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MetadataTest {
 
-private URI mergedURI;
-private Metadata merged;
+private URI			mergedURI;
+private Metadata	merged;
 
 @BeforeEach
 public void setup() throws Exception {
@@ -41,21 +42,9 @@ public void setup() throws Exception {
 	directives.put("directives2", directivesA2);
 	Map<String, Set<String>> attributes = new HashMap<String, Set<String>>(0);
 	Map<String, Set<String>> attributeCategories = new HashMap<String, Set<String>>(0);
-	Metadata priorityMetadata = new Metadata(priorityURI,
-												"descA",
-												"A",
-												"ACP",
-												"IMG",
-												"GET",
-												"DEFAULT",
-												"idA",
-												readonly,
-												"valueLocatorA",
-												priorityDefaultValues,
-												directives,
-												attributes,
-												null,
-												attributeCategories);
+	Metadata priorityMetadata = new Metadata(priorityURI, "descA", "A", "ACP", "IMG", "GET",
+			"DEFAULT", "idA", readonly, "valueLocatorA", priorityDefaultValues, directives,
+			attributes, null, attributeCategories);
 
 	URI metadataURI = new URI("priority.xsd");
 	HashMap<String, String> metadataDefaultValues = new HashMap<String, String>(2);
@@ -73,21 +62,9 @@ public void setup() throws Exception {
 	categoryY.add("b");
 	attributeCategories2.put("X", categoryX);
 	attributeCategories2.put("Y", categoryY);
-	Metadata metadata = new Metadata(metadataURI,
-										"descB", 
-										"B", 
-										"BCP", 
-										"BCPTYPE", 
-										"GETB",
-										"THUMB", 
-										"idB", 
-										Optional.of(false),
-										"valueLocatorB",
-										metadataDefaultValues, 
-										directives, 
-										attributes2,
-										"X",
-										attributeCategories2);
+	Metadata metadata = new Metadata(metadataURI, "descB", "B", "BCP", "BCPTYPE", "GETB", "THUMB",
+			"idB", Optional.of(false), "valueLocatorB", metadataDefaultValues, directives,
+			attributes2, "X", attributeCategories2);
 
 	mergedURI = new URI("foo.xsd");
 	merged = Metadata.merge(mergedURI, priorityMetadata, metadata);
@@ -98,28 +75,24 @@ public void setup() throws Exception {
 @Test @DisplayName("Merge metadata basic test")
 public void testMergeMetadataBasic() {
 
-	assertAll("Checking merge values",
-		() -> assertEquals(mergedURI, merged.getURI()),
-		() -> assertEquals("descA", merged.getDesc()),
-		() -> assertEquals("A", merged.getPresentation()),
-		() -> assertEquals("ACP", merged.getCellPresentation()),
-		() -> assertEquals("BCPTYPE", merged.getCellPresentationType()),
-		() -> assertEquals("GETB", merged.getCellPresentationMethod()),
-		() -> assertEquals("THUMB", merged.getThumb()),
-		() -> assertTrue(merged.getIdentifier().isPresent()),
-		() -> assertTrue(merged.isReadonly().isPresent()),
-		() -> assertTrue(merged.isReadonly().get()),
-		() -> assertTrue(merged.getValueLocator().isPresent()),
-		() -> assertEquals("valueLocatorA", merged.getValueLocator().get()),
-		() -> assertEquals("idA", merged.getIdentifier().get())
-	);
+	assertAll("Checking merge values", () -> assertEquals(mergedURI, merged.getURI()),
+			() -> assertEquals("descA", merged.getDesc()),
+			() -> assertEquals("A", merged.getPresentation()),
+			() -> assertEquals("ACP", merged.getCellPresentation()),
+			() -> assertEquals("BCPTYPE", merged.getCellPresentationType()),
+			() -> assertEquals("GETB", merged.getCellPresentationMethod()),
+			() -> assertEquals("THUMB", merged.getThumb()),
+			() -> assertTrue(merged.getIdentifier().isPresent()),
+			() -> assertTrue(merged.isReadonly().isPresent()),
+			() -> assertTrue(merged.isReadonly().get()),
+			() -> assertTrue(merged.getValueLocator().isPresent()),
+			() -> assertEquals("valueLocatorA", merged.getValueLocator().get()),
+			() -> assertEquals("idA", merged.getIdentifier().get()));
 
 	Map<String, String> mergedDefaultValues = merged.getDefaultValues();
-	assertAll("Checking merge default values",
-		() -> assertEquals(2, mergedDefaultValues.size()),
-		() -> 	assertEquals("priority-default-a", mergedDefaultValues.get("@a")),
-		() -> 	assertEquals("meta-default-b", mergedDefaultValues.get("@b"))
-	);
+	assertAll("Checking merge default values", () -> assertEquals(2, mergedDefaultValues.size()),
+			() -> assertEquals("priority-default-a", mergedDefaultValues.get("@a")),
+			() -> assertEquals("meta-default-b", mergedDefaultValues.get("@b")));
 
 }
 
@@ -128,19 +101,15 @@ public void testMergeMetadataBasic() {
 public void testMergeMetadataDirectives() {
 
 	Set<String> directives = merged.getDirectivesFor("directives");
-	assertAll("Checking merge values",
-		() -> assertNotNull(directives),
-		() -> assertEquals(2, directives.size()),
-		() -> assertTrue(directives.contains("directive-A")),
-		() -> assertTrue(directives.contains("directive-B"))
-	);
+	assertAll("Checking merge values", () -> assertNotNull(directives),
+			() -> assertEquals(2, directives.size()),
+			() -> assertTrue(directives.contains("directive-A")),
+			() -> assertTrue(directives.contains("directive-B")));
 
 	Set<String> directives2 = merged.getDirectivesFor("directives2");
-	assertAll("Checking merge values",
-		() -> assertNotNull(directives2),
-		() -> assertEquals(1, directives2.size()),
-		() -> assertTrue(directives2.contains("directive-A2"))
-	);
+	assertAll("Checking merge values", () -> assertNotNull(directives2),
+			() -> assertEquals(1, directives2.size()),
+			() -> assertTrue(directives2.contains("directive-A2")));
 
 }
 
@@ -151,29 +120,25 @@ public void testMergeAttributeCategories() {
 	assertEquals("X", merged.getCategory().get());
 	assertEquals(2, merged.getCategories().size());
 	assertAll("Checking all two categories",
-		() -> assertTrue(merged.getAttributesIn("X").contains("a")),
-		() -> assertTrue(merged.getAttributesIn("Y").contains("b")),
-		() -> assertEquals(1, merged.getAttributesIn("X").size()),
-		() -> assertEquals(1, merged.getAttributesIn("Y").size())
-	);
+			() -> assertTrue(merged.getAttributesIn("X").contains("a")),
+			() -> assertTrue(merged.getAttributesIn("Y").contains("b")),
+			() -> assertEquals(1, merged.getAttributesIn("X").size()),
+			() -> assertEquals(1, merged.getAttributesIn("Y").size()));
 
 }
-
 
 }
 
 /*
- *    Copyright 2024 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
