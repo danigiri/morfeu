@@ -57,10 +57,10 @@ public static org.w3c.dom.Document produceDomDocument(	DocumentBuilder db,
 	try {
 		return db.parse(effectiveContent);
 	} catch (SAXException e) {
-		log.error("Could not parse '{}' ({})", uri, e);
+		log.error("Could not parse '{}' ({}), in DOM parsing", uri, e);
 		throw new ParsingException("Problem when parsing '" + uri + "'", e);
 	} catch (IOException e) {
-		log.error("Could not fetch '{}' ({})", uri, e);
+		log.error("Could not fetch '{}' ({}) in DOM parsing", uri, e);
 		throw new FetchingException("Problem when fetching '" + uri + "'", e);
 	}
 

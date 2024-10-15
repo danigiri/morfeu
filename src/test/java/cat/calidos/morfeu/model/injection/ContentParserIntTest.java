@@ -26,11 +26,12 @@ private static String modelPath = "test-resources/models/test-model.xsd";
 @Test @DisplayName("Test validate content")
 public void testValidate() throws Exception {
 
-	String contentPath = "test-resources/documents/document1.xml";
+	var contentPath = "test-resources/documents/document1.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 
-	Validable validator = DaggerContentParserComponent.builder()
+	Validable validator = DaggerContentParserComponent
+			.builder()
 			.content(new URI(contentPath))
 			.fetchedContentFrom(new URI(fullContentPath))
 			.model(new URI(modelPath))
@@ -47,11 +48,12 @@ public void testValidate() throws Exception {
 @Test @DisplayName("Testing invalid content")
 public void testNonValidDocument() throws Exception {
 
-	String contentPath = "test-resources/documents/nonvalid-document.xml";
+	var contentPath = "test-resources/documents/nonvalid-document.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 
-	Validable validator = DaggerContentParserComponent.builder()
+	Validable validator = DaggerContentParserComponent
+			.builder()
 			.content(new URI(contentPath))
 			.fetchedContentFrom(new URI(fullContentPath))
 			.model(new URI(modelPath))
@@ -60,8 +62,6 @@ public void testNonValidDocument() throws Exception {
 			.validator()
 			.get();
 	try {
-		System.err.println(
-				"Please ignore next ParsingException, it is expected as we are testing non valid doc");
 		validator.validate();
 	} catch (ValidationException e) {
 		assertTrue(e.getMessage().contains("notvalid"));
@@ -73,11 +73,12 @@ public void testNonValidDocument() throws Exception {
 @Test @DisplayName("Testing the resulting cells")
 public void testProduceContent() throws Exception {
 
-	String contentPath = "test-resources/documents/document1.xml";
+	var contentPath = "test-resources/documents/document1.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 
-	Composite<Cell> content = DaggerContentParserComponent.builder()
+	Composite<Cell> content = DaggerContentParserComponent
+			.builder()
 			.content(new URI(contentPath))
 			.fetchedContentFrom(new URI(fullContentPath))
 			.model(new URI(modelPath))
@@ -93,11 +94,12 @@ public void testProduceContent() throws Exception {
 @Test @DisplayName("Testing JSON input")
 public void testProduceJSONContent() throws Exception {
 
-	String contentPath = "test-resources/transform/document1-json-content.json";
+	var contentPath = "test-resources/transform/document1-json-content.json";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 
-	Composite<Cell> content = DaggerContentParserComponent.builder()
+	Composite<Cell> content = DaggerContentParserComponent
+			.builder()
 			.content(new URI(contentPath))
 			.fetchedContentFrom(new URI(fullContentPath))
 			.model(new URI(modelPath))
@@ -113,14 +115,15 @@ public void testProduceJSONContent() throws Exception {
 @Test @DisplayName("Testing filtered content")
 public void testFilteredContent() throws Exception {
 
-	String contentPath = "test-resources/documents/filtered.xml";
+	var contentPath = "test-resources/documents/filtered.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String testAwareModelPath = testAwareFullPathFrom(modelPath);
 	// first we use java encoding, then json encoding, finally regexp pattern
 	String f = "replace{\"replacements\":[" + "{\"from\":\"=\\\\s*\\\\{\",\"to\":\"=\\\"{\"},"
 			+ "{\"from\":\"}\",\"to\":\"}\\\"\"}" + "]}";
 
-	Composite<Cell> content = DaggerContentParserComponent.builder()
+	Composite<Cell> content = DaggerContentParserComponent
+			.builder()
 			.content(new URI(contentPath))
 			.fetchedContentFrom(new URI(fullContentPath))
 			.filters(f)
@@ -133,9 +136,10 @@ public void testFilteredContent() throws Exception {
 
 	// testing with backreferences for more robust handling
 
-	String f2 = "replace{\"replacements\":{\"from\":\"=\\\\s*\\\\{([^}]*?)}\",\"to\":\"=\\\"{$1}\\\"\"}}";
+	var f2 = "replace{\"replacements\":{\"from\":\"=\\\\s*\\\\{([^}]*?)}\",\"to\":\"=\\\"{$1}\\\"\"}}";
 
-	Composite<Cell> content2 = DaggerContentParserComponent.builder()
+	Composite<Cell> content2 = DaggerContentParserComponent
+			.builder()
 			.content(new URI(contentPath))
 			.fetchedContentFrom(new URI(fullContentPath))
 			.filters(f2)
