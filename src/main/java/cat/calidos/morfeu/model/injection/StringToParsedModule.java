@@ -35,7 +35,7 @@ public static org.w3c.dom.Document produceDomDocument(	DocumentBuilder db,
 	try {
 		return db.parse(IOUtils.toInputStream(content, Config.DEFAULT_CHARSET));
 	} catch (SAXException e) {
-		throw new ParsingException("Problem when parsing '" + content.substring(0, 20) + "'", e);
+		throw new ParsingException("Problem when parsing '" + content.substring(0, 20) + "'",content, e);
 	} catch (IOException e) {
 		throw new FetchingException("IO problem when parsing '" + content.substring(0, 20) + "'",
 				e);

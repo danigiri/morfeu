@@ -50,6 +50,7 @@ public static JsonNode json(String content,
 		log.error("Cound not process input '{}', as valid JSON", snippet);
 		throw new ParsingException(
 				"Cound not process input '" + snippet + "', as valid JSON (" + e.getMessage() + ")",
+				content,
 				e);
 	}
 

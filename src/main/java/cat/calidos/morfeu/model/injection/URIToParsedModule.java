@@ -13,6 +13,8 @@ import dagger.producers.Produces;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
@@ -23,6 +25,7 @@ import javax.xml.parsers.DocumentBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.TeeInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -34,6 +37,7 @@ import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.transform.injection.DaggerYAMLConverterComponent;
 import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.utils.NamedPair;
 
 
 /**
@@ -50,18 +54,51 @@ protected final static Logger	log				= LoggerFactory.getLogger(URIToParsedModule
 @Produces
 public static org.w3c.dom.Document produceDomDocument(	DocumentBuilder db,
 														@Named("FetchableContentURI") URI uri,
-														@Named("EffectiveContent") InputStream effectiveContent)
+														@Named("EffectiveContentToParse") InputStream effectiveContentToParse,
+														@Named("EffectiveContentAsString") String effectiveContentToDump)
 		throws ParsingException, FetchingException {
 
 	// TODO: we can probably parse with something faster than building into dom
-	try {
-		return db.parse(effectiveContent);
+	try (effectiveContentToParse) {
+		return db.parse(effectiveContentToParse);
 	} catch (SAXException e) {
 		log.error("Could not parse '{}' ({}), in DOM parsing", uri, e);
-		throw new ParsingException("Problem when parsing '" + uri + "'", e);
+		throw new ParsingException("Problem when parsing '" + uri + "'", effectiveContentToDump, e);
 	} catch (IOException e) {
-		log.error("Could not fetch '{}' ({}) in DOM parsing", uri, e);
-		throw new FetchingException("Problem when fetching '" + uri + "'", e);
+		var msg = logFetchingProblem(uri, e);
+		throw new FetchingException(msg, e);
+	}
+
+}
+
+
+// basically we want to read the content to parse it but also we want it to dump it for diagnostics
+// if there is a parsing error, therefore we create a piped structure that allows us to read the
+// input stream
+@Produces @Named("EffectiveContentToParse")
+InputStream effectiveContentToParse(NamedPair<InputStream> effectiveContent) {
+	return effectiveContent.get("EffectiveContentToParse");
+}
+
+
+@Produces @Named("EffectiveContentToDump")
+InputStream effectiveContentToDump(NamedPair<InputStream> effectiveContent) {
+	return effectiveContent.get("EffectiveContentToDump");
+}
+
+
+@Produces
+NamedPair<InputStream> effectiveContentPair(@Named("FetchableContentURI") URI uri,
+											@Named("EffectiveContent") InputStream effectiveContent)
+		throws FetchingException {
+	try {
+		var pipedStream = new PipedInputStream();
+		var teeStream = new TeeInputStream(effectiveContent, new PipedOutputStream(pipedStream));
+		return new NamedPair<InputStream>("EffectiveContentToParse", teeStream,
+				"EffectiveContentToDump", pipedStream);
+	} catch (IOException e) {
+		var msg = logFetchingProblem(uri, e);
+		throw new FetchingException(msg, e);
 	}
 
 }
@@ -105,8 +142,10 @@ public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI ur
 	try {
 		if (uri.isAbsolute()) {
 			log.info("Fetching absolute content uri '{}' to parse", uri);
-			return IOUtils.toInputStream(IOUtils.toString(uri, Config.DEFAULT_CHARSET),
-					Config.DEFAULT_CHARSET);
+			return IOUtils
+					.toInputStream(
+							IOUtils.toString(uri, Config.DEFAULT_CHARSET),
+							Config.DEFAULT_CHARSET);
 		} else {
 			log.info("Fetching relative content uri '{}' to parse, assuming file", uri);
 			return FileUtils.openInputStream(new File(uri.toString()));
@@ -135,7 +174,8 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		log.trace("Converting yaml to xml '{}'", uri);
 		ObjectMapper mapper = isYAML ? mapperYAML.get().get() : mapperJSON.get().get();
 		JsonNode yaml = mapper.readTree(fetchedRawContent.get().get());
-		String xml = DaggerYAMLConverterComponent.builder()
+		String xml = DaggerYAMLConverterComponent
+				.builder()
 				.from(yaml)
 				.given(model.get().get())
 				.build()
@@ -157,7 +197,7 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 
 
 @Produces @Named("EffectiveContent")
-public static InputStream filteredContent(	@Named("FetchableContentURI") URI uri,
+public static InputStream effectiveContent(	@Named("FetchableContentURI") URI uri,
 											@Nullable @Named("Filters") String filters,
 											@Named("FetchedEffectiveContent") InputStream fetchedEffectiveContent)
 		throws FetchingException {
@@ -167,7 +207,8 @@ public static InputStream filteredContent(	@Named("FetchableContentURI") URI uri
 	if (filters != null && !filters.isBlank()) {
 		try {
 			String raw = IOUtils.toString(fetchedEffectiveContent, Config.DEFAULT_CHARSET);
-			String filtered = DaggerFilterComponent.builder()
+			String filtered = DaggerFilterComponent
+					.builder()
 					.filters(filters)
 					.build()
 					.stringToString()
@@ -187,6 +228,19 @@ public static InputStream filteredContent(	@Named("FetchableContentURI") URI uri
 }
 
 
+@Produces @Named("EffectiveContentAsString")
+String effectiveContentAsString(@Named("ContentURI") URI uri,
+								@Named("EffectiveContentToDump") InputStream effectiveContentToDump)
+		throws FetchingException {
+	try (effectiveContentToDump) {
+		return IOUtils.toString(effectiveContentToDump, Config.DEFAULT_CHARSET);
+	} catch (IOException e) {
+		var msg = logFetchingProblem(uri, e);
+		throw new FetchingException(msg, e);
+	}
+}
+
+
 @Produces @Named("Filename")
 String filename(@Named("FetchableContentURI") URI uri) {
 	return FilenameUtils.getName(uri.getPath());
@@ -198,7 +252,16 @@ boolean isYAML(@Named("Filename") String filename) {
 	return filename.endsWith(YAML_EXTENSION);
 }
 
+
+private static String logFetchingProblem(	URI uri,
+											IOException e) {
+	var msg = String.format("Problem when fetching '%s' (%s) in DOM parsing", uri, e);
+	log.error(msg, e);
+	return msg;
 }
+
+}
+
 /*
  * Copyright 2024 Daniel Giribet
  *

@@ -4,6 +4,7 @@ package cat.calidos.morfeu.model.injection;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Named;
 
@@ -13,7 +14,12 @@ import org.slf4j.LoggerFactory;
 import cat.calidos.morfeu.model.CellModel;
 import cat.calidos.morfeu.model.Model;
 import cat.calidos.morfeu.problems.ParsingException;
+import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.utils.MorfeuUtils;
+import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
+import cat.calidos.morfeu.view.injection.DaggerViewComponent;
 import dagger.BindsOptionalOf;
+import dagger.Lazy;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
@@ -40,28 +46,50 @@ protected final static Logger log = LoggerFactory.getLogger(CellModelsFilterModu
  */
 @Produces @Named("CellModel")
 public static CellModel filterCellModels(	Model model,
-											@Named("CellModelFilter") Optional<URI> cellModelFilter)
+											@Named("CellModelFilter") Optional<URI> cellModelFilter,
+											@Named("CellModelDump") Lazy<String> cellModelDump)
 		throws ParsingException {
 
+	CellModel finalModel;
 	// if there is a filter we want to look for it in the model hierarchy
 	if (cellModelFilter.isPresent()) {
 		URI filter = cellModelFilter.get();
 		log.trace("*** Looking for cell model filter " + filter);
-		CellModel cellModel = model.children()
+		Optional<Optional<CellModel>> cellModelFromFilter = model
+				.children()
 				.stream()
 				.map(cm -> lookForCellModel(cm, filter))
-				.findFirst()
-				.get()
-				.orElseThrow(() -> new ParsingException("Wrong filter " + filter));
-
-		return cellModel;
-
+				.findFirst();
+		if (cellModelFromFilter.isPresent() && cellModelFromFilter.get().isPresent()) {
+			finalModel = cellModelFromFilter.get().get();
+		} else {
+			String payload = cellModelDump.get();
+			throw new ParsingException("Could not find model with filter " + filter, payload);
+		}
 	} else {
-
-		return model;
-
+		finalModel = model;
 	}
+	return finalModel;
+}
 
+
+@Produces @Named("CellModelDump")
+public static String cellModelDump(Model model) {
+	String payload;
+	try {
+		//TODO: this is replicated from the get controller, should reside in a centralised place
+		String json = DaggerViewComponent
+				.builder()
+				.withValue(MorfeuUtils.paramMap("v", model))
+				.withTemplatePath(Config.MODEL_TEMPLATE)
+				.build()
+				.render();
+		payload = DaggerJSONParserComponent.builder().from(json).build().pretty().get();
+	} catch (Exception e) {
+		payload = "Could not generate model dump due to exception! (" + e.getMessage() + ")";
+		log.error(payload);
+	}
+	return payload;
 }
 
 
@@ -85,7 +113,8 @@ private static Optional<CellModel> lookForCellModel(CellModel cellModel,
 		// found in the children
 		// if no children have it, the last filter will not find match anything so we return a plain
 		// empty
-		found = cellModel.asComplex()
+		found = cellModel
+				.asComplex()
 				.children()
 				.asList()
 				.stream()
@@ -102,7 +131,7 @@ private static Optional<CellModel> lookForCellModel(CellModel cellModel,
 }
 
 /*
- * Copyright 2019 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at

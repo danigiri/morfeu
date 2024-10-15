@@ -42,7 +42,7 @@ String xml(	Transformer transformer,
 	} catch (TransformerException e) {
 		String msg = "Could not generate string for node " + source.getNode().getNodeName();
 		log.error(msg);
-		throw new ParsingException(msg, e);
+		throw new ParsingException(msg, source.toString(), e);
 	}
 
 	return writer.toString();

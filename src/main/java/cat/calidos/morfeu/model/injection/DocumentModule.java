@@ -88,12 +88,13 @@ public static Document parseDocument(	URI uri,
 										ObjectMapper mapper)
 		throws ParsingException, FetchingException {
 
+	Document document = new Document(uri);
 	try {
-
-		return mapper.readerForUpdating(new Document(uri)).readValue(docStream);
+		return mapper.readerForUpdating(document).readValue(docStream);
 
 	} catch (JsonProcessingException jpe) {
-		throw new ParsingException("Problem with the json format of '" + uri + "'", jpe);
+		throw new ParsingException("Problem with the json format of '" + uri + "'",
+				document.toString(), jpe);
 	} catch (IOException ioe) {
 		throw new FetchingException("Problem fetching '" + uri + "'", ioe);
 	}
@@ -108,8 +109,12 @@ public static Document normaliseDocumentURIs(	@Named("ParsedDocument") Document 
 												@Named("ContentURI") URI contentURI,
 												@Named("FetchableContentURI") URI fetchableContentURI) {
 
-	log.trace("[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]", prefix,
-			fetchableModelURI, contentURI);
+	log
+			.trace(
+					"[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]",
+					prefix,
+					fetchableModelURI,
+					contentURI);
 
 	doc.setFetchableModelURI(fetchableModelURI);
 	doc.setContentURI(contentURI);
@@ -133,17 +138,19 @@ public static URI documentPrefix(	@Named("ParsedDocument") Document doc,
 			int index = uri.lastIndexOf("/");
 			if (index == -1) {
 				throw new ParsingException("Problem guessing prefix as no / found on '" + uri + "'",
-						new IndexOutOfBoundsException());
+						doc.toString(), new IndexOutOfBoundsException());
 			}
 			prefixURI = new URI(uri.substring(0, index + 1));
 		} catch (URISyntaxException e) {
-			throw new ParsingException("Problem guessing prefix of '" + uri + "'", e);
+			throw new ParsingException("Problem guessing prefix of '" + uri + "'", doc.toString(),
+					e);
 		}
 	} else {
 		try {
 			prefixURI = new URI(prefix);
 		} catch (URISyntaxException e) {
-			throw new ParsingException("Problem with invalid URI of prefix '" + prefix + "'", e);
+			throw new ParsingException("Problem with invalid URI of prefix '" + prefix + "'",
+					doc.toString(), e);
 		}
 	}
 

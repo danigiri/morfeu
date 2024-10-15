@@ -86,7 +86,7 @@ public static XSSchemaSet parseModel(	@Named("FetchableModelURI") URI u,
 		if (e.getCause() instanceof FileNotFoundException) {
 			throw new FetchingException("Problem fetching model '" + uri + "'", e);
 		} else {
-			throw new ParsingException("Problem parsing model '" + uri + "'", e);
+			throw new ParsingException("Problem parsing model '" + uri + "'", u.toString(), e);
 		}
 	}
 
@@ -107,7 +107,12 @@ public static Composite<CellModel> rootCellModels(	XSSchemaSet schemaSet,
 	Iterator<XSElementDecl> elems = schemaSet.iterateElementDecls();
 	elems.forEachRemaining(elem -> {
 		XSParticle part = elem.getType().asComplexType().getContentType().asParticle();
-		CellModel cellModel = buildCellModel(elem, part, u, processedTypes, globals,
+		CellModel cellModel = buildCellModel(
+				elem,
+				part,
+				u,
+				processedTypes,
+				globals,
 				globalMetadata);
 		rootCellModels.addChild(cellModel.getName(), cellModel);
 	});
@@ -157,7 +162,8 @@ private static CellModel buildCellModel(XSElementDecl elem,
 										Set<Type> types,
 										Map<String, CellModel> globals,
 										Map<URI, Metadata> globalMetadata) {
-	return DaggerCellModelComponent.builder()
+	return DaggerCellModelComponent
+			.builder()
 			.fromElem(elem)
 			.fromParticle(particle)
 			.withParentURI(u)

@@ -25,4 +25,7 @@ public class Config {
 public static final String	DEFAULT_CHARSET		= "UTF-8";
 public static final Charset	DEFAULT_NIO_CHARSET	= Charset.forName("UTF-8");
 
+public static final String MODEL_TEMPLATE = "model.ftl";
+public static final String MODEL_PROBLEM_TEMPLATE = "model-problem.ftl";
+
 }

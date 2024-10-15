@@ -51,7 +51,7 @@ public static List<List<String>> query(	Statement statement,
 		}
 
 	} catch (SQLException e) {
-		throw new ParsingException("Problem running query '" + query + "'", e);
+		throw new ParsingException("Problem running query '" + query + "'", query, e);
 	}
 
 	return rows;
@@ -66,7 +66,7 @@ public static Integer update(	Statement statement,
 	try {
 		return statement.executeUpdate(update);// ==0 ? "" : "";
 	} catch (SQLException e) {
-		throw new ParsingException("Problem running update '" + update + "'", e);
+		throw new ParsingException("Problem running update '" + update + "'",update,e);
 	}
 }
 

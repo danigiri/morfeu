@@ -40,7 +40,7 @@ public static URI makeAbsoluteURIIfNeeded(	URI prefix,
 			finalURI = new URI(prefix + uri.toString());
 		} catch (URISyntaxException e) {
 			throw new ParsingException("Problem composing absolute urls with prefix:'" + prefix
-					+ "', and:'" + uri + "'", e);
+					+ "', and:'" + uri + "'", prefix.toString()+uri,e);
 		}
 	} else {
 		finalURI = uri;

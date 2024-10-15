@@ -40,6 +40,17 @@ ListenableFuture<Validable> validator()
 ListenableFuture<Composite<Cell>> content()
 		throws FetchingException, ParsingException, TransformException;
 
+/**
+ * This returns the content after fetch and any possible transformation, but before parsing and
+ * validation. Note you cannot parse
+ * 
+ * @return content as string
+ * @throws FetchingException
+ * @throws TransformException
+ */
+@Named("EffectiveContentAsString")
+ListenableFuture<String> effectiveContent() throws FetchingException, TransformException;
+
 //@formatter:off
 @ProductionComponent.Builder
 interface Builder {

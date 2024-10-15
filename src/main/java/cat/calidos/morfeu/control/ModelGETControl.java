@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.model.injection.DaggerModelComponent;
+import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
 import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ValidationException;
@@ -27,7 +28,7 @@ private String	prefix;	// orefix, to build the full fetchable path
 public ModelGETControl(	String prefix,
 						String path) {
 
-	super("model:" + path, "model.ftl", "model-problem.ftl");
+	super("model:" + path, Config.MODEL_TEMPLATE, Config.MODEL_PROBLEM_TEMPLATE);
 
 	this.prefix = prefix;
 	this.path = path;

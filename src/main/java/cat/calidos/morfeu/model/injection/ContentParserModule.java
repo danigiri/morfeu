@@ -92,7 +92,8 @@ public static StreamSource produceStreamSource(@Named("FetchableModelURI") URI u
 
 
 @Produces
-public static Schema produceSchema(	SchemaFactory sf,
+public static Schema produceSchema(	@Named("FetchableModelURI") URI u,
+									SchemaFactory sf,
 									StreamSource schemaSource)
 		throws ParsingException {
 
@@ -101,7 +102,7 @@ public static Schema produceSchema(	SchemaFactory sf,
 		return sf.newSchema(schemaSource);
 
 	} catch (SAXException e) {
-		throw new ParsingException("Problem when reading the model schema", e);
+		throw new ParsingException("Problem when reading the model schema", u.toString(), e);
 	}
 
 }

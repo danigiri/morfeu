@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author daniel giribet
- *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuUtilsTest {
 
 @Test
 public void paramMapTest() {
 
-	Map<String, Object> map = MorfeuUtils.paramMap("foo", Collections.EMPTY_LIST, "bar",
-			"more stuff");
+	Map<String, Object> map = MorfeuUtils
+			.paramMap("foo", Collections.EMPTY_LIST, "bar", "more stuff");
 	assertNotNull(map);
 	assertEquals(2, map.size());
 	assertTrue(map.containsKey("foo"));
