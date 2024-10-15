@@ -53,7 +53,7 @@ public void validate() throws ValidationException, FetchingException {
 
 	// FIXME: this complains strangely and fails to validate, though xmllint works well and
 	// validates
-	// IDEA: Don' use nonamespacelocation and specify just the schema id, try that with setSchema
+	// IDEA: Don't use nonamespacelocation and specify just the schema id, try that with setSchema
 	try {
 		validator.validate(source);
 		isValid = true;
