@@ -5,31 +5,24 @@ package cat.calidos.morfeu.utils;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Pair<X, Y> {
 
-private X	left;
-private Y	right;
+private X					left;
+private Y					right;
 
-public Pair(X left,
-			Y right) {
-
+public Pair(X left, Y right) {
 	this.left = left;
 	this.right = right;
-
 }
 
-
-public X getLeft() {
-	return left;
-}
+public X getLeft() { return left; }
 
 
-public Y getRight() {
-	return right;
-}
+public Y getRight() { return right; }
+
 
 }
 
 /*
- * Copyright 2019 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
