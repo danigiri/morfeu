@@ -410,6 +410,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- CLI RUNTIME -->
+		<dependency>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<version>4.7.6</version>
+		</dependency>
+
 		<!-- HELPERS -->
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -467,7 +474,7 @@
 			<artifactId>freemarker</artifactId>
 			<version>${freemarker-version}</version>
 		</dependency>
-		
+
 		<!-- request proxying -->
 		<dependency>
 			<groupId>org.mitre.dsmiley.httpproxy</groupId>
