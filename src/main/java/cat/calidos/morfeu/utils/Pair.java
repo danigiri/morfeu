@@ -19,6 +19,10 @@ public X getLeft() { return left; }
 public Y getRight() { return right; }
 
 
+public static <X,Y> Pair<X,Y> of(X left, Y right) {
+	return new Pair<X,Y>(left, right);
+}
+
 }
 
 /*

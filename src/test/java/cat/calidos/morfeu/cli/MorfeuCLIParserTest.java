@@ -1,7 +1,6 @@
 package cat.calidos.morfeu.cli;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -9,31 +8,40 @@ import java.io.PrintStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import cat.calidos.morfeu.model.injection.ModelTezt;
+import cat.calidos.morfeu.utils.Pair;
+import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 
 
-public class MorfeuCLIParserTest  extends ModelTezt {
+public class MorfeuCLIParserTest extends ModelTezt {
 
 @Test @DisplayName("Content GET test")
 public void parseContent() throws Exception {
-	
+
 	String prefix = testAwareFullPathFrom(".");
 	String path = "test-resources/documents/document1.xml";
 	String model = "test-resources/models/test-model.xsd";
 
-	MorfeuCLIParser cli = mock(MorfeuCLIParser.class);
-	var output = new PrintStream(new ByteArrayOutputStream());
-	when(cli.getOutStream()).thenReturn(output);
-	int code = MorfeuCLIParser.mainImpl(new String[] {"--model", model, "--prefix", prefix, path});
+	Pair<Integer, String> result = MorfeuCLIParser
+			.mainImpl(new String[] { "-q", "--model", model, "--prefix", prefix, path });
 
-	assertEquals(0, code);
-	System.out.println(output.toString());
+	assertEquals(0, result.getLeft());
+
+	// the printer in its wisdom appends the classname at the end of the dump
+	String outputStr = result.getRight().toString().replaceAll("java\\.io\\.PrintStream@.*$", "");
+	// System.out.println(outputStr);
+	JsonNode json = DaggerJSONParserComponent.builder().from(outputStr).build().json().get();
+	assertAll(
+			"basic structure of the json output",
+			() -> assertNotNull(json),
+			() -> assertEquals(0, json.get("schema").asInt()),
+			() -> assertEquals(path, json.get("URI").asText()));
+
 }
 
-
 }
-
-
 
 /*
  * Copyright 2024 Daniel Giribet

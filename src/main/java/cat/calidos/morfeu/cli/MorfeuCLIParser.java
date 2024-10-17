@@ -10,6 +10,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import cat.calidos.morfeu.control.ContentGETControl;
+import cat.calidos.morfeu.utils.Pair;
 
 
 /**
@@ -31,8 +32,14 @@ String prefix;
 @Option(names = "--filters", description = "filters")
 String filters;
 
+@Option(names = {"-q", "--quiet"}, description = "do not print anything")
+boolean quiet = false;
+
 @Parameters(description = "content to parse")
 String path;
+
+private String output;
+
 
 @Override
 public Integer call() {
@@ -40,27 +47,27 @@ public Integer call() {
 	Optional<String> appliedfilters = Optional.ofNullable(filters);
 	prefix = prefix == null ? "file://" + System.getProperty("user.dir") : prefix;
 	// we can happily reuse the content controller
-	String out = new ContentGETControl(prefix, path, appliedfilters, modelPath).processRequest();
-	getOutStream().print(out);
+	output = new ContentGETControl(prefix, path, appliedfilters, modelPath).processRequest();
+	if (!quiet) {
+		System.out.println(output);
+	}
+
 	return 0;
 }
 
-
 public static void main(String[] args) {
-
-	int exitCode = mainImpl(args);
+	int exitCode = mainImpl(args).getLeft();
 	System.exit(exitCode);
 }
 
-
-public static int mainImpl(String[] args) {
-	return  new CommandLine(new MorfeuCLIParser()).execute(args);
+// this decoupling is useful to do testing of the implementation
+public static Pair<Integer, String> mainImpl(String[] args) {
+	MorfeuCLIParser cli = new MorfeuCLIParser();
+	int code = new CommandLine(cli).execute(args);
+	return Pair.of(code, cli.getOutput());
 }
 
-public PrintStream getOutStream() {
-	return System.out;
-}
-
+public String getOutput() { return output; }
 
 }
 
