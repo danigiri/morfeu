@@ -29,6 +29,7 @@
 		<junit-platform-version>5.10.2</junit-platform-version>
 		<selenide-version>7.2.3</selenide-version>
 		<selenium-version>4.19.1</selenium-version>
+		<picocli-version>4.7.6</picocli-version>
 		<spotless.version>2.44.0.BETA2</spotless.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -89,7 +90,8 @@
 							<artifactId>dagger-compiler</artifactId>
 							<version>${dagger-2-version}</version>
 						</path>
-					</annotationProcessorPaths>	<!--
+					</annotationProcessorPaths>
+					<!--
 					FIXME: NEED TO DOUBLE CHECK THIS IS IN CLASSPATH -->
 					<generatedSourcesDirectory>
 						target/generated-sources/annotations</generatedSourcesDirectory>
@@ -359,7 +361,6 @@
 			<version>20140925</version>
 		</dependency>
 
-
 		<!-- Jackson JSON lib stuff -->
 		<!-- the core, which includes Streaming API, shared low-level
 		abstractions (but NOT data-binding) -->
@@ -414,7 +415,7 @@
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli</artifactId>
-			<version>4.7.6</version>
+			<version>${picocli-version}</version>
 		</dependency>
 
 		<!-- HELPERS -->
