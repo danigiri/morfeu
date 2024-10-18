@@ -31,9 +31,7 @@ private UICell			parent;
 private UIContent		content;
 private int				position;
 
-public UIDropArea(	SelenideElement e,
-					UIContent content,
-					UICell parent) {
+public UIDropArea(SelenideElement e, UIContent content, UICell parent) {
 
 	this.element = e;
 	this.content = content;
@@ -42,19 +40,13 @@ public UIDropArea(	SelenideElement e,
 }
 
 
-public boolean isActive() {
-	return element.attr(CLASS).contains(ACTIVE);
-}
+public boolean isActive() { return element.attr(CLASS).contains(ACTIVE); }
 
 
-public boolean isSelected() {
-	return element.attr(CLASS).contains(SELECTED);
-}
+public boolean isSelected() { return element.attr(CLASS).contains(SELECTED); }
 
 
-public void setPosition(int position) {
-	this.position = position;
-}
+public void setPosition(int position) { this.position = position; }
 
 
 public int position() {

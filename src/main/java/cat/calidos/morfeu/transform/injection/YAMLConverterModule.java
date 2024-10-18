@@ -37,7 +37,8 @@ StackContext<JsonNodeCellModel> populatedContext(	StackContext<JsonNodeCellModel
 
 	// we iteratively add all elements, skipping the root node as our algorithm is happy with that
 
-	DaggerYAMLCellModelGuesserProcessorComponent.builder()
+	DaggerYAMLCellModelGuesserProcessorComponent
+			.builder()
 			.fromNode(yaml)
 			.givenCase("yaml-to-xml")
 			.parentCellModel(model.asComplex())

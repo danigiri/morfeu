@@ -28,7 +28,8 @@ HashMap<String, String> emptyParams = new HashMap<String, String>(0);
 @Test
 public void testPingControl() {
 
-	ControlComponent controlComponent = DaggerControlComponent.builder()
+	ControlComponent controlComponent = DaggerControlComponent
+			.builder()
 			.withPath("/ping")
 			.method(ControlComponent.GET)
 			.withParams(emptyParams)
@@ -45,7 +46,8 @@ public void testPingControl() {
 @Test
 public void testPingControlWithParam() {
 
-	ControlComponent controlComponent = DaggerControlComponent.builder()
+	ControlComponent controlComponent = DaggerControlComponent
+			.builder()
 			.withPath("/ping/param")
 			.method(ControlComponent.GET)
 			.withParams(emptyParams)
@@ -56,7 +58,8 @@ public void testPingControlWithParam() {
 	assertEquals("OK param", controlComponent.process());
 	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
 
-	controlComponent = DaggerControlComponent.builder()
+	controlComponent = DaggerControlComponent
+			.builder()
 			.withPath("/ping/param%20with%20spaces")
 			.method(ControlComponent.GET)
 			.withParams(emptyParams)
@@ -72,7 +75,8 @@ public void testPingControlWithParam() {
 @Test
 public void testNoMatch() {
 
-	ControlComponent controlComponent = DaggerControlComponent.builder()
+	ControlComponent controlComponent = DaggerControlComponent
+			.builder()
 			.withPath("/foo")
 			.method(ControlComponent.GET)
 			.withParams(emptyParams)
@@ -91,7 +95,8 @@ public void testContext() {
 
 	when(context.getAttribute("counter")).thenReturn(0);
 
-	ControlComponent controlComponent = DaggerControlComponent.builder()
+	ControlComponent controlComponent = DaggerControlComponent
+			.builder()
 			.withPath("/counter")
 			.method(ControlComponent.GET)
 			.withParams(emptyParams)

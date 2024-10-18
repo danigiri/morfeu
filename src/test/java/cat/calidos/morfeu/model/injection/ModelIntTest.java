@@ -62,7 +62,8 @@ public void testParseModel() throws Exception {
 @Test
 public void testGlobalMetadata() {
 
-	ComplexCellModel col = model.children()
+	ComplexCellModel col = model
+			.children()
 			.child(0)
 			.asComplex()
 			.children()
@@ -86,7 +87,8 @@ public void testGlobalMetadata() {
 @Test
 public void testMetadataDirectives() {
 
-	ComplexCellModel col = model.children()
+	ComplexCellModel col = model
+			.children()
 			.child(0)
 			.asComplex()
 			.children()

@@ -35,7 +35,8 @@ public void setup() throws Exception {
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd";
 	modelURI = new URI(modelPath);
 
-	document = DaggerContentParserTeztComponent.builder()
+	document = DaggerContentParserTeztComponent
+			.builder()
 			.content(contentURI)
 			.fetchedContentFrom(contentURI)
 			.model(modelURI)
@@ -78,7 +79,8 @@ public void testChildrenFrom() throws Exception {
 @Test
 public void testAttributesFrom() throws Exception {
 
-	Cell cell = children.child("row(0)")
+	Cell cell = children
+			.child("row(0)")
 			.asComplex()
 			.children()
 			.child("col(0)")
@@ -92,15 +94,20 @@ public void testAttributesFrom() throws Exception {
 	// ensure order is also cool, to do that, we assume there are two column children, access the
 	// first and compare
 
-	assertEquals(children.child("row(0)").asComplex().children().child("col(0)"),
+	assertEquals(
+			children.child("row(0)").asComplex().children().child("col(0)"),
 			children.child("row(0)").asComplex().children().child(0),
 			"Accessing children by index and not name fails, order is not preserved");
 
 	// extra order check
 	List<Cell> cols = children.child("row(0)").asComplex().children().asList();
-	assertEquals(children.child("row(0)").asComplex().children().child(0), cols.get(0),
+	assertEquals(
+			children.child("row(0)").asComplex().children().child(0),
+			cols.get(0),
 			"Order not preserved");
-	assertEquals(children.child("row(0)").asComplex().children().child(1), cols.get(1),
+	assertEquals(
+			children.child("row(0)").asComplex().children().child(1),
+			cols.get(1),
 			"Order not preserved");
 
 	Attributes<Cell> attributes = complexCell.attributes();
@@ -125,13 +132,15 @@ public void testAttributesFrom() throws Exception {
 @Test
 public void testInternalAttributes() throws Exception {
 
-	Attributes<Cell> attributes = CellModule.internalAttributesFrom(document.getDocumentElement(),
-			contentURI, testCellModel);
+	Attributes<Cell> attributes = CellModule
+			.internalAttributesFrom(document.getDocumentElement(), contentURI, testCellModel);
 	assertNotNull(attributes);
 	assertEquals(2, attributes.size(), "More internal attributes than expected");
-	assertEquals("http://www.w3.org/2001/XMLSchema-instance",
+	assertEquals(
+			"http://www.w3.org/2001/XMLSchema-instance",
 			attributes.attribute("xmlns:xsi").getValue().get());
-	assertEquals("../models/test-model.xsd",
+	assertEquals(
+			"../models/test-model.xsd",
 			attributes.attribute("xsi:noNamespaceSchemaLocation").getValue().get());
 
 }

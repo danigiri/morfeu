@@ -37,11 +37,8 @@ private ExecRunningTask		runningTask;
 private ExecStoppingTask	stoppingTask;
 private ExecFinishedTask	finishedTask;
 
-public ExecReadyTask(	int type,
-						ProcessExecutor executor,
-						ExecStartingTask startingTask,
-						ExecRunningTask runningTask,
-						ExecStoppingTask stoppingTask,
+public ExecReadyTask(	int type, ProcessExecutor executor, ExecStartingTask startingTask,
+						ExecRunningTask runningTask, ExecStoppingTask stoppingTask,
 						ExecFinishedTask finishedTask) {
 
 	super(type, READY, executor); // no matchers for ready tasks
@@ -144,9 +141,7 @@ public void setRemaining(int percent) {
 
 
 @Override
-public int getRemaining() {
-	return MAX;
-}
+public int getRemaining() { return MAX; }
 
 
 @Override

@@ -19,8 +19,7 @@ package cat.calidos.morfeu.problems;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MorfeuRuntimeException extends RuntimeException {
 
-public MorfeuRuntimeException(	String message,
-								Throwable e) {
+public MorfeuRuntimeException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

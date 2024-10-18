@@ -34,17 +34,9 @@ private Composite<CellModel>	children;
  * @param attributes that are possible for this cell model
  * @param children list of children
  */
-public ComplexCellModel(URI u,
-						String name,
-						String desc,
-						Type type,
-						int minOccurs,
-						int maxOccurs,
-						Optional<String> defaultValue,
-						Optional<String> category,
-						boolean areChildrenOrdered,
-						Metadata meta,
-						Attributes<CellModel> attributes,
+public ComplexCellModel(URI u, String name, String desc, Type type, int minOccurs, int maxOccurs,
+						Optional<String> defaultValue, Optional<String> category,
+						boolean areChildrenOrdered, Metadata meta, Attributes<CellModel> attributes,
 						Composite<CellModel> children) {
 
 	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, category, meta);
@@ -57,17 +49,9 @@ public ComplexCellModel(URI u,
 }
 
 
-public ComplexCellModel(URI u,
-						String name,
-						String desc,
-						Type type,
-						int minOccurs,
-						int maxOccurs,
-						Optional<String> defaultValue,
-						Optional<String> category,
-						Metadata meta,
-						Attributes<CellModel> attributes,
-						ComplexCellModel ref) {
+public ComplexCellModel(URI u, String name, String desc, Type type, int minOccurs, int maxOccurs,
+						Optional<String> defaultValue, Optional<String> category, Metadata meta,
+						Attributes<CellModel> attributes, ComplexCellModel ref) {
 
 	super(u, name, desc, type, minOccurs, maxOccurs, false, defaultValue, category, meta, ref);
 
@@ -85,9 +69,7 @@ public Attributes<CellModel> attributes() {
 }
 
 
-public void setAttributes(Attributes<CellModel> attributes) {
-	this.attributes = attributes;
-}
+public void setAttributes(Attributes<CellModel> attributes) { this.attributes = attributes; }
 
 
 public Composite<CellModel> children() {
@@ -95,9 +77,7 @@ public Composite<CellModel> children() {
 }
 
 
-public void setChildren(Composite<CellModel> children) {
-	this.children = children;
-}
+public void setChildren(Composite<CellModel> children) { this.children = children; }
 
 
 public boolean areChildrenOrdered() {

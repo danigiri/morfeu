@@ -34,8 +34,7 @@ private Validator	validator;
 private DOMSource	source;
 private boolean		isValid	= false;
 
-public XSDValidator(Validator v,
-					DOMSource s) {
+public XSDValidator(Validator v, DOMSource s) {
 
 	this.validator = v;
 	this.source = s;
@@ -68,8 +67,6 @@ public void validate() throws ValidationException, FetchingException {
 
 
 @Override
-public boolean isValid() {
-	return isValid;
-}
+public boolean isValid() { return isValid; }
 
 }

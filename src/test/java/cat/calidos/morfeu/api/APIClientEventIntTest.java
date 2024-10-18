@@ -26,7 +26,9 @@ public void testClientEvent() throws Exception {
 
 	JsonNode eventResponse = parseJson(content);
 	assertNotNull(eventResponse);
-	assertEquals("foo", eventResponse.get("result").asText(),
+	assertEquals(
+			"foo",
+			eventResponse.get("result").asText(),
 			"Result should include the event name");
 	assertEquals("aa=b,", eventResponse.get("desc").asText(), "Desc should include the parameters");
 

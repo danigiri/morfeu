@@ -53,7 +53,8 @@ protected void initTarget() throws ServletException {
 public static String getFinalTargetURI(	String targetUri,
 										ServletConfig config)
 		throws ServletException {
-	targetUri = DaggerConfigPropertyComponent.builder()
+	targetUri = DaggerConfigPropertyComponent
+			.builder()
 			.forName(P_TARGET_URI)
 			.allowEmpty(false)
 			.andDefault(targetUri)
@@ -69,13 +70,17 @@ public static String getFinalTargetURI(	String targetUri,
 		// template snippet in the param, so we populate the view with the servlet config, system
 		// vars and env which
 		// can be used in the param to provide advanced features (like variable substitution)
-		Properties configuration = DaggerServletConfigComponent.builder()
+		Properties configuration = DaggerServletConfigComponent
+				.builder()
 				.with(config)
 				.build()
 				.getProperties();
-		log.trace("(From configuration) __PROXY_PREFIX='{}'",
-				configuration.getProperty(__PROXY_PREFIX, "not set!"));
-		targetUri = DaggerViewComponent.builder()
+		log
+				.trace(
+						"(From configuration) __PROXY_PREFIX='{}'",
+						configuration.getProperty(__PROXY_PREFIX, "not set!"));
+		targetUri = DaggerViewComponent
+				.builder()
 				.withValues(configuration)
 				.withTemplate(targetUri)
 				.build()

@@ -23,7 +23,8 @@ private UIContent content;
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()
+	content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.shouldBeVisible()
 			.clickOn(0)
@@ -130,7 +131,8 @@ public void testSelectionChangesActivation() {
 	content.pressKey("0");
 	content.pressKey("0");
 	content.pressKey("1");
-	UICell data2 = content.rootCells()
+	UICell data2 = content
+			.rootCells()
 			.get(0)
 			.child("row(0)")
 			.child("col(1)")

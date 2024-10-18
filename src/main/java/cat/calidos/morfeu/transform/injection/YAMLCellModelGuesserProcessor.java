@@ -27,9 +27,7 @@ private String				case_;
 private JsonNodeCellModel	nodeCellmodel;
 private Optional<String>	name;
 
-YAMLCellModelGuesserProcessor(	String prefix,
-								String case_,
-								@Nullable String name,
+YAMLCellModelGuesserProcessor(	String prefix, String case_, @Nullable String name,
 								JsonNodeCellModel nodeCellmodel) {
 
 	super(prefix);
@@ -60,7 +58,8 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 
 	if (child == null && name.isPresent()) { // whecking if we come from an object parent that had a
 												// field name to match
-		child = parent.children()
+		child = parent
+				.children()
 				.stream()
 				.filter(c -> matchName(c, case_).equals(name.get()))
 				.findAny()
@@ -74,7 +73,8 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 	// TODO: find by attribute matching
 
 	if (child != null) {
-		DaggerYAMLCellToXMLProcessorComponent.builder()
+		DaggerYAMLCellToXMLProcessorComponent
+				.builder()
 				.withPrefix(prefix)
 				.givenCase(case_)
 				.cellModel(child)
@@ -106,7 +106,8 @@ private boolean matches(CellModel candidate,
 						JsonNode node) {
 
 	boolean matches = false;
-	boolean attributesOnly = candidate.getMetadata()
+	boolean attributesOnly = candidate
+			.getMetadata()
 			.getAttributesFor(case_)
 			.contains(Metadata.ATTRIBUTES_ONLY);
 
@@ -120,11 +121,13 @@ private boolean matches(CellModel candidate,
 	} else {
 		ComplexCellModel complexCandidate = candidate.asComplex();
 		if (attributesOnly) {
-			matches = complexCandidate.attributes()
+			matches = complexCandidate
+					.attributes()
 					.stream()
 					.anyMatch(a -> node.has(matchName(a, case_)));
 		} else {
-			matches = complexCandidate.children()
+			matches = complexCandidate
+					.children()
 					.stream()
 					.anyMatch(c -> node.has(matchName(c, case_)));
 		}

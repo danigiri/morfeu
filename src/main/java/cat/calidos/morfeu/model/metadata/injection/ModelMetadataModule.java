@@ -103,7 +103,8 @@ public static URI uri(	@Nullable XSAnnotation annotation,
 	if (uriValue.isPresent()) {
 		// in the metadata we have explicitly the URI
 		try {
-			uri = DaggerURIComponent.builder()
+			uri = DaggerURIComponent
+					.builder()
 					.from(parentURI + "/" + uriValue.get() + METADATA)
 					.build()
 					.uri()
@@ -224,7 +225,8 @@ public static Optional<String> valueLocator(@Nullable XSAnnotation annotation) {
 public static Map<String, String> defaultValues(@Nullable XSAnnotation annotation) {
 
 	// we extract the default values from the metadata annotation
-	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
+	List<Node> nodeValues = DaggerMetadataAnnotationComponent
+			.builder()
 			.from(annotation)
 			.andTag(DEFAULT_VALUE_FIELD)
 			.build()
@@ -239,9 +241,10 @@ public static Map<String, String> defaultValues(@Nullable XSAnnotation annotatio
 			if (name.startsWith(Metadata.DEFAULT_VALUE_PREFIX)) {
 				defaultValues.put(name, defaultValue); // default value for attribute
 			} else {
-				log.warn(
-						"Ignoring a metadata default that doesn't have a name starting with '@' ({})",
-						n);
+				log
+						.warn(
+								"Ignoring a metadata default that doesn't have a name starting with '@' ({})",
+								n);
 			}
 		} else {
 			defaultValues.put(null, defaultValue); // this is the default value for the cell content
@@ -257,7 +260,8 @@ public static Map<String, String> defaultValues(@Nullable XSAnnotation annotatio
 // list of <mf:transform> nodes
 @Provides @Named("TransformNodes")
 public static List<Node> serializeNodes(@Nullable XSAnnotation annotation) {
-	return DaggerMetadataAnnotationComponent.builder()
+	return DaggerMetadataAnnotationComponent
+			.builder()
 			.from(annotation)
 			.andTag(TRANSFORM_TAG)
 			.build()
@@ -280,7 +284,8 @@ Map<String, Set<String>> attributes(@Named("TransformNodes") List<Node> transfor
 // list of <mf:attribute> nodes
 @Provides @Named("categoryNodes")
 public static List<Node> attributeNodes(@Nullable XSAnnotation annotation) {
-	return DaggerMetadataAnnotationComponent.builder()
+	return DaggerMetadataAnnotationComponent
+			.builder()
 			.from(annotation)
 			.andTag(CATEGORY_TAG)
 			.build()
@@ -291,7 +296,8 @@ public static List<Node> attributeNodes(@Nullable XSAnnotation annotation) {
 @Provides @Named("category") // we get the <mf:category> node that has no 'name', like <mf:category
 								// value="X"/>
 public static Optional<String> category(@Named("categoryNodes") List<Node> categoryNodes) {
-	return categoryNodes.stream()
+	return categoryNodes
+			.stream()
 			.filter(Node::hasAttributes)
 			.filter(n -> n.getAttributes().getNamedItem(CATEGORY_ATTRIBUTE_FIELD) == null)
 			.map(n -> n.getAttributes().getNamedItem(CATEGORY).getNodeValue())
@@ -304,7 +310,8 @@ public static Map<String, Set<String>> categories(@Named("categoryNodes") List<N
 
 	Map<String, Set<String>> categories = new HashMap<String, Set<String>>();
 
-	categoryNodes.stream()
+	categoryNodes
+			.stream()
 			.filter(Node::hasAttributes)
 			.filter(n -> n.getAttributes().getNamedItem(CATEGORY_ATTRIBUTE_FIELD) != null)
 			.filter(n -> n.getAttributes().getNamedItem(CATEGORY) != null)
@@ -328,7 +335,8 @@ public static Map<String, Set<String>> categories(@Named("categoryNodes") List<N
 private static Optional<String> annotationTaggedAs(	@Nullable XSAnnotation annotation,
 													String tag) {
 
-	List<Node> nodeValues = DaggerMetadataAnnotationComponent.builder()
+	List<Node> nodeValues = DaggerMetadataAnnotationComponent
+			.builder()
 			.from(annotation)
 			.andTag(tag)
 			.build()
@@ -352,9 +360,11 @@ private static Map<String, Set<String>> groupSerializeTagsByCaseFilterBy(	String
 	});
 
 	// next we group them by cases
-	attributeNodes.filter(an -> an.getAttributes().getNamedItem(TRANSFORM_CASE_ATTR) != null)
+	attributeNodes
+			.filter(an -> an.getAttributes().getNamedItem(TRANSFORM_CASE_ATTR) != null)
 			.forEach(an -> {
-				String case_ = an.getAttributes()
+				String case_ = an
+						.getAttributes()
 						.getNamedItem(TRANSFORM_CASE_ATTR)
 						.getTextContent();
 				if (!groups.containsKey(case_)) {

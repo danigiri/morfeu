@@ -26,8 +26,7 @@ protected final static Logger log = LoggerFactory.getLogger(LocalSaver.class);
 private String	destination;
 private String	content;
 
-public LocalSaver(	String destination,
-					String content) {
+public LocalSaver(String destination, String content) {
 
 	this.destination = destination;
 	this.content = content;

@@ -40,9 +40,7 @@ protected ExecProblemProcessor	problemMatcher;
 
 private boolean isOK = true;
 
-public ExecTask(int type,
-				int status,
-				ProcessExecutor executor) {
+public ExecTask(int type, int status, ProcessExecutor executor) {
 
 	this.type = type;
 	this.status = status;
@@ -51,12 +49,9 @@ public ExecTask(int type,
 }
 
 
-public ExecTask(int type,
-				int status,
-				ProcessExecutor executor,
+public ExecTask(int type, int status, ProcessExecutor executor,
 				ExecOutputProcessor outputProcessorWrapper,
-				ExecProblemProcessor problemProcessorWrapper,
-				ExecOutputProcessor logMatcher,
+				ExecProblemProcessor problemProcessorWrapper, ExecOutputProcessor logMatcher,
 				ExecProblemProcessor problemMatcher) {
 
 	this(type, status, executor);
@@ -98,9 +93,7 @@ public void stopRedirectingOutput() {
 }
 
 
-public void setProcess(Process process) {
-	this.process = process;
-}
+public void setProcess(Process process) { this.process = process; }
 
 
 @Override
@@ -110,9 +103,7 @@ public int getStatus() { // if the process has somehow died, we mark as finished
 
 
 @Override
-public int getType() {
-	return type;
-}
+public int getType() { return type; }
 
 
 public void setKO() {
@@ -121,9 +112,7 @@ public void setKO() {
 
 
 @Override
-public boolean isOK() {
-	return isOK;
-}
+public boolean isOK() { return isOK; }
 
 
 private InputStream stdinStream(String stdin) {

@@ -37,9 +37,7 @@ private String	prefix;		// prefix of
 private String	path;		// relative path
 private String	modelPath;	// relative path of the model, not used to validate
 
-public SnippetGETControl(	String prefix,
-							String path,
-							@Nullable String modelPath) {
+public SnippetGETControl(String prefix, String path, @Nullable String modelPath) {
 
 	super("GET snippet:" + path, "content.ftl", "content-problem.ftl");
 
@@ -58,12 +56,14 @@ protected Object process()
 	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix + path).build().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).build().uri().get();
-	URI fetchableModelPath = DaggerURIComponent.builder()
+	URI fetchableModelPath = DaggerURIComponent
+			.builder()
 			.from(prefix + modelPath)
 			.build()
 			.uri()
 			.get();
-	SnippetParserComponent snippetComponent = DaggerSnippetParserComponent.builder()
+	SnippetParserComponent snippetComponent = DaggerSnippetParserComponent
+			.builder()
 			.content(uri)
 			.fetchedContentFrom(fetchableURI)
 			.modelFiltered(modelURI)

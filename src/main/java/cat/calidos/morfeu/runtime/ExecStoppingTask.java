@@ -29,13 +29,11 @@ import cat.calidos.morfeu.runtime.api.StoppingTask;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ExecStoppingTask extends ExecMutableTask implements StoppingTask {
 
-public ExecStoppingTask(int type,
-						ProcessExecutor executor,
+public ExecStoppingTask(int type, ProcessExecutor executor,
 						ExecOutputProcessor outputProcessorWrapper,
 						ExecProblemProcessor problemProcessorWrapper,
 						StoppingOutputProcessor outputProcessor,
-						ExecProblemProcessor problemProcessor,
-						ExecFinishedTask finishedTask) {
+						ExecProblemProcessor problemProcessor, ExecFinishedTask finishedTask) {
 
 	super(type, STOPPING, executor, outputProcessorWrapper, problemProcessorWrapper,
 			outputProcessor, problemProcessor, null, finishedTask);

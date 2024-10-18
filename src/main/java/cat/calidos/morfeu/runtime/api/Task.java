@@ -40,14 +40,10 @@ public int getStatus();
 public int getType();
 
 
-default public boolean isOneTime() {
-	return getType() == Task.ONE_TIME;
-}
+default public boolean isOneTime() { return getType() == Task.ONE_TIME; }
 
 
-default public boolean isLongRunning() {
-	return getType() == Task.LONG_RUNNING;
-}
+default public boolean isLongRunning() { return getType() == Task.LONG_RUNNING; }
 
 
 public void setRemaining(int percent);
@@ -57,9 +53,7 @@ public int getRemaining();
 public boolean isOK();
 
 
-default public boolean isDone() {
-	return getRemaining() <= Task.NEXT || getStatus() == FINISHED;
-}
+default public boolean isDone() { return getRemaining() <= Task.NEXT || getStatus() == FINISHED; }
 
 
 /** Used in testing, block until status is reached @throws InterruptedException */

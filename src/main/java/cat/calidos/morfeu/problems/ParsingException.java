@@ -24,8 +24,7 @@ public ParsingException(String message) {
 }
 
 
-public ParsingException(String message,
-						Throwable e) {
+public ParsingException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

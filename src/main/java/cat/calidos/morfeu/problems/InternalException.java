@@ -24,8 +24,7 @@ public InternalException(String message) {
 }
 
 
-public InternalException(	String message,
-							Throwable e) {
+public InternalException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

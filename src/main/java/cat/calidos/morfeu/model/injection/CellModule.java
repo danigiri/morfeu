@@ -142,8 +142,12 @@ public static Composite<Cell> childrenFrom(	Node node,
 											URI uri,
 											ComplexCellModel cellModel) {
 
-	log.trace("Getting children from node={}, uri={}, cellModel={}", node.getNodeName(), uri,
-			cellModel.getURI());
+	log
+			.trace(
+					"Getting children from node={}, uri={}, cellModel={}",
+					node.getNodeName(),
+					uri,
+					cellModel.getURI());
 
 	if (!node.hasChildNodes()) { // base case, save some memory on the list
 
@@ -177,7 +181,8 @@ public static Composite<Cell> childrenFrom(	Node node,
 																			// differently and for
 																			// the URI
 			URI childURI = cellURI(uri, cellModel, "/" + childIndexedName); // foo(1)/bar(0)
-			Cell childCell = DaggerCellComponent.builder()
+			Cell childCell = DaggerCellComponent
+					.builder()
 					.withURI(childURI)
 					.fromNode(childElem)
 					.withCellModel(childCellModel)
@@ -202,7 +207,10 @@ public static Attributes<Cell> publicAttributesFrom(Node node,
 													ComplexCellModel cellModel) {
 	// a bit slow as we go through the attributes twice, in the future we can do streams and group
 	// by to optimise
-	return attributesFrom(node, uri, cellModel,
+	return attributesFrom(
+			node,
+			uri,
+			cellModel,
 			attributeName -> !(attributeName.startsWith("xmlns:")
 					|| attributeName.startsWith("xsi:")));
 }
@@ -214,8 +222,12 @@ public static Attributes<Cell> internalAttributesFrom(	Node node,
 														ComplexCellModel cellModel) {
 	// a bit slow as we go through the attributes twice, in the future we can do streams and group
 	// by to optimise
-	return attributesFrom(node, uri, cellModel, attributeName -> attributeName.startsWith("xmlns:")
-			|| attributeName.startsWith("xsi:"));
+	return attributesFrom(
+			node,
+			uri,
+			cellModel,
+			attributeName -> attributeName.startsWith("xmlns:")
+					|| attributeName.startsWith("xsi:"));
 }
 
 
@@ -231,8 +243,10 @@ private static Attributes<Cell> attributesFrom(	Node node,
 	}
 
 	if (cellModel.isSimple()) {
-		log.error("CellModel '{}' does not allow attributes but the elem does",
-				cellModel.getName());
+		log
+				.error(
+						"CellModel '{}' does not allow attributes but the elem does",
+						cellModel.getName());
 		throw new RuntimeException("Element and model attribute mismatch",
 				new IllegalArgumentException());
 	}
@@ -252,7 +266,8 @@ private static Attributes<Cell> attributesFrom(	Node node,
 		CellModel attributeCellModel = findAttributeWithName(cellModel, attributeName);
 		if (attributeFilter.test(attributeName)) {
 
-			Cell attributeCell = DaggerCellComponent.builder()
+			Cell attributeCell = DaggerCellComponent
+					.builder()
 					.withURI(childURI)
 					.fromNode(attribute)
 					.withCellModel(attributeCellModel)
@@ -273,7 +288,8 @@ private static Attributes<Cell> attributesFrom(	Node node,
 private static CellModel findChildWithName(	ComplexCellModel cellModel,
 											String childName) {
 
-	Optional<CellModel> matchedChild = cellModel.children()
+	Optional<CellModel> matchedChild = cellModel
+			.children()
 			.asList()
 			.stream()
 			.filter(cm -> cm.getName().equals(childName))
@@ -306,7 +322,8 @@ private static URI cellURI(	URI uri,
 private static CellModel findAttributeWithName(	ComplexCellModel cellModel,
 												String attributeName) {
 
-	Optional<CellModel> matchedAttribute = cellModel.attributes()
+	Optional<CellModel> matchedAttribute = cellModel
+			.attributes()
 			.asList()
 			.stream()
 			.filter(cm -> cm.getName().equals(attributeName))
@@ -315,8 +332,11 @@ private static CellModel findAttributeWithName(	ComplexCellModel cellModel,
 		// FIXME: this is a hack, we should handle this more gracefully
 		if (!(attributeName.startsWith("xmlns:") || attributeName.startsWith("xsi:"))) {
 
-			log.error("Elem '{}' could not match any attribute of '{}'", attributeName,
-					cellModel.getName());
+			log
+					.error(
+							"Elem '{}' could not match any attribute of '{}'",
+							attributeName,
+							cellModel.getName());
 			throw new RuntimeException(
 					"Node and model attribute mismatch (" + attributeName + " not found)");
 		}

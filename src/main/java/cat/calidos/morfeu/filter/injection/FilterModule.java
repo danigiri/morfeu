@@ -29,8 +29,8 @@ public static Filter<String, String> stringToString(List<String> links,
 													@Named("stringToObject") Map<String, Filter<String, Object>> strToObjFilters,
 													@Named("objectToObject") Map<String, Filter<Object, Object>> objToObjFilters)
 		throws ConfigurationException {
-	return new FilterEngine<String, Object>().xToX(links, strToStrFilters, strToObjFilters,
-			objToStrFilters, objToObjFilters);
+	return new FilterEngine<String, Object>()
+			.xToX(links, strToStrFilters, strToObjFilters, objToStrFilters, objToObjFilters);
 }
 
 
@@ -41,8 +41,8 @@ public static Filter<String, Object> stringToObject(List<String> transforms,
 													@Named("stringToObject") Map<String, Filter<String, Object>> strToObjFilters,
 													@Named("objectToObject") Map<String, Filter<Object, Object>> objToObjFilters)
 		throws ConfigurationException {
-	return new FilterEngine<String, Object>().xToY(transforms, strToStrFilters, strToObjFilters,
-			objToStrFilters, objToObjFilters);
+	return new FilterEngine<String, Object>()
+			.xToY(transforms, strToStrFilters, strToObjFilters, objToStrFilters, objToObjFilters);
 }
 
 
@@ -53,8 +53,13 @@ public static Filter<Object, String> objectToString(List<String> transforms,
 													@Named("stringToObject") Map<String, Filter<String, Object>> strToObjFilters,
 													@Named("objectToObject") Map<String, Filter<Object, Object>> objToObjFilters)
 		throws ConfigurationException {
-	return new FilterEngine<Object, String>().xToY(transforms, objToObjFilters, // different order
-			objToStrFilters, strToObjFilters, strToStrFilters);
+	return new FilterEngine<Object, String>()
+			.xToY(
+					transforms,
+					objToObjFilters, // different order
+					objToStrFilters,
+					strToObjFilters,
+					strToStrFilters);
 }
 
 
@@ -65,8 +70,13 @@ public static Filter<Object, Object> objectToObject(List<String> transforms,
 													@Named("stringToObject") Map<String, Filter<String, Object>> strToObjFilters,
 													@Named("objectToObject") Map<String, Filter<Object, Object>> objToObjFilters)
 		throws ConfigurationException {
-	return new FilterEngine<Object, String>().xToX(transforms, objToObjFilters, // different order
-			objToStrFilters, strToObjFilters, strToStrFilters);
+	return new FilterEngine<Object, String>()
+			.xToX(
+					transforms,
+					objToObjFilters, // different order
+					objToStrFilters,
+					strToObjFilters,
+					strToStrFilters);
 }
 
 

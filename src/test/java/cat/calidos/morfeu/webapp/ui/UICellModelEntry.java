@@ -41,11 +41,8 @@ private Optional<UICellModelEntry>	parent;
 private int							level;
 private int							position;
 
-public UICellModelEntry(SelenideElement e,
-						UIModel model,
-						Optional<UICellModelEntry> parent,
-						int level,
-						int position) {
+public UICellModelEntry(SelenideElement e, UIModel model, Optional<UICellModelEntry> parent,
+						int level, int position) {
 
 	super(e);
 
@@ -75,8 +72,7 @@ public UICellModelEntry hover() {
 	SelenideElement thumb = element.$(".cell-model-thumb");
 	try {
 		Thread.sleep(10);
-	} catch (Exception e) {
-	}
+	} catch (Exception e) {}
 	thumb.hover();
 
 	return this;
@@ -163,7 +159,8 @@ public List<UICellModelEntry> children() {
 
 
 public UICellModelEntry child(String name) {
-	return children().stream()
+	return children()
+			.stream()
 			.filter((UICellModelEntry cme) -> cme.name().equals(name))
 			.findAny()
 			.get();
@@ -187,9 +184,7 @@ public boolean isSelected() {
 }
 
 
-public boolean isActive() {
-	return element.$(".cell-model-thumb").attr("class").contains(ACTIVE);
-}
+public boolean isActive() { return element.$(".cell-model-thumb").attr("class").contains(ACTIVE); }
 
 
 public UICellData cellInfo() {

@@ -19,8 +19,7 @@ package cat.calidos.morfeu.problems;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ValidationException extends Exception {
 
-public ValidationException(	String message,
-							Throwable e) {
+public ValidationException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

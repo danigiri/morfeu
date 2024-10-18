@@ -7,8 +7,7 @@ package cat.calidos.morfeu.problems;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class PostingException extends Exception {
 
-public PostingException(String message,
-						Exception e) {
+public PostingException(String message, Exception e) {
 	super(message, e);
 }
 

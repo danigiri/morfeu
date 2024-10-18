@@ -34,7 +34,9 @@ public void okResultTest() throws Exception {
 	assertEquals(1, update);
 
 	List<List<String>> output = SQLModule.query(statement, "SELECT * FROM Persons");
-	assertAll("show tables asserts", () -> assertEquals(2, output.size()),
+	assertAll(
+			"show tables asserts",
+			() -> assertEquals(2, output.size()),
 			() -> assertEquals(5, output.get(0).size()),
 			() -> assertEquals(5, output.get(1).size()),
 			() -> assertTrue(output.get(0).contains("PERSONID")),

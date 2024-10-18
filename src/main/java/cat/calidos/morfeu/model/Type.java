@@ -20,8 +20,7 @@ private Set<String>			possibleValues;
 private boolean				isGlobal;
 private Optional<Metadata>	metadata;
 
-public Type(URI u,
-			String name) {
+public Type(URI u, String name) {
 
 	super(u, name, "TYPE DESC");
 
@@ -32,13 +31,8 @@ public Type(URI u,
 }
 
 
-public Type(URI u,
-			String name,
-			XSType xsType,
-			String regex,
-			Set<String> possibleValues,
-			boolean global,
-			Metadata metadata) {
+public Type(URI u, String name, XSType xsType, String regex, Set<String> possibleValues,
+			boolean global, Metadata metadata) {
 	// TODO: extract description for types from annotation
 	super(u, name, "TYPE DESC");
 
@@ -51,19 +45,13 @@ public Type(URI u,
 }
 
 
-public boolean isSimple() {
-	return xsType.isPresent() ? xsType.get().isSimpleType() : false;
-}
+public boolean isSimple() { return xsType.isPresent() ? xsType.get().isSimpleType() : false; }
 
 
-public boolean isGlobal() {
-	return isGlobal;
-}
+public boolean isGlobal() { return isGlobal; }
 
 
-public Optional<String> getRegex() {
-	return regex;
-}
+public Optional<String> getRegex() { return regex; }
 
 
 public boolean hasPossibleValues() {
@@ -77,9 +65,7 @@ public Set<String> getPossibleValues() {
 }
 
 
-public Metadata getMetadata() {
-	return metadata.orElse(null);
-}
+public Metadata getMetadata() { return metadata.orElse(null); }
 
 
 public boolean isContentValid(Object content) {

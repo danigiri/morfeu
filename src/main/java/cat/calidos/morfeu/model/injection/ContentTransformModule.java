@@ -77,7 +77,8 @@ public static String effectiveContent(	@Named("DestinationContentURI") URI uri,
 // TODO: move to domain-specific filter module
 @Produces @Named("YAMLContent")
 public static String yamlContent(@Named("ValuesForTemplate") Map<String, Object> values) {
-	return DaggerViewComponent.builder()
+	return DaggerViewComponent
+			.builder()
 			.withTemplatePath("transform/content-to-yaml.ftl")
 			.withValue(values)
 			.build()
@@ -96,7 +97,8 @@ public static String jsonContent(	@Named("DestinationContentURI") URI uri,
 	try {
 
 		// we are using the dirty trick of converting to YAML and then converting to JSON, works ^^
-		return jsonMapper.writerWithDefaultPrettyPrinter()
+		return jsonMapper
+				.writerWithDefaultPrettyPrinter()
 				.writeValueAsString(yamlMapper.readTree(yaml));
 
 	} catch (IOException e) {
@@ -114,7 +116,8 @@ public static String filterContent(	@Named("ValuesForTemplate") Map<String, Obje
 		throws TransformException {
 
 	try {
-		return DaggerFilterComponent.builder()
+		return DaggerFilterComponent
+				.builder()
 				.filters(filters)
 				.build()
 				.objectToString()

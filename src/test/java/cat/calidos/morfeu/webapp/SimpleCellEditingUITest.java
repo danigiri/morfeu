@@ -29,7 +29,8 @@ private UIContent	content;
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()
+	content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 3")
@@ -60,7 +61,8 @@ public void editSimpleCellAndSave() {
 	UICellData cellEditorData = stuffEditor.cellData();
 	assertNotNull(cellEditorData);
 	assertTrue(cellEditorData.isFromEditor(), "Editing the cell should show an editor");
-	assertTrue(cellEditorData.isFromCell(),
+	assertTrue(
+			cellEditorData.isFromCell(),
 			"Editing the cell should show an editor with data coming from the cell");
 
 	stuffEditor.enterText("New stuff content");

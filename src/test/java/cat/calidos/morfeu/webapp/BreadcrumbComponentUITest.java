@@ -21,19 +21,26 @@ public void testFullBreadcrumb() {
 
 	open(appBaseURL + "test/breadcrumb-test/display");
 	UIBreadcrumb breadcrumb = new UIBreadcrumb().shouldAppear();
-	assertAll("basic checks", () -> assertNotNull(breadcrumb),
+	assertAll(
+			"basic checks",
+			() -> assertNotNull(breadcrumb),
 			() -> assertFalse(breadcrumb.isFragment()));
 
 	List<String> elements = breadcrumb.elements();
-	assertAll("element checks", () -> assertNotNull(elements),
-			() -> assertEquals(6, elements.size()), () -> assertEquals("test(0)", elements.get(0)),
+	assertAll(
+			"element checks",
+			() -> assertNotNull(elements),
+			() -> assertEquals(6, elements.size()),
+			() -> assertEquals("test(0)", elements.get(0)),
 			() -> assertEquals("row(0)", elements.get(1)),
 			() -> assertEquals("col(1)", elements.get(2)),
 			() -> assertEquals("row(0)", elements.get(3)),
 			() -> assertEquals("col(1)", elements.get(4)),
 			() -> assertEquals("data2(1)", elements.get(5)));
 
-	assertAll("active checks", () -> assertNotNull(breadcrumb),
+	assertAll(
+			"active checks",
+			() -> assertNotNull(breadcrumb),
 			() -> assertTrue(breadcrumb.activeName().isPresent()),
 			() -> assertEquals("data2(1)", breadcrumb.activeName().get()));
 
@@ -45,7 +52,9 @@ public void testShowAndHideBreadcrumb() {
 
 	open(appBaseURL + "test/breadcrumb-test/display-and-hide");
 	UIBreadcrumb breadcrumb = new UIBreadcrumb().shouldAppear();
-	assertAll("active checks", () -> assertNotNull(breadcrumb),
+	assertAll(
+			"active checks",
+			() -> assertNotNull(breadcrumb),
 			() -> assertTrue(breadcrumb.activeName().isPresent()),
 			() -> assertEquals("data2(1)", breadcrumb.activeName().get()));
 
@@ -60,7 +69,9 @@ public void testFragmentlBreadcrumb() {
 
 	open(appBaseURL + "test/breadcrumb-test/display-fragment");
 	UIBreadcrumb breadcrumb = new UIBreadcrumb().shouldAppear();
-	assertAll("basic checks", () -> assertNotNull(breadcrumb),
+	assertAll(
+			"basic checks",
+			() -> assertNotNull(breadcrumb),
 			() -> assertTrue(breadcrumb.isFragment()));
 
 }

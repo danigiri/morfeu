@@ -14,8 +14,7 @@ public class YAMLTextualToXMLProcessor extends PrefixProcessor<JsonNodeCellModel
 
 private JsonNodeCellModel nodeCellModel;
 
-public YAMLTextualToXMLProcessor(	String prefix,
-									JsonNodeCellModel nodeCellModel) {
+public YAMLTextualToXMLProcessor(String prefix, JsonNodeCellModel nodeCellModel) {
 
 	super(prefix);
 	this.nodeCellModel = nodeCellModel;
@@ -41,7 +40,8 @@ public String output() {
 	} else {
 		template = "<${v.cm.name}>${f.xmlc(v.yaml)}</${v.cm.name}>\n";
 	}
-	String out = super.output() + DaggerViewComponent.builder()
+	String out = super.output() + DaggerViewComponent
+			.builder()
 			.withValue(values)
 			.withTemplate(template)
 			.andProblem("")

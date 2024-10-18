@@ -31,7 +31,9 @@ public void contentGET() throws Exception {
 	assertNotNull(content);
 
 	Cell test = content.get(0);
-	assertAll("test basic content", () -> assertNotNull(test),
+	assertAll(
+			"test basic content",
+			() -> assertNotNull(test),
 			() -> assertEquals("test-resources/documents/document1.xml", test.getURI().toString()),
 			() -> assertTrue(test.isComplex()));
 
@@ -48,12 +50,14 @@ public void contentGETFiltered() throws Exception {
 			+ "{\"from\":\"}\",\"to\":\"}\\\"\"}" + "]}";
 	Optional<String> filters = Optional.of(f); // if the filters are not applied we get a different
 												// exception
-	assertThrows(ValidationException.class,
+	assertThrows(
+			ValidationException.class,
 			() -> new ContentGETControl(prefix, path, filters, model).process());
 
 	Optional<String> empty = Optional.empty();
 	System.out.println("Ignore the next exception, thrown during testing");
-	assertThrows(ExecutionException.class,
+	assertThrows(
+			ExecutionException.class,
 			() -> new ContentGETControl(prefix, path, empty, model).process());
 
 }

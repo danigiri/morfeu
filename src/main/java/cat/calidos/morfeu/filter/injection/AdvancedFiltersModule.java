@@ -39,7 +39,8 @@ public static Filter<String, String> yamlToJSON(ObjectMapper jsonMapper,
 
 			// we are using the dirty trick of converting to YAML and then converting to JSON, works
 			// ^^
-			return jsonMapper.writerWithDefaultPrettyPrinter()
+			return jsonMapper
+					.writerWithDefaultPrettyPrinter()
 					.writeValueAsString(yamlMapper.readTree(yaml));
 
 		} catch (IOException e) {
@@ -62,14 +63,16 @@ public static Filter<Object, String> applyTemplate(Map<String, JsonNode> params)
 	}
 	JsonNode templateNode = filterParameters.get("template");
 	if (!templateNode.isTextual()) {
-		log.error(
-				"Incorrect parameters in apply-template, 'template' param value should be a string");
+		log
+				.error(
+						"Incorrect parameters in apply-template, 'template' param value should be a string");
 		return (values) -> "APPLY TEMPLATE PARAM 'template' IS NOT A STRING";
 	}
 	String template = templateNode.asText();
 
 	return (values) -> {
-		return DaggerViewComponent.builder()
+		return DaggerViewComponent
+				.builder()
 				.withTemplatePath(template)
 				.withValue(values)
 				.build()

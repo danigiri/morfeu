@@ -32,7 +32,9 @@ public void testPreview() {
 	HTMLPreview preview = new HTMLPreview();
 	preview.shouldAppear();
 
-	assertAll("Basic preview content", () -> assertEquals("identifier 1", preview.title()),
+	assertAll(
+			"Basic preview content",
+			() -> assertEquals("identifier 1", preview.title()),
 			() -> assertEquals("#ff1100", preview.color()));
 
 }
@@ -51,26 +53,36 @@ public void testPreviewLiveUpdates() {
 	preview.shouldAppear();
 
 	UICellData cellEditorData = editor.cellData();
-	assertAll("Basic cell editor stuff", () -> assertNotNull(cellEditorData),
-			() -> assertTrue(cellEditorData.isFromEditor(),
+	assertAll(
+			"Basic cell editor stuff",
+			() -> assertNotNull(cellEditorData),
+			() -> assertTrue(
+					cellEditorData.isFromEditor(),
 					"Editing the cell should show an editor"),
-			() -> assertTrue(cellEditorData.isFromCell(),
+			() -> assertTrue(
+					cellEditorData.isFromCell(),
 					"Editor should show data coming from the cell"));
 
 	List<UIAttributeData> attributes = cellEditorData.attributes();
-	assertAll("Basic cell editor attributes", () -> assertNotNull(attributes),
+	assertAll(
+			"Basic cell editor attributes",
+			() -> assertNotNull(attributes),
 			() -> assertEquals(2, attributes.size(), "We should be editing two attributes"));
 
 	UIAttributeData text = cellEditorData.attribute("text");
 	String textExpectedValue = "identifier 1";
-	assertAll("Text content is correct", () -> assertNotNull(text),
+	assertAll(
+			"Text content is correct",
+			() -> assertNotNull(text),
 			() -> assertTrue(text.hasValue()),
 			() -> assertEquals(textExpectedValue, preview.title()),
 			() -> assertEquals(textExpectedValue, text.value()));
 
 	UIAttributeData color = cellEditorData.attribute("color");
 	String colorExpectedValue = "ff1100";
-	assertAll("Color content is correct", () -> assertNotNull(color),
+	assertAll(
+			"Color content is correct",
+			() -> assertNotNull(color),
 			() -> assertTrue(color.hasValue()),
 			() -> assertEquals("#" + colorExpectedValue, preview.color()), // preview adds the hash
 																			// in the markup
@@ -80,7 +92,9 @@ public void testPreviewLiveUpdates() {
 	text.eraseValueInField();
 	String erasedExpectedValue = "";
 	UIAttributeData erasedText = editor.cellData().attribute("text");
-	assertAll("Interactive erase clears preview value", () -> assertNotNull(erasedText),
+	assertAll(
+			"Interactive erase clears preview value",
+			() -> assertNotNull(erasedText),
 			() -> assertTrue(erasedText.hasValue()),
 			() -> assertEquals(erasedExpectedValue, preview.title()),
 			() -> assertEquals(erasedExpectedValue, erasedText.value()));
@@ -88,7 +102,9 @@ public void testPreviewLiveUpdates() {
 	String enteredExpectedValue = "";
 	text.tabIntoEnterText(enteredExpectedValue);
 	UIAttributeData enteredText = editor.cellData().attribute("text");
-	assertAll("Interactive change sets preview value", () -> assertNotNull(enteredText),
+	assertAll(
+			"Interactive change sets preview value",
+			() -> assertNotNull(enteredText),
 			() -> assertTrue(enteredText.hasValue()),
 			() -> assertEquals(enteredExpectedValue, preview.title()),
 			() -> assertEquals(enteredExpectedValue, enteredText.value()));
@@ -104,7 +120,9 @@ public void testPOSTPreview() {
 	HTMLPreview preview = new HTMLPreview();
 	preview.shouldAppear();
 
-	assertAll("POST preview content", () -> assertEquals("testvalue", preview.title()),
+	assertAll(
+			"POST preview content",
+			() -> assertEquals("testvalue", preview.title()),
 			() -> assertEquals("#01a1fb", preview.color()));
 
 }

@@ -44,9 +44,7 @@ public ExecProblemProcessor(ExecProblemProcessor indirectProcessor) {
 }
 
 
-public void setTask(MutableTask task) {
-	this.task = task;
-}
+public void setTask(MutableTask task) { this.task = task; }
 
 
 public void setIndirectProcessor(ExecProblemProcessor indirectProcessor) {

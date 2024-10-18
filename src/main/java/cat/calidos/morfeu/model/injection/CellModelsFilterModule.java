@@ -47,7 +47,8 @@ public static CellModel filterCellModels(	Model model,
 	if (cellModelFilter.isPresent()) {
 		URI filter = cellModelFilter.get();
 		log.trace("*** Looking for cell model filter " + filter);
-		CellModel cellModel = model.children()
+		CellModel cellModel = model
+				.children()
 				.stream()
 				.map(cm -> lookForCellModel(cm, filter))
 				.findFirst()
@@ -85,7 +86,8 @@ private static Optional<CellModel> lookForCellModel(CellModel cellModel,
 		// found in the children
 		// if no children have it, the last filter will not find match anything so we return a plain
 		// empty
-		found = cellModel.asComplex()
+		found = cellModel
+				.asComplex()
 				.children()
 				.asList()
 				.stream()

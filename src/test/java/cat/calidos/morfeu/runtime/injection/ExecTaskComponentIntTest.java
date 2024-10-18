@@ -27,7 +27,8 @@ private boolean				finishedCallbackCalled	= false;
 public void testOneTimeExecSimpleTask() throws Exception {
 
 	// System.out.println("TEST: START");
-	ReadyTask task = DaggerExecTaskComponent.builder()
+	ReadyTask task = DaggerExecTaskComponent
+			.builder()
 			.exec("/bin/bash", "-c", "echo 'hello world' && sleep 1")
 			.type(Task.ONE_TIME)
 			.startedMatcher(s -> s.equals("hello world") ? Task.NEXT : Task.MAX)
@@ -35,7 +36,8 @@ public void testOneTimeExecSimpleTask() throws Exception {
 			.build()
 			.readyTask();
 
-	assertTrue(task.toString().contains("/bin/bash, -c, echo 'hello world' && sleep 1"),
+	assertTrue(
+			task.toString().contains("/bin/bash, -c, echo 'hello world' && sleep 1"),
 			"Wrong task definition");
 	assertFalse(task.isDone(), "Task not started should not be 'done'");
 	assertEquals(Task.READY, task.getStatus(), "Task not started should be ready");
@@ -61,19 +63,22 @@ public void testOneTimeExecSimpleTask() throws Exception {
 public void testOneTimeExecComplexTask() throws Exception {
 
 	String command = "echo 'started' && sleep 1 && echo 100 && sleep 1 && echo 50 && echo 0";
-	ReadyTask task = DaggerExecTaskComponent.builder()
+	ReadyTask task = DaggerExecTaskComponent
+			.builder()
 			.exec("/bin/bash", "-c", command)
 			.type(Task.ONE_TIME)
 			.startedMatcher(s -> s.equals("started") ? Task.NEXT : Task.MAX)
-			.startedCallback((	s,
-								r) -> {
-				startedCallbackCalled = true;
-			})
+			.startedCallback(
+					(	s,
+						r) -> {
+						startedCallbackCalled = true;
+					})
 			.runningMatcher(s -> Integer.parseInt(s))
-			.finishedCallback((	r,
-								f) -> {
-				finishedCallbackCalled = true;
-			})
+			.finishedCallback(
+					(	r,
+						f) -> {
+						finishedCallbackCalled = true;
+					})
 			.problemMatcher(s -> true)
 			.build()
 			.readyTask();
@@ -101,7 +106,8 @@ public void testOneTimeExecComplexTask() throws Exception {
 @Test
 public void testOneTimeExecProblematicTask() throws Exception {
 
-	ReadyTask task = DaggerExecTaskComponent.builder()
+	ReadyTask task = DaggerExecTaskComponent
+			.builder()
 			.exec("/bin/bash", "-c", "echo 'started' && sleep 2 && notfound")
 			.type(Task.ONE_TIME)
 			.startedMatcher(s -> s.equals("started") ? Task.NEXT : Task.MAX)
@@ -138,7 +144,8 @@ public void testOneTimeExecProblematicTask() throws Exception {
 public void testOneTimeBinaryNotFoundTask() {
 	// can't avoid the stacktrace being printed, so disabling for the time being
 
-	ReadyTask task = DaggerExecTaskComponent.builder()
+	ReadyTask task = DaggerExecTaskComponent
+			.builder()
 			.exec("/bin/NOTFOUNDFORSURE")
 			.type(Task.ONE_TIME)
 			.startedMatcher(s -> s.equals("started") ? Task.NEXT : Task.MAX)
@@ -158,7 +165,8 @@ public void testOneTimeBinaryNotFoundTask() {
 public void testStopOneTimeStartingTask() throws Exception {
 
 	String command = "trap 'sleep 2 && echo stopped' SIGTERM; sleep 500 & wait %1";
-	ReadyTask task = DaggerExecTaskComponent.builder()
+	ReadyTask task = DaggerExecTaskComponent
+			.builder()
 			.exec("/bin/bash", "-c", command)
 			.type(Task.ONE_TIME)
 			.startedMatcher(s -> s.equals("started") ? Task.NEXT : Task.MAX)
@@ -173,7 +181,9 @@ public void testStopOneTimeStartingTask() throws Exception {
 	assertFalse(starting.isDone());
 
 	int status = starting.getStatus();
-	assertEquals(Task.STARTING, status,
+	assertEquals(
+			Task.STARTING,
+			status,
 			"Starting task should be STARTING (" + starting.translate(status) + ")");
 
 	StoppingTask stopping = starting.stop();
@@ -182,7 +192,9 @@ public void testStopOneTimeStartingTask() throws Exception {
 	assertFalse(stopping.isDone());
 
 	status = stopping.getStatus();
-	assertEquals(Task.STOPPING, status,
+	assertEquals(
+			Task.STOPPING,
+			status,
 			"Starting task should be STOPPING (" + starting.translate(status) + ")");
 
 	stopping.spinUntil(Task.FINISHED);
@@ -197,7 +209,8 @@ public void testStopOneTimeStartingTask() throws Exception {
 public void testStopOneTimeRunningTask() throws Exception {
 
 	String command = "trap 'sleep 1 && echo 0' SIGTERM; echo 'started' && sleep 500 & wait %1";
-	ReadyTask task = DaggerExecTaskComponent.builder()
+	ReadyTask task = DaggerExecTaskComponent
+			.builder()
 			.exec("/bin/bash", "-c", command)
 			.type(Task.ONE_TIME)
 			.startedMatcher(s -> s.equals("started") ? Task.NEXT : Task.MAX) // this matches
@@ -220,7 +233,9 @@ public void testStopOneTimeRunningTask() throws Exception {
 	assertTrue(running.isDone());
 
 	int status = running.getStatus();
-	assertEquals(Task.STOPPED, status,
+	assertEquals(
+			Task.STOPPED,
+			status,
 			"Stopped task should not be (" + running.translate(status) + ")");
 	assertNotNull(stopping);
 
@@ -241,7 +256,8 @@ public void testStopOneTimeRunningTask() throws Exception {
 public void testOneTimeExecSTDINTask() throws Exception {
 
 	// this blocks so can't run at the moment
-	ReadyTask task = DaggerExecTaskComponent.builder()
+	ReadyTask task = DaggerExecTaskComponent
+			.builder()
 			.exec("/bin/bash")
 			.type(Task.ONE_TIME)
 			.startedMatcher(s -> s.equals("hello world") ? Task.NEXT : Task.MAX)

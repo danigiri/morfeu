@@ -49,9 +49,10 @@ List<Node> provideNodesTagged(	LinkedList<Node> annotationNodes,
 		if (currentNode == null) {
 			// FIXME: is this a problem or is intrinsic from the annotations (like empty value XML
 			// nodes)?
-			log.trace(
-					"************** pop spits out a nullpointer value when retrieving metadata for '{}'",
-					tagExpr);
+			log
+					.trace(
+							"************** pop spits out a nullpointer value when retrieving metadata for '{}'",
+							tagExpr);
 			continue;
 		}
 		String nodeName = currentNode.getNodeName();
@@ -59,7 +60,8 @@ List<Node> provideNodesTagged(	LinkedList<Node> annotationNodes,
 			if (attributeIndex == -1) { // looking for plain node and its value
 				content.add(currentNode);
 			} else { // looking for node but setting attribute
-				Node value = currentNode.getAttributes()
+				Node value = currentNode
+						.getAttributes()
 						.getNamedItem(tagExpr.substring(attributeIndex + 1));
 				if (value != null) { // if attribute does not actually exist in the metadata we
 										// don't add
@@ -76,9 +78,10 @@ List<Node> provideNodesTagged(	LinkedList<Node> annotationNodes,
 				} catch (NullPointerException e) {
 					// FIXME: this seems to happen randomly at application startup, and then it goes
 					// away
-					log.error(
-							"getChildNodes kicks out a nullpointer when retrieving metadata for '{}'",
-							tagExpr);
+					log
+							.error(
+									"getChildNodes kicks out a nullpointer when retrieving metadata for '{}'",
+									tagExpr);
 				}
 			}
 		}

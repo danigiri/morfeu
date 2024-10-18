@@ -41,7 +41,8 @@ public void init(ServletConfig config) throws ServletException {
 	// env vars etc should be in the configuration from the super class, but this
 	// will not hurt
 	// TODO: we could move this to a view so we have more flexibility, like var substitution
-	resourcesPrefix = DaggerConfigPropertyComponent.builder()
+	resourcesPrefix = DaggerConfigPropertyComponent
+			.builder()
 			.forName(RESOURCES_PREFIX)
 			.withProps(configuration)
 			.allowEmpty(false)
@@ -51,8 +52,9 @@ public void init(ServletConfig config) throws ServletException {
 			.get();
 	log.info("Final RESOURCES_PREFIX='{}'", resourcesPrefix);
 	if (!resourcesPrefix.endsWith("/")) {
-		log.warn(
-				"*** Used resources prefix does not end with '/', may have issues fetching content ***");
+		log
+				.warn(
+						"*** Used resources prefix does not end with '/', may have issues fetching content ***");
 	}
 
 }
@@ -60,7 +62,8 @@ public void init(ServletConfig config) throws ServletException {
 
 public ControlComponent getControl(	String path,
 									Map<String, String> params) {
-	return DaggerMorfeuControlComponent.builder()
+	return DaggerMorfeuControlComponent
+			.builder()
 			.withPath(path)
 			.method(ControlComponent.GET)
 			.withParams(params)
@@ -72,7 +75,8 @@ public ControlComponent getControl(	String path,
 
 public ControlComponent postControl(String path,
 									Map<String, String> params) {
-	return DaggerMorfeuControlComponent.builder()
+	return DaggerMorfeuControlComponent
+			.builder()
 			.withPath(path)
 			.method(ControlComponent.POST)
 			.withParams(params)

@@ -56,8 +56,12 @@ public static BiFunction<List<String>, Map<String, String>, String> content() {
 		String path = pathElems.get(1); // normalised already
 		String modelPath = params.get("model");
 		Optional<String> filters = Optional.ofNullable(params.get("filters"));
-		log.trace("ContentControlModule::content GET [{}]{}, model: {}", resourcesPrefix, path,
-				modelPath);
+		log
+				.trace(
+						"ContentControlModule::content GET [{}]{}, model: {}",
+						resourcesPrefix,
+						path,
+						modelPath);
 
 		return new ContentGETControl(resourcesPrefix, path, filters, modelPath).processRequest();
 
@@ -80,8 +84,12 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 			log.warn("Empty POST content");
 		}
 		Optional<String> filters = Optional.ofNullable(params.get("filters"));
-		log.trace("ContentControlModule::content POST [{}]{}, model: {}", resourcesPrefix, path,
-				modelPath);
+		log
+				.trace(
+						"ContentControlModule::content POST [{}]{}, model: {}",
+						resourcesPrefix,
+						path,
+						modelPath);
 
 		return new ContentSaveControl(resourcesPrefix, path, content, filters, modelPath)
 				.processRequest();

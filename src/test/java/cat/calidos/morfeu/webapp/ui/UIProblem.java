@@ -53,8 +53,6 @@ public UIProblem shouldDisappear() {
 }
 
 
-public String getText() {
-	return $("#problem").getText();
-}
+public String getText() { return $("#problem").getText(); }
 
 }

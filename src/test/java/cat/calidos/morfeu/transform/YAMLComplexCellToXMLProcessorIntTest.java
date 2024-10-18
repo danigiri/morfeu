@@ -37,7 +37,8 @@ public void setup() throws Exception {
 @Test
 public void testIdentifier() throws Exception {
 
-	CellModel data3 = test.children()
+	CellModel data3 = test
+			.children()
 			.child("row")
 			.asComplex()
 			.children()
@@ -62,13 +63,15 @@ public void testIdentifier() throws Exception {
 // @Test
 public void testData2() throws Exception {
 
-	ComplexCellModel col = test.children()
+	ComplexCellModel col = test
+			.children()
 			.child("row")
 			.asComplex()
 			.children()
 			.child("col")
 			.asComplex();
-	ComplexCellModel data2 = test.children()
+	ComplexCellModel data2 = test
+			.children()
 			.child("row")
 			.asComplex()
 			.children()

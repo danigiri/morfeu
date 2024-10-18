@@ -31,9 +31,7 @@ public class NullValidator implements Validable {
  * @see cat.calidos.morfeu.model.Validable#isValid()
  *//////////////////////////////////////////////////////////////////////////////
 @Override
-public boolean isValid() {
-	return true;
-}
+public boolean isValid() { return true; }
 
 
 /*

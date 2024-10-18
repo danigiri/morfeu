@@ -38,9 +38,7 @@ private String	path;
 private String	modelPath;
 private String	filters;
 
-public ContentGETControl(	String prefix,
-							String path,
-							Optional<String> filters,
+public ContentGETControl(	String prefix, String path, Optional<String> filters,
 							@Nullable String modelPath) {
 
 	super("GET content:" + path, "content.ftl", "content-problem.ftl");
@@ -60,13 +58,15 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix + path).build().uri().get();
 	URI modelURI = DaggerURIComponent.builder().from(modelPath).build().uri().get();
-	URI fetchableModelPath = DaggerURIComponent.builder()
+	URI fetchableModelPath = DaggerURIComponent
+			.builder()
 			.from(prefix + modelPath)
 			.build()
 			.uri()
 			.get();
 
-	ContentParserComponent contentComponent = DaggerContentParserComponent.builder()
+	ContentParserComponent contentComponent = DaggerContentParserComponent
+			.builder()
 			.content(uri)
 			.fetchedContentFrom(fetchableURI)
 			.filters(filters)

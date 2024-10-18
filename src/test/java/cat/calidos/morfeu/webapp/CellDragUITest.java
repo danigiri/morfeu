@@ -30,7 +30,8 @@ public void setup() {
 @Test
 public void testDragCell() {
 
-	UIContent content = UICatalogues.openCatalogues()
+	UIContent content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.shouldBeVisible()
 			.clickOn(0)
@@ -68,7 +69,8 @@ public void testDragCell() {
 @Test
 public void testDragCellSoOtherCellsChangeTheirURIs() {
 
-	UIContent content = UICatalogues.openCatalogues()
+	UIContent content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.shouldBeVisible()
 			.clickOn(0)
@@ -95,12 +97,16 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
 	assertNotNull(targetCol);
-	assertEquals(1, targetCol.children().size(),
+	assertEquals(
+			1,
+			targetCol.children().size(),
 			"Target column should only have one child (row) at the start");
 
 	UICell sourceCol = targetCol.child("row(0)").child("col(0)");
 	assertNotNull(sourceCol);
-	assertEquals(2, sourceCol.children().size(),
+	assertEquals(
+			2,
+			sourceCol.children().size(),
 			"Source column should have two child (data and data2) at the start");
 
 	UICell data = sourceCol.child("data(0)");
@@ -109,7 +115,9 @@ public void testDragCellSoOtherCellsChangeTheirURIs() {
 	assertNotNull(data2);
 
 	data.dragTo(targetCol.dropArea(0));
-	assertEquals(2, targetCol.children().size(),
+	assertEquals(
+			2,
+			targetCol.children().size(),
 			"Target column should have two children after drag");
 
 	data = targetCol.child("data(0)"); // newly dropped data cell
@@ -161,7 +169,8 @@ public void testDragCellFromLast() {
 	// In effect, the position is position-1 (the children count while the dragged cell is in 'the
 	// air' and an orphan)
 
-	UIContent content = UICatalogues.openCatalogues()
+	UIContent content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.shouldBeVisible()
 			.clickOn(0)
@@ -170,7 +179,8 @@ public void testDragCellFromLast() {
 	content.shouldAppear().shouldBeVisible();
 
 	// source col has two children: data and data2
-	UICell col = content.rootCells()
+	UICell col = content
+			.rootCells()
 			.get(0)
 			.child("row(0)")
 			.child("col(1)")
@@ -192,7 +202,8 @@ public void testDragCellFromLast() {
 	editor.clickSave();
 
 	// Next:
-	col = content.rootCells()
+	col = content
+			.rootCells()
 			.get(0)
 			.child("row(0)")
 			.child("col(1)")
@@ -200,11 +211,14 @@ public void testDragCellFromLast() {
 			.child("col(1)");
 	UICell data2 = col.child("data2(1)");
 	data2.dragTo(col.dropArea(0));
-	assertEquals(2, col.children().size(),
+	assertEquals(
+			2,
+			col.children().size(),
 			"Target column should still have two children after drag");
 
 	// Put it back
-	col = content.rootCells()
+	col = content
+			.rootCells()
 			.get(0)
 			.child("row(0)")
 			.child("col(1)")
@@ -212,11 +226,14 @@ public void testDragCellFromLast() {
 			.child("col(1)");
 	data2 = col.child("data2(0)");
 	data2.dragTo(col.dropArea(2));
-	assertEquals(2, col.children().size(),
+	assertEquals(
+			2,
+			col.children().size(),
 			"Target column should still have two children after 2nd drag");
 
 	// And again:
-	col = content.rootCells()
+	col = content
+			.rootCells()
 			.get(0)
 			.child("row(0)")
 			.child("col(1)")
@@ -224,7 +241,9 @@ public void testDragCellFromLast() {
 			.child("col(1)");
 	data2 = col.child("data2(1)");
 	data2.dragTo(col.dropArea(0));
-	assertEquals(2, col.children().size(),
+	assertEquals(
+			2,
+			col.children().size(),
 			"Target column should still have two children after 3rd drag");
 
 	// let's check we are good

@@ -18,9 +18,7 @@ RemoteResource(URI u) {
 }
 
 
-RemoteResource(	URI u,
-				String name,
-				String desc) {
+RemoteResource(URI u, String name, String desc) {
 
 	this(u);
 
@@ -30,30 +28,20 @@ RemoteResource(	URI u,
 }
 
 
-public URI getURI() {
-	return uri;
-}
+public URI getURI() { return uri; }
 
 
-public String getName() {
-	return name;
-}
+public String getName() { return name; }
 
 
-public String getDesc() {
-	return desc;
-}
+public String getDesc() { return desc; }
 
 
 @JsonProperty("name")
-public void setName(String name) {
-	this.name = name;
-}
+public void setName(String name) { this.name = name; }
 
 
 @JsonProperty("desc")
-public void setDesc(String desc) {
-	this.desc = desc;
-}
+public void setDesc(String desc) { this.desc = desc; }
 
 }

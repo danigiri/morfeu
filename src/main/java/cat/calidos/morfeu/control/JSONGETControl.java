@@ -13,9 +13,7 @@ public abstract class JSONGETControl extends Control {
 
 private final static Logger log = LoggerFactory.getLogger(JSONGETControl.class);
 
-public JSONGETControl(	String operation,
-						String template,
-						String problemTemplate) {
+public JSONGETControl(String operation, String template, String problemTemplate) {
 	super(operation, template, problemTemplate);
 }
 

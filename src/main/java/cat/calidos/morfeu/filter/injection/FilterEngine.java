@@ -84,8 +84,12 @@ public Filter<X, X> xToX(	List<String> filters,
 							Map<String, Filter<Y, Y>> yToYFilters)
 		throws ConfigurationException {
 
-	Pair<Filter<X, X>, Filter<X, Y>> output = stateMachine(filters, xToXFilters, xToYFilters,
-			yToXFilters, yToYFilters);
+	Pair<Filter<X, X>, Filter<X, Y>> output = stateMachine(
+			filters,
+			xToXFilters,
+			xToYFilters,
+			yToXFilters,
+			yToYFilters);
 	Filter<X, X> xToX = output.getLeft();
 	if (xToX == null) {
 		throw new ConfigurationException(
@@ -109,8 +113,12 @@ public Filter<X, Y> xToY(	List<String> filters,
 				"Cannot make an X to Y filter without any defined filters");
 	}
 
-	Pair<Filter<X, X>, Filter<X, Y>> output = stateMachine(filters, xToXFilters, xToYFilters,
-			yToXFilters, yToYFilters);
+	Pair<Filter<X, X>, Filter<X, Y>> output = stateMachine(
+			filters,
+			xToXFilters,
+			xToYFilters,
+			yToXFilters,
+			yToYFilters);
 	Filter<X, Y> xToY = output.getRight();
 	if (xToY == null) {
 		throw new ConfigurationException(

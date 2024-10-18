@@ -30,12 +30,14 @@ public void testDocument() throws Exception {
 
 	var modelURI = pathPrefix + "models/test-model.xsd?not=used";
 	assertEquals(modelURI, doc.get("modelURI").asText());
-	assertTrue(doc.get("fetchableModelURI").asText().endsWith(modelURI),
+	assertTrue(
+			doc.get("fetchableModelURI").asText().endsWith(modelURI),
 			"Fetchable model uri does not end correctly");
 
 	var contentURI = pathPrefix + "documents/document1.xml";
 	assertEquals(contentURI, doc.get("contentURI").asText());
-	assertTrue(doc.get("fetchableContentURI").asText().endsWith(contentURI),
+	assertTrue(
+			doc.get("fetchableContentURI").asText().endsWith(contentURI),
 			"Fetchable content uri not correct");
 
 	assertTrue(doc.get("valid").asBoolean());

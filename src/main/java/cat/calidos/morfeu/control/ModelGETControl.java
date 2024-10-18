@@ -24,8 +24,7 @@ protected final static Logger log = LoggerFactory.getLogger(ModelGETControl.clas
 private String	path;	// relative path of the model
 private String	prefix;	// orefix, to build the full fetchable path
 
-public ModelGETControl(	String prefix,
-						String path) {
+public ModelGETControl(String prefix, String path) {
 
 	super("model:" + path, "model.ftl", "model-problem.ftl");
 
@@ -42,7 +41,8 @@ protected Object process()
 	URI uri = DaggerURIComponent.builder().from(path).build().uri().get();
 	URI fetchableURI = DaggerURIComponent.builder().from(prefix + path).build().uri().get();
 
-	return DaggerModelComponent.builder()
+	return DaggerModelComponent
+			.builder()
 			.identifiedBy(uri)
 			.fromFetchable(fetchableURI)
 			.build()

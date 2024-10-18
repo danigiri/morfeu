@@ -24,22 +24,27 @@ public void testRender() throws Exception {
 			+ "    City varchar(255) \n" + ") ";
 	int update = SQLModule.update(statement, create);
 	assertEquals(0, update);
-	update = SQLModule.update(statement,
-			"INSERT INTO Persons VALUES (1, 'Doe', 'John', 'foo', 'fairyland')");
+	update = SQLModule
+			.update(statement, "INSERT INTO Persons VALUES (1, 'Doe', 'John', 'foo', 'fairyland')");
 	assertEquals(1, update);
-	update = SQLModule.update(statement,
-			"INSERT INTO Persons VALUES (1, 'Doe', 'Daisy', 'bar', 'fairyland')");
+	update = SQLModule
+			.update(
+					statement,
+					"INSERT INTO Persons VALUES (1, 'Doe', 'Daisy', 'bar', 'fairyland')");
 	assertEquals(1, update);
 
 	var query = "SELECT * FROM Persons";
 	SQLComponent sql = SQLViewModule.sql(connection, query);
 	String table = SQLViewModule.render(sql, false);
 	// System.err.println(table);
-	assertAll("select * asserts", () -> assertNotNull(table),
+	assertAll(
+			"select * asserts",
+			() -> assertNotNull(table),
 			() -> assertTrue(table.contains("PERSONID")),
 			() -> assertTrue(table.contains("LASTNAME")),
 			() -> assertTrue(table.contains("FIRSTNAME")),
-			() -> assertTrue(table.contains("ADDRESS")), () -> assertTrue(table.contains("CITY")));
+			() -> assertTrue(table.contains("ADDRESS")),
+			() -> assertTrue(table.contains("CITY")));
 
 }
 

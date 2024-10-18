@@ -27,17 +27,20 @@ public void testSnippetCategories() {
 	// we need some time to load the snippets, not ideal but this should give us time
 	try {
 		Thread.sleep(1000);
-	} catch (InterruptedException e) {
-	}
+	} catch (InterruptedException e) {}
 
 	List<String> categories = snippetsArea.categories();
-	assertAll("checking categories", () -> assertNotNull(categories),
+	assertAll(
+			"checking categories",
+			() -> assertNotNull(categories),
 			() -> assertEquals(2, categories.size()),
 			() -> assertEquals("simple", categories.get(0)),
 			() -> assertEquals("complex", categories.get(1)));
 
 	List<UISnippetEntry> simpleSnippets = snippetsArea.snippets();
-	assertAll("checking simple", () -> assertNotNull(simpleSnippets),
+	assertAll(
+			"checking simple",
+			() -> assertNotNull(simpleSnippets),
 			() -> assertEquals(5, simpleSnippets.size()),
 			() -> assertEquals("Stuff 1", simpleSnippets.get(0).name()),
 			() -> assertEquals("Data 1", simpleSnippets.get(1).name()),
@@ -48,7 +51,9 @@ public void testSnippetCategories() {
 	snippetsArea.clickOnCategory("complex");
 	waitOneSec();
 	List<UISnippetEntry> complexSnippets = snippetsArea.snippets();
-	assertAll("checking comple", () -> assertNotNull(complexSnippets),
+	assertAll(
+			"checking comple",
+			() -> assertNotNull(complexSnippets),
 			() -> assertEquals(1, complexSnippets.size()),
 			() -> assertEquals("Row 6,6", complexSnippets.get(0).name()));
 

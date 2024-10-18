@@ -31,13 +31,11 @@ private ExecStoppingTask								stoppingTask;
 private ExecFinishedTask								finishedTask;
 private BiConsumer<ExecRunningTask, ExecFinishedTask>	finishedCallBack;
 
-public ExecRunningTask(	int type,
-						ProcessExecutor executor,
+public ExecRunningTask(	int type, ProcessExecutor executor,
 						ExecOutputProcessor outputProcessorWrapper,
 						ExecProblemProcessor problemProcessorWrapper,
 						RunningOutputProcessor outputProcessor,
-						ExecProblemProcessor problemProcessor,
-						ExecStoppingTask stoppingTask,
+						ExecProblemProcessor problemProcessor, ExecStoppingTask stoppingTask,
 						ExecFinishedTask finishedTask,
 						BiConsumer<ExecRunningTask, ExecFinishedTask> finishedCallBack) {
 

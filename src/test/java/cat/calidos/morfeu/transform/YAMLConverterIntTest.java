@@ -39,7 +39,8 @@ public void testYAMLConverterRowCol() throws Exception {
 	var yaml = "rows:\n" + "  - \n" + "    cols:\n" + "      - \n" + "        size: 12\n";
 	var mapper = new ObjectMapper(new YAMLFactory());
 	JsonNode node = mapper.readTree(yaml);
-	String transformed = DaggerYAMLConverterComponent.builder()
+	String transformed = DaggerYAMLConverterComponent
+			.builder()
 			.from(node)
 			.given(model)
 			.build()
@@ -63,7 +64,8 @@ public void testYAMLConverterRowCols() throws Exception {
 			+ "      - \n" + "        size: 6\n";
 	ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 	JsonNode node = mapper.readTree(yaml);
-	String transformed = DaggerYAMLConverterComponent.builder()
+	String transformed = DaggerYAMLConverterComponent
+			.builder()
 			.from(node)
 			.given(model)
 			.build()
@@ -91,7 +93,8 @@ public void testYAMLConverterData() throws Exception {
 
 	var mapper = new ObjectMapper(new YAMLFactory());
 	JsonNode node = mapper.readTree(yaml);
-	String transformed = DaggerYAMLConverterComponent.builder()
+	String transformed = DaggerYAMLConverterComponent
+			.builder()
 			.from(node)
 			.given(model)
 			.build()
@@ -119,7 +122,8 @@ public void testYAMLConverterDatas() throws Exception {
 
 	var mapper = new ObjectMapper(new YAMLFactory());
 	JsonNode node = mapper.readTree(yaml);
-	String transformed = DaggerYAMLConverterComponent.builder()
+	String transformed = DaggerYAMLConverterComponent
+			.builder()
 			.from(node)
 			.given(model)
 			.build()
@@ -147,7 +151,8 @@ public void testYAMLConverterStuff() throws Exception {
 
 	var mapper = new ObjectMapper(new YAMLFactory());
 	JsonNode node = mapper.readTree(yaml);
-	String transformed = DaggerYAMLConverterComponent.builder()
+	String transformed = DaggerYAMLConverterComponent
+			.builder()
 			.from(node)
 			.given(model)
 			.build()

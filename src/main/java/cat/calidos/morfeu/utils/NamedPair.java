@@ -2,6 +2,7 @@ package cat.calidos.morfeu.utils;
 
 import java.util.NoSuchElementException;
 
+
 public class NamedPair<Z> extends Pair<Z, Z> {
 
 private static final String	LEFT_DEFAULT_NAME	= "left";

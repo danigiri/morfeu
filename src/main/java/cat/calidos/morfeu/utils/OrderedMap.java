@@ -54,8 +54,7 @@ public OrderedMap(int initialCapacity) {
 }
 
 
-public OrderedMap(	String name,
-					T value) {
+public OrderedMap(String name, T value) {
 
 	this(1);
 

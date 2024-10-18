@@ -38,14 +38,16 @@ public void testParseDocument() throws Exception {
 
 @Test
 public void testMalformedDocument() throws Exception {
-	assertThrows(ParsingException.class,
+	assertThrows(
+			ParsingException.class,
 			() -> parseRelativeLocation("test-resources/documents/malformed-document.json"));
 }
 
 
 @Test
 public void testInvalidDocument() throws Exception {
-	assertThrows(ParsingException.class,
+	assertThrows(
+			ParsingException.class,
 			() -> parseRelativeLocation("test-resources/documents/nonvalid-document.json"));
 }
 

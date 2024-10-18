@@ -42,7 +42,8 @@ public static String render(SQLComponent sql,
 		v = MorfeuUtils.paramMap();
 	}
 
-	return DaggerViewComponent.builder()
+	return DaggerViewComponent
+			.builder()
 			.withTemplatePath(TEMPLATE)
 			.withValue(v)
 			.andProblem(problem)

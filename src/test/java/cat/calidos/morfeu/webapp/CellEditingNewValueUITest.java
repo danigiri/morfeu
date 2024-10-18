@@ -31,7 +31,8 @@ private UIModel		model;
 public void setup() {
 
 	open(appBaseURL);
-	UIDocument doc = UICatalogues.openCatalogues()
+	UIDocument doc = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.shouldBeVisible()
 			.clickOn(0)
@@ -57,7 +58,8 @@ public void removeCellValue() {
 	Optional<String> value = stuffEditor.value();
 	assertTrue(value.isPresent());
 	assertEquals("Stuff content", value.get());
-	assertFalse(stuffEditor.isCreateValueVisible(),
+	assertFalse(
+			stuffEditor.isCreateValueVisible(),
 			"Should not be able to create a value for this cell");
 	assertTrue(stuffEditor.isRemoveValueVisible(), "Should be able to remove value for this cell");
 
@@ -74,7 +76,8 @@ public void addCellValue() {
 	// target/test-classes/test-resources/documents/document3.xml/test(0)/row(0)/col(0)
 
 	// TEST->ROW->COL->STUFF
-	UICellModelEntry stuffModel = model.rootCellModels()
+	UICellModelEntry stuffModel = model
+			.rootCellModels()
 			.get(0)
 			.child("row")
 			.child("col")
@@ -96,7 +99,8 @@ public void addCellValue() {
 	Optional<String> value = stuffEditor.value();
 	assertFalse(value.isPresent());
 	assertTrue(stuffEditor.isCreateValueVisible(), "Should be able to create a value for new cell");
-	assertFalse(stuffEditor.isRemoveValueVisible(),
+	assertFalse(
+			stuffEditor.isRemoveValueVisible(),
 			"Should not be able to remove value for new cell");
 
 	stuffEditor.clickCreateValue();

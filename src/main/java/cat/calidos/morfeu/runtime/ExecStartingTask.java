@@ -30,15 +30,13 @@ public class ExecStartingTask extends ExecMutableTask implements StartingTask {
 private BiConsumer<ExecStartingTask, ExecRunningTask>	startedCallback;
 private ExecRunningTask									runningTask;
 
-public ExecStartingTask(int type,
-						ProcessExecutor executor,
+public ExecStartingTask(int type, ProcessExecutor executor,
 						ExecOutputProcessor outputProcessorWrapper,
 						ExecProblemProcessor problemProcessorWrapper,
 						StartingOutputProcessor outputProcessor,
 						ExecProblemProcessor problemProcessor,
 						BiConsumer<ExecStartingTask, ExecRunningTask> startedCallback,
-						ExecRunningTask runningTask,
-						ExecStoppingTask stoppingTask,
+						ExecRunningTask runningTask, ExecStoppingTask stoppingTask,
 						ExecFinishedTask finishedTask) {
 
 	super(type, STARTING, executor, outputProcessorWrapper, problemProcessorWrapper,

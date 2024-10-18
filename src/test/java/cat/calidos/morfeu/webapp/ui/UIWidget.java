@@ -56,9 +56,7 @@ public T shouldBeVisible() {
 }
 
 
-public boolean isDisplayed() {
-	return element.isDisplayed();
-}
+public boolean isDisplayed() { return element.isDisplayed(); }
 
 
 @SuppressWarnings("unchecked")
@@ -105,8 +103,7 @@ public T pressKey(String k) {
 	// this keeps failing randomly
 	try {
 		Thread.sleep(50);
-	} catch (InterruptedException e) {
-	}
+	} catch (InterruptedException e) {}
 
 	return (T) this;
 

@@ -29,7 +29,8 @@ public void testTransformUsingTemplateDocument1() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath(TEMPLATE)
 			.withValue(values)
 			.build()
@@ -81,7 +82,8 @@ public void testTransformUsingTemplateDocument3() throws Exception {
 
 	Map<String, Object> values = valueMapFrom(doc);
 
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath(TEMPLATE)
 			.withValue(values)
 			.build()
@@ -116,7 +118,8 @@ public void testTransformUsingTemplateKeyValuesDocument() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath(TEMPLATE)
 			.withValue(values)
 			.build()
@@ -150,7 +153,8 @@ public void testTransformUsingTemplateEscapeStuffDocument() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath(TEMPLATE)
 			.withValue(values)
 			.build()
@@ -179,7 +183,8 @@ public void testTransformUsingTemplateEscapeDataDocument() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath(TEMPLATE)
 			.withValue(values)
 			.build()
@@ -216,7 +221,8 @@ public void testTransformUsingTemplateEscapeKeyValuesDocument() throws Exception
 
 	Map<String, Object> values = valueMapFrom(doc);
 
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath(TEMPLATE)
 			.withValue(values)
 			.build()

@@ -32,8 +32,7 @@ public UIAttributeData(SelenideElement element) {
 }
 
 
-public UIAttributeData(	SelenideElement element,
-						UICellData parent) {
+public UIAttributeData(SelenideElement element, UICellData parent) {
 
 	super(element);
 
@@ -57,9 +56,7 @@ public String name() {
 
 
 /** @return is this an optional attribute? */
-public boolean isOptional() {
-	return !isMandatory();
-}
+public boolean isOptional() { return !isMandatory(); }
 
 
 /** @return is this a mandatory attribute? */
@@ -100,7 +97,8 @@ public List<String> possibleValues() {
 				"Tried to get a list of possible valus from a non-list (" + name() + ")");
 	}
 
-	return element.$$(By.xpath(".//option"))
+	return element
+			.$$(By.xpath(".//option"))
 			.asFixedIterable()
 			.stream()
 			.map(e -> e.innerText())
@@ -131,9 +129,7 @@ public String validationWarning() {
 }
 
 
-public boolean isBoolean() {
-	return class_().contains("attribute-data-boolean");
-}
+public boolean isBoolean() { return class_().contains("attribute-data-boolean"); }
 
 
 public boolean asBoolean() {
@@ -141,9 +137,7 @@ public boolean asBoolean() {
 }
 
 
-public boolean isList() {
-	return class_().contains("attribute-data-list");
-}
+public boolean isList() { return class_().contains("attribute-data-list"); }
 
 
 public UIAttributeData tabIntoEnterText(String value) {

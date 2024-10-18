@@ -20,11 +20,7 @@ public RemoteModule() {
 protected static ListenableFuture<InputStream> fetchRemoteStream(	URI u,
 																	CloseableHttpClient c)
 		throws FetchingException {
-	return DaggerDataFetcherComponent.builder()
-			.forURI(u)
-			.withClient(c)
-			.build()
-			.fetchData();
+	return DaggerDataFetcherComponent.builder().forURI(u).withClient(c).build().fetchData();
 }
 
 }

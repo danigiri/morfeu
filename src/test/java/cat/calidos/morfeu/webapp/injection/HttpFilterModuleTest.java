@@ -51,7 +51,8 @@ public void testHandledExceptions() throws Exception {
 	var filters = new LinkedList<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>();
 	filters.add(f0);
 
-	assertThrows(MorfeuRuntimeException.class,
+	assertThrows(
+			MorfeuRuntimeException.class,
 			() -> HttpFilterModule.process(filters, filters, null, null, chain));
 
 }
@@ -76,7 +77,9 @@ public void testFilterOrder() {
 
 	List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filterList = HttpFilterModule
 			.preFilters(filters);
-	assertAll("Testing filter order", () -> assertNotNull(filterList),
+	assertAll(
+			"Testing filter order",
+			() -> assertNotNull(filterList),
 			() -> assertEquals(3, filterList.size(), "Wrong filter list size"),
 			() -> assertEquals(f0, filterList.get(0), "f0 should be the first filter"),
 			() -> assertEquals(f1, filterList.get(1), "f1 should be the second filter"),
@@ -169,9 +172,12 @@ public void testStopping() throws Exception {
 
 	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
 
-	assertAll("Checking filter stopped",
+	assertAll(
+			"Checking filter stopped",
 			() -> assertFalse(continue_, "filter chain continued when it should have stopped"),
-			() -> assertEquals(2, Mockito.mockingDetails(request).getInvocations().size(),
+			() -> assertEquals(
+					2,
+					Mockito.mockingDetails(request).getInvocations().size(),
 					"ran 3 filters and not 2"));
 	verify(request).getHeader("foo0");
 	verify(request).getHeader("foo1");
@@ -207,7 +213,8 @@ public void testPrePost() throws Exception {
 
 	boolean continue_ = HttpFilterModule.process(preFilters, postFilters, request, response, chain);
 
-	assertAll("Checking filter stopped",
+	assertAll(
+			"Checking filter stopped",
 			() -> assertTrue(continue_, "filter chain stopped when it should continue"),
 			() -> assertEquals("01", testBuffer.toString(), "Should have ran the two filters"));
 

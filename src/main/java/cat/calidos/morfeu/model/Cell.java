@@ -32,18 +32,12 @@ public Cell(URI u) {
 }
 
 
-public Cell(URI u,
-			String name,
-			String desc) {
+public Cell(URI u, String name, String desc) {
 	super(u, name, desc);
 }
 
 
-public Cell(URI u,
-			String name,
-			String desc,
-			Optional<String> value,
-			CellModel cm) {
+public Cell(URI u, String name, String desc, Optional<String> value, CellModel cm) {
 
 	super(u, name, desc);
 
@@ -53,19 +47,13 @@ public Cell(URI u,
 }
 
 
-public CellModel getCellModel() {
-	return this.cellModel;
-}
+public CellModel getCellModel() { return this.cellModel; }
 
 
-public boolean isSimple() {
-	return isSimple;
-}
+public boolean isSimple() { return isSimple; }
 
 
-public boolean isComplex() {
-	return !isSimple();
-}
+public boolean isComplex() { return !isSimple(); }
 
 
 public ComplexCell asComplex() {
@@ -73,9 +61,7 @@ public ComplexCell asComplex() {
 }
 
 
-public Optional<String> getValue() {
-	return value;
-}
+public Optional<String> getValue() { return value; }
 
 
 /*

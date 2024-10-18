@@ -38,8 +38,7 @@ protected final static Logger log = LoggerFactory.getLogger(DocumentGETControl.c
 private String	prefix;
 private String	path;
 
-public DocumentGETControl(	String prefix,
-							String path) {
+public DocumentGETControl(String prefix, String path) {
 
 	super("document", "document.ftl", "document-problem.ftl");
 
@@ -52,7 +51,8 @@ public DocumentGETControl(	String prefix,
 @Override
 protected Object process() throws InterruptedException, ExecutionException, ValidationException,
 		ParsingException, FetchingException {
-	return DaggerDocumentComponent.builder()
+	return DaggerDocumentComponent
+			.builder()
 			.from(DaggerURIComponent.builder().from(prefix + path).build().uri().get())
 			.withPrefix(prefix)
 			.build()

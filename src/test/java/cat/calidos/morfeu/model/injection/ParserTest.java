@@ -43,8 +43,8 @@ public void testProduceSchemaParser() throws Exception {
 	SAXParserFactory factory = ModelParserModule.produceSAXParserFactory();
 	ErrorHandler errorHandler = ModelParserModule.errorHandler();
 	AnnotationParserFactory annotationParserFactory = ModelParserModule.annotationParserFactory();
-	XSOMParser parser = ModelParserModule.produceSchemaParser(factory, errorHandler,
-			annotationParserFactory);
+	XSOMParser parser = ModelParserModule
+			.produceSchemaParser(factory, errorHandler, annotationParserFactory);
 	assertNotNull(parser);
 	assertNotNull(parser.getErrorHandler());
 }

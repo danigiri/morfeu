@@ -58,14 +58,16 @@ public void streamChainTest() throws Exception {
 @Test @DisplayName("Identity test")
 public void identityTest() throws Exception {
 
-	Filter<String, String> f = DaggerFilterComponent.builder()
+	Filter<String, String> f = DaggerFilterComponent
+			.builder()
 			.filters("identity")
 			.build()
 			.stringToString()
 			.get();
 	assertEquals("foo", f.apply("foo"));
 
-	Filter<Object, Object> f2 = DaggerFilterComponent.builder()
+	Filter<Object, Object> f2 = DaggerFilterComponent
+			.builder()
 			.filters("identity")
 			.build()
 			.objectToObject()
@@ -81,7 +83,8 @@ public void identityTest() throws Exception {
 public void objectToStringTest() throws Exception {
 
 	String transforms = "to-string;identity;lowercase";
-	Filter<Object, String> f = DaggerFilterComponent.builder()
+	Filter<Object, String> f = DaggerFilterComponent
+			.builder()
 			.filters(transforms)
 			.build()
 			.objectToString()
@@ -90,7 +93,9 @@ public void objectToStringTest() throws Exception {
 
 	StringBuffer fooObject = new StringBuffer("FOO");
 	String result = f.apply(fooObject);
-	assertAll("to string and to lower case", () -> assertNotNull(result),
+	assertAll(
+			"to string and to lower case",
+			() -> assertNotNull(result),
 			() -> assertEquals("foo", result, "Correct filter chain was not applied"));
 
 }
@@ -100,7 +105,8 @@ public void objectToStringTest() throws Exception {
 public void jsonToYAMLTest() throws Exception {
 
 	String transforms = "yaml-to-json";
-	Filter<String, String> f = DaggerFilterComponent.builder()
+	Filter<String, String> f = DaggerFilterComponent
+			.builder()
 			.filters(transforms)
 			.build()
 			.stringToString()
@@ -110,7 +116,9 @@ public void jsonToYAMLTest() throws Exception {
 	String yaml = "a:\n" + "- a0\n" + "- a1";
 	String result = f.apply(yaml);
 	String expected = "{\n" + "  \"a\" : [ \"a0\", \"a1\" ]\n" + "}\n";
-	assertAll("check yaml to json outcome", () -> assertNotNull(result),
+	assertAll(
+			"check yaml to json outcome",
+			() -> assertNotNull(result),
 			() -> assertEquals(expected, expected, "Correct filter chain was not applied"));
 }
 
@@ -119,7 +127,8 @@ public void jsonToYAMLTest() throws Exception {
 public void applyTemplateTest() throws Exception {
 
 	String transforms = "apply-template{\"template\":\"transform/map-identity.ftl\"}";
-	Filter<Object, String> f = DaggerFilterComponent.builder()
+	Filter<Object, String> f = DaggerFilterComponent
+			.builder()
 			.filters(transforms)
 			.build()
 			.objectToString()
@@ -130,18 +139,23 @@ public void applyTemplateTest() throws Exception {
 	values.put("b", "bar");
 	String result = f.apply(values);
 	String expected = "a=foo,b=bar";
-	assertAll("check yaml to json outcome", () -> assertNotNull(result),
+	assertAll(
+			"check yaml to json outcome",
+			() -> assertNotNull(result),
 			() -> assertEquals(expected, result, "Correct template was not applied"));
 
 	transforms = "apply-template{}";
-	Filter<Object, String> f2 = DaggerFilterComponent.builder()
+	Filter<Object, String> f2 = DaggerFilterComponent
+			.builder()
 			.filters(transforms)
 			.build()
 			.objectToString()
 			.get();
 	String result2 = f2.apply(values);
 	String expected2 = "APPLY TEMPLATE HAS NO TEMPLATE PARAMETER";
-	assertAll("check yaml to json outcome", () -> assertNotNull(result2),
+	assertAll(
+			"check yaml to json outcome",
+			() -> assertNotNull(result2),
 			() -> assertEquals(expected2, result2, "Should not have applied a template"));
 }
 
@@ -149,7 +163,8 @@ public void applyTemplateTest() throws Exception {
 @Test @DisplayName("Search and replace test")
 public void replaceTest() throws Exception {
 	var filter = "replace{\"replacements\":{\"from\":\"FROM\", \"to\":\"TO\"}}";
-	Filter<String, String> f = DaggerFilterComponent.builder()
+	Filter<String, String> f = DaggerFilterComponent
+			.builder()
 			.filters(filter)
 			.build()
 			.stringToString()
@@ -158,7 +173,8 @@ public void replaceTest() throws Exception {
 
 	// arrays of replacements also work
 	var filter2 = "replace{\"replacements\":[{\"from\":\"FROM\", \"to\":\"TO\"}]}";
-	Filter<String, String> f2 = DaggerFilterComponent.builder()
+	Filter<String, String> f2 = DaggerFilterComponent
+			.builder()
 			.filters(filter2)
 			.build()
 			.stringToString()
@@ -167,7 +183,8 @@ public void replaceTest() throws Exception {
 
 	// backreferences
 	var filter3 = "replace{\"replacements\":[{\"from\":\"F(\\\\d)\", \"to\":\"T$1\"}]}";
-	Filter<String, String> f3 = DaggerFilterComponent.builder()
+	Filter<String, String> f3 = DaggerFilterComponent
+			.builder()
 			.filters(filter3)
 			.build()
 			.stringToString()
@@ -183,7 +200,8 @@ public void complexReplaceTest() throws Exception {
 				{\"from\":\"=\\\\s*\\\\{\",\"to\":\"=\\\"{\"},
 				{\"from\":\"}\",\"to\":\"}\\\"\"}
 			]}""";
-	Filter<String, String> f2 = DaggerFilterComponent.builder()
+	Filter<String, String> f2 = DaggerFilterComponent
+			.builder()
 			.filters(filter)
 			.build()
 			.stringToString()

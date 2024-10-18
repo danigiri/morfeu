@@ -26,7 +26,8 @@ public void testSnippet() throws Exception {
 	String fullContentPath = testAwareFullPathFrom(contentPath);
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd?filter=/test/row/col/stuff";
 	String testAwareModelPath = testAwareFullPathFrom("test-resources/models/test-model.xsd");
-	Composite<Cell> content = DaggerSnippetParserComponent.builder()
+	Composite<Cell> content = DaggerSnippetParserComponent
+			.builder()
 			.content(new URI(contentPath))
 			.fetchedContentFrom(new URI(fullContentPath))
 			.modelFiltered(new URI(modelPath))

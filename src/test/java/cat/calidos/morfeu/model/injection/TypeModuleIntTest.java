@@ -55,8 +55,8 @@ public void testRootAnonymousType() throws Exception {
 	XSElementDecl elementDecl = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 
 	XSType xsType = elementDecl.getType();
-	Type type = TypeModule.type(modelURI, "cell-model-name", xsType, null, new HashSet<String>(),
-			emptyMedatada);
+	Type type = TypeModule
+			.type(modelURI, "cell-model-name", xsType, null, new HashSet<String>(), emptyMedatada);
 	assertEquals("cell-model-name", type.getName());
 	assertEquals("PRESENTATION", type.getMetadata().getPresentation());
 	assertEquals("CELL-PRESENTATION", type.getMetadata().getCellPresentation());
@@ -106,8 +106,8 @@ public void testRootAnonymousType() throws Exception {
 public void testTextSimpleType() {
 
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "textField");
-	Type type = TypeModule.type(modelURI, "not used default", xsType, null, new HashSet<String>(),
-			emptyMedatada);
+	Type type = TypeModule
+			.type(modelURI, "not used default", xsType, null, new HashSet<String>(), emptyMedatada);
 	assertEquals("textField", type.getName());
 	assertTrue(type.isSimple());
 	assertTrue(type.isContentValid("random string"));
@@ -123,8 +123,8 @@ public void testTextSimpleType() {
 public void testIntegerSimpleType() {
 
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "numberField");
-	Type type = TypeModule.type(modelURI, "not used default", xsType, null, new HashSet<String>(),
-			emptyMedatada);
+	Type type = TypeModule
+			.type(modelURI, "not used default", xsType, null, new HashSet<String>(), emptyMedatada);
 	assertEquals("numberField", type.getName());
 	assertTrue(type.isSimple());
 
@@ -137,8 +137,8 @@ public void testIntegerSimpleType() {
 public void testColFieldSimpleType() {
 
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colField");
-	Type type = TypeModule.type(modelURI, "not used default", xsType, null, new HashSet<String>(),
-			emptyMedatada);
+	Type type = TypeModule
+			.type(modelURI, "not used default", xsType, null, new HashSet<String>(), emptyMedatada);
 	assertEquals("colField", type.getName());
 	assertTrue(type.isSimple());
 
@@ -165,10 +165,19 @@ public void testColorType() {
 
 	XSType xsType = schemaSet.getType(Model.MODEL_NAMESPACE, "colorField");
 	String regex = TypeModule.regex(xsType);
-	Type type = TypeModule.type(modelURI, "not used default", xsType, regex, new HashSet<String>(),
-			emptyMedatada);
-	assertAll("testing color", () -> assertEquals("colorField", type.getName()),
-			() -> assertTrue(type.isSimple()), () -> assertTrue(type.getRegex().isPresent()),
+	Type type = TypeModule
+			.type(
+					modelURI,
+					"not used default",
+					xsType,
+					regex,
+					new HashSet<String>(),
+					emptyMedatada);
+	assertAll(
+			"testing color",
+			() -> assertEquals("colorField", type.getName()),
+			() -> assertTrue(type.isSimple()),
+			() -> assertTrue(type.getRegex().isPresent()),
 			() -> assertEquals("[0-9a-fA-F]{6}", type.getRegex().get()));
 
 }
@@ -183,10 +192,13 @@ public void testListType() {
 	possibleValues.add("A0");
 	possibleValues.add("A1");
 	possibleValues.add("A2");
-	Type type = TypeModule.type(modelURI, "not used default", xsType, regex, possibleValues,
-			emptyMedatada);
-	assertAll("testing color", () -> assertEquals("listField", type.getName()),
-			() -> assertTrue(type.isSimple()), () -> assertTrue(type.getRegex().isEmpty()),
+	Type type = TypeModule
+			.type(modelURI, "not used default", xsType, regex, possibleValues, emptyMedatada);
+	assertAll(
+			"testing color",
+			() -> assertEquals("listField", type.getName()),
+			() -> assertTrue(type.isSimple()),
+			() -> assertTrue(type.getRegex().isEmpty()),
 			() -> assertEquals(3, type.getPossibleValues().size()),
 			() -> assertTrue(type.getPossibleValues().contains("A0")),
 			() -> assertTrue(type.getPossibleValues().contains("A1")),

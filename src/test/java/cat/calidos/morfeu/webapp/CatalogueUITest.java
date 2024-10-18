@@ -31,19 +31,30 @@ public void catalogueListTest() throws Exception {
 
 	open(appBaseURL);
 
-	List<UICatalogueEntry> catalogueEntries = UICatalogues.openCatalogues()
+	List<UICatalogueEntry> catalogueEntries = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.allCatalogueEntries();
 	assertEquals(EXPECTED_CATALOGUES_COUNT, catalogueEntries.size());
-	assertEquals("Catalogue 1", catalogueEntries.get(0).name(),
+	assertEquals(
+			"Catalogue 1",
+			catalogueEntries.get(0).name(),
 			"Wrong catalogue content (entry 0)");
-	assertEquals("Catalogue 2", catalogueEntries.get(1).name(),
+	assertEquals(
+			"Catalogue 2",
+			catalogueEntries.get(1).name(),
 			"Wrong catalogue content (entry 1)");
-	assertEquals("Catalogue 1 yaml", catalogueEntries.get(2).name(),
+	assertEquals(
+			"Catalogue 1 yaml",
+			catalogueEntries.get(2).name(),
 			"Wrong catalogue content (entry 2)");
-	assertEquals("Catalogue 1 json", catalogueEntries.get(3).name(),
+	assertEquals(
+			"Catalogue 1 json",
+			catalogueEntries.get(3).name(),
 			"Wrong catalogue content (entry 3)");
-	assertEquals("Catalogue not found", catalogueEntries.get(4).name(),
+	assertEquals(
+			"Catalogue not found",
+			catalogueEntries.get(4).name(),
 			"Wrong catalogue content (entry 4)");
 	UIProblem.shouldNotBeVisible();
 
@@ -68,11 +79,17 @@ public void catalogueDetailTest() throws Exception {
 	assertEquals("Document 3", documentEntries.get(2).getText(), "Wrong catalogue content (2)");
 	assertEquals("Document 4", documentEntries.get(3).getText(), "Wrong catalogue content (3)");
 	assertEquals("Document 5", documentEntries.get(4).getText(), "Wrong catalogue content (4)");
-	assertEquals("Document with non-valid content", documentEntries.get(5).getText(),
+	assertEquals(
+			"Document with non-valid content",
+			documentEntries.get(5).getText(),
 			"Wrong catalogue content (5)");
-	assertEquals("Document with non-valid model", documentEntries.get(6).getText(),
+	assertEquals(
+			"Document with non-valid model",
+			documentEntries.get(6).getText(),
 			"Wrong catalogue content (6)");
-	assertEquals("Document with not-found content", documentEntries.get(7).getText(),
+	assertEquals(
+			"Document with not-found content",
+			documentEntries.get(7).getText(),
 			"Wrong catalogue content (7)");
 
 }

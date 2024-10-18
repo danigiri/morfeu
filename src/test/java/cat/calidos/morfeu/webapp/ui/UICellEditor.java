@@ -140,7 +140,8 @@ public UICellData cellData() {
 
 
 public void clickOnCategory(String category) {
-	$$(CATEGORY_LINK).asFixedIterable()
+	$$(CATEGORY_LINK)
+			.asFixedIterable()
 			.stream()
 			.filter(e -> e.getText().equals(category))
 			.findAny()
@@ -151,7 +152,8 @@ public void clickOnCategory(String category) {
 
 
 public List<String> categories() {
-	return $$(CATEGORY_LINK).asFixedIterable()
+	return $$(CATEGORY_LINK)
+			.asFixedIterable()
 			.stream()
 			.map(e -> e.getText())
 			.collect(Collectors.toList());

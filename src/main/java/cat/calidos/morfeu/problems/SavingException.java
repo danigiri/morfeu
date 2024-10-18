@@ -24,8 +24,7 @@ public SavingException(String message) {
 }
 
 
-public SavingException(	String message,
-						Exception e) {
+public SavingException(String message, Exception e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

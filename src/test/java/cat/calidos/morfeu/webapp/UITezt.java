@@ -82,8 +82,7 @@ protected UICatalogue clickOnCatalogue(int i) {
 public void waitOneSec() {
 	try {
 		Thread.sleep(1000);
-	} catch (InterruptedException e) {
-	}
+	} catch (InterruptedException e) {}
 }
 
 

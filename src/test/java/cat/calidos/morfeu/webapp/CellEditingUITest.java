@@ -31,7 +31,8 @@ private UIContent	content;
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()
+	content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1")
@@ -58,7 +59,8 @@ public void editCellAndSave() {
 	UICellData cellEditorData = dataEditor.cellData();
 	assertNotNull(cellEditorData);
 	assertTrue(cellEditorData.isFromEditor(), "Editing the cell should show an editor");
-	assertTrue(cellEditorData.isFromCell(),
+	assertTrue(
+			cellEditorData.isFromCell(),
 			"Editing the cell should show an editor with data coming from the cell");
 
 	attributes = cellEditorData.attributes();
@@ -147,7 +149,8 @@ private UIAttributeData checkAttribute(	List<UIAttributeData> attributes,
 										String name,
 										String expectedValue) {
 
-	Optional<UIAttributeData> attributeOptional = attributes.stream()
+	Optional<UIAttributeData> attributeOptional = attributes
+			.stream()
 			.filter(a -> a.name().matches(name))
 			.findFirst();
 	assertTrue(attributeOptional.isPresent());

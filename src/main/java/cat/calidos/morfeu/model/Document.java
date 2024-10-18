@@ -35,21 +35,13 @@ public Document(URI u) {
 }
 
 
-public Document(URI u,
-				String name,
-				String desc) {
+public Document(URI u, String name, String desc) {
 	super(u, name, desc, Optional.empty(), null, null, null, null);
 }
 
 
-public Document(String name,
-				String desc,
-				String kind,
-				URI prefix,
-				URI uri,
-				URI modelUri,
-				URI docUri,
-				Model model)
+public Document(String name, String desc, String kind, URI prefix, URI uri, URI modelUri,
+				URI docUri, Model model)
 		throws URISyntaxException {
 
 	super(uri, name, desc, Optional.empty(), model, null, null, null); // no children, attributes
@@ -80,9 +72,7 @@ public void validate() throws ValidationException, FetchingException {
 
 
 @Override
-public boolean isValid() {
-	return isValid;
-}
+public boolean isValid() { return isValid; }
 
 
 /*
@@ -97,31 +87,21 @@ public String toString() {
 }
 
 
-public String getKind() {
-	return kind;
-}
+public String getKind() { return kind; }
 
 
 @JsonProperty("kind")
-public void setKind(String kind) {
-	this.kind = kind;
-}
+public void setKind(String kind) { this.kind = kind; }
 
 
 @JsonProperty("prefix")
-public void setPrefix(URI prefix) {
-	this.prefix = prefix;
-}
+public void setPrefix(URI prefix) { this.prefix = prefix; }
 
 
-public URI getPrefix() {
-	return prefix;
-}
+public URI getPrefix() { return prefix; }
 
 
-public URI getModelURI() {
-	return modelURI;
-}
+public URI getModelURI() { return modelURI; }
 
 
 /** this is the user-friendly, relative URI used to easily identify this document model */
@@ -140,9 +120,7 @@ public URI getFetchableModelURI() {
 
 
 @JsonProperty("fetchableModelURI")
-public void setFetchableModelURI(URI uri) {
-	this.fetchableModelURI = uri;
-}
+public void setFetchableModelURI(URI uri) { this.fetchableModelURI = uri; }
 
 
 /** this is the user-friendly, relative URI used to easily identify this document content */
@@ -152,9 +130,7 @@ public URI getContentURI() {
 
 
 @JsonProperty("contentURI")
-public void setContentURI(URI contentURI) {
-	this.contentURI = contentURI;
-}
+public void setContentURI(URI contentURI) { this.contentURI = contentURI; }
 
 
 /** This is the url that will be used to fetch the raw model content */
@@ -164,9 +140,7 @@ public URI getFetchableContentURI() {
 
 
 @JsonProperty("fetchableContentURI")
-public void setFetchableContentURI(URI uri) {
-	this.fetchableContentURI = uri;
-}
+public void setFetchableContentURI(URI uri) { this.fetchableContentURI = uri; }
 
 
 public boolean skipValidation() {
@@ -180,14 +154,10 @@ public void skipValidation(boolean skip) {
 }
 
 
-public Model getModel() {
-	return model;
-}
+public Model getModel() { return model; }
 
 
-public void setModel(Model model) {
-	this.model = model;
-}
+public void setModel(Model model) { this.model = model; }
 
 
 public void setContent(Composite<Cell> content) {
@@ -197,9 +167,7 @@ public void setContent(Composite<Cell> content) {
 }
 
 
-public void setValidator(Validable validator) {
-	this.validator = validator;
-}
+public void setValidator(Validable validator) { this.validator = validator; }
 
 }
 

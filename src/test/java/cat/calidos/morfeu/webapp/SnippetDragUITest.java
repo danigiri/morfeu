@@ -27,7 +27,8 @@ public void testDragSnippetCell() {
 
 	open(appBaseURL);
 
-	UIDocument document = UICatalogues.openCatalogues()
+	UIDocument document = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.shouldBeVisible()
 			.clickOn(0)

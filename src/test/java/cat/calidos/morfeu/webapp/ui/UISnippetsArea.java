@@ -42,7 +42,8 @@ public static void shouldNotBeVisible() {
 
 
 public List<String> categories() {
-	return element.$$("div[role=tab]")
+	return element
+			.$$("div[role=tab]")
 			.asFixedIterable()
 			.stream()
 			.filter(e -> e.attr("class") != null)
@@ -67,7 +68,8 @@ public UISnippetsArea clickOnCategory(String name) {
 
 
 public List<UISnippetEntry> snippets() {
-	return $$(".snippet").asFixedIterable()
+	return $$(".snippet")
+			.asFixedIterable()
 			.stream()
 			.map(e -> new UISnippetEntry(e, this))
 			.collect(Collectors.toList());

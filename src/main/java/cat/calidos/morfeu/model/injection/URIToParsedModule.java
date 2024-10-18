@@ -105,8 +105,10 @@ public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI ur
 	try {
 		if (uri.isAbsolute()) {
 			log.info("Fetching absolute content uri '{}' to parse", uri);
-			return IOUtils.toInputStream(IOUtils.toString(uri, Config.DEFAULT_CHARSET),
-					Config.DEFAULT_CHARSET);
+			return IOUtils
+					.toInputStream(
+							IOUtils.toString(uri, Config.DEFAULT_CHARSET),
+							Config.DEFAULT_CHARSET);
 		} else {
 			log.info("Fetching relative content uri '{}' to parse, assuming file", uri);
 			return FileUtils.openInputStream(new File(uri.toString()));
@@ -135,7 +137,8 @@ public static InputStream fetchedTransformedContent(@Named("FetchableContentURI"
 		log.trace("Converting yaml to xml '{}'", uri);
 		ObjectMapper mapper = isYAML ? mapperYAML.get().get() : mapperJSON.get().get();
 		JsonNode yaml = mapper.readTree(fetchedRawContent.get().get());
-		String xml = DaggerYAMLConverterComponent.builder()
+		String xml = DaggerYAMLConverterComponent
+				.builder()
 				.from(yaml)
 				.given(model.get().get())
 				.build()
@@ -167,7 +170,8 @@ public static InputStream filteredContent(	@Named("FetchableContentURI") URI uri
 	if (filters != null && !filters.isBlank()) {
 		try {
 			String raw = IOUtils.toString(fetchedEffectiveContent, Config.DEFAULT_CHARSET);
-			String filtered = DaggerFilterComponent.builder()
+			String filtered = DaggerFilterComponent
+					.builder()
 					.filters(filters)
 					.build()
 					.stringToString()

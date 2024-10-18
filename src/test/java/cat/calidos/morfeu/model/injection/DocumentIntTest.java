@@ -79,8 +79,9 @@ public void testNonValidModelDocument() throws Exception {
 
 	try {
 
-		System.err.println(
-				"Please ignore next ParsingException, it is expected as the model is not valid");
+		System.err
+				.println(
+						"Please ignore next ParsingException, it is expected as the model is not valid");
 		produceDocumentFromPath("test-resources/documents/document-with-nonvalid-model.json");
 
 	} catch (ExecutionException e) {

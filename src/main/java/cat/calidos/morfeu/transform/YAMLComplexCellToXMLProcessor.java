@@ -25,9 +25,7 @@ private String				case_;
 private JsonNodeCellModel	nodeCellModel;
 private boolean				hasChildren;
 
-public YAMLComplexCellToXMLProcessor(	String prefix,
-										String case_,
-										JsonNodeCellModel nodeCellModel) {
+public YAMLComplexCellToXMLProcessor(String prefix, String case_, JsonNodeCellModel nodeCellModel) {
 
 	super(prefix);
 
@@ -54,13 +52,16 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 	CellModel cellModel = nodeCellModel.cellModel();
 	JsonNode node = nodeCellModel.node();
 	if (hasChildren) {
-		context.push(DaggerYAMLCellToXMLProcessorComponent.builder()
-				.withPrefix(prefix)
-				.givenCase(case_)
-				.fromNode(node)
-				.cellModel(cellModel)
-				.build()
-				.processorSlash());
+		context
+				.push(
+						DaggerYAMLCellToXMLProcessorComponent
+								.builder()
+								.withPrefix(prefix)
+								.givenCase(case_)
+								.fromNode(node)
+								.cellModel(cellModel)
+								.build()
+								.processorSlash());
 
 		// now we have to generate the guesses
 		if (cellModel.isSimple()) { //// SIMPLE CELL MODEL ////
@@ -70,7 +71,8 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 			ComplexCellModel complex = cellModel.asComplex();
 			if (node.isArray()) {
 				for (int i = 0; i < node.size(); i++) {
-					DaggerYAMLCellModelGuesserProcessorComponent.builder()
+					DaggerYAMLCellModelGuesserProcessorComponent
+							.builder()
 							.withPrefix("\t" + prefix)
 							.givenCase(case_)
 							.fromNode(node.get(i))
@@ -80,9 +82,11 @@ public Context<JsonNodeCellModel, String> generateNewContext(Context<JsonNodeCel
 							.forEach(processors::add);
 				}
 			} else if (node.isObject()) {
-				node.fields()
+				node
+						.fields()
 						.forEachRemaining(
-								f -> DaggerYAMLCellModelGuesserProcessorComponent.builder()
+								f -> DaggerYAMLCellModelGuesserProcessorComponent
+										.builder()
 										.withPrefix("\t" + prefix)
 										.givenCase(case_)
 										.name(f.getKey())
@@ -115,13 +119,15 @@ public String output() {
 	values.put("yaml", node);
 	values.put("hasChildren", hasChildren);
 
-	List<String> caseAttributes = metadata.getAttributesFor(case_)
+	List<String> caseAttributes = metadata
+			.getAttributesFor(case_)
 			.stream()
 			.collect(Collectors.toList());
 	values.put("caseAttr", caseAttributes);
 
 	List<CellModel> attributeNames = cellModel.attributes().asList();
-	List<String> attr = attributeNames.stream()
+	List<String> attr = attributeNames
+			.stream()
 			.map(a -> a.getName())
 			.filter(node::has)
 			.collect(Collectors.toList());
@@ -150,7 +156,8 @@ public String output() {
 			/>
 			</#if><#t>""";
 
-	String out = super.output() + DaggerViewComponent.builder()
+	String out = super.output() + DaggerViewComponent
+			.builder()
 			.withValue(values)
 			.withTemplate(template)
 			.andProblem("")

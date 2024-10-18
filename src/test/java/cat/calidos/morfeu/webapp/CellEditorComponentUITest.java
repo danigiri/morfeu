@@ -51,22 +51,32 @@ public void testReadonlyCells() {
 	assertFalse(editor.canSave());
 
 	List<String> categories = editor.categories();
-	assertAll("check categories", () -> assertNotNull(categories),
+	assertAll(
+			"check categories",
+			() -> assertNotNull(categories),
 			() -> assertEquals(2, categories.size(), "wrong number of categories"),
 			() -> assertNotEquals(-1, categories.indexOf("X")),
 			() -> assertNotEquals(-1, categories.indexOf("Y")));
 
 	List<UIAttributeData> defaultAttributes = editor.cellData().displayedAttributes();
-	assertAll("check categories", () -> assertNotNull(defaultAttributes),
-			() -> assertEquals(2, defaultAttributes.size(),
+	assertAll(
+			"check categories",
+			() -> assertNotNull(defaultAttributes),
+			() -> assertEquals(
+					2,
+					defaultAttributes.size(),
 					"wrong number of visible attributes in default category"),
 			() -> assertTrue(findAttribute(defaultAttributes, "value0x").isPresent()),
 			() -> assertTrue(findAttribute(defaultAttributes, "value1x").isPresent()));
 
 	editor.clickOnCategory("Y");
 	List<UIAttributeData> yAttributes = editor.cellData().displayedAttributes();
-	assertAll("check categories", () -> assertNotNull(yAttributes),
-			() -> assertEquals(2, yAttributes.size(),
+	assertAll(
+			"check categories",
+			() -> assertNotNull(yAttributes),
+			() -> assertEquals(
+					2,
+					yAttributes.size(),
 					"wrong number of visible attributes in default category"),
 			() -> assertTrue(findAttribute(yAttributes, "value0y").isPresent()),
 			() -> assertTrue(findAttribute(yAttributes, "value1y").isPresent()));

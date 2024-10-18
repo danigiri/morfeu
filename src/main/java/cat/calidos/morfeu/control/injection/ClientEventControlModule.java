@@ -41,7 +41,8 @@ public static String contentType() {
 private static String paramsToString(Map<String, String> params) {
 
 	StringBuilder out = new StringBuilder();
-	params.keySet()
+	params
+			.keySet()
 			.stream()
 			.filter(k -> !k.startsWith("__"))
 			.forEach(k -> out.append(k + "=" + params.get(k) + ","));

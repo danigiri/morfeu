@@ -80,8 +80,10 @@ public void testToString() {
 
 	context.push(new IdentityProcessor("foo"));
 	context.push(new IdentityProcessor("barx"));
-	context.push(
-			new IdentityProcessor("tooLong-01234567890123456789012345678901234567890123456789"));
+	context
+			.push(
+					new IdentityProcessor(
+							"tooLong-01234567890123456789012345678901234567890123456789"));
 	context.push(new IdentityProcessor("bar"));
 	var expected = "\n" + "⊏------------------------------------------------⊐\n"
 			+ "|bar                                             |\n"

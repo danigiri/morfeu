@@ -33,22 +33,29 @@ public void testValue() {
 	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, null, "bar", null, null).get());
 
 	// default value testing
-	assertEquals("bar",
+	assertEquals(
+			"bar",
 			ConfigPropertyModule.value("foo", p, "bar", null, null, null, "bar2").get());
-	assertEquals("bar",
+	assertEquals(
+			"bar",
 			ConfigPropertyModule.value("foo", p, null, "bar", null, null, "bar2").get());
-	assertEquals("bar",
+	assertEquals(
+			"bar",
 			ConfigPropertyModule.value("foo", p, null, null, "bar", null, "bar2").get());
 	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, null, null, null, "bar").get());
 
 	// override
-	assertEquals("bar",
+	assertEquals(
+			"bar",
 			ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
-	assertEquals("bar",
+	assertEquals(
+			"bar",
 			ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
-	assertEquals("bar",
+	assertEquals(
+			"bar",
 			ConfigPropertyModule.value("foo", p, "bar2", null, "bar", null, null).get());
-	assertEquals("bar",
+	assertEquals(
+			"bar",
 			ConfigPropertyModule.value("foo", p, "bar2", "bar3", "bar", null, null).get());
 
 	// null value handling
@@ -62,7 +69,8 @@ public void testValue() {
 @Test @DisplayName("Allow empty test")
 public void testAllowEmpty() {
 	System.setProperty("foo", "");
-	String value = DaggerConfigPropertyComponent.builder()
+	String value = DaggerConfigPropertyComponent
+			.builder()
 			.forName("foo")
 			.allowEmpty(false)
 			.andDefault("bar")

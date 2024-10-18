@@ -24,8 +24,7 @@ public TransformException(String message) {
 }
 
 
-public TransformException(	String message,
-							Throwable e) {
+public TransformException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

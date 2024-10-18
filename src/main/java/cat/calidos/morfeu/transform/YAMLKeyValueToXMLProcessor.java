@@ -18,9 +18,7 @@ private String				case_;			// <identifier>="<key>"
 private String				identifierValue;
 private JsonNodeCellModel	nodeCellModel;
 
-public YAMLKeyValueToXMLProcessor(	String prefix,
-									String case_,
-									String identifierValue,
+public YAMLKeyValueToXMLProcessor(	String prefix, String case_, String identifierValue,
 									JsonNodeCellModel nodeCellModel) {
 
 	super(prefix);
@@ -48,7 +46,8 @@ public String output() {
 
 	values.put("name", cellModel.getName());
 
-	List<String> caseAttributes = metadata.getAttributesFor(case_)
+	List<String> caseAttributes = metadata
+			.getAttributesFor(case_)
 			.stream()
 			.collect(Collectors.toList());
 	values.put("caseAttr", caseAttributes);
@@ -67,7 +66,8 @@ public String output() {
 			+ "${v.identifier}=${f.quote(f.xmla(v.identifierValue))} "
 			+ "${v.valueKey}=${f.quote(f.xmla(v.value))} " + "/>\n";
 
-	String out = super.output() + DaggerViewComponent.builder()
+	String out = super.output() + DaggerViewComponent
+			.builder()
 			.withValue(values)
 			.withTemplate(template)
 			.andProblem("")

@@ -33,11 +33,14 @@ Converter<JsonNode, String> converter(@Named("PopulatedContext") StackContext<Js
 StackContext<JsonNode> populatedContext(StackContext<JsonNode> context,
 										JsonNode json) {
 
-	context.push(DaggerContentJSONToXMLComponent.builder()
-			.fromNode(json)
-			.withPrefix("")
-			.build()
-			.processor());
+	context
+			.push(
+					DaggerContentJSONToXMLComponent
+							.builder()
+							.fromNode(json)
+							.withPrefix("")
+							.build()
+							.processor());
 
 	return context;
 

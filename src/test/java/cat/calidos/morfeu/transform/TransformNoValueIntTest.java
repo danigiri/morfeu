@@ -57,7 +57,8 @@ public void testTransformJSONToYAML() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath("transform/content-to-yaml.ftl")
 			.withValue(values)
 			.build()

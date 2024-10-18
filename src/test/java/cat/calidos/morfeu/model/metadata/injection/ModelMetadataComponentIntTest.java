@@ -46,7 +46,8 @@ public void setup() throws Exception {
 public void testValue() {
 
 	XSAnnotation annotation = schema.getAnnotation();
-	Metadata meta = DaggerModelMetadataComponent.builder()
+	Metadata meta = DaggerModelMetadataComponent
+			.builder()
 			.from(annotation)
 			.withParentURI(modelURI)
 			.build()
@@ -62,7 +63,8 @@ public void testTransformAttributes() {
 
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	XSAnnotation annotation = elem.getAnnotation();
-	Metadata meta = DaggerModelMetadataComponent.builder()
+	Metadata meta = DaggerModelMetadataComponent
+			.builder()
 			.from(annotation)
 			.withParentURI(modelURI)
 			.build()
@@ -84,7 +86,8 @@ public void testTransformDirectives() {
 
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, "test");
 	XSAnnotation annotation = elem.getAnnotation();
-	Metadata meta = DaggerModelMetadataComponent.builder()
+	Metadata meta = DaggerModelMetadataComponent
+			.builder()
 			.from(annotation)
 			.withParentURI(modelURI)
 			.build()
@@ -104,7 +107,8 @@ public void testTransformDirectives() {
 @Test @DisplayName("Test value locator")
 public void testValueLocator() throws Exception {
 
-	Metadata locator = cellModelFrom(modelURI, "test").asComplex()
+	Metadata locator = cellModelFrom(modelURI, "test")
+			.asComplex()
 			.children()
 			.child("row")
 			.asComplex()
@@ -119,7 +123,9 @@ public void testValueLocator() throws Exception {
 			.getMetadata();
 	assertNotNull(locator);
 
-	assertAll("test locator stuff", () -> assertTrue(locator.getValueLocator().isPresent()),
+	assertAll(
+			"test locator stuff",
+			() -> assertTrue(locator.getValueLocator().isPresent()),
 			() -> assertEquals("/test/**/stuff", locator.getValueLocator().get())
 
 	);

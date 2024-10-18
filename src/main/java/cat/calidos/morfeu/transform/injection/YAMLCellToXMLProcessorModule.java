@@ -39,7 +39,8 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 		if (node.isTextual() || node.isObject()) { // isObject: we probably have an [empty] object
 			processors.add(generateTextualProcessor(pref, node, cellModel));
 		} else if (node.isArray()) { // we have a list of textuals
-			node.elements()
+			node
+					.elements()
 					.forEachRemaining(
 							e -> processors.add(generateTextualProcessor(pref, e, cellModel)));
 		} else {
@@ -51,16 +52,20 @@ List<PrefixProcessor<JsonNodeCellModel, String>> processors(String pref,
 		if (node.isObject()) {
 			// we check if we are a key value node {"key1": "v1", "key2": "v2"} or a normal object
 			if (cellModel.getMetadata().getDirectivesFor(case_).contains(Metadata.KEY_VALUE)) {
-				node.fields()
-						.forEachRemaining(f -> processors
-								.add(generateKeyValueProcessor(pref, case_, f, cellModel)));
+				node
+						.fields()
+						.forEachRemaining(
+								f -> processors
+										.add(generateKeyValueProcessor(pref, case_, f, cellModel)));
 			} else {
 				processors.add(generateComplexProcessor(pref, case_, node, cellModel));
 			}
 		} else if (node.isArray()) {
-			node.elements()
-					.forEachRemaining(e -> processors
-							.add(generateComplexProcessor(pref, case_, e, cellModel)));
+			node
+					.elements()
+					.forEachRemaining(
+							e -> processors
+									.add(generateComplexProcessor(pref, case_, e, cellModel)));
 		} else if (node.isTextual()) {
 			throw new IllegalStateException(
 					"Unhandled guess state of complex cell model [textual]");

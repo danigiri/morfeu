@@ -52,7 +52,8 @@ public static Filter<Object, String> mapToString(Map<String, JsonNode> params) {
 
 @Produces @IntoMap @Named("objectToString") @StringKey("content-to-yaml")
 public static Filter<Object, String> contentToYAML() {
-	return (values) -> DaggerViewComponent.builder()
+	return (values) -> DaggerViewComponent
+			.builder()
 			.withTemplatePath("transform/content-to-yaml.ftl")
 			.withValue(values)
 			.build()

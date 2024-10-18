@@ -31,9 +31,7 @@ public RunningOutputProcessor(Function<String, Integer> matcher) {
 }
 
 
-public void setTask(ExecRunningTask task) {
-	this.task = task;
-}
+public void setTask(ExecRunningTask task) { this.task = task; }
 
 
 @Override

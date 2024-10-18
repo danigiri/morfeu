@@ -33,10 +33,20 @@ public static String result(@Named("Result") String result,
 							long operationTime,
 							@Nullable @Named("Problem") String problem) {
 
-	return DaggerViewComponent.builder()
+	return DaggerViewComponent
+			.builder()
 			.withTemplate(TEMPLATE)
-			.withValue(MorfeuUtils.paramMap("result", result, "target", target, "operation", op,
-					"operationTime", operationTime))
+			.withValue(
+					MorfeuUtils
+							.paramMap(
+									"result",
+									result,
+									"target",
+									target,
+									"operation",
+									op,
+									"operationTime",
+									operationTime))
 			.andProblem(problem)
 			.build()
 			.render();

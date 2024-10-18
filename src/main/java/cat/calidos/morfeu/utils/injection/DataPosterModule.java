@@ -37,8 +37,11 @@ InputStream postHttpData(	CloseableHttpClient client,
 							HttpPost request)
 		throws PostingException {
 
-	log.trace("Posting http data [{} bytes] to {}", request.getEntity().getContentLength(),
-			request.getURI());
+	log
+			.trace(
+					"Posting http data [{} bytes] to {}",
+					request.getEntity().getContentLength(),
+					request.getURI());
 
 	try {
 		// we want to close right now so we fetch all the content and close the input stream

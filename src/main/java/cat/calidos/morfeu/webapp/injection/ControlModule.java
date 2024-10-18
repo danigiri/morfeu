@@ -49,9 +49,12 @@ public static String process(	@Named("Path") String path,
 	Map<String, BiFunction<List<String>, Map<String, String>, String>> controls = method
 			.equals(ControlComponent.GET) ? get : post;
 
-	return controls.get(
-			matchedPath.orElseThrow(() -> new UnsupportedOperationException("No matched " + path))
-					.pattern())
+	return controls
+			.get(
+					matchedPath
+							.orElseThrow(
+									() -> new UnsupportedOperationException("No matched " + path))
+							.pattern())
 			.apply(pathElems.get(), params);
 
 }
@@ -99,7 +102,8 @@ Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> compiledCont
 @Provides
 public static Optional<Pattern> matchedPathPattern(	@Named("Path") String path,
 													Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> controls) {
-	return controls.keySet()
+	return controls
+			.keySet()
 			.stream()
 			.peek(p -> log.trace("Matching {} against pattern {}", path, p.toString()))
 			.filter(p -> p.matcher(path).matches())

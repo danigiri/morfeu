@@ -35,8 +35,8 @@ public void setupDatabase() throws Exception {
 	dbThread.start();
 	sleep(Duration.ofMillis(200)); // so db starts
 	Class.forName("org.hsqldb.jdbcDriver");
-	connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/" + databaseName, "SA",
-			"");
+	connection = DriverManager
+			.getConnection("jdbc:hsqldb:hsql://localhost/" + databaseName, "SA", "");
 	statement = SQLModule.statement(connection);
 
 }
@@ -73,8 +73,7 @@ private String	path;
 private Server	server;
 private String	name;
 
-DBThread(	String path,
-			String name) {
+DBThread(String path, String name) {
 	this.path = path;
 	this.name = name;
 }

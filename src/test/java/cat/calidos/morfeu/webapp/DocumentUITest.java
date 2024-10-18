@@ -43,7 +43,8 @@ public void documentValidDataTest() {
 	UIDocument document = catalogue.clickOnDocumentNamed("Document 1");
 	document.shouldBeVisible();
 	String title = document.title();
-	assertTrue(title.contains("Document 1"),
+	assertTrue(
+			title.contains("Document 1"),
 			"'Document 1' is not titled correltly (" + title + ")");
 	assertTrue(title.contains("xml"), "'Document 1' is not correctly detected as xml");
 	assertEquals("First document", document.desc());
@@ -57,7 +58,8 @@ public void documentNonValidDataTest() {
 	UIDocument document = catalogue.clickOnDocumentNamed("Document with non-valid content");
 	document.shouldBeVisible();
 	String title = document.title();
-	assertTrue(title.contains("Problematic document"),
+	assertTrue(
+			title.contains("Problematic document"),
 			"'non valid doc' is not titled correctly (" + title + ")");
 	assertTrue(title.contains("Unknown"), "'non valid doc' is not correctly detected as Unknown");
 	assertEquals("Unknown", document.desc());

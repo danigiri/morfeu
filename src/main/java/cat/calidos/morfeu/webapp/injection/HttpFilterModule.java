@@ -40,7 +40,8 @@ public static boolean process(	@Named("PreFiltersList") List<BiFunction<HttpServ
 								FilterChain chain)
 		throws MorfeuRuntimeException {
 
-	boolean completed_ = !prevFilter.stream()
+	boolean completed_ = !prevFilter
+			.stream()
 			.filter(f -> !f.apply(request, response))
 			.findFirst()
 			.isPresent();
@@ -51,7 +52,8 @@ public static boolean process(	@Named("PreFiltersList") List<BiFunction<HttpServ
 		} catch (Exception e) {
 			throw new MorfeuRuntimeException("Had a problem running downstream filters", e);
 		}
-		completed_ = !postFilter.stream()
+		completed_ = !postFilter
+				.stream()
 				.filter(f -> !f.apply(request, response))
 				.findFirst()
 				.isPresent();
@@ -65,7 +67,8 @@ public static boolean process(	@Named("PreFiltersList") List<BiFunction<HttpServ
 
 @Produces @Named("PreFiltersList")
 public static List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> preFilters(@Named("PreFilters") Map<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters) {
-	return filters.keySet()
+	return filters
+			.keySet()
 			.stream()
 			.sorted()
 			.skip(1)
@@ -76,7 +79,8 @@ public static List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>>
 
 @Produces @Named("PostFiltersList")
 public static List<BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> postFilters(@Named("PostFilters") Map<Integer, BiFunction<HttpServletRequest, HttpServletResponse, Boolean>> filters) {
-	return filters.keySet()
+	return filters
+			.keySet()
 			.stream()
 			.sorted()
 			.skip(1)

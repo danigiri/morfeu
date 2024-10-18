@@ -28,7 +28,8 @@ public void testTransformJSONToYAML() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	String transformed = DaggerViewComponent.builder()
+	String transformed = DaggerViewComponent
+			.builder()
 			.withTemplatePath("transform/content-to-yaml.ftl")
 			.withValue(values)
 			.build()
@@ -57,7 +58,9 @@ public void testTransformJSONToYAML() throws Exception {
 	Iterator<String> fields = data3s0.fieldNames(); // let's check the order so the identifier is
 													// first
 	assertTrue(fields.hasNext());
-	assertEquals(fields.next(), "text",
+	assertEquals(
+			fields.next(),
+			"text",
 			"'text' is not the first field name and it should be as it's the identifier");
 
 	JsonNode data3s1 = data3s.get(1);

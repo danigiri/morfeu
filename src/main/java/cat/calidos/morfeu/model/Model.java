@@ -18,19 +18,10 @@ public class Model extends ComplexCellModel {
 protected XSSchemaSet		schema;
 public static final String	MODEL_NAMESPACE	= "";
 
-public Model(	URI u,
-				String name,
-				String desc,
-				Type type,
-				int min,
-				int max,
-				Optional<String> defaultValue,
-				Optional<String> category,
-				boolean areChildrenOrdered,
-				Metadata meta,
-				Attributes<CellModel> attributes,
-				XSSchemaSet s,
-				Composite<CellModel> children) {
+public Model(	URI u, String name, String desc, Type type, int min, int max,
+				Optional<String> defaultValue, Optional<String> category,
+				boolean areChildrenOrdered, Metadata meta, Attributes<CellModel> attributes,
+				XSSchemaSet s, Composite<CellModel> children) {
 
 	// TODO: fetch description from annotation
 	super(u, name, desc, type, min, max, defaultValue, category, areChildrenOrdered, meta,

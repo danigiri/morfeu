@@ -33,7 +33,9 @@ public void testDragAndDropStuff() {
 	assertNotNull(stuff0);
 
 	stuff0.hover();
-	assertAll("active areas", () -> assertFalse(col.dropArea(0).isActive()), // adjacent, noop
+	assertAll(
+			"active areas",
+			() -> assertFalse(col.dropArea(0).isActive()), // adjacent, noop
 			() -> assertFalse(col.dropArea(1).isActive()), // adjacent, noop
 			() -> assertTrue(col.dropArea(2).isActive()), // is ok
 			() -> assertTrue(col.dropArea(3).isActive()), // is ok
@@ -46,7 +48,9 @@ public void testDragAndDropStuff() {
 	UICellEditor stuffEditor = col2.child("stuff(0)").hover().edit();
 	Optional<String> stuffValue = stuffEditor.value();
 	stuffEditor.clickDiscard();
-	assertAll("after drop", () -> assertTrue(stuffValue.isPresent()),
+	assertAll(
+			"after drop",
+			() -> assertTrue(stuffValue.isPresent()),
 			() -> assertEquals("Stuff content 2", stuffValue.get()));
 
 	col2.child("stuff(0)").hover(); // bug in the activation event sequence
@@ -54,7 +58,9 @@ public void testDragAndDropStuff() {
 	UICellEditor movedStuffEditor = movedStuff.editByDoubleClicking();
 	Optional<String> movedStuffValue = movedStuffEditor.value();
 	movedStuffEditor.clickDiscard();
-	assertAll("after drop", () -> assertTrue(movedStuffValue.isPresent()),
+	assertAll(
+			"after drop",
+			() -> assertTrue(movedStuffValue.isPresent()),
 			() -> assertEquals("Stuff content", movedStuffValue.get()));
 
 }

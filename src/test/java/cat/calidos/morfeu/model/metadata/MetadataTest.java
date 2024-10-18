@@ -75,7 +75,9 @@ public void setup() throws Exception {
 @Test @DisplayName("Merge metadata basic test")
 public void testMergeMetadataBasic() {
 
-	assertAll("Checking merge values", () -> assertEquals(mergedURI, merged.getURI()),
+	assertAll(
+			"Checking merge values",
+			() -> assertEquals(mergedURI, merged.getURI()),
 			() -> assertEquals("descA", merged.getDesc()),
 			() -> assertEquals("A", merged.getPresentation()),
 			() -> assertEquals("ACP", merged.getCellPresentation()),
@@ -90,7 +92,9 @@ public void testMergeMetadataBasic() {
 			() -> assertEquals("idA", merged.getIdentifier().get()));
 
 	Map<String, String> mergedDefaultValues = merged.getDefaultValues();
-	assertAll("Checking merge default values", () -> assertEquals(2, mergedDefaultValues.size()),
+	assertAll(
+			"Checking merge default values",
+			() -> assertEquals(2, mergedDefaultValues.size()),
 			() -> assertEquals("priority-default-a", mergedDefaultValues.get("@a")),
 			() -> assertEquals("meta-default-b", mergedDefaultValues.get("@b")));
 
@@ -101,13 +105,17 @@ public void testMergeMetadataBasic() {
 public void testMergeMetadataDirectives() {
 
 	Set<String> directives = merged.getDirectivesFor("directives");
-	assertAll("Checking merge values", () -> assertNotNull(directives),
+	assertAll(
+			"Checking merge values",
+			() -> assertNotNull(directives),
 			() -> assertEquals(2, directives.size()),
 			() -> assertTrue(directives.contains("directive-A")),
 			() -> assertTrue(directives.contains("directive-B")));
 
 	Set<String> directives2 = merged.getDirectivesFor("directives2");
-	assertAll("Checking merge values", () -> assertNotNull(directives2),
+	assertAll(
+			"Checking merge values",
+			() -> assertNotNull(directives2),
 			() -> assertEquals(1, directives2.size()),
 			() -> assertTrue(directives2.contains("directive-A2")));
 
@@ -119,7 +127,8 @@ public void testMergeAttributeCategories() {
 
 	assertEquals("X", merged.getCategory().get());
 	assertEquals(2, merged.getCategories().size());
-	assertAll("Checking all two categories",
+	assertAll(
+			"Checking all two categories",
 			() -> assertTrue(merged.getAttributesIn("X").contains("a")),
 			() -> assertTrue(merged.getAttributesIn("Y").contains("b")),
 			() -> assertEquals(1, merged.getAttributesIn("X").size()),

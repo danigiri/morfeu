@@ -66,7 +66,9 @@ public void contentSaveWithFilter() throws Exception {
 	ctrl.process(); // this controller will save the document
 
 	String savedContent = readFromFile(path);
-	assertAll("testing filtered save", () -> assertNotNull(savedContent),
+	assertAll(
+			"testing filtered save",
+			() -> assertNotNull(savedContent),
 			() -> assertTrue(savedContent.contains("HELLO")),
 			() -> assertFalse(savedContent.contains("blahblah")));
 

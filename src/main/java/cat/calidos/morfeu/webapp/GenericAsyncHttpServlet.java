@@ -44,8 +44,11 @@ public void init(ServletConfig config) throws ServletException {
 	try {
 		timeout = Integer.parseInt(timeoutStr);
 	} catch (Exception e) {
-		log.warn("Invalid timeout configuration ({} is not an integer), using {}", timeoutStr,
-				DEFAULT_TIMEOUT);
+		log
+				.warn(
+						"Invalid timeout configuration ({} is not an integer), using {}",
+						timeoutStr,
+						DEFAULT_TIMEOUT);
 		timeout = DEFAULT_TIMEOUT;
 	}
 	log.info("Using async servlet request handler timeout {}", timeout);
@@ -85,8 +88,7 @@ private final class AsyncRequestHandler implements Runnable {
 private final ExecutorService	executorService;
 private final Logger			log;
 
-private AsyncRequestHandler(ExecutorService executorService,
-							Logger log) {
+private AsyncRequestHandler(ExecutorService executorService, Logger log) {
 
 	this.executorService = executorService;
 	this.log = log;

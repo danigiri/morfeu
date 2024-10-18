@@ -32,7 +32,9 @@ public void testModel() throws Exception {
 	assertTrue(model.get("children").isArray(), "/children is not an array and it should be");
 	assertEquals("", model.get("name").asText(), "Wrong model name");
 	assertEquals("Description of test model", model.get("desc").asText(), "Wrong model desc");
-	assertEquals("test", model.get("children").get(0).get("name").asText(),
+	assertEquals(
+			"test",
+			model.get("children").get(0).get("name").asText(),
 			"/children/test(0) has a wrong name");
 }
 

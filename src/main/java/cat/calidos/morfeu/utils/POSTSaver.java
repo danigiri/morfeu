@@ -27,12 +27,11 @@ private DataPosterComponent	poster;
 
 private String response;
 
-public POSTSaver(	CloseableHttpClient client,
-					URI destination,
-					Map<String, String> content) {
+public POSTSaver(CloseableHttpClient client, URI destination, Map<String, String> content) {
 
 	this.destination = destination;
-	this.poster = DaggerDataPosterComponent.builder()
+	this.poster = DaggerDataPosterComponent
+			.builder()
 			.forURI(destination)
 			.withClient(client)
 			.andData(content)
@@ -54,9 +53,7 @@ public void save() throws SavingException {
 }
 
 
-public Optional<String> getResponse() {
-	return Optional.ofNullable(response);
-}
+public Optional<String> getResponse() { return Optional.ofNullable(response); }
 
 }
 

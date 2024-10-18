@@ -37,9 +37,12 @@ public void testDocument1YAMLTransform() throws Exception {
 
 	JsonNode testInternalAttributes = test.get("internalAttributes");
 	assertNotNull(testInternalAttributes);
-	assertTrue(testInternalAttributes.isArray(),
+	assertTrue(
+			testInternalAttributes.isArray(),
 			"/children/test(0)@internalAttributes should be an array");
-	assertEquals(2, testInternalAttributes.size(),
+	assertEquals(
+			2,
+			testInternalAttributes.size(),
 			"/children/test(0)@internalAttributes should have two elems");
 
 	JsonNode testAttributes = test.get("attributes");

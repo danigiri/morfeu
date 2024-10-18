@@ -30,7 +30,9 @@ public void testSave() throws Exception {
 	var file2 = new File(path);
 	String contentRead = FileUtils.readFileToString(file2, Config.DEFAULT_CHARSET);
 
-	assertEquals(contentWritten, contentRead,
+	assertEquals(
+			contentWritten,
+			contentRead,
 			"Content written to the output file was not as expected");
 
 }

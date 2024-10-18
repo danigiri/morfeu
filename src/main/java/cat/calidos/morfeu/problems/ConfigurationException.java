@@ -24,8 +24,7 @@ public ConfigurationException(String message) {
 }
 
 
-public ConfigurationException(	String message,
-								Throwable e) {
+public ConfigurationException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

@@ -30,7 +30,8 @@ public class SVGViewModuleIntTest {
 public void testRenderSVGTruncate() throws Exception {
 
 	Optional<String> header = Optional.empty();
-	String svg = DaggerSVGViewComponent.builder()
+	String svg = DaggerSVGViewComponent
+			.builder()
 			.from("Short text")
 			.withHeader(header)
 			.truncate(true)
@@ -55,7 +56,8 @@ public void testRenderSVGTruncate() throws Exception {
 public void testRenderSVGHeader() throws Exception {
 
 	Optional<String> header = Optional.of("Header");
-	String svg = DaggerSVGViewComponent.builder()
+	String svg = DaggerSVGViewComponent
+			.builder()
 			.from("Short text")
 			.withHeader(header)
 			.truncate(true)
@@ -82,7 +84,8 @@ private NodeList readFromSVG(	String svg,
 	InputSource svgSource = new InputSource(new StringReader(svg));
 	Document xmlDocument = builder.parse(svgSource);
 	XPath xPath = XPathFactory.newInstance().newXPath();
-	NodeList nodeList = (NodeList) xPath.compile(xpath)
+	NodeList nodeList = (NodeList) xPath
+			.compile(xpath)
 			.evaluate(xmlDocument, XPathConstants.NODESET);
 
 	return nodeList;

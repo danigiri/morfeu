@@ -36,7 +36,8 @@ public static Properties getProperties(	@Nullable ServletConfig config,
 
 	if (servletContext.isPresent()) {
 		ServletContext context = servletContext.get();
-		StreamSupport.stream(attributeNames.spliterator(), false)
+		StreamSupport
+				.stream(attributeNames.spliterator(), false)
 				.filter(a -> context.getAttribute(a) instanceof String)
 				.forEach(a -> p.setProperty(a, (String) context.getAttribute(a)));
 	}

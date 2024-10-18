@@ -41,8 +41,11 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 
 	return (request,
 			response) -> {
-		log.trace("------ Request filter request ({} {}) ------", request.getMethod(),
-				request.getServletPath());
+		log
+				.trace(
+						"------ Request filter request ({} {}) ------",
+						request.getMethod(),
+						request.getServletPath());
 
 		if (!request.getMethod().equals(_POST)) {
 			return true; // continue filter chain
@@ -51,7 +54,8 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 		ServletOutputStream outputStream = null;
 		try {
 
-			URI destination = DaggerURIComponent.builder()
+			URI destination = DaggerURIComponent
+					.builder()
 					.from(uri.get().get())
 					.build()
 					.uri()
@@ -62,7 +66,8 @@ public static BiFunction<HttpServletRequest, HttpServletResponse, Boolean> postS
 			}
 			// System.err.println(content);
 			// we assume Morfeu is doing the validation for now
-			DaggerSaverComponent.builder()
+			DaggerSaverComponent
+					.builder()
 					.toURI(destination)
 					.content(content)
 					.build()

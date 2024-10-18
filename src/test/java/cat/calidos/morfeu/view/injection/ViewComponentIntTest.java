@@ -22,7 +22,8 @@ public void testInlineTemplate() {
 	Map<String, Object> values = MorfeuUtils.paramMap("foo", "bar");
 	String templ = "value=${v.foo}";
 
-	ViewComponent view = DaggerViewComponent.builder()
+	ViewComponent view = DaggerViewComponent
+			.builder()
 			.withValue(values)
 			.withTemplate(templ)
 			.andProblem("")
@@ -39,7 +40,8 @@ public void testInlineTemplateWithProblem() {
 	Map<String, Object> values = MorfeuUtils.paramMap();
 	String templ = "problem=${problem}";
 
-	ViewComponent view = DaggerViewComponent.builder()
+	ViewComponent view = DaggerViewComponent
+			.builder()
 			.withValue(values)
 			.withTemplate(templ)
 			.andProblem("bar")
@@ -55,7 +57,8 @@ public void testChop() {
 
 	var templ = "${f.chop('abc')}";
 
-	ViewComponent view = DaggerViewComponent.builder()
+	ViewComponent view = DaggerViewComponent
+			.builder()
 			.withValue(MorfeuUtils.paramMap())
 			.withTemplate(templ)
 			.andProblem("")
@@ -70,7 +73,8 @@ public void testChop() {
 public void testQuote() {
 	var templ = "${f.quote('abc')}";
 
-	ViewComponent view = DaggerViewComponent.builder()
+	ViewComponent view = DaggerViewComponent
+			.builder()
 			.withValue(MorfeuUtils.paramMap())
 			.withTemplate(templ)
 			.andProblem("")
@@ -80,7 +84,8 @@ public void testQuote() {
 
 	String templ2 = "${f.quote('\"abc\"')}";
 
-	ViewComponent view2 = DaggerViewComponent.builder()
+	ViewComponent view2 = DaggerViewComponent
+			.builder()
 			.withValue(MorfeuUtils.paramMap())
 			.withTemplate(templ2)
 			.andProblem("")
@@ -95,7 +100,8 @@ public void testQuote() {
 public void testIsMultiline() {
 	var templ = "${f.isMultiline('abc')?c}";
 
-	ViewComponent view = DaggerViewComponent.builder()
+	ViewComponent view = DaggerViewComponent
+			.builder()
 			.withValue(MorfeuUtils.paramMap())
 			.withTemplate(templ)
 			.andProblem("")
@@ -109,7 +115,8 @@ public void testIsMultiline() {
 public void testXMLEscaping() {
 	var templ = "${f.xmlc('& > <')}";
 
-	ViewComponent view = DaggerViewComponent.builder()
+	ViewComponent view = DaggerViewComponent
+			.builder()
 			.withValue(MorfeuUtils.paramMap())
 			.withTemplate(templ)
 			.andProblem("")
@@ -123,7 +130,8 @@ public void testXMLEscaping() {
 public void testYAMLEscaping() {
 	var templ = "${f.yamla('\\\"')}";
 
-	ViewComponent view = DaggerViewComponent.builder()
+	ViewComponent view = DaggerViewComponent
+			.builder()
 			.withValue(MorfeuUtils.paramMap())
 			.withTemplate(templ)
 			.andProblem("")
@@ -133,7 +141,8 @@ public void testYAMLEscaping() {
 
 	templ = "${f.yamlc('\\\"')}";
 
-	view = DaggerViewComponent.builder()
+	view = DaggerViewComponent
+			.builder()
 			.withValue(MorfeuUtils.paramMap())
 			.withTemplate(templ)
 			.andProblem("")

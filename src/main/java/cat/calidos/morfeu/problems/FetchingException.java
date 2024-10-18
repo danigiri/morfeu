@@ -12,8 +12,7 @@ public FetchingException(String message) {
 }
 
 
-public FetchingException(	String message,
-							Throwable e) {
+public FetchingException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);
 }
 

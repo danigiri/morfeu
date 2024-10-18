@@ -65,7 +65,8 @@ public static String effectiveTemplate(	@Nullable @Named("templatePath") String 
 																								// it's
 																								// minimally
 																								// readable
-					+ Hashing.murmur3_32_fixed()
+					+ Hashing
+							.murmur3_32_fixed()
 							.hashString(template, Config.DEFAULT_NIO_CHARSET)
 							.toString();
 }
@@ -73,7 +74,7 @@ public static String effectiveTemplate(	@Nullable @Named("templatePath") String 
 
 @Provides
 public static Configuration configuration(StringTemplateLoader stringLoader) {
-	Configuration cfg = new Configuration(Configuration.VERSION_2_3_33);
+	var cfg = new Configuration(Configuration.VERSION_2_3_33);
 	cfg.setDefaultEncoding("UTF-8");
 	// use the logger below to debug
 	var ctl = new ClassTemplateLoader(ViewModule.class, "/templates");

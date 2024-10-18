@@ -30,7 +30,8 @@ public void setup() throws Exception {
 
 	URI modelURI = new URI("target/test-classes/test-resources/models/test-model.xsd");
 	ComplexCellModel test = cellModelFrom(modelURI, "test").asComplex();
-	stuff = test.children()
+	stuff = test
+			.children()
 			.child("row")
 			.asComplex()
 			.children()

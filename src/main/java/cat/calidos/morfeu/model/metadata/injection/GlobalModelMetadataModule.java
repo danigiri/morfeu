@@ -34,7 +34,8 @@ public class GlobalModelMetadataModule {
 public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotation,
 															@Named("ModelURI") URI uri) {
 
-	List<Node> extraMetadataNodes = DaggerMetadataAnnotationComponent.builder()
+	List<Node> extraMetadataNodes = DaggerMetadataAnnotationComponent
+			.builder()
 			.from(annotation)
 			.andTag("mf:metadata")
 			.build()
@@ -42,7 +43,8 @@ public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotat
 
 	// an XSAnnotation is just a wrapper for any kind of object, in this case a Node, so we give it
 	// that
-	return extraMetadataNodes.stream()
+	return extraMetadataNodes
+			.stream()
 			.map(m -> DaggerModelMetadataComponent.builder().from(new XSAnnotation() {
 
 			@Override
@@ -52,18 +54,19 @@ public static Map<URI, Metadata> provideGlobalModelMetadata(XSAnnotation annotat
 
 
 			@Override
-			public Locator getLocator() {
-				return null;
-			}
+			public Locator getLocator() { return null; }
 
 
 			@Override
-			public Object getAnnotation() {
-				return m;
-			}
+			public Object getAnnotation() { return m; }
 			}).withParentURI(uri).build().value())
-			.collect(Collectors.toMap(Metadata::getURI, Functions.identity(), (	p1,
-																				p2) -> p1));
+			.collect(
+					Collectors
+							.toMap(
+									Metadata::getURI,
+									Functions.identity(),
+									(	p1,
+										p2) -> p1));
 	// FIXME: sometimes we get a duplicate here, we should investigate at some point
 
 }

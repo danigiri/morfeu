@@ -17,27 +17,44 @@ public class ModelMetadataModuleTest {
 public void testReadonly() {
 
 	Optional<Boolean> readonly0 = ModelMetadataModule.readonly(Optional.empty());
-	assertAll("test empty", () -> assertNotNull(readonly0),
+	assertAll(
+			"test empty",
+			() -> assertNotNull(readonly0),
 			() -> assertFalse(readonly0.isPresent()));
 
 	Optional<Boolean> readonly1 = ModelMetadataModule.readonly(Optional.of("yes"));
-	assertAll("test yes", () -> assertNotNull(readonly1), () -> assertTrue(readonly1.isPresent()),
+	assertAll(
+			"test yes",
+			() -> assertNotNull(readonly1),
+			() -> assertTrue(readonly1.isPresent()),
 			() -> assertTrue(readonly1.get()));
 
 	Optional<Boolean> readonly2 = ModelMetadataModule.readonly(Optional.of("true"));
-	assertAll("test yes", () -> assertNotNull(readonly2), () -> assertTrue(readonly2.isPresent()),
+	assertAll(
+			"test yes",
+			() -> assertNotNull(readonly2),
+			() -> assertTrue(readonly2.isPresent()),
 			() -> assertTrue(readonly2.get()));
 
 	Optional<Boolean> readonly3 = ModelMetadataModule.readonly(Optional.of("nope"));
-	assertAll("test nope", () -> assertNotNull(readonly3), () -> assertTrue(readonly3.isPresent()),
+	assertAll(
+			"test nope",
+			() -> assertNotNull(readonly3),
+			() -> assertTrue(readonly3.isPresent()),
 			() -> assertFalse(readonly3.get()));
 
 	Optional<Boolean> readonly4 = ModelMetadataModule.readonly(Optional.of("no"));
-	assertAll("test no", () -> assertNotNull(readonly4), () -> assertTrue(readonly4.isPresent()),
+	assertAll(
+			"test no",
+			() -> assertNotNull(readonly4),
+			() -> assertTrue(readonly4.isPresent()),
 			() -> assertFalse(readonly4.get()));
 
 	Optional<Boolean> readonly5 = ModelMetadataModule.readonly(Optional.of("false"));
-	assertAll("test false", () -> assertNotNull(readonly5), () -> assertTrue(readonly5.isPresent()),
+	assertAll(
+			"test false",
+			() -> assertNotNull(readonly5),
+			() -> assertTrue(readonly5.isPresent()),
 			() -> assertFalse(readonly5.get()));
 
 }

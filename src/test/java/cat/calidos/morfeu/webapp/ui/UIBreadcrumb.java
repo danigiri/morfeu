@@ -26,7 +26,8 @@ public UIBreadcrumb(SelenideElement element) {
 
 /** @return all elements of the breadcrumb (includind doc name and active cell name) */
 public List<String> elements() {
-	return element.$$(".breadcrumb-element")
+	return element
+			.$$(".breadcrumb-element")
 			.asFixedIterable()
 			.stream()
 			.map(e -> e.text())
@@ -52,9 +53,7 @@ public Optional<String> activeName() {
 }
 
 
-public boolean isFragment() {
-	return element.$("#breadcrumb-fragment-back").exists();
-}
+public boolean isFragment() { return element.$("#breadcrumb-fragment-back").exists(); }
 
 }
 

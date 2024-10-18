@@ -107,7 +107,8 @@ public BiFunction<List<String>, Map<String, String>, String> getCodePreview(@Nul
 		initDatabase(connection, context); // FIXME: we need to listen to servlet state and clean
 											// the connection up!!!
 		String query = params.get("sql");
-		return DaggerSQLViewComponent.builder()
+		return DaggerSQLViewComponent
+				.builder()
 				.query(query)
 				.isUpdate(false)
 				.andConnection(connection)
@@ -167,7 +168,8 @@ private void initDatabase(	Connection conn,
 	try {
 		log.info("Creating test database...");
 		String tables = "SHOW TABLES";
-		List<List<String>> pt = DaggerSQLComponent.builder()
+		List<List<String>> pt = DaggerSQLComponent
+				.builder()
 				.sql(tables)
 				.andConnection(conn)
 				.build()
@@ -180,7 +182,8 @@ private void initDatabase(	Connection conn,
 			DaggerSQLComponent.builder().sql(create).andConnection(conn).build().update().get();
 		}
 		String count = "SELECT COUNT(*) FROM Persons";
-		List<List<String>> c = DaggerSQLComponent.builder()
+		List<List<String>> c = DaggerSQLComponent
+				.builder()
 				.sql(count)
 				.andConnection(conn)
 				.build()

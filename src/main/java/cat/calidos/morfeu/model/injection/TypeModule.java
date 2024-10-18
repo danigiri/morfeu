@@ -71,8 +71,10 @@ URI uri(@Nullable XSType xsType,
 			Locator locator = xsType.getLocator();
 			u = new URI(locator.getSystemId());
 		} catch (URISyntaxException e) {
-			log.error("What the heck, locator-based URI of element '{}' is not valid ",
-					xsType.getName());
+			log
+					.error(
+							"What the heck, locator-based URI of element '{}' is not valid ",
+							xsType.getName());
 		}
 	}
 
@@ -110,7 +112,8 @@ public static Set<String> possibleValues(@Nullable XSType xsType) {
 		XSSimpleType xsSimpleType = xsType.asSimpleType();
 		if (xsSimpleType != null && xsSimpleType.isRestriction()
 				&& xsSimpleType.getFacet("enumeration") != null) {
-			xsSimpleType.asRestriction()
+			xsSimpleType
+					.asRestriction()
 					.getFacets("enumeration")
 					.forEach(f -> values.add(f.getValue().value));
 		}
@@ -124,7 +127,8 @@ public static Set<String> possibleValues(@Nullable XSType xsType) {
 @Provides
 public static Metadata metadata(@Nullable XSType xsType,
 								@Named("EffectiveURI") URI uri) {
-	return DaggerModelMetadataComponent.builder()
+	return DaggerModelMetadataComponent
+			.builder()
 			.from(xsType.getAnnotation())
 			.withParentURI(uri)
 			.build()

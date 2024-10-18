@@ -42,7 +42,8 @@ public void testSimpleCell() throws Exception {
 	String modelPath = "target/test-classes/test-resources/models/test-model.xsd";
 	URI modelURI = new URI(modelPath);
 
-	Document document = DaggerContentParserTeztComponent.builder()
+	Document document = DaggerContentParserTeztComponent
+			.builder()
 			.content(contentURI)
 			.fetchedContentFrom(contentURI)
 			.model(modelURI)

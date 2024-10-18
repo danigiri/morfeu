@@ -13,7 +13,8 @@ import cat.calidos.morfeu.utils.Pair;
 
 
 /**
- * Utility CLI helpful for diagnostics 
+ * Utility CLI helpful for diagnostics
+ * 
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
 @Command(name = "MorfeuCLI", version = "MorfeuCLI 0.8", mixinStandardHelpOptions = true)
@@ -30,7 +31,7 @@ String prefix;
 @Option(names = "--filters", description = "filters")
 String filters;
 
-@Option(names = {"-q", "--quiet"}, description = "do not print anything")
+@Option(names = { "-q", "--quiet" }, description = "do not print anything")
 boolean quiet = false;
 
 @Parameters(description = "command {parse|}")
@@ -40,7 +41,6 @@ String command;
 String path;
 
 private String output;
-
 
 @Override
 public Integer call() {
@@ -58,10 +58,12 @@ public Integer call() {
 	return 0;
 }
 
+
 public static void main(String[] args) {
 	int exitCode = mainImpl(args).getLeft();
 	System.exit(exitCode);
 }
+
 
 // this decoupling is useful to do testing of the implementation
 public static Pair<Integer, String> mainImpl(String[] args) {
@@ -69,6 +71,7 @@ public static Pair<Integer, String> mainImpl(String[] args) {
 	int code = new CommandLine(cli).execute(args);
 	return Pair.of(code, cli.getOutput());
 }
+
 
 public String getOutput() { return output; }
 

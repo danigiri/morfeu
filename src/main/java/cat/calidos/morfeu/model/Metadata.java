@@ -67,20 +67,11 @@ private Map<String, Set<String>>	attributes;
 private Optional<String>			category;
 private Map<String, Set<String>>	categories;
 
-public Metadata(URI uri,
-				String desc,
-				String presentation,
-				String cellPresentation,
-				String cellPresentationType,
-				String cellPresentationMethod,
-				String thumb,
-				String identifier,
-				Optional<Boolean> readonly,
-				String valueLocator,
-				Map<String, String> defaultValues,
-				Map<String, Set<String>> directives,
-				Map<String, Set<String>> attributes,
-				String category,
+public Metadata(URI uri, String desc, String presentation, String cellPresentation,
+				String cellPresentationType, String cellPresentationMethod, String thumb,
+				String identifier, Optional<Boolean> readonly, String valueLocator,
+				Map<String, String> defaultValues, Map<String, Set<String>> directives,
+				Map<String, Set<String>> attributes, String category,
 				Map<String, Set<String>> categories) {
 	this(uri, Optional.ofNullable(desc), Optional.ofNullable(presentation),
 			Optional.ofNullable(cellPresentation), Optional.ofNullable(cellPresentationType),
@@ -90,21 +81,13 @@ public Metadata(URI uri,
 }
 
 
-public Metadata(URI uri,
-				Optional<String> desc,
-				Optional<String> presentation,
-				Optional<String> cellPresentation,
-				Optional<String> cellPresentationType,
-				Optional<String> cellPresentationMethod,
-				Optional<String> thumb,
-				Optional<String> identifier,
-				Optional<Boolean> readonly,
-				Optional<String> valueLocator,
-				Map<String, String> defaultValues,
-				Map<String, Set<String>> directives,
-				Map<String, Set<String>> attributes,
-				Optional<String> category,
-				Map<String, Set<String>> categories) {
+public Metadata(URI uri, Optional<String> desc, Optional<String> presentation,
+				Optional<String> cellPresentation, Optional<String> cellPresentationType,
+				Optional<String> cellPresentationMethod, Optional<String> thumb,
+				Optional<String> identifier, Optional<Boolean> readonly,
+				Optional<String> valueLocator, Map<String, String> defaultValues,
+				Map<String, Set<String>> directives, Map<String, Set<String>> attributes,
+				Optional<String> category, Map<String, Set<String>> categories) {
 
 	this.uri = uri;
 	this.desc = desc.orElse(DEFAULT_DESC);
@@ -125,60 +108,38 @@ public Metadata(URI uri,
 }
 
 
-public String getDesc() {
-	return desc;
-}
+public String getDesc() { return desc; }
 
 
-public String getPresentation() {
-	return presentation;
-}
+public String getPresentation() { return presentation; }
 
 
-public String getCellPresentation() {
-	return cellPresentation;
-}
+public String getCellPresentation() { return cellPresentation; }
 
 
-public String getCellPresentationType() {
-	return cellPresentationType;
-}
+public String getCellPresentationType() { return cellPresentationType; }
 
 
-public String getCellPresentationMethod() {
-	return cellPresentationMethod;
-}
+public String getCellPresentationMethod() { return cellPresentationMethod; }
 
 
-public String getThumb() {
-	return thumb;
-}
+public String getThumb() { return thumb; }
 
 
-public Optional<String> getIdentifier() {
-	return identifier;
-}
+public Optional<String> getIdentifier() { return identifier; }
 
 
-public Optional<Boolean> isReadonly() {
-	return readonly;
-}
+public Optional<Boolean> isReadonly() { return readonly; }
 
 
-public Optional<String> getValueLocator() {
-	return valueLocator;
-}
+public Optional<String> getValueLocator() { return valueLocator; }
 
 
-public Map<String, String> getDefaultValues() {
-	return defaultValues;
-}
+public Map<String, String> getDefaultValues() { return defaultValues; }
 
 
 @Override
-public URI getURI() {
-	return uri;
-}
+public URI getURI() { return uri; }
 
 
 @Override
@@ -199,9 +160,7 @@ public boolean directivesForCaseContain(String case_,
 }
 
 
-public Map<String, Set<String>> getDirectives() {
-	return directives;
-}
+public Map<String, Set<String>> getDirectives() { return directives; }
 
 
 public Set<String> getAttributesFor(String case_) {
@@ -209,14 +168,10 @@ public Set<String> getAttributesFor(String case_) {
 }
 
 
-public Map<String, Set<String>> getAttributes() {
-	return attributes;
-}
+public Map<String, Set<String>> getAttributes() { return attributes; }
 
 
-public Optional<String> getCategory() {
-	return category;
-}
+public Optional<String> getCategory() { return category; }
 
 
 public Set<String> getAttributesIn(String category) {
@@ -224,9 +179,7 @@ public Set<String> getAttributesIn(String category) {
 }
 
 
-public Map<String, Set<String>> getCategories() {
-	return categories;
-}
+public Map<String, Set<String>> getCategories() { return categories; }
 
 
 @Override
@@ -284,13 +237,16 @@ public static Metadata merge(	URI u,
 	newDefaultValues.putAll(lessPriority.getDefaultValues());
 	newDefaultValues.putAll(morePriority.getDefaultValues()); // this will overwrite
 
-	Map<String, Set<String>> directives = mergeMapSet(morePriority.getDirectives(),
+	Map<String, Set<String>> directives = mergeMapSet(
+			morePriority.getDirectives(),
 			lessPriority.getDirectives());
-	Map<String, Set<String>> attributes = mergeMapSet(morePriority.getAttributes(),
+	Map<String, Set<String>> attributes = mergeMapSet(
+			morePriority.getAttributes(),
 			lessPriority.getAttributes());
 
 	String category = morePriority.getCategory().orElse(lessPriority.getCategory().orElse(null));
-	Map<String, Set<String>> categories = mergeMapSet(morePriority.getCategories(),
+	Map<String, Set<String>> categories = mergeMapSet(
+			morePriority.getCategories(),
 			lessPriority.getCategories());
 
 	return new Metadata(u, desc, presentation, cellPresentation, cellPresentationType,

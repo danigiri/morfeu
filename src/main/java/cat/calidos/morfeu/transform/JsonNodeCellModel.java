@@ -13,8 +13,7 @@ public class JsonNodeCellModel {
 private JsonNode	node;
 private CellModel	cellModel;
 
-public JsonNodeCellModel(	JsonNode node,
-							CellModel cellModel) {
+public JsonNodeCellModel(JsonNode node, CellModel cellModel) {
 
 	this.node = node;
 	this.cellModel = cellModel;

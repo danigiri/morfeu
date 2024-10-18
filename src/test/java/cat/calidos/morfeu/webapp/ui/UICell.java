@@ -29,10 +29,7 @@ private UIContent			content;
 private Optional<UICell>	parent;
 private int					level;
 
-public UICell(	SelenideElement element,
-				UIContent content,
-				Optional<UICell> parent,
-				int level) {
+public UICell(SelenideElement element, UIContent content, Optional<UICell> parent, int level) {
 
 	super(element);
 
@@ -75,7 +72,8 @@ public String img() {
 
 public List<UIDropArea> dropAreas() {
 
-	List<UIDropArea> dropAreas = element.$$(".drop-area")
+	List<UIDropArea> dropAreas = element
+			.$$(".drop-area")
 			.asFixedIterable()
 			.stream()
 			.map(e -> new UIDropArea(e, content, this))
@@ -96,7 +94,8 @@ public UIDropArea dropArea(int i) {
 
 
 public List<UICell> children() {
-	return element.$$(".cell-level-" + (level + 1))
+	return element
+			.$$(".cell-level-" + (level + 1))
 			.asFixedIterable()
 			.stream()
 			.map(e -> new UICell(e, content, Optional.of(this), level + 1))
@@ -158,8 +157,7 @@ public UICell activate() {
 	}
 	try {
 		Thread.sleep(500);
-	} catch (InterruptedException e) {
-	}
+	} catch (InterruptedException e) {}
 
 	return this;
 
@@ -223,9 +221,7 @@ public UICellData cellInfo() {
 }
 
 
-public boolean isCell() {
-	return class_().contains("cell-img");
-}
+public boolean isCell() { return class_().contains("cell-img"); }
 
 
 public boolean isWell() {
@@ -263,22 +259,17 @@ public boolean isActive() {
 	// this keeps failing randomly
 	try {
 		Thread.sleep(50);
-	} catch (InterruptedException e) {
-	}
+	} catch (InterruptedException e) {}
 
 	return class_().contains(ACTIVE);
 
 }
 
 
-public boolean isSelected() {
-	return class_().contains(SELECTED);
-}
+public boolean isSelected() { return class_().contains(SELECTED); }
 
 
-public boolean isReadonly() {
-	return class_().contains(READONLY);
-}
+public boolean isReadonly() { return class_().contains(READONLY); }
 
 
 public boolean isActiveReadonly() {
@@ -286,8 +277,7 @@ public boolean isActiveReadonly() {
 	// this keeps failing randomly
 	try {
 		Thread.sleep(50);
-	} catch (InterruptedException e) {
-	}
+	} catch (InterruptedException e) {}
 
 	return class_().contains(ACTIVE_READONLY);
 }

@@ -155,8 +155,10 @@ public void handleResponse(	HttpServletRequest req,
 		String result = controlComponent.process();
 		writeTo(result, controlComponent.contentType(), resp);
 	} else {
-		log.error("GenericHttpServlet::handleeEsponse {} NOT FOUND (not matched)",
-				req.getPathInfo());
+		log
+				.error(
+						"GenericHttpServlet::handleeEsponse {} NOT FOUND (not matched)",
+						req.getPathInfo());
 		resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
 
@@ -164,14 +166,16 @@ public void handleResponse(	HttpServletRequest req,
 
 
 protected Map<String, String> normaliseParams(Map<String, String[]> parameterMap) {
-	return parameterMap.entrySet()
+	return parameterMap
+			.entrySet()
 			.stream()
 			.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()[0]));
 }
 
 
 public static Map<String, String> removeInternalHeaders(Map<String, String> params) {
-	return params.entrySet()
+	return params
+			.entrySet()
 			.stream()
 			.filter(k -> !k.getKey().startsWith(INTERNAL_PARAM_PREFIX))
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -215,21 +219,23 @@ public ControlComponent generatePostControlComponent(	HttpServletRequest req,
 		try {
 			// FIXME: this is an ugly hack, do we have to write our own parser?
 			log.trace("About to parse the content as variables");
-			URI tmpURI = DaggerURIComponent.builder()
+			URI tmpURI = DaggerURIComponent
+					.builder()
 					.from("http://localhost/?" + content)
 					.build()
 					.uri()
 					.get();
-			List<NameValuePair> contentAsVars = URLEncodedUtils.parse(tmpURI,
-					Config.DEFAULT_NIO_CHARSET);
+			List<NameValuePair> contentAsVars = URLEncodedUtils
+					.parse(tmpURI, Config.DEFAULT_NIO_CHARSET);
 			log.trace("::doPost() number of vars in input {}", contentAsVars.size());
 			for (NameValuePair v : contentAsVars) {
 				params.put(v.getName(), v.getValue());
 			}
 		} catch (Exception e) {
-			log.warn(
-					"Could not read input stream as variables in POST servlet code, no variables added",
-					e);
+			log
+					.warn(
+							"Could not read input stream as variables in POST servlet code, no variables added",
+							e);
 		}
 	}
 	params = processParams(params);

@@ -35,16 +35,9 @@ private Metadata			metadata;
 private boolean				isReference;
 private Optional<CellModel>	reference;
 
-public BasicCellModel(	URI u,
-						String name,
-						String desc,
-						Type type,
-						int minOccurs,
-						int maxOccurs,
-						boolean isAttribute,
-						Optional<String> defaultValue,
-						Optional<String> category,
-						Metadata meta) {
+public BasicCellModel(	URI u, String name, String desc, Type type, int minOccurs, int maxOccurs,
+						boolean isAttribute, Optional<String> defaultValue,
+						Optional<String> category, Metadata meta) {
 
 	super(u, name, desc);
 
@@ -62,17 +55,9 @@ public BasicCellModel(	URI u,
 }
 
 
-public BasicCellModel(	URI u,
-						String name,
-						String desc,
-						Type type,
-						int minOccurs,
-						int maxOccurs,
-						boolean isAttribute,
-						Optional<String> defaultValue,
-						Optional<String> category,
-						Metadata meta,
-						CellModel ref) {
+public BasicCellModel(	URI u, String name, String desc, Type type, int minOccurs, int maxOccurs,
+						boolean isAttribute, Optional<String> defaultValue,
+						Optional<String> category, Metadata meta, CellModel ref) {
 
 	this(u, name, desc, type, minOccurs, maxOccurs, isAttribute, defaultValue, category, meta);
 
@@ -88,9 +73,7 @@ public BasicCellModel(	URI u,
  * @see cat.calidos.morfeu.model.CellModelI#isSimple()
  *//////////////////////////////////////////////////////////////////////////////
 @Override
-public boolean isSimple() {
-	return isSimple;
-}
+public boolean isSimple() { return isSimple; }
 
 
 @Override
@@ -101,9 +84,7 @@ public boolean isComplex() {
 
 
 @Override
-public boolean isAttribute() {
-	return isAttribute;
-}
+public boolean isAttribute() { return isAttribute; }
 
 
 /*
@@ -124,9 +105,7 @@ public ComplexCellModel asComplex() {
  * @see cat.calidos.morfeu.model.CellModelI#getType()
  *//////////////////////////////////////////////////////////////////////////////
 @Override
-public Type getType() {
-	return type;
-}
+public Type getType() { return type; }
 
 
 /*
@@ -135,9 +114,7 @@ public Type getType() {
  * @see cat.calidos.morfeu.model.CellModel#getMinOccurs()
  *//////////////////////////////////////////////////////////////////////////////
 @Override
-public int getMinOccurs() {
-	return minOccurs;
-}
+public int getMinOccurs() { return minOccurs; }
 
 
 /*
@@ -146,21 +123,15 @@ public int getMinOccurs() {
  * @see cat.calidos.morfeu.model.CellModel#getMaxOccurs()
  *//////////////////////////////////////////////////////////////////////////////
 @Override
-public OptionalInt getMaxOccurs() {
-	return maxOccurs;
-}
+public OptionalInt getMaxOccurs() { return maxOccurs; }
 
 
 @Override
-public Optional<String> getCategory() {
-	return category;
-}
+public Optional<String> getCategory() { return category; }
 
 
 @Override
-public Metadata getMetadata() {
-	return metadata;
-}
+public Metadata getMetadata() { return metadata; }
 
 
 /*
@@ -169,9 +140,7 @@ public Metadata getMetadata() {
  * @see cat.calidos.morfeu.model.CellModel#getDefaultValue()
  *//////////////////////////////////////////////////////////////////////////////
 @Override
-public Optional<String> getDefaultValue() {
-	return defaultValue;
-}
+public Optional<String> getDefaultValue() { return defaultValue; }
 
 
 /*
@@ -180,9 +149,7 @@ public Optional<String> getDefaultValue() {
  * @see cat.calidos.morfeu.model.CellModelI#isReference()
  *//////////////////////////////////////////////////////////////////////////////
 @Override
-public boolean isReference() {
-	return isReference;
-}
+public boolean isReference() { return isReference; }
 
 
 /*

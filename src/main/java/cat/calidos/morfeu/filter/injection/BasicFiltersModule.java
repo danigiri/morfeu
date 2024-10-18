@@ -77,7 +77,8 @@ public static Filter<String, String> replace(Map<String, JsonNode> params)
 		log.error(message);
 		return (v) -> message;
 	}
-	if (fromTos.stream()
+	if (fromTos
+			.stream()
 			.filter(n -> !n.get("from").isTextual() || !n.get("to").isTextual())
 			.findAny()
 			.isPresent()) {

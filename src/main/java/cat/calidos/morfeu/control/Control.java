@@ -49,9 +49,7 @@ private String		problemTemplate;	// template to generate the output whenever the
  * @param template template output for normal operations
  * @param problemTemplate template for problems
  */
-public Control(	String operation,
-				String template,
-				String problemTemplate) {
+public Control(String operation, String template, String problemTemplate) {
 
 	this.operation = operation;
 	this.template = template;
@@ -71,7 +69,8 @@ public Control(	String operation,
 protected String render(String template,
 						Object value,
 						String problem) {
-	return DaggerViewComponent.builder()
+	return DaggerViewComponent
+			.builder()
 			.withValue(value)
 			.withTemplatePath(template)
 			.andProblem(problem)

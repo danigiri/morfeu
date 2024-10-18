@@ -34,9 +34,7 @@ private Optional<String>	header;		// header of the SVG preview image
 private boolean				truncate;	// trucante the text within the SVG
 private Map<String, String>	params;		// params to concateneate onto the SVG for info
 
-public SVGPreviewGETControl(String prefix,
-							String path,
-							Optional<String> header,
+public SVGPreviewGETControl(String prefix, String path, Optional<String> header,
 							Map<String, String> params) {
 
 	super("preview", "", "");
@@ -56,7 +54,8 @@ protected Object process()
 
 	String text = params.values().stream().collect(Collectors.joining(","));
 
-	return DaggerSVGViewComponent.builder()
+	return DaggerSVGViewComponent
+			.builder()
 			.from(text)
 			.withHeader(header)
 			.truncate(truncate)

@@ -38,15 +38,11 @@ private StringBuilder		output	= new StringBuilder();
 protected ExecStoppingTask	stoppingTask;
 protected ExecFinishedTask	finishedTask;
 
-public ExecMutableTask(	int type,
-						int status,
-						ProcessExecutor executor,
+public ExecMutableTask(	int type, int status, ProcessExecutor executor,
 						ExecOutputProcessor outputProcessorWrapper,
 						ExecProblemProcessor problemProcessorWrapper,
-						ExecOutputProcessor logProcessor,
-						ExecProblemProcessor problemProcessor,
-						ExecStoppingTask stoppingTask,
-						ExecFinishedTask finishedTask) {
+						ExecOutputProcessor logProcessor, ExecProblemProcessor problemProcessor,
+						ExecStoppingTask stoppingTask, ExecFinishedTask finishedTask) {
 
 	super(type, status, executor, outputProcessorWrapper, problemProcessorWrapper, logProcessor,
 			problemProcessor);
@@ -114,9 +110,7 @@ public FinishedTask markAsFinished() {
 
 
 @Override
-public int getRemaining() {
-	return remaining;
-}
+public int getRemaining() { return remaining; }
 
 
 @Override

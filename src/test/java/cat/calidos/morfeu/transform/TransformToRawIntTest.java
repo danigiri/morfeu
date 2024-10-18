@@ -24,14 +24,17 @@ public void streamChainTest() throws Exception {
 	assertNotNull(doc);
 
 	Map<String, Object> values = valueMapFrom(doc);
-	String output = DaggerViewComponent.builder()
+	String output = DaggerViewComponent
+			.builder()
 			.withTemplatePath("transform/content-to-raw.ftl")
 			.withValue(values)
 			.build()
 			.render();
 	// System.err.println(output);
 	// hard to test, let's do some basic assertions
-	assertAll("raw output test", () -> assertNotNull(output),
+	assertAll(
+			"raw output test",
+			() -> assertNotNull(output),
 			() -> assertTrue(output.contains("blahblah")),
 			() -> assertFalse(output.contains("data")));
 

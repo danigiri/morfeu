@@ -30,7 +30,8 @@ private UICellModelEntry	data2Model;
 public void setup() {
 
 	open(appBaseURL);
-	UIDocument doc = UICatalogues.openCatalogues()
+	UIDocument doc = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.shouldBeVisible()
 			.clickOn(0)
@@ -52,7 +53,9 @@ public void newAfterMouseActivationOfCellModel() {
 	assertNotNull(data2Model);
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
-	assertEquals(1, targetCol.children().size(),
+	assertEquals(
+			1,
+			targetCol.children().size(),
 			"Before creating a new cell, we should only have one child");
 	assertNotNull(targetCol.child("data(0)"), "Before creating new cell, target child 0 is data");
 
@@ -63,7 +66,8 @@ public void newAfterMouseActivationOfCellModel() {
 	assertTrue(data2Model.isActive(), "data2 cell model is not highlighted after rollover");
 	assertTrue(targetDropArea.isActive(), "Valid target drop area should be active on rollover");
 	UIDropArea disabledDropArea = targetCol.dropArea(0); // extra testing for ordering
-	assertFalse(disabledDropArea.isActive(),
+	assertFalse(
+			disabledDropArea.isActive(),
 			"Due to order restrictions, drop area zero should still be inactive");
 
 	targetDropArea.select();
@@ -71,9 +75,12 @@ public void newAfterMouseActivationOfCellModel() {
 
 	// create a new data2 element through the keyboard shortcut
 	model.pressKey(UIModel.NEW_CELL_KEY);
-	assertEquals(2, targetCol.children().size(),
+	assertEquals(
+			2,
+			targetCol.children().size(),
 			"After creating a new cell, we should have 2 children");
-	assertNotNull(targetCol.child("data(0)"),
+	assertNotNull(
+			targetCol.child("data(0)"),
 			"Before creating new cell, target child 0 is still data");
 	assertNotNull(targetCol.child("data2(1)"), "Aftert creating new cell, target child 1 is data2");
 
@@ -88,7 +95,9 @@ public void newAfterKeyboardActivationOfCellModel() {
 	assertNotNull(testModel);
 
 	UICell targetCol = content.rootCells().get(0).child("row(0)").child("col(0)");
-	assertEquals(1, targetCol.children().size(),
+	assertEquals(
+			1,
+			targetCol.children().size(),
 			"Before creating a new cell, we should only have one child");
 	assertNotNull(targetCol.child("data(0)"), "Before creating new cell, target child 0 is data");
 
@@ -100,16 +109,20 @@ public void newAfterKeyboardActivationOfCellModel() {
 	model.pressKey(UIModel.MODEL_MODE_KEY);
 	data2Model.select().activate();
 	assertTrue(data2Model.isActive(), "data2 cell model is not highlighted after activation");
-	assertTrue(targetDropArea.isActive(),
+	assertTrue(
+			targetDropArea.isActive(),
 			"Target area should be active on after activating cell model");
 	targetDropArea.select();
 	assertTrue(targetDropArea.isSelected(), "Target drop area shoud be selected after select");
 
 	// create a new data2 element through the keyboard shortcut
 	model.pressKey(UIModel.NEW_CELL_KEY);
-	assertEquals(2, targetCol.children().size(),
+	assertEquals(
+			2,
+			targetCol.children().size(),
 			"After creating a new cell, we should have 2 children");
-	assertNotNull(targetCol.child("data(0)"),
+	assertNotNull(
+			targetCol.child("data(0)"),
 			"Before creating new cell, target child 0 is still data");
 	assertNotNull(targetCol.child("data2(1)"), "Aftert creating new cell, target child 1 is data2");
 

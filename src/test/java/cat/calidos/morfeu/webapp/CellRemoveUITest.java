@@ -25,7 +25,8 @@ private UIContent content;
 public void setup() {
 
 	open(appBaseURL);
-	content = UICatalogues.openCatalogues()
+	content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1")

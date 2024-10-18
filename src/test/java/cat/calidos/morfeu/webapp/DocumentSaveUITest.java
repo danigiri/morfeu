@@ -69,7 +69,8 @@ public void teardown() throws Exception {
 public void documentSaveTest() throws Exception {
 
 	open(appBaseURL);
-	UIDocument document = UICatalogues.openCatalogues()
+	UIDocument document = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1");
@@ -77,7 +78,8 @@ public void documentSaveTest() throws Exception {
 	content.shouldBeVisible();
 
 	// now we make a modification and then save
-	UICell data = content.rootCells()
+	UICell data = content
+			.rootCells()
 			.get(0)
 			.child("row(0)")
 			.child("col(0)")
@@ -101,13 +103,15 @@ public void documentSaveTest() throws Exception {
 	Thread.sleep(5000); // wait for reboot of jetty env as files have changed
 
 	// reload the same document and check the change
-	document = UICatalogues.openCatalogues()
+	document = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1");
 	content = document.content();
 	content.shouldBeVisible();
-	data = content.rootCells()
+	data = content
+			.rootCells()
 			.get(0)
 			.child("row(0)")
 			.child("col(0)")
@@ -117,7 +121,9 @@ public void documentSaveTest() throws Exception {
 	assertNotNull(data);
 
 	cellData = data.cellInfo();
-	assertEquals("66", cellData.attribute("number").value(),
+	assertEquals(
+			"66",
+			cellData.attribute("number").value(),
 			"Saving the document does not modify its content");
 
 }

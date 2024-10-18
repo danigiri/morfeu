@@ -59,7 +59,8 @@ protected Model parseModelFrom(URI u) throws ConfigurationException, Interrupted
 	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
 	Metadata metadata = ModelModule.metadata(u, annotation);
 	String desc = ModelModule.description(metadata);
-	Type type = DaggerTypeComponent.builder()
+	Type type = DaggerTypeComponent
+			.builder()
 			.withDefaultName(ModelModule.ROOT_NAME)
 			.andURI(u)
 			.build()
@@ -67,8 +68,8 @@ protected Model parseModelFrom(URI u) throws ConfigurationException, Interrupted
 	Attributes<CellModel> attributes = ModelModule.attributes();
 	Map<URI, Metadata> globalModelMetadata = GlobalModelMetadataModule
 			.provideGlobalModelMetadata(annotation, u);
-	Composite<CellModel> rootCellModels = ModelModule.rootCellModels(schemaSet, u,
-			globalModelMetadata);
+	Composite<CellModel> rootCellModels = ModelModule
+			.rootCellModels(schemaSet, u, globalModelMetadata);
 
 	return ModelModule.model(u, desc, type, metadata, attributes, schemaSet, rootCellModels);
 
@@ -88,7 +89,8 @@ protected CellModel cellModelFrom(	URI u,
 
 	// FIXME: this particle creation is probably wrong but it seems to work, at least for complex
 	// types
-	return DaggerCellModelComponent.builder()
+	return DaggerCellModelComponent
+			.builder()
 			.fromElem(elem)
 			.fromParticle(elem.getType().asComplexType().getContentType().asParticle())
 			.withParentURI(u)
@@ -123,8 +125,9 @@ protected XSSchemaSet parseSchemaFrom(URI uri) throws InterruptedException, Exec
 
 protected Type provideElementType(XSElementDecl elem) {
 
-	return DaggerTypeComponent.builder() // awfully convenient to inject the dependencies, ok on
-											// integration tests
+	return DaggerTypeComponent
+			.builder() // awfully convenient to inject the dependencies, ok on
+						// integration tests
 			.withDefaultName("default-type-name")
 			.withXSType(elem.getType())
 			.build()

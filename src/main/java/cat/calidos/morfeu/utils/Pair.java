@@ -5,13 +5,14 @@ package cat.calidos.morfeu.utils;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Pair<X, Y> {
 
-private X					left;
-private Y					right;
+private X	left;
+private Y	right;
 
 public Pair(X left, Y right) {
 	this.left = left;
 	this.right = right;
 }
+
 
 public X getLeft() { return left; }
 
@@ -19,8 +20,9 @@ public X getLeft() { return left; }
 public Y getRight() { return right; }
 
 
-public static <X,Y> Pair<X,Y> of(X left, Y right) {
-	return new Pair<X,Y>(left, right);
+public static <X, Y> Pair<X, Y> of(	X left,
+									Y right) {
+	return new Pair<X, Y>(left, right);
 }
 
 }

@@ -45,10 +45,7 @@ private String contentSnippet; // the first few characters of the content, for l
 
 private HashMap<String, String> resultMetadata;
 
-public ContentSaveControl(	String prefix,
-							String path,
-							String content,
-							Optional<String> filters,
+public ContentSaveControl(	String prefix, String path, String content, Optional<String> filters,
 							String modelPath) {
 
 	super("POST content:" + path, "operation-ok.ftl", "operation-problem.ftl");
@@ -85,7 +82,8 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 
 	log.info(">>> Saving content to '{}' (size:{}) <<<", outputURI, transformedContent.length());
 
-	ContentSaverParserComponent component = DaggerContentSaverParserComponent.builder()
+	ContentSaverParserComponent component = DaggerContentSaverParserComponent
+			.builder()
 			.from(transformedContent)
 			.to(outputURI)
 			.filters(filters.orElse(""))
@@ -109,15 +107,25 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 
 @Override
 protected void beforeProcess() {
-	log.trace("Saving content '{}' to '[{}]{}' given model '{}'", contentSnippet, prefix, path,
-			modelPath);
+	log
+			.trace(
+					"Saving content '{}' to '[{}]{}' given model '{}'",
+					contentSnippet,
+					prefix,
+					path,
+					modelPath);
 }
 
 
 @Override
 protected void afterProblem(String problem) {
-	log.trace("Problem saving content '{}' to '[{}]{}' given model '{}'", contentSnippet, prefix,
-			path, modelPath);
+	log
+			.trace(
+					"Problem saving content '{}' to '[{}]{}' given model '{}'",
+					contentSnippet,
+					prefix,
+					path,
+					modelPath);
 }
 
 

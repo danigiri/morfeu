@@ -24,7 +24,9 @@ public void testShowArrow() {
 	assertAll("test arrows", () -> assertNotNull(links), () -> assertEquals(1, links.size()));
 
 	UIArrow arrow = links.get(0);
-	assertAll("check created arrow", () -> assertNotNull(arrow),
+	assertAll(
+			"check created arrow",
+			() -> assertNotNull(arrow),
 			() -> assertEquals(0, arrow.start().getX()),
 			() -> assertEquals(0, arrow.start().getY()),
 			() -> assertEquals(128, arrow.end().getX()),

@@ -62,7 +62,8 @@ public void destroy() {
 protected HttpFilterComponent filterComponent(	FilterChain chain,
 												HttpServletRequest httpRequest,
 												HttpServletResponse httpResponse) {
-	return DaggerHttpFilterComponent.builder()
+	return DaggerHttpFilterComponent
+			.builder()
 			.request(httpRequest)
 			.response(httpResponse)
 			.chain(chain)

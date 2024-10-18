@@ -54,9 +54,7 @@ public String desc() {
 }
 
 
-public boolean isValid() {
-	return $("#document-valid").getText().equals("VALID");
-}
+public boolean isValid() { return $("#document-valid").getText().equals("VALID"); }
 
 
 public UIModel model() {
@@ -75,8 +73,7 @@ public UISnippetsArea snippets() {
 	// let the snippets load (asynchronously)
 	try {
 		Thread.sleep(1000);
-	} catch (InterruptedException e) {
-	}
+	} catch (InterruptedException e) {}
 
 	return new UISnippetsArea();
 

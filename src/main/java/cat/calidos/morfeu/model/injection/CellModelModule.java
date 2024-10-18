@@ -266,7 +266,8 @@ public Boolean areChildrenOrdered(	XSElementDecl elem,
 @Provides
 public static Type getTypeFrom(	XSType type,
 								@Named("TypeDefaultName") String defaultName) {
-	return DaggerTypeComponent.builder()
+	return DaggerTypeComponent
+			.builder()
 			.withDefaultName(defaultName)
 			.withXSType(type)
 			.build()
@@ -295,7 +296,11 @@ public static Attributes<CellModel> attributesOf(	XSElementDecl elem,
 	rawAttributes.forEach(a -> {
 		XSAttributeDecl attributeDecl = a.getDecl();
 		boolean isRequired = a.isRequired();
-		CellModel cellModel = attributeCellModelFor(attributeDecl, isRequired, u, metadata,
+		CellModel cellModel = attributeCellModelFor(
+				attributeDecl,
+				isRequired,
+				u,
+				metadata,
 				globals);
 		attributes.addAttribute(attributeDecl.getName(), cellModel);
 	});
@@ -341,7 +346,8 @@ public static Composite<CellModel> childrenOf(	XSElementDecl elem,
 		if (particle.getTerm().isModelGroup()) { // we get rid of nestings with xsd:sequence,
 													// xsd:choice, or xsd:group
 													// and flatten all of them in a list
-			particle.getTerm()
+			particle
+					.getTerm()
 					.asModelGroup()
 					.iterator()
 					.forEachRemaining(m -> termTypes.add(m.asParticle()));
@@ -349,7 +355,8 @@ public static Composite<CellModel> childrenOf(	XSElementDecl elem,
 		} else {
 
 			XSElementDecl childElem = particle.getTerm().asElementDecl();
-			CellModel childCellModel = DaggerCellModelComponent.builder()
+			CellModel childCellModel = DaggerCellModelComponent
+					.builder()
 					.fromElem(childElem)
 					.fromParticle(particle)
 					.withParentURI(u)
@@ -430,7 +437,8 @@ public static Metadata metadata(XSElementDecl elem,
 								@Named("reference") Provider<CellModel> referenceProvider) {
 
 	// we get the metadata from the current cell model, this will have the highest priority
-	Metadata meta = DaggerModelMetadataComponent.builder()
+	Metadata meta = DaggerModelMetadataComponent
+			.builder()
 			.from(elem.getAnnotation())
 			.withParentURI(uri)
 			.build()
@@ -473,14 +481,16 @@ private static CellModel attributeCellModelFor(	XSAttributeDecl xsAttributeDecl,
 
 	String name = xsAttributeDecl.getName();
 	URI attributeURI = getURIFrom(nodeURI.toString() + ATTRIBUTE_SEPARATOR + name, name);
-	Type type = DaggerTypeComponent.builder()
+	Type type = DaggerTypeComponent
+			.builder()
 			.withDefaultName(name)
 			.withXSType(xsAttributeDecl.getType())
 			.build()
 			.type();
 	int minOccurs = required ? ATTRIBUTE_REQUIRED : ATTRIBUTE_MIN;
 
-	Metadata attributeMetadata = DaggerModelMetadataComponent.builder()
+	Metadata attributeMetadata = DaggerModelMetadataComponent
+			.builder()
 			.from(xsAttributeDecl.getAnnotation())
 			.withParentURI(attributeURI)
 			.build()
@@ -491,8 +501,9 @@ private static CellModel attributeCellModelFor(	XSAttributeDecl xsAttributeDecl,
 	// 1) the Cell metadata, with '<mf:default-value name="@attributename">foo</mf:default-value>'
 	// 2) XML schema default="foo" (on optional attributes)
 	// 3) the type default value
-	Optional<String> defaultValue = Optional.ofNullable(
-			parentMetadata.getDefaultValues().get(Metadata.DEFAULT_VALUE_PREFIX + name));
+	Optional<String> defaultValue = Optional
+			.ofNullable(
+					parentMetadata.getDefaultValues().get(Metadata.DEFAULT_VALUE_PREFIX + name));
 	if (!defaultValue.isPresent()) {
 		XmlString defaultValueXMLString = xsAttributeDecl.getDefaultValue();
 		defaultValue = (defaultValueXMLString != null) ? Optional.of(defaultValueXMLString.value)
@@ -511,7 +522,8 @@ private static CellModel attributeCellModelFor(	XSAttributeDecl xsAttributeDecl,
 	// therefore, we check for the attribute listing in the parent cell model and use that, with the
 	// type as fallback
 	Map<String, Set<String>> categories = parentMetadata.getCategories();
-	Optional<String> category = categories.keySet()
+	Optional<String> category = categories
+			.keySet()
 			.stream()
 			.filter(c -> parentMetadata.getAttributesIn(c).contains(name))
 			.findAny();

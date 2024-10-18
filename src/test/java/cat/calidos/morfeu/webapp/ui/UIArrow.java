@@ -11,8 +11,7 @@ public class UIArrow {
 private UILinks	parent;
 private int		index;
 
-public UIArrow(	UILinks parent,
-				int index) {
+public UIArrow(UILinks parent, int index) {
 
 	this.parent = parent;
 	this.index = index;

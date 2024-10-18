@@ -39,8 +39,12 @@ public static BiFunction<List<String>, Map<String, String>, String> snippet() {
 		String pref = params.get(MorfeuServlet.RESOURCES_PREFIX);
 		String path = pathElems.get(1); // normalised already
 		String modelPath = params.get("model");
-		log.trace("SnippetsControlModule::snippet [{}]{}, model: {}, cell-model: {}", pref, path,
-				modelPath);
+		log
+				.trace(
+						"SnippetsControlModule::snippet [{}]{}, model: {}, cell-model: {}",
+						pref,
+						path,
+						modelPath);
 
 		return new SnippetGETControl(pref, path, modelPath).processRequest();
 

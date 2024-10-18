@@ -28,8 +28,7 @@ public class UISnippetEntry extends UIWidget<UISnippetEntry> {
 
 private UISnippetsArea snippets;
 
-public UISnippetEntry(	SelenideElement e,
-						UISnippetsArea snippets) {
+public UISnippetEntry(SelenideElement e, UISnippetsArea snippets) {
 
 	super(e);
 
@@ -48,15 +47,14 @@ public int position() {
 }
 
 
-public boolean isSelected() {
-	return element.attr("class").contains("snippet-selected");
-}
+public boolean isSelected() { return element.attr("class").contains("snippet-selected"); }
 
 
 // we (ab)use the flexible constructor so the content is the snippets list, which is in fact
 // a content area
 public List<UICell> children() {
-	return element.$$(".cell-level-0")
+	return element
+			.$$(".cell-level-0")
 			.asFixedIterable()
 			.stream()
 			.map(e -> new UICell(e, new UIContent(snippets.element), Optional.empty(), 0))

@@ -21,7 +21,9 @@ public void testBooleanAttributeTrue() {
 	open(appBaseURL + "test/attribute-data-info-test/boolean-true");
 
 	UIAttributeData attribute = new UIAttributeData($(".attribute-data"));
-	assertAll("check boolean true", () -> assertNotNull(attribute),
+	assertAll(
+			"check boolean true",
+			() -> assertNotNull(attribute),
 			() -> assertTrue(attribute.isBoolean(), "attribute should be a boolean and it is not"),
 			() -> assertTrue(attribute.asBoolean(), "attribute should have the value 'true'"),
 			() -> assertFalse(attribute.isEditable()));
@@ -35,7 +37,9 @@ public void testBooleanAttributeFalse() {
 	open(appBaseURL + "test/attribute-data-info-test/boolean-false");
 
 	UIAttributeData attribute = new UIAttributeData($(".attribute-data"));
-	assertAll("check boolean false", () -> assertNotNull(attribute),
+	assertAll(
+			"check boolean false",
+			() -> assertNotNull(attribute),
 			() -> assertTrue(attribute.isBoolean(), "attribute should be a boolean and it is not"),
 			() -> assertFalse(attribute.asBoolean(), "attribute should have the value 'false'"));
 

@@ -35,7 +35,8 @@ private UIContent	content;
 public void setup() {
 
 	open(appBaseURL);
-	UIDocument document = UICatalogues.openCatalogues()
+	UIDocument document = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 2");
@@ -51,7 +52,8 @@ public void setup() {
 public void addAttributeTest() throws Exception {
 
 	// /test(0)/row(0)/col(0)/row(0)/col(0)/data(0)
-	UICell data = test.child("row(0)")
+	UICell data = test
+			.child("row(0)")
 			.child("col(0)")
 			.child("row(0)")
 			.child("col(0)")
@@ -61,7 +63,9 @@ public void addAttributeTest() throws Exception {
 	assertNotNull(data);
 
 	List<UIAttributeData> attributes = data.cellInfo().attributes();
-	assertEquals(1, attributes.size(),
+	assertEquals(
+			1,
+			attributes.size(),
 			"We should only have a single attribute before adding another");
 
 	UIAttributeData number = attributes.get(0);
@@ -93,7 +97,9 @@ public void addAttributeTest() throws Exception {
 	assertEquals(2, dataEditorCellData.attributes().size(), "We have now two attributes"); // awesome!
 
 	nonPresentAttributes = dataEditorCellData.notPresentAttributes();
-	assertEquals(0, nonPresentAttributes.size(),
+	assertEquals(
+			0,
+			nonPresentAttributes.size(),
 			"We do not have any remaining non-present attributes");
 
 }

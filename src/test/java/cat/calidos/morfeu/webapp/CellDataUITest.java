@@ -30,7 +30,8 @@ private UICell test;
 public void setup() {
 
 	open(appBaseURL);
-	UIContent content = UICatalogues.openCatalogues()
+	UIContent content = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1")
@@ -53,21 +54,26 @@ public void checkCellData() {
 	data.hover();
 	UICellData cellData = data.cellInfo();
 	assertNotNull(cellData);
-	assertFalse(cellData.isFromModel(),
+	assertFalse(
+			cellData.isFromModel(),
 			"cell data from hovering on a cell should not come from the model");
-	assertTrue(cellData.isFromCell(),
+	assertTrue(
+			cellData.isFromCell(),
 			"cell data from hovering on a cell should come from the cell");
 	assertFalse(cellData.isFromEditor(), "cell data from hovering should not be an editor");
 
 	String header = cellData.header();
-	assertTrue(header.contains("data"),
+	assertTrue(
+			header.contains("data"),
 			"Bad information cell, we did not get 'data' in the cell info header");
-	assertTrue(header.contains("[0..∞]"),
+	assertTrue(
+			header.contains("[0..∞]"),
 			"Bad information cell, should have 0 to ∞ as the cardinality of 'data'");
 
 	String desc = cellData.desc();
 	String expectedDesc = "Globally provided description of 'data'";
-	assertTrue(desc.contains(expectedDesc),
+	assertTrue(
+			desc.contains(expectedDesc),
 			"Bad information cell, does not have the correct description");
 
 	String uri = cellData.URI();
@@ -97,7 +103,8 @@ public void checkCellDataMissingAttributes() {
 
 	// this cell only has 'number' attribute and no 'text'
 	// target/test-classes/test-resources/documents/document1.xml/test(0)/row(0)/col(1)/row(0)/col(0)/data(0)
-	UICell data = test.child("row(0)")
+	UICell data = test
+			.child("row(0)")
 			.child("col(1)")
 			.child("row(0)")
 			.child("col(0)")
@@ -125,7 +132,8 @@ public void checkCellDataMissingAttributes() {
 @Test
 public void checkCellModelData() {
 
-	UIModel model = UICatalogues.openCatalogues()
+	UIModel model = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1")
@@ -138,20 +146,25 @@ public void checkCellModelData() {
 	UICellData.shouldNotBeVisible();
 	testModelEntry.hover();
 	UICellData testData = testModelEntry.cellInfo().shouldAppear();
-	assertTrue(testData.isFromModel(),
+	assertTrue(
+			testData.isFromModel(),
 			"cell data from hovering on the model should come from the model");
-	assertFalse(testData.isFromCell(),
+	assertFalse(
+			testData.isFromCell(),
 			"cell data from hovering on the model should come from the model");
 
 	String header = testData.header();
-	assertTrue(header.contains("test"),
+	assertTrue(
+			header.contains("test"),
 			"Bad information from model, we did not get 'test' in the cell info header");
-	assertTrue(header.contains("[1..1]"),
+	assertTrue(
+			header.contains("[1..1]"),
 			"Bad information from model, should have 1..1 as the cardinality of 'test'");
 
 	String desc = testData.desc();
 	String expectedDesc = "Root cell-model desc";
-	assertTrue(desc.contains(expectedDesc),
+	assertTrue(
+			desc.contains(expectedDesc),
 			"Bad information from model, does not have the correct description");
 
 	List<UIAttributeData> attributes = testData.attributes();

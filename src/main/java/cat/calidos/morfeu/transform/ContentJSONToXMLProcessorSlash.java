@@ -8,8 +8,7 @@ public class ContentJSONToXMLProcessorSlash implements Processor<JsonNode, Strin
 private String		prefix;
 private JsonNode	node;
 
-public ContentJSONToXMLProcessorSlash(	String prefix,
-										JsonNode node) {
+public ContentJSONToXMLProcessorSlash(String prefix, JsonNode node) {
 
 	this.prefix = prefix;
 	this.node = node;

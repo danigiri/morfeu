@@ -48,7 +48,8 @@ public String URI() {
 
 
 public List<String> extraInfo() {
-	return element.$$(".cell-data-extra-info")
+	return element
+			.$$(".cell-data-extra-info")
 			.asFixedIterable()
 			.stream()
 			.map(e -> e.text())
@@ -64,14 +65,10 @@ public boolean isFromCell() {
 }
 
 
-public boolean isFromModel() {
-	return !isFromCell();
-}
+public boolean isFromModel() { return !isFromCell(); }
 
 
-public boolean isFromEditor() {
-	return element.attr("id").contains("editor");
-}
+public boolean isFromEditor() { return element.attr("id").contains("editor"); }
 
 
 public List<UIAttributeData> attributes() {
@@ -112,7 +109,8 @@ public Optional<String> value() {
 
 
 private List<UIAttributeData> attributesOfClass(String class_) {
-	return element.$$(class_)
+	return element
+			.$$(class_)
 			.asFixedIterable()
 			.stream()
 			.map(e -> new UIAttributeData(e, this))

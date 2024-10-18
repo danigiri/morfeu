@@ -115,13 +115,15 @@ protected void compareWithXMLFile(	String content,
 	File originalFile = new File(path);
 	Source originalSource = Input.fromFile(originalFile).build();
 
-	Diff diff = DiffBuilder.compare(originalSource)
+	Diff diff = DiffBuilder
+			.compare(originalSource)
 			.withTest(transformedSource)
 			.ignoreComments()
 			.ignoreWhitespace()
 			.build();
 
-	assertFalse(diff.hasDifferences(),
+	assertFalse(
+			diff.hasDifferences(),
 			"Transformed JSON to XML should be the same as original" + diff.toString());
 
 }
@@ -133,13 +135,15 @@ protected void compareWithXML(	String content,
 	Source transformedSource = Input.fromString(content).build();
 	Source originalSource = Input.fromString(expected).build();
 
-	Diff diff = DiffBuilder.compare(originalSource)
+	Diff diff = DiffBuilder
+			.compare(originalSource)
 			.withTest(transformedSource)
 			.ignoreComments()
 			.ignoreWhitespace()
 			.build();
 
-	assertFalse(diff.hasDifferences(),
+	assertFalse(
+			diff.hasDifferences(),
 			"Transformed JSON to XML should be the same as original" + diff.toString());
 
 }

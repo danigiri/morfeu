@@ -108,8 +108,12 @@ public static Document normaliseDocumentURIs(	@Named("ParsedDocument") Document 
 												@Named("ContentURI") URI contentURI,
 												@Named("FetchableContentURI") URI fetchableContentURI) {
 
-	log.trace("[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]", prefix,
-			fetchableModelURI, contentURI);
+	log
+			.trace(
+					"[DocumentModule::normaliseDocumentURIs prefix={}, model={} content={}]",
+					prefix,
+					fetchableModelURI,
+					contentURI);
 
 	doc.setFetchableModelURI(fetchableModelURI);
 	doc.setContentURI(contentURI);

@@ -15,13 +15,8 @@ protected Composite<Cell>	children;
 protected Attributes<Cell>	attributes;
 private Attributes<Cell>	internalAttributes;
 
-public ComplexCell(	URI u,
-					String name,
-					String desc,
-					Optional<String> value,
-					CellModel cm,
-					Composite<Cell> children,
-					Attributes<Cell> attributes,
+public ComplexCell(	URI u, String name, String desc, Optional<String> value, CellModel cm,
+					Composite<Cell> children, Attributes<Cell> attributes,
 					Attributes<Cell> internalAttributes) {
 
 	super(u, name, desc, value, cm);

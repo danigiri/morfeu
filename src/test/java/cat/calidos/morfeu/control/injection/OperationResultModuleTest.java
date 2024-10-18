@@ -21,7 +21,9 @@ public void okResultTest() throws Exception {
 	assertNotNull(result);
 
 	JsonNode json = DaggerJSONParserComponent.builder().from(result).build().json().get();
-	assertAll("checking output", () -> assertNotNull(json),
+	assertAll(
+			"checking output",
+			() -> assertNotNull(json),
 			() -> assertEquals("aaa", json.get("result").asText()),
 			() -> assertEquals("bbb", json.get("target").asText()),
 			() -> assertEquals("ccc", json.get("operation").asText()),
@@ -36,7 +38,9 @@ public void koResultTest() throws Exception {
 	assertNotNull(result);
 
 	JsonNode json = DaggerJSONParserComponent.builder().from(result).build().json().get();
-	assertAll("checking output", () -> assertNotNull(json),
+	assertAll(
+			"checking output",
+			() -> assertNotNull(json),
 			() -> assertEquals("aax", json.get("result").asText()),
 			() -> assertEquals("bbx", json.get("target").asText()),
 			() -> assertEquals("ccx", json.get("operation").asText()),

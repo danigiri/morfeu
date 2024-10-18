@@ -24,8 +24,7 @@ import cat.calidos.morfeu.runtime.api.FinishedTask;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ExecFinishedTask extends ExecTask implements FinishedTask {
 
-public ExecFinishedTask(int type,
-						ProcessExecutor executor) {
+public ExecFinishedTask(int type, ProcessExecutor executor) {
 
 	super(type, FINISHED, executor);
 

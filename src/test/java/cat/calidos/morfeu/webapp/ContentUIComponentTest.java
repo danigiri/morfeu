@@ -40,11 +40,14 @@ public void testReadonlyCells() {
 
 	// target/test-classes/test-resources/documents/readonly.xml/test(0)/row(1)/col(0)/data(0)
 	UICell data0 = content.rootCells().get(0).child("row(1)").child("col(0)").child("data(0)");
-	assertAll("basic readonly checks", () -> assertNotNull(data0),
+	assertAll(
+			"basic readonly checks",
+			() -> assertNotNull(data0),
 			() -> assertFalse(data0.isReadonly()));
 
 	// target/test-classes/test-resources/documents/readonly.xml/test(0)/row(1)/col(0)/readonly(1)
-	UICell readonly1 = content.rootCells()
+	UICell readonly1 = content
+			.rootCells()
 			.get(0)
 			.child("row(1)")
 			.child("col(0)")
@@ -66,7 +69,9 @@ public void testCannotDeleteReadonlyCells() {
 	UICell readonly2AfterDelete = parent.child("readonly(1)");
 	assertNotNull(readonly2AfterDelete);
 	readonly2AfterDelete.shouldBeVisible();
-	assertAll("could not remove cell", () -> assertTrue(readonly2AfterDelete.isCell()),
+	assertAll(
+			"could not remove cell",
+			() -> assertTrue(readonly2AfterDelete.isCell()),
 			() -> assertEquals(3, parent.children().size()));
 
 }
@@ -75,7 +80,8 @@ public void testCannotDeleteReadonlyCells() {
 @Test @DisplayName("Cannot edit cells")
 public void testCannotEditReadonlyCells() {
 
-	UICell readonly1 = content.rootCells()
+	UICell readonly1 = content
+			.rootCells()
 			.get(0)
 			.child("row(1)")
 			.child("col(0)")

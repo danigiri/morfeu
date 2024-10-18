@@ -91,7 +91,11 @@ public void testProvideCellModel() throws Exception {
 	checkAttribute(numberAttribute, "number", "numberField", modelURI + "/test/row@number");
 
 	CellModel col = rowComplex.children().child("col"); // TEST -> ROW -> COL
-	checkComplexCellModel(col, "col", "Column, can accept content", "colCell",
+	checkComplexCellModel(
+			col,
+			"col",
+			"Column, can accept content",
+			"colCell",
 			modelURI + "/test/row/col");
 	assertEquals("COL-WELL", col.getMetadata().getPresentation());
 
@@ -103,7 +107,9 @@ public void testProvideCellModel() throws Exception {
 	assertEquals(1, sizeAttribute.getMinOccurs(), "Size attribute of columns should be compulsory");
 	assertEquals("COL-FIELD", sizeAttribute.getMetadata().getPresentation());
 	int childrenCount = colComplex.children().size();
-	assertEquals(EXPECTED_COL_CHILDREN_COUNT, childrenCount,
+	assertEquals(
+			EXPECTED_COL_CHILDREN_COUNT,
+			childrenCount,
 			"Column should have 9 children, not " + childrenCount);
 	assertTrue(colComplex.areChildrenOrdered());
 
@@ -111,11 +117,13 @@ public void testProvideCellModel() throws Exception {
 	String dataDesc = "Globally provided description of 'data'";
 	checkComplexCellModel(data, "data", dataDesc, "testCell", modelURI + "/test/row/col/data");
 	assertEquals(0, data.getMinOccurs(), "/test/row/col/data cell model should be min 0");
-	assertFalse(data.getMaxOccurs().isPresent(),
+	assertFalse(
+			data.getMaxOccurs().isPresent(),
 			"/test/row/col/data cell model should be unbounded");
 	ComplexCellModel dataComplex = data.asComplex();
 	String defaultTextAttributeFromGlobal = "Default value for text (from global)";
-	assertEquals(defaultTextAttributeFromGlobal,
+	assertEquals(
+			defaultTextAttributeFromGlobal,
 			dataComplex.attributes().attribute("text").getDefaultValue().get());
 	assertEquals("11", dataComplex.attributes().attribute("number").getDefaultValue().get()); // type
 																								// default
@@ -126,7 +134,9 @@ public void testProvideCellModel() throws Exception {
 	checkComplexCellModel(data2, "data2", data2Desc, "testCell", modelURI + "/test/row/col/data2");
 	assertEquals(0, data2.getMinOccurs(), "/test/row/col/data2 cell model should be min 0");
 	// model references keep local max counts
-	assertEquals(2, data2.getMaxOccurs().getAsInt(),
+	assertEquals(
+			2,
+			data2.getMaxOccurs().getAsInt(),
 			"/test/row/col/data2 cell model should be max 2");
 	// we only have the type default and nothing from global
 	ComplexCellModel data2Complex = data2.asComplex();
@@ -170,7 +180,9 @@ public void testColAndRowReference() throws Exception {
 	// we check the reference from row to col and so forth
 	CellModel rowRef = col.asComplex().children().child("row"); // TEST -> ROW -> COL -> ref(ROW)
 	assertTrue(rowRef.isReference());
-	assertEquals(row, rowRef.getReference().get(),
+	assertEquals(
+			row,
+			rowRef.getReference().get(),
 			"Row reference in col does not reference original");
 
 	// the row reference should have the same children as the original row
@@ -185,7 +197,9 @@ public void testColAndRowReference() throws Exception {
 	rowRef = holderWell.asComplex().children().child("row");
 	assertNotNull(rowRef);
 	assertTrue(rowRef.isReference());
-	assertEquals(row, rowRef.getReference().get(),
+	assertEquals(
+			row,
+			rowRef.getReference().get(),
 			"Row reference in col does not reference original");
 
 }
@@ -202,7 +216,8 @@ public void testAttributesOf() {
 
 	URI uri = CellModelModule.getURIFrom(modelURI + "/" + name, name);
 	HashMap<String, CellModel> globals = new HashMap<String, CellModel>();
-	Metadata meta = DaggerModelMetadataComponent.builder()
+	Metadata meta = DaggerModelMetadataComponent
+			.builder()
 			.from(elem.getAnnotation())
 			.withParentURI(modelURI)
 			.build()
@@ -224,7 +239,8 @@ public void testAttributesOf() {
 @Test
 public void testColorRestriction() throws Exception {
 
-	CellModel color = cellModelFrom(modelURI, "test").asComplex()
+	CellModel color = cellModelFrom(modelURI, "test")
+			.asComplex()
 			.children()
 			.child("row")
 			.asComplex()
@@ -246,7 +262,8 @@ public void testColorRestriction() throws Exception {
 @Test
 public void testPossibleValues() throws Exception {
 
-	CellModel list = cellModelFrom(modelURI, "test").asComplex()
+	CellModel list = cellModelFrom(modelURI, "test")
+			.asComplex()
 			.children()
 			.child("row")
 			.asComplex()
@@ -291,8 +308,8 @@ public void testAttributesDefaultValues() {
 			null, Optional.empty(), "valueLocator", defaultValues, null, null, "X", categories);
 	// when(mockCellMetadata.getDefaultValues()).thenReturn(defaultValues);
 
-	Attributes<CellModel> attributes = CellModelModule.attributesOf(elem, type, uri, cellMetadata,
-			globals);
+	Attributes<CellModel> attributes = CellModelModule
+			.attributesOf(elem, type, uri, cellMetadata, globals);
 	assertNotNull(attributes);
 
 	CellModel textAttribute = attributes.attribute("text");
@@ -312,8 +329,8 @@ public void testChildrenOf() {
 	Map<String, CellModel> globals = new HashMap<String, CellModel>(0);
 	Map<URI, Metadata> globalMetadata = new HashMap<URI, Metadata>(0);
 
-	Composite<CellModel> children = CellModelModule.childrenOf(elem, type, modelURI, globals,
-			globalMetadata);
+	Composite<CellModel> children = CellModelModule
+			.childrenOf(elem, type, modelURI, globals, globalMetadata);
 	CellModel row = children.child("row");
 	assertEquals("row", row.getName());
 	assertEquals(row, children.child(0));

@@ -32,8 +32,7 @@ private boolean		needToRender;
 private boolean	hasValue;
 private String	value;
 
-public ContentJSONToXMLProcessor(	String prefix,
-									JsonNode node) {
+public ContentJSONToXMLProcessor(String prefix, JsonNode node) {
 
 	this.prefix = prefix;
 	this.node = node;
@@ -64,11 +63,14 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 		// if we have a value we do not add a prefix to the slash so we don't implicitly add the
 		// prefix to the value
 		var appliedPrefix = hasValue ? "" : prefix;
-		newContext.push(DaggerContentJSONToXMLComponent.builder()
-				.fromNode(node)
-				.withPrefix(appliedPrefix)
-				.build()
-				.processorSlash());
+		newContext
+				.push(
+						DaggerContentJSONToXMLComponent
+								.builder()
+								.fromNode(node)
+								.withPrefix(appliedPrefix)
+								.build()
+								.processorSlash());
 
 	}
 
@@ -78,13 +80,18 @@ public Context<JsonNode, String> generateNewContext(Context<JsonNode, String> ol
 		JsonNode children = node.get(CHILDREN_FIELD); // adding directly to the context will mean
 														// reverse order
 		var childrenList = new LinkedList<Processor<JsonNode, String>>();
-		children.forEach(c -> childrenList.addFirst(DaggerContentJSONToXMLComponent.builder() // add
-																								// at
-																								// beginning
-				.fromNode(c)
-				.withPrefix(newPrefix)
-				.build()
-				.processor()));
+		children
+				.forEach(
+						c -> childrenList
+								.addFirst(
+										DaggerContentJSONToXMLComponent
+												.builder() // add
+															// at
+															// beginning
+												.fromNode(c)
+												.withPrefix(newPrefix)
+												.build()
+												.processor()));
 		childrenList.forEach(newContext::push); // now this is in the correct order
 	}
 
@@ -105,8 +112,8 @@ public String output() {
 	var render = "";
 	if (needToRender) {
 		var name = node.get(NAME_FIELD).asText();
-		Map<String, Object> v = MorfeuUtils.paramMap(NAME_FIELD, name, "value", value, "pref",
-				prefix, "node", node);
+		Map<String, Object> v = MorfeuUtils
+				.paramMap(NAME_FIELD, name, "value", value, "pref", prefix, "node", node);
 		String template = null;
 		if (!hasChildren && !hasValue) {
 			template = "\n${v.pref}<${v.name}" // - postfix
@@ -129,7 +136,8 @@ public String output() {
 			// note ContentJSONToXMLProcessorSlash that is on the stack generates the slash
 		}
 
-		ViewComponent view = DaggerViewComponent.builder()
+		ViewComponent view = DaggerViewComponent
+				.builder()
 				.withValue(v)
 				.withTemplate(template)
 				.andProblem("")

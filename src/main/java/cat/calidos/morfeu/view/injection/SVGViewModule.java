@@ -149,8 +149,8 @@ public static SVGGraphics2D completedGraphics(	boolean truncate,
 public static SVGGraphics2D graphicsShortText(	@Named("EffectiveText") String content,
 												SVGGraphics2D generator) {
 
-	String truncatedContent = content.substring(0,
-			Math.min(content.length(), TRUNCATE_TEXT_LENGHT));
+	String truncatedContent = content
+			.substring(0, Math.min(content.length(), TRUNCATE_TEXT_LENGHT));
 	generator.drawString(truncatedContent, TEXT_START, TEXT_START * 3);
 
 	return generator;
@@ -186,7 +186,7 @@ public static SVGGraphics2D graphicsLongText(	LineBreakMeasurer lineMeasurer,
 }
 
 /*
- * Copyright 2018 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at

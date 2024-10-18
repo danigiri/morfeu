@@ -23,12 +23,16 @@ public void testColData() {
 	UICellData cellData = new UICellData();
 	cellData.shouldBeVisible();
 
-	assertAll("check basics", () -> assertTrue(cellData.isFromCell()),
+	assertAll(
+			"check basics",
+			() -> assertTrue(cellData.isFromCell()),
 			() -> assertEquals("col [0..∞]", cellData.header()),
 			() -> assertEquals("Column, can accept content", cellData.desc()));
 
 	List<String> extraInfo = cellData.extraInfo();
-	assertAll("check extra info", () -> assertNotNull(extraInfo),
+	assertAll(
+			"check extra info",
+			() -> assertNotNull(extraInfo),
 			() -> assertEquals(1, extraInfo.size()),
 			() -> assertTrue(extraInfo.contains("[Children need to be in order]")));
 

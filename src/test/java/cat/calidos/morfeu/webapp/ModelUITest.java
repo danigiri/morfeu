@@ -83,7 +83,8 @@ public void documentWithNonValidModelIsSelected() {
 @Test
 public void testCellModels() {
 
-	UIModel model = UICatalogues.openCatalogues()
+	UIModel model = UICatalogues
+			.openCatalogues()
 			.shouldAppear()
 			.clickOn(0)
 			.clickOnDocumentNamed("Document 1")
@@ -124,7 +125,9 @@ public void testCellModels() {
 	List<UICellModelEntry> colChildren = colModel.children(); // TEST/ROW/COL/*
 	int colChildrenSize = colChildren.size();
 	int expectedCount = ModelTezt.EXPECTED_COL_CHILDREN_COUNT;
-	assertEquals(expectedCount, colChildrenSize,
+	assertEquals(
+			expectedCount,
+			colChildrenSize,
 			"col model should have 10 children, not " + colChildrenSize);
 
 	assertEquals("stuff", colChildren.get(0).name());

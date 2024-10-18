@@ -40,7 +40,8 @@ public void testTransform() throws Exception {
 
 	String transforms = "string-to-json;content-to-xml";
 
-	Filter<String, String> transform = DaggerFilterComponent.builder()
+	Filter<String, String> transform = DaggerFilterComponent
+			.builder()
 			.filters(transforms)
 			.build()
 			.stringToString()

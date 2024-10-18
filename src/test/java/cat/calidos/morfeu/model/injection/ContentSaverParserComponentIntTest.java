@@ -69,7 +69,8 @@ public void setup() throws Exception {
 public void testValidateString() throws Exception {
 
 	URI outputURI = new URI("file://" + temporaryOutputFilePathIn(tmpPath));
-	ContentSaverParserComponent contentComp = DaggerContentSaverParserComponent.builder()
+	ContentSaverParserComponent contentComp = DaggerContentSaverParserComponent
+			.builder()
 			.from(content)
 			.to(outputURI)
 			.having(contentURI)
@@ -85,10 +86,14 @@ public void testValidateString() throws Exception {
 	Composite<Cell> rootCells = contentComp.content().get();
 	assertNotNull(rootCells);
 
-	assertEquals(1, rootCells.size(),
+	assertEquals(
+			1,
+			rootCells.size(),
 			"Wrong size of content root from 'content saver parser' parsed XML string");
 	Cell test = rootCells.child(0).asComplex().children().child("test(0)"); // skip virtual root
-	assertEquals("test", test.getName(),
+	assertEquals(
+			"test",
+			test.getName(),
 			"Wrong root node name from 'content saver parser' parsed XML string");
 
 }
@@ -103,7 +108,8 @@ public void testNonValidString() throws Exception {
 	URI fullContentURI = new URI(fullContentPath);
 	String content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 
-	Validable validator = DaggerContentSaverParserComponent.builder()
+	Validable validator = DaggerContentSaverParserComponent
+			.builder()
 			.from(content)
 			.to(outputURI)
 			.having(new URI(contentPath))
@@ -114,11 +120,13 @@ public void testNonValidString() throws Exception {
 			.get();
 
 	try {
-		System.out.println(
-				"Please ignore next ParsingException, it is expected as we are testing non valid str");
+		System.out
+				.println(
+						"Please ignore next ParsingException, it is expected as we are testing non valid str");
 		validator.validate();
 	} catch (ValidationException e) {
-		assertTrue(e.getMessage().contains("notvalid"),
+		assertTrue(
+				e.getMessage().contains("notvalid"),
 				"Wrong exception message parsing of 'content saver parser'");
 	}
 
@@ -131,7 +139,8 @@ public void testSaveToXML() throws Exception {
 	String outputPath = temporaryOutputFilePathIn(tmpPath);
 	URI outputURI = new URI("file://" + outputPath);
 
-	Saver saver = DaggerContentSaverParserComponent.builder()
+	Saver saver = DaggerContentSaverParserComponent
+			.builder()
 			.from(content)
 			.to(outputURI)
 			.having(contentURI)
@@ -162,7 +171,8 @@ public void testSaveToYAML() throws Exception {
 	String outputPath = temporaryOutputFilePathIn(tmpPath) + ".yaml";
 	URI outputURI = new URI("file://" + outputPath);
 
-	Saver saver = DaggerContentSaverParserComponent.builder()
+	Saver saver = DaggerContentSaverParserComponent
+			.builder()
 			.from(content)
 			.to(outputURI)
 			.having(contentURI)
@@ -189,7 +199,8 @@ public void testSaveToJSON() throws Exception {
 	String outputPath = temporaryOutputFilePathIn(tmpPath) + ".json";
 	URI outputURI = new URI("file://" + outputPath);
 
-	Saver saver = DaggerContentSaverParserComponent.builder()
+	Saver saver = DaggerContentSaverParserComponent
+			.builder()
 			.from(content)
 			.to(outputURI)
 			.having(contentURI)
@@ -217,7 +228,8 @@ public void testSaveToFiltersYAML() throws Exception {
 	URI outputURI = new URI("file://" + outputPath);
 
 	String filters = "content-to-yaml;replace{\"replacements\":{\"from\":\"blahblah\", \"to\":\"YEAH\"}}";
-	Saver saver = DaggerContentSaverParserComponent.builder()
+	Saver saver = DaggerContentSaverParserComponent
+			.builder()
 			.from(content)
 			.filters(filters)
 			.to(outputURI)
@@ -236,7 +248,9 @@ public void testSaveToFiltersYAML() throws Exception {
 	YAMLMapper mapper = new YAMLMapper();
 	checkYAMLContent(writtenContent, mapper);
 
-	assertAll("Check replace was applied", () -> assertFalse(writtenContent.contains("blahblah")),
+	assertAll(
+			"Check replace was applied",
+			() -> assertFalse(writtenContent.contains("blahblah")),
 			() -> assertTrue(writtenContent.contains("YEAH")));
 
 }
@@ -249,7 +263,8 @@ public void testSaveToFilters() throws Exception {
 	URI outputURI = new URI("file://" + outputPath);
 
 	String filters = "map-to-string{\"key\":\"xml\"};replace{\"replacements\":{\"from\":\"blahblah\",\"to\":\"YEAH\"}}";
-	Saver saver = DaggerContentSaverParserComponent.builder()
+	Saver saver = DaggerContentSaverParserComponent
+			.builder()
 			.from(content)
 			.filters(filters)
 			.to(outputURI)
@@ -264,14 +279,17 @@ public void testSaveToFilters() throws Exception {
 
 	String writtenContent = FileUtils.readFileToString(savedFile, Config.DEFAULT_CHARSET);
 	// System.err.println(writtenContent);
-	org.w3c.dom.Document doc = DaggerXMLParserComponent.builder()
+	org.w3c.dom.Document doc = DaggerXMLParserComponent
+			.builder()
 			.withContent(writtenContent)
 			.build()
 			.document()
 			.get();
 	assertNotNull(doc); // no exception here means parse was OK
 
-	assertAll("Check replace was applied", () -> assertFalse(writtenContent.contains("blahblah")),
+	assertAll(
+			"Check replace was applied",
+			() -> assertFalse(writtenContent.contains("blahblah")),
 			() -> assertTrue(writtenContent.contains("YEAH")));
 
 }
@@ -282,11 +300,17 @@ private void checkYAMLContent(	String writtenContent,
 		throws IOException {
 
 	JsonNode node = mapper.readTree(writtenContent);
-	assertAll("check content", () -> assertNotNull(node), () -> assertTrue(node.isObject()),
+	assertAll(
+			"check content",
+			() -> assertNotNull(node),
+			() -> assertTrue(node.isObject()),
 			() -> assertTrue(node.has("rows")));
 
 	JsonNode rows = node.get("rows"); // rows
-	assertAll("check rows", () -> assertNotNull(rows), () -> assertTrue(rows.isArray()),
+	assertAll(
+			"check rows",
+			() -> assertNotNull(rows),
+			() -> assertTrue(rows.isArray()),
 			() -> assertEquals(1, rows.size()));
 
 	JsonNode cols = rows.get(0).get("cols");

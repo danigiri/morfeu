@@ -20,7 +20,8 @@ protected String transformYAMLToXML(String yamlPath,
 
 	Document doc = produceDocumentFromPath(documentPath);
 	JsonNode yaml = readYAMLFrom(yamlPath);
-	String transformed = DaggerYAMLConverterComponent.builder()
+	String transformed = DaggerYAMLConverterComponent
+			.builder()
 			.from(yaml)
 			.given(doc.getModel())
 			.build()

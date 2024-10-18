@@ -31,9 +31,7 @@ public StoppingOutputProcessor(Function<String, Integer> matcher) {
 }
 
 
-public void setTask(ExecStoppingTask execStoppingTask) {
-	this.task = execStoppingTask;
-}
+public void setTask(ExecStoppingTask execStoppingTask) { this.task = execStoppingTask; }
 
 
 @Override

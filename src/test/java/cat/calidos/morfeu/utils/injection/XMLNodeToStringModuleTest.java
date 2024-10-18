@@ -50,7 +50,8 @@ public void testGenerateXMLNode() throws Exception {
 
 	Document doc = DaggerXMLParserComponent.builder().withContent(content).build().document().get();
 
-	Node node = doc.getChildNodes()
+	Node node = doc
+			.getChildNodes()
 			.item(0)
 			.getChildNodes()
 			.item(1)
