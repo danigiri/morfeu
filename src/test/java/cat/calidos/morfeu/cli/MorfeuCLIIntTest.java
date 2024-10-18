@@ -12,7 +12,7 @@ import cat.calidos.morfeu.utils.Pair;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 
 
-public class MorfeuCLITest extends ModelTezt {
+public class MorfeuCLIIntTest extends ModelTezt {
 
 @Test @DisplayName("Content parse test")
 public void parseContent() throws Exception {

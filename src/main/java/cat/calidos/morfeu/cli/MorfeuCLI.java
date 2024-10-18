@@ -13,7 +13,7 @@ import cat.calidos.morfeu.utils.Pair;
 
 
 /**
- * Utility CLI helpful for diagnostics Example usage: 
+ * Utility CLI helpful for diagnostics 
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
 @Command(name = "MorfeuCLI", version = "MorfeuCLI 0.8", mixinStandardHelpOptions = true)
