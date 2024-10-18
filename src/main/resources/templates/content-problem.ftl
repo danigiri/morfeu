@@ -1,7 +1,7 @@
 {
 	"schema": 0
 	,cells: []
-	<#if problem!=null><#t>
+	<#if problem??><#t>
 		,"problem": "${ problem }"
 	</#if><#t>
 }
