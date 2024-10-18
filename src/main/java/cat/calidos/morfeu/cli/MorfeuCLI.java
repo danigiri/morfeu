@@ -14,8 +14,6 @@ import cat.calidos.morfeu.utils.Pair;
 
 /**
  * Utility CLI helpful for diagnostics Example usage: 
- * 
-alias MorfeuCLI="java -cp $PWD/target/morfeu-webapp-0.8.23-SNAPSHOT-classes.jar:$PWD/target/morfeu-webapp-0.8.23-SNAPSHOT-jar-with-dependencies.jar cat.calidos.morfeu.cli.MorfeuCLI" * 
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
 @Command(name = "MorfeuCLI", version = "MorfeuCLI 0.8", mixinStandardHelpOptions = true)
