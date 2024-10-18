@@ -1,6 +1,5 @@
 package cat.calidos.morfeu.cli;
 
-import java.io.PrintStream;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
@@ -14,14 +13,15 @@ import cat.calidos.morfeu.utils.Pair;
 
 
 /**
- * Utility CLI helpful for diagnostics Example usage: `java -cp
- * "target/morfeu-webapp-*-SNAPSHOT/WEB-INF/lib/picocli-4.7.6.jar:target/classes" \
- * cat.calidos.morfeu.cli.MorfeuCLIParser`
+ * Utility CLI helpful for diagnostics Example usage: 
  * 
+alias MorfeuCLI="java -cp $PWD/target/morfeu-webapp-0.8.23-SNAPSHOT-classes.jar:$PWD/target/morfeu-webapp-0.8.23-SNAPSHOT-jar-with-dependencies.jar cat.calidos.morfeu.cli.MorfeuCLI" * 
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
-@Command(name = "MorfeuCLIParser", version = "MorfeuParser 0.8", mixinStandardHelpOptions = true)
-public class MorfeuCLIParser implements Callable<Integer> {
+@Command(name = "MorfeuCLI", version = "MorfeuCLI 0.8", mixinStandardHelpOptions = true)
+public class MorfeuCLI implements Callable<Integer> {
+
+public static final String PARSE = "parse";
 
 @Option(names = "--model", description = "model to use")
 String modelPath;
@@ -35,6 +35,9 @@ String filters;
 @Option(names = {"-q", "--quiet"}, description = "do not print anything")
 boolean quiet = false;
 
+@Parameters(description = "command {parse|}")
+String command;
+
 @Parameters(description = "content to parse")
 String path;
 
@@ -44,12 +47,14 @@ private String output;
 @Override
 public Integer call() {
 
-	Optional<String> appliedfilters = Optional.ofNullable(filters);
-	prefix = prefix == null ? "file://" + System.getProperty("user.dir") : prefix;
-	// we can happily reuse the content controller
-	output = new ContentGETControl(prefix, path, appliedfilters, modelPath).processRequest();
-	if (!quiet) {
-		System.out.println(output);
+	if (command.equalsIgnoreCase(PARSE)) {
+		Optional<String> appliedfilters = Optional.ofNullable(filters);
+		prefix = prefix == null ? "file://" + System.getProperty("user.dir") : prefix;
+		// we can happily reuse the content controller
+		output = new ContentGETControl(prefix, path, appliedfilters, modelPath).processRequest();
+		if (!quiet) {
+			System.out.println(output);
+		}
 	}
 
 	return 0;
@@ -62,7 +67,7 @@ public static void main(String[] args) {
 
 // this decoupling is useful to do testing of the implementation
 public static Pair<Integer, String> mainImpl(String[] args) {
-	MorfeuCLIParser cli = new MorfeuCLIParser();
+	MorfeuCLI cli = new MorfeuCLI();
 	int code = new CommandLine(cli).execute(args);
 	return Pair.of(code, cli.getOutput());
 }

@@ -2,9 +2,6 @@ package cat.calidos.morfeu.cli;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,17 +12,17 @@ import cat.calidos.morfeu.utils.Pair;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 
 
-public class MorfeuCLIParserTest extends ModelTezt {
+public class MorfeuCLITest extends ModelTezt {
 
-@Test @DisplayName("Content GET test")
+@Test @DisplayName("Content parse test")
 public void parseContent() throws Exception {
 
 	String prefix = testAwareFullPathFrom(".");
 	String path = "test-resources/documents/document1.xml";
 	String model = "test-resources/models/test-model.xsd";
 
-	Pair<Integer, String> result = MorfeuCLIParser
-			.mainImpl(new String[] { "-q", "--model", model, "--prefix", prefix, path });
+	var args = new String[] { "-q", "--model", model, "--prefix", prefix, MorfeuCLI.PARSE, path };
+	Pair<Integer, String> result = MorfeuCLI.mainImpl(args);
 
 	assertEquals(0, result.getLeft());
 
