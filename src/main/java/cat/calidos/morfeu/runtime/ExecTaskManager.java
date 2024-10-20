@@ -42,17 +42,14 @@ public List<ExecTask> getTasks() {
 
 
 public OptionalInt getStatusOfTask(String id) {
-
 	ExecTask task = tasks.get(id);
-
 	return task == null ? OptionalInt.empty() : OptionalInt.of(task.getStatus());
-
 }
 
 }
 
 /*
- * Copyright 2018 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at

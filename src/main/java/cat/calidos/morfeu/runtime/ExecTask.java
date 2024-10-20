@@ -71,7 +71,7 @@ public void startRedirectingOutput() {
 	// they are called
 	// from within a callback, they have no effect, so we use a level of indirection
 
-	System.out.println("REDIRECTING (INDIRECTLY) IN " + this.translate(status));
+	System.err.println("REDIRECTING (INDIRECTLY) IN " + this.translate(status));
 	problemProcessorWrapper.setIndirectProcessor(problemMatcher);
 	outputProcessorWrapper.setIndirectProcessor(logMatcher);
 	executor.redirectError(problemProcessorWrapper);
