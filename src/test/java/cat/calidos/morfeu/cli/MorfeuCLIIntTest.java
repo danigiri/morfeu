@@ -22,13 +22,14 @@ public void parseContent() throws Exception {
 	String model = "test-resources/models/test-model.xsd";
 
 	var args = new String[] { "-q", "--model", model, "--prefix", prefix, MorfeuCLI.PARSE, path };
-	Pair<Integer, String> result = MorfeuCLI.mainImpl(args);
+	Pair<Integer, String> result = MorfeuCLI.mainImpl(new MorfeuCLI(), args);
 
 	assertEquals(0, result.getLeft());
 
-	// the printer in its wisdom appends the classname at the end of the dump
-	String outputStr = result.getRight().toString().replaceAll("java\\.io\\.PrintStream@.*$", "");
+	String outputStr = result.getRight();
+	assertNotNull(outputStr);
 	// System.out.println(outputStr);
+
 	JsonNode json = DaggerJSONParserComponent.builder().from(outputStr).build().json().get();
 	assertAll(
 			"basic structure of the json output",

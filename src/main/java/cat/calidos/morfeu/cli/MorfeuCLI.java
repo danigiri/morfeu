@@ -3,13 +3,11 @@ package cat.calidos.morfeu.cli;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import cat.calidos.morfeu.control.ContentGETControl;
-import cat.calidos.morfeu.utils.Pair;
 
 
 /**
@@ -18,14 +16,14 @@ import cat.calidos.morfeu.utils.Pair;
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
 @Command(name = "MorfeuCLI", version = "MorfeuCLI 0.8", mixinStandardHelpOptions = true)
-public class MorfeuCLI implements Callable<Integer> {
+public class MorfeuCLI extends MorfeuBaseCLI implements Callable<Integer> {
 
 public static final String PARSE = "parse";
 
 @Option(names = "--model", description = "model to use")
 String modelPath;
 
-@Option(names = "--prefix", description = "model to use (default is file://cwd)")
+@Option(names = "--prefix", description = "model to use (default is file://<cwd>)")
 String prefix;
 
 @Option(names = "--filters", description = "filters")
@@ -39,8 +37,6 @@ String command;
 
 @Parameters(description = "content to parse")
 String path;
-
-private String output;
 
 @Override
 public Integer call() {
@@ -60,20 +56,8 @@ public Integer call() {
 
 
 public static void main(String[] args) {
-	int exitCode = mainImpl(args).getLeft();
-	System.exit(exitCode);
+	System.exit(MorfeuCLI.mainImpl(new MorfeuCLI(), args).getLeft());
 }
-
-
-// this decoupling is useful to do testing of the implementation
-public static Pair<Integer, String> mainImpl(String[] args) {
-	MorfeuCLI cli = new MorfeuCLI();
-	int code = new CommandLine(cli).execute(args);
-	return Pair.of(code, cli.getOutput());
-}
-
-
-public String getOutput() { return output; }
 
 }
 
