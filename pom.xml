@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cat.calidos.morfeu</groupId>
 	<artifactId>morfeu-webapp</artifactId>
-	<version>0.8.23</version>
+	<version>0.8.24-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Morfeu web application</name>
@@ -44,7 +44,7 @@
 		<connection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</connection>
 		<url>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</url>
 		<developerConnection>scm:git:git@${scm.host_}:${developer.id_}/morfeu.git</developerConnection>
-		<tag>v0.8.23</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<build>
