@@ -20,13 +20,13 @@ public class MorfeuCLI extends MorfeuBaseCLI implements Callable<Integer> {
 
 public static final String PARSE = "parse";
 
-@Option(names = "--model", description = "model to use")
+@Option(names = "--model", required = true, description = "model to use")
 String modelPath;
 
 @Option(names = "--prefix", description = "model to use (default is file://<cwd>)")
 String prefix;
 
-@Option(names = "--filters", description = "filters")
+@Option(names = "--filters", description = "filters (default is no filtering)")
 String filters;
 
 @Option(names = { "-q", "--quiet" }, description = "do not print anything")
