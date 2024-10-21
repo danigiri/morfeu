@@ -63,6 +63,7 @@ public ContentSaveControl(	String prefix, String path, String content, Optional<
 	resultMetadata.put("operation", "FileSaver");
 	resultMetadata.put("filters", filters.orElse(""));
 	resultMetadata.put("operationTime", "-1");
+	resultMetadata.put("result", "Not set");
 
 }
 
