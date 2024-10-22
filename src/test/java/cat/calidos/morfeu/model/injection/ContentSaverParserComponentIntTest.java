@@ -50,14 +50,14 @@ public static void teardownClass() throws InterruptedException {
 @BeforeEach
 public void setup() throws Exception {
 
-	String modelPath = "test-resources/models/test-model.xsd";
+	var modelPath = "test-resources/models/test-model.xsd";
 	modelURI = new URI(modelPath);
 	modelFetchableURI = new URI("target/test-classes/" + modelPath);
 
-	String contentPath = "test-resources/documents/document1.xml";
+	var contentPath = "test-resources/documents/document1.xml";
 	contentURI = new URI(contentPath);
 	String fullContentPath = testAwareFullPathFrom(contentPath);
-	URI fullContentURI = new URI(fullContentPath);
+	var fullContentURI = new URI(fullContentPath);
 	content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 
 	tmpPath = setupTempDirectory().getAbsolutePath();
@@ -68,7 +68,7 @@ public void setup() throws Exception {
 @Test @DisplayName("Validate string parsing")
 public void testValidateString() throws Exception {
 
-	URI outputURI = new URI("file://" + temporaryOutputFilePathIn(tmpPath));
+	var outputURI = new URI("file://" + temporaryOutputFilePathIn(tmpPath));
 	ContentSaverParserComponent contentComp = DaggerContentSaverParserComponent
 			.builder()
 			.from(content)
@@ -102,10 +102,10 @@ public void testValidateString() throws Exception {
 @Test @DisplayName("Non valid string parsing")
 public void testNonValidString() throws Exception {
 
-	URI outputURI = new URI("file://" + temporaryOutputFilePathIn(tmpPath));
-	String contentPath = "test-resources/documents/nonvalid-document.xml";
+	var outputURI = new URI("file://" + temporaryOutputFilePathIn(tmpPath));
+	var contentPath = "test-resources/documents/nonvalid-document.xml";
 	String fullContentPath = testAwareFullPathFrom(contentPath);
-	URI fullContentURI = new URI(fullContentPath);
+	var fullContentURI = new URI(fullContentPath);
 	String content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
 
 	Validable validator = DaggerContentSaverParserComponent
@@ -137,7 +137,7 @@ public void testNonValidString() throws Exception {
 public void testSaveToXML() throws Exception {
 
 	String outputPath = temporaryOutputFilePathIn(tmpPath);
-	URI outputURI = new URI("file://" + outputPath);
+	var outputURI = new URI("file://" + outputPath);
 
 	Saver saver = DaggerContentSaverParserComponent
 			.builder()

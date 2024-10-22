@@ -82,7 +82,7 @@ protected CellModel cellModelFrom(	URI u,
 
 	XSSchemaSet schemaSet = parseSchemaFrom(u);
 	XSElementDecl elem = schemaSet.getElementDecl(Model.MODEL_NAMESPACE, name);
-	Map<String, CellModel> globals = new HashMap<String, CellModel>();
+	var globals = new HashMap<String, CellModel>();
 	XSAnnotation annotation = schemaSet.getSchema(Model.MODEL_NAMESPACE).getAnnotation();
 	Map<URI, Metadata> globalMetadata = GlobalModelMetadataModule
 			.provideGlobalModelMetadata(annotation, u);
@@ -138,8 +138,8 @@ protected Type provideElementType(XSElementDecl elem) {
 
 protected JsonNode readYAMLFrom(String path) throws Exception {
 
-	YAMLMapper mapper = new YAMLMapper();
-	File inputFile = new File(path);
+	var mapper = new YAMLMapper();
+	var inputFile = new File(path);
 	String content = FileUtils.readFileToString(inputFile, Config.DEFAULT_CHARSET);
 	JsonNode yaml = mapper.readTree(content);
 
@@ -150,7 +150,7 @@ protected JsonNode readYAMLFrom(String path) throws Exception {
 
 protected Map<String, Object> valueMapFrom(Document doc) {
 
-	Map<String, Object> values = new HashMap<String, Object>(2);
+	var values = new HashMap<String, Object>(2);
 	values.put("cells", doc.children()); // skip document, do not skip root node and it's more
 											// compatible
 	values.put("model", doc.getModel());
