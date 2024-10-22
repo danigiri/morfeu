@@ -8,6 +8,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 
 import javax.xml.transform.Source;
@@ -168,6 +170,17 @@ protected void sleep(Duration duration) {
 	} catch (InterruptedException e) {
 		e.printStackTrace();
 	}
+}
+
+
+protected String readFromFile(String contentPath) throws URISyntaxException, IOException {
+
+	String fullContentPath = testAwareFullPathFrom(contentPath);
+	var fullContentURI = new URI(fullContentPath);
+	String content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
+
+	return content;
+
 }
 
 }

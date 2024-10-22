@@ -3,12 +3,8 @@ package cat.calidos.morfeu.control;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +13,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import cat.calidos.morfeu.model.injection.ModelTezt;
-import cat.calidos.morfeu.utils.Config;
 
 
 /**
@@ -35,7 +30,7 @@ private String	modelPath;
 public void setup() throws Exception {
 
 	prefix = testAwareFullPathFrom(".");
-	path = "ctrl-save-output-document1.xml";
+	path = temporaryOutputFilePathIn(".");
 	content = readFromFile("test-resources/transform/document1-as-view.json");
 	modelPath = "test-resources/models/test-model.xsd";
 
@@ -59,7 +54,7 @@ public void contentSave() throws Exception {
 @Test @DisplayName("Content save with filter test")
 public void contentSaveWithFilter() throws Exception {
 
-	String filter = "map-to-string{\"key\":\"xml\"};"
+	var filter = "map-to-string{\"key\":\"xml\"};"
 			+ "replace{\"replacements\":{\"from\":\"blahblah\", \"to\":\"HELLO\"}}";
 	ContentSaveControl ctrl = new ContentSaveControl(prefix, path, content, Optional.of(filter),
 			modelPath);
@@ -82,17 +77,6 @@ public void teardown() {
 	if (file.exists()) {
 		file.delete();
 	}
-
-}
-
-
-private String readFromFile(String contentPath) throws URISyntaxException, IOException {
-
-	String fullContentPath = testAwareFullPathFrom(contentPath);
-	URI fullContentURI = new URI(fullContentPath);
-	String content = IOUtils.toString(fullContentURI, Config.DEFAULT_CHARSET);
-
-	return content;
 
 }
 

@@ -1,11 +1,17 @@
 package cat.calidos.morfeu.cli;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import cat.calidos.morfeu.utils.Pair;
 import picocli.CommandLine;
 
 
 public abstract class MorfeuBaseCLI {
 
+public static final int EX_OK = 0;
+public static final int EX_NOINPUT = -66;
 protected String output;
 
 public static Pair<Integer, String> mainImpl(	MorfeuBaseCLI cli,
@@ -16,6 +22,18 @@ public static Pair<Integer, String> mainImpl(	MorfeuBaseCLI cli,
 
 
 public String getOutput() { return output; }
+
+
+protected String readSystemIn() throws IOException {
+
+	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	StringBuilder inputBuilder = new StringBuilder();
+	String line;
+	while ((line = reader.readLine()) != null) {
+		inputBuilder.append(line).append("\n");
+	}
+	return inputBuilder.toString();
+}
 
 }
 

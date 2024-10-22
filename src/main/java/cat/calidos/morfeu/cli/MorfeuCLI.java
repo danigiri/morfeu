@@ -1,5 +1,6 @@
 package cat.calidos.morfeu.cli;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
@@ -8,6 +9,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import cat.calidos.morfeu.control.ContentGETControl;
+import cat.calidos.morfeu.control.ContentSaveControl;
 
 
 /**
@@ -18,12 +20,13 @@ import cat.calidos.morfeu.control.ContentGETControl;
 @Command(name = "MorfeuCLI", version = "MorfeuCLI 0.8", mixinStandardHelpOptions = true)
 public class MorfeuCLI extends MorfeuBaseCLI implements Callable<Integer> {
 
-public static final String PARSE = "parse";
+public static final String	PARSE	= "parse";
+public static final String	SAVE	= "save";
 
-@Option(names = "--model", required = true, description = "model to use")
+@Option(names = {"-m", "--model"}, required = true, description = "model to use")
 String modelPath;
 
-@Option(names = "--prefix", description = "model to use (default is file://<cwd>)")
+@Option(names = {"-p", "--prefix"}, description = "model to use (default is file://<cwd>)")
 String prefix;
 
 @Option(names = "--filters", description = "filters (default is no filtering)")
@@ -32,26 +35,34 @@ String filters;
 @Option(names = { "-q", "--quiet" }, description = "do not print anything")
 boolean quiet = false;
 
-@Parameters(description = "command {parse|}")
+@Parameters(description = "command {parse|save}")
 String command;
 
-@Parameters(description = "content to parse")
+@Parameters(description = "content to parse or destination to save into")
 String path;
 
 @Override
 public Integer call() {
 
+	Optional<String> appliedfilters = Optional.ofNullable(filters);
+	prefix = prefix == null ? "file://" + System.getProperty("user.dir") : prefix;
+	// we can happily reuse the content controllers
 	if (command.equalsIgnoreCase(PARSE)) {
-		Optional<String> appliedfilters = Optional.ofNullable(filters);
-		prefix = prefix == null ? "file://" + System.getProperty("user.dir") : prefix;
-		// we can happily reuse the content controller
 		output = new ContentGETControl(prefix, path, appliedfilters, modelPath).processRequest();
-		if (!quiet) {
-			System.out.println(output);
+	} else if (command.equalsIgnoreCase(SAVE)) {
+		String content;
+		try {
+			content = readSystemIn();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return EX_NOINPUT;
 		}
+		output = new ContentSaveControl(prefix, path, content, appliedfilters, modelPath).processRequest();
 	}
-
-	return 0;
+	if (!quiet) {
+		System.out.println(output);
+	}
+	return EX_OK;
 }
 
 
