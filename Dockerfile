@@ -59,7 +59,7 @@ FROM eclipse-temurin:21 AS main
 
 # arguments and variables run stage
 ENV JETTY_HOME /var/lib/jetty
-ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/12.0.11/jetty-home-12.0.11.tar.gz
+ENV JETTY_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/12.0.14/jetty-home-12.0.14.tar.gz
 ARG JETTY_BASE=/jetty-base
 
 # we will add the test resources prefix but in production you can put real data as http:// or file://
