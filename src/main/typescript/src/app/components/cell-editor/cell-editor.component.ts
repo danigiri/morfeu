@@ -45,7 +45,6 @@ editing = false;
 showAttributes = false;
 showCategories = false;
 categories: string[];
-defaultCategoryAttributes: CellModel[];
 attributesByCategory: Map<string, CellModel[]>;
 activeCategory:string = null;
 canSave: boolean = false;
@@ -121,19 +120,21 @@ private edit(cell: Cell) {
 		const cellModel = this.cell.cellModel;
 
 		// do we show all attributes or do we do it by category
-		this.showAttributes = cellModel.attributes!==undefined && cellModel.category===undefined;
+		const categoryCount = cellModel.getCategories().length;
+		this.showAttributes = cellModel.attributes!==undefined && categoryCount<2;
+		this.showCategories = cellModel.attributes!==undefined && categoryCount>1;
 
 		// handle attribute categories if needed
-		this.showCategories = cellModel.attributes!==undefined && cellModel.category!==undefined;
 		if (this.showCategories) {
-			this.defaultCategoryAttributes = cellModel.getAttributesInCategory(cellModel.category);
+			const defaultCategoryAttributes = cellModel.getAttributesInCategory(cellModel.category);
+			const attributesWithNoCategory = cellModel.getAttributesInCategory(undefined);
+			defaultCategoryAttributes.concat(attributesWithNoCategory);
 			this.attributesByCategory = cellModel.getAttributesByCategory();
-			// we ad the default category first, and make it active
+			this.attributesByCategory.set(cellModel.category, defaultCategoryAttributes);
+			// default category goes first
 			this.categories = cellModel.getCategories().filter(c => c!==cellModel.category);
 			this.categories.unshift(cellModel.category);
 			this.activeCategory = cellModel.category;
-			const attributesWithNoCategory = cellModel.getAttributesInCategory(undefined);
-			this.defaultCategoryAttributes.concat(attributesWithNoCategory);
 		}
 
 		this.modalService.open(this.editor).result.then((result) => this.button(result), (reason) => this.outside());
@@ -195,6 +196,7 @@ removeValue() {
 select(category: string) {
 	this.activeCategory = category;
 }
+
 
 
 private button(result: string) {
