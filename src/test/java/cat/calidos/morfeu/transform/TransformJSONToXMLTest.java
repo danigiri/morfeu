@@ -22,7 +22,7 @@ import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TransformJSONToXMLIntTest extends TransformTezt {
+public class TransformJSONToXMLTest extends TransformTezt {
 
 private String content;
 
@@ -38,7 +38,7 @@ public void setup() throws Exception {
 @Test
 public void testTransform() throws Exception {
 
-	String transforms = "string-to-json;content-to-xml";
+	var transforms = "string-to-json;content-to-xml";
 
 	Filter<String, String> transform = DaggerFilterComponent
 			.builder()

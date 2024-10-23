@@ -78,13 +78,13 @@ public static String getFinalTargetURI(	String targetUri,
 				.getProperties();
 		if (configuration.containsKey(__PROXY_PREFIX)) {
 			log
-			.trace(
-					"(From configuration) __PROXY_PREFIX='{}'",
-					configuration.getProperty(__PROXY_PREFIX));
+					.trace(
+							"(From configuration) __PROXY_PREFIX='{}'",
+							configuration.getProperty(__PROXY_PREFIX));
 		} else {
 			log
-			.warn(
-					"(From configuration) no __PROXY_PREFIX set, which is probably not what you want");
+					.warn(
+							"(From configuration) no __PROXY_PREFIX set, which is probably not what you want");
 		}
 		targetUri = DaggerViewComponent
 				.builder()
@@ -93,7 +93,7 @@ public static String getFinalTargetURI(	String targetUri,
 				.build()
 				.render();
 		log.info("** Using template-based {} for proxy target uri", targetUri);
-		if (targetUri==null || targetUri.isBlank()) {
+		if (targetUri == null || targetUri.isBlank()) {
 			log.warn("** Proxy target uri is blank, so proxy won't work");
 		}
 	}

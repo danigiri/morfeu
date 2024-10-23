@@ -80,7 +80,7 @@ protected Object process() throws InterruptedException, ExecutionException, Vali
 	// log.trace(content);
 	JsonNode json = DaggerJSONParserComponent.builder().from(content).build().json().get();
 	String transformedContent = DaggerContentConverterComponent.builder().from(json).build().xml();
-
+	// log.trace(transformedContent);
 	log.info(">>> Saving content to '{}' (size:{}) <<<", outputURI, transformedContent.length());
 
 	ContentSaverParserComponent component = DaggerContentSaverParserComponent
