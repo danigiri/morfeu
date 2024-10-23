@@ -68,17 +68,24 @@ public static String getFinalTargetURI(	String targetUri,
 
 	if (targetUri.contains(TEMPLATE_SNIPPET)) {
 		// template snippet in the param, so we populate the view with the servlet config, system
-		// vars and env which
-		// can be used in the param to provide advanced features (like variable substitution)
+		// vars and env which can be used in the param to provide advanced features (like variable
+		// substitution)
+		// for some reason this is not picking up values from the servlet config-params list
 		Properties configuration = DaggerServletConfigComponent
 				.builder()
 				.with(config)
 				.build()
 				.getProperties();
-		log
-				.trace(
-						"(From configuration) __PROXY_PREFIX='{}'",
-						configuration.getProperty(__PROXY_PREFIX, "not set!"));
+		if (configuration.containsKey(__PROXY_PREFIX)) {
+			log
+			.trace(
+					"(From configuration) __PROXY_PREFIX='{}'",
+					configuration.getProperty(__PROXY_PREFIX));
+		} else {
+			log
+			.warn(
+					"(From configuration) no __PROXY_PREFIX set, which is probably not what you want");
+		}
 		targetUri = DaggerViewComponent
 				.builder()
 				.withValues(configuration)
@@ -86,6 +93,9 @@ public static String getFinalTargetURI(	String targetUri,
 				.build()
 				.render();
 		log.info("** Using template-based {} for proxy target uri", targetUri);
+		if (targetUri==null || targetUri.isBlank()) {
+			log.warn("** Proxy target uri is blank, so proxy won't work");
+		}
 	}
 	return targetUri;
 }
