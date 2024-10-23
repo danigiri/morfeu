@@ -23,10 +23,10 @@ public class MorfeuCLI extends MorfeuBaseCLI implements Callable<Integer> {
 public static final String	PARSE	= "parse";
 public static final String	SAVE	= "save";
 
-@Option(names = {"-m", "--model"}, required = true, description = "model to use")
+@Option(names = { "-m", "--model" }, required = true, description = "model to use")
 String modelPath;
 
-@Option(names = {"-p", "--prefix"}, description = "model to use (default is file://<cwd>)")
+@Option(names = { "-p", "--prefix" }, description = "model to use (default is file://<cwd>)")
 String prefix;
 
 @Option(names = "--filters", description = "filters (default is no filtering)")
@@ -57,7 +57,8 @@ public Integer call() {
 			e.printStackTrace();
 			return EX_NOINPUT;
 		}
-		output = new ContentSaveControl(prefix, path, content, appliedfilters, modelPath).processRequest();
+		output = new ContentSaveControl(prefix, path, content, appliedfilters, modelPath)
+				.processRequest();
 	}
 	if (!quiet) {
 		System.out.println(output);
