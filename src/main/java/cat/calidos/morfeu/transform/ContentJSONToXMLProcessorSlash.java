@@ -12,7 +12,6 @@ public ContentJSONToXMLProcessorSlash(String prefix, JsonNode node) {
 
 	this.prefix = prefix;
 	this.node = node;
-
 }
 
 
@@ -24,7 +23,8 @@ public JsonNode input() {
 
 @Override
 public String output() {
-	return prefix + "</" + node.get("name").asText() + ">\n";
+	boolean hadValue = node.has("value"); // if we did not have value, we format to pretty print
+	return (hadValue ? "" : "\n" + prefix) + "</" + node.get("name").asText() + ">";
 }
 
 
@@ -36,7 +36,7 @@ public String toString() {
 }
 
 /*
- * Copyright 2019 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at

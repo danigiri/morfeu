@@ -123,16 +123,16 @@ public String output() {
 																										// postfix
 					+ "</#if><#t>" + "<#if v.node.has('attributes')><#t>"
 					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>"
-					+ "</#if><#t>" + "/>\n";
+					+ "</#if><#lt>" + "/>\n";
 		} else {
-			template = "${v.pref}<${v.name}" // - postfix
+			template = "\n${v.pref}<${v.name}" // - postfix
 					+ "<#if v.node.has('internalAttributes')><#t>"
 					+ " <#list v.node.get('internalAttributes').iterator() as a>" // - prefix
 					+ "${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>" // -
 																										// postfix
 					+ "</#if><#t>" + "<#if v.node.has('attributes')><#t>"
-					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list> >"
-					+ "</#if><#t>" + (hasValue ? "${f.xmlc(v.value)}" : "\n");
+					+ " <#list v.node.get('attributes').iterator() as a>${a.get('name').textValue()}=\"${a.get('value').textValue()}\"<#sep> </#list>"
+					+ "</#if>><#t>" + (hasValue ? "${f.xmlc(v.value)}" : "\n");
 			// note ContentJSONToXMLProcessorSlash that is on the stack generates the slash
 		}
 
