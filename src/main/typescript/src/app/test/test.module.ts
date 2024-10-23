@@ -2,11 +2,13 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ComponentsModule } from '../components/components.module';
 import { TestRoutingModule } from './test-routing.module';
 import { ConfigJSON, Configuration } from '../config/configuration.class';
-import { HttpClient } from '@angular/common/http';
 import { RemoteObjectService } from '../services/remote-object.service';
 
 @NgModule({
@@ -14,7 +16,8 @@ import { RemoteObjectService } from '../services/remote-object.service';
 	imports: [
 		ComponentsModule,
 		CommonModule,
-		TestRoutingModule
+		NgbModule,
+		TestRoutingModule,
 	],
 	providers: [
 			Configuration,

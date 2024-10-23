@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { ComponentsModule } from '../components/components.module';
 
 import { AttributeDataEditorTestComponent } 
@@ -43,6 +45,7 @@ const routes: Routes = [
 				ComponentsModule,
 				CommonModule,
 				FormsModule,
+				NgbModule,
 				RouterModule.forChild(routes)
 	],
 	exports: [RouterModule],

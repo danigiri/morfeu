@@ -47,6 +47,7 @@ showCategories = false;
 categories: string[];
 defaultCategoryAttributes: CellModel[];
 attributesByCategory: Map<string, CellModel[]>;
+activeCategory:string = null;
 canSave: boolean = false;
 
 
@@ -127,7 +128,10 @@ private edit(cell: Cell) {
 		if (this.showCategories) {
 			this.defaultCategoryAttributes = cellModel.getAttributesInCategory(cellModel.category);
 			this.attributesByCategory = cellModel.getAttributesByCategory();
+			// we ad the default category first, and make it active
 			this.categories = cellModel.getCategories().filter(c => c!==cellModel.category);
+			this.categories.unshift(cellModel.category);
+			this.activeCategory = cellModel.category;
 			const attributesWithNoCategory = cellModel.getAttributesInCategory(undefined);
 			this.defaultCategoryAttributes.concat(attributesWithNoCategory);
 		}
@@ -155,6 +159,41 @@ showPresentation() {
 
 getPresentation(): string {
 	return this.cell===undefined ? this.cell.cellModel.getCellPresentation() : this.cell.getCellPresentation();
+}
+
+
+
+createValue() {
+
+	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
+	Promise.resolve(null).then(() => {
+		this.cell.createValue();
+		const valid = this.cell.cellModel.validates(this.cell.value);
+		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.CREATED_VALUE, valid));
+	});
+
+}
+
+
+modifiedValue(e: any) {
+
+	const valid = this.cell.cellModel.validates(this.cell.value);
+	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.MODIFIED_VALUE, valid));
+}
+
+
+removeValue() {
+
+	console.log("[UI] Removing value for '%s'", this.cell.URI);
+	Promise.resolve(null).then(() => {
+		this.cell.removeValue();
+		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.REMOVED_VALUE, true));
+	});
+
+}
+
+select(category: string) {
+	this.activeCategory = category;
 }
 
 
@@ -207,36 +246,6 @@ private clear() {
 }
 
 
-createValue() {
-
-	console.log("[UI] Create new (empty|default) value for '%s'", this.cell.URI);
-	Promise.resolve(null).then(() => {
-		this.cell.createValue();
-		const valid = this.cell.cellModel.validates(this.cell.value);
-		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.CREATED_VALUE, valid));
-	});
-
-}
-
-
-modifiedValue(e: any) {
-
-	const valid = this.cell.cellModel.validates(this.cell.value);
-	this.events.service.publish(new CellChangeEvent(this.cell, CellChange.MODIFIED_VALUE, valid));
-}
-
-
-removeValue() {
-
-	console.log("[UI] Removing value for '%s'", this.cell.URI);
-	Promise.resolve(null).then(() => {
-		this.cell.removeValue();
-		this.events.service.publish(new CellChangeEvent(this.cell, CellChange.REMOVED_VALUE, true));
-	});
-
-}
-
-
 private editorChange(attribute: Cell, what: CellChange, isValid: boolean) {
 
 	let canBeSaved: boolean;
@@ -280,7 +289,7 @@ private editorChange(attribute: Cell, what: CellChange, isValid: boolean) {
 }
 
 /*
- *	  Copyright 2018 Daniel Giribet
+ *	  Copyright 2024 Daniel Giribet
  *
  *	 Licensed under the Apache License, Version 2.0 (the "License");
  *	 you may not use this file except in compliance with the License.

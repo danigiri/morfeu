@@ -16,6 +16,8 @@ import { CellEditEvent } from '../../events/cell-edit.event';
 
 export class CellEditorTestComponent extends TestComponent {
 
+// http://localhost:3000/test/cell-editor/document5
+
 private readonly model = 'target/test-classes/test-resources/models/test-model.xsd';
 private cellPath: string;
 

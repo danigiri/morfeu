@@ -172,7 +172,6 @@ select(selected: string) {
 	if (selected===ModelAreaComponent.SNIPPETS_TAB) {
 			this.isModelActive = false;
 			this.isSnippetsActive = true;
-			console.log('AAAAAA, sending snippets display event AAAAAA')
 			this.events.service.publish(new SnippetsDisplayEvent(this.catalogue.snippets, this.catalogue));
 		} else if (selected===ModelAreaComponent.MODEL_TAB) {
 			this.isSnippetsActive = false;

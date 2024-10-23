@@ -40,29 +40,26 @@
 					></attribute-data-editor>
 				</ul>
 				<!-- show categories otherwise, first the default -->
-				<ul *ngIf="showCategories" ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
-					<li [ngbNavItem]="cell.cellModel.category" class="cell-editor-category"> <!-- default  -->
-						<a ngbNavLink class="cell-editor-category-link">{{cell.cellModel.category}}</a>
-						<ng-template ngbNavContent>
-							<attribute-data-editor *ngFor="let a of defaultCategoryAttributes; let i = index"
-								[parentCell]="cell"
-								[cellModel]="a"
-								[index]="i"
-							></attribute-data-editor>
-						</ng-template>
-					</li>
-					<li *ngFor="let c of categories" [ngbNavItem]="c" class="cell-editor-category">
-						<a ngbNavLink class="cell-editor-category-link">{{c}}</a>
-						<ng-template ngbNavContent>
-							<attribute-data-editor *ngFor="let a of attributesByCategory.get(c); let i = index"
-								[parentCell]="cell"
-								[cellModel]="a"
-								[index]="i"
-							></attribute-data-editor>
-						</ng-template>
-					</li>
-					<div [ngbNavOutlet]="nav"></div>
-				</ul>
+				<nav *ngIf="showCategories" class="navbar navbar-expand-lg navbar-light bg-light">
+					<div class="container-fluid">
+						<div class="collapse navbar-collapse" id="navbarNavCategories">
+							<ul class="navbar-nav">
+								<li *ngFor="let c of categories" class="cell-editor-category">
+									<button id="model-tab"
+										[class.btn-dark]="c === activeCategory"
+										class="btn"
+										(click)="select(c)"
+										aria-current="page">{{c}}</button>
+									<attribute-data-editor *ngFor="let a of attributesByCategory.get(activeCategory); let i = index"
+										[parentCell]="cell"
+										[cellModel]="a"
+										[index]="i"
+									></attribute-data-editor>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
 			</form>
 			<!-- presentation goes here -->
 			<img *ngIf="showPresentation() && cellPresentationIsIMG()"
