@@ -25,7 +25,8 @@ It is licensed under the Apache 2 open-source license and is under heavy develop
 ## Getting Started
 
 ### Using Docker
-```
+
+```shell
 git clone https://github.com/danigiri/morfeu.git
 cd morfeu
 docker build -t morfeu .
@@ -35,7 +36,8 @@ docker build -t morfeu  --build-arg MAVEN_CENTRAL_MIRROR=http://reposilite.local
 ```
 
 ### Manually
-```
+
+```shell
 # clone the project
 git clone https://github.com/danigiri/morfeu.git
 # install maven, npm and angular and then...
@@ -51,13 +53,35 @@ cd src/main/typescript && npm install --force && npm start
 ### Deploying on Kubernetes
 Follow the same steps for Docker and use the generated image (example below is for a local microk8s cluster).
 
-```
+```shell
 docker tag morfeu 127.0.0.1:32000/morfeu
 docker push 127.0.0.1:32000/morfeu
 # examine dashboard
 http://<ip>:8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
 ```
 
+### Using CLI
+You can invoke Morfeu parsing using a CLI utility. By adding the `-classes` and `-jar-with-dependencies` jars into your classpath and invoking the main class `cat.calidos.morfeu.cli.MorfeuCLI`. Here is an example of invokation from the project source folder:
+
+```shell
+alias MorfeuCLI="java -cp "$PWD"/target/morfeu-webapp-0.8.24-SNAPSHOT-classes.jar:"$PWD"/target/morfeu-webapp-0.8.23-SNAPSHOT-jar-with-dependencies.jar cat.calidos.morfeu.cli.MorfeuCLI"
+MorfeuCLI -h
+Usage: MorfeuCLI [-hqV] [--filters=<filters>] -m=<modelPath> [-p=<prefix>]
+                 <command> <path>
+      <command>             command {parse|save}
+      <path>                content to parse or destination to save into
+      --filters=<filters>   filters (default is no filtering)
+  -h, --help                Show this help message and exit.
+  -m, --model=<modelPath>   model to use
+  -p, --prefix=<prefix>     model to use (default is file://<cwd>)
+  -q, --quiet               do not print anything
+  -V, --version             Print version information and exit.
+
+```
+
+The two main operations are:
+- `parse <path>` which accepts a `path` to a content file and outputs the content in JSON format
+- `save <path>` which reads content in JSON format from `STDIN` and saves it to the `path` file
 
 ## Demo
 
