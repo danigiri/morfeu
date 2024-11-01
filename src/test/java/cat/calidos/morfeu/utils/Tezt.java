@@ -33,7 +33,7 @@ public class Tezt {
 protected static int systemPropertyPrints = 0;
 
 protected static final String	URL_PROPERTY			= "app-url";
-protected static String			DEFAULT_URL				= "http://localhost:3000";
+protected static String			DEFAULT_URL				= "http://localhost:3000/";
 public static final String		DEFAULT_TMP_FOLDER_NAME	= "integration-tests-tmp";
 
 public String tempDirectoryPath() {

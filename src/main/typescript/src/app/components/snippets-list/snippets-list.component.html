@@ -11,8 +11,10 @@
 		[animation]="true"
 		[closeOthers]="true"
 	>
-	<div *ngFor="let name of snippetCategoryNames" ngbAccordionItem="{{name}}">
-		<p ngbAccordionHeader>
+	<div *ngFor="let name of snippetCategoryNames" 
+		ngbAccordionItem="{{name}}" 
+		class="snippet-category">
+		<p ngbAccordionHeader class="snippet-category-name">
 			<button ngbAccordionButton>{{name}}</button>
 		</p>
 		<div ngbAccordionCollapse>

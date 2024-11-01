@@ -48,8 +48,11 @@ public void testSnippetCategories() {
 			() -> assertEquals("Data 3", simpleSnippets.get(3).name()),
 			() -> assertEquals("Data 4", simpleSnippets.get(4).name()));
 
+	// if we fold the simple category we'll be quicker
+	snippetsArea.clickOnCategory("simple");
 	snippetsArea.clickOnCategory("complex");
 	waitOneSec();
+	assertTrue(snippetsArea.isExpanded("complex"));
 	List<UISnippetEntry> complexSnippets = snippetsArea.snippets();
 	assertAll(
 			"checking comple",

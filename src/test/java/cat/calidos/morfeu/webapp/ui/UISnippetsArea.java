@@ -37,17 +37,17 @@ public UISnippetsArea() {
 
 
 public static void shouldNotBeVisible() {
-	$("#snippets-tab").shouldNotBe(visible);
+	$("#snippets").shouldNotBe(visible);
 }
 
 
 public List<String> categories() {
+	// looks like the accordion implementation we are using assigns the name of the category as ID,
+	// which can create collisions
 	return element
-			.$$("div[role=tab]")
+			.$$(".snippet-category-name")
 			.asFixedIterable()
 			.stream()
-			.filter(e -> e.attr("class") != null)
-			.filter(e -> e.attr("id").endsWith("-header"))
 			.map(e -> e.text())
 			.collect(Collectors.toList());
 }
@@ -60,7 +60,7 @@ public UISnippetsArea clickOnCategory(String name) {
 		throw new NoSuchElementException("No snippet category with name " + name);
 	}
 
-	element.$("#" + name + "-header").scrollTo().$("button").click();
+	element.$("#" + name).scrollTo().$(".snippet-category-name").click();
 
 	return this;
 
@@ -83,6 +83,15 @@ public UISnippetEntry snippet(int pos) {
 
 public Optional<UISnippetEntry> snippet(String name) {
 	return snippets().stream().filter(s -> s.name().equals(name)).findAny();
+}
+
+
+public boolean isExpanded(String name) {
+	return !isCollapsed(name);
+}
+
+public boolean isCollapsed(String name) {
+	return $("#"+name).$(".snippet-category-name").attr("class").contains("collapsed");
 }
 
 }

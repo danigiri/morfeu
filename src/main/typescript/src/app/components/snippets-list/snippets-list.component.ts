@@ -33,6 +33,8 @@ import { EventService } from '../../services/event.service';
 	templateUrl: "./snippets-list.component.html",
 	styles: [`
 		#snippets {}
+		.snippet-category {}
+		.snippet-category-name {}
 	`]
 })
 
