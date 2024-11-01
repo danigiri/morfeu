@@ -33,12 +33,25 @@ public publish(event: MorfeuEvent) {
 
 
 promiseToPublish(event: MorfeuEvent) {
+
 	Promise.resolve(null).then(() => {
 		const k = event.eventName;
 		console.debug("\tSending event "+k+" -> ("+event.toString()+")");
 		this.subject(k).next({ channel: k, data: event });
 		this.eventCounter++;
 	});
+}
+
+
+promiseToPublishDelayed(event: MorfeuEvent, delay: number) {
+	setTimeout(() => {
+		Promise.resolve(null).then(() => {
+				const k = event.eventName;
+				console.debug("\tSending event "+k+" -> ("+event.toString()+") after delay of "+delay+"ms");
+				this.subject(k).next({ channel: k, data: event });
+				this.eventCounter++;
+			})
+	}, delay); 
 }
 
 
