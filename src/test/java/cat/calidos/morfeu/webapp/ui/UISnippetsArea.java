@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class UISnippetsArea extends UIWidget<UISnippetsArea> {
 
+private static final String SNIPPET_CATEGORY_POSTFIX = "-snippet-category";
+
 public static final String	SNIPPETS_KEY	= "s";
 public static final String	ACTIVATE_KEY	= "a";
 
@@ -43,7 +45,9 @@ public static void shouldNotBeVisible() {
 
 public List<String> categories() {
 	// looks like the accordion implementation we are using assigns the name of the category as ID,
-	// which can create collisions
+	// which can create collisions. So we are using names for ease of debugging, but note that the
+	// snippet categories have a more collision-resistant id, we'll use the id explicitly in those
+	// cases
 	return element
 			.$$(".snippet-category-name")
 			.asFixedIterable()
@@ -56,11 +60,13 @@ public List<String> categories() {
 public UISnippetsArea clickOnCategory(String name) {
 
 	Optional<String> category = categories().stream().filter(c -> c.equals(c)).findAny();
+
 	if (category.isEmpty()) {
 		throw new NoSuchElementException("No snippet category with name " + name);
 	}
 
-	element.$("#" + name).scrollTo().$(".snippet-category-name").click();
+	String id = "#" + name + SNIPPET_CATEGORY_POSTFIX;
+	element.$(id).scrollTo().$(".snippet-category-name").click();
 
 	return this;
 
@@ -90,8 +96,10 @@ public boolean isExpanded(String name) {
 	return !isCollapsed(name);
 }
 
+
 public boolean isCollapsed(String name) {
-	return $("#"+name).$(".snippet-category-name").attr("class").contains("collapsed");
+	String id = "#" + name + SNIPPET_CATEGORY_POSTFIX;
+	return $(id).$(".snippet-category-name").attr("class").contains("collapsed");
 }
 
 }

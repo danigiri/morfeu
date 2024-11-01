@@ -12,7 +12,7 @@
 		[closeOthers]="true"
 	>
 	<div *ngFor="let name of snippetCategoryNames" 
-		ngbAccordionItem="{{name}}" 
+		ngbAccordionItem="{{name}}-snippet-category" 
 		class="snippet-category">
 		<p ngbAccordionHeader class="snippet-category-name">
 			<button ngbAccordionButton>{{name}}</button>

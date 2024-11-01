@@ -40,6 +40,8 @@ import { EventService } from '../../services/event.service';
 
 export class SnippetsListComponent extends KeyListenerWidget implements OnInit { // AfterViewInit {
 
+private static readonly SNIPPET_CATEGORY_POSTFIX = '-snippet-category';
+	
 @Input() display = false;
 
 model: Model;
@@ -223,9 +225,10 @@ private storeSnippetContent(snippet: CellDocument, snippetContent: Content) {
 	this.snippetsByCategory.get(category).push(snippet);
 
 	const defaultCategory = this.snippetCategoryNames[0];
-	if (!this.accordion.isExpanded(defaultCategory) && category===defaultCategory) {
+	const categoryID = defaultCategory+SnippetsListComponent.SNIPPET_CATEGORY_POSTFIX;
+	if (!this.accordion.isExpanded(categoryID) && category===defaultCategory) {
 		this.currentCategory = defaultCategory;
-		Promise.resolve(null).then(() => this.accordion.expand(defaultCategory));	// the toggle will do a next()
+		Promise.resolve(null).then(() => this.accordion.expand(categoryID));	// the toggle will do a next()
 	}
 
 }
@@ -259,8 +262,9 @@ override numberPressedCallback(num: number) {
 			this.snippetSelectingMode = true;
 			// now we check if the category was not already toggled (no action needed then)
 			const category = categories[num]; //.id;
-			if (!this.accordion.isExpanded(category)) {
-				this.accordion.toggle(category);
+			const categoryId = category + SnippetsListComponent.SNIPPET_CATEGORY_POSTFIX;
+			if (!this.accordion.isExpanded(categoryId)) {
+				this.accordion.toggle(categoryId);
 				this.beforeToggle(category,true);
 				// we lose info status here, we could reactivate it here if needed
 			}
