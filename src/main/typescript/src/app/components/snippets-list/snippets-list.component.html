@@ -1,5 +1,6 @@
 
 <div id="snippets" class="list-group">
+	<small *ngIf="display && !completedLoading" id="snippets-loading-status">(loading...)</small>
 	<small *ngIf="info">currentCategory: {{currentCategory}},
 		<ng-container *ngIf="snippetCategorySelectingMode"><b>snippetCategorySelectingMode</b></ng-container>
 		<ng-container *ngIf="snippetSelectingMode"><b>snippetSelectingMode</b></ng-container>
@@ -14,13 +15,13 @@
 	<div *ngFor="let name of snippetCategoryNames" 
 		ngbAccordionItem="{{name}}-snippet-category" 
 		class="snippet-category">
-		<p ngbAccordionHeader class="snippet-category-name">
-			<button ngbAccordionButton>{{name}}</button>
+		<p ngbAccordionHeader>
+			<button ngbAccordionButton class="snippet-category-name">{{name}}</button>
 		</p>
 		<div ngbAccordionCollapse>
 			<div ngbAccordionBody>
 				<ng-template>
-					<snippet *ngFor="let s of displaySnippetsByCategory.get(name); let j=index"
+					<snippet *ngFor="let s of snippetsByCategoryDisplay.get(name); let j=index"
 						class="list-group-item"
 						[snippet]="s"
 						[model]="normalisedModel"

@@ -33,6 +33,7 @@ import { EventService } from '../../services/event.service';
 	templateUrl: "./snippets-list.component.html",
 	styles: [`
 		#snippets {}
+		#snippets-loading-status {}
 		.snippet-category {}
 		.snippet-category-name {}
 	`]
@@ -55,14 +56,14 @@ normalisedModel: Model;
 
 snippetCategoryNames: string[] = [];
 snippetsByCategory: Map<string, CellDocument[]>; // snippets grouped by categories, source of truth
-displaySnippetsByCategory: Map<string, CellDocument[]>; // using this to display and force change detection
+snippetsByCategoryDisplay: Map<string, CellDocument[]>; // using this to display and force change detection
 
 currentCategory: string;
 
 protected override commandKeys: string[] = ["a"];		// activation keybinding
 snippetCategorySelectingMode = false;	// are we selecting categories
 snippetSelectingMode = false;			// or snippets?
-private completedLoading = false;
+completedLoading = false;
 
 info = false;
 
@@ -114,7 +115,7 @@ public fetchSnippets(stubs: CellDocument[]) {
 		// we initialise the snippet structures
 		this.snippetCategoryNames = [];
 		this.snippetsByCategory = new Map<string, CellDocument[]>();
-		this.displaySnippetsByCategory = new Map<string, CellDocument[]>();
+		this.snippetsByCategoryDisplay = new Map<string, CellDocument[]>();
 		this.snippetStubs.map(s => s.kind).forEach(c => {
 															if (!this.snippetsByCategory.has(c)) {
 																this.createSnippetCategory(c)
@@ -196,7 +197,7 @@ private requestSnippetContent(snippet: CellDocument, index: number) {
 					this.events.service.publish(new SnippetDocumentRequestEvent(index+1));
 				} else {
 					console.debug('SnippetsListComponent: completed loading all snippets');
-					this.displaySnippetsByCategory = this.snippetsByCategory;
+					this.snippetsByCategoryDisplay = this.snippetsByCategory;
 					this.events.service.publish(new StatusEvent("Fetching snippets", StatusEvent.DONE));
 					this.completedLoading = true; // finished, do not load snippets again
 					this.events.ok();	// this means we don't see intermediate errors for that long unfortunately

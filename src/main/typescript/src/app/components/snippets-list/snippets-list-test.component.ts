@@ -20,7 +20,6 @@ import { RemoteObjectService } from '../../services/remote-object.service';
 import { RemoteDataService } from 'src/app/services/remote-data.service';
 import { EventService } from '../../services/event.service';
 import { Catalogue } from 'src/app/catalogue.class';
-import { ModelDisplayEvent } from 'src/app/events/model-display.event';
 import { InfoModeEvent } from 'src/app/events/info-mode.event';
 
 @Component({

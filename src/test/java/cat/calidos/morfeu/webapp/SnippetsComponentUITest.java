@@ -24,10 +24,7 @@ public void testSnippetCategories() {
 
 	UISnippetsArea snippetsArea = new UISnippetsArea();
 	snippetsArea.shouldAppear().shouldBeVisible();
-	// we need some time to load the snippets, not ideal but this should give us time
-	try {
-		Thread.sleep(1000);
-	} catch (InterruptedException e) {}
+	UISnippetsArea.shouldFinishLoading();
 
 	List<String> categories = snippetsArea.categories();
 	assertAll(
@@ -51,6 +48,7 @@ public void testSnippetCategories() {
 	// if we fold the simple category we'll be quicker
 	snippetsArea.clickOnCategory("simple");
 	snippetsArea.clickOnCategory("complex");
+	snippetsArea.shouldExpand("complex");
 	waitOneSec();
 	assertTrue(snippetsArea.isExpanded("complex"));
 	List<UISnippetEntry> complexSnippets = snippetsArea.snippets();
