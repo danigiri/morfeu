@@ -2,16 +2,17 @@
 
 import { Component, Input, AfterViewInit, ViewChildren } from "@angular/core";
 
-import { CellDocument } from "../cell-document.class";
-import { Model } from "../model.class";
+import { CellDocument } from "../../cell-document.class";
+import { Model } from "../../model.class";
 
-import { CellComponent } from "./cell/cell.component";
-import { SelectableWidget } from "../selectable-widget.class";
-import { SnippetsListComponent } from './snippets-list/snippets-list.component';
+import { CellComponent } from "../cell/cell.component";
+import { SelectableWidget } from "../../selectable-widget.class";
+import { SnippetsListComponent } from '../snippets-list/snippets-list.component';
 
-import { CellSelectEvent } from "../events/cell-select.event";
-import { SnippetDisplayedEvent } from '../events/snippet-displayed.event';
-import { EventService } from "../services/event.service";
+import { CellSelectEvent } from "../../events/cell-select.event";
+import { SnippetDisplayedEvent } from '../../events/snippet-displayed.event';
+import { EventService } from "../../services/event.service";
+import { InfoModeEvent } from "src/app/events/info-mode.event";
 
 @Component({
 	selector: "snippet",
@@ -20,6 +21,7 @@ import { EventService } from "../services/event.service";
 			[attr._position]="position"
 			[class.snippet-selected]="selected"
 		>
+		<small *ngIf="info">Position: {{position}}, <b *ngIf="selected">selected</b></small>
 			<div class="d-flex justify-content-between">
 				<h5 class="mb-1 snippet-name">{{snippet.name}}</h5>
 				<!-- at the moment, snippets only contain one node-->
@@ -54,6 +56,7 @@ export class SnippetComponent extends SelectableWidget implements AfterViewInit 
 // active = false;
 dragEnabled = false;
 
+info = false;
 
 constructor(eventService: EventService) {
 	super(eventService);
@@ -70,8 +73,9 @@ ngOnInit() {
 	}																// but a small, constant, capped number
 	this.parent.snippetComponents[this.position] = this;	// this will set the reference OK as position
 															// is guaranteed to be unique
-}
+	this.register(this.events.service.of<InfoModeEvent>(InfoModeEvent).subscribe(mode => this.info = mode.active));
 
+}
 
 ngAfterViewInit () {
 

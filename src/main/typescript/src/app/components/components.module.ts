@@ -6,7 +6,8 @@ import { KeyboardShortcutsModule } from 'ng-keyboard-shortcuts';
 import { NgModule } from '@angular/core';
 
 import { DndModule } from '../dnd/dnd.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 import { PipesModule } from '../pipes/pipes.module';
 
@@ -27,7 +28,7 @@ import { LinksComponent } from './links/links.component';
 import { ModelComponent } from './model/model.component';
 import { ModelAreaComponent } from './model-area/model-area.component';
 import { PresentationComponent } from './presentation/presentation.component';
-import { SnippetComponent } from './snippet.component';
+import { SnippetComponent } from './snippet/snippet.component';
 import { SnippetsListComponent } from './snippets-list/snippets-list.component';
 import { TreeNodeComponent } from './tree-node/tree-node.component';
 import { TreeNodeDirective } from './tree-node/tree-node.directive';
@@ -46,7 +47,8 @@ import { RemoteEventService } from '../services/remote-event.service';
 				CommonModule,
 				DndModule,
 				KeyboardShortcutsModule,
-				NgbModule,
+				NgbModalModule,
+				NgbAccordionModule,
 				FormsModule,
 				PipesModule
 	],

@@ -36,8 +36,6 @@ import { EventService } from '../../services/event.service';
 export class CellEditorComponent extends EventListener implements OnInit {
 
 @ViewChild('editor') editor: ElementRef;
-//@ViewChild('form_', {static: false}) ngForm: NgForm;
-private form: NgForm;
 
 cell: Cell;
 cellBackup: Cell;
@@ -45,7 +43,8 @@ editing = false;
 showAttributes = false;
 showCategories = false;
 categories: string[];
-attributesByCategory: Map<string, CellModel[]>;
+attributesWithNoCategory: CellModel[] = [];
+attributesByCategory: Map<string, CellModel[]> = new Map();
 activeCategory:string = null;
 canSave: boolean = false;
 
@@ -121,20 +120,20 @@ private edit(cell: Cell) {
 
 		// do we show all attributes or do we do it by category
 		const categoryCount = cellModel.getCategories().length;
-		this.showAttributes = cellModel.attributes!==undefined && categoryCount<2;
-		this.showCategories = cellModel.attributes!==undefined && categoryCount>1;
+		this.showAttributes = cellModel.attributes!==undefined && categoryCount==0;
+		this.showCategories = cellModel.attributes!==undefined && categoryCount>=1;
 
-		// handle attribute categories if needed
+		// handle attribute categories if needed, first the attributes that have no category, then default category
 		if (this.showCategories) {
-			const defaultCategoryAttributes = cellModel.getAttributesInCategory(cellModel.category);
-			const attributesWithNoCategory = cellModel.getAttributesInCategory(undefined);
-			defaultCategoryAttributes.concat(attributesWithNoCategory);
+			this.attributesWithNoCategory = cellModel.getAttributesInCategory(undefined);
+			const defaultCategory = cellModel.category || cellModel.getCategories()[0];
+			const defaultCategoryAttributes = cellModel.getAttributesInCategory(defaultCategory);
 			this.attributesByCategory = cellModel.getAttributesByCategory();
 			this.attributesByCategory.set(cellModel.category, defaultCategoryAttributes);
 			// default category goes first
-			this.categories = cellModel.getCategories().filter(c => c!==cellModel.category);
-			this.categories.unshift(cellModel.category);
-			this.activeCategory = cellModel.category;
+			this.categories = cellModel.getCategories().filter(c => c!==defaultCategory);
+			this.categories.unshift(defaultCategory);
+			this.activeCategory = defaultCategory;
 		}
 
 		this.modalService.open(this.editor).result.then((result) => this.button(result), (reason) => this.outside());

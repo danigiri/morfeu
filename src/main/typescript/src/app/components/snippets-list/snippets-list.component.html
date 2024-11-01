@@ -1,0 +1,32 @@
+
+<div id="snippets" class="list-group">
+	<small *ngIf="info">currentCategory: {{currentCategory}},
+		<ng-container *ngIf="snippetCategorySelectingMode"><b>snippetCategorySelectingMode</b></ng-container>
+		<ng-container *ngIf="snippetSelectingMode"><b>snippetSelectingMode</b></ng-container>
+	</small>
+	<div 
+		ngbAccordion
+		*ngIf="snippetCategoryNames.length>0 && display" 
+		#snippetsAccordion="ngbAccordion"
+		[animation]="true"
+		[closeOthers]="true"
+	>
+	<div *ngFor="let name of snippetCategoryNames" ngbAccordionItem="{{name}}">
+		<p ngbAccordionHeader>
+			<button ngbAccordionButton>{{name}}</button>
+		</p>
+		<div ngbAccordionCollapse>
+			<div ngbAccordionBody>
+				<ng-template>
+					<snippet *ngFor="let s of displaySnippetsByCategory.get(name); let j=index"
+						class="list-group-item"
+						[snippet]="s"
+						[model]="normalisedModel"
+						[position]="j"
+						[parent]="this"
+					></snippet>
+				</ng-template>
+			</div>
+		</div>
+	</div>
+</div>

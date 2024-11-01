@@ -39,27 +39,34 @@
 						[index]="i"
 					></attribute-data-editor>
 				</ul>
-				<!-- show categories otherwise, first the default -->
+				<!-- show categories otherwise, first the default ones without category -->
+				<!-- both lists will be empty by default -->
+				<attribute-data-editor *ngFor="let a of attributesWithNoCategory; let i = index"
+					[parentCell]="cell"
+					[cellModel]="a"
+					[index]="i"
+				></attribute-data-editor>
+
 				<nav *ngIf="showCategories" class="navbar navbar-expand-lg navbar-light bg-light">
 					<div class="container-fluid">
 						<div class="collapse navbar-collapse" id="navbarNavCategories">
-							<ul class="navbar-nav">
+							<ul class="navbar-nav me-auto">
 								<li *ngFor="let c of categories" class="cell-editor-category">
 									<button id="model-tab"
 										[class.btn-dark]="c === activeCategory"
 										class="btn"
 										(click)="select(c)"
 										aria-current="page">{{c}}</button>
-									<attribute-data-editor *ngFor="let a of attributesByCategory.get(activeCategory); let i = index"
-										[parentCell]="cell"
-										[cellModel]="a"
-										[index]="i"
-									></attribute-data-editor>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</nav>
+				<attribute-data-editor *ngFor="let a of attributesByCategory.get(activeCategory); let i = index"
+					[parentCell]="cell"
+					[cellModel]="a"
+					[index]="i"
+				></attribute-data-editor>
 			</form>
 			<!-- presentation goes here -->
 			<img *ngIf="showPresentation() && cellPresentationIsIMG()"

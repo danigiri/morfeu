@@ -8,7 +8,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { DndModule } from './dnd/dnd.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PipesModule } from './pipes/pipes.module';
 import { CatalogueListComponent } from './components/catalogue-list.component';
@@ -32,15 +31,16 @@ import { StatusComponent } from './components/status.component';
         ProblemComponent,
         StatusComponent,
     ],
-    bootstrap: [AppComponent], imports: [AppRoutingModule,
+    bootstrap: [AppComponent],
+	imports: [AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
         CommonModule,
         ComponentsModule,
         DndModule.forRoot(),
-        NgbModule,
         PipesModule,
-        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        ReactiveFormsModule,
+        ], providers: [provideHttpClient(withInterceptorsFromDi())] })
 
 export class AppModule { }
 

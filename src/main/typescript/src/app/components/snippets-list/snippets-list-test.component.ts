@@ -21,11 +21,12 @@ import { RemoteDataService } from 'src/app/services/remote-data.service';
 import { EventService } from '../../services/event.service';
 import { Catalogue } from 'src/app/catalogue.class';
 import { ModelDisplayEvent } from 'src/app/events/model-display.event';
+import { InfoModeEvent } from 'src/app/events/info-mode.event';
 
 @Component({
 	selector: 'snippets-list-test',
 	template: `
-		<snippets></snippets>
+		<snippets [display]=true></snippets>
 		<key-capture></key-capture>
 	`
 })
@@ -57,7 +58,7 @@ constructor(eventService: EventService,
 
 
 ngOnInit() {
-	
+
 	// when we are finished loading we are ready for keypresses
 	this.register(this.events.service.of<SnippetDisplayedEvent>(SnippetDisplayedEvent)
 			.pipe(filter(displayed => displayed.position===this.snippetsComponent.currentSnippets().length-1))
@@ -81,7 +82,11 @@ private display() {
 
 protected override loadedCatalogue(catalogue: Catalogue): void {	
 	this.snippets = catalogue.snippets;
+	this.snippetsComponent.model = this.model;
 	this.events.service.publish(new SnippetsDisplayEvent(catalogue.snippets, catalogue));
+	// useful for development
+	this.events.service.promiseToPublishDelayed(new InfoModeEvent(true),500);
+
 }
 
 }
