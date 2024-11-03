@@ -69,11 +69,9 @@ public UIContent content() {
 
 public UISnippetsArea snippets() {
 
-	$("#snippets-tab").$("a").click();
+	$("#snippets-tab").click();
 	// let the snippets load (asynchronously)
-	try {
-		Thread.sleep(1000);
-	} catch (InterruptedException e) {}
+	UISnippetsArea.shouldFinishLoading();
 
 	return new UISnippetsArea();
 

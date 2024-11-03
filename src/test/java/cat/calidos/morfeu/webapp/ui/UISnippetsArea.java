@@ -4,6 +4,7 @@ package cat.calidos.morfeu.webapp.ui;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public static void shouldNotBeVisible() {
 
 
 public static void shouldFinishLoading() {
-	$("#snippets-loading-status").shouldNotBe(visible);
+	$("#snippets-loading-status").shouldNotBe(visible, Duration.ofSeconds(10));
 }
 
 
