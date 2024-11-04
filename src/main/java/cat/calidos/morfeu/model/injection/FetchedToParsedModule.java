@@ -1,4 +1,4 @@
-// URI TO PARSED MODULE . JAVA
+// FETCHED TO PARSED MODULE . JAVA
 
 package cat.calidos.morfeu.model.injection;
 
@@ -37,14 +37,16 @@ import cat.calidos.morfeu.utils.Config;
 
 
 /**
- * @author daniel giribet Handles parsing raw XML or YAML (hardcoded transformation)
- *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * Handles parsing raw XML or YAML (hardcoded transformation) from fetched content
+ * 
+ * @author daniel giribet
+ *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @ProducerModule
-public class URIToParsedModule {
+public class FetchedToParsedModule {
 
 private static final String		JSON_EXTENSION	= "json";
 private static final String		YAML_EXTENSION	= "yaml";
-protected final static Logger	log				= LoggerFactory.getLogger(URIToParsedModule.class);
+protected final static Logger	log				= LoggerFactory.getLogger(FetchedToParsedModule.class);
 
 // notice this is a DOM Document and not a morfeu document
 @Produces
@@ -92,31 +94,6 @@ InputStream fetchedContentReady(@Named("Filename") String filename,
 	}
 
 	return effectiveContent;
-
-}
-
-
-@Produces @Named("FetchedRawContent")
-public static InputStream fetchedRawContent(@Named("FetchableContentURI") URI uri)
-		throws FetchingException {
-
-	// if uri is absolute we retrieve it, otherwise we assume it's a local relative file
-
-	try {
-		if (uri.isAbsolute()) {
-			log.info("Fetching absolute content uri '{}' to parse", uri);
-			return IOUtils
-					.toInputStream(
-							IOUtils.toString(uri, Config.DEFAULT_CHARSET),
-							Config.DEFAULT_CHARSET);
-		} else {
-			log.info("Fetching relative content uri '{}' to parse, assuming file", uri);
-			return FileUtils.openInputStream(new File(uri.toString()));
-		}
-	} catch (IOException e) {
-		log.error("Could not fetch '{}' ({}", uri, e);
-		throw new FetchingException("Problem when fetching '" + uri + "'", e);
-	}
 
 }
 

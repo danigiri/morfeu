@@ -29,9 +29,10 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
  * 
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules = { ContentParserModule.class, URIToParsedModule.class,
-		MapperModule.class, ModelModule.class, CellModelsFilterModule.class, ValidatorModule.class,
-		XMLDocumentBuilderModule.class, ListeningExecutorServiceModule.class })
+@ProductionComponent(modules = { ContentParserModule.class, URIToFetchedContentModule.class,
+		FetchedToParsedModule.class, MapperModule.class, ModelModule.class,
+		CellModelsFilterModule.class, ValidatorModule.class, XMLDocumentBuilderModule.class,
+		ListeningExecutorServiceModule.class })
 public interface ContentParserComponent {
 
 ListenableFuture<Validable> validator()

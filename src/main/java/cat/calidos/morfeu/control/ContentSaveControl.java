@@ -28,7 +28,7 @@ import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
  * Controller that validates the content and if valid, saves it
  * 
  * @author daniel giribet
- *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ *//////////////////////////////////////////////////////////////////////////////////////////////////
 public class ContentSaveControl extends Control {
 
 private final static Logger log = LoggerFactory.getLogger(ContentSaveControl.class);
