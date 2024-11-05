@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
+import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -24,7 +25,7 @@ import jakarta.servlet.ServletContext;
  * Controller module for pinging the API, mainly for monitoring and testing
  * 
  * @author daniel giribet
- *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ *//////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
 public class PingControlModule {
 

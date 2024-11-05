@@ -10,7 +10,6 @@ import dagger.producers.Producer;
 import dagger.producers.ProducerModule;
 import dagger.producers.Produces;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -20,7 +19,6 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.xml.parsers.DocumentBuilder;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -46,7 +44,8 @@ public class FetchedToParsedModule {
 
 private static final String		JSON_EXTENSION	= "json";
 private static final String		YAML_EXTENSION	= "yaml";
-protected final static Logger	log				= LoggerFactory.getLogger(FetchedToParsedModule.class);
+protected final static Logger	log				= LoggerFactory
+		.getLogger(FetchedToParsedModule.class);
 
 // notice this is a DOM Document and not a morfeu document
 @Produces

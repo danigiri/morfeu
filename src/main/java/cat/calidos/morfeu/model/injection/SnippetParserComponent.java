@@ -20,6 +20,7 @@ import cat.calidos.morfeu.problems.FetchingException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.utils.injection.MapperModule;
+import cat.calidos.morfeu.utils.injection.HttpClientModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 
@@ -29,10 +30,10 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
  * 
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
-@ProductionComponent(modules = { ContentParserModule.class, URIToFetchedContentModule.class, FetchedToParsedModule.class,
-		MapperModule.class, ModelModule.class, SnippetCellModelModule.class,
-		CellModelsFilterModule.class, XMLDocumentBuilderModule.class, ValidatorModule.class,
-		ListeningExecutorServiceModule.class })
+@ProductionComponent(modules = { ContentParserModule.class, URIToFetchedContentModule.class,
+		FetchedToParsedModule.class, HttpClientModule.class, MapperModule.class, ModelModule.class,
+		SnippetCellModelModule.class, CellModelsFilterModule.class, XMLDocumentBuilderModule.class,
+		ValidatorModule.class, ListeningExecutorServiceModule.class })
 public interface SnippetParserComponent {
 
 ListenableFuture<Validable> validator()

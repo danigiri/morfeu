@@ -12,6 +12,7 @@ import dagger.BindsInstance;
 import dagger.producers.ProductionComponent;
 
 import cat.calidos.morfeu.utils.injection.MapperModule;
+import cat.calidos.morfeu.utils.injection.HttpClientModule;
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
 
 
@@ -21,7 +22,7 @@ import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
  * @author daniel giribet
  *//////////////////////////////////////////////////////////////////////////////////////////////////
 @ProductionComponent(modules = { ContentParserModule.class, URIToFetchedContentModule.class,
-		FetchedToParsedModule.class, MapperModule.class, ModelModule.class,
+		FetchedToParsedModule.class, HttpClientModule.class, MapperModule.class, ModelModule.class,
 		CellModelsFilterModule.class, ValidatorModule.class, XMLDocumentBuilderModule.class,
 		ListeningExecutorServiceModule.class })
 public interface ContentParserTeztComponent {
