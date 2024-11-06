@@ -12,13 +12,15 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.webapp.GenericHttpServlet;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
+
 import jakarta.servlet.ServletContext;
+
+import cat.calidos.morfeu.webapp.GenericHttpServlet;
+import cat.calidos.morfeu.webapp.control.problem.ControlNotFoundException;
 
 
 /**
@@ -54,6 +56,13 @@ public static BiFunction<List<String>, Map<String, String>, String> counter(@Nul
 public static BiFunction<List<String>, Map<String, String>, String> pingPost() {
 	return (pathElems,
 			params) -> "OK " + GenericHttpServlet.removeInternalHeaders(params);
+}
+
+
+@Provides @IntoMap @Named("GET") @StringKey("/notfound/?(.+)?")
+public static BiFunction<List<String>, Map<String, String>, String> notFound(@Nullable ServletContext context) {
+	return (pathElems,
+			params) -> { throw new ControlNotFoundException(); };
 }
 
 }

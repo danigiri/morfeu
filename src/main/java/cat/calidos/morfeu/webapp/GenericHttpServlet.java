@@ -17,8 +17,12 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.control.problem.ControlForbiddenException;
+import cat.calidos.morfeu.control.problem.ControlInternalException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
+import cat.calidos.morfeu.webapp.control.problem.ControlNotFoundException;
+import cat.calidos.morfeu.webapp.control.problem.ControlRuntimeException;
 import cat.calidos.morfeu.webapp.injection.ControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerServletConfigComponent;
 import jakarta.servlet.ServletConfig;
@@ -37,11 +41,7 @@ public abstract class GenericHttpServlet extends HttpServlet {
 protected final static Logger log = LoggerFactory.getLogger(GenericHttpServlet.class);
 
 public static final String	URLENCODED				= "application/x-www-form-urlencoded";
-public static final String	INTERNAL_PARAM_PREFIX	= "__";									// internal
-																							// params
-																							// start
-																							// with
-																							// this
+public static final String	INTERNAL_PARAM_PREFIX	= "__"; // internal params start with this
 public static final String	METHOD					= "__METHOD";
 public static final String	POST_VALUE				= "__POST";
 public static final String	__CONFIG				= "__CONFIG";
@@ -115,9 +115,9 @@ protected String normalisedPathFrom(HttpServletRequest req) {
 }
 
 
-protected void writeTo(	String content,
-						String contentType,
-						HttpServletResponse resp) {
+protected HttpServletResponse writeTo(	String content,
+										String contentType,
+										HttpServletResponse resp) {
 
 	// to simulate slowness
 	// try {
@@ -133,17 +133,17 @@ protected void writeTo(	String content,
 		out.print(content);
 		out.close();
 	} catch (IOException e) {
-		String msg = "Could not write response in servlet code, cannot recover from this";
+		var msg = "Could not write response in servlet code, cannot recover from this";
 		log.error(msg, e);
 		throw new RuntimeException(msg, e);
 	}
-
+	return resp;
 }
 
 
-protected void writeTo(	String content,
-						HttpServletResponse resp) {
-	writeTo(content, defaultContentType, resp);
+protected HttpServletResponse writeTo(	String content,
+										HttpServletResponse resp) {
+	return writeTo(content, defaultContentType, resp);
 }
 
 
@@ -152,14 +152,49 @@ public void handleResponse(	HttpServletRequest req,
 							ControlComponent controlComponent) {
 
 	if (controlComponent.matches()) {
-		String result = controlComponent.process();
-		writeTo(result, controlComponent.contentType(), resp);
+		String result;
+		try {
+			result = controlComponent.process();
+			resp = writeTo(result, controlComponent.contentType(), resp);
+		} catch (ControlNotFoundException e) {} catch (Exception e) {
+			int code;
+			String pathInfo = req.getPathInfo();
+			String logMsg;
+			if (e instanceof ControlRuntimeException cre) {
+				Optional<String> payload = cre.getPayload();
+				if (payload.isPresent()) {
+					resp = writeTo(payload.get(), controlComponent.contentType(), resp);
+				}
+				switch (cre) {
+					case ControlNotFoundException cnfe:
+						code = HttpServletResponse.SC_NOT_FOUND;
+						logMsg = "NOT FOUND (matched)";
+						break;
+					case ControlForbiddenException cfe:
+						code = HttpServletResponse.SC_FORBIDDEN;
+						logMsg = "FORBIDDEN ("+e.getMessage()+")";
+						break;
+					case ControlInternalException cfe:
+						code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+						logMsg = "FORBIDDEN ("+e.getMessage()+")";
+						break;
+					default:
+						code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+						logMsg = "Unknown ctrl exception processing request ("+e.getMessage()+")";
+				}
+			} else {
+				code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+				logMsg = "Unexpected exception processing request ("+e.getMessage()+")";
+			}
+			resp = setResponseCodeAndLog(resp, code, pathInfo, logMsg);
+
+		}
 	} else {
-		log
-				.error(
-						"GenericHttpServlet::handleeEsponse {} NOT FOUND (not matched)",
-						req.getPathInfo());
-		resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		resp = setResponseCodeAndLog(
+				resp,
+				HttpServletResponse.SC_NOT_FOUND,
+				req.getPathInfo(),
+				"GenericHttpServlet::handleResponse {} NOT FOUND (not matched)");
 	}
 
 }
@@ -255,6 +290,16 @@ public static Optional<Properties> getConfigurationFromContext(ServletContext co
 
 private void addConfigurationToContext() {
 	context.setAttribute(__CONFIG, configuration);
+}
+
+
+private HttpServletResponse setResponseCodeAndLog(	HttpServletResponse resp,
+													int status,
+													String pathInfo,
+													String logMessage) {
+	log.error("GenericHttpServlet::handleResponse [{}] at '{} - " + logMessage, status, pathInfo);
+	resp.setStatus(status);
+	return resp;
 }
 
 }
