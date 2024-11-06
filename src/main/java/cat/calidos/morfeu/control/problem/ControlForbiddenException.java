@@ -6,5 +6,3 @@ import cat.calidos.morfeu.webapp.control.problem.ControlRuntimeException;
 public class ControlForbiddenException extends ControlRuntimeException {
 
 }
-
-

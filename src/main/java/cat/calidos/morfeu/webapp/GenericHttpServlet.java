@@ -41,7 +41,11 @@ public abstract class GenericHttpServlet extends HttpServlet {
 protected final static Logger log = LoggerFactory.getLogger(GenericHttpServlet.class);
 
 public static final String	URLENCODED				= "application/x-www-form-urlencoded";
-public static final String	INTERNAL_PARAM_PREFIX	= "__"; // internal params start with this
+public static final String	INTERNAL_PARAM_PREFIX	= "__";									// internal
+																							// params
+																							// start
+																							// with
+																							// this
 public static final String	METHOD					= "__METHOD";
 public static final String	POST_VALUE				= "__POST";
 public static final String	__CONFIG				= "__CONFIG";
@@ -172,19 +176,20 @@ public void handleResponse(	HttpServletRequest req,
 						break;
 					case ControlForbiddenException cfe:
 						code = HttpServletResponse.SC_FORBIDDEN;
-						logMsg = "FORBIDDEN ("+e.getMessage()+")";
+						logMsg = "FORBIDDEN (" + e.getMessage() + ")";
 						break;
 					case ControlInternalException cfe:
 						code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-						logMsg = "FORBIDDEN ("+e.getMessage()+")";
+						logMsg = "FORBIDDEN (" + e.getMessage() + ")";
 						break;
 					default:
 						code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-						logMsg = "Unknown ctrl exception processing request ("+e.getMessage()+")";
+						logMsg = "Unknown ctrl exception processing request (" + e.getMessage()
+								+ ")";
 				}
 			} else {
 				code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-				logMsg = "Unexpected exception processing request ("+e.getMessage()+")";
+				logMsg = "Unexpected exception processing request (" + e.getMessage() + ")";
 			}
 			resp = setResponseCodeAndLog(resp, code, pathInfo, logMsg);
 

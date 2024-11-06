@@ -25,7 +25,6 @@ public MorfeuRuntimeException(String message, Throwable e) {
 
 }
 
-
 /*
  * Copyright 2024 Daniel Giribet
  *

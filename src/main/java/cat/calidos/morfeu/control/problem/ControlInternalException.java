@@ -6,5 +6,3 @@ import cat.calidos.morfeu.webapp.control.problem.ControlRuntimeException;
 public class ControlInternalException extends ControlRuntimeException {
 
 }
-
-

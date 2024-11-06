@@ -1,9 +1,6 @@
 package cat.calidos.morfeu.webapp.control.problem;
 
-
 public class ControlNotFoundException extends ControlRuntimeException {
-
-
 
 }
 
