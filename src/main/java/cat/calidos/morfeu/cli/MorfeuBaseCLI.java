@@ -10,9 +10,13 @@ import picocli.CommandLine;
 
 public abstract class MorfeuBaseCLI {
 
-public static final int	EX_OK		= 0;
-public static final int	EX_NOINPUT	= -66;
-protected String		output;
+protected static final int	EX_OK					= 0;
+protected static final int	EX_ERROR				= -1;
+protected static final int	EX_PARAM_ERROR			= -3;
+protected static final int	EX_NOINPUT				= -4;
+protected static final int	EX_COMMAND_NOT_FOUND	= -127;
+
+protected String output;
 
 public static Pair<Integer, String> mainImpl(	MorfeuBaseCLI cli,
 												String[] args) {

@@ -3,6 +3,7 @@ package cat.calidos.morfeu.control;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cat.calidos.morfeu.problems.MorfeuException;
 import cat.calidos.morfeu.utils.injection.DaggerJSONParserComponent;
 
 
@@ -19,9 +20,9 @@ public JSONGETControl(String operation, String template, String problemTemplate)
 
 
 @Override
-public String processRequest() {
+public String doWork() throws MorfeuException {
 
-	String json = super.processRequest();
+	String json = super.doWork();
 	try {
 
 		return DaggerJSONParserComponent.builder().from(json).build().pretty().get();

@@ -5,7 +5,7 @@ package cat.calidos.morfeu.problems;
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class FetchingException extends Exception {
+public class FetchingException extends MorfeuException {
 
 public FetchingException(String message) {
 	super(message);

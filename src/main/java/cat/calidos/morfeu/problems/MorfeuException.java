@@ -1,16 +1,30 @@
-package cat.calidos.morfeu.webapp.control.problem;
+package cat.calidos.morfeu.problems;
 
 import java.util.Optional;
 
-
-public class ControlRuntimeException extends RuntimeException {
+/**
+ * Morfeu checked exception
+ * 
+ * @author daniel giribet
+ *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class MorfeuException extends Exception implements ExceptionWithPayload {
 
 protected Optional<String> payload = Optional.empty();
 
-public void setPayload(String payload) { this.payload = Optional.of(payload); }
+public MorfeuException(String message) {
+	super(message);
+}
+
+
+public MorfeuException(String message, Throwable e) {
+	super(message, e);
+}
+
+public void setPayload(	String payload) { this.payload = Optional.of(payload); }
 
 
 public Optional<String> getPayload() { return payload; }
+
 
 }
 

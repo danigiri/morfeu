@@ -17,7 +17,7 @@ package cat.calidos.morfeu.problems;
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ConfigurationException extends Exception {
+public class ConfigurationException extends MorfeuException {
 
 public ConfigurationException(String message) {
 	super(message);

@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.DocumentGETControl;
 import cat.calidos.morfeu.control.MorfeuServlet;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.problems.MorfeuException;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
 
 
 /**
@@ -41,7 +42,15 @@ public static BiFunction<List<String>, Map<String, String>, String> getDocument(
 		String path = pathElems.get(1); // normalised already
 		log.trace("DocumentControlModule::getDocument '[{}]{}'", resourcesPrefix, path);
 
-		return new DocumentGETControl(resourcesPrefix, path).processRequest();
+		try {
+			return new DocumentGETControl(resourcesPrefix, path).doWork();
+		} catch (MorfeuException e) {
+			throw DaggerMorfeuExceptionTranslatorComponent
+					.builder()
+					.from(e)
+					.build()
+					.toWebappException();
+		}
 
 	};
 
@@ -50,7 +59,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getDocument(
 
 @Provides @IntoMap @Named("Content-Type") @StringKey("/documents/(.+)")
 public static String contentType() {
-	return ControlComponent.JSON;
+	return WebappControlComponent.JSON;
 }
 
 }

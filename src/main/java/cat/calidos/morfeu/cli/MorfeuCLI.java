@@ -10,6 +10,7 @@ import picocli.CommandLine.Parameters;
 
 import cat.calidos.morfeu.control.ContentGETControl;
 import cat.calidos.morfeu.control.ContentSaveControl;
+import cat.calidos.morfeu.problems.MorfeuException;
 
 
 /**
@@ -44,21 +45,33 @@ String path;
 @Override
 public Integer call() {
 
-	Optional<String> appliedfilters = Optional.ofNullable(filters);
+	Optional<String> fs = Optional.ofNullable(filters);
 	prefix = prefix == null ? "file://" + System.getProperty("user.dir") : prefix;
 	// we can happily reuse the content controllers
 	if (command.equalsIgnoreCase(PARSE)) {
-		output = new ContentGETControl(prefix, path, appliedfilters, modelPath).processRequest();
+		try {
+			output = new ContentGETControl(prefix, path, fs, modelPath).doWork();
+		} catch (MorfeuException e) {
+			System.err.println(e.getPayload().orElse(e.getMessage()));
+			return EX_ERROR;
+		}
 	} else if (command.equalsIgnoreCase(SAVE)) {
 		String content;
 		try {
 			content = readSystemIn();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Could not read STDIN for some reason (" + e.getMessage() + ")");
 			return EX_NOINPUT;
 		}
-		output = new ContentSaveControl(prefix, path, content, appliedfilters, modelPath)
-				.processRequest();
+		try {
+			output = new ContentSaveControl(prefix, path, content, fs, modelPath).doWork();
+		} catch (MorfeuException e) {
+			System.err.println(e.getPayload().orElse(e.getMessage()));
+			return EX_ERROR;
+		}
+	} else {
+		System.err.println("Unkown command, use {parse|save}");
+		return EX_COMMAND_NOT_FOUND;
 	}
 	if (!quiet) {
 		System.out.println(output);

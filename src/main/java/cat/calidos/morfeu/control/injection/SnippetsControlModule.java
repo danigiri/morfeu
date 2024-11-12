@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.MorfeuServlet;
 import cat.calidos.morfeu.control.SnippetGETControl;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.problems.MorfeuException;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -45,9 +46,15 @@ public static BiFunction<List<String>, Map<String, String>, String> snippet() {
 						pref,
 						path,
 						modelPath);
-
-		return new SnippetGETControl(pref, path, modelPath).processRequest();
-
+		try {
+			return new SnippetGETControl(pref, path, modelPath).doWork();
+		} catch (MorfeuException e) {
+			throw DaggerMorfeuExceptionTranslatorComponent
+					.builder()
+					.from(e)
+					.build()
+					.toWebappException();
+		}
 	};
 
 }
@@ -55,13 +62,13 @@ public static BiFunction<List<String>, Map<String, String>, String> snippet() {
 
 @Provides @IntoMap @Named("Content-Type") @StringKey("/snippets/(.+)")
 public static String contentType() {
-	return ControlComponent.JSON;
+	return WebappControlComponent.JSON;
 }
 
 }
 
 /*
- * Copyright 2019 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at

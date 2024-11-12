@@ -1,5 +1,28 @@
+package cat.calidos.morfeu.webapp.control.problems;
+
+import cat.calidos.morfeu.problems.MorfeuException;
+
+
+public class WebappInternalException extends WebappRuntimeException {
+
+public WebappInternalException(MorfeuException e) {
+	super(e);
+}
+
+
+public WebappInternalException(String message, Exception e) {
+	this(message, message, e);
+}
+
+
+public WebappInternalException(String message, String payload, Exception e) {
+	super(message, payload, e);
+}
+
+}
+
 /*
- * Copyright 2018 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,21 +34,3 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
-package cat.calidos.morfeu.problems;
-
-/**
- * @author daniel giribet
- *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class TransformException extends MorfeuException {
-
-public TransformException(String message) {
-	super(message);
-}
-
-
-public TransformException(String message, Throwable e) {
-	super(message + "(" + e.getMessage() + ")", e);
-}
-
-}

@@ -7,14 +7,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.injection.DaggerMorfeuControlComponent;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+
+import cat.calidos.morfeu.control.injection.DaggerMorfeuWebappControlComponent;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerConfigPropertyComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
 
-import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
 
 
 /**
@@ -60,12 +61,12 @@ public void init(ServletConfig config) throws ServletException {
 }
 
 
-public ControlComponent getControl(	String path,
+public WebappControlComponent getControl(	String path,
 									Map<String, String> params) {
-	return DaggerMorfeuControlComponent
+	return DaggerMorfeuWebappControlComponent
 			.builder()
 			.withPath(path)
-			.method(ControlComponent.GET)
+			.method(WebappControlComponent.GET)
 			.withParams(params)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)
@@ -73,12 +74,12 @@ public ControlComponent getControl(	String path,
 }
 
 
-public ControlComponent postControl(String path,
+public WebappControlComponent postControl(String path,
 									Map<String, String> params) {
-	return DaggerMorfeuControlComponent
+	return DaggerMorfeuWebappControlComponent
 			.builder()
 			.withPath(path)
-			.method(ControlComponent.POST)
+			.method(WebappControlComponent.POST)
 			.withParams(params)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)

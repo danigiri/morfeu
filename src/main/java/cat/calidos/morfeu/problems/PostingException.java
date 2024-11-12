@@ -5,7 +5,12 @@ package cat.calidos.morfeu.problems;
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class PostingException extends Exception {
+public class PostingException extends MorfeuException {
+
+public PostingException(String message) {
+	super(message);
+}
+
 
 public PostingException(String message, Exception e) {
 	super(message, e);
@@ -14,7 +19,7 @@ public PostingException(String message, Exception e) {
 }
 
 /*
- * Copyright 2019 Daniel Giribet
+ * Copyright 2024 Daniel Giribet
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at

@@ -25,6 +25,7 @@ ListenableFuture<URI> uri() throws FetchingException;
 interface Builder {
 
 	@BindsInstance Builder from(String uri);
+
 	URIComponent build();
 
 }

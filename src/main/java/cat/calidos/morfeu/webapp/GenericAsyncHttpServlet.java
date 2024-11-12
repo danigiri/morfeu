@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.utils.injection.ListeningExecutorServiceModule;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -111,7 +111,7 @@ public void run() {
 				// we retrieve the original path info that async context has mangled and use that
 				// instead
 				String pathInfo = (String) req.getAttribute(ORIGINAL_PATH_INFO);
-				ControlComponent controlComponent;
+				WebappControlComponent controlComponent;
 				log.trace("Handling async request {} ({})", pathInfo, req.getMethod());
 				if (method.equalsIgnoreCase("POST")) {
 					controlComponent = generatePostControlComponent(req, pathInfo);

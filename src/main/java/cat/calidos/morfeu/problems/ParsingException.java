@@ -17,7 +17,7 @@ package cat.calidos.morfeu.problems;
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ParsingException extends Exception {
+public class ParsingException extends MorfeuException {
 
 public ParsingException(String message) {
 	super(message);

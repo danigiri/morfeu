@@ -17,13 +17,15 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cat.calidos.morfeu.control.problem.ControlForbiddenException;
-import cat.calidos.morfeu.control.problem.ControlInternalException;
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.injection.DaggerURIComponent;
-import cat.calidos.morfeu.webapp.control.problem.ControlNotFoundException;
-import cat.calidos.morfeu.webapp.control.problem.ControlRuntimeException;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.control.problems.WebappBadGatewayException;
+import cat.calidos.morfeu.webapp.control.problems.WebappForbiddenException;
+import cat.calidos.morfeu.webapp.control.problems.WebappInternalException;
+import cat.calidos.morfeu.webapp.control.problems.WebappNotFoundException;
+import cat.calidos.morfeu.webapp.control.problems.WebappRuntimeException;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
 import cat.calidos.morfeu.webapp.injection.DaggerServletConfigComponent;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
@@ -67,11 +69,11 @@ public void init(ServletConfig config) throws ServletException {
 }
 
 
-public abstract ControlComponent getControl(String path,
-											Map<String, String> params);
+public abstract WebappControlComponent getControl(	String path,
+													Map<String, String> params);
 
-public abstract ControlComponent postControl(	String path,
-												Map<String, String> params);
+public abstract WebappControlComponent postControl(	String path,
+													Map<String, String> params);
 
 
 @Override
@@ -79,7 +81,7 @@ protected void doGet(	HttpServletRequest req,
 						HttpServletResponse resp)
 		throws ServletException, IOException {
 
-	ControlComponent controlComponent = generateGetControlComponent(req, req.getPathInfo());
+	WebappControlComponent controlComponent = generateGetControlComponent(req, req.getPathInfo());
 	handleResponse(req, resp, controlComponent);
 
 }
@@ -90,7 +92,7 @@ protected void doPost(	HttpServletRequest req,
 						HttpServletResponse resp)
 		throws ServletException, IOException {
 
-	ControlComponent controlComponent = generatePostControlComponent(req, req.getPathInfo());
+	WebappControlComponent controlComponent = generatePostControlComponent(req, req.getPathInfo());
 	handleResponse(req, resp, controlComponent);
 
 }
@@ -153,41 +155,51 @@ protected HttpServletResponse writeTo(	String content,
 
 public void handleResponse(	HttpServletRequest req,
 							HttpServletResponse resp,
-							ControlComponent controlComponent) {
+							WebappControlComponent controlComponent) {
 
 	if (controlComponent.matches()) {
 		String result;
 		try {
 			result = controlComponent.process();
 			resp = writeTo(result, controlComponent.contentType(), resp);
-		} catch (ControlNotFoundException e) {} catch (Exception e) {
+		} catch (Exception e) {
+			// in general, we expect exceptions here to be informed from the webapp controller and
+			// have some sort of
+			// payload to set on the response, the servlet is then responsible to translate those
+			// exceptions into error
+			// codes as corresponds to the HTTP domain
 			int code;
 			String pathInfo = req.getPathInfo();
 			String logMsg;
-			if (e instanceof ControlRuntimeException cre) {
-				Optional<String> payload = cre.getPayload();
+			if (e instanceof MorfeuRuntimeException mre) {
+				Optional<String> payload = mre.getPayload();
 				if (payload.isPresent()) {
 					resp = writeTo(payload.get(), controlComponent.contentType(), resp);
 				}
-				switch (cre) {
-					case ControlNotFoundException cnfe:
+				switch (mre) {
+					case WebappNotFoundException cnfe:
 						code = HttpServletResponse.SC_NOT_FOUND;
 						logMsg = "NOT FOUND (matched)";
 						break;
-					case ControlForbiddenException cfe:
+					case WebappForbiddenException cfe:
 						code = HttpServletResponse.SC_FORBIDDEN;
-						logMsg = "FORBIDDEN (" + e.getMessage() + ")";
+						logMsg = "FORBIDDEN (" + cfe.getMessage() + ")";
 						break;
-					case ControlInternalException cfe:
+					case WebappInternalException cie:
 						code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-						logMsg = "FORBIDDEN (" + e.getMessage() + ")";
+						logMsg = "FORBIDDEN (" + cie.getMessage() + ")";
 						break;
-					default:
+					case WebappBadGatewayException cbge:
+						code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+						logMsg = "BAD GATEWAY (" + cbge.getMessage() + ")";
+						break;
+					default: // TODO: use heuristics to see if there is an identifiable root cause
 						code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 						logMsg = "Unknown ctrl exception processing request (" + e.getMessage()
 								+ ")";
 				}
 			} else {
+				// totally unexpected exception
 				code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 				logMsg = "Unexpected exception processing request (" + e.getMessage() + ")";
 			}
@@ -222,8 +234,8 @@ public static Map<String, String> removeInternalHeaders(Map<String, String> para
 }
 
 
-public ControlComponent generateGetControlComponent(HttpServletRequest req,
-													String pathInfo) {
+public WebappControlComponent generateGetControlComponent(	HttpServletRequest req,
+															String pathInfo) {
 
 	String path = pathInfo;
 	log.trace("GenericHttpServlet::doGet {}", path);
@@ -232,15 +244,15 @@ public ControlComponent generateGetControlComponent(HttpServletRequest req,
 	params.put(METHOD, req.getMethod());
 	params = processParams(params);
 
-	ControlComponent controlComponent = getControl(path, params);
+	WebappControlComponent controlComponent = getControl(path, params);
 
 	return controlComponent;
 
 }
 
 
-public ControlComponent generatePostControlComponent(	HttpServletRequest req,
-														String pathInfo) {
+public WebappControlComponent generatePostControlComponent(	HttpServletRequest req,
+															String pathInfo) {
 
 	String path = pathInfo;
 	log.trace("::doPost {}", path);
@@ -281,7 +293,7 @@ public ControlComponent generatePostControlComponent(	HttpServletRequest req,
 	params = processParams(params);
 	log.trace("POST param keys:", params.keySet().toString());
 
-	ControlComponent controlComponent = postControl(path, params);
+	WebappControlComponent controlComponent = postControl(path, params);
 
 	return controlComponent;
 

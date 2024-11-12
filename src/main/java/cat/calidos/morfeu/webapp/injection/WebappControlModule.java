@@ -30,9 +30,9 @@ import dagger.multibindings.StringKey;
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Module
-public class ControlModule {
+public class WebappControlModule {
 
-protected final static Logger log = LoggerFactory.getLogger(ControlModule.class);
+protected final static Logger log = LoggerFactory.getLogger(WebappControlModule.class);
 
 private static final String DEFAULT_ENCODING = "UTF-8";
 
@@ -47,7 +47,7 @@ public static String process(	@Named("Path") String path,
 								@Named("GET") Map<String, BiFunction<List<String>, Map<String, String>, String>> get,
 								@Named("POST") Map<String, BiFunction<List<String>, Map<String, String>, String>> post) {
 	Map<String, BiFunction<List<String>, Map<String, String>, String>> controls = method
-			.equals(ControlComponent.GET) ? get : post;
+			.equals(WebappControlComponent.GET) ? get : post;
 
 	return controls
 			.get(
@@ -66,8 +66,8 @@ public static String process(	@Named("Path") String path,
 public static String contentType(	@Named("Content-Type") Map<String, String> contentTypes,
 									Optional<Pattern> matchedPath) {
 	return matchedPath.isPresent()
-			? contentTypes.getOrDefault(matchedPath.get().pattern(), ControlComponent.TEXT)
-			: ControlComponent.TEXT;
+			? contentTypes.getOrDefault(matchedPath.get().pattern(), WebappControlComponent.TEXT)
+			: WebappControlComponent.TEXT;
 }
 
 
@@ -87,7 +87,7 @@ Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> compiledCont
 
 	// log.trace("Compiling path regexps for method {}", method);
 	Map<String, BiFunction<List<String>, Map<String, String>, String>> controls = method
-			.equals(ControlComponent.GET) ? get.get() : post.get();
+			.equals(WebappControlComponent.GET) ? get.get() : post.get();
 	Map<Pattern, BiFunction<List<String>, Map<String, String>, String>> patternControls = new HashMap<Pattern, BiFunction<List<String>, Map<String, String>, String>>(
 			controls.size());
 	controls.keySet().forEach(k -> patternControls.put(Pattern.compile(k), controls.get(k)));
@@ -141,7 +141,7 @@ List<String> pathElems(	@Named("Path") String path,
 // provides content type default map
 @Provides @IntoMap @Named("Content-Type") @StringKey("____(NEVERtoBEm4tCHED3241234")
 public static String contentTypeDefaultMap() {
-	return ControlComponent.TEXT;
+	return WebappControlComponent.TEXT;
 }
 
 

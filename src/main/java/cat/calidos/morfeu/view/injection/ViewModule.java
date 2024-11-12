@@ -15,6 +15,7 @@ import com.google.common.hash.Hashing;
 
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import cat.calidos.morfeu.utils.Config;
 import cat.calidos.morfeu.utils.TemplateUtils;
 
@@ -48,10 +49,10 @@ public String render(	Template template,
 		template.process(finalValues, writer);
 		return writer.toString();
 	} catch (TemplateException e) {
-		throw new RuntimeException(
+		throw new MorfeuRuntimeException(
 				new ConfigurationException("Template '" + template + "' has issues", e));
 	} catch (IOException e) {
-		throw new RuntimeException(
+		throw new MorfeuRuntimeException(
 				new FetchingException("Template '" + template + "' hit IO issues", e));
 	}
 }

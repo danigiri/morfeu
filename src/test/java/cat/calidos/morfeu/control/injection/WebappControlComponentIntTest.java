@@ -9,16 +9,18 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
-import cat.calidos.morfeu.utils.Config;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
-import cat.calidos.morfeu.webapp.injection.DaggerControlComponent;
 import jakarta.servlet.ServletContext;
+
+import cat.calidos.morfeu.utils.Config;
+import cat.calidos.morfeu.webapp.control.problems.WebappNotFoundException;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
+import cat.calidos.morfeu.webapp.injection.DaggerWebappControlComponent;
 
 
 /**
  * @author daniel giribet
- *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ControlComponentIntTest {
+ *//////////////////////////////////////////////////////////////////////////////////////////////////
+public class WebappControlComponentIntTest {
 
 ServletContext context = mock(ServletContext.class);
 
@@ -27,17 +29,17 @@ HashMap<String, String> emptyParams = new HashMap<String, String>(0);
 @Test
 public void testPingControl() {
 
-	ControlComponent controlComponent = DaggerControlComponent
+	WebappControlComponent controlComponent = DaggerWebappControlComponent
 			.builder()
 			.withPath("/ping")
-			.method(ControlComponent.GET)
+			.method(WebappControlComponent.GET)
 			.withParams(emptyParams)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)
 			.build();
 	assertTrue(controlComponent.matches(), "Should match /ping path");
 	assertEquals("OK", controlComponent.process());
-	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(WebappControlComponent.TEXT, controlComponent.contentType());
 
 }
 
@@ -45,22 +47,22 @@ public void testPingControl() {
 @Test
 public void testPingControlWithParam() {
 
-	ControlComponent controlComponent = DaggerControlComponent
+	WebappControlComponent controlComponent = DaggerWebappControlComponent
 			.builder()
 			.withPath("/ping/param")
-			.method(ControlComponent.GET)
+			.method(WebappControlComponent.GET)
 			.withParams(emptyParams)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)
 			.build();
 	assertTrue(controlComponent.matches(), "Should match /ping/param path");
 	assertEquals("OK param", controlComponent.process());
-	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(WebappControlComponent.TEXT, controlComponent.contentType());
 
-	controlComponent = DaggerControlComponent
+	controlComponent = DaggerWebappControlComponent
 			.builder()
 			.withPath("/ping/param%20with%20spaces")
-			.method(ControlComponent.GET)
+			.method(WebappControlComponent.GET)
 			.withParams(emptyParams)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)
@@ -74,17 +76,17 @@ public void testPingControlWithParam() {
 @Test
 public void testNoMatch() {
 
-	ControlComponent controlComponent = DaggerControlComponent
+	WebappControlComponent controlComponent = DaggerWebappControlComponent
 			.builder()
 			.withPath("/foo")
-			.method(ControlComponent.GET)
+			.method(WebappControlComponent.GET)
 			.withParams(emptyParams)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)
 			.build();
 
 	assertFalse(controlComponent.matches());
-	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(WebappControlComponent.TEXT, controlComponent.contentType());
 
 }
 
@@ -94,18 +96,35 @@ public void testContext() {
 
 	when(context.getAttribute("counter")).thenReturn(0);
 
-	ControlComponent controlComponent = DaggerControlComponent
+	WebappControlComponent controlComponent = DaggerWebappControlComponent
 			.builder()
 			.withPath("/counter")
-			.method(ControlComponent.GET)
+			.method(WebappControlComponent.GET)
 			.withParams(emptyParams)
 			.andContext(context)
 			.encoding(Config.DEFAULT_CHARSET)
 			.build();
 	assertTrue(controlComponent.matches(), "Should match /counter path");
 	assertEquals("1", controlComponent.process());
-	assertEquals(ControlComponent.TEXT, controlComponent.contentType());
+	assertEquals(WebappControlComponent.TEXT, controlComponent.contentType());
 
+}
+
+
+@Test
+public void testNotFound() {
+	WebappControlComponent controlComponent = DaggerWebappControlComponent
+			.builder()
+			.withPath("/notfound/foo")
+			.method(WebappControlComponent.GET)
+			.withParams(emptyParams)
+			.andContext(context)
+			.encoding(Config.DEFAULT_CHARSET)
+			.build();
+
+	// we match but any subpath (/foo or whatever) will always be not found
+	assertTrue(controlComponent.matches());
+	assertThrows(WebappNotFoundException.class, () -> controlComponent.process());
 }
 
 }

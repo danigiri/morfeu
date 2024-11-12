@@ -1,6 +1,23 @@
-package cat.calidos.morfeu.webapp.control.problem;
+package cat.calidos.morfeu.webapp.control.problems;
 
-public class ControlNotFoundException extends ControlRuntimeException {
+import cat.calidos.morfeu.problems.MorfeuException;
+
+
+public class WebappBadGatewayException extends WebappRuntimeException {
+
+public WebappBadGatewayException(MorfeuException e) {
+	super(e);
+}
+
+
+public WebappBadGatewayException(String message, String payload, Exception e) {
+	super(message, payload, e);
+}
+
+
+public WebappBadGatewayException(String message, Exception e) {
+	this(message, message, e);
+}
 
 }
 

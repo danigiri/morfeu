@@ -1,22 +1,35 @@
-// SAVING EXCEPTION . JAVA
+package cat.calidos.morfeu.webapp.control.problems;
 
-package cat.calidos.morfeu.problems;
-/**
- * @author daniel giribet
- *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class SavingException extends MorfeuException {
+import cat.calidos.morfeu.problems.MorfeuException;
 
-public SavingException(String message) {
+public class WebappNotFoundException extends WebappRuntimeException {
+
+public WebappNotFoundException() {
+	super();
+}
+
+
+public WebappNotFoundException(MorfeuException e) {
+	super(e);
+}
+
+public WebappNotFoundException(String message) {
 	super(message);
 }
 
 
-public SavingException(String message, Exception e) {
-	super(message + "(" + e.getMessage() + ")", e);
+public WebappNotFoundException(String message, String payload, Exception e) {
+	super(message, payload, e);
 }
 
+
+public WebappNotFoundException(String message, Exception e) {
+	this(message, message, e);
 }
 
+
+
+}
 
 /*
  * Copyright 2024 Daniel Giribet

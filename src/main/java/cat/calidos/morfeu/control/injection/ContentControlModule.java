@@ -32,7 +32,8 @@ import dagger.multibindings.StringKey;
 import cat.calidos.morfeu.control.ContentGETControl;
 import cat.calidos.morfeu.control.ContentSaveControl;
 import cat.calidos.morfeu.control.MorfeuServlet;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.problems.MorfeuException;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 
 
@@ -62,8 +63,15 @@ public static BiFunction<List<String>, Map<String, String>, String> content() {
 						resourcesPrefix,
 						path,
 						modelPath);
-
-		return new ContentGETControl(resourcesPrefix, path, filters, modelPath).processRequest();
+		try {
+			return new ContentGETControl(resourcesPrefix, path, filters, modelPath).doWork();
+		} catch (MorfeuException e) {
+			throw DaggerMorfeuExceptionTranslatorComponent
+					.builder()
+					.from(e)
+					.build()
+					.toWebappException();
+		}
 
 	};
 
@@ -90,9 +98,16 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 						resourcesPrefix,
 						path,
 						modelPath);
-
-		return new ContentSaveControl(resourcesPrefix, path, content, filters, modelPath)
-				.processRequest();
+		try {
+			return new ContentSaveControl(resourcesPrefix, path, content, filters, modelPath)
+					.doWork();
+		} catch (MorfeuException e) {
+			throw DaggerMorfeuExceptionTranslatorComponent
+					.builder()
+					.from(e)
+					.build()
+					.toWebappException();
+		}
 
 	};
 
@@ -101,7 +116,7 @@ public static BiFunction<List<String>, Map<String, String>, String> postContent(
 
 @Provides @IntoMap @Named("Content-Type") @StringKey("/content/(.+)")
 public static String contentType() {
-	return ControlComponent.JSON;
+	return WebappControlComponent.JSON;
 }
 
 }

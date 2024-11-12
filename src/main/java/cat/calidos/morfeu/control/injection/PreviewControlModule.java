@@ -24,11 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import cat.calidos.morfeu.control.MorfeuServlet;
 import cat.calidos.morfeu.control.SVGPreviewGETControl;
+import cat.calidos.morfeu.problems.MorfeuException;
+import cat.calidos.morfeu.problems.MorfeuRuntimeException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.utils.injection.DaggerSQLComponent;
 import cat.calidos.morfeu.view.injection.DaggerSQLViewComponent;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
 
 
@@ -60,9 +62,15 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentSV
 
 		params = GenericHttpServlet.removeInternalHeaders(params); // remove all __* we do not want
 																	// as a param
-
-		return new SVGPreviewGETControl(resourcesPrefix, path, header, params).processRequest();
-
+		try {
+			return new SVGPreviewGETControl(resourcesPrefix, path, header, params).doWork();
+		} catch (MorfeuException e) {
+			throw DaggerMorfeuExceptionTranslatorComponent
+					.builder()
+					.from(e)
+					.build()
+					.toWebappException();
+		}
 	};
 
 }
@@ -77,8 +85,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentHT
 		String path = pathElems.get(1); // normalised already
 		String color = params.get("color");
 
-		return renderPresentation(path, color);
-
+		return renderPresentation(path, color); // only throws runtime exceptions
 	};
 
 }
@@ -92,7 +99,7 @@ public static BiFunction<List<String>, Map<String, String>, String> getContentHT
 		String path = params.get("text");
 		String color = params.get("color");
 
-		return renderPresentation(path, color);
+		return renderPresentation(path, color); // only throws runtime exceptions
 
 	};
 }
@@ -121,13 +128,13 @@ public BiFunction<List<String>, Map<String, String>, String> getCodePreview(@Nul
 
 @Provides @IntoMap @Named("Content-Type") @StringKey("/preview/svg/(.+)")
 public static String contentTypeSVG(@Named("Path") String path) {
-	return ControlComponent.SVG;
+	return WebappControlComponent.SVG;
 }
 
 
 @Provides @IntoMap @Named("Content-Type") @StringKey("/preview/html/(.*)")
 public static String contentTypeHTML(@Named("Path") String path) {
-	return ControlComponent.TEXT;
+	return WebappControlComponent.TEXT;
 }
 
 

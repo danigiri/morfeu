@@ -17,7 +17,12 @@ package cat.calidos.morfeu.problems;
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ValidationException extends Exception {
+public class ValidationException extends MorfeuException {
+
+public ValidationException(String message) {
+	super(message);
+}
+
 
 public ValidationException(String message, Throwable e) {
 	super(message + "(" + e.getMessage() + ")", e);

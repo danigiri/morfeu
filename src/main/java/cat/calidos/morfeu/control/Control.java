@@ -18,12 +18,15 @@ import java.util.concurrent.ExecutionException;
 
 import cat.calidos.morfeu.problems.ConfigurationException;
 import cat.calidos.morfeu.problems.FetchingException;
+import cat.calidos.morfeu.problems.MorfeuException;
 import cat.calidos.morfeu.problems.ParsingException;
 import cat.calidos.morfeu.problems.SavingException;
 import cat.calidos.morfeu.problems.TransformException;
 import cat.calidos.morfeu.problems.ValidationException;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 import cat.calidos.morfeu.view.injection.DaggerViewComponent;
+import cat.calidos.morfeu.webapp.control.problems.WebappNotFoundException;
+import cat.calidos.morfeu.webapp.control.problems.WebappRuntimeException;
 
 
 /**
@@ -79,37 +82,51 @@ protected String render(String template,
 }
 
 
-/** @return process the request, handling any problems */
-public String processRequest() {
+/**
+ * Handling problems: in this case, we capture domain exceptions and add payload to them and throw
+ * them up the hierarchy
+ * 
+ * @return the result payload if all goes well, to be displayed/saved/returned
+ * @throws MorfeuException optionally with payload
+ */
+public String doWork() throws MorfeuException {
 
 	beforeProcess();
 
 	Object result = null;
 	String problem = "";
 	String parsedResult = null;
+	MorfeuException exception = null;
 
 	try {
 		result = process();
 
 	} catch (InterruptedException e) {
 		problem = "Interrupted processing '" + operation + "' (" + e.getMessage() + ")";
+		exception = new MorfeuException(problem, e);
 	} catch (ExecutionException e) {
 		Throwable root = MorfeuUtils.findRootCauseFrom(e);
 		problem = "Problem processing '" + operation + "' (" + root.getMessage() + ", "
 				+ e.getMessage() + ")";
-		e.printStackTrace();
+		exception = new MorfeuException(problem, e);
 	} catch (ValidationException e) {
 		problem = "Problem validating '" + operation + "' (" + e.getMessage() + ")";
+		exception = e;
 	} catch (FetchingException e) {
 		problem = "Problem fetching data for '" + operation + "' (" + e.getMessage() + ")";
+		exception = e;
 	} catch (ParsingException e) {
 		problem = "Problem parsing for '" + operation + "' (" + e.getMessage() + ")";
+		exception = e;
 	} catch (ConfigurationException e) {
 		problem = "Problem configuring for '" + operation + "' (" + e.getMessage() + ")";
+		exception = e;
 	} catch (SavingException e) {
 		problem = "Problem saving in '" + operation + "' (" + e.getMessage() + ")";
+		exception = e;
 	} catch (TransformException e) {
 		problem = "Problem transforming in '" + operation + "' (" + e.getMessage() + ")";
+		exception = e;
 	}
 
 	if (problem.length() == 0) {
@@ -118,6 +135,10 @@ public String processRequest() {
 		afterProblem(problem);
 		Object problemInformation = problemInformation();
 		parsedResult = render(problemTemplate, problemInformation, problem);
+		if (exception != null) {
+			exception.setPayload(parsedResult);
+			throw exception;
+		}
 	}
 
 	return parsedResult;
@@ -125,7 +146,10 @@ public String processRequest() {
 }
 
 
-/**
+/** Process and do the work
+ * 
+ * Note that checked exceptions are thrown
+ * 
  * @return process the request and return the value(s) that the template will use to show whatever
  * @throws InterruptedException should not happen, only if our threads are interrupetd
  * @throws ExecutionException generic problem

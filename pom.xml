@@ -318,7 +318,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
+				<groupId>org.apache.maven.plugins</groupId> <!-- use DASHit.test=foo -->
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>3.2.5</version>
 				<configuration>
@@ -654,7 +654,7 @@
 			<id>danigiri</id>
 			<name>Daniel Giribet</name>
 			<email>dani AT calidos DOT cat</email>
-			<url>http//dani.calidos.com</url>
+			<url>https://dani.calidos.cat</url>
 			<roles>
 				<role>creator</role>
 				<role>developer</role>

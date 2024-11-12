@@ -2,24 +2,24 @@
 
 package cat.calidos.morfeu.control.injection;
 
-import cat.calidos.morfeu.webapp.injection.ControlComponent;
-import cat.calidos.morfeu.webapp.injection.ControlModule;
+import cat.calidos.morfeu.webapp.injection.WebappControlComponent;
+import cat.calidos.morfeu.webapp.injection.WebappControlModule;
 import dagger.Component;
 
 
 /**
- * This is where we register al the controllers that will handle our requests
+ * This is where we register al the webapp controllers that will handle our requests
  * 
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = { ControlModule.class, PingControlModule.class, DocumentControlModule.class,
+@Component(modules = { WebappControlModule.class, PingControlModule.class, DocumentControlModule.class,
 		ContentControlModule.class, ModelsControlModule.class, PreviewControlModule.class,
 		SnippetsControlModule.class, ClientEventControlModule.class })
-public interface MorfeuControlComponent extends ControlComponent {
+public interface MorfeuWebappControlComponent extends WebappControlComponent {
 
 //@formatter:off
 @Component.Builder
-interface Builder extends ControlComponent.Builder {}
+interface Builder extends WebappControlComponent.Builder {}
 //@formatter.on
 
 }

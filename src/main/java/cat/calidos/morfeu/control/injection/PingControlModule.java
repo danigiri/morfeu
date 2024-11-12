@@ -18,9 +18,8 @@ import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
 
 import jakarta.servlet.ServletContext;
-
 import cat.calidos.morfeu.webapp.GenericHttpServlet;
-import cat.calidos.morfeu.webapp.control.problem.ControlNotFoundException;
+import cat.calidos.morfeu.webapp.control.problems.WebappNotFoundException;
 
 
 /**
@@ -62,7 +61,7 @@ public static BiFunction<List<String>, Map<String, String>, String> pingPost() {
 @Provides @IntoMap @Named("GET") @StringKey("/notfound/?(.+)?")
 public static BiFunction<List<String>, Map<String, String>, String> notFound(@Nullable ServletContext context) {
 	return (pathElems,
-			params) -> { throw new ControlNotFoundException(); };
+			params) -> { throw new WebappNotFoundException(pathElems.getFirst()); };
 }
 
 }

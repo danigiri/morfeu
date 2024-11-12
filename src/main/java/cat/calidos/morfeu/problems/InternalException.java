@@ -17,7 +17,7 @@ package cat.calidos.morfeu.problems;
 /**
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class InternalException extends RuntimeException {
+public class InternalException extends MorfeuRuntimeException {
 
 public InternalException(String message) {
 	super(message);

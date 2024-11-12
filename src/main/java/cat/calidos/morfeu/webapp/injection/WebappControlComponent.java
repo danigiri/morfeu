@@ -20,8 +20,8 @@ import cat.calidos.morfeu.control.injection.PingControlModule;
  * 
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@Component(modules = { ControlModule.class, PingControlModule.class })
-public interface ControlComponent {
+@Component(modules = { WebappControlModule.class, PingControlModule.class })
+public interface WebappControlComponent {
 
 public static final String	GET		= "GET";
 public static final String	POST	= "POST";
@@ -50,7 +50,7 @@ interface Builder {
 	@BindsInstance Builder andContext(@Nullable ServletContext context);
 	@BindsInstance Builder encoding(@Named("encoding") @Nullable String encoding);
 
-	ControlComponent build();
+	WebappControlComponent build();
 
 }
 //@formatter:on
