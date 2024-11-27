@@ -1,5 +1,6 @@
 package cat.calidos.morfeu.utils.injection;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -12,24 +13,32 @@ import dagger.Component;
 
 /**
  * Read a configuration propert value in the following reverse priority order 1) from
- * properties(optional) 2) from sysenv 3) from env vars 4) from args array (optional, with
- * name=value or --name value) Each step overrides the previous ones
+ * properties(optional) 2) from sysenv 3) from env vars 4) from a map (optional) 5) from args array
+ * (optional) name=value or --name value) Each step overrides the previous ones
+ * 
+ * This means we can have configuration properties that can be progressively overriden by '-D' or
+ * env vars or CLI flags
  * 
  * @author daniel giribet
  *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component(modules = { ConfigurationModule.class, ConfigPropertyModule.class })
 public interface ConfigPropertyComponent {
 
-Optional<String> value();
+Optional<Object> value();
+
+Optional<Integer> integerValue();
+
+Optional<String> stringValue();
 
 //@formatter:off
 @Component.Builder
 interface Builder {
 	@BindsInstance Builder forName(@Named("PropertyName") String name);
 	@BindsInstance Builder withProps(@Nullable @Named("InputProperties") Properties p);
-	@BindsInstance Builder withArgs(@Nullable String args[]);
+	@BindsInstance Builder withMap(@Nullable Map<String,Object> map);
+	@BindsInstance Builder withArray(@Nullable String args[]);
 	@BindsInstance Builder allowEmpty(@Nullable Boolean allowEmpty);
-	@BindsInstance Builder andDefault(@Nullable @Named("DefaultValue") String defaultValue);
+	@BindsInstance Builder andDefault(@Nullable @Named("DefaultValue") Object defaultValue);
 
 	ConfigPropertyComponent build();
 }

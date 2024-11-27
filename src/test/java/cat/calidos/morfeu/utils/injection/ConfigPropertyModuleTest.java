@@ -2,66 +2,114 @@ package cat.calidos.morfeu.utils.injection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import cat.calidos.morfeu.utils.MorfeuUtils;
 
 
 public class ConfigPropertyModuleTest {
 
+private Properties p;
+
+@BeforeEach
+public void setup() {
+	p = new Properties();
+
+}
+
+
 @Test @DisplayName("Test arg value extraction")
 public void testArgsValue() {
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", null));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] {}));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "bar" }));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "foo" }));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "--foo" }));
-	assertEquals("bar", ConfigPropertyModule.argsValue("foo", new String[] { "--foo", "bar" }));
-	assertEquals(null, ConfigPropertyModule.argsValue("foo", new String[] { "foobar" }));
-	assertEquals("bar", ConfigPropertyModule.argsValue("foo", new String[] { "foo=bar" }));
-	assertEquals("", ConfigPropertyModule.argsValue("foo", new String[] { "foo=" }));
+	assertEquals(null, ConfigPropertyModule.arrayValue("foo", null));
+	assertEquals(null, ConfigPropertyModule.arrayValue("foo", new String[] {}));
+	assertEquals(null, ConfigPropertyModule.arrayValue("foo", new String[] { "bar" }));
+	assertEquals(null, ConfigPropertyModule.arrayValue("foo", new String[] { "foo" }));
+	assertEquals(null, ConfigPropertyModule.arrayValue("foo", new String[] { "--foo" }));
+	assertEquals("bar", ConfigPropertyModule.arrayValue("foo", new String[] { "--foo", "bar" }));
+	assertEquals(null, ConfigPropertyModule.arrayValue("foo", new String[] { "foobar" }));
+	assertEquals("bar", ConfigPropertyModule.arrayValue("foo", new String[] { "foo=bar" }));
+	assertEquals("", ConfigPropertyModule.arrayValue("foo", new String[] { "foo=" }));
+}
+
+
+@Test @DisplayName("Test value from properties")
+public void testValueProperties() {
+	Optional<Object> value = ConfigPropertyModule
+			.effectiveValue("foo", p, null, null, null, null, false, null);
+	assertTrue(value.isEmpty());
+	p.put("foo", "bar");
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, null, null, null, false, null);
+	assertEquals("bar", value.get());
 }
 
 
 @Test @DisplayName("Test value")
 public void testValue() {
-	var p = new Properties();
-	assertTrue(ConfigPropertyModule.value("foo", p, null, null, null, null, null).isEmpty());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, "bar", null, null, null, null).get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, "bar", null, null, null).get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, null, "bar", null, null).get());
 
+	Optional<Object> value = ConfigPropertyModule
+			.effectiveValue("foo", p, "bar", null, null, null, false, null);
+	assertEquals("bar", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, "bar", null, null, false, null);
+	assertEquals("bar", value.get());
+
+	Map<String, Object> map = MorfeuUtils.paramMap("foo", "bar");
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, null, map, null, false, null);
+	assertEquals("bar", value.get());
+
+	map = MorfeuUtils.paramMap();
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, null, map, null, false, null);
+	assertTrue(value.isEmpty());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, null, null, "bar", false, null);
+	assertEquals("bar", value.get());
+}
+
+
+@Test @DisplayName("Test default value")
+public void testDefaultValue() {
 	// default value testing
-	assertEquals(
-			"bar",
-			ConfigPropertyModule.value("foo", p, "bar", null, null, null, "bar2").get());
-	assertEquals(
-			"bar",
-			ConfigPropertyModule.value("foo", p, null, "bar", null, null, "bar2").get());
-	assertEquals(
-			"bar",
-			ConfigPropertyModule.value("foo", p, null, null, "bar", null, "bar2").get());
-	assertEquals("bar", ConfigPropertyModule.value("foo", p, null, null, null, null, "bar").get());
+	Optional<Object> value = ConfigPropertyModule
+			.effectiveValue("foo", p, "bar", null, null, null, false, "bar2");
+	assertEquals("bar", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, "bar", null, null, false, "bar2");
+	assertEquals("bar", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, null, null, "bar", false, "bar2");
+	assertEquals("bar", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, null, null, null, null, false, "bar");
+	assertEquals("bar", value.get());
 
 	// override
-	assertEquals(
-			"bar",
-			ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
-	assertEquals(
-			"bar",
-			ConfigPropertyModule.value("foo", p, "bar2", "bar", null, null, null).get());
-	assertEquals(
-			"bar",
-			ConfigPropertyModule.value("foo", p, "bar2", null, "bar", null, null).get());
-	assertEquals(
-			"bar",
-			ConfigPropertyModule.value("foo", p, "bar2", "bar3", "bar", null, null).get());
+	value = ConfigPropertyModule.effectiveValue("foo", p, "bar2", "bar", null, null, false, null);
+	assertEquals("bar", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, "bar2", "bar", null, null, false, null);
+	assertEquals("bar", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, "bar2", null, null, "bar", false, null);
+	assertEquals("bar", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("foo", p, "bar2", "bar3", null, "bar", false, null);
+	assertEquals("bar", value.get());
 
 	// null value handling
-	assertEquals("", ConfigPropertyModule.value("", p, "", null, null, null, "bar2").get());
-	assertEquals("", ConfigPropertyModule.value("", p, "", null, null, true, "bar2").get());
-	assertEquals("bar2", ConfigPropertyModule.value("", p, "", null, null, false, "bar2").get());
+	value = ConfigPropertyModule.effectiveValue("", p, "", null, null, null, null, "bar2");
+	assertEquals("", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("", p, "", null, null, null, true, "bar2");
+	assertEquals("", value.get());
+
+	value = ConfigPropertyModule.effectiveValue("", p, "", null, null, null, false, "bar2");
+	assertEquals("bar2", value.get());
 
 }
 
@@ -75,9 +123,37 @@ public void testAllowEmpty() {
 			.allowEmpty(false)
 			.andDefault("bar")
 			.build()
-			.value()
+			.stringValue()
 			.get();
 	assertEquals("bar", value);
+	System.clearProperty("foo");
+}
+
+
+@Test @DisplayName("Conversion test")
+public void testConversion() {
+	var p = new Properties();
+	p.put("foo", 1);
+	int value = DaggerConfigPropertyComponent
+			.builder()
+			.withProps(p)
+			.forName("foo")
+			.build()
+			.integerValue()
+			.get();
+	assertEquals(1, value);
+
+	p = new Properties();
+	p.put("foo", "1");
+	value = DaggerConfigPropertyComponent
+			.builder()
+			.withProps(p)
+			.forName("foo")
+			.build()
+			.integerValue()
+			.get();
+	assertEquals(1, value);
+
 }
 
 }

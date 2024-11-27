@@ -1,11 +1,13 @@
 package cat.calidos.morfeu.utils.injection;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
+import org.bouncycastle.asn1.x509.qualified.TypeOfBiometricData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,18 +26,25 @@ protected final static Logger log = LoggerFactory.getLogger(ConfigPropertyModule
 private static final char VARIABLE_DELIMITER = '=';
 
 @Provides
-public static Optional<String> value(	@Named("PropertyName") String name,
-										@Named("Configuration") Properties p,
-										@Nullable @Named("SystemValue") String systemValue,
-										@Nullable @Named("EnvValue") String envValue,
-										@Nullable @Named("ArgsValue") String argsValue,
-										@Nullable Boolean allowEmpty,
-										@Nullable @Named("DefaultValue") String defaultValue) {
+public static Optional<Object> value(@Named("EffectiveValue") Optional<Object> value) {
+	return value;
+}
+
+
+@Provides @Named("EffectiveValue")
+public static Optional<Object> effectiveValue(	@Named("PropertyName") String name,
+												@Named("Configuration") Properties p,
+												@Nullable @Named("SystemValue") String systemValue,
+												@Nullable @Named("EnvValue") String envValue,
+												@Nullable Map<String, Object> map,
+												@Nullable @Named("ArrayValue") String argsValue,
+												@Nullable Boolean allowEmpty,
+												@Nullable @Named("DefaultValue") Object defaultValue) {
 
 	var message = new StringBuffer();
 	message.append("Property " + name + "' in [");
 
-	String value = p.getProperty(name);
+	Object value = p.get(name);
 	message.append(value != null ? "properties," : "");
 
 	value = systemValue != null ? systemValue : value;
@@ -44,17 +53,54 @@ public static Optional<String> value(	@Named("PropertyName") String name,
 	value = envValue != null ? envValue : value;
 	message.append(envValue != null ? "env," : "");
 
+	value = map != null && map.containsKey(name) ? map.get(name) : value;
+	message.append(map != null && map.containsKey(name) ? "map," : "");
+
 	value = argsValue != null ? argsValue : value;
 	message.append(argsValue != null ? "args," : "");
 
 	allowEmpty = allowEmpty == null ? true : allowEmpty;
-	value = value == null || (value.isEmpty() && !allowEmpty) ? defaultValue : value;
+	value = value == null
+			|| ((value instanceof String) && ((String) value).isEmpty() && !allowEmpty)
+					? defaultValue : value;
 	message.append(value == null ? "default" : "");
 
 	message.append("], final='" + value + "'");
 	log.trace(message.toString());
 
 	return Optional.ofNullable(value);
+}
+
+
+@Provides
+public static Optional<Integer> integerValue(@Named("EffectiveValue") Optional<Object> value) {
+	if (value.isPresent()) {
+		Object data = value.get();
+		if (data instanceof Integer) {
+			return Optional.of((Integer) data);
+		} else if (data instanceof String) {
+			return Optional.of(Integer.parseInt((String) data));
+		} else {
+			throw new ClassCastException("Cannot get value as Integer");
+		}
+	} else {
+		return Optional.empty();
+	}
+}
+
+
+@Provides
+Optional<String> stringValue(@Named("EffectiveValue") Optional<Object> value) {
+	if (value.isPresent()) {
+		Object data = value.get();
+		if (data instanceof String) {
+			return Optional.of((String) data);
+		} else {
+			throw new ClassCastException("Cannot get value as String");
+		}
+	} else {
+		return Optional.empty();
+	}
 }
 
 
@@ -70,8 +116,8 @@ public static String envValue(@Named("PropertyName") String name) {
 }
 
 
-@Provides @Nullable @Named("ArgsValue")
-public static String argsValue(	@Named("PropertyName") String name,
+@Provides @Nullable @Named("ArrayValue")
+public static String arrayValue(@Named("PropertyName") String name,
 								@Nullable String args[]) {
 	if (args == null) {
 		return null;
