@@ -13,14 +13,13 @@ import org.junit.jupiter.api.Test;
 import cat.calidos.morfeu.utils.MorfeuUtils;
 
 
-public class ConfigPropertyModuleTest {
+public class ConfigPropertyComponentTest {
 
 private Properties p;
 
 @BeforeEach
 public void setup() {
 	p = new Properties();
-
 }
 
 

@@ -7,7 +7,6 @@ import java.util.Properties;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
-import org.bouncycastle.asn1.x509.qualified.TypeOfBiometricData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
